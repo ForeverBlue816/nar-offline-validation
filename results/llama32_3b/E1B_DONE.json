@@ -1,0 +1,22 @@
+{
+  "group_sizes": [
+    32,
+    64
+  ],
+  "methods": [
+    "bf16",
+    "identity",
+    "hadamard",
+    "nar"
+  ],
+  "model": "llama32_3b",
+  "nar_rope_status": "dropped: plain NAR strictly dominated NAR-RoPE in all 28 layers for range and NMSE at b=32 and b=64",
+  "positions": [
+    0,
+    512,
+    1024,
+    2048
+  ],
+  "seed": 20260902,
+  "source_calibration": "/projects/_ssd/river/nar-validation/activations/llama32_3b/cal_a"
+}

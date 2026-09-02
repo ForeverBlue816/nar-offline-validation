@@ -1,44 +1,56 @@
 # NAR offline tensor validation
 
-A reproducible benchmark testing whether a learned orthogonal rotation can put
-dominant post-RoPE Llama K directions onto the free DC directions of dynamic
-asymmetric per-token, per-group INT4 quantization.
+A reproducible benchmark for normalized-anchor rotations (NAR) under dynamic
+asymmetric INT4 quantization. It covers post-RoPE Llama K tensors, wide
+`q_proj`/`down_proj` inputs, and a KIVI-style per-channel K baseline.
 
-> **Result: NO-GO under the pre-registered criteria.** NAR reduced mean K range
-> by 7.770% versus full-head Hadamard at `b=128`, below the required 10%. The
-> separate KV-only perplexity gate passed, but the overall criterion was
-> conjunctive. This negative result is preserved without configuration search.
+> **Corrected result:** the valid pre-registered K gates at `b=32/64` pass, as
+> do all frozen E2 NAR rows. The original `b=128` K gate is invalid because a
+> 128-dimensional head contains only one group and therefore one DC slot. In
+> the fair K-axis comparison, however, per-channel K quantization beats every
+> tested per-token rotation method.
 
-| Gate | Result | Main number |
+| Check | Result | Main number |
 |---|---:|---:|
-| E0 asymmetric-quantizer sanity | PASS | Hadamard outlier range matches `2\|x\|/sqrt(b)`; NAR range 0 |
-| E1 phenomenon at `b=128` | **FAIL** | 7.770% range reduction (required >=10%) |
-| Low-rank attribution | PASS | 15.231% top-k projection attribution |
-| Held-out stability | PASS | 100.914% of calibration-A reduction retained |
-| E2 3B `b=128` PPL gate | PASS | NAR-Hadamard -0.01713, paired 90% CI [-0.02789, -0.00637] |
-| Overall method-promising criterion | **FAIL** | E1 and E2 were both required |
+| Corrected E1 K, `b=32` | PASS | 20.489% range reduction vs Hadamard |
+| Corrected E1 K, `b=64` | PASS | 12.612% range reduction vs Hadamard |
+| All frozen E2 NAR rows | PASS | Paired PPL deltas satisfy the frozen gate |
+| E1b position robustness | PASS | 19.602–20.978% (`b=32`), 11.984–12.788% (`b=64`) |
+| E1c `q_proj` input | positive | 23.755% mean paired-layer range reduction vs full Hadamard |
+| E1c `down_proj` input | positive | 25.301% mean paired-layer range reduction vs full Hadamard |
+| E1d KIVI-style baseline | **clear winner** | Lower NMSE in 28/28 layers at both group sizes |
 
-![Mean K range versus absorbed rank](results/llama32_3b/range_vs_k.png)
+NAR-RoPE is dominated by plain NAR in every available paired range/NMSE check
+and at every paired E2 seed, so it is dropped from further work. These are
+paired, no-tuning results; negative findings and randomized-eigenspace residuals
+are reported rather than filtered.
 
-![Post-RoPE K eigenvalue spectrum](results/llama32_3b/eigenvalue_spectrum.png)
+![E1c mean range versus absorbed rank](results/llama32_3b/e1c_range_vs_k.png)
 
-## Scope
+![E1c realized range versus absorbed energy](results/llama32_3b/e1c_energy_fit.png)
+
+## Scope and artifacts
 
 The repository performs forward-hook activation capture, offline tensor
 analysis, and KV-only INT4 fake quantization. It does **not** run GPTQ, weight
 quantization, end-to-end W4A4KV4, or configuration tuning. Models are
 Llama-3.2-3B and Llama-3.2-1B; data are fixed WikiText-2 chunks.
 
-The complete protocol, all per-layer tables, confidence intervals, negative
-findings, and caveats are in [`report.md`](report.md). Exact CSV/JSON outputs
-and figures are committed under [`results/`](results/). Execution transcripts
-are under [`runs/`](runs/).
+The complete protocol, exact fit statistics, summary tables, confidence
+intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
+CSV/JSON outputs and figures are committed under [`results/`](results/), with execution
+transcripts under [`runs/`](runs/). `results/decision_corrected.json` is the
+authoritative decision; the older `results/decision.json` is retained only as
+the archival outcome of the mis-specified `b=128` gate.
 
-Large generated assets are intentionally excluded: model weights, Hugging Face
-and dataset caches, virtual environments, and the 128-sequence Q/K activation
-dumps. The script regenerates them locally.
+Large assets are intentionally excluded from Git: model weights, caches,
+environments, and raw activations. The E1c capture retains exact bf16 bit
+patterns for all 128×2048 tokens at every layer (168 GiB total) so that E3 FP4
+E2M1 and E4 two-level NVFP4 can reuse it.
 
 ## Reproduce
+
+The original frozen E0/E1/E2 pipeline is:
 
 ```bash
 python -m venv .venv
@@ -47,12 +59,15 @@ pip install -r requirements.txt
 ./run_all.sh
 ```
 
-The full run requires one CUDA GPU and writes resumable stage markers. On a
-Slurm cluster, adjust the GPU type in `slurm.sh` if necessary, then run:
+The E1b/E1c/E1d extension requires project storage because it writes the large
+activation capture. Set `NAR_WORKDIR` to that storage and submit from the
+repository root so Slurm can create relative log paths:
 
 ```bash
-sbatch slurm.sh
+mkdir -p runs
+NAR_WORKDIR=/path/to/project-storage sbatch slurm_extensions.sh
 ```
 
-See [`nar/README.md`](nar/README.md) for the frozen sample selection, group
-sizes, calibration splits, seeds, and individual stage commands.
+The batch script expects the environment at `$NAR_WORKDIR/venv`. See
+[`nar/README.md`](nar/README.md) for frozen choices and individual stage
+commands.

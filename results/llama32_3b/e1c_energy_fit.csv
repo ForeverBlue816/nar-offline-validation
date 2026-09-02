@@ -1,0 +1,3 @@
+site,fit,intercept,slope,r_squared,rmse,points
+q_input,"OLS normalized_range = intercept + slope * sqrt(1-f), pooled over paired layer-k rows",0.09083061527405187,0.917523264206551,0.9660186724637545,0.010266746076594226,700
+down_input,"OLS normalized_range = intercept + slope * sqrt(1-f), pooled over paired layer-k rows",0.5360162276796187,0.4037821281247191,0.7168824775491465,0.040282841398745,1820

@@ -1,0 +1,42 @@
+{
+  "all_frozen_e2_nar_rows_pass": true,
+  "b128_k_gate_status": "invalid: head_dim=128 gives one b=128 DC slot; retained only as archival measurement",
+  "corrected_e1_pass": true,
+  "e1_gate_rows": [
+    {
+      "b": 32,
+      "heldout_retained_fraction": 0.9989985518407848,
+      "nar_range_reduction_vs_hadamard": 0.20489181606095272,
+      "pass": true,
+      "topk_projection_range_attribution": 0.2695418170589264
+    },
+    {
+      "b": 64,
+      "heldout_retained_fraction": 0.9930687808866052,
+      "nar_range_reduction_vs_hadamard": 0.12611912816488147,
+      "pass": true,
+      "topk_projection_range_attribution": 0.20667229815598676
+    }
+  ],
+  "e1d_dominance": [
+    {
+      "b": 32,
+      "kivi_beats_every_per_token_method_global_nmse": true,
+      "layers": 28,
+      "layers_where_kivi_beats_every_per_token_method_nmse": 28
+    },
+    {
+      "b": 64,
+      "kivi_beats_every_per_token_method_global_nmse": true,
+      "layers": 28,
+      "layers_where_kivi_beats_every_per_token_method_nmse": 28
+    }
+  ],
+  "kivi_per_channel_clear_winner": true,
+  "method_promising_corrected": true,
+  "nar_rope_dropped_as_dominated": true,
+  "valid_e1_group_sizes": [
+    32,
+    64
+  ]
+}
