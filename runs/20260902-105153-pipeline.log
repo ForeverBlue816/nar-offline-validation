@@ -1,0 +1,1 @@
+2026-09-02T10:51:53Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 collect --model llama32_3b --tag cal_a --split train --offset 0 --sequences 128 --seq-len 2048 --batch-size 2 --sample-stride 32

@@ -1,0 +1,467 @@
+start_utc=2026-09-02T10:51:52Z
+host=gpu-6000ada-1.cluster02.eee.ntu.edu.sg
+job_id=135840
+Wed Sep  2 10:51:52 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.173.02             Driver Version: 580.173.02     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA RTX 6000 Ada Gene...    On  |   00000000:00:1C.0 Off |                    0 |
+| 85%   32C    P8             21W /  300W |       1MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+2026-09-02T10:51:53Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 collect --model llama32_3b --tag cal_a --split train --offset 0 --sequences 128 --seq-len 2048 --batch-size 2 --sample-stride 32
+2026-09-02T10:51:56Z INFO loading WikiText-2 split=train
+2026-09-02T10:52:08Z INFO saved torch.Size([128, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_3b-train-o0-n128-l2048.pt
+2026-09-02T10:52:08Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T10:52:13Z INFO 2/128 sequences
+2026-09-02T10:52:14Z INFO 10/128 sequences
+2026-09-02T10:52:15Z INFO 18/128 sequences
+2026-09-02T10:52:16Z INFO 26/128 sequences
+2026-09-02T10:52:17Z INFO 34/128 sequences
+2026-09-02T10:52:18Z INFO 42/128 sequences
+2026-09-02T10:52:19Z INFO 50/128 sequences
+2026-09-02T10:52:20Z INFO 58/128 sequences
+2026-09-02T10:52:21Z INFO 66/128 sequences
+2026-09-02T10:52:22Z INFO 74/128 sequences
+2026-09-02T10:52:23Z INFO 82/128 sequences
+2026-09-02T10:52:24Z INFO 90/128 sequences
+2026-09-02T10:52:24Z INFO 98/128 sequences
+2026-09-02T10:52:25Z INFO 106/128 sequences
+2026-09-02T10:52:26Z INFO 114/128 sequences
+2026-09-02T10:52:27Z INFO 122/128 sequences
+2026-09-02T10:52:28Z INFO saved layer 0 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 1 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 2 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 3 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 4 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 5 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 6 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 7 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 8 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 9 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 10 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 11 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 12 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 13 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 14 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 15 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 16 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 17 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 18 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 19 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 20 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 21 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 22 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 23 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 24 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 25 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 26 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 27 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO collection complete in 16.2s
+2026-09-02T10:52:29Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 collect --model llama32_3b --tag cal_b --split train --offset 128 --sequences 128 --seq-len 2048 --batch-size 2 --sample-stride 32 --moments-only
+2026-09-02T10:52:29Z INFO loading WikiText-2 split=train
+2026-09-02T10:52:39Z INFO saved torch.Size([128, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_3b-train-o128-n128-l2048.pt
+2026-09-02T10:52:39Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T10:52:43Z INFO 2/128 sequences
+2026-09-02T10:52:44Z INFO 10/128 sequences
+2026-09-02T10:52:45Z INFO 18/128 sequences
+2026-09-02T10:52:46Z INFO 26/128 sequences
+2026-09-02T10:52:47Z INFO 34/128 sequences
+2026-09-02T10:52:48Z INFO 42/128 sequences
+2026-09-02T10:52:49Z INFO 50/128 sequences
+2026-09-02T10:52:50Z INFO 58/128 sequences
+2026-09-02T10:52:51Z INFO 66/128 sequences
+2026-09-02T10:52:52Z INFO 74/128 sequences
+2026-09-02T10:52:53Z INFO 82/128 sequences
+2026-09-02T10:52:54Z INFO 90/128 sequences
+2026-09-02T10:52:55Z INFO 98/128 sequences
+2026-09-02T10:52:56Z INFO 106/128 sequences
+2026-09-02T10:52:57Z INFO 114/128 sequences
+2026-09-02T10:52:58Z INFO 122/128 sequences
+2026-09-02T10:52:59Z INFO saved layer 0 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 1 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 2 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 3 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 4 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 5 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 6 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 7 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 8 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 9 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 10 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 11 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 12 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 13 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 14 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 15 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 16 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 17 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 18 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 19 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 20 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 21 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 22 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 23 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 24 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 25 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 26 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO saved layer 27 count=2097152 samples=0
+2026-09-02T10:52:59Z INFO collection complete in 15.4s
+2026-09-02T10:52:59Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 analyze --model llama32_3b --cal-a cal_a --cal-b cal_b
+2026-09-02T10:53:01Z INFO analyzed layer 1/28
+2026-09-02T10:53:04Z INFO analyzed layer 2/28
+2026-09-02T10:53:06Z INFO analyzed layer 3/28
+2026-09-02T10:53:09Z INFO analyzed layer 4/28
+2026-09-02T10:53:11Z INFO analyzed layer 5/28
+2026-09-02T10:53:13Z INFO analyzed layer 6/28
+2026-09-02T10:53:16Z INFO analyzed layer 7/28
+2026-09-02T10:53:18Z INFO analyzed layer 8/28
+2026-09-02T10:53:20Z INFO analyzed layer 9/28
+2026-09-02T10:53:23Z INFO analyzed layer 10/28
+2026-09-02T10:53:25Z INFO analyzed layer 11/28
+2026-09-02T10:53:28Z INFO analyzed layer 12/28
+2026-09-02T10:53:30Z INFO analyzed layer 13/28
+2026-09-02T10:53:33Z INFO analyzed layer 14/28
+2026-09-02T10:53:35Z INFO analyzed layer 15/28
+2026-09-02T10:53:37Z INFO analyzed layer 16/28
+2026-09-02T10:53:40Z INFO analyzed layer 17/28
+2026-09-02T10:53:42Z INFO analyzed layer 18/28
+2026-09-02T10:53:45Z INFO analyzed layer 19/28
+2026-09-02T10:53:47Z INFO analyzed layer 20/28
+2026-09-02T10:53:49Z INFO analyzed layer 21/28
+2026-09-02T10:53:52Z INFO analyzed layer 22/28
+2026-09-02T10:53:54Z INFO analyzed layer 23/28
+2026-09-02T10:53:56Z INFO analyzed layer 24/28
+2026-09-02T10:53:59Z INFO analyzed layer 25/28
+2026-09-02T10:54:01Z INFO analyzed layer 26/28
+2026-09-02T10:54:04Z INFO analyzed layer 27/28
+2026-09-02T10:54:06Z INFO analyzed layer 28/28
+2026-09-02T10:54:11Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 collect --model llama32_1b --tag cal_a --split train --offset 0 --sequences 128 --seq-len 2048 --batch-size 2 --sample-stride 32 --moments-only
+2026-09-02T10:54:11Z INFO loading WikiText-2 split=train
+2026-09-02T10:54:22Z INFO saved torch.Size([128, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_1b-train-o0-n128-l2048.pt
+2026-09-02T10:54:22Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T10:54:23Z INFO 2/128 sequences
+2026-09-02T10:54:24Z INFO 10/128 sequences
+2026-09-02T10:54:24Z INFO 18/128 sequences
+2026-09-02T10:54:24Z INFO 26/128 sequences
+2026-09-02T10:54:25Z INFO 34/128 sequences
+2026-09-02T10:54:25Z INFO 42/128 sequences
+2026-09-02T10:54:25Z INFO 50/128 sequences
+2026-09-02T10:54:26Z INFO 58/128 sequences
+2026-09-02T10:54:26Z INFO 66/128 sequences
+2026-09-02T10:54:27Z INFO 74/128 sequences
+2026-09-02T10:54:27Z INFO 82/128 sequences
+2026-09-02T10:54:27Z INFO 90/128 sequences
+2026-09-02T10:54:28Z INFO 98/128 sequences
+2026-09-02T10:54:28Z INFO 106/128 sequences
+2026-09-02T10:54:28Z INFO 114/128 sequences
+2026-09-02T10:54:29Z INFO 122/128 sequences
+2026-09-02T10:54:29Z INFO saved layer 0 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 1 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 2 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 3 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 4 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 5 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 6 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 7 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 8 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 9 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 10 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 11 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 12 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 13 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 14 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 15 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO collection complete in 5.5s
+2026-09-02T10:54:29Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 e2 --model llama32_3b --cal-a cal_a --eval-sequences 64 --seq-len 2048 --seeds 3
+2026-09-02T10:54:29Z INFO loading WikiText-2 split=test
+2026-09-02T10:54:34Z INFO saved torch.Size([64, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_3b-test-o0-n64-l2048.pt
+2026-09-02T10:54:34Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T10:54:38Z INFO E2 model=llama32_3b b=64 seed=20260902 method=bf16
+2026-09-02T10:54:38Z INFO PPL sequence 1/64 loss=1.821631
+2026-09-02T10:54:39Z INFO PPL sequence 9/64 loss=2.240482
+2026-09-02T10:54:40Z INFO PPL sequence 17/64 loss=2.119182
+2026-09-02T10:54:41Z INFO PPL sequence 25/64 loss=2.272136
+2026-09-02T10:54:42Z INFO PPL sequence 33/64 loss=2.003620
+2026-09-02T10:54:43Z INFO PPL sequence 41/64 loss=2.261674
+2026-09-02T10:54:44Z INFO PPL sequence 49/64 loss=2.025194
+2026-09-02T10:54:45Z INFO PPL sequence 57/64 loss=1.813277
+2026-09-02T10:54:46Z INFO E2 model=llama32_3b b=64 seed=20260902 method=identity
+2026-09-02T10:54:47Z INFO PPL sequence 1/64 loss=1.855976
+2026-09-02T10:54:48Z INFO PPL sequence 9/64 loss=2.268810
+2026-09-02T10:54:49Z INFO PPL sequence 17/64 loss=2.150789
+2026-09-02T10:54:50Z INFO PPL sequence 25/64 loss=2.299026
+2026-09-02T10:54:51Z INFO PPL sequence 33/64 loss=2.022087
+2026-09-02T10:54:52Z INFO PPL sequence 41/64 loss=2.276070
+2026-09-02T10:54:53Z INFO PPL sequence 49/64 loss=2.050401
+2026-09-02T10:54:55Z INFO PPL sequence 57/64 loss=1.837219
+2026-09-02T10:54:56Z INFO E2 model=llama32_3b b=64 seed=20260902 method=hadamard
+2026-09-02T10:54:56Z INFO PPL sequence 1/64 loss=1.827264
+2026-09-02T10:54:57Z INFO PPL sequence 9/64 loss=2.252158
+2026-09-02T10:54:58Z INFO PPL sequence 17/64 loss=2.139312
+2026-09-02T10:54:59Z INFO PPL sequence 25/64 loss=2.293923
+2026-09-02T10:55:00Z INFO PPL sequence 33/64 loss=2.026513
+2026-09-02T10:55:02Z INFO PPL sequence 41/64 loss=2.279046
+2026-09-02T10:55:03Z INFO PPL sequence 49/64 loss=2.041705
+2026-09-02T10:55:04Z INFO PPL sequence 57/64 loss=1.841712
+2026-09-02T10:55:05Z INFO E2 model=llama32_3b b=64 seed=20260902 method=nar
+2026-09-02T10:55:05Z INFO PPL sequence 1/64 loss=1.825469
+2026-09-02T10:55:06Z INFO PPL sequence 9/64 loss=2.256494
+2026-09-02T10:55:08Z INFO PPL sequence 17/64 loss=2.135825
+2026-09-02T10:55:09Z INFO PPL sequence 25/64 loss=2.284464
+2026-09-02T10:55:10Z INFO PPL sequence 33/64 loss=2.011477
+2026-09-02T10:55:11Z INFO PPL sequence 41/64 loss=2.275522
+2026-09-02T10:55:12Z INFO PPL sequence 49/64 loss=2.033841
+2026-09-02T10:55:14Z INFO PPL sequence 57/64 loss=1.829741
+2026-09-02T10:55:15Z INFO E2 model=llama32_3b b=64 seed=20260902 method=nar_rope
+2026-09-02T10:55:15Z INFO PPL sequence 1/64 loss=1.824945
+2026-09-02T10:55:16Z INFO PPL sequence 9/64 loss=2.266355
+2026-09-02T10:55:17Z INFO PPL sequence 17/64 loss=2.143215
+2026-09-02T10:55:18Z INFO PPL sequence 25/64 loss=2.284039
+2026-09-02T10:55:20Z INFO PPL sequence 33/64 loss=2.020932
+2026-09-02T10:55:21Z INFO PPL sequence 41/64 loss=2.278201
+2026-09-02T10:55:22Z INFO PPL sequence 49/64 loss=2.041921
+2026-09-02T10:55:23Z INFO PPL sequence 57/64 loss=1.834073
+2026-09-02T10:55:24Z INFO E2 model=llama32_3b b=64 seed=20260903 method=hadamard
+2026-09-02T10:55:24Z INFO PPL sequence 1/64 loss=1.831815
+2026-09-02T10:55:26Z INFO PPL sequence 9/64 loss=2.255327
+2026-09-02T10:55:27Z INFO PPL sequence 17/64 loss=2.135888
+2026-09-02T10:55:28Z INFO PPL sequence 25/64 loss=2.287093
+2026-09-02T10:55:29Z INFO PPL sequence 33/64 loss=2.028156
+2026-09-02T10:55:30Z INFO PPL sequence 41/64 loss=2.276880
+2026-09-02T10:55:32Z INFO PPL sequence 49/64 loss=2.047693
+2026-09-02T10:55:33Z INFO PPL sequence 57/64 loss=1.836125
+2026-09-02T10:55:34Z INFO E2 model=llama32_3b b=64 seed=20260903 method=nar
+2026-09-02T10:55:34Z INFO PPL sequence 1/64 loss=1.827399
+2026-09-02T10:55:35Z INFO PPL sequence 9/64 loss=2.255002
+2026-09-02T10:55:37Z INFO PPL sequence 17/64 loss=2.135098
+2026-09-02T10:55:38Z INFO PPL sequence 25/64 loss=2.282042
+2026-09-02T10:55:39Z INFO PPL sequence 33/64 loss=2.020381
+2026-09-02T10:55:40Z INFO PPL sequence 41/64 loss=2.267786
+2026-09-02T10:55:41Z INFO PPL sequence 49/64 loss=2.036817
+2026-09-02T10:55:42Z INFO PPL sequence 57/64 loss=1.838228
+2026-09-02T10:55:44Z INFO E2 model=llama32_3b b=64 seed=20260903 method=nar_rope
+2026-09-02T10:55:44Z INFO PPL sequence 1/64 loss=1.832474
+2026-09-02T10:55:45Z INFO PPL sequence 9/64 loss=2.260667
+2026-09-02T10:55:46Z INFO PPL sequence 17/64 loss=2.134356
+2026-09-02T10:55:47Z INFO PPL sequence 25/64 loss=2.277809
+2026-09-02T10:55:49Z INFO PPL sequence 33/64 loss=2.021613
+2026-09-02T10:55:50Z INFO PPL sequence 41/64 loss=2.280140
+2026-09-02T10:55:51Z INFO PPL sequence 49/64 loss=2.045892
+2026-09-02T10:55:52Z INFO PPL sequence 57/64 loss=1.838707
+2026-09-02T10:55:53Z INFO E2 model=llama32_3b b=64 seed=20260904 method=hadamard
+2026-09-02T10:55:54Z INFO PPL sequence 1/64 loss=1.829676
+2026-09-02T10:55:55Z INFO PPL sequence 9/64 loss=2.260183
+2026-09-02T10:55:56Z INFO PPL sequence 17/64 loss=2.136772
+2026-09-02T10:55:57Z INFO PPL sequence 25/64 loss=2.281485
+2026-09-02T10:55:58Z INFO PPL sequence 33/64 loss=2.021780
+2026-09-02T10:56:00Z INFO PPL sequence 41/64 loss=2.271417
+2026-09-02T10:56:01Z INFO PPL sequence 49/64 loss=2.047762
+2026-09-02T10:56:02Z INFO PPL sequence 57/64 loss=1.830598
+2026-09-02T10:56:03Z INFO E2 model=llama32_3b b=64 seed=20260904 method=nar
+2026-09-02T10:56:03Z INFO PPL sequence 1/64 loss=1.825590
+2026-09-02T10:56:05Z INFO PPL sequence 9/64 loss=2.249648
+2026-09-02T10:56:06Z INFO PPL sequence 17/64 loss=2.132790
+2026-09-02T10:56:07Z INFO PPL sequence 25/64 loss=2.290460
+2026-09-02T10:56:08Z INFO PPL sequence 33/64 loss=2.023291
+2026-09-02T10:56:10Z INFO PPL sequence 41/64 loss=2.275708
+2026-09-02T10:56:11Z INFO PPL sequence 49/64 loss=2.040253
+2026-09-02T10:56:12Z INFO PPL sequence 57/64 loss=1.826982
+2026-09-02T10:56:13Z INFO E2 model=llama32_3b b=64 seed=20260904 method=nar_rope
+2026-09-02T10:56:13Z INFO PPL sequence 1/64 loss=1.830354
+2026-09-02T10:56:15Z INFO PPL sequence 9/64 loss=2.258535
+2026-09-02T10:56:16Z INFO PPL sequence 17/64 loss=2.144308
+2026-09-02T10:56:17Z INFO PPL sequence 25/64 loss=2.277574
+2026-09-02T10:56:18Z INFO PPL sequence 33/64 loss=2.017541
+2026-09-02T10:56:19Z INFO PPL sequence 41/64 loss=2.276790
+2026-09-02T10:56:21Z INFO PPL sequence 49/64 loss=2.030013
+2026-09-02T10:56:22Z INFO PPL sequence 57/64 loss=1.826061
+2026-09-02T10:56:23Z INFO E2 model=llama32_3b b=128 seed=20260902 method=bf16
+2026-09-02T10:56:23Z INFO PPL sequence 1/64 loss=1.821631
+2026-09-02T10:56:24Z INFO PPL sequence 9/64 loss=2.240482
+2026-09-02T10:56:25Z INFO PPL sequence 17/64 loss=2.119182
+2026-09-02T10:56:27Z INFO PPL sequence 25/64 loss=2.272136
+2026-09-02T10:56:28Z INFO PPL sequence 33/64 loss=2.003620
+2026-09-02T10:56:29Z INFO PPL sequence 41/64 loss=2.261674
+2026-09-02T10:56:30Z INFO PPL sequence 49/64 loss=2.025194
+2026-09-02T10:56:31Z INFO PPL sequence 57/64 loss=1.813277
+2026-09-02T10:56:32Z INFO E2 model=llama32_3b b=128 seed=20260902 method=identity
+2026-09-02T10:56:32Z INFO PPL sequence 1/64 loss=1.867738
+2026-09-02T10:56:34Z INFO PPL sequence 9/64 loss=2.302263
+2026-09-02T10:56:35Z INFO PPL sequence 17/64 loss=2.168257
+2026-09-02T10:56:36Z INFO PPL sequence 25/64 loss=2.324059
+2026-09-02T10:56:37Z INFO PPL sequence 33/64 loss=2.058792
+2026-09-02T10:56:38Z INFO PPL sequence 41/64 loss=2.320853
+2026-09-02T10:56:40Z INFO PPL sequence 49/64 loss=2.069440
+2026-09-02T10:56:41Z INFO PPL sequence 57/64 loss=1.898785
+2026-09-02T10:56:42Z INFO E2 model=llama32_3b b=128 seed=20260902 method=hadamard
+2026-09-02T10:56:42Z INFO PPL sequence 1/64 loss=1.846152
+2026-09-02T10:56:44Z INFO PPL sequence 9/64 loss=2.252466
+2026-09-02T10:56:45Z INFO PPL sequence 17/64 loss=2.149771
+2026-09-02T10:56:46Z INFO PPL sequence 25/64 loss=2.286819
+2026-09-02T10:56:47Z INFO PPL sequence 33/64 loss=2.035465
+2026-09-02T10:56:48Z INFO PPL sequence 41/64 loss=2.291589
+2026-09-02T10:56:50Z INFO PPL sequence 49/64 loss=2.033790
+2026-09-02T10:56:51Z INFO PPL sequence 57/64 loss=1.862429
+2026-09-02T10:56:52Z INFO E2 model=llama32_3b b=128 seed=20260902 method=nar
+2026-09-02T10:56:52Z INFO PPL sequence 1/64 loss=1.845612
+2026-09-02T10:56:53Z INFO PPL sequence 9/64 loss=2.265832
+2026-09-02T10:56:55Z INFO PPL sequence 17/64 loss=2.147960
+2026-09-02T10:56:56Z INFO PPL sequence 25/64 loss=2.295518
+2026-09-02T10:56:57Z INFO PPL sequence 33/64 loss=2.020593
+2026-09-02T10:56:58Z INFO PPL sequence 41/64 loss=2.284072
+2026-09-02T10:57:00Z INFO PPL sequence 49/64 loss=2.050322
+2026-09-02T10:57:01Z INFO PPL sequence 57/64 loss=1.849067
+2026-09-02T10:57:02Z INFO E2 model=llama32_3b b=128 seed=20260903 method=hadamard
+2026-09-02T10:57:02Z INFO PPL sequence 1/64 loss=1.849639
+2026-09-02T10:57:03Z INFO PPL sequence 9/64 loss=2.256087
+2026-09-02T10:57:05Z INFO PPL sequence 17/64 loss=2.143423
+2026-09-02T10:57:06Z INFO PPL sequence 25/64 loss=2.292759
+2026-09-02T10:57:07Z INFO PPL sequence 33/64 loss=2.031262
+2026-09-02T10:57:08Z INFO PPL sequence 41/64 loss=2.294521
+2026-09-02T10:57:10Z INFO PPL sequence 49/64 loss=2.047472
+2026-09-02T10:57:11Z INFO PPL sequence 57/64 loss=1.863213
+2026-09-02T10:57:12Z INFO E2 model=llama32_3b b=128 seed=20260903 method=nar
+2026-09-02T10:57:12Z INFO PPL sequence 1/64 loss=1.845066
+2026-09-02T10:57:13Z INFO PPL sequence 9/64 loss=2.257652
+2026-09-02T10:57:15Z INFO PPL sequence 17/64 loss=2.149440
+2026-09-02T10:57:16Z INFO PPL sequence 25/64 loss=2.290644
+2026-09-02T10:57:17Z INFO PPL sequence 33/64 loss=2.029486
+2026-09-02T10:57:18Z INFO PPL sequence 41/64 loss=2.283485
+2026-09-02T10:57:20Z INFO PPL sequence 49/64 loss=2.048079
+2026-09-02T10:57:21Z INFO PPL sequence 57/64 loss=1.844806
+2026-09-02T10:57:22Z INFO E2 model=llama32_3b b=128 seed=20260904 method=hadamard
+2026-09-02T10:57:22Z INFO PPL sequence 1/64 loss=1.842976
+2026-09-02T10:57:23Z INFO PPL sequence 9/64 loss=2.256780
+2026-09-02T10:57:25Z INFO PPL sequence 17/64 loss=2.147656
+2026-09-02T10:57:26Z INFO PPL sequence 25/64 loss=2.289998
+2026-09-02T10:57:27Z INFO PPL sequence 33/64 loss=2.027970
+2026-09-02T10:57:28Z INFO PPL sequence 41/64 loss=2.292323
+2026-09-02T10:57:30Z INFO PPL sequence 49/64 loss=2.053312
+2026-09-02T10:57:31Z INFO PPL sequence 57/64 loss=1.843142
+2026-09-02T10:57:32Z INFO E2 model=llama32_3b b=128 seed=20260904 method=nar
+2026-09-02T10:57:32Z INFO PPL sequence 1/64 loss=1.847814
+2026-09-02T10:57:33Z INFO PPL sequence 9/64 loss=2.265749
+2026-09-02T10:57:35Z INFO PPL sequence 17/64 loss=2.149189
+2026-09-02T10:57:36Z INFO PPL sequence 25/64 loss=2.295762
+2026-09-02T10:57:37Z INFO PPL sequence 33/64 loss=2.033268
+2026-09-02T10:57:38Z INFO PPL sequence 41/64 loss=2.287805
+2026-09-02T10:57:40Z INFO PPL sequence 49/64 loss=2.042269
+2026-09-02T10:57:41Z INFO PPL sequence 57/64 loss=1.856628
+2026-09-02T10:57:42Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 e2 --model llama32_1b --cal-a cal_a --eval-sequences 64 --seq-len 2048 --seeds 3
+2026-09-02T10:57:42Z INFO loading WikiText-2 split=test
+2026-09-02T10:57:48Z INFO saved torch.Size([64, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_1b-test-o0-n64-l2048.pt
+2026-09-02T10:57:48Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T10:57:50Z INFO E2 model=llama32_1b b=32 seed=20260902 method=bf16
+2026-09-02T10:57:50Z INFO PPL sequence 1/64 loss=1.978113
+2026-09-02T10:57:50Z INFO PPL sequence 9/64 loss=2.493437
+2026-09-02T10:57:50Z INFO PPL sequence 17/64 loss=2.339801
+2026-09-02T10:57:51Z INFO PPL sequence 25/64 loss=2.510370
+2026-09-02T10:57:51Z INFO PPL sequence 33/64 loss=2.222066
+2026-09-02T10:57:52Z INFO PPL sequence 41/64 loss=2.492138
+2026-09-02T10:57:52Z INFO PPL sequence 49/64 loss=2.248924
+2026-09-02T10:57:53Z INFO PPL sequence 57/64 loss=2.171948
+2026-09-02T10:57:53Z INFO E2 model=llama32_1b b=32 seed=20260902 method=identity
+2026-09-02T10:57:53Z INFO PPL sequence 1/64 loss=2.025415
+2026-09-02T10:57:54Z INFO PPL sequence 9/64 loss=2.566305
+2026-09-02T10:57:54Z INFO PPL sequence 17/64 loss=2.405712
+2026-09-02T10:57:55Z INFO PPL sequence 25/64 loss=2.553250
+2026-09-02T10:57:55Z INFO PPL sequence 33/64 loss=2.281295
+2026-09-02T10:57:56Z INFO PPL sequence 41/64 loss=2.534537
+2026-09-02T10:57:56Z INFO PPL sequence 49/64 loss=2.308353
+2026-09-02T10:57:57Z INFO PPL sequence 57/64 loss=2.201829
+2026-09-02T10:57:57Z INFO E2 model=llama32_1b b=32 seed=20260902 method=hadamard
+2026-09-02T10:57:57Z INFO PPL sequence 1/64 loss=2.029966
+2026-09-02T10:57:58Z INFO PPL sequence 9/64 loss=2.533972
+2026-09-02T10:57:58Z INFO PPL sequence 17/64 loss=2.386694
+2026-09-02T10:57:59Z INFO PPL sequence 25/64 loss=2.551116
+2026-09-02T10:57:59Z INFO PPL sequence 33/64 loss=2.267421
+2026-09-02T10:58:00Z INFO PPL sequence 41/64 loss=2.526500
+2026-09-02T10:58:00Z INFO PPL sequence 49/64 loss=2.294230
+2026-09-02T10:58:01Z INFO PPL sequence 57/64 loss=2.196777
+2026-09-02T10:58:01Z INFO E2 model=llama32_1b b=32 seed=20260902 method=nar
+2026-09-02T10:58:01Z INFO PPL sequence 1/64 loss=2.007390
+2026-09-02T10:58:02Z INFO PPL sequence 9/64 loss=2.528312
+2026-09-02T10:58:02Z INFO PPL sequence 17/64 loss=2.368357
+2026-09-02T10:58:03Z INFO PPL sequence 25/64 loss=2.535275
+2026-09-02T10:58:03Z INFO PPL sequence 33/64 loss=2.252019
+2026-09-02T10:58:04Z INFO PPL sequence 41/64 loss=2.515578
+2026-09-02T10:58:04Z INFO PPL sequence 49/64 loss=2.272226
+2026-09-02T10:58:05Z INFO PPL sequence 57/64 loss=2.184195
+2026-09-02T10:58:05Z INFO E2 model=llama32_1b b=32 seed=20260902 method=nar_rope
+2026-09-02T10:58:05Z INFO PPL sequence 1/64 loss=2.023528
+2026-09-02T10:58:06Z INFO PPL sequence 9/64 loss=2.529376
+2026-09-02T10:58:06Z INFO PPL sequence 17/64 loss=2.365510
+2026-09-02T10:58:07Z INFO PPL sequence 25/64 loss=2.541844
+2026-09-02T10:58:07Z INFO PPL sequence 33/64 loss=2.261562
+2026-09-02T10:58:08Z INFO PPL sequence 41/64 loss=2.522505
+2026-09-02T10:58:08Z INFO PPL sequence 49/64 loss=2.273266
+2026-09-02T10:58:09Z INFO PPL sequence 57/64 loss=2.204568
+2026-09-02T10:58:09Z INFO E2 model=llama32_1b b=32 seed=20260903 method=hadamard
+2026-09-02T10:58:09Z INFO PPL sequence 1/64 loss=2.014196
+2026-09-02T10:58:10Z INFO PPL sequence 9/64 loss=2.538700
+2026-09-02T10:58:10Z INFO PPL sequence 17/64 loss=2.391754
+2026-09-02T10:58:11Z INFO PPL sequence 25/64 loss=2.538647
+2026-09-02T10:58:11Z INFO PPL sequence 33/64 loss=2.266126
+2026-09-02T10:58:12Z INFO PPL sequence 41/64 loss=2.541112
+2026-09-02T10:58:12Z INFO PPL sequence 49/64 loss=2.292973
+2026-09-02T10:58:12Z INFO PPL sequence 57/64 loss=2.220549
+2026-09-02T10:58:13Z INFO E2 model=llama32_1b b=32 seed=20260903 method=nar
+2026-09-02T10:58:13Z INFO PPL sequence 1/64 loss=2.010204
+2026-09-02T10:58:13Z INFO PPL sequence 9/64 loss=2.538548
+2026-09-02T10:58:14Z INFO PPL sequence 17/64 loss=2.372669
+2026-09-02T10:58:14Z INFO PPL sequence 25/64 loss=2.529294
+2026-09-02T10:58:15Z INFO PPL sequence 33/64 loss=2.253443
+2026-09-02T10:58:15Z INFO PPL sequence 41/64 loss=2.523929
+2026-09-02T10:58:16Z INFO PPL sequence 49/64 loss=2.282527
+2026-09-02T10:58:16Z INFO PPL sequence 57/64 loss=2.183933
+2026-09-02T10:58:17Z INFO E2 model=llama32_1b b=32 seed=20260903 method=nar_rope
+2026-09-02T10:58:17Z INFO PPL sequence 1/64 loss=2.021337
+2026-09-02T10:58:17Z INFO PPL sequence 9/64 loss=2.535477
+2026-09-02T10:58:18Z INFO PPL sequence 17/64 loss=2.376060
+2026-09-02T10:58:18Z INFO PPL sequence 25/64 loss=2.541566
+2026-09-02T10:58:19Z INFO PPL sequence 33/64 loss=2.268752
+2026-09-02T10:58:19Z INFO PPL sequence 41/64 loss=2.527936
+2026-09-02T10:58:20Z INFO PPL sequence 49/64 loss=2.281135
+2026-09-02T10:58:20Z INFO PPL sequence 57/64 loss=2.194187
+2026-09-02T10:58:21Z INFO E2 model=llama32_1b b=32 seed=20260904 method=hadamard
+2026-09-02T10:58:21Z INFO PPL sequence 1/64 loss=2.026674
+2026-09-02T10:58:21Z INFO PPL sequence 9/64 loss=2.537951
+2026-09-02T10:58:22Z INFO PPL sequence 17/64 loss=2.382425
+2026-09-02T10:58:22Z INFO PPL sequence 25/64 loss=2.539939
+2026-09-02T10:58:23Z INFO PPL sequence 33/64 loss=2.267440
+2026-09-02T10:58:23Z INFO PPL sequence 41/64 loss=2.530333
+2026-09-02T10:58:24Z INFO PPL sequence 49/64 loss=2.298112
+2026-09-02T10:58:24Z INFO PPL sequence 57/64 loss=2.214876
+2026-09-02T10:58:25Z INFO E2 model=llama32_1b b=32 seed=20260904 method=nar
+2026-09-02T10:58:25Z INFO PPL sequence 1/64 loss=2.004828
+2026-09-02T10:58:25Z INFO PPL sequence 9/64 loss=2.508333
+2026-09-02T10:58:26Z INFO PPL sequence 17/64 loss=2.371194
+2026-09-02T10:58:26Z INFO PPL sequence 25/64 loss=2.532854
+2026-09-02T10:58:27Z INFO PPL sequence 33/64 loss=2.245580
+2026-09-02T10:58:27Z INFO PPL sequence 41/64 loss=2.522293
+2026-09-02T10:58:28Z INFO PPL sequence 49/64 loss=2.274477
+2026-09-02T10:58:28Z INFO PPL sequence 57/64 loss=2.190580
+2026-09-02T10:58:29Z INFO E2 model=llama32_1b b=32 seed=20260904 method=nar_rope
+2026-09-02T10:58:29Z INFO PPL sequence 1/64 loss=2.007589
+2026-09-02T10:58:29Z INFO PPL sequence 9/64 loss=2.528057
+2026-09-02T10:58:30Z INFO PPL sequence 17/64 loss=2.375880
+2026-09-02T10:58:30Z INFO PPL sequence 25/64 loss=2.534850
+2026-09-02T10:58:31Z INFO PPL sequence 33/64 loss=2.256525
+2026-09-02T10:58:31Z INFO PPL sequence 41/64 loss=2.534549
+2026-09-02T10:58:32Z INFO PPL sequence 49/64 loss=2.282292
+2026-09-02T10:58:32Z INFO PPL sequence 57/64 loss=2.199633
+2026-09-02T10:58:33Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 report
+2026-09-02T10:58:33Z INFO wrote /projects/_ssd/river/nar-validation/report.md

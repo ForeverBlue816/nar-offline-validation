@@ -1,0 +1,37 @@
+2026-09-02T10:54:11Z INFO loading WikiText-2 split=train
+2026-09-02T10:54:22Z INFO saved torch.Size([128, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_1b-train-o0-n128-l2048.pt
+2026-09-02T10:54:22Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T10:54:23Z INFO 2/128 sequences
+2026-09-02T10:54:24Z INFO 10/128 sequences
+2026-09-02T10:54:24Z INFO 18/128 sequences
+2026-09-02T10:54:24Z INFO 26/128 sequences
+2026-09-02T10:54:25Z INFO 34/128 sequences
+2026-09-02T10:54:25Z INFO 42/128 sequences
+2026-09-02T10:54:25Z INFO 50/128 sequences
+2026-09-02T10:54:26Z INFO 58/128 sequences
+2026-09-02T10:54:26Z INFO 66/128 sequences
+2026-09-02T10:54:27Z INFO 74/128 sequences
+2026-09-02T10:54:27Z INFO 82/128 sequences
+2026-09-02T10:54:27Z INFO 90/128 sequences
+2026-09-02T10:54:28Z INFO 98/128 sequences
+2026-09-02T10:54:28Z INFO 106/128 sequences
+2026-09-02T10:54:28Z INFO 114/128 sequences
+2026-09-02T10:54:29Z INFO 122/128 sequences
+2026-09-02T10:54:29Z INFO saved layer 0 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 1 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 2 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 3 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 4 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 5 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 6 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 7 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 8 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 9 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 10 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 11 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 12 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 13 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 14 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO saved layer 15 count=2097152 samples=0
+2026-09-02T10:54:29Z INFO collection complete in 5.5s
+2026-09-02T10:54:29Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 e2 --model llama32_3b --cal-a cal_a --eval-sequences 64 --seq-len 2048 --seeds 3

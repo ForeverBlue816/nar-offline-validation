@@ -1,0 +1,49 @@
+2026-09-02T10:51:56Z INFO loading WikiText-2 split=train
+2026-09-02T10:52:08Z INFO saved torch.Size([128, 2048]) token chunks to /projects/_ssd/river/nar-validation/cache/tokenized/llama32_3b-train-o0-n128-l2048.pt
+2026-09-02T10:52:08Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T10:52:13Z INFO 2/128 sequences
+2026-09-02T10:52:14Z INFO 10/128 sequences
+2026-09-02T10:52:15Z INFO 18/128 sequences
+2026-09-02T10:52:16Z INFO 26/128 sequences
+2026-09-02T10:52:17Z INFO 34/128 sequences
+2026-09-02T10:52:18Z INFO 42/128 sequences
+2026-09-02T10:52:19Z INFO 50/128 sequences
+2026-09-02T10:52:20Z INFO 58/128 sequences
+2026-09-02T10:52:21Z INFO 66/128 sequences
+2026-09-02T10:52:22Z INFO 74/128 sequences
+2026-09-02T10:52:23Z INFO 82/128 sequences
+2026-09-02T10:52:24Z INFO 90/128 sequences
+2026-09-02T10:52:24Z INFO 98/128 sequences
+2026-09-02T10:52:25Z INFO 106/128 sequences
+2026-09-02T10:52:26Z INFO 114/128 sequences
+2026-09-02T10:52:27Z INFO 122/128 sequences
+2026-09-02T10:52:28Z INFO saved layer 0 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 1 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 2 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 3 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 4 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 5 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 6 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 7 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 8 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 9 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 10 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 11 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 12 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 13 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 14 count=2097152 samples=65536
+2026-09-02T10:52:28Z INFO saved layer 15 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 16 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 17 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 18 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 19 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 20 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 21 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 22 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 23 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 24 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 25 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 26 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO saved layer 27 count=2097152 samples=65536
+2026-09-02T10:52:29Z INFO collection complete in 16.2s
+2026-09-02T10:52:29Z INFO pipeline invoke: /projects/river/nar-validation/venv/bin/python /projects/river/nar-validation/nar/experiment.py --workdir /projects/_ssd/river/nar-validation --seed 20260902 collect --model llama32_3b --tag cal_b --split train --offset 128 --sequences 128 --seq-len 2048 --batch-size 2 --sample-stride 32 --moments-only

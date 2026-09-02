@@ -1,0 +1,17 @@
+activations/
+cache/
+models/
+tmp/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+*.tmp
+*.partial.csv

@@ -1,0 +1,29 @@
+{
+  "base_seed": 20260902,
+  "ci": "two-sided paired 90% Student-t CI over the three seed-level PPL differences (df=2)",
+  "elapsed_seconds": 43.06995487213135,
+  "eval_sequences": 64,
+  "eval_split": "test",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      9
+    ],
+    "gpu_name": "NVIDIA RTX 6000 Ada Generation",
+    "hostname": "gpu-6000ada-1.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA RTX 6000 Ada Generation, GPU-909d1900-a4f6-c32d-2700-e477d79a7be1, 46068 MiB, 36517 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "3",
+    "slurm_job_id": "135840",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "llama32_1b",
+  "model_id": "unsloth/Llama-3.2-1B",
+  "paired_design": "identical calibration and evaluation sequences within each seed; only R differs",
+  "seeds": 3,
+  "sequence_length": 2048
+}

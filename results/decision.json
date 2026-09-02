@@ -1,0 +1,20 @@
+{
+  "e2_gate_pass": true,
+  "e2_nar_vs_hadamard": {
+    "b": "128",
+    "mean_ppl": "7.765272898908353",
+    "method": "nar",
+    "model": "llama32_3b",
+    "paired_90ci_high": "-0.006373972989415106",
+    "paired_90ci_low": "-0.027894221067178766",
+    "paired_ppl_delta_vs_hadamard": "-0.017134097028296935",
+    "seed_ppl_std": "0.0010919328705772883",
+    "seed_ppls": "7.76443563;7.76487511;7.76650796",
+    "seeds": "3"
+  },
+  "heldout_survives": true,
+  "nar_range_reduction_vs_hadamard_b128": 0.07770195111596132,
+  "phenomenon_pass": false,
+  "promising_pass": false,
+  "topk_projection_range_attribution_b128": 0.15231095517385382
+}

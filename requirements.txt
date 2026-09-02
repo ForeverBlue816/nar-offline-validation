@@ -1,0 +1,7 @@
+torch==2.11.0
+transformers @ git+https://github.com/huggingface/transformers.git@a353632607c59463e6ced86a44c2de3c2cd62d5e
+datasets==5.0.1
+accelerate==1.14.0
+numpy==2.4.6
+pandas==3.0.5
+matplotlib==3.10.5
