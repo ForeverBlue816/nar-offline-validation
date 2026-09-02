@@ -144,6 +144,12 @@ mkdir -p runs
 NAR_WORKDIR=/path/to/project-storage sbatch slurm_extensions.sh
 ```
 
+To continue an already-running E13 queue under a five-job submission limit,
+use `continue_e13_e15.sh` with the two E13 job IDs, E13 report ID, GPTQ parity
+ID, and existing 3B E14 calibration ID. The driver stops on the first failed
+job and records every newly submitted ID under
+`$NAR_WORKDIR/orchestration/e13_e15_jobs.tsv`.
+
 Stages have `DONE.json` markers and resumable capture checkpoints. Exact
 commands are appended to `runs/commands.jsonl`. Raw bf16 dumps and randomized
 eigenspace checkpoints remain under `activations/` in project storage and are
