@@ -863,6 +863,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "mean_accuracy": float(np.mean([row["accuracy"] for row in task_rows])),
                 "mean_definition": "unweighted mean of six frozen accuracy metrics",
                 "seed": args.seed, "num_fewshot": 0, "harness_commit": HARNESS_COMMIT,
+                "batch_size": args.batch_size,
                 "task_versions": _serializable(result.get("versions", {})),
                 "sample_counts": _serializable(result.get("n-samples", {})),
                 "hardware": base.hardware_info(),
@@ -941,7 +942,7 @@ def parser() -> argparse.ArgumentParser:
     evaluate = sub.add_parser("evaluate")
     evaluate.add_argument("--model", choices=MODELS, required=True)
     evaluate.add_argument("--row", choices=ROWS, required=True)
-    evaluate.add_argument("--batch-size", type=int, default=2)
+    evaluate.add_argument("--batch-size", type=int, default=1)
     sub.add_parser("finalize")
     return parser
 
