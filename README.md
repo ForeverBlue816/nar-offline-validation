@@ -2,7 +2,8 @@
 
 A reproducible benchmark for normalized-anchor rotations (NAR) under dynamic
 asymmetric INT4 quantization. It covers post-RoPE Llama K tensors, wide
-`q_proj`/`down_proj` inputs, and a KIVI-style per-channel K baseline.
+`q_proj`/`down_proj` inputs, activation-only perplexity, factorized online
+cost, per-token V-cache quantization, and a KIVI-style per-channel K baseline.
 
 > **Corrected result:** the valid pre-registered K gates at `b=32/64` pass, as
 > do all frozen E2 NAR rows. The original `b=128` K gate is invalid because a
@@ -19,6 +20,12 @@ asymmetric INT4 quantization. It covers post-RoPE Llama K tensors, wide
 | E1c `q_proj` input | positive | 23.755% mean paired-layer range reduction vs full Hadamard |
 | E1c `down_proj` input | positive | 25.301% mean paired-layer range reduction vs full Hadamard |
 | E1d KIVI-style baseline | **clear winner** | Lower NMSE in 28/28 layers at both group sizes |
+| E5 activation PPL, 3B | positive | NAR beats Hadamard at qkv/down/both; paired 90% CIs exclude zero |
+| E5 activation PPL, 1B | positive | NAR beats Hadamard at qkv/down/both; paired 90% CIs exclude zero |
+| E5 activation PPL, 8B | positive | NAR beats Hadamard at qkv/down/both; paired 90% CIs exclude zero |
+| E6 unfused online cost | **FAIL** | NAR wall time exceeds 10% of `down_proj` matmul at every measured token count |
+| E7 per-token V cache | positive, modest | NAR reduces mean range and NMSE vs Hadamard at `b=32/64/128` |
+| E8 range-direct refinement | negative for range | Held-out mean range worsens by 0.000560; NMSE improves by 0.000012 |
 
 NAR-RoPE is dominated by plain NAR in every available paired range/NMSE check
 and at every paired E2 seed, so it is dropped from further work. These are
@@ -32,9 +39,10 @@ are reported rather than filtered.
 ## Scope and artifacts
 
 The repository performs forward-hook activation capture, offline tensor
-analysis, and KV-only INT4 fake quantization. It does **not** run GPTQ, weight
-quantization, end-to-end W4A4KV4, or configuration tuning. Models are
-Llama-3.2-3B and Llama-3.2-1B; data are fixed WikiText-2 chunks.
+analysis, KV-only fake quantization, and activation-only perplexity proxies. It
+does **not** run GPTQ, weight quantization, end-to-end W4A4KV4, or configuration
+tuning. Models are Llama-3.2-3B, Llama-3.2-1B, and Llama-3.1-8B; data are fixed
+WikiText-2 chunks.
 
 The complete protocol, exact fit statistics, summary tables, confidence
 intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
@@ -66,6 +74,16 @@ repository root so Slurm can create relative log paths:
 ```bash
 mkdir -p runs
 NAR_WORKDIR=/path/to/project-storage sbatch slurm_extensions.sh
+```
+
+The activation continuation has separate jobs so models and diagnostics can
+run independently:
+
+```bash
+NAR_WORKDIR=/path/to/project-storage sbatch slurm_activation_3b.sh
+NAR_WORKDIR=/path/to/project-storage sbatch slurm_activation_1b.sh
+NAR_WORKDIR=/path/to/project-storage sbatch slurm_activation_8b.sh
+NAR_WORKDIR=/path/to/project-storage sbatch slurm_activation_diagnostics.sh
 ```
 
 The batch script expects the environment at `$NAR_WORKDIR/venv`. See

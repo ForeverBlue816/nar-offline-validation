@@ -1,0 +1,40 @@
+{
+  "actual_reflections": 64,
+  "benchmark": {
+    "repeats": 30,
+    "token_counts": [
+      1,
+      32,
+      2048
+    ],
+    "warmup": 10
+  },
+  "dense_verification": {
+    "layer": 0,
+    "max_abs_error": 1.9073486328125e-06,
+    "relative_l2_error": 3.659422418422764e-07,
+    "rows": 8
+  },
+  "factorization": "k sequential Householder reflections, fixed permutation, sign, block H128",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 30798 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "0",
+    "slurm_job_id": "136128",
+    "torch": "2.11.0+cu128"
+  },
+  "maximum_allowed_reflections": 128,
+  "model": "llama32_3b",
+  "model_id": "unsloth/Llama-3.2-3B",
+  "site": "down_proj input"
+}

@@ -1,0 +1,57 @@
+{
+  "base_seed": 20260902,
+  "bits": 4,
+  "calibration": {
+    "calibration_sequences": 128,
+    "eigenspace": "frozen E1c randomized eigenspaces; no recomputation",
+    "group_size": 128,
+    "hidden_size": 3072,
+    "intermediate_size": 8192,
+    "max_anchor_error": 6.556510925292969e-07,
+    "model": "llama32_3b",
+    "model_id": "unsloth/Llama-3.2-3B",
+    "num_layers": 28,
+    "permutation_token_stride": 32,
+    "sequence_length": 2048
+  },
+  "ci": "two-sided paired 90% Student-t CI over three seed-level PPL differences (df=2)",
+  "eval_sequences": 64,
+  "eval_split": "test",
+  "group_size": 128,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 25254 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1",
+    "slurm_job_id": "136126",
+    "torch": "2.11.0+cu128"
+  },
+  "methods": [
+    "identity",
+    "hadamard",
+    "nar"
+  ],
+  "model": "llama32_3b",
+  "model_id": "unsloth/Llama-3.2-3B",
+  "other_tensors": "KV and all non-target activations remain bf16",
+  "paired_design": "identical WikiText-2 sequences within each seed/site; only activation rotation differs",
+  "scale_dtype": "fp16",
+  "seeds": 3,
+  "sequence_length": 2048,
+  "sites": [
+    "qkv_only",
+    "both",
+    "down_only"
+  ],
+  "weights": "bf16; R^T is folded into q/k/v or down_proj weight rows offline",
+  "zero_point_dtype": "fp16 real-valued offset"
+}

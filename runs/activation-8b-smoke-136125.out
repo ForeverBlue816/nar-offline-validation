@@ -1,0 +1,20 @@
+2026-09-02T14:19:46Z INFO loading WikiText-2 split=train
+2026-09-02T14:20:01Z INFO saved torch.Size([2, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/ffcc87608d60-train-o0-n2-l128.pt
+2026-09-02T14:20:01Z INFO loading model unsloth/Meta-Llama-3.1-8B
+2026-09-02T14:20:32Z INFO covariance pass 1/3 2/2 sequences
+2026-09-02T14:20:33Z INFO covariance pass 2/3 2/2 sequences
+2026-09-02T14:20:34Z INFO covariance pass 3/3 2/2 sequences
+2026-09-02T14:20:36Z INFO permutation-energy pass 1/1 2/2 sequences
+2026-09-02T14:20:49Z INFO loading WikiText-2 split=test
+2026-09-02T14:20:55Z INFO saved torch.Size([1, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/ffcc87608d60-test-o0-n1-l128.pt
+2026-09-02T14:20:55Z INFO loading model unsloth/Meta-Llama-3.1-8B
+2026-09-02T14:21:05Z INFO llama31_8b bf16 sequence 1/1 loss=2.259517
+2026-09-02T14:21:09Z INFO llama31_8b qkv_only identity seed=20260902 sequence 1/1 loss=2.302425
+2026-09-02T14:21:09Z INFO llama31_8b both identity seed=20260902 sequence 1/1 loss=2.396404
+2026-09-02T14:21:09Z INFO llama31_8b down_only identity seed=20260902 sequence 1/1 loss=2.294623
+2026-09-02T14:21:10Z INFO llama31_8b qkv_only hadamard seed=20260902 sequence 1/1 loss=2.262492
+2026-09-02T14:21:15Z INFO llama31_8b both hadamard seed=20260902 sequence 1/1 loss=2.270759
+2026-09-02T14:21:15Z INFO llama31_8b down_only hadamard seed=20260902 sequence 1/1 loss=2.318502
+2026-09-02T14:21:17Z INFO llama31_8b qkv_only nar seed=20260902 sequence 1/1 loss=2.269939
+2026-09-02T14:21:21Z INFO llama31_8b both nar seed=20260902 sequence 1/1 loss=2.256744
+2026-09-02T14:21:21Z INFO llama31_8b down_only nar seed=20260902 sequence 1/1 loss=2.285866

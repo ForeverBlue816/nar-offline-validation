@@ -1,0 +1,4 @@
+model,b,intercept,slope,r_squared,rmse,points,fit
+llama32_3b,32,0.40375746232610854,0.5947797760026702,0.9395228864990016,0.0038357898404463627,140,"OLS range(k)/range(k=0) = intercept + slope*sqrt(1-f), pooled layer-k"
+llama32_3b,64,0.38515088216229343,0.6136094091337958,0.9506113140557506,0.002719334285963125,84,"OLS range(k)/range(k=0) = intercept + slope*sqrt(1-f), pooled layer-k"
+llama32_3b,128,0.3441420969075823,0.6552445018572088,0.959318896707346,0.002009375811409759,56,"OLS range(k)/range(k=0) = intercept + slope*sqrt(1-f), pooled layer-k"

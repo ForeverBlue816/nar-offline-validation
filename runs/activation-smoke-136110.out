@@ -1,0 +1,101 @@
+2026-09-02T14:12:10Z INFO factor qkv layer=1/28
+2026-09-02T14:12:13Z INFO factor qkv layer=2/28
+2026-09-02T14:12:17Z INFO factor qkv layer=3/28
+2026-09-02T14:12:20Z INFO factor qkv layer=4/28
+2026-09-02T14:12:24Z INFO factor qkv layer=5/28
+2026-09-02T14:12:27Z INFO factor qkv layer=6/28
+2026-09-02T14:12:31Z INFO factor qkv layer=7/28
+2026-09-02T14:12:34Z INFO factor qkv layer=8/28
+2026-09-02T14:12:38Z INFO factor qkv layer=9/28
+2026-09-02T14:12:41Z INFO factor qkv layer=10/28
+2026-09-02T14:12:45Z INFO factor qkv layer=11/28
+2026-09-02T14:12:48Z INFO factor qkv layer=12/28
+2026-09-02T14:12:52Z INFO factor qkv layer=13/28
+2026-09-02T14:12:55Z INFO factor qkv layer=14/28
+2026-09-02T14:12:59Z INFO factor qkv layer=15/28
+2026-09-02T14:13:02Z INFO factor qkv layer=16/28
+2026-09-02T14:13:06Z INFO factor qkv layer=17/28
+2026-09-02T14:13:09Z INFO factor qkv layer=18/28
+2026-09-02T14:13:13Z INFO factor qkv layer=19/28
+2026-09-02T14:13:16Z INFO factor qkv layer=20/28
+2026-09-02T14:13:20Z INFO factor qkv layer=21/28
+2026-09-02T14:13:23Z INFO factor qkv layer=22/28
+2026-09-02T14:13:27Z INFO factor qkv layer=23/28
+2026-09-02T14:13:30Z INFO factor qkv layer=24/28
+2026-09-02T14:13:33Z INFO factor qkv layer=25/28
+2026-09-02T14:13:37Z INFO factor qkv layer=26/28
+2026-09-02T14:13:40Z INFO factor qkv layer=27/28
+2026-09-02T14:13:44Z INFO factor qkv layer=28/28
+2026-09-02T14:13:47Z INFO factor down layer=1/28
+2026-09-02T14:13:51Z INFO factor down layer=2/28
+2026-09-02T14:13:55Z INFO factor down layer=3/28
+2026-09-02T14:13:59Z INFO factor down layer=4/28
+2026-09-02T14:14:03Z INFO factor down layer=5/28
+2026-09-02T14:14:06Z INFO factor down layer=6/28
+2026-09-02T14:14:10Z INFO factor down layer=7/28
+2026-09-02T14:14:14Z INFO factor down layer=8/28
+2026-09-02T14:14:18Z INFO factor down layer=9/28
+2026-09-02T14:14:21Z INFO factor down layer=10/28
+2026-09-02T14:14:25Z INFO factor down layer=11/28
+2026-09-02T14:14:29Z INFO factor down layer=12/28
+2026-09-02T14:14:33Z INFO factor down layer=13/28
+2026-09-02T14:14:37Z INFO factor down layer=14/28
+2026-09-02T14:14:40Z INFO factor down layer=15/28
+2026-09-02T14:14:44Z INFO factor down layer=16/28
+2026-09-02T14:14:48Z INFO factor down layer=17/28
+2026-09-02T14:14:52Z INFO factor down layer=18/28
+2026-09-02T14:14:56Z INFO factor down layer=19/28
+2026-09-02T14:14:59Z INFO factor down layer=20/28
+2026-09-02T14:15:03Z INFO factor down layer=21/28
+2026-09-02T14:15:07Z INFO factor down layer=22/28
+2026-09-02T14:15:11Z INFO factor down layer=23/28
+2026-09-02T14:15:14Z INFO factor down layer=24/28
+2026-09-02T14:15:18Z INFO factor down layer=25/28
+2026-09-02T14:15:22Z INFO factor down layer=26/28
+2026-09-02T14:15:26Z INFO factor down layer=27/28
+2026-09-02T14:15:30Z INFO factor down layer=28/28
+2026-09-02T14:15:45Z INFO loading WikiText-2 split=test
+2026-09-02T14:15:52Z INFO saved torch.Size([1, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/llama32_3b-test-o0-n1-l128.pt
+2026-09-02T14:15:52Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T14:16:04Z INFO llama32_3b bf16 sequence 1/1 loss=2.479424
+2026-09-02T14:16:06Z INFO llama32_3b qkv_only identity seed=20260902 sequence 1/1 loss=2.436822
+2026-09-02T14:16:06Z INFO llama32_3b both identity seed=20260902 sequence 1/1 loss=2.485474
+2026-09-02T14:16:06Z INFO llama32_3b down_only identity seed=20260902 sequence 1/1 loss=2.530720
+2026-09-02T14:16:07Z INFO llama32_3b qkv_only hadamard seed=20260902 sequence 1/1 loss=2.464057
+2026-09-02T14:16:07Z INFO llama32_3b both hadamard seed=20260902 sequence 1/1 loss=2.495951
+2026-09-02T14:16:07Z INFO llama32_3b down_only hadamard seed=20260902 sequence 1/1 loss=2.469782
+2026-09-02T14:16:08Z INFO llama32_3b qkv_only nar seed=20260902 sequence 1/1 loss=2.475687
+2026-09-02T14:16:09Z INFO llama32_3b both nar seed=20260902 sequence 1/1 loss=2.480054
+2026-09-02T14:16:10Z INFO llama32_3b down_only nar seed=20260902 sequence 1/1 loss=2.495274
+2026-09-02T14:16:17Z INFO loading WikiText-2 split=train
+2026-09-02T14:16:28Z INFO saved torch.Size([2, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/llama32_3b-train-o0-n2-l128.pt
+2026-09-02T14:16:29Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T14:16:34Z INFO E7 capture 1/2 sequences
+2026-09-02T14:16:34Z INFO E7 capture 2/2 sequences
+2026-09-02T14:16:37Z INFO E7 layer 1/28
+2026-09-02T14:16:41Z INFO loading WikiText-2 split=train
+2026-09-02T14:16:52Z INFO saved torch.Size([2, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/llama32_3b-train-o128-n2-l128.pt
+2026-09-02T14:16:53Z INFO loading model unsloth/Llama-3.2-3B
+2026-09-02T14:16:58Z INFO E8 held-out capture 1/2 sequences
+2026-09-02T14:16:58Z INFO E8 held-out capture 2/2 sequences
+2026-09-02T14:17:05Z INFO E8 complete layer=1/28
+2026-09-02T14:17:09Z INFO loading WikiText-2 split=train
+2026-09-02T14:17:21Z INFO saved torch.Size([2, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/llama32_1b-train-o0-n2-l128.pt
+2026-09-02T14:17:21Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T14:17:27Z INFO covariance pass 1/3 2/2 sequences
+2026-09-02T14:17:28Z INFO covariance pass 2/3 2/2 sequences
+2026-09-02T14:17:28Z INFO covariance pass 3/3 2/2 sequences
+2026-09-02T14:17:29Z INFO permutation-energy pass 1/1 2/2 sequences
+2026-09-02T14:17:35Z INFO loading WikiText-2 split=test
+2026-09-02T14:17:41Z INFO saved torch.Size([1, 128]) token chunks to $NAR_WORKDIR/smoke_activation/cache/tokenized/llama32_1b-test-o0-n1-l128.pt
+2026-09-02T14:17:41Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T14:17:44Z INFO llama32_1b bf16 sequence 1/1 loss=2.542739
+2026-09-02T14:17:44Z INFO llama32_1b qkv_only identity seed=20260902 sequence 1/1 loss=2.659623
+2026-09-02T14:17:44Z INFO llama32_1b both identity seed=20260902 sequence 1/1 loss=2.707429
+2026-09-02T14:17:44Z INFO llama32_1b down_only identity seed=20260902 sequence 1/1 loss=2.689642
+2026-09-02T14:17:45Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 1/1 loss=2.550820
+2026-09-02T14:17:45Z INFO llama32_1b both hadamard seed=20260902 sequence 1/1 loss=2.678363
+2026-09-02T14:17:45Z INFO llama32_1b down_only hadamard seed=20260902 sequence 1/1 loss=2.581836
+2026-09-02T14:17:45Z INFO llama32_1b qkv_only nar seed=20260902 sequence 1/1 loss=2.534468
+2026-09-02T14:17:46Z INFO llama32_1b both nar seed=20260902 sequence 1/1 loss=2.560517
+2026-09-02T14:17:46Z INFO llama32_1b down_only nar seed=20260902 sequence 1/1 loss=2.569322

@@ -3,6 +3,11 @@
 `experiment.py` reproduces the frozen E0, E1, and E2 tables. The extension
 `extended_experiment.py` reads those outputs without rerunning them, performs
 E1b, captures the wide activations once, and evaluates E1c/E1d.
+`activation_experiments.py` adds activation-only perplexity and factorized
+online-cost checks (E5/E6). `activation_diagnostics.py` adds the per-token V
+cache and one-shot range-direct diagnostics (E7/E8), while
+`activation_report.py` appends their tables and figures to the corrected
+report.
 
 The experiment is limited to forward hooks, offline tensors, and KV-only fake
 quantization. It never modifies weights, runs GPTQ, or builds a W4A4 pipeline.
@@ -28,6 +33,16 @@ All comparisons are paired and no result-driven configuration tuning is used.
   and residual balancing use positions `0,32,...,2016` from all 128 sequences.
 - E1d compares identical full post-RoPE K tensors against KIVI-style dynamic
   asymmetric per-channel INT4, grouping contiguous tokens at `b=32/64`.
+- E5 uses group-128 dynamic asymmetric per-token INT4 at q/k/v and down_proj
+  inputs only. Rotation seeds, evaluation chunks, and three sites are paired;
+  all weights and non-target tensors remain bf16.
+- E6 uses 64 Householder reflections followed by the fixed permutation, signs,
+  and block H128, with dense equivalence checked only for validation.
+- E7 rotates V independently within each KV head and folds the inverse into
+  o_proj. Group sizes are fixed at `32/64/128`.
+- E8 performs one seed and exactly 200 Grassmann steps with p=8 on calibration
+  A, then evaluates the unchanged result on disjoint calibration B. There is no
+  hyperparameter iteration.
 
 ## Commands
 
@@ -49,6 +64,19 @@ python nar/extended_experiment.py --workdir "$NAR_WORKDIR" collect-wide --tag wi
 python nar/extended_experiment.py --workdir "$NAR_WORKDIR" e1c
 python nar/extended_experiment.py --workdir "$NAR_WORKDIR" e1d
 python nar/extended_experiment.py --workdir "$NAR_WORKDIR" report
+```
+
+Activation continuation stages:
+
+```bash
+python nar/activation_experiments.py --workdir "$NAR_WORKDIR" calibrate --model llama32_3b
+python nar/activation_experiments.py --workdir "$NAR_WORKDIR" e5 --model llama32_3b
+python nar/activation_experiments.py --workdir "$NAR_WORKDIR" e6
+python nar/activation_diagnostics.py --workdir "$NAR_WORKDIR" collect-v
+python nar/activation_diagnostics.py --workdir "$NAR_WORKDIR" e7
+python nar/activation_diagnostics.py --workdir "$NAR_WORKDIR" collect-down-heldout
+python nar/activation_diagnostics.py --workdir "$NAR_WORKDIR" e8
+python nar/activation_report.py --workdir "$NAR_WORKDIR"
 ```
 
 For a fresh full extension run on Slurm:

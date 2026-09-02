@@ -1,0 +1,244 @@
+2026-09-02T14:21:34Z INFO loading token chunks $NAR_WORKDIR/cache/tokenized/llama32_1b-train-o0-n128-l2048.pt
+2026-09-02T14:21:34Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T14:21:40Z INFO covariance pass 1/3 8/128 sequences
+2026-09-02T14:21:41Z INFO covariance pass 1/3 16/128 sequences
+2026-09-02T14:21:41Z INFO covariance pass 1/3 24/128 sequences
+2026-09-02T14:21:41Z INFO covariance pass 1/3 32/128 sequences
+2026-09-02T14:21:42Z INFO covariance pass 1/3 40/128 sequences
+2026-09-02T14:21:42Z INFO covariance pass 1/3 48/128 sequences
+2026-09-02T14:21:43Z INFO covariance pass 1/3 56/128 sequences
+2026-09-02T14:21:43Z INFO covariance pass 1/3 64/128 sequences
+2026-09-02T14:21:43Z INFO covariance pass 1/3 72/128 sequences
+2026-09-02T14:21:44Z INFO covariance pass 1/3 80/128 sequences
+2026-09-02T14:21:44Z INFO covariance pass 1/3 88/128 sequences
+2026-09-02T14:21:45Z INFO covariance pass 1/3 96/128 sequences
+2026-09-02T14:21:45Z INFO covariance pass 1/3 104/128 sequences
+2026-09-02T14:21:45Z INFO covariance pass 1/3 112/128 sequences
+2026-09-02T14:21:46Z INFO covariance pass 1/3 120/128 sequences
+2026-09-02T14:21:46Z INFO covariance pass 1/3 128/128 sequences
+2026-09-02T14:21:47Z INFO covariance pass 2/3 8/128 sequences
+2026-09-02T14:21:47Z INFO covariance pass 2/3 16/128 sequences
+2026-09-02T14:21:48Z INFO covariance pass 2/3 24/128 sequences
+2026-09-02T14:21:48Z INFO covariance pass 2/3 32/128 sequences
+2026-09-02T14:21:48Z INFO covariance pass 2/3 40/128 sequences
+2026-09-02T14:21:49Z INFO covariance pass 2/3 48/128 sequences
+2026-09-02T14:21:49Z INFO covariance pass 2/3 56/128 sequences
+2026-09-02T14:21:49Z INFO covariance pass 2/3 64/128 sequences
+2026-09-02T14:21:50Z INFO covariance pass 2/3 72/128 sequences
+2026-09-02T14:21:50Z INFO covariance pass 2/3 80/128 sequences
+2026-09-02T14:21:51Z INFO covariance pass 2/3 88/128 sequences
+2026-09-02T14:21:51Z INFO covariance pass 2/3 96/128 sequences
+2026-09-02T14:21:51Z INFO covariance pass 2/3 104/128 sequences
+2026-09-02T14:21:52Z INFO covariance pass 2/3 112/128 sequences
+2026-09-02T14:21:52Z INFO covariance pass 2/3 120/128 sequences
+2026-09-02T14:21:52Z INFO covariance pass 2/3 128/128 sequences
+2026-09-02T14:21:53Z INFO covariance pass 3/3 8/128 sequences
+2026-09-02T14:21:54Z INFO covariance pass 3/3 16/128 sequences
+2026-09-02T14:21:54Z INFO covariance pass 3/3 24/128 sequences
+2026-09-02T14:21:54Z INFO covariance pass 3/3 32/128 sequences
+2026-09-02T14:21:55Z INFO covariance pass 3/3 40/128 sequences
+2026-09-02T14:21:55Z INFO covariance pass 3/3 48/128 sequences
+2026-09-02T14:21:56Z INFO covariance pass 3/3 56/128 sequences
+2026-09-02T14:21:56Z INFO covariance pass 3/3 64/128 sequences
+2026-09-02T14:21:57Z INFO covariance pass 3/3 72/128 sequences
+2026-09-02T14:21:57Z INFO covariance pass 3/3 80/128 sequences
+2026-09-02T14:21:57Z INFO covariance pass 3/3 88/128 sequences
+2026-09-02T14:21:58Z INFO covariance pass 3/3 96/128 sequences
+2026-09-02T14:21:58Z INFO covariance pass 3/3 104/128 sequences
+2026-09-02T14:21:59Z INFO covariance pass 3/3 112/128 sequences
+2026-09-02T14:21:59Z INFO covariance pass 3/3 120/128 sequences
+2026-09-02T14:22:00Z INFO covariance pass 3/3 128/128 sequences
+2026-09-02T14:22:01Z INFO permutation-energy pass 1/1 8/128 sequences
+2026-09-02T14:22:02Z INFO permutation-energy pass 1/1 16/128 sequences
+2026-09-02T14:22:02Z INFO permutation-energy pass 1/1 24/128 sequences
+2026-09-02T14:22:03Z INFO permutation-energy pass 1/1 32/128 sequences
+2026-09-02T14:22:04Z INFO permutation-energy pass 1/1 40/128 sequences
+2026-09-02T14:22:05Z INFO permutation-energy pass 1/1 48/128 sequences
+2026-09-02T14:22:05Z INFO permutation-energy pass 1/1 56/128 sequences
+2026-09-02T14:22:06Z INFO permutation-energy pass 1/1 64/128 sequences
+2026-09-02T14:22:07Z INFO permutation-energy pass 1/1 72/128 sequences
+2026-09-02T14:22:08Z INFO permutation-energy pass 1/1 80/128 sequences
+2026-09-02T14:22:08Z INFO permutation-energy pass 1/1 88/128 sequences
+2026-09-02T14:22:09Z INFO permutation-energy pass 1/1 96/128 sequences
+2026-09-02T14:22:10Z INFO permutation-energy pass 1/1 104/128 sequences
+2026-09-02T14:22:11Z INFO permutation-energy pass 1/1 112/128 sequences
+2026-09-02T14:22:11Z INFO permutation-energy pass 1/1 120/128 sequences
+2026-09-02T14:22:12Z INFO permutation-energy pass 1/1 128/128 sequences
+2026-09-02T14:22:18Z INFO loading token chunks $NAR_WORKDIR/cache/tokenized/llama32_1b-test-o0-n64-l2048.pt
+2026-09-02T14:22:18Z INFO loading model unsloth/Llama-3.2-1B
+2026-09-02T14:22:21Z INFO llama32_1b bf16 sequence 1/64 loss=1.978874
+2026-09-02T14:22:22Z INFO llama32_1b bf16 sequence 9/64 loss=2.495482
+2026-09-02T14:22:22Z INFO llama32_1b bf16 sequence 17/64 loss=2.339958
+2026-09-02T14:22:22Z INFO llama32_1b bf16 sequence 25/64 loss=2.509001
+2026-09-02T14:22:23Z INFO llama32_1b bf16 sequence 33/64 loss=2.223209
+2026-09-02T14:22:23Z INFO llama32_1b bf16 sequence 41/64 loss=2.490764
+2026-09-02T14:22:23Z INFO llama32_1b bf16 sequence 49/64 loss=2.249591
+2026-09-02T14:22:24Z INFO llama32_1b bf16 sequence 57/64 loss=2.169719
+2026-09-02T14:22:24Z INFO llama32_1b qkv_only identity seed=20260902 sequence 1/64 loss=2.022398
+2026-09-02T14:22:25Z INFO llama32_1b qkv_only identity seed=20260902 sequence 9/64 loss=2.553915
+2026-09-02T14:22:25Z INFO llama32_1b qkv_only identity seed=20260902 sequence 17/64 loss=2.380522
+2026-09-02T14:22:25Z INFO llama32_1b qkv_only identity seed=20260902 sequence 25/64 loss=2.547961
+2026-09-02T14:22:26Z INFO llama32_1b qkv_only identity seed=20260902 sequence 33/64 loss=2.276151
+2026-09-02T14:22:26Z INFO llama32_1b qkv_only identity seed=20260902 sequence 41/64 loss=2.536741
+2026-09-02T14:22:26Z INFO llama32_1b qkv_only identity seed=20260902 sequence 49/64 loss=2.305160
+2026-09-02T14:22:27Z INFO llama32_1b qkv_only identity seed=20260902 sequence 57/64 loss=2.217663
+2026-09-02T14:22:27Z INFO llama32_1b both identity seed=20260902 sequence 1/64 loss=2.129671
+2026-09-02T14:22:28Z INFO llama32_1b both identity seed=20260902 sequence 9/64 loss=2.655062
+2026-09-02T14:22:28Z INFO llama32_1b both identity seed=20260902 sequence 17/64 loss=2.448506
+2026-09-02T14:22:28Z INFO llama32_1b both identity seed=20260902 sequence 25/64 loss=2.605651
+2026-09-02T14:22:29Z INFO llama32_1b both identity seed=20260902 sequence 33/64 loss=2.350484
+2026-09-02T14:22:29Z INFO llama32_1b both identity seed=20260902 sequence 41/64 loss=2.632752
+2026-09-02T14:22:30Z INFO llama32_1b both identity seed=20260902 sequence 49/64 loss=2.379288
+2026-09-02T14:22:30Z INFO llama32_1b both identity seed=20260902 sequence 57/64 loss=2.268813
+2026-09-02T14:22:30Z INFO llama32_1b down_only identity seed=20260902 sequence 1/64 loss=2.069533
+2026-09-02T14:22:31Z INFO llama32_1b down_only identity seed=20260902 sequence 9/64 loss=2.569163
+2026-09-02T14:22:31Z INFO llama32_1b down_only identity seed=20260902 sequence 17/64 loss=2.408809
+2026-09-02T14:22:32Z INFO llama32_1b down_only identity seed=20260902 sequence 25/64 loss=2.589666
+2026-09-02T14:22:32Z INFO llama32_1b down_only identity seed=20260902 sequence 33/64 loss=2.303726
+2026-09-02T14:22:32Z INFO llama32_1b down_only identity seed=20260902 sequence 41/64 loss=2.585072
+2026-09-02T14:22:33Z INFO llama32_1b down_only identity seed=20260902 sequence 49/64 loss=2.327053
+2026-09-02T14:22:33Z INFO llama32_1b down_only identity seed=20260902 sequence 57/64 loss=2.266430
+2026-09-02T14:22:34Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 1/64 loss=1.989465
+2026-09-02T14:22:34Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 9/64 loss=2.504642
+2026-09-02T14:22:35Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 17/64 loss=2.349305
+2026-09-02T14:22:35Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 25/64 loss=2.515791
+2026-09-02T14:22:35Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 33/64 loss=2.235027
+2026-09-02T14:22:36Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 41/64 loss=2.500867
+2026-09-02T14:22:36Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 49/64 loss=2.263944
+2026-09-02T14:22:36Z INFO llama32_1b qkv_only hadamard seed=20260902 sequence 57/64 loss=2.172269
+2026-09-02T14:22:37Z INFO llama32_1b both hadamard seed=20260902 sequence 1/64 loss=2.035746
+2026-09-02T14:22:38Z INFO llama32_1b both hadamard seed=20260902 sequence 9/64 loss=2.541557
+2026-09-02T14:22:38Z INFO llama32_1b both hadamard seed=20260902 sequence 17/64 loss=2.382922
+2026-09-02T14:22:39Z INFO llama32_1b both hadamard seed=20260902 sequence 25/64 loss=2.544939
+2026-09-02T14:22:40Z INFO llama32_1b both hadamard seed=20260902 sequence 33/64 loss=2.271207
+2026-09-02T14:22:41Z INFO llama32_1b both hadamard seed=20260902 sequence 41/64 loss=2.544132
+2026-09-02T14:22:42Z INFO llama32_1b both hadamard seed=20260902 sequence 49/64 loss=2.297003
+2026-09-02T14:22:42Z INFO llama32_1b both hadamard seed=20260902 sequence 57/64 loss=2.213831
+2026-09-02T14:22:43Z INFO llama32_1b down_only hadamard seed=20260902 sequence 1/64 loss=2.001520
+2026-09-02T14:22:44Z INFO llama32_1b down_only hadamard seed=20260902 sequence 9/64 loss=2.525725
+2026-09-02T14:22:45Z INFO llama32_1b down_only hadamard seed=20260902 sequence 17/64 loss=2.374360
+2026-09-02T14:22:45Z INFO llama32_1b down_only hadamard seed=20260902 sequence 25/64 loss=2.537325
+2026-09-02T14:22:46Z INFO llama32_1b down_only hadamard seed=20260902 sequence 33/64 loss=2.242675
+2026-09-02T14:22:47Z INFO llama32_1b down_only hadamard seed=20260902 sequence 41/64 loss=2.526620
+2026-09-02T14:22:47Z INFO llama32_1b down_only hadamard seed=20260902 sequence 49/64 loss=2.273869
+2026-09-02T14:22:48Z INFO llama32_1b down_only hadamard seed=20260902 sequence 57/64 loss=2.203146
+2026-09-02T14:22:49Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 1/64 loss=1.986091
+2026-09-02T14:22:49Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 9/64 loss=2.511224
+2026-09-02T14:22:50Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 17/64 loss=2.349016
+2026-09-02T14:22:50Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 25/64 loss=2.516195
+2026-09-02T14:22:51Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 33/64 loss=2.236601
+2026-09-02T14:22:51Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 41/64 loss=2.504763
+2026-09-02T14:22:51Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 49/64 loss=2.256512
+2026-09-02T14:22:52Z INFO llama32_1b qkv_only hadamard seed=20260903 sequence 57/64 loss=2.178686
+2026-09-02T14:22:52Z INFO llama32_1b both hadamard seed=20260903 sequence 1/64 loss=2.021288
+2026-09-02T14:22:53Z INFO llama32_1b both hadamard seed=20260903 sequence 9/64 loss=2.537150
+2026-09-02T14:22:54Z INFO llama32_1b both hadamard seed=20260903 sequence 17/64 loss=2.382421
+2026-09-02T14:22:55Z INFO llama32_1b both hadamard seed=20260903 sequence 25/64 loss=2.540561
+2026-09-02T14:22:55Z INFO llama32_1b both hadamard seed=20260903 sequence 33/64 loss=2.260357
+2026-09-02T14:22:56Z INFO llama32_1b both hadamard seed=20260903 sequence 41/64 loss=2.552140
+2026-09-02T14:22:57Z INFO llama32_1b both hadamard seed=20260903 sequence 49/64 loss=2.293078
+2026-09-02T14:22:58Z INFO llama32_1b both hadamard seed=20260903 sequence 57/64 loss=2.225315
+2026-09-02T14:22:58Z INFO llama32_1b down_only hadamard seed=20260903 sequence 1/64 loss=2.003340
+2026-09-02T14:22:59Z INFO llama32_1b down_only hadamard seed=20260903 sequence 9/64 loss=2.529367
+2026-09-02T14:23:00Z INFO llama32_1b down_only hadamard seed=20260903 sequence 17/64 loss=2.370721
+2026-09-02T14:23:01Z INFO llama32_1b down_only hadamard seed=20260903 sequence 25/64 loss=2.536857
+2026-09-02T14:23:01Z INFO llama32_1b down_only hadamard seed=20260903 sequence 33/64 loss=2.256793
+2026-09-02T14:23:02Z INFO llama32_1b down_only hadamard seed=20260903 sequence 41/64 loss=2.525701
+2026-09-02T14:23:03Z INFO llama32_1b down_only hadamard seed=20260903 sequence 49/64 loss=2.270777
+2026-09-02T14:23:04Z INFO llama32_1b down_only hadamard seed=20260903 sequence 57/64 loss=2.195107
+2026-09-02T14:23:04Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 1/64 loss=1.990088
+2026-09-02T14:23:05Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 9/64 loss=2.499486
+2026-09-02T14:23:05Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 17/64 loss=2.356387
+2026-09-02T14:23:06Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 25/64 loss=2.520950
+2026-09-02T14:23:06Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 33/64 loss=2.235506
+2026-09-02T14:23:06Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 41/64 loss=2.503443
+2026-09-02T14:23:07Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 49/64 loss=2.257036
+2026-09-02T14:23:07Z INFO llama32_1b qkv_only hadamard seed=20260904 sequence 57/64 loss=2.184890
+2026-09-02T14:23:08Z INFO llama32_1b both hadamard seed=20260904 sequence 1/64 loss=2.028368
+2026-09-02T14:23:08Z INFO llama32_1b both hadamard seed=20260904 sequence 9/64 loss=2.536185
+2026-09-02T14:23:09Z INFO llama32_1b both hadamard seed=20260904 sequence 17/64 loss=2.383271
+2026-09-02T14:23:10Z INFO llama32_1b both hadamard seed=20260904 sequence 25/64 loss=2.536332
+2026-09-02T14:23:11Z INFO llama32_1b both hadamard seed=20260904 sequence 33/64 loss=2.256449
+2026-09-02T14:23:11Z INFO llama32_1b both hadamard seed=20260904 sequence 41/64 loss=2.531946
+2026-09-02T14:23:12Z INFO llama32_1b both hadamard seed=20260904 sequence 49/64 loss=2.296735
+2026-09-02T14:23:13Z INFO llama32_1b both hadamard seed=20260904 sequence 57/64 loss=2.223673
+2026-09-02T14:23:14Z INFO llama32_1b down_only hadamard seed=20260904 sequence 1/64 loss=2.005717
+2026-09-02T14:23:15Z INFO llama32_1b down_only hadamard seed=20260904 sequence 9/64 loss=2.515415
+2026-09-02T14:23:15Z INFO llama32_1b down_only hadamard seed=20260904 sequence 17/64 loss=2.362316
+2026-09-02T14:23:16Z INFO llama32_1b down_only hadamard seed=20260904 sequence 25/64 loss=2.530084
+2026-09-02T14:23:17Z INFO llama32_1b down_only hadamard seed=20260904 sequence 33/64 loss=2.248559
+2026-09-02T14:23:17Z INFO llama32_1b down_only hadamard seed=20260904 sequence 41/64 loss=2.528169
+2026-09-02T14:23:18Z INFO llama32_1b down_only hadamard seed=20260904 sequence 49/64 loss=2.278047
+2026-09-02T14:23:19Z INFO llama32_1b down_only hadamard seed=20260904 sequence 57/64 loss=2.205506
+2026-09-02T14:23:20Z INFO llama32_1b qkv_only nar seed=20260902 sequence 1/64 loss=1.980766
+2026-09-02T14:23:20Z INFO llama32_1b qkv_only nar seed=20260902 sequence 9/64 loss=2.493159
+2026-09-02T14:23:21Z INFO llama32_1b qkv_only nar seed=20260902 sequence 17/64 loss=2.341157
+2026-09-02T14:23:21Z INFO llama32_1b qkv_only nar seed=20260902 sequence 25/64 loss=2.514437
+2026-09-02T14:23:22Z INFO llama32_1b qkv_only nar seed=20260902 sequence 33/64 loss=2.228084
+2026-09-02T14:23:22Z INFO llama32_1b qkv_only nar seed=20260902 sequence 41/64 loss=2.497989
+2026-09-02T14:23:23Z INFO llama32_1b qkv_only nar seed=20260902 sequence 49/64 loss=2.252934
+2026-09-02T14:23:23Z INFO llama32_1b qkv_only nar seed=20260902 sequence 57/64 loss=2.175812
+2026-09-02T14:23:24Z INFO llama32_1b both nar seed=20260902 sequence 1/64 loss=1.992480
+2026-09-02T14:23:26Z INFO llama32_1b both nar seed=20260902 sequence 9/64 loss=2.513400
+2026-09-02T14:23:29Z INFO llama32_1b both nar seed=20260902 sequence 17/64 loss=2.360966
+2026-09-02T14:23:31Z INFO llama32_1b both nar seed=20260902 sequence 25/64 loss=2.525697
+2026-09-02T14:23:33Z INFO llama32_1b both nar seed=20260902 sequence 33/64 loss=2.243245
+2026-09-02T14:23:35Z INFO llama32_1b both nar seed=20260902 sequence 41/64 loss=2.515303
+2026-09-02T14:23:37Z INFO llama32_1b both nar seed=20260902 sequence 49/64 loss=2.264146
+2026-09-02T14:23:40Z INFO llama32_1b both nar seed=20260902 sequence 57/64 loss=2.185371
+2026-09-02T14:23:42Z INFO llama32_1b down_only nar seed=20260902 sequence 1/64 loss=1.993698
+2026-09-02T14:23:44Z INFO llama32_1b down_only nar seed=20260902 sequence 9/64 loss=2.510997
+2026-09-02T14:23:46Z INFO llama32_1b down_only nar seed=20260902 sequence 17/64 loss=2.348284
+2026-09-02T14:23:48Z INFO llama32_1b down_only nar seed=20260902 sequence 25/64 loss=2.520325
+2026-09-02T14:23:50Z INFO llama32_1b down_only nar seed=20260902 sequence 33/64 loss=2.235345
+2026-09-02T14:23:52Z INFO llama32_1b down_only nar seed=20260902 sequence 41/64 loss=2.508723
+2026-09-02T14:23:54Z INFO llama32_1b down_only nar seed=20260902 sequence 49/64 loss=2.265307
+2026-09-02T14:23:56Z INFO llama32_1b down_only nar seed=20260902 sequence 57/64 loss=2.189160
+2026-09-02T14:23:58Z INFO llama32_1b qkv_only nar seed=20260903 sequence 1/64 loss=1.977947
+2026-09-02T14:23:59Z INFO llama32_1b qkv_only nar seed=20260903 sequence 9/64 loss=2.502741
+2026-09-02T14:23:59Z INFO llama32_1b qkv_only nar seed=20260903 sequence 17/64 loss=2.345098
+2026-09-02T14:24:00Z INFO llama32_1b qkv_only nar seed=20260903 sequence 25/64 loss=2.512078
+2026-09-02T14:24:00Z INFO llama32_1b qkv_only nar seed=20260903 sequence 33/64 loss=2.230279
+2026-09-02T14:24:01Z INFO llama32_1b qkv_only nar seed=20260903 sequence 41/64 loss=2.498070
+2026-09-02T14:24:01Z INFO llama32_1b qkv_only nar seed=20260903 sequence 49/64 loss=2.256212
+2026-09-02T14:24:02Z INFO llama32_1b qkv_only nar seed=20260903 sequence 57/64 loss=2.179733
+2026-09-02T14:24:03Z INFO llama32_1b both nar seed=20260903 sequence 1/64 loss=1.990728
+2026-09-02T14:24:05Z INFO llama32_1b both nar seed=20260903 sequence 9/64 loss=2.507891
+2026-09-02T14:24:07Z INFO llama32_1b both nar seed=20260903 sequence 17/64 loss=2.360951
+2026-09-02T14:24:09Z INFO llama32_1b both nar seed=20260903 sequence 25/64 loss=2.523069
+2026-09-02T14:24:12Z INFO llama32_1b both nar seed=20260903 sequence 33/64 loss=2.244750
+2026-09-02T14:24:14Z INFO llama32_1b both nar seed=20260903 sequence 41/64 loss=2.522827
+2026-09-02T14:24:16Z INFO llama32_1b both nar seed=20260903 sequence 49/64 loss=2.276340
+2026-09-02T14:24:18Z INFO llama32_1b both nar seed=20260903 sequence 57/64 loss=2.185574
+2026-09-02T14:24:20Z INFO llama32_1b down_only nar seed=20260903 sequence 1/64 loss=1.998874
+2026-09-02T14:24:22Z INFO llama32_1b down_only nar seed=20260903 sequence 9/64 loss=2.507493
+2026-09-02T14:24:24Z INFO llama32_1b down_only nar seed=20260903 sequence 17/64 loss=2.358447
+2026-09-02T14:24:26Z INFO llama32_1b down_only nar seed=20260903 sequence 25/64 loss=2.528513
+2026-09-02T14:24:29Z INFO llama32_1b down_only nar seed=20260903 sequence 33/64 loss=2.234908
+2026-09-02T14:24:31Z INFO llama32_1b down_only nar seed=20260903 sequence 41/64 loss=2.502507
+2026-09-02T14:24:33Z INFO llama32_1b down_only nar seed=20260903 sequence 49/64 loss=2.264018
+2026-09-02T14:24:35Z INFO llama32_1b down_only nar seed=20260903 sequence 57/64 loss=2.185258
+2026-09-02T14:24:37Z INFO llama32_1b qkv_only nar seed=20260904 sequence 1/64 loss=1.981520
+2026-09-02T14:24:37Z INFO llama32_1b qkv_only nar seed=20260904 sequence 9/64 loss=2.497427
+2026-09-02T14:24:38Z INFO llama32_1b qkv_only nar seed=20260904 sequence 17/64 loss=2.347427
+2026-09-02T14:24:38Z INFO llama32_1b qkv_only nar seed=20260904 sequence 25/64 loss=2.517156
+2026-09-02T14:24:39Z INFO llama32_1b qkv_only nar seed=20260904 sequence 33/64 loss=2.234759
+2026-09-02T14:24:39Z INFO llama32_1b qkv_only nar seed=20260904 sequence 41/64 loss=2.493250
+2026-09-02T14:24:40Z INFO llama32_1b qkv_only nar seed=20260904 sequence 49/64 loss=2.257578
+2026-09-02T14:24:40Z INFO llama32_1b qkv_only nar seed=20260904 sequence 57/64 loss=2.184162
+2026-09-02T14:24:41Z INFO llama32_1b both nar seed=20260904 sequence 1/64 loss=1.998438
+2026-09-02T14:24:43Z INFO llama32_1b both nar seed=20260904 sequence 9/64 loss=2.519157
+2026-09-02T14:24:46Z INFO llama32_1b both nar seed=20260904 sequence 17/64 loss=2.354276
+2026-09-02T14:24:48Z INFO llama32_1b both nar seed=20260904 sequence 25/64 loss=2.522602
+2026-09-02T14:24:50Z INFO llama32_1b both nar seed=20260904 sequence 33/64 loss=2.242539
+2026-09-02T14:24:52Z INFO llama32_1b both nar seed=20260904 sequence 41/64 loss=2.520049
+2026-09-02T14:24:54Z INFO llama32_1b both nar seed=20260904 sequence 49/64 loss=2.269752
+2026-09-02T14:24:57Z INFO llama32_1b both nar seed=20260904 sequence 57/64 loss=2.196420
+2026-09-02T14:24:59Z INFO llama32_1b down_only nar seed=20260904 sequence 1/64 loss=1.988808
+2026-09-02T14:25:01Z INFO llama32_1b down_only nar seed=20260904 sequence 9/64 loss=2.510758
+2026-09-02T14:25:03Z INFO llama32_1b down_only nar seed=20260904 sequence 17/64 loss=2.356152
+2026-09-02T14:25:05Z INFO llama32_1b down_only nar seed=20260904 sequence 25/64 loss=2.523386
+2026-09-02T14:25:07Z INFO llama32_1b down_only nar seed=20260904 sequence 33/64 loss=2.249222
+2026-09-02T14:25:09Z INFO llama32_1b down_only nar seed=20260904 sequence 41/64 loss=2.511177
+2026-09-02T14:25:11Z INFO llama32_1b down_only nar seed=20260904 sequence 49/64 loss=2.267884
+2026-09-02T14:25:13Z INFO llama32_1b down_only nar seed=20260904 sequence 57/64 loss=2.183254

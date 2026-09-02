@@ -1,0 +1,5 @@
+model,split,method,layers,mean_group_range,mean_relative_quantization_error_nmse,mean_range_delta_vs_second_moment,mean_nmse_delta_vs_second_moment
+llama32_3b,calibration_a,second_moment,28,0.2829866111278762,0.005729612876485547,0.0,0.0
+llama32_3b,calibration_a,range_direct,28,0.28043972467392625,0.005599486041468552,-0.002546886453949991,-0.0001301268350169958
+llama32_3b,heldout_cal_b,second_moment,28,0.28617407699169356,0.005919523644819344,0.0,0.0
+llama32_3b,heldout_cal_b,range_direct,28,0.2867338512263153,0.005907863706416513,0.0005597742346217556,-1.1659938402832172e-05
