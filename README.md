@@ -38,11 +38,12 @@ are reported rather than filtered.
 
 ## Scope and artifacts
 
-The repository performs forward-hook activation capture, offline tensor
-analysis, KV-only fake quantization, and activation-only perplexity proxies. It
-does **not** run GPTQ, weight quantization, end-to-end W4A4KV4, or configuration
-tuning. Models are Llama-3.2-3B, Llama-3.2-1B, and Llama-3.1-8B; data are fixed
-WikiText-2 chunks.
+E1--E13 perform forward-hook activation capture, offline tensor analysis,
+KV-only fake quantization, and activation-only perplexity/accuracy proxies. E14
+is the explicitly requested expansion to pinned QuaRot GPTQ and end-to-end
+W4A4KV4; E15 is the no-zero-point FP4 boundary check. No stage performs
+result-driven configuration tuning. Models are Llama-3.2-3B, Llama-3.2-1B,
+and Llama-3.1-8B; data are fixed WikiText-2 chunks.
 
 The complete protocol, exact fit statistics, summary tables, confidence
 intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
