@@ -7,11 +7,15 @@ E1b, captures the wide activations once, and evaluates E1c/E1d.
 online-cost checks (E5/E6). `activation_diagnostics.py` adds the per-token V
 cache and one-shot range-direct diagnostics (E7/E8), while
 `activation_report.py` appends their tables and figures to the corrected
-report.
+report. `e11_fair_baselines.py` adds the frozen SmoothQuant, DuQuant-style,
+bit-fair, group-size, and rank-knee comparisons. `e12_wy.py` benchmarks compact
+WY R4, and `e13_zero_shot.py` runs the pinned zero-shot transfer suite.
+`e14_w4a4kv4.py` adds the requested QuaRot-GPTQ end-to-end rows, while
+`e15_fp4.py` tests the no-zero-point FP4 boundary on the retained E1c tensors.
 
-The experiment is limited to forward hooks, offline tensors, and KV-only fake
-quantization. It never modifies weights, runs GPTQ, or builds a W4A4 pipeline.
-All comparisons are paired and no result-driven configuration tuning is used.
+E1--E13 are forward-hook/offline/fake-quant experiments. E14 is the explicitly
+requested expansion to GPTQ W4A4KV4; its large layer checkpoints stay outside
+Git. All comparisons are paired and no result-driven tuning is used.
 
 ## Frozen choices
 
@@ -43,6 +47,24 @@ All comparisons are paired and no result-driven configuration tuning is used.
 - E8 performs one seed and exactly 200 Grassmann steps with p=8 on calibration
   A, then evaluates the unchanged result on disjoint calibration B. There is no
   hyperparameter iteration.
+- E11 reuses E5 bf16/Hadamard/NAR rows verbatim and adds both-site activation
+  baselines on 3B/8B. SmoothQuant uses alpha=0.5. The DuQuant-style row uses the
+  pinned upstream construction audit and one requested outlier direction per
+  block. Group/rank choices are fixed at g=64/128/256 and k=8/16/32/kmax.
+- E12 uses compact WY `G=I-WY^T` at k=16/32/64 and times tokens=1/32/2048
+  against the same unfused Hadamard and bf16 down_proj matmul as E6.
+- E13 uses lm-evaluation-harness commit
+  `b954108c9baaaa934b4ad842033b31a97ee30816`, zero-shot, seed 20260902, on
+  PIQA, ARC-e, ARC-c, HellaSwag, WinoGrande, and LAMBADA.
+- E14 ports GPTQ and its MSE clipping search from spcl/QuaRot commit
+  `5008669b08c1f11f9b64d52d16fddd47ca754c5a`: symmetric W4 per output
+  channel (`groupsize=-1`), block 128, damp 0.01, no act order, 128 fixed
+  WikiText-2 sequences. Embeddings/lm_head remain bf16. All rows replace R3 K
+  with asymmetric KIVI-style per-channel K4 over 32-token groups; V is
+  asymmetric per-token V4. NAR R4 uses the E12 compact-WY representation.
+- E15 uses nearest E2M1 with one E4M3FN max/6 scale per block of 16 and no
+  zero-point. It samples every 128th retained E1c token and includes one fixed
+  condition-16 log-diagonal non-Gaussian invertible control.
 
 ## Commands
 
@@ -79,6 +101,40 @@ python nar/activation_diagnostics.py --workdir "$NAR_WORKDIR" e8
 python nar/activation_report.py --workdir "$NAR_WORKDIR"
 ```
 
+Fair-baseline, deployment, and transfer continuation:
+
+```bash
+python nar/e11_fair_baselines.py --workdir "$NAR_WORKDIR" calibrate --model llama32_3b
+python nar/e11_fair_baselines.py --workdir "$NAR_WORKDIR" evaluate --model llama32_3b
+python nar/e11_fair_baselines.py --workdir "$NAR_WORKDIR" calibrate --model llama31_8b
+python nar/e11_fair_baselines.py --workdir "$NAR_WORKDIR" evaluate --model llama31_8b
+python nar/e11_fair_baselines.py --workdir "$NAR_WORKDIR" decision
+python nar/e11_report.py --workdir "$NAR_WORKDIR"
+python nar/e12_wy.py --workdir "$NAR_WORKDIR"
+python nar/e12_report.py --workdir "$NAR_WORKDIR"
+pip install -r requirements-e13.txt
+python nar/e13_zero_shot.py --workdir "$NAR_WORKDIR" run --model llama32_3b --method bf16
+python nar/e13_zero_shot.py --workdir "$NAR_WORKDIR" run --model llama32_3b --method hadamard
+python nar/e13_zero_shot.py --workdir "$NAR_WORKDIR" run --model llama32_3b --method nar
+python nar/e13_zero_shot.py --workdir "$NAR_WORKDIR" finalize --model llama32_3b
+```
+
+End-to-end and FP4 boundary stages (run E14 only because the E11 stop condition did not fire):
+
+```bash
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" calibrate --model llama32_3b
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" calibrate --model llama31_8b
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" gptq --model llama32_3b --rotation hadamard
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" gptq --model llama32_3b --rotation nar
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" evaluate --model llama32_3b --row quarot
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" evaluate --model llama32_3b --row hadamard_asym_g128
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" evaluate --model llama32_3b --row nar_asym_g128
+python nar/e14_w4a4kv4.py --workdir "$NAR_WORKDIR" finalize
+python nar/e14_report.py --workdir "$NAR_WORKDIR"
+python nar/e15_fp4.py --workdir "$NAR_WORKDIR"
+python nar/e15_report.py --workdir "$NAR_WORKDIR"
+```
+
 For a fresh full extension run on Slurm:
 
 ```bash
@@ -89,4 +145,5 @@ NAR_WORKDIR=/path/to/project-storage sbatch slurm_extensions.sh
 Stages have `DONE.json` markers and resumable capture checkpoints. Exact
 commands are appended to `runs/commands.jsonl`. Raw bf16 dumps and randomized
 eigenspace checkpoints remain under `activations/` in project storage and are
-excluded from version control; preserve them for E3/E4.
+excluded from version control; preserve them for E3/E4. E14 GPTQ checkpoints
+default to `$HOME/nar-e14-artifacts` and are likewise not committed.
