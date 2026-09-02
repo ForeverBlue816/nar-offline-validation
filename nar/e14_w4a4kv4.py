@@ -52,6 +52,13 @@ def _json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
 
+def _serializable(value: Any) -> Any:
+    """Normalize lm-eval scalar/container types before atomic JSON output."""
+    return json.loads(
+        json.dumps(value, default=lambda item: item.item() if hasattr(item, "item") else str(item))
+    )
+
+
 def rotation_dir(workdir: Path, model: str) -> Path:
     return workdir / "activations" / model / "e14_rotations"
 
@@ -813,8 +820,8 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "mean_accuracy": float(np.mean([row["accuracy"] for row in task_rows])),
                 "mean_definition": "unweighted mean of six frozen accuracy metrics",
                 "seed": args.seed, "num_fewshot": 0, "harness_commit": HARNESS_COMMIT,
-                "task_versions": result.get("versions", {}),
-                "sample_counts": result.get("n-samples", {}),
+                "task_versions": _serializable(result.get("versions", {})),
+                "sample_counts": _serializable(result.get("n-samples", {})),
                 "hardware": base.hardware_info(),
             })
             del lm
