@@ -11,7 +11,7 @@ code_dir="${NAR_CODE_DIR:-${SLURM_SUBMIT_DIR:-$PWD}}"
 : "${NAR_WORKDIR:?Set NAR_WORKDIR}"
 : "${NAR_MODEL:?Set NAR_MODEL}"
 : "${NAR_ROTATION:?Set NAR_ROTATION to hadamard or nar}"
-artifact_root="${NAR_E14_ARTIFACT_ROOT:-$HOME/nar-e14-artifacts}"
+artifact_root="${NAR_E14_ARTIFACT_ROOT:-$NAR_WORKDIR/artifacts/e14}"
 python_bin="$NAR_WORKDIR/venv/bin/python"
 export PYTHONUNBUFFERED=1 TOKENIZERS_PARALLELISM=false
 exec "$python_bin" "$code_dir/nar/e14_w4a4kv4.py" --workdir "$NAR_WORKDIR" \

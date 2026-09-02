@@ -10,7 +10,7 @@ umask 0007
 code_dir="${NAR_CODE_DIR:-${SLURM_SUBMIT_DIR:-$PWD}}"
 : "${NAR_WORKDIR:?Set NAR_WORKDIR}"
 : "${NAR_MODEL:?Set NAR_MODEL}"
-artifact_root="${NAR_E14_ARTIFACT_ROOT:-$HOME/nar-e14-artifacts}"
+artifact_root="${NAR_E14_ARTIFACT_ROOT:-$NAR_WORKDIR/artifacts/e14}"
 python_bin="$NAR_WORKDIR/venv/bin/python"
 sitepackages="${E13_SITEPACKAGES:-$HOME/.e13_packages}"
 export PYTHONPATH="$sitepackages${PYTHONPATH:+:$PYTHONPATH}"

@@ -148,4 +148,4 @@ Stages have `DONE.json` markers and resumable capture checkpoints. Exact
 commands are appended to `runs/commands.jsonl`. Raw bf16 dumps and randomized
 eigenspace checkpoints remain under `activations/` in project storage and are
 excluded from version control; preserve them for E3/E4. E14 GPTQ checkpoints
-default to `$HOME/nar-e14-artifacts` and are likewise not committed.
+default to `$NAR_WORKDIR/artifacts/e14` and are likewise not committed.

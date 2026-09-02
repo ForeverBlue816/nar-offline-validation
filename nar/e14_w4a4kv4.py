@@ -920,7 +920,7 @@ def finalize(args: argparse.Namespace) -> None:
 def parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workdir", required=True)
-    parser.add_argument("--artifact-root", default=str(Path.home() / "nar-e14-artifacts"))
+    parser.add_argument("--artifact-root")
     parser.add_argument("--seed", type=int, default=base.DEFAULT_SEED)
     parser.add_argument("--seq-len", type=int, default=2048)
     parser.add_argument("--weight-row-batch", type=int, default=256)
@@ -949,6 +949,8 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = parser().parse_args()
+    if args.artifact_root is None:
+        args.artifact_root = str(Path(args.workdir).resolve() / "artifacts" / "e14")
     {
         "calibrate": calibrate_rotations, "verify": verify_rotation,
         "gptq": gptq_quantize, "evaluate": evaluate_row, "finalize": finalize,
