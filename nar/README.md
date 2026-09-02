@@ -60,8 +60,9 @@ Git. All comparisons are paired and no result-driven tuning is used.
   `5008669b08c1f11f9b64d52d16fddd47ca754c5a`: symmetric W4 per output
   channel (`groupsize=-1`), block 128, damp 0.01, no act order, 128 fixed
   WikiText-2 sequences. Embeddings/lm_head remain bf16. All rows replace R3 K
-  with asymmetric KIVI-style per-channel K4 over 32-token groups; V is
-  asymmetric per-token V4. NAR R4 uses the E12 compact-WY representation.
+  with asymmetric KIVI-style per-channel K4 over 32-token groups and the
+  standard 128-token residual policy; V is asymmetric per-token V4 with a
+  128-token bf16 residual. NAR R4 uses the E12 compact-WY representation.
 - E15 uses nearest E2M1 with one E4M3FN max/6 scale per block of 16 and no
   zero-point. It samples every 128th retained E1c token and includes one fixed
   condition-16 log-diagonal non-Gaussian invertible control.

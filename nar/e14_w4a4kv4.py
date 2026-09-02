@@ -46,6 +46,7 @@ QUAROT_COMMIT = "5008669b08c1f11f9b64d52d16fddd47ca754c5a"
 HARNESS_COMMIT = "b954108c9baaaa934b4ad842033b31a97ee30816"
 GROUP = 128
 K_TOKEN_GROUP = 32
+KV_RESIDUAL_LENGTH = 128
 
 
 def _json(path: Path) -> dict[str, Any]:
@@ -404,9 +405,9 @@ def _symmetric_per_token_int4(value: torch.Tensor) -> torch.Tensor:
 
 
 def _kivi_key_qdq(key: torch.Tensor) -> torch.Tensor:
-    """Asymmetric per-channel K, contiguous token groups; short tail is bf16."""
+    """Quantize completed KIVI residual chunks; keep the newest chunk bf16."""
     length = key.shape[-2]
-    prefix = length // K_TOKEN_GROUP * K_TOKEN_GROUP
+    prefix = (max(0, length - 1) // KV_RESIDUAL_LENGTH) * KV_RESIDUAL_LENGTH
     if prefix == 0:
         return key
     transposed = key[..., :prefix, :].transpose(-1, -2).contiguous()
@@ -414,6 +415,21 @@ def _kivi_key_qdq(key: torch.Tensor) -> torch.Tensor:
     output = key.clone()
     output[..., :prefix, :] = quantized.transpose(-1, -2)
     return output
+
+
+def _residual_masks(q_length: int, kv_length: int, device: torch.device) -> tuple[torch.Tensor, torch.Tensor]:
+    """Return KIVI's sawtooth K and sliding V full-precision masks."""
+    query_position = torch.arange(
+        kv_length - q_length, kv_length, device=device, dtype=torch.long
+    ).unsqueeze(1)
+    key_position = torch.arange(kv_length, device=device, dtype=torch.long).unsqueeze(0)
+    causal = key_position <= query_position
+    key_chunk_start = torch.div(
+        query_position, KV_RESIDUAL_LENGTH, rounding_mode="floor"
+    ) * KV_RESIDUAL_LENGTH
+    key_full = causal & (key_position >= key_chunk_start)
+    value_full = causal & (key_position > query_position - KV_RESIDUAL_LENGTH)
+    return key_full.unsqueeze(0).unsqueeze(0), value_full.unsqueeze(0).unsqueeze(0)
 
 
 class RuntimeHooks:
@@ -450,10 +466,37 @@ class RuntimeHooks:
 
     def attention(self, module: torch.nn.Module, query: torch.Tensor, key: torch.Tensor,
                   value: torch.Tensor, attention_mask: torch.Tensor | None, **kwargs: Any) -> tuple[torch.Tensor, None]:
-        from transformers.integrations.sdpa_attention import sdpa_attention_forward
+        from transformers.models.llama.modeling_llama import repeat_kv
+
+        scaling = kwargs.get("scaling", getattr(module, "scaling", self.rotations.head_dim ** -0.5))
+        key_full_mask, value_full_mask = _residual_masks(
+            query.shape[-2], key.shape[-2], query.device
+        )
         quantized_key = _kivi_key_qdq(key)
         quantized_value, _, _, _ = base.dynamic_asym_int4(value, self.rotations.head_dim)
-        return sdpa_attention_forward(module, query, quantized_key, quantized_value, attention_mask, **kwargs)
+        key = repeat_kv(key, module.num_key_value_groups)
+        value = repeat_kv(value, module.num_key_value_groups)
+        quantized_key = repeat_kv(quantized_key, module.num_key_value_groups)
+        quantized_value = repeat_kv(quantized_value, module.num_key_value_groups)
+
+        # KIVI quantizes a completed R-token K residual chunk at once, so the
+        # number of recent bf16 K tokens cycles from 1..R.
+        weights = torch.matmul(query, quantized_key.transpose(-1, -2))
+        correction = torch.matmul(query, (key - quantized_key).transpose(-1, -2))
+        weights.add_(correction.masked_fill_(~key_full_mask, 0)).mul_(scaling)
+        causal = torch.arange(key.shape[-2], device=query.device).unsqueeze(0) <= torch.arange(
+            key.shape[-2] - query.shape[-2], key.shape[-2], device=query.device
+        ).unsqueeze(1)
+        weights.masked_fill_(~causal.unsqueeze(0).unsqueeze(0), torch.finfo(weights.dtype).min)
+        if attention_mask is not None:
+            weights.add_(attention_mask[..., : key.shape[-2]])
+        weights = torch.nn.functional.softmax(weights, dim=-1, dtype=torch.float32).to(query.dtype)
+
+        # V keeps the most recent R tokens bf16 and quantizes older V per token.
+        output = torch.matmul(weights, quantized_value)
+        recent_weights = weights.masked_fill(~value_full_mask, 0)
+        output.add_(torch.matmul(recent_weights, value - quantized_value))
+        return output.transpose(1, 2).contiguous(), None
 
     def install(self) -> None:
         from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
@@ -862,7 +905,7 @@ def finalize(args: argparse.Namespace) -> None:
         },
         "k4": {
             "all_rows": "post-RoPE KIVI-style dynamic asymmetric per-channel, contiguous token groups of 32",
-            "residual": "incomplete newest group of fewer than 32 tokens remains bf16",
+            "residual": "R=128: K quantizes completed 128-token residual chunks (1..128 recent bf16 tokens); V keeps the latest 128 tokens bf16",
             "r3": "omitted because the fixed per-channel K baseline replaces QuaRot per-token rotated K",
         },
         "v4": {
