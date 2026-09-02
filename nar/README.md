@@ -64,7 +64,8 @@ Git. All comparisons are paired and no result-driven tuning is used.
   standard 128-token residual policy; V is asymmetric per-token V4 with a
   128-token bf16 residual. NAR R4 uses the E12 compact-WY representation.
 - E15 uses nearest E2M1 with one E4M3FN max/6 scale per block of 16 and no
-  zero-point. It samples every 128th retained E1c token and includes one fixed
+  zero-point. Its Hadamard baseline is a fixed random-sign H16 aligned to each
+  scale block. It samples every 128th retained E1c token and includes one fixed
   condition-16 log-diagonal non-Gaussian invertible control.
 
 ## Commands

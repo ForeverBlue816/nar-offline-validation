@@ -46,8 +46,8 @@ def build(args: argparse.Namespace) -> None:
     )
     section = [
         "# E15 — FP4 E2M1 framework boundary\n",
-        "The retained E1c q_input/down_input tensors are reused without a model rerun. Every row is paired on the same every-128th-token sample. FP4 uses nearest finite E2M1 values with one max/6 E4M3FN scale per block of 16 and no zero-point. Kurtosis is Pearson kurtosis of the transformed values.\n",
-        _table(summary[["site", "method", "layers", "mean_fp4_nmse", "mean_transformed_pearson_kurtosis", "mean_relative_e4m3_scale_rounding_error"]]) + "\n",
+        "The retained E1c q_input/down_input tensors are reused without a model rerun. Every row is paired on the same every-128th-token sample. FP4 uses nearest finite E2M1 values with one max/6 E4M3FN scale per block of 16 and no zero-point. The Hadamard baseline is a fixed random-sign orthonormal H16 applied inside each aligned scale block. NMSE is the global squared-error/signal-energy ratio across layers; kurtosis is Pearson kurtosis of the transformed values.\n",
+        _table(summary[["site", "method", "layers", "global_fp4_nmse", "mean_layer_fp4_nmse", "mean_transformed_pearson_kurtosis", "mean_relative_e4m3_scale_rounding_error"]]) + "\n",
         _table(comparison) + "\n",
         "The deliberately non-Gaussian invertible baseline is a fixed, seeded, randomly permuted diagonal transform with singular values exp(linspace(-ln4,ln4)), condition number 16. Its exact inverse is applied before NMSE; no parameter was tuned.\n",
         "Boundary verdict: " + verdict + ". The result confirms or refutes only whether NAR's zero-point-alignment benefit transfers to this no-zero-point FP4 framework; it is not used to revise the INT4 method result.\n",

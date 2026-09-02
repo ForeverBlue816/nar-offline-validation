@@ -63,6 +63,13 @@ def _logdiag(n: int, seed: int, device: torch.device) -> torch.Tensor:
     return diagonal[torch.randperm(n, generator=generator)].to(device)
 
 
+def _block_hadamard(value: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
+    """Random-sign orthonormal H16 applied inside each FP4 scale block."""
+    shape = value.shape
+    blocks = (value.float() * signs).reshape(-1, shape[-1] // BLOCK, BLOCK)
+    return ext._fast_walsh_hadamard(blocks).reshape(shape)
+
+
 def analyze(args: argparse.Namespace) -> None:
     if not torch.cuda.is_available():
         raise RuntimeError("E15 requires CUDA")
@@ -76,11 +83,10 @@ def analyze(args: argparse.Namespace) -> None:
     wide = workdir / "activations" / MODEL / "wide_cal_a"
     meta = _json(wide / "DONE.json")
     dimensions = {"qkv": int(meta["hidden_size"]), "down": int(meta["intermediate_size"])}
-    rotations = {
-        method: act.MethodRotations(workdir, MODEL, method, 0, args.seed,
-                                    int(meta["num_layers"]), dimensions, torch.device("cuda"))
-        for method in ("hadamard", "nar")
-    }
+    rotations = act.MethodRotations(
+        workdir, MODEL, "nar", 0, args.seed,
+        int(meta["num_layers"]), dimensions, torch.device("cuda")
+    )
     rows = []
     for site in SITES:
         rotation_site = "qkv" if site == "q_input" else "down"
@@ -88,34 +94,43 @@ def analyze(args: argparse.Namespace) -> None:
             mmap = ext._open_site(wide, meta, site, layer)
             value = ext._sample_site_tokens(mmap, args.sample_stride, torch.device("cuda"))
             base_kurtosis = pearson_kurtosis(value)
+            signal_energy = float(value.float().square().sum(dtype=torch.float64))
             rows.append({
                 "model": MODEL, "site": site, "layer": layer, "method": "bf16",
                 "fp4_nmse": 0.0, "transformed_pearson_kurtosis": base_kurtosis,
                 "mean_relative_e4m3_scale_rounding_error": 0.0,
+                "squared_error": 0.0, "signal_energy": signal_energy,
                 "sample_vectors": value.shape[0],
             })
             for method in METHODS[1:]:
                 diagonal = None
                 if method == "identity":
                     transformed = value.float()
-                elif method in rotations:
-                    transformed = rotations[method].apply(rotation_site, layer, value)
+                elif method == "hadamard":
+                    transformed = _block_hadamard(
+                        value, rotations.signs[(rotation_site, layer)]
+                    )
+                elif method == "nar":
+                    transformed = rotations.apply(rotation_site, layer, value)
                 else:
                     diagonal = _logdiag(value.shape[-1], args.seed + 10_000 * (site == "down_input") + layer,
                                         value.device)
                     transformed = value.float() * diagonal
                 quantized, scale_error = e2m1_e4m3_qdq(transformed)
                 if diagonal is None:
-                    numerator = (quantized.float() - transformed.float()).square().sum()
+                    numerator = (quantized.float() - transformed.float()).square().sum(
+                        dtype=torch.float64
+                    )
                 else:
                     reconstructed = quantized.float() / diagonal
-                    numerator = (reconstructed - value.float()).square().sum()
-                nmse = float(numerator / value.float().square().sum().clamp_min(1e-30))
+                    numerator = (reconstructed - value.float()).square().sum(dtype=torch.float64)
+                nmse = float(numerator / max(signal_energy, 1e-30))
                 rows.append({
                     "model": MODEL, "site": site, "layer": layer, "method": method,
                     "fp4_nmse": nmse,
                     "transformed_pearson_kurtosis": pearson_kurtosis(transformed),
                     "mean_relative_e4m3_scale_rounding_error": float(scale_error.mean()),
+                    "squared_error": float(numerator), "signal_energy": signal_energy,
                     "sample_vectors": value.shape[0],
                 })
                 del transformed, quantized, scale_error
@@ -127,9 +142,12 @@ def analyze(args: argparse.Namespace) -> None:
     for site in SITES:
         for method in METHODS:
             subset = [row for row in rows if row["site"] == site and row["method"] == method]
+            squared_error = sum(row["squared_error"] for row in subset)
+            signal_energy = sum(row["signal_energy"] for row in subset)
             summary.append({
                 "model": MODEL, "site": site, "method": method, "layers": len(subset),
-                "mean_fp4_nmse": float(np.mean([row["fp4_nmse"] for row in subset])),
+                "global_fp4_nmse": squared_error / max(signal_energy, 1e-30),
+                "mean_layer_fp4_nmse": float(np.mean([row["fp4_nmse"] for row in subset])),
                 "mean_transformed_pearson_kurtosis": float(np.mean([
                     row["transformed_pearson_kurtosis"] for row in subset
                 ])),
@@ -140,19 +158,29 @@ def analyze(args: argparse.Namespace) -> None:
     base.write_csv(result_dir / "e15_fp4_summary.csv", summary)
     comparisons = []
     for site in SITES:
-        had = np.asarray([row["fp4_nmse"] for row in rows if row["site"] == site and row["method"] == "hadamard"])
-        nar = np.asarray([row["fp4_nmse"] for row in rows if row["site"] == site and row["method"] == "nar"])
+        had_rows = [row for row in rows if row["site"] == site and row["method"] == "hadamard"]
+        nar_rows = [row for row in rows if row["site"] == site and row["method"] == "nar"]
+        had = np.asarray([row["fp4_nmse"] for row in had_rows])
+        nar = np.asarray([row["fp4_nmse"] for row in nar_rows])
         delta = nar - had
+        global_had = sum(row["squared_error"] for row in had_rows) / sum(
+            row["signal_energy"] for row in had_rows
+        )
+        global_nar = sum(row["squared_error"] for row in nar_rows) / sum(
+            row["signal_energy"] for row in nar_rows
+        )
         comparisons.append({
             "model": MODEL, "site": site, "mean_nar_minus_hadamard_nmse": float(delta.mean()),
+            "global_nar_minus_hadamard_nmse": global_nar - global_had,
             "nar_better_layers": int((delta < 0).sum()), "layers": len(delta),
-            "nar_loses_zero_point_advantage": bool(delta.mean() >= 0),
+            "nar_loses_zero_point_advantage": bool(global_nar >= global_had),
         })
     base.write_csv(result_dir / "e15_fp4_comparison.csv", comparisons)
     base.atomic_json(done, {
         "model": MODEL, "source": str(wide), "sample_stride": args.sample_stride,
         "paired": "identical frozen E1c vectors for all methods",
         "fp4": "nearest finite E2M1; one max/6 E4M3FN scale per block of 16; no zero-point",
+        "hadamard": "fixed random-sign orthonormal H16 inside each aligned FP4 scale block",
         "logdiag": "fixed seeded diagonal exp(linspace(-ln4,ln4)) with random permutation; condition number 16; exact inverse applied before NMSE",
         "comparison": comparisons, "seed": args.seed, "no_tuning": True,
         "hardware": base.hardware_info(),
