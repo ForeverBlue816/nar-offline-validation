@@ -1017,8 +1017,11 @@ def finalize(args: argparse.Namespace) -> None:
             if row_name in PAIRED_ROWS:
                 ppl_delta = np.asarray([ppls[index] - had_ppl[seed] for index, seed in enumerate(seeds)])
                 accuracy_delta = np.asarray([means[index] - had_accuracy[seed] for index, seed in enumerate(seeds)])
-                ppl_half = TCRIT_DF2_90 * float(ppl_delta.std(ddof=1)) / math.sqrt(len(seeds))
-                acc_half = TCRIT_DF2_90 * float(accuracy_delta.std(ddof=1)) / math.sqrt(len(seeds))
+                if len(seeds) > 1:
+                    ppl_half = TCRIT_DF2_90 * float(ppl_delta.std(ddof=1)) / math.sqrt(len(seeds))
+                    acc_half = TCRIT_DF2_90 * float(accuracy_delta.std(ddof=1)) / math.sqrt(len(seeds))
+                else:
+                    ppl_half = acc_half = float("nan")
             else:
                 ppl_delta = np.asarray([float("nan")])
                 accuracy_delta = np.asarray([float("nan")])
@@ -1066,7 +1069,12 @@ def finalize(args: argparse.Namespace) -> None:
             "all_rows": "dynamic asymmetric per-token, one head_dim=128 group",
             "quarot_and_hadamard": "Hadamard R2", "nar": "NAR R2 folded into o_proj",
         },
-        "paired_seed_count": len(seeds), "no_tuning": True, "negative_results_reported": True,
+        "paired_seed_count": len(seeds),
+        "uncertainty": (
+            "paired 90% Student-t CI over seeds" if len(seeds) > 1
+            else "not estimable: protocol amended to one paired seed"
+        ),
+        "no_tuning": True, "negative_results_reported": True,
     })
 
 
@@ -1087,12 +1095,15 @@ def ppl_gate(args: argparse.Namespace) -> None:
             deltas = np.asarray([
                 values[(row, seed)] - values[("hadamard_asym_g128", seed)] for seed in seeds
             ], dtype=np.float64)
-            half = 0.0 if row == "hadamard_asym_g128" else (
-                TCRIT_DF2_90 * float(deltas.std(ddof=1)) / math.sqrt(len(deltas))
+            half = (
+                0.0 if row == "hadamard_asym_g128"
+                else TCRIT_DF2_90 * float(deltas.std(ddof=1)) / math.sqrt(len(deltas))
+                if len(deltas) > 1 else float("nan")
             )
             rows.append({
                 "model": model, "row": row, "seeds": len(seeds),
-                "ppl_mean": float(samples.mean()), "ppl_std": float(samples.std(ddof=1)),
+                "ppl_mean": float(samples.mean()),
+                "ppl_std": float(samples.std(ddof=1)) if len(samples) > 1 else 0.0,
                 "paired_ppl_delta_vs_hadamard": float(deltas.mean()),
                 "paired_delta_ci90_low": float(deltas.mean() - half),
                 "paired_delta_ci90_high": float(deltas.mean() + half),
@@ -1103,20 +1114,29 @@ def ppl_gate(args: argparse.Namespace) -> None:
                                                   + KV_RESIDUAL_LENGTH * 16) / 2048,
             })
         k8 = next(item for item in rows if item["model"] == model and item["row"] == "nar_k8_asym_g128")
-        passed = float(k8["paired_delta_ci90_high"]) < 0
+        passed = (
+            float(k8["paired_delta_ci90_high"]) < 0 if len(seeds) > 1
+            else float(k8["paired_ppl_delta_vs_hadamard"]) < 0
+        )
         decisions[model] = {
-            "nar_k8_better_than_hadamard_with_ci_excluding_zero": passed,
+            "nar_k8_better_than_hadamard": passed,
             "paired_delta": k8["paired_ppl_delta_vs_hadamard"],
             "ci90": [k8["paired_delta_ci90_low"], k8["paired_delta_ci90_high"]],
         }
-    stop = not all(item["nar_k8_better_than_hadamard_with_ci_excluding_zero"]
-                   for item in decisions.values())
+    stop = not all(item["nar_k8_better_than_hadamard"] for item in decisions.values())
     base.write_csv(workdir / "results" / "e14_ppl_gate.csv", rows)
     base.atomic_json(workdir / "results" / "E14_PPL_GATE.json", {
         "models": list(MODELS), "rows": list(PAIRED_ROWS), "seeds": seeds,
-        "paired_ci": "two-sided 90% Student-t interval over three seed-level PPL differences",
+        "paired_ci": (
+            "two-sided 90% Student-t interval over seed-level PPL differences"
+            if len(seeds) > 1 else "not estimable with one seed"
+        ),
         "decision": decisions, "stop_before_e17_e18": stop,
-        "stop_rule": "stop unless NAR k=8 beats metadata-matched Hadamard on both models with CI excluding zero",
+        "stop_rule": (
+            "stop unless NAR k=8 beats metadata-matched Hadamard on both models with CI excluding zero"
+            if len(seeds) > 1
+            else "single-seed amendment: stop unless paired NAR k=8 minus Hadamard PPL is negative on both models"
+        ),
         "metadata_formulas": {
             "a4_asym_g128": "4 + (16 scale + 16 zero)/128 = 4.25 bits/value",
             "k4_ctx2048": "2016 quantized tokens at 4+(16+16)/32 bits plus 32 bf16 residual tokens",
@@ -1155,9 +1175,9 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--batch-size", type=int, default=1)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
     gate = sub.add_parser("ppl-gate")
-    gate.add_argument("--seeds", type=int, default=3)
+    gate.add_argument("--seeds", type=int, default=1)
     final = sub.add_parser("finalize")
-    final.add_argument("--seeds", type=int, default=3)
+    final.add_argument("--seeds", type=int, default=1)
     return parser
 
 

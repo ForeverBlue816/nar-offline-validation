@@ -436,11 +436,15 @@ These accuracy results are reported regardless of sign. No task subset, prompt, 
 
 The official released QuaRot W4A4KV4 pipeline produced WikiText-2 PPL **6.355** for Llama-2-7B, versus the published **6.10** target (absolute error **0.255**; requested tolerance ±0.10). The sanity anchor is therefore a recorded **FAIL**. Per the explicit project decision, this release/paper discrepancy is retained as a negative reproducibility result and the frozen 3B/8B experiment matrix proceeds without reclassifying the anchor. No anchor result was tuned or rerun after this decision.
 
-## Provisional full-test PPL
+## Single-seed protocol amendment
 
-These are the first completed paired seed only, shown to make progress auditable; they are not the requested three-seed conclusion.
+E14 was explicitly amended to one seed per configuration to accelerate completion. Seed 0 is the sole planned E14 seed; partial seed-1 work is excluded from the headline comparison. Direct paired deltas are reported without seed-level confidence intervals. Existing completed E5/E11 multi-seed results are unchanged.
 
 | model | seed | row | full WikiText-2 PPL | paired delta vs Hadamard |
 |---|---|---|---|---|
 | Llama-3.2-3B | 0 | Hadamard + asymmetric g128 | 9.20901 | 0 |
 | Llama-3.2-3B | 0 | NAR k=8 R1/R4 + NAR R2 + asymmetric g128 | 8.75623 | -0.452776 |
+| Llama-3.2-3B | 0 | NAR k=max R1/R4 + NAR R2 + asymmetric g128 | 8.71445 | -0.494562 |
+| Llama-3.2-3B | 0 | QuaRot released symmetric A4 | 10.33237 | +1.12336 |
+
+Completed six-task zero-shot means are 0.643694 for metadata-matched Hadamard and 0.651201 for NAR k=8, a direct paired gain of +0.007507 for NAR. The released QuaRot zero-shot row is still running.

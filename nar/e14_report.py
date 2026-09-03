@@ -44,13 +44,16 @@ def build(args: argparse.Namespace) -> None:
     frame = pd.read_csv(workdir / "results" / "e14_w4a4kv4_summary.csv")
     frame["model"] = frame.model.map(LABELS)
     frame["row"] = frame.row.map(LABELS)
-    columns = ["model", "row", "seeds", "ppl", "paired_ppl_delta_vs_hadamard",
-               "paired_ppl_ci90_low", "paired_ppl_ci90_high", "mean_accuracy",
-               "paired_accuracy_delta_vs_hadamard", "paired_accuracy_ci90_low",
-               "paired_accuracy_ci90_high", "w4_effective_bits", "a4_qkv_effective_bits",
-               "a4_down_effective_bits", "k4_effective_bits_at_ctx2048",
-               "v4_effective_bits_at_ctx2048", "piqa", "arc_easy", "arc_challenge",
-               "hellaswag", "winogrande", "lambada_openai"]
+    columns = ["model", "row", "seeds", "ppl", "paired_ppl_delta_vs_hadamard"]
+    if int(done["paired_seed_count"]) > 1:
+        columns += ["paired_ppl_ci90_low", "paired_ppl_ci90_high"]
+    columns += ["mean_accuracy", "paired_accuracy_delta_vs_hadamard"]
+    if int(done["paired_seed_count"]) > 1:
+        columns += ["paired_accuracy_ci90_low", "paired_accuracy_ci90_high"]
+    columns += ["w4_effective_bits", "a4_qkv_effective_bits",
+                "a4_down_effective_bits", "k4_effective_bits_at_ctx2048",
+                "v4_effective_bits_at_ctx2048", "piqa", "arc_easy", "arc_challenge",
+                "hellaswag", "winogrande", "lambada_openai"]
     report_path = workdir / "report.md"
     report = report_path.read_text()
     marker = "\n# E14 — end-to-end W4A4KV4"
@@ -73,7 +76,7 @@ def build(args: argparse.Namespace) -> None:
         "Weights use the GPTQ implementation and fixed clipping search from spcl/QuaRot commit 5008669b08c1f11f9b64d52d16fddd47ca754c5a: symmetric W4 per output channel, one group across the full input row, MSE norm 2.4, grid 100, max shrink 0.8, block 128, damp 0.01, no act order, and 128 fixed WikiText-2 calibration sequences. Embeddings and lm_head remain bf16 as in the upstream fake-quant path.\n",
         _table(frame[columns]) + "\n",
         "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with residual window R=32. V keeps the latest 32 tokens bf16 and quantizes older values dynamically asymmetric per token over one 128-channel head group. The Q/K rotation used by released QuaRot's per-token K path is omitted because per-channel K replaces it for every row. Hadamard rows retain random-sign R1, per-head V Hadamard plus the cross-head o_proj factor, and R4. NAR rows use calibrated global R1, per-layer per-head R2, and per-layer R4 at k=8 or k=max.\n",
-        "The first row preserves upstream symmetric per-token A4 semantics while using the common KIVI K policy. The other rows quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. GPTQ uses the released seed-0 random-window sampler: 128 WikiText-2 train windows of length 2048. Rows 2–4 use three paired rotation seeds and two-sided 90% Student-t intervals over seed-level differences. Zero-shot evaluation uses batch size one so padding cannot shift token-group boundaries.\n",
+        "The first row preserves upstream symmetric per-token A4 semantics while using the common KIVI K policy. The other rows quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. GPTQ uses the released seed-0 random-window sampler: 128 WikiText-2 train windows of length 2048. Following the explicit protocol amendment, every E14 configuration uses one paired seed; direct paired deltas are reported and seed-level confidence intervals are not estimable. Zero-shot evaluation uses batch size one so padding cannot shift token-group boundaries.\n",
         "Effective bits include metadata separately for W, A, K, and V; they are not summed across tensors. Asymmetric group-128 A4 is 4+(16+16)/128=4.25 bits/value. Cache columns include the 32-token bf16 residual at context 2048.\n",
         "E12 already shows that the current unfused NAR R4 is not deployable: even a favorable quality result here does not override that engineering failure. All negative task and PPL deltas are retained.\n",
     ]
