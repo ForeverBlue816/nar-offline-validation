@@ -35,8 +35,14 @@ record() {
 }
 
 job_state() {
-    local output
+    local output state
     for attempt in 1 2 3 4 5; do
+        if output="$(squeue -h -j "$1" -o '%T')" &&
+            state="$(awk 'NF {print $1; exit}' <<< "$output")" &&
+            [[ -n "$state" ]]; then
+            printf '%s\n' "$state"
+            return 0
+        fi
         if output="$(sacct -X -j "$1" --format=State -n -P)"; then
             awk 'NF {sub(/[+|].*/, "", $1); print $1; exit}' <<< "$output"
             return 0
