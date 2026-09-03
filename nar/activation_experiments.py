@@ -35,6 +35,8 @@ MODEL_IDS = {
     "llama32_3b": "unsloth/Llama-3.2-3B",
     "llama32_1b": "unsloth/Llama-3.2-1B",
     "llama31_8b": "unsloth/Meta-Llama-3.1-8B",
+    # E18 v2 / E19 use the base checkpoint, never the post-trained Qwen/Qwen3-8B.
+    "qwen3_8b_base": "Qwen/Qwen3-8B-Base",
 }
 SITES = ("qkv", "down")
 EVAL_SITES = ("qkv_only", "both", "down_only")

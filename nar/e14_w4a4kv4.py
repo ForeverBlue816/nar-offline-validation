@@ -51,6 +51,12 @@ GROUP = 128
 K_TOKEN_GROUP = 32
 KV_RESIDUAL_LENGTH = 32
 
+# Extension points for non-Llama architectures (E19 sets both for Qwen3).
+# The Llama rows behave exactly as before when these are left untouched.
+LOAD_MODEL: Callable[[str, Path], torch.nn.Module] = None  # type: ignore[assignment]
+ROTATION_SET: type | None = None
+ALGEBRA_CONTROL: Callable[[Path, str], dict[str, Any]] | None = None
+
 
 def _json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
@@ -199,9 +205,15 @@ def _quarot_calibration_tokens(model_id: str, workdir: Path, nsamples: int,
         "Salesforce/wikitext", "wikitext-2-raw-v1", split="train",
         cache_dir=str(workdir / "cache" / "datasets"),
     )
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_id, cache_dir=str(workdir / "cache" / "huggingface"), use_fast=False
-    )
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_id, cache_dir=str(workdir / "cache" / "huggingface"), use_fast=False
+        )
+    except Exception:  # noqa: BLE001 - Qwen3 ships no slow tokenizer
+        LOG.info("no slow tokenizer for %s; using the fast tokenizer", model_id)
+        tokenizer = AutoTokenizer.from_pretrained(
+            model_id, cache_dir=str(workdir / "cache" / "huggingface"), use_fast=True
+        )
     encoded = tokenizer("\n\n".join(dataset["text"]), return_tensors="pt").input_ids
     rng = random.Random(seed)
     windows = []
@@ -634,8 +646,9 @@ def _layer_forward(layer: torch.nn.Module, hidden: torch.Tensor, position_ids: t
 def _prepare_rotated_model(workdir: Path, model_key: str, rotation: str,
                            seed: int, row_batch: int) -> tuple[torch.nn.Module, RotationSet, dict[str, Any]]:
     model_id, canonical = act.model_id_and_key(model_key)
-    model = base.load_model(model_id, workdir)
-    rotations = RotationSet(workdir, canonical, rotation, seed, model.config, torch.device("cuda"))
+    model = (LOAD_MODEL or base.load_model)(model_id, workdir)
+    rotation_set = ROTATION_SET or RotationSet
+    rotations = rotation_set(workdir, canonical, rotation, seed, model.config, torch.device("cuda"))
     fold = fuse_norms_and_rotate(model, rotations, row_batch)
     return model, rotations, fold
 
@@ -676,7 +689,7 @@ def verify_rotation(args: argparse.Namespace) -> None:
     model_id, model_key = act.model_id_and_key(args.model)
     tokens = base.prepare_token_chunks(model_id, "train", 0, 1, args.seq_len, workdir)
     probe = tokens[:, :args.verify_tokens].cuda()
-    original = base.load_model(model_id, workdir)
+    original = (LOAD_MODEL or base.load_model)(model_id, workdir)
     with torch.inference_mode():
         reference = original(input_ids=probe, use_cache=False).logits.float()
     del original
@@ -714,7 +727,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
 
     # Measure algebraic folding before GPTQ on a fixed prefix.
     probe = tokens[:1, :args.verify_tokens].cuda()
-    original = base.load_model(model_id, workdir)
+    original = (LOAD_MODEL or base.load_model)(model_id, workdir)
     with torch.inference_mode():
         reference = original(input_ids=probe, use_cache=False).logits.float()
     del original
@@ -724,7 +737,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         workdir, model_key, args.rotation, args.seed, args.weight_row_batch
     )
     invariance = _fold_invariance(model_id, model, rotations, probe, reference)
-    algebra_control = _algebra_control(workdir, args.rotation)
+    algebra_control = (ALGEBRA_CONTROL or _algebra_control)(workdir, args.rotation)
     invariance["previous_bf16_gate"] = args.fold_tolerance
     invariance["exceeds_previous_bf16_gate"] = (
         invariance["relative_l2_logit_error"] > args.fold_tolerance
@@ -738,8 +751,9 @@ def gptq_quantize(args: argparse.Namespace) -> None:
     model.cpu()
     rotary = model.model.rotary_emb.cuda()
     layers = model.model.layers
+    stream_dtype = model.model.embed_tokens.weight.dtype
     hidden = torch.empty(
-        (tokens.shape[0], args.seq_len, model.config.hidden_size), dtype=torch.bfloat16
+        (tokens.shape[0], args.seq_len, model.config.hidden_size), dtype=stream_dtype
     )
     with torch.inference_mode():
         for index in range(tokens.shape[0]):
@@ -747,7 +761,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
     scratch = torch.empty_like(hidden)
     position_ids = torch.arange(args.seq_len, device="cuda").unsqueeze(0)
     dummy = torch.zeros(
-        (1, args.seq_len, model.config.hidden_size), device="cuda", dtype=torch.bfloat16
+        (1, args.seq_len, model.config.hidden_size), device="cuda", dtype=stream_dtype
     )
     position_embeddings = rotary(dummy, position_ids)
     del dummy

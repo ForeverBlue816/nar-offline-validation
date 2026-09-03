@@ -1,0 +1,105 @@
+{
+  "architecture": "Qwen3ForCausalLM",
+  "compute_dtype": "float32",
+  "embedding_and_lm_head_share_storage": false,
+  "git_commit": "8d606a0ef0d03d6f39b9d360a6785e03f6729833",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "hostname": "gpu-pro6000-7.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-aef07636-a42d-5efe-5775-61e1828fe740, 97887 MiB, 65328 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5",
+    "slurm_job_id": "138063",
+    "torch": "2.11.0+cu128"
+  },
+  "kv_group_counts": {
+    "k_per_channel_groups": 4,
+    "kv_heads": 8,
+    "num_key_value_groups": 4,
+    "v_per_token_group_size": 128
+  },
+  "kv_site_probe": {
+    "attention_interface_shapes": {
+      "key_shape": [
+        1,
+        8,
+        8,
+        128
+      ],
+      "key_shape_after_repeat": [
+        1,
+        32,
+        8,
+        128
+      ],
+      "query_shape": [
+        1,
+        32,
+        8,
+        128
+      ],
+      "value_shape": [
+        1,
+        8,
+        8,
+        128
+      ]
+    },
+    "k_is_post_k_norm": true,
+    "k_quantizer_input": "post q_norm/k_norm and post-RoPE key, i.e. the cache tensor",
+    "k_quantizer_matches_llama_functional_point": true,
+    "module_shapes": {
+      "k_norm_output": [
+        1,
+        8,
+        8,
+        128
+      ],
+      "k_proj_output": [
+        1,
+        8,
+        1024
+      ],
+      "q_norm_output": [
+        1,
+        8,
+        32,
+        128
+      ]
+    }
+  },
+  "linear_modules_with_bias": [],
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "per_head_qk_norm_fused": false,
+  "per_head_qk_norm_modules": 72,
+  "per_head_qk_norm_note": "q_norm/k_norm are applied inside Qwen3Attention after q_proj/k_proj and before RoPE. fuse_norms_and_rotate folds only input_layernorm, post_attention_layernorm and the final norm, so they are untouched.",
+  "problems": [],
+  "r1_note": "R1 folds into the input axis of q/k/v_proj and gate/up_proj and the output axis of o_proj and down_proj. q_norm/k_norm live downstream of q_proj/k_proj on the head_dim axis and are therefore unaffected by R1.",
+  "r2_note": "R2 acts on the head_dim axis (v_proj output / o_proj input), independent of q_norm/k_norm.",
+  "rmsnorm_kinds_fused_into_consumers": [
+    "input_layernorm",
+    "norm",
+    "post_attention_layernorm"
+  ],
+  "shapes": {
+    "head_dim": 128,
+    "hidden_size": 4096,
+    "intermediate_size": 12288,
+    "num_attention_heads": 32,
+    "num_hidden_layers": 36,
+    "num_key_value_heads": 8
+  },
+  "slot_counts": {
+    "down": 96,
+    "qkv": 32
+  },
+  "tie_word_embeddings": false
+}

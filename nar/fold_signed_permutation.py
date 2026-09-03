@@ -59,6 +59,11 @@ class FoldedR4:
     y_prime_fp32: torch.Tensor
     y_prime_bf16: torch.Tensor
     y_prime_t_fp32: torch.Tensor
+    y_prime_lo_bf16: torch.Tensor
+    y_prime_pad_bf16: torch.Tensor
+    y_prime_pad_lo_bf16: torch.Tensor
+    y_prime_third_bf16: torch.Tensor
+    y_prime_pad_terms_bf16: torch.Tensor
     w_h_fp32: torch.Tensor
     w_h_t_fp32: torch.Tensor
 
@@ -72,6 +77,22 @@ class FoldedR4:
         y_prime = signed_permute_rows(wy_w, source, signs).float()
         w_prime = signed_permute_rows(wy_y, source, signs).float()
         w_h = block_hadamard_columns(w_prime, factor.b).float().contiguous()
+        # tl.dot needs at least 16 columns, so Y' is zero-padded to KP; the
+        # kernel stores only the first k, leaving the partial layout unchanged.
+        rank = y_prime.shape[1]
+        padded = max(16, 1 << (rank - 1).bit_length())
+        y_bf16 = y_prime.to(torch.bfloat16)
+        y_lo = (y_prime - y_bf16.float()).to(torch.bfloat16)
+        pad = torch.zeros((y_prime.shape[0], padded), dtype=torch.bfloat16, device=y_prime.device)
+        pad_lo = torch.zeros_like(pad)
+        pad[:, :rank] = y_bf16
+        pad_lo[:, :rank] = y_lo
+        # Three bf16 terms recover ~24 mantissa bits for Y'; k=32 needs the
+        # third to hold the fp16 zero-point inside one ULP.
+        residual2 = (y_prime - y_bf16.float() - y_lo.float()).to(torch.bfloat16)
+        pad_third = torch.zeros_like(pad)
+        pad_third[:, :rank] = residual2
+        terms = torch.cat((pad, pad_lo, pad_third), dim=0).contiguous()
         # The Triton kernels index both factors as (rank, channel) so that the
         # 128 channels of one group are contiguous under a single rank.
         return cls(
@@ -83,6 +104,11 @@ class FoldedR4:
             y_prime_fp32=y_prime,
             y_prime_bf16=y_prime.to(torch.bfloat16),
             y_prime_t_fp32=y_prime.T.contiguous(),
+            y_prime_lo_bf16=y_lo,
+            y_prime_pad_bf16=pad.contiguous(),
+            y_prime_pad_lo_bf16=pad_lo.contiguous(),
+            y_prime_third_bf16=residual2,
+            y_prime_pad_terms_bf16=terms,
             w_h_fp32=w_h,
             w_h_t_fp32=w_h.T.contiguous(),
         )
@@ -112,6 +138,10 @@ class FoldedR4:
             "y_prime_fp32": self.y_prime_fp32.cpu(),
             "y_prime_bf16": self.y_prime_bf16.cpu(),
             "y_prime_t_fp32": self.y_prime_t_fp32.cpu(),
+            "y_prime_lo_bf16": self.y_prime_lo_bf16.cpu(),
+            "y_prime_pad_bf16": self.y_prime_pad_bf16.cpu(),
+            "y_prime_pad_lo_bf16": self.y_prime_pad_lo_bf16.cpu(),
+            "y_prime_third_bf16": self.y_prime_third_bf16.cpu(),
             "w_h_fp32": self.w_h_fp32.cpu(),
             "w_h_t_fp32": self.w_h_t_fp32.cpu(),
             "compact_wy_convention": "repository row form x-(x@wy_w)@wy_y.T; stored Y'=Q*wy_w and W''=H*Q*wy_y",
