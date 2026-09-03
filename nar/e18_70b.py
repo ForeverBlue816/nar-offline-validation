@@ -37,6 +37,17 @@ MODEL_KEY = "llama31_70b"
 METHODS = ("bf16", "hadamard", "nar_k8", "nar_kmax")
 
 
+def resolve_ranks(requested: tuple[Any, ...], maximum: int) -> list[tuple[str, int]]:
+    """Map requested ranks onto one site; "max" is n/GROUP and ints are capped."""
+    resolved: list[tuple[str, int]] = []
+    for item in requested:
+        if item == "max":
+            resolved.append(("nar_kmax", maximum))
+        else:
+            resolved.append((f"nar_k{int(item)}", min(int(item), maximum)))
+    return resolved
+
+
 def _device_of(module: torch.nn.Module) -> torch.device:
     return next(module.parameters()).device
 
@@ -96,9 +107,11 @@ def make_bases(dimensions: dict[str, int], layers: int, oversample: int, seed: i
 class MultiRankEnergyCollector:
     """Collect coordinate energies after k=8 and k=max compact-WY maps."""
 
-    def __init__(self, model: torch.nn.Module, vectors: dict[tuple[str, int], torch.Tensor], stride: int):
+    def __init__(self, model: torch.nn.Module, vectors: dict[tuple[str, int], torch.Tensor],
+                 stride: int, ranks: tuple[Any, ...] = (8, "max")):
         self.model = model
         self.stride = stride
+        self.ranks = ranks
         self.handles: list[Any] = []
         self.cpu_factors: dict[tuple[str, int, int], tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, float]] = {}
         self.device_wy: dict[tuple[str, int, int, str], tuple[torch.Tensor, torch.Tensor]] = {}
@@ -106,7 +119,7 @@ class MultiRankEnergyCollector:
         self.counts: dict[tuple[str, int, int], int] = {}
         for key, value in vectors.items():
             maximum = value.shape[1]
-            for rank in sorted({8, maximum}):
+            for rank in sorted({r for _, r in resolve_ranks(self.ranks, maximum)}):
                 refs, active, error = act.reflectors_from_vectors(value[:, :rank], GROUP)
                 w, y = compact_wy(refs, active)
                 record = (refs.cpu(), active.cpu(), w.cpu(), y.cpu(), error)
@@ -117,7 +130,7 @@ class MultiRankEnergyCollector:
     def consume(self, site: str, layer: int, value: torch.Tensor) -> None:
         sampled = value.detach()[:, :: self.stride, :].float().reshape(-1, value.shape[-1])
         maximum = value.shape[-1] // GROUP
-        for rank in sorted({8, maximum}):
+        for rank in sorted({r for _, r in resolve_ranks(self.ranks, maximum)}):
             key = (site, layer, rank)
             cache_key = (*key, str(sampled.device))
             if cache_key not in self.device_wy:
@@ -162,8 +175,11 @@ def calibrate(
     model_key: str,
     dimensions: dict[str, int],
     layers: int,
+    ranks: tuple[Any, ...] = (8, "max"),
+    root_override: Path | None = None,
+    eigenspace_name: str = "e18_calibration_eigenspace.csv",
 ) -> None:
-    root = factor_root(Path(args.workdir), model_key)
+    root = root_override or factor_root(Path(args.workdir), model_key)
     done = root / "DONE.json"
     if done.exists():
         LOG.info("reusing E18 factors: %s", done)
@@ -217,7 +233,7 @@ def calibrate(
         vectors[key] = v.float()
         eigenvalues[key] = values.cpu()
         residuals[key] = (residual.norm(dim=0) / values.clamp_min(torch.finfo(torch.float64).tiny)).cpu()
-    energy = MultiRankEnergyCollector(model, vectors, args.permutation_stride)
+    energy = MultiRankEnergyCollector(model, vectors, args.permutation_stride, ranks)
     energy.install(layers)
     try:
         model_pass(model, tokens, args.batch_size, "70B permutation-energy pass 1/1")
@@ -228,7 +244,7 @@ def calibrate(
     for key, v in vectors.items():
         site, layer = key
         maximum = v.shape[1]
-        for rank, label in ((8, "nar_k8"), (maximum, "nar_kmax")):
+        for label, rank in resolve_ranks(ranks, maximum):
             refs, active, _w, _y, error = energy.cpu_factors[(site, layer, rank)]
             means = energy.sums[(site, layer, rank)] / energy.counts[(site, layer, rank)]
             source, target = act.balanced_orders(means.clamp_min(0).sqrt().unsqueeze(0), rank, GROUP)
@@ -246,12 +262,12 @@ def calibrate(
                 "cumulative_fraction_total_energy": float(eigenvalues[key][: index + 1].sum()) / traces[key],
                 "relative_ritz_residual": float(residuals[key][index]),
             })
-    base.write_csv(Path(args.workdir) / "results" / model_key / "e18_calibration_eigenspace.csv", eig_rows)
+    base.write_csv(Path(args.workdir) / "results" / model_key / eigenspace_name, eig_rows)
     base.atomic_json(done, {
         "model": model_key, "model_id": model_id, "num_layers": layers,
         "hidden_size": dimensions["qkv"], "intermediate_size": dimensions["down"],
         "group_size": GROUP, "slot_counts": {"qkv": dimensions["qkv"] // GROUP, "down": dimensions["down"] // GROUP},
-        "ranks": [8, "n_over_b"], "calibration_split": "train", "calibration_offset": 0,
+        "ranks": list(ranks), "calibration_split": "train", "calibration_offset": 0,
         "calibration_sequences": args.calibration_sequences, "sequence_length": args.seq_len,
         "subspace_oversample": args.oversample, "covariance_passes": 3,
         "permutation_energy_passes": 1, "permutation_token_stride": args.permutation_stride,
@@ -370,7 +386,14 @@ def evaluate(model: torch.nn.Module, tokens: torch.Tensor, label: str) -> list[f
             batch = tokens[index:index + 1].to(input_device, non_blocking=True)
             logits = model(input_ids=batch, use_cache=False).logits
             labels = batch[:, 1:].to(logits.device)
-            loss = F.cross_entropy(logits[:, :-1, :].reshape(-1, logits.shape[-1]), labels.reshape(-1)).float()
+            # fp32 BEFORE log_softmax: casting the bf16 loss afterwards quantizes
+            # every per-chunk NLL to a bf16 grid (~0.008 at NLL 2.5) and makes
+            # paired row comparisons meaningless.  See E18 v2 Step 0.
+            loss = F.cross_entropy(
+                logits[:, :-1, :].float().reshape(-1, logits.shape[-1]), labels.reshape(-1)
+            )
+            if loss.dtype != torch.float32:
+                raise AssertionError(f"per-chunk NLL must be fp32, got {loss.dtype}")
             value = float(loss.cpu())
             if not math.isfinite(value):
                 raise RuntimeError(f"non-finite {label} loss at sequence {index}")

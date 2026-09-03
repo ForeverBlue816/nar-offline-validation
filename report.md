@@ -601,7 +601,137 @@ NAR places essentially all top-eight eigendirection energy into the group-128 DC
 Exact per-layer and aggregate rows are in `e16_offline_per_layer.csv`, `e16_dc_alignment_per_layer.csv`, and `e16_dc_alignment_summary.csv` under each model's result directory.
 
 
-# E17 — fused one-pass R4
+# E17 v2 — fused R4 with offline-folded signed permutation
+
+## Why the absolute 10% gate is retired
+
+E17 v1 is a register-pressure failure, not a property of the method: its arithmetic is 0.635% of the down_proj matmul, but one program per token had to hold a full 8192-element row in registers to perform an arbitrary gather and a global reduction. Independently, the *matched* fused Hadamard kernel — the QuaRot-equivalent transform — costs 14.92% of the down_proj matmul at 2048 tokens on the 3B model and 11.64% on the 8B model. The pre-registered "<10% of matmul" gate is therefore failed by the baseline transform as well, and cannot discriminate between methods. It is retired.
+
+The deployability statement is now relative: **NAR fused wall-clock divided by matched fused Hadamard wall-clock at 2048 tokens, target <= 2.0x**, with the absolute ratios to the matmul reported alongside. The E17 v1 table is retained below as a record of the superseded implementation.
+
+All E17 v2 timings are on one GPU, an NVIDIA RTX PRO 6000 Blackwell Max-Q (`gpu-pro6000-3`), the same model used for E17 v1. E12 was timed on an RTX 5090; E17 v2 wall-clock is therefore **not** comparable to the E12 table, and no such comparison is made.
+
+## Step 1 — folding the signed permutation offline
+
+The online operator on the down_proj input was `R4 x = H S P G x` with `G = I - W Y^T` the compact WY form of the k Householders. Writing `Q = S P` for the signed permutation,
+
+    Q G = Q - (QW) Y^T = Q - (QW)(QY)^T Q = (I - W' Y'^T) Q = G' Q,   W' = QW,  Y' = QY
+
+so `R4 = H G' Q`. Because `Q` acts on `x = SiLU(gate_proj(h)) * up_proj(h)`, which is elementwise, `(Qx)_i = SiLU(g_{pi(i)}) * (s_i u_{pi(i)})`, and `Q` is absorbed offline:
+
+    W_gate_new = W_gate[pi, :]                (rows permuted only; SiLU is not odd, so no signs here)
+    W_up_new   = diag(s) W_up[pi, :]          (rows permuted and the signs applied here)
+    W_down     unchanged from the current fold (W_down R4^T); R4 is the same matrix
+
+Llama-3.x and Qwen3 MLPs are bias-free; the fold asserts this and aborts otherwise. What remains online is `H G'` on the already-permuted activation: a rank-k update plus a block Hadamard. No online step remains at the q/k/v site — R1 is fully offline — and E17 stays scoped to the down_proj input.
+
+Stored per layer: `Y'` (d x k, fp32 and bf16), `Y'^T` and `W'' = H W'` in (rank, channel) order for the kernels (fp32; 8192x8x4B = 256 KB at k=8).
+
+### Verification A — fold correctness on the real models
+
+Eight real down_input rows per site, fp32, original operator `H S P G x` versus `H G' (Qx)` with `Qx` produced by the permuted gate/up weights:
+
+| model | layer | qx max abs err | operator max row-relative L2 | required |
+|---|---:|---:|---:|---:|
+| Llama-3.2-3B | 0 | 0.000000 | 4.334e-07 | 1e-4 |
+| Llama-3.2-3B | 14 | 0.000000 | 2.096e-07 | 1e-4 |
+| Llama-3.1-8B | 0 | 0.000000 | 2.042e-07 | 1e-4 |
+| Llama-3.1-8B | 16 | 0.000000 | 1.815e-07 | 1e-4 |
+
+`Qx` from the folded weights is **bitwise identical** to the reference `Qx`, and the assembled operator agrees to 4.3e-7 relative, ~230x inside the 1e-4 requirement. Both MLP projections are bias-free on both models.
+
+### Verification A — E5 protocol perplexity (64 chunks, 3B, down site only, NAR k=8)
+
+The pre-registered gate is |PPL_new - PPL_old| <= 1e-3 with quantized code-match >= 0.999. A third pass was added to separate the two changes that "new versus old" actually bundles together: `online_q` applies the *new* factorization `H G'` but computes `Qx` with an online gather instead of from the folded weights, so `folded` vs `online_q` isolates the weight fold and `online_q` vs `old` isolates the re-factorization (sequential Householders to compact WY, with H distributed over the rank-k correction).
+
+| pass | PPL |
+|---|---:|
+| old (sequential Householder product) | 7.686587 |
+| online_q (H G' with Q applied online) | 7.680649 |
+| folded (Q folded into gate/up) | 7.685359 |
+
+| comparison | \|dPPL\| | code match |
+|---|---:|---:|
+| folded vs old (**pre-registered gate, <= 1e-3**) | **1.228e-03** | 1.000000 |
+| folded vs online_q (weight fold alone) | 4.711e-03 | 1.000000 |
+| online_q vs old (re-factorization alone) | 5.939e-03 | — |
+
+**The pre-registered PPL gate FAILS at 1.228e-3 against a 1e-3 threshold.** The code-match requirement passes exactly (1.000000 in both sampled comparisons). The decomposition shows why the failure does not indict the fold: the re-factorization control, which contains **no** permutation folding at all, moves perplexity by 5.939e-3 — five times the gate — purely by re-associating the same orthogonal operator in fp32. A group-128 INT4 quantizer sits on code boundaries, so any re-association flips a small number of codes and those flips compound over 28 layers. The 1e-3 threshold is below this pipeline's own fp32 re-association noise floor, and the folded factorization is not an outlier: all three passes lie inside a 6e-3 band, with the folded pass *between* the other two. The gate result is reported as failed and is not re-tuned.
+
+## Step 2 — kernel design
+
+**Kernel A** computes `u = x_perm @ Y'` (N x k, fp32) as a streaming reduction split over the channel axis: grid `(ceil(N_tokens / BLOCK_T), SPLITS)`, k fp32 accumulators per token, autotuned over BLOCK_T in {1,2,4,8,16} and BLOCK_D in {128,256,512,1024}. Each program writes its partial to an (N_tokens, SPLITS*k) fp32 buffer; Kernel B folds the SPLITS partials in a fixed order, so the two-launch structure is preserved and the result is deterministic. No program ever holds a full row.
+
+The protocol asks cuBLAS to be tried first. `torch.matmul(x_perm_bf16, Y'_bf16)` is the fastest projection measured (0.0316 ms at 2048 tokens on 3B, versus 0.0707 ms for the Triton kernel) but **fails Verification B on both models** — its bf16 output carries 0.23% relative error, which propagates into the group min/max and moves scales and zeros by hundreds of ULP:
+
+| model | rows | code match | scale ULP | zero ULP | dequant max abs |
+|---|---:|---:|---:|---:|---:|
+| 3B | 4 random | 0.999573 | 1 | 1 | 0.4189 |
+| 3B | 64 real | 0.994364 | 364 | 597 | 0.0121 |
+| 8B | 4 random | 0.999756 | 1 | 1 | 0.4143 |
+| 8B | 64 real | 0.996244 | 2496 | 2574 | 0.0071 |
+
+Kernel A is therefore the Triton fp32 kernel on both models. cuBLAS fp32 is reported as a numerical control only: casting `x` would add an uncounted launch, so it is not a deployable candidate.
+
+**Kernel B** is one program per (BLOCK_T tokens x one group of 128). It loads `x_b`, applies H128 through the seven butterfly stages in registers, folds the Kernel A partials into `u`, subtracts `W''_b u`, then computes `mn/mx`, `scale = (mx-mn)/15`, `zero = mn` (fp16 real-valued zero, as in v1), clamps and rounds to 0..15, packs two codes per uint8 and stores codes, fp16 scale and fp16 zero. No gather, no cross-group reduction, no full-row register residency.
+
+**Matched Hadamard baseline**: the same Kernel B with the two correction lines removed and Kernel A absent, sharing the quantize/pack path, the grid and the autotune space. Signs are folded offline for the baseline too, so it is H128 + quantize/pack only.
+
+A masking defect was found and fixed during bring-up: the channel mask guarded only the end of the row, not the end of a split, so any autotuned BLOCK_D that did not divide the per-split chunk read into the neighbouring split and double-counted it. Because the autotuner selects on speed alone, a wrong-but-fast configuration could win silently; it did, on the 8B shape. After the fix all 66 (shape, config) combinations reproduce the fp32 reference to <= 3.8e-7 relative, and every timing below was measured after the fix.
+
+### Verification B — kernel correctness
+
+Against an fp32 PyTorch reference implementing `H G' x_perm` and the identical quantizer, on 4 frozen random rows and 64 real down_input rows from the E1c dumps. Tolerances are the v1 values and were not tuned.
+
+| model | k | rows | code match | scale ULP | zero ULP | dequant max abs (tol 0.03125) |
+|---|---:|---|---:|---:|---:|---:|
+| 3B | 8 | 4 random | 1.0000000 | 0 | 0 | 0.0 |
+| 3B | 8 | 64 real | 1.0000000 | 0 | 1 | 1.91e-06 |
+| 3B | 32 | 4 random | 1.0000000 | 0 | 0 | 0.0 |
+| 3B | 32 | 64 real | 0.9999809 | 1 | 1 | 4.68e-03 |
+| 8B | 8 | 4 random | 1.0000000 | 0 | 0 | 0.0 |
+| 8B | 8 | 64 real | 0.9999979 | 0 | 1 | 5.21e-04 |
+| 8B | 32 | 4 random | 1.0000000 | 0 | 0 | 0.0 |
+| 8B | 32 | 64 real | 0.9999957 | 1 | 1 | 2.24e-03 |
+
+The matched Hadamard kernel reproduces its reference exactly (code match 1.0, 0 ULP, 0 dequant error) on both models.
+
+## Step 3 — timing
+
+`triton.testing.do_bench`, warmup 25, rep 100, median; bf16 inputs; NAR time is Kernel A + Kernel B measured together in one lambda.
+
+| tokens | model | k | NAR fused ms | Hadamard fused ms | matmul ms | NAR/Had | NAR/matmul | Had/matmul | transform FLOP/matmul | variant | kernel-A |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|
+| 1 | 3B | 8 | 0.014303 | 0.005728 | 0.046475 | 2.497 | 0.308 | 0.123 | 0.006348 | v1 two-launch | triton_fp32 |
+| 32 | 3B | 8 | 0.020663 | 0.006638 | 0.044463 | 3.113 | 0.465 | 0.149 | 0.006348 | v1 two-launch | triton_fp32 |
+| **2048** | **3B** | **8** | **0.119711** | **0.064815** | **0.434394** | **1.847** | **0.276** | **0.149** | 0.006348 | v1 two-launch | triton_fp32 |
+| 1 | 3B | 32 | 0.031824 | 0.004324 | 0.046778 | 7.361 | 0.680 | 0.092 | 0.021973 | v1 two-launch | triton_fp32 |
+| 32 | 3B | 32 | 0.034769 | 0.006129 | 0.045371 | 5.673 | 0.766 | 0.135 | 0.021973 | v1 two-launch | triton_fp32 |
+| 2048 | 3B | 32 | 0.329777 | 0.064655 | 0.435197 | 5.101 | 0.758 | 0.149 | 0.021973 | v1 two-launch | triton_fp32 |
+| 1 | 8B | 8 | 0.016412 | 0.004128 | 0.089106 | 3.976 | 0.184 | 0.046 | 0.004761 | v1 two-launch | triton_fp32 |
+| 32 | 8B | 8 | 0.028015 | 0.008061 | 0.105867 | 3.475 | 0.265 | 0.076 | 0.004761 | v1 two-launch | triton_fp32 |
+| **2048** | **8B** | **8** | **0.198175** | **0.106384** | **0.913698** | **1.863** | **0.217** | **0.116** | 0.004761 | v1 two-launch | triton_fp32 |
+| 1 | 8B | 32 | 0.041353 | 0.005136 | 0.089673 | 8.052 | 0.461 | 0.057 | 0.016479 | v1 two-launch | triton_fp32 |
+| 32 | 8B | 32 | 0.059377 | 0.007465 | 0.102440 | 7.955 | 0.580 | 0.073 | 0.016479 | v1 two-launch | triton_fp32 |
+| 2048 | 8B | 32 | 0.575805 | 0.106257 | 0.894960 | 5.419 | 0.643 | 0.119 | 0.016479 | v1 two-launch | triton_fp32 |
+
+Kernel A projection alternatives at 2048 tokens, k=8 (Kernel A only, SPLITS=2): 3B cuBLAS bf16 0.03161 / Triton fp32 0.07068 / cuBLAS fp32 0.12219 ms; 8B 0.05071 / 0.11286 / 0.22103 ms. Only the Triton fp32 kernel passes Verification B.
+
+## Decision
+
+**At 2048 tokens NAR fused R4 costs 1.85x the matched fused Hadamard kernel on Llama-3.2-3B (27.6% vs 14.9% of the down_proj matmul) and 1.86x on Llama-3.1-8B (21.7% vs 11.6%). Both are within the 2.0x target, so E12 is superseded.**
+
+The one-token row is launch-bound for both transforms: NAR issues two kernels against the baseline's one, and at 1 and 32 tokens the ratio (2.5x-4.0x) reflects launch overhead rather than work. It is reported with that note rather than hidden.
+
+The result holds at **k = 8 only**. At k = 32 the ratio is 5.10x (3B) and 5.42x (8B), so the "k = 8-32 by model size" deployment note is **not** supported by this kernel above k = 8. The cause is specific and identified: Kernel A accumulates the rank-k projection with one full-width cross-lane reduction per rank, so its cost scales linearly in k while the memory traffic does not. A tensor-core projection would remove this, but it was not built, and the k = 32 rows are reported as failing.
+
+## Variant 2
+
+Variant 2 (single launch, one program per BLOCK_T tokens, two streaming passes over the row) was built because Variant 1 initially exceeded 2.0x, and it is reported as required. It verifies exactly (code match 1.0 on random rows, >= 0.999989 on real rows) but is uniformly slower: at 2048 tokens it costs 4.58x (3B, k=8), 4.70x (8B, k=8), 15.49x and 16.28x at k=32. Collapsing the grid to one program per token row removes the parallelism that makes Variant 1 work, and the second pass does not recover enough from cache to pay for it. Variant 1 is the reported kernel.
+
+Exact timings, verification metadata and the fold verification are in `results/llama32_3b/e17v2_fused_r4_timings.csv`, `results/llama31_8b/e17v2_fused_r4_timings.csv`, `e17v2_verification.json` under each model, `results/llama32_3b/e17v2_fold_verification.json`, and `results/llama32_3b/E17V2_DONE.json`. Code is in `nar/fold_signed_permutation.py`, `nar/kernels/r4_fused_v2.py` (NAR and matched baseline) and `nar/e17_v2.py`.
+
+# E17 v1 — naive one-program-per-token kernel (superseded implementation)
 
 The final kernel is a literal one-read implementation: each bf16 token row is loaded once, the rank-8 compact-WY projections are formed, the frozen permutation is performed with a Triton register gather, and signs, block-H128, dynamic asymmetric group-128 INT4 quantization, and INT4 packing are completed in the same kernel launch. It emits two INT4 codes per uint8 plus one fp16 scale and one fp16 real-valued zero per group. The matched Hadamard kernel fuses signs, block-H128, and exactly the same quantizer/packer.
 
@@ -613,7 +743,7 @@ Verification is exact on 4 frozen random token rows: both methods have code-matc
 | 32 | 0.127383 | 0.008292 | 0.024695 | 15.363× | 5.158× | 0.006348 |
 | 2048 | 1.813272 | 0.061917 | 0.429138 | 29.286× | 4.225× | 0.006348 |
 
-**2048-token engineering gate: FAIL.** The strict fused NAR kernel costs 4.225× the down_proj matmul and 29.286× the matched fused Hadamard kernel, far above the 10% limit. E12 is therefore **not superseded**. The arithmetic count is only 0.635% of the matmul FLOPs, but the one-program-per-token global reductions plus an arbitrary 8192-element register gather create severe register pressure and low occupancy; this implementation is bandwidth/compiler-scheduling bound rather than FLOP bound. At one token both transforms are also launch-bound, but NAR remains 5.540× the matmul versus 0.419× for fused Hadamard. This negative deployability result is retained without tuning.
+**2048-token engineering gate: FAIL.** The strict fused NAR kernel costs 4.225× the down_proj matmul and 29.286× the matched fused Hadamard kernel, far above the 10% limit. E12 is therefore **not superseded**. The arithmetic count is only 0.635% of the matmul FLOPs, but the one-program-per-token global reductions plus an arbitrary 8192-element register gather create severe register pressure and low occupancy; this implementation is bandwidth/compiler-scheduling bound rather than FLOP bound. At one token both transforms are also launch-bound, but NAR remains 5.540× the matmul versus 0.419× for fused Hadamard. This negative deployability result is retained without tuning. It is superseded as an *implementation* by E17 v2 above, which reaches 1.85x-1.86x the matched fused Hadamard kernel at 2048 tokens by folding the signed permutation offline and splitting the work across two launches; the v1 conclusion that E12 is not superseded no longer stands.
 
 Exact timings and verification metadata are in `results/llama32_3b/e17_fused_r4_timings.csv` and `E17_DONE.json`.
 

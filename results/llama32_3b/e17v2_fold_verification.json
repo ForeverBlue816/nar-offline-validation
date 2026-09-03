@@ -1,0 +1,97 @@
+{
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-pro6000-6.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-5278f9b2-f8ce-96f7-d1af-298258020273, 97887 MiB, 80651 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "7",
+    "slurm_job_id": "137928",
+    "torch": "2.11.0+cu128"
+  },
+  "models": [
+    "llama32_3b",
+    "llama31_8b"
+  ],
+  "ppl": {
+    "fold_only_passed": false,
+    "fold_only_ppl_abs_difference": 0.004710556083054485,
+    "model": "llama32_3b",
+    "new_ppl": 7.6853591987678485,
+    "old_ppl": 7.686587417704502,
+    "online_q_ppl": 7.680648642684794,
+    "online_q_sampled_code_match_fraction": 1.0,
+    "passed": false,
+    "ppl_abs_difference": 0.0012282189366539242,
+    "rank": 8,
+    "refactorization_ppl_abs_difference": 0.005938775019708409,
+    "required_code_match_fraction": 0.999,
+    "required_ppl_abs_difference": 0.001,
+    "sampled_code_match_fraction": 1.0,
+    "sequence_length": 2048,
+    "sequences": 64,
+    "site": "down_only"
+  },
+  "rank": 8,
+  "real_model_fold_rows": [
+    {
+      "gate_bias": false,
+      "layer": 0,
+      "model": "llama32_3b",
+      "operator_max_abs": 7.152557373046875e-07,
+      "operator_max_row_relative_l2": 4.3336649468983524e-07,
+      "operator_relative_l2": 4.2101777353309444e-07,
+      "qx_max_abs": 0.0,
+      "qx_relative_l2": 0.0,
+      "required_max_row_relative_l2": 0.0001,
+      "rows": 8,
+      "up_bias": false
+    },
+    {
+      "gate_bias": false,
+      "layer": 14,
+      "model": "llama32_3b",
+      "operator_max_abs": 9.313225746154785e-08,
+      "operator_max_row_relative_l2": 2.0956085222678666e-07,
+      "operator_relative_l2": 1.4510037260606623e-07,
+      "qx_max_abs": 0.0,
+      "qx_relative_l2": 0.0,
+      "required_max_row_relative_l2": 0.0001,
+      "rows": 8,
+      "up_bias": false
+    },
+    {
+      "gate_bias": false,
+      "layer": 0,
+      "model": "llama31_8b",
+      "operator_max_abs": 3.5762786865234375e-07,
+      "operator_max_row_relative_l2": 2.0419651036718278e-07,
+      "operator_relative_l2": 2.0092501529234141e-07,
+      "qx_max_abs": 0.0,
+      "qx_relative_l2": 0.0,
+      "required_max_row_relative_l2": 0.0001,
+      "rows": 8,
+      "up_bias": false
+    },
+    {
+      "gate_bias": false,
+      "layer": 16,
+      "model": "llama31_8b",
+      "operator_max_abs": 8.940696716308594e-08,
+      "operator_max_row_relative_l2": 1.8151970948565577e-07,
+      "operator_relative_l2": 1.1973651226071524e-07,
+      "qx_max_abs": 0.0,
+      "qx_relative_l2": 0.0,
+      "required_max_row_relative_l2": 0.0001,
+      "rows": 8,
+      "up_bias": false
+    }
+  ]
+}
