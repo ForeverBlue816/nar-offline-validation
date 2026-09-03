@@ -41,6 +41,10 @@ GROUP = 128
 MODELS = {
     "qwen3_8b": "Qwen/Qwen3-8B",
     "qwen3_8b_base": "Qwen/Qwen3-8B-Base",
+    # The E18 70B run reported a destroyed Hadamard row (PPL 15025 against a
+    # bf16 3.105); it has never had the rotation-only control that localised
+    # the Qwen3 defect, so the same control is run for it here.
+    "llama31_70b": "unsloth/Meta-Llama-3.1-70B",
 }
 CONTROL_METHODS = ("hadamard", "nar_k8", "nar_kmax")
 STEP4_RANKS: tuple[Any, ...] = (8, 16, 32, 64, "max")
