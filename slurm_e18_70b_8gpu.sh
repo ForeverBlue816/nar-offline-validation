@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=nar-e18-70b
 #SBATCH --gpus=pro6000:8
-#SBATCH --time=4-00:00:00
+#SBATCH --time=3-00:00:00
 #SBATCH --output=runs/e18-70b-8gpu-%j.out
 #SBATCH --error=runs/e18-70b-8gpu-%j.err
 #SBATCH --requeue
