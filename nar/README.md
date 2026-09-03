@@ -71,6 +71,12 @@ Git. All comparisons are paired and no result-driven tuning is used.
   generally, any baseline requiring training may use only a released artifact
   or published numbers and is never trained locally. Exact model/setting
   differences are marked in a footnote.
+- The end-to-end official DuQuant baseline is citation-only by explicit
+  amendment: cite official published numbers and their model/quantization
+  setting; do not run its code locally. The measured E11 `DuQuant-style` row is
+  a distinct frozen construction audit and remains unchanged.
+- The optional Qwen3-30B-A3B MoE generality row is deferred and must not be
+  submitted. Dense-model E18 scope is unchanged.
 - E15 uses nearest E2M1 with one E4M3FN max/6 scale per block of 16 and no
   zero-point. Its Hadamard baseline is a fixed random-sign H16 aligned to each
   scale block. It samples every 128th retained E1c token and includes one fixed

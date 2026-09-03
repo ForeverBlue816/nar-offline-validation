@@ -446,6 +446,8 @@ SpinQuant is citation-only: no rotation artifact is downloaded or evaluated, and
 
 *Footnote:* These reports concern Llama3-70B or Llama3-8B, not the present Llama-3.2-3B/Llama-3.1-8B pair, and their quantizer, cache policy, calibration, and evaluation settings differ from the metadata-matched KIVI/asymmetric-g128 protocol. They are reproducibility context only: they are excluded from paired deltas and from claims of direct superiority.
 
+**Protocol amendment:** the official end-to-end DuQuant baseline is citation-only. Only official published data, with its exact model and quantization setting stated, will be used; no local DuQuant reproduction is run and it is excluded from paired claims when settings differ. This does not alter the already completed E11 `DuQuant-style` construction audit, which is explicitly not an official end-to-end DuQuant row. The optional Qwen3-30B-A3B MoE experiment is deferred and receives no GPU time.
+
 | model | seed | row | full WikiText-2 PPL | paired delta vs Hadamard |
 |---|---|---|---|---|
 | Llama-3.2-3B | 0 | Hadamard + asymmetric g128 | 9.20901 | 0 |

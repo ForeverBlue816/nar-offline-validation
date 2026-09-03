@@ -52,6 +52,11 @@ For SpinQuant specifically, official-repository community reproductions are
 the primary reference and paper values are retained only to show the reported
 reproduction gap.
 
+By explicit protocol amendment, the end-to-end official DuQuant row is also
+citation-only: use official published data with its exact model and setting,
+and do not run or reproduce DuQuant locally. The optional MoE generality row is
+deferred and consumes no GPU budget.
+
 The complete protocol, exact fit statistics, summary tables, confidence
 intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
 CSV/JSON outputs and figures are committed under [`results/`](results/), with execution

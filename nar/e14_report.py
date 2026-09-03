@@ -97,7 +97,13 @@ def build(args: argparse.Namespace) -> None:
             "Llama-3.2-3B/Llama-3.1-8B pair, and their quantizer, cache policy, calibration, and "
             "evaluation settings differ from the metadata-matched KIVI/asymmetric-g128 protocol. "
             "They are reproducibility context only: they are excluded from paired deltas and from "
-            "claims of direct superiority.\n"
+            "claims of direct superiority.\n\n"
+            "**Protocol amendment:** the official end-to-end DuQuant baseline is citation-only. "
+            "Only official published data, with its exact model and quantization setting stated, "
+            "will be used; no local DuQuant reproduction is run and it is excluded from paired "
+            "claims when settings differ. This does not alter the completed E11 `DuQuant-style` "
+            "construction audit. The optional Qwen3-30B-A3B MoE experiment is deferred and "
+            "receives no GPU time.\n"
         ),
         "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with residual window R=32. V keeps the latest 32 tokens bf16 and quantizes older values dynamically asymmetric per token over one 128-channel head group. The Q/K rotation used by released QuaRot's per-token K path is omitted because per-channel K replaces it for every row. Hadamard rows retain random-sign R1, per-head V Hadamard plus the cross-head o_proj factor, and R4. NAR rows use calibrated global R1, per-layer per-head R2, and per-layer R4 at k=8 or k=max.\n",
         "The first row preserves upstream symmetric per-token A4 semantics while using the common KIVI K policy. The other rows quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. GPTQ uses the released seed-0 random-window sampler: 128 WikiText-2 train windows of length 2048. Following the explicit protocol amendment, every E14 configuration uses one paired seed; direct paired deltas are reported and seed-level confidence intervals are not estimable. Zero-shot evaluation uses batch size one so padding cannot shift token-group boundaries.\n",
