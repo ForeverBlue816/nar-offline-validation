@@ -1,0 +1,52 @@
+{
+  "activation_quantizer": "dynamic asymmetric per-token group-128 INT4",
+  "eval_sequences": 64,
+  "eval_split": "test",
+  "gpu_count": 1,
+  "group_size": 128,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 15846 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137693",
+    "torch": "2.11.0+cu128"
+  },
+  "head_dim": 128,
+  "hidden_size": 4096,
+  "intermediate_size": 12288,
+  "metadata": "fp16 scale plus fp16 real-valued zero per group = 4 + 32/128 = 4.25 bits/value",
+  "methods": [
+    "bf16",
+    "hadamard",
+    "nar_k8",
+    "nar_kmax"
+  ],
+  "model": "qwen3_8b",
+  "model_id": "Qwen/Qwen3-8B",
+  "num_layers": 36,
+  "paired_design": "same frozen WikiText-2 chunks for all four rows; one seed per user instruction",
+  "seed": 20260902,
+  "sequence_length": 2048,
+  "sites": "post-RMSNorm q/k/v_proj input and down_proj input only",
+  "slot_counts": {
+    "down": 96,
+    "qkv": 32
+  },
+  "weight_fold_max_relative_error": {
+    "bf16": 0.0,
+    "hadamard": 0.003980131819844246,
+    "nar_k8": 0.003830200992524624,
+    "nar_kmax": 0.003942152950912714
+  },
+  "weights_kv_other_activations": "bf16"
+}

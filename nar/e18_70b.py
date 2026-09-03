@@ -392,7 +392,7 @@ def run(args: argparse.Namespace) -> None:
     calibrate(args, model, args.model_id, args.model_key, dimensions, layers)
     tokens = base.prepare_token_chunks(args.model_id, "test", 0, args.eval_sequences, args.seq_len, workdir)
     result_dir = workdir / "results" / args.model_key
-    partial = result_dir / "e18_70b_per_sequence.partial.csv"
+    partial = result_dir / "e18_per_sequence.partial.csv"
     rows: list[dict[str, Any]] = base.read_csv(partial) if partial.exists() else []
     completed = {str(row["method"]) for row in rows}
     weights: ShardedWeights | None = None
@@ -440,9 +440,9 @@ def run(args: argparse.Namespace) -> None:
             "ppl_delta_vs_hadamard": ppl - had_ppl if method != "bf16" else math.nan,
             "effective_bits_per_value": 16.0 if method == "bf16" else 4.25,
         })
-    base.write_csv(result_dir / "e18_70b_per_sequence.csv", rows)
-    base.write_csv(result_dir / "e18_70b_summary.csv", summary)
-    base.atomic_json(result_dir / "E18_70B_DONE.json", {
+    base.write_csv(result_dir / "e18_per_sequence.csv", rows)
+    base.write_csv(result_dir / "e18_summary.csv", summary)
+    base.atomic_json(result_dir / "E18_DONE.json", {
         "model": args.model_key, "model_id": args.model_id, "seed": args.seed,
         "num_layers": layers, "hidden_size": dimensions["qkv"], "intermediate_size": dimensions["down"],
         "head_dim": int(getattr(model.config, "head_dim", model.config.hidden_size // model.config.num_attention_heads)),

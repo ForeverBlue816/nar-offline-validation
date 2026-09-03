@@ -577,3 +577,18 @@ Verification is exact on 4 frozen random token rows: both methods have code-matc
 **2048-token engineering gate: FAIL.** The strict fused NAR kernel costs 4.225× the down_proj matmul and 29.286× the matched fused Hadamard kernel, far above the 10% limit. E12 is therefore **not superseded**. The arithmetic count is only 0.635% of the matmul FLOPs, but the one-program-per-token global reductions plus an arbitrary 8192-element register gather create severe register pressure and low occupancy; this implementation is bandwidth/compiler-scheduling bound rather than FLOP bound. At one token both transforms are also launch-bound, but NAR remains 5.540× the matmul versus 0.419× for fused Hadamard. This negative deployability result is retained without tuning.
 
 Exact timings and verification metadata are in `results/llama32_3b/e17_fused_r4_timings.csv` and `E17_DONE.json`.
+
+# E18 — Qwen3-8B generality
+
+Qwen3-8B has head_dim=128, hidden=4096, and intermediate=12288; group 128 therefore provides 32 q/k/v-input slots and 96 down-input slots. The paired both-sites E5 protocol is unchanged: 128 calibration sequences, 64 WikiText-2 test chunks at context 2048, bf16 weights/KV/all other activations, and dynamic asymmetric group-128 INT4 (4.25 effective bits/value) only at the two target activation sites. One seed is used under the amended execution rule.
+
+| method | PPL | delta vs bf16 | delta vs Hadamard | effective bits/value |
+|---|---:|---:|---:|---:|
+| bf16 | 12.925526 | +0.000000 | +nan | 16.00 |
+| Hadamard | 13.499615 | +0.574089 | +0.000000 | 4.25 |
+| NAR k=8 | 13.433859 | +0.508333 | -0.065755 | 4.25 |
+| NAR k=max | 12.621483 | -0.304042 | -0.878131 | 4.25 |
+
+NAR k=8 recovers only 11.5% of the Hadamard-to-bf16 gap on this model, substantially less than on the Llama models. NAR k=max recovers 153.0% and yields a PPL 0.3040 below the bf16 row. The latter is reported as a surprising one-seed observation, not a claim that quantization improves the base model: no seed-level CI is estimable, no hyperparameter was tuned, and no confirmation rerun was performed. The paired chunks and weight-fold audits are retained for diagnosis.
+
+Exact outputs are in `results/qwen3_8b/e18_per_sequence.csv`, `e18_summary.csv`, and `E18_DONE.json`.
