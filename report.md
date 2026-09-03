@@ -496,3 +496,32 @@ For each NAR row, the correlation uses its per-layer NAR-minus-H16 kurtosis and 
 The original q_input identity-best observation **is an absmax scale-selection artifact**: identity beats H16 under absmax (0.008399 vs 0.009496), but loses under exact MSE-optimal selection (0.007028 vs 0.006575). With matched b=16, NAR loses to H16 under absmax at both sites, yet wins under MSE-optimal scaling (q_input 0.006356 vs 0.006575; down_input 0.001081 vs 0.001373). NAR-b128 remains strongest on down_input (0.000697), where it spreads extreme blocks over a wider 128-channel transform. Because E2M1 has no zero-point and its blocks are only 16 channels, none of these residual FP4 gains is evidence for DC/zero-point alignment. They are a separate distribution-shaping/outlier-redistribution effect, not support for the paper's main null-space mechanism.
 
 Exact paired outputs are in `results/llama32_3b/e15_followup_block_distribution.csv`, `e15_followup_per_layer.csv`, and `e15_followup_kurtosis_correlation.csv`.
+
+## E15 mixing-width control
+
+To separate alignment from mixing width, the missing seeded block-H128 row applies signs and H128 within fixed contiguous groups, with no Householder alignment and no permutation. All rows below use the same FP4 E2M1 block size 16, frozen tokens, signs, and scale selectors. “Aligned H16” is NAR-b16 and “aligned H128” is NAR-b128.
+
+| site | transform | alignment | scale | global NMSE | worst 1% error share |
+|---|---|---|---|---:|---:|
+| q_input | H16 | no | absmax | 0.00949634 | 0.1192 |
+| q_input | H128 | no | absmax | 0.00917609 | 0.0528 |
+| q_input | H16 | yes | absmax | 0.0102516 | 0.3127 |
+| q_input | H128 | yes | absmax | 0.00942352 | 0.0951 |
+| q_input | H16 | no | MSE-optimal | 0.00657511 | 0.0994 |
+| q_input | H128 | no | MSE-optimal | 0.00659000 | 0.0466 |
+| q_input | H16 | yes | MSE-optimal | 0.00635560 | 0.2240 |
+| q_input | H128 | yes | MSE-optimal | 0.00659209 | 0.0818 |
+| down_input | H16 | no | absmax | 0.00231981 | 0.7376 |
+| down_input | H128 | no | absmax | 0.00199692 | 0.6366 |
+| down_input | H16 | yes | absmax | 0.00258707 | 0.8140 |
+| down_input | H128 | yes | absmax | 0.00150053 | 0.5950 |
+| down_input | H16 | no | MSE-optimal | 0.00137337 | 0.6957 |
+| down_input | H128 | no | MSE-optimal | 0.000947645 | 0.4532 |
+| down_input | H16 | yes | MSE-optimal | 0.00108109 | 0.6981 |
+| down_input | H128 | yes | MSE-optimal | 0.000697182 | 0.3878 |
+
+On q_input, H128-only and aligned H128 are effectively tied under MSE-optimal scaling (0.00659000 vs 0.00659209; aligned is 0.032% worse), and H128-only is 2.70% better under absmax. Thus q_input's b=128 FP4 behavior is a mixing-width effect; NAR alignment contributes nothing beyond wider Hadamard mixing in this control.
+
+On down_input, H128-only improves over H16-only by 13.9% under absmax and 31.0% under MSE-optimal, so mixing width explains a substantial part. Aligned H128 then improves over H128-only by a further 24.9% and 26.4%, respectively, while reducing the worst-1% error share from 63.7% to 59.5% and from 45.3% to 38.8%. Therefore down_input is **not** an H128-only result: alignment adds a measurable contribution beyond width. Since E2M1 has no zero-point, that contribution remains a directional outlier-redistribution effect, not DC/null-space evidence.
+
+The added raw control is `results/llama32_3b/e15_h128_control.csv`; the per-layer file is retained alongside it.

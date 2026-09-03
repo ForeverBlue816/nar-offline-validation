@@ -1,0 +1,33 @@
+{
+  "alignment": false,
+  "fp4_block_size": 16,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-2.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-1a676512-a670-6b78-2f00-d65e1244d6d6, 32607 MiB, 31484 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1",
+    "slurm_job_id": "137550",
+    "torch": "2.11.0+cu128"
+  },
+  "method": "seeded block-H128 only",
+  "mixing_width": 128,
+  "model": "llama32_3b",
+  "negative_results_reported": true,
+  "no_tuning": true,
+  "paired": "same frozen E1c vectors, sample stride, and signs as E15 follow-up",
+  "permutation": false,
+  "sample_stride": 128,
+  "scale_rules": {
+    "absmax": "same E15 rounded E4M3FN max(abs(x))/6 rule",
+    "mse_optimal": "same exact exhaustive search over all 126 positive finite E4M3FN scales"
+  }
+}
