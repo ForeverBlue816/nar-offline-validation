@@ -22,8 +22,12 @@ fi
 
 submit() {
     local output
-    output="$(sbatch --parsable "$@")"
-    printf '%s' "${output%%;*}"
+    if ! output="$(sbatch --parsable "$@")"; then
+        return 1
+    fi
+    output="${output%%;*}"
+    [[ -n "$output" ]] || return 1
+    printf '%s' "$output"
 }
 
 record() {
