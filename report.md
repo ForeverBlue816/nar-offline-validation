@@ -961,3 +961,57 @@ Exact outputs are in `results/qwen3_8b_base/` (`e18v2_per_sequence.csv` with fp3
 ### Carry-over to the Llama rows
 
 The bf16 loss defect is confined to the sharded E18/70B path. The weight-fold comparison bug is **not**: `activation_experiments` folds the rotation into the consuming weight and stores it in bf16 for the E5/E11/E14 Llama rows too, and those runs record `weight_fold_max_relative_error` up to 3.1e-03. On Llama the quantization penalty (~0.5 PPL) is an order of magnitude larger than the fold artifact measured here (0.003-0.18 PPL), so the sign of those results is not in question, but the artifact is not negligible relative to the NAR-versus-Hadamard *differences* and the Llama rows have not been re-measured under the exact-transpose fold. This is recorded as an open item, not as a correction to those tables.
+
+
+# E20 — the quantizer null space beyond the zero-point
+
+**This section was written and committed before any E20 row was run. The hypotheses below are pre-registered; no row was added or removed afterwards.**
+
+## The question
+
+The asymmetric group quantizer stores a real-valued zero-point per group, and that zero-point absorbs one direction for free: adding any multiple of the group's all-ones vector leaves the integer codes unchanged. NAR spends its Householders aligning covariance eigendirections into exactly that per-group DC subspace. E20 asks whether the DC direction is special, or merely the `m = 1` case of a larger affine null space.
+
+The generalized quantizer stores `m - 1` additional fp16 coefficients per group along **fixed** within-group directions `w_2 .. w_m`, orthogonal to each other and to `w_1 = 1/sqrt(g)`, projects them out before rounding and adds them back after:
+
+    c_j   = <x_g, w_j>                      j = 2..m, fp32 then stored fp16
+    r     = x_g - sum_{j>=2} c_j w_j
+    scale = (max r - min r) / 15,  zero = min r,  both fp16,  q in 0..15
+    x_hat = q*scale + zero + sum_{j>=2} c_j w_j
+
+The DC direction keeps its min-based zero-point, so grid utilisation is unchanged and only the extra directions use least-squares coefficients. Metadata per group is 16 (scale) + 16 (zero) + 16 (m-1) bits, giving `4 + 16(m+1)/g` effective bits: g256 m=1 is 4.125, g256 m=2 is 4.1875, g256 m=3 is 4.25, g128 m=1 is 4.25 (the current default), g128 m=2 is 4.375, g64 m=1 is 4.5.
+
+`nar/quantizer_affine.py` implements this and is unit-tested against the existing quantizer: at `m = 1` it reproduces the codes, the fp16 scale, the fp16 zero and the dequantized tensor **exactly**, for g = 64, 128 and 256. With fp32 coefficients, adding any null-space vector leaves the codes and scale bitwise unchanged and shifts the reconstruction by exactly that vector; with the fp16 coefficients the bit accounting assumes, the residual drift stays below one quantization step.
+
+The directions are the sequency-ordered Walsh rows, fixed a priori, identical for every row and every model, and never chosen from data:
+
+    w_2 = [+1 (g/2), -1 (g/2)] / sqrt(g)
+    w_3 = [+1 (g/4), -1 (g/4), -1 (g/4), +1 (g/4)] / sqrt(g)
+
+On a 256-group, `w_2` is `(DC_block1 - DC_block2)/sqrt(2)`, so `span{w_1, w_2}` equals `span{DC_block1, DC_block2}`: **NAR g256 m=2 has exactly the 64 slots of NAR g128 m=1 with half the scale resolution and fewer bits.** That is the cleanest slots-versus-scale-resolution comparison available, and it is what H1 tests.
+
+## Pre-registered hypotheses
+
+- **H1.** NAR g256 m=2 (4.1875 bits, 64 slots) is within the paired CI of, or better than, NAR g128 m=1 (4.25 bits, 64 slots). Same slot count, coarser scale, fewer bits. If it holds, the slots carry the gain and scale resolution does not.
+- **H2.** NAR g256 m=3 (4.25 bits, 96 slots) beats NAR g128 m=1 (4.25 bits, 64 slots). Same bits, more slots. If it holds, spending metadata on null-space dimension beats spending it on group count.
+- **H3.** Hadamard g256 m=2 and m=3 do not improve on Hadamard g256 m=1 beyond the CI. Hadamard performs no alignment, so if extra directions help it anyway, part of any NAR gain is not alignment and H1/H2 must be re-read against this control.
+- **Scale-resolution contribution**, measured directly as Hadamard g128 minus Hadamard g256. Hadamard uses no slots, so this difference isolates scale resolution alone.
+
+Each hypothesis will be reported as supported or not supported against the paired 90% CI, with no post-hoc rows.
+
+## Protocol
+
+The E11 setting, unchanged: Llama-3.2-3B and Llama-3.1-8B, the same 64 WikiText-2 test chunks, three paired rotation seeds, fake-quantization only at the post-RMSNorm q/k/v inputs and the down_proj inputs, bf16 everywhere else, k = max for every NAR row.
+
+Two requirements carry over from E18 v2. The fold is the **exact transpose** `x -> R^T Q(R x)` with the round-trip residual recorded per site and required to be <= 1e-6, and per-chunk NLL is computed from fp32 logits. Because the effects being measured are ~0.02 PPL while the bf16 weight-fold artifact E18 v2 found is up to 0.1 PPL, **no row is copied from E11**: every row below is re-run under the same exact-transpose fold so that all deltas are paired within E20.
+
+Rows per model, all three seeds unless noted: bf16 (one run); Hadamard asym g64/g128/g256 at m=1 as the scale-resolution ladder; Hadamard g256 at m=2 and m=3 as the H3 control; NAR asym g64 m=1 (128 slots), g128 m=1 (64 slots, the row to beat), g256 m=1 (32 slots), g256 m=2 (64 slots), g256 m=3 (96 slots), and optionally g128 m=2 (128 slots) against NAR g64 (128 slots at 4.5 bits).
+
+**Implementation note on the alignment target.** The NAR construction replaces the DC projector `P_DC` by `P_N = span{w_j embedded in group b}`, leaving Householder alignment, greedy slot assignment, low-energy fillers and everything else unchanged. For the existing machinery to align into `P_N` with coordinate anchors, the pre-Hadamard image `H P_N` must be coordinate-aligned, which holds exactly when the Hadamard block size equals the quantizer group size. E20 therefore sets the block size equal to `g` for each row; at g = 128 this is literally the unchanged block-H128 pipeline. This is recorded here rather than left implicit because it is a deviation for the g = 256 rows.
+
+## Deployability note, recorded so it is not lost
+
+The m-direction quantizer adds `m - 1` dot products of length g per group to the E17 Kernel B, and `m - 1` precomputed `W w_j` vectors per group to the INT4 GEMM dequantization. Both have the same form as the existing zero-point term, which the fused kernel already carries. No new kernel structure is required.
+
+## Results
+
+Pending. This section will be completed with the table, the sqrt(1-f) theory columns, the extended E16 alignment diagnostic, the fp16 coefficient precision check, and a plain statement of which hypotheses held.
