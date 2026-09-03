@@ -10,7 +10,7 @@ umask 0007
 : "${NAR_WORKDIR:?Set NAR_WORKDIR}"
 quarot_dir="${QUAROT_CODE_DIR:-/home/yanlongc/QuaRot-upstream}"
 python_bin="$NAR_WORKDIR/quarot-env/bin/python"
-anchor_root="${NAR_E14_ANCHOR_ROOT:-/home/yanlongc/nar-e14-anchor}"
+anchor_root="${NAR_E14_ANCHOR_ROOT:-$NAR_WORKDIR/artifacts/e14/quarot_release_anchor}"
 checkpoint="$anchor_root/quarot_release_llama2_7b.pt"
 mkdir -p "$(dirname "$checkpoint")"
 export HF_HOME="$anchor_root/huggingface"
