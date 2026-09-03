@@ -7,11 +7,14 @@
 #SBATCH --requeue
 set -euo pipefail
 umask 0007
+code_dir="${NAR_CODE_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 : "${NAR_WORKDIR:?Set NAR_WORKDIR}"
 quarot_dir="${QUAROT_CODE_DIR:-/home/yanlongc/QuaRot-upstream}"
 python_bin="$NAR_WORKDIR/quarot-env/bin/python"
 anchor_root="${NAR_E14_ANCHOR_ROOT:-$NAR_WORKDIR/artifacts/e14/quarot_release_anchor}"
 checkpoint="$anchor_root/quarot_release_llama2_7b.pt"
+run_log="$anchor_root/anchor_latest.log"
+gate_result="$NAR_WORKDIR/results/e14/quarot_release_anchor.json"
 mkdir -p "$(dirname "$checkpoint")"
 qmodel_args=(--save_qmodel_path "$checkpoint")
 if [[ -s "$checkpoint" ]]; then
@@ -27,7 +30,8 @@ cd "$quarot_dir/fake_quant"
 echo "QuaRot upstream base: 5008669b08c1f11f9b64d52d16fddd47ca754c5a"
 echo "QuaRot compatibility commit: $(git -C "$quarot_dir" rev-parse HEAD)"
 "$python_bin" -c "import torch,transformers,datasets; print('torch',torch.__version__,'transformers',transformers.__version__,'datasets',datasets.__version__)"
-exec "$python_bin" main.py \
+set +e
+"$python_bin" main.py \
     --model NousResearch/llama-2-7b-hf \
     --rotate \
     --a_bits 4 \
@@ -36,4 +40,11 @@ exec "$python_bin" main.py \
     --w_bits 4 \
     --w_clip \
     "${qmodel_args[@]}" \
-    --save_name e14_quarot_release_anchor
+    --save_name e14_quarot_release_anchor 2>&1 | tee "$run_log"
+status=${PIPESTATUS[0]}
+set -e
+if (( status != 0 )); then
+    exit "$status"
+fi
+exec "$python_bin" "$code_dir/nar/e14_anchor_gate.py" \
+    --log "$run_log" --output "$gate_result"
