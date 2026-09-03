@@ -48,6 +48,9 @@ and Llama-3.1-8B; data are fixed WikiText-2 chunks.
 SpinQuant and other training-dependent baselines are citation-only unless an
 explicitly approved released artifact is supplied. This repository never
 trains baseline rotation matrices (including Cayley/Stiefel optimization).
+For SpinQuant specifically, official-repository community reproductions are
+the primary reference and paper values are retained only to show the reported
+reproduction gap.
 
 The complete protocol, exact fit statistics, summary tables, confidence
 intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
