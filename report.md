@@ -601,6 +601,111 @@ NAR places essentially all top-eight eigendirection energy into the group-128 DC
 Exact per-layer and aggregate rows are in `e16_offline_per_layer.csv`, `e16_dc_alignment_per_layer.csv`, and `e16_dc_alignment_summary.csv` under each model's result directory.
 
 
+# E17 v3 — k-independent projection
+
+E17 v2 passed at k=8 (1.85x / 1.86x the matched fused Hadamard) and failed at k=32 (5.10x / 5.42x). The cause was in Kernel A: it formed `u = x_perm @ Y'` with one full-width cross-lane reduction per rank, so its cost grew linearly in k while its memory traffic — a single read of x — did not. v3 treats the projection as the matmul it is and runs it on tensor cores. Kernel B's structure, the quantizer, the fold and the verification suite are unchanged.
+
+All v3 timings are on the same GPU as v2, an NVIDIA RTX PRO 6000 Blackwell, with `triton.testing.do_bench`, warmup 25, rep 100, median, bf16 inputs.
+
+## Config selection is verified, not autotuned
+
+v2 shipped a masking defect that only a fast configuration exposed, because `triton.autotune` ranks on speed alone and will select a wrong-but-fast config. In v3 every candidate is first verified against the fp32 reference with the unchanged Verification B suite (4 frozen random rows and 64 real E1c down_input rows, code match >= 0.999, scale/zero <= 1 ULP, dequant <= 0.03125) and only verified configs are timed. **200 (shape, config) combinations were tested per model; 75 passed on the 3B and 59 on the 8B.**
+
+## Which precision variant Verification B required
+
+x is already bf16, so its products are exact in fp32 and the only new error is the rounding of `Y'`. That error is what the metadata gate measures, and it decides the backend:
+
+| Y' representation | 3B k=8 | 3B k=32 | 8B k=8 | 8B k=32 |
+|---|---:|---:|---:|---:|
+| 1 bf16 term (plain) | 0/25 | 0/25 | 0/25 | 0/25 |
+| 2 bf16 terms (hi/lo) | 9/25 | 0/25 | 8/25 | 0/25 |
+| 3 bf16 terms | 9/25 | 7/25 | 0/25 | 1/25 |
+
+**Plain bf16 `Y'` fails everywhere**, and not marginally: code match 0.997 with the fp16 scale and zero off by up to 352 ULP on the 3B and 2574 ULP on the 8B. This is the same failure that made v2 reject cuBLAS, and it is an output-precision problem in `Y'`, not a cuBLAS problem. Two terms suffice at k=8; **k=32 needs three**, because twice as many products accumulate and the fp16 zero-point drifts to 2-6 ULP.
+
+## Option 0 — cuBLAS with an fp32 output
+
+`torch.mm(x_bf16, Yp_bf16, out_dtype=torch.float32)` exists and runs on the installed torch 2.11.0+cu128 with no implicit cast of x. It is a valid Kernel A once `Y'` is split into terms, but each term is a separate GEMM and therefore **a separate read of x**, which is exactly the traffic the fused design is trying to avoid. It survives only where the Triton kernel does not.
+
+## Option 1 — Triton tensor-core Kernel A
+
+One `tl.dot` per bf16 term of `Y'`, accumulating in fp32, with the split masked against the end of the chunk as well as the end of the row.
+
+The one non-obvious requirement is that **each term needs its own accumulator**. Folding the terms into a single running sum loses the third term: it is ~2^-16 of the first and is added to an accumulator already grown to the full magnitude, where it rounds away. That is why three cuBLAS GEMMs were accurate while a first single-accumulator Triton version was not — cuBLAS sums three *complete* products at the end, each accumulated among like-magnitude values. Separate accumulators reproduce that structure at the cost of registers instead of two extra passes over x, and they moved the 3B k=32 projection from failing verification (rel. L2 1.3e-6, zero 2 ULP) to passing (3.9e-7, 1 ULP).
+
+### Kernel A standalone at 2048 tokens (fastest verified config per backend)
+
+| model | k | v2 Triton fp32 | cuBLAS fp32-out 3-term | Triton dot |
+|---|---:|---:|---:|---:|
+| 3B | 8 | 0.08508 | 0.09074 | **0.04111** (3-term) |
+| 3B | 32 | 0.19443 | 0.10025 | **0.04453** (3-term) |
+| 8B | 8 | 0.12705 | — | **0.07755** (2-term) |
+| 8B | 32 | 0.33125 | **0.14589** | no config verified |
+
+**Kernel A is k-independent where the tensor-core path verifies.** On the 3B it costs 0.04111 ms at k=8 and 0.04453 ms at k=32 — 8% apart, inside the 10% target — against 0.19443 ms for v2's reduction at k=32, a 4.4x improvement. On the 8B, no Triton dot configuration passes Verification B at k=32 at any term count, so Kernel A there falls back to the three-GEMM cuBLAS path and its cost is not k-independent.
+
+### Kernel B at k=8 versus k=32
+
+| model | Kernel B k=8 | Kernel B k=32 | ratio |
+|---|---:|---:|---:|
+| 3B | 0.09771 | 0.12016 | 1.230 |
+| 8B | 0.12108 | 0.18957 | 1.566 |
+
+Both exceed the ~15% bound, so Kernel B is **not** fully k-independent either. The `tl.dot` correction variant and the wider BLOCK_T=64 tiles were built and verified (12/12 tiles pass at both ranks on both models) and cut the k=32 penalty from 95% to 23% on the 3B, but the joint selection did not choose the dot variant in the final configuration. The residual cost is the W'' traffic: each program reads k x 128 fp32 of W'' per group, which grows with k while x does not.
+
+## Timing
+
+| tokens | model | k | NAR fused ms | Hadamard fused ms | matmul ms | NAR/Had | NAR/matmul | Had/matmul | transform FLOP/matmul | kernel-A | splits |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---:|
+| 1 | 3B | 8 | 0.016858 | 0.006251 | 0.066828 | 2.697 | 0.252 | 0.094 | 0.006348 | v2_triton_fp32 | 32 |
+| 32 | 3B | 8 | 0.017286 | 0.008158 | 0.063287 | 2.119 | 0.273 | 0.129 | 0.006348 | v2_triton_fp32 | 32 |
+| **2048** | **3B** | **8** | **0.113823** | **0.063236** | **0.383177** | **1.800** | **0.297** | **0.165** | 0.006348 | triton_dot_3term | 4 |
+| 1 | 3B | 32 | 0.023019 | 0.006189 | 0.066352 | 3.719 | 0.347 | 0.093 | 0.021973 | triton_dot_3term | 4 |
+| 32 | 3B | 32 | 0.025691 | 0.008150 | 0.061887 | 3.152 | 0.415 | 0.132 | 0.021973 | triton_dot_3term | 4 |
+| 2048 | 3B | 32 | 0.181518 | 0.063236 | 0.402392 | 2.870 | 0.451 | 0.157 | 0.021973 | cublas_fp32out_3term | 1 |
+| 1 | 8B | 8 | 0.018879 | 0.006316 | 0.110907 | 2.989 | 0.170 | 0.057 | 0.004761 | v2_triton_fp32 | 32 |
+| 32 | 8B | 8 | 0.022710 | 0.008238 | 0.130487 | 2.757 | 0.174 | 0.063 | 0.004761 | v2_triton_fp32 | 32 |
+| **2048** | **8B** | **8** | **0.154618** | **0.104493** | **0.695544** | **1.480** | **0.222** | **0.150** | 0.004761 | triton_dot_2term | 1 |
+| 1 | 8B | 32 | 0.041750 | 0.006358 | 0.111040 | 6.567 | 0.376 | 0.057 | 0.016479 | v2_triton_fp32 | 32 |
+| 32 | 8B | 32 | 0.058058 | 0.008458 | 0.130246 | 6.865 | 0.446 | 0.065 | 0.016479 | v2_triton_fp32 | 32 |
+| 2048 | 8B | 32 | 0.284597 | 0.104405 | 0.736187 | 2.726 | 0.387 | 0.142 | 0.016479 | cublas_fp32out_3term | 1 |
+
+**k=8 improves on v2 on both models: 1.800x on the 3B (v2 1.847x) and 1.480x on the 8B (v2 1.863x). k=32 improves from 5.101x to 2.870x on the 3B and from 5.419x to 2.726x on the 8B, but both remain above the 2.0x target.** Per the pre-registered instruction the result is reported with its breakdown and no further tuning was attempted.
+
+## Why k=32 is still above 2.0: it is bandwidth, not arithmetic
+
+Counting every byte each launch moves (one bf16 read of x per GEMM, the fp32 partial buffer written by Kernel A and read by Kernel B, and the packed codes plus fp16 scales and zeros):
+
+| model | row | bytes moved | achieved GB/s | traffic vs Hadamard | measured vs Hadamard |
+|---|---|---:|---:|---:|---:|
+| 3B | Hadamard | 42.5 MB | 672 | 1.00 | 1.000 |
+| 3B | NAR k=8 | 76.5 MB | 673 | 1.80 | **1.800** |
+| 3B | NAR k=32 | 143.7 MB | 791 | 3.38 | 2.870 |
+| 8B | Hadamard | 74.3 MB | 711 | 1.00 | 1.000 |
+| 8B | NAR k=8 | 133.2 MB | 861 | 1.79 | **1.480** |
+| 8B | NAR k=32 | 251.0 MB | 882 | 3.38 | 2.726 |
+
+At k=8 on the 3B the measured ratio equals the traffic ratio to three decimals at identical achieved bandwidth (672 versus 673 GB/s): **the two-launch NAR kernel is exactly at its bandwidth floor**, and nothing further can be won at k=8 without merging the two launches into one — which E17 v2 tried as Variant 2 and which was 4.6x slower because it destroys the parallelism. On the 8B, NAR beats its own traffic ratio because it sustains higher bandwidth than the baseline kernel (861 versus 711 GB/s).
+
+At k=32 the three-GEMM cuBLAS Kernel A reads x three times, and that alone accounts for the ratio: 3.38x the Hadamard traffic, measured at 2.87x/2.73x because the repeated reads partly hit cache. The single-pass Triton dot would remove two of those reads, and on the 3B it is 2.3x faster standalone (0.04453 versus 0.10025 ms) — but at k=32 it verifies only with SPLITS=4, which quadruples the fp32 partial buffer Kernel B must fold, and the joint optimum therefore falls back to cuBLAS. Kernel A and Kernel B are not independent: the channel split of the first sets the work of the second, and v3 selects the **pair** on the combined pipeline rather than each on its own.
+
+## Per-layer overhead
+
+Each transform's share of one real decoder layer at 2048 tokens, bf16, layer 0:
+
+| model | decoder layer ms | Hadamard | NAR k=8 | NAR k=32 |
+|---|---:|---:|---:|---:|
+| Llama-3.2-3B | 1.960 | 3.12% | 5.49% | 8.47% |
+| Llama-3.1-8B | 3.466 | 2.92-2.93% | 4.27% | 7.59% |
+
+At k=8 the NAR transform costs 1.3-2.4 percentage points of a full decoder layer more than the matched Hadamard transform. The Hadamard kernel is timed once per (model, k) row and the two measurements agree to 0.01 percentage points, which is why the 8B baseline is given as a range.
+
+## Deployment note
+
+**The "k = 8-32 by model size" deployment note is not supported.** k=8 is supported on both models and improves on v2. k=32 costs 2.87x (3B) and 2.73x (8B) the matched fused Hadamard kernel, above the 2.0x target on both. The v2 k=32 rows (5.101x and 5.419x) are superseded by the v3 rows above; the conclusion they supported — that k=32 is not deployable under this gate — is unchanged.
+
+Exact outputs are in `results/<model>/e17v3_fused_r4_timings.csv`, `e17v3_kernel_a_backends.csv`, `e17v3_verification.json`, `e17v3_layer_overhead.csv` and `results/llama32_3b/E17V3_DONE.json`. Code is in `nar/kernels/r4_fused_v3.py` and `nar/e17_v3.py`.
+
 # E17 v2 — fused R4 with offline-folded signed permutation
 
 ## Why the absolute 10% gate is retired
@@ -723,7 +828,7 @@ Kernel A projection alternatives at 2048 tokens, k=8 (Kernel A only, SPLITS=2): 
 
 The one-token row is launch-bound for both transforms: NAR issues two kernels against the baseline's one, and at 1 and 32 tokens the ratio (2.5x-4.0x) reflects launch overhead rather than work. It is reported with that note rather than hidden.
 
-The result holds at **k = 8 only**. At k = 32 the ratio is 5.10x (3B) and 5.42x (8B), so the "k = 8-32 by model size" deployment note is **not** supported by this kernel above k = 8. The cause is specific and identified: Kernel A accumulates the rank-k projection with one full-width cross-lane reduction per rank, so its cost scales linearly in k while the memory traffic does not. A tensor-core projection would remove this, but it was not built, and the k = 32 rows are reported as failing.
+The result holds at **k = 8 only**. At k = 32 the ratio is 5.10x (3B) and 5.42x (8B), so the "k = 8-32 by model size" deployment note is **not** supported by this kernel above k = 8. **These two k = 32 rows are superseded by E17 v3 above, which reaches 2.87x and 2.73x with a tensor-core projection; they still fail the 2.0x target.** The cause is specific and identified: Kernel A accumulates the rank-k projection with one full-width cross-lane reduction per rank, so its cost scales linearly in k while the memory traffic does not. A tensor-core projection would remove this, but it was not built, and the k = 32 rows are reported as failing.
 
 ## Variant 2
 
