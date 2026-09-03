@@ -1,0 +1,6 @@
+model,rotation,stage,model_dtype,tokens,max_abs_logit_error,relative_l2_logit_error
+llama32_3b,nar,norm_only,torch.float32,16,1.9073486328125e-05,7.464066698048555e-07
+llama32_3b,nar,norm_r1,torch.float32,16,3.0040740966796875e-05,1.415605993315694e-06
+llama32_3b,nar,norm_r1_r2,torch.float32,16,2.956390380859375e-05,1.3596038570540259e-06
+llama32_3b,nar,norm_r1_r4,torch.float32,16,4.291534423828125e-05,1.926181994349463e-06
+llama32_3b,nar,norm_r1_r2_r4,torch.float32,16,4.38690185546875e-05,2.0012066670460626e-06

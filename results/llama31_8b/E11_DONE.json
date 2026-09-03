@@ -1,0 +1,64 @@
+{
+  "activation_only": true,
+  "base_seed": 20260902,
+  "duquant_style": {
+    "difference_from_nar": "single greedy channel per block rather than top-k second-moment eigen-directions; no explicit zero-point/DC alignment",
+    "difference_from_official": "no global greedy multi-step prefix and no second post-permutation rotation",
+    "implemented": "official zigzag distribution by calibration channel absmax, then one blockwise rotation whose largest channel row is uniform and whose complement is seeded random orthogonal",
+    "reference_commit": "d56cfc6fe97c34c0eb100fec82fe439865905679"
+  },
+  "eval_sequences": 64,
+  "eval_split": "test",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 15718 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1",
+    "slurm_job_id": "136276",
+    "torch": "2.11.0+cu128"
+  },
+  "metadata": {
+    "group_asymmetric": "4 + (16 scale bits + 16 zero-point bits)/group_size",
+    "token_asymmetric": "4 + 32/n",
+    "token_symmetric": "4 + 16/n"
+  },
+  "model": "llama31_8b",
+  "model_id": "unsloth/Meta-Llama-3.1-8B",
+  "new_methods": [
+    "smoothquant_hadamard_g128_asym",
+    "duquant_style_g128_asym",
+    "hadamard_token_symmetric",
+    "hadamard_token_asymmetric",
+    "nar_b64_kmax",
+    "nar_b256_kmax",
+    "nar_b128_k8",
+    "nar_b128_k16",
+    "nar_b128_k32"
+  ],
+  "no_tuning": true,
+  "paired_ci": "two-sided 90% Student-t over three seed-level PPL differences, df=2",
+  "reused_rows": [
+    "bf16",
+    "E5 both-site Hadamard",
+    "E5 both-site NAR"
+  ],
+  "seeds": 3,
+  "sequence_length": 2048,
+  "site": "both",
+  "smoothquant": {
+    "alpha": 0.5,
+    "formula": "s_c=max|x_c|^0.5/max|w_c|^0.5; x'=x/s, W'=W*s, then random-sign Hadamard",
+    "no_sweep": true
+  },
+  "stop_before_e14": false,
+  "stop_condition_matched_methods": []
+}

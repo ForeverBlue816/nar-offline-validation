@@ -1,0 +1,79 @@
+{
+  "benchmark": {
+    "repeats": 30,
+    "warmup": 10
+  },
+  "benchmark_dtype": "rotation fp32; down_proj matmul bf16, matching E6",
+  "compact_wy": "G=I-WY^T with W,Y in R^(8192 x k); online G uses two GEMM kernel launches; subtraction is fused into the addmm epilogue",
+  "fp32_tolerance": 1e-05,
+  "full_r4": "compact WY G, fixed permutation/sign, then block H128",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 31438 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1",
+    "slurm_job_id": "136322",
+    "torch": "2.11.0+cu128"
+  },
+  "layer": 0,
+  "model": "llama32_3b",
+  "one_token_interpretation": "kernel-launch-bound for both compact WY R4 and unfused Hadamard",
+  "ranks": [
+    16,
+    32,
+    64
+  ],
+  "site": "down_proj input",
+  "tokens": [
+    1,
+    32,
+    2048
+  ],
+  "under_10pct_at_2048": {
+    "16": false,
+    "32": false,
+    "64": false
+  },
+  "unfused_hadamard": "PyTorch staged FWHT with no fused custom kernel",
+  "verification": [
+    {
+      "k": 16,
+      "layer": 0,
+      "model": "llama32_3b",
+      "verify_rows": 8,
+      "wy_full_vs_dense_max_abs_error": 1.430511474609375e-06,
+      "wy_full_vs_dense_relative_l2_error": 2.8451015054997697e-07,
+      "wy_vs_sequential_g_max_abs_error": 2.384185791015625e-06,
+      "wy_vs_sequential_g_relative_l2_error": 1.098991759818091e-07
+    },
+    {
+      "k": 32,
+      "layer": 0,
+      "model": "llama32_3b",
+      "verify_rows": 8,
+      "wy_full_vs_dense_max_abs_error": 1.7881393432617188e-06,
+      "wy_full_vs_dense_relative_l2_error": 2.913990044817183e-07,
+      "wy_vs_sequential_g_max_abs_error": 2.384185791015625e-06,
+      "wy_vs_sequential_g_relative_l2_error": 1.5118411056391778e-07
+    },
+    {
+      "k": 64,
+      "layer": 0,
+      "model": "llama32_3b",
+      "verify_rows": 8,
+      "wy_full_vs_dense_max_abs_error": 1.6689300537109375e-06,
+      "wy_full_vs_dense_relative_l2_error": 3.1032391234475654e-07,
+      "wy_vs_sequential_g_max_abs_error": 2.384185791015625e-06,
+      "wy_vs_sequential_g_relative_l2_error": 2.1338436795304005e-07
+    }
+  ]
+}

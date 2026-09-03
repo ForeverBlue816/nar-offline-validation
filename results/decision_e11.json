@@ -1,0 +1,11 @@
+{
+  "e5_rows_reused_without_rerun": true,
+  "matched_or_better_than_nar_within_paired_90ci": {},
+  "models": [
+    "llama32_3b",
+    "llama31_8b"
+  ],
+  "no_tuning": true,
+  "rule": "stop before E14 if SmoothQuant+Hadamard or DuQuant-style has baseline-minus-NAR CI with lower bound <= 0",
+  "stop_before_e14": false
+}

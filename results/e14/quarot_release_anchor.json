@@ -1,0 +1,12 @@
+{
+  "absolute_error": 0.2550000000000008,
+  "configuration": "official QuaRot GPTQ W4A4KV4, no groups",
+  "created_utc": "2026-09-03T03:50:33.882460+00:00",
+  "model": "Llama-2-7B",
+  "passed": false,
+  "published_ppl": 6.1,
+  "reproduced_ppl": 6.355,
+  "source_log": "/projects/nar/nar-validation/artifacts/e14/quarot_release_anchor/anchor_latest.log",
+  "task": "E14 QuaRot release sanity anchor",
+  "tolerance": 0.1
+}

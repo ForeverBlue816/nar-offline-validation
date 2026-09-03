@@ -302,8 +302,145 @@ Held-out sign: mean range did not improve (26/28 layers); mean NMSE improved (22
 
 The original E1c q_input/down_input bf16 dumps remain untouched for E3/E4. E7 and E8 add separate V-cal-A and down-cal-B sampled dumps under project storage; none of the raw dumps enter Git. All result tables, completion metadata, factorization audits, plots, Slurm transcripts, and commands are published. E1/E2/E1c results were not rerun or modified.
 
+# E11 — fair baselines in the E5 setting
+
+The E5 bf16, both-site Hadamard, and both-site NAR rows are reused verbatim. New rows use the identical 64 WikiText-2 test chunks and three paired rotation seeds; only post-RMSNorm q/k/v inputs and down_proj inputs are fake-quantized. There was no sweep or post-result tuning.
+
+| model | method | mean_ppl | ppl_delta_vs_bf16 | effective_bits_qkv | effective_bits_down | delta_vs_Had_90CI | delta_vs_NAR_90CI |
+|---|---|---|---|---|---|---|---|
+| Llama-3.2-3B | bf16 | 7.61682 | 0 | 16 | 16 | N/A | N/A |
+| Llama-3.2-3B | Hadamard, asym g128 (E5) | 7.77113 | 0.154305 | 4.25 | 4.25 | 0.000000 [0.000000, 0.000000] | 0.065848 [0.039065, 0.092630] |
+| Llama-3.2-3B | NAR, asym g128, kmax (E5) | 7.70528 | 0.0884571 | 4.25 | 4.25 | -0.065848 [-0.092630, -0.039065] | 0.000000 [0.000000, 0.000000] |
+| Llama-3.2-3B | SmoothQuant + Hadamard, asym g128 | 7.79104 | 0.174213 | 4.25 | 4.25 | 0.019908 [0.012168, 0.027649] | 0.085756 [0.066702, 0.104811] |
+| Llama-3.2-3B | DuQuant-style, asym g128 | 7.75416 | 0.137335 | 4.25 | 4.25 | -0.016970 [-0.033445, -0.000494] | 0.048878 [0.036346, 0.061410] |
+| Llama-3.2-3B | Hadamard, symmetric per-token | 8.01395 | 0.397129 | 4.00521 | 4.00195 | 0.242824 [0.236481, 0.249167] | 0.308672 [0.276337, 0.341007] |
+| Llama-3.2-3B | Hadamard, asymmetric per-token | 7.91562 | 0.298799 | 4.01042 | 4.00391 | 0.144494 [0.131128, 0.157861] | 0.210342 [0.185714, 0.234970] |
+| Llama-3.2-3B | NAR, asym g64, kmax | 7.68077 | 0.0639417 | 4.5 | 4.5 | -0.090363 [-0.101278, -0.079449] | -0.024515 [-0.041228, -0.007803] |
+| Llama-3.2-3B | NAR, asym g256, kmax | 7.72464 | 0.107813 | 4.125 | 4.125 | -0.046492 [-0.050932, -0.042051] | 0.019356 [-0.003931, 0.042643] |
+| Llama-3.2-3B | NAR, asym g128, k=8 | 7.71159 | 0.094766 | 4.25 | 4.25 | -0.059539 [-0.072446, -0.046632] | 0.006309 [-0.007644, 0.020262] |
+| Llama-3.2-3B | NAR, asym g128, k=16 | 7.71202 | 0.0952 | 4.25 | 4.25 | -0.059105 [-0.063637, -0.054573] | 0.006743 [-0.015614, 0.029099] |
+| Llama-3.2-3B | NAR, asym g128, k=32 | 7.70651 | 0.0896842 | 4.25 | 4.25 | -0.064621 [-0.075694, -0.053547] | 0.001227 [-0.014526, 0.016980] |
+| Llama-3.1-8B | bf16 | 6.20401 | 0 | 16 | 16 | N/A | N/A |
+| Llama-3.1-8B | Hadamard, asym g128 (E5) | 6.34626 | 0.142254 | 4.25 | 4.25 | 0.000000 [0.000000, 0.000000] | 0.061333 [0.056407, 0.066259] |
+| Llama-3.1-8B | NAR, asym g128, kmax (E5) | 6.28493 | 0.0809206 | 4.25 | 4.25 | -0.061333 [-0.066259, -0.056407] | 0.000000 [0.000000, 0.000000] |
+| Llama-3.1-8B | SmoothQuant + Hadamard, asym g128 | 6.35792 | 0.153913 | 4.25 | 4.25 | 0.011659 [0.008521, 0.014797] | 0.072992 [0.066167, 0.079817] |
+| Llama-3.1-8B | DuQuant-style, asym g128 | 6.33393 | 0.129926 | 4.25 | 4.25 | -0.012327 [-0.016047, -0.008608] | 0.049006 [0.041183, 0.056828] |
+| Llama-3.1-8B | Hadamard, symmetric per-token | 6.61061 | 0.406607 | 4.00391 | 4.00112 | 0.264353 [0.257897, 0.270808] | 0.325686 [0.314309, 0.337063] |
+| Llama-3.1-8B | Hadamard, asymmetric per-token | 6.51651 | 0.312501 | 4.00781 | 4.00223 | 0.170247 [0.166250, 0.174245] | 0.231581 [0.226431, 0.236730] |
+| Llama-3.1-8B | NAR, asym g64, kmax | 6.26141 | 0.0574021 | 4.5 | 4.5 | -0.084852 [-0.085437, -0.084266] | -0.023518 [-0.028449, -0.018588] |
+| Llama-3.1-8B | NAR, asym g256, kmax | 6.30517 | 0.101158 | 4.125 | 4.125 | -0.041096 [-0.050918, -0.031273] | 0.020238 [0.014311, 0.026164] |
+| Llama-3.1-8B | NAR, asym g128, k=8 | 6.29571 | 0.0917042 | 4.25 | 4.25 | -0.050550 [-0.054498, -0.046601] | 0.010784 [0.003442, 0.018125] |
+| Llama-3.1-8B | NAR, asym g128, k=16 | 6.29542 | 0.0914089 | 4.25 | 4.25 | -0.050845 [-0.056853, -0.044837] | 0.010488 [0.008392, 0.012584] |
+| Llama-3.1-8B | NAR, asym g128, k=32 | 6.28904 | 0.0850314 | 4.25 | 4.25 | -0.057222 [-0.062285, -0.052160] | 0.004111 [-0.005529, 0.013751] |
+
+Effective activation bits/value include fp16 metadata: asymmetric group-g uses 4 + 32/g bits (one fp16 scale and one fp16 real-valued zero-point per group); symmetric per-token uses 4 + 16/n; asymmetric per-token uses 4 + 32/n. SmoothQuant channel scales are statically folded into bf16 weights and therefore add no per-token metadata.
+
+## Baseline construction audit
+
+SmoothQuant uses the fixed standard alpha=0.5 rule s_c=max|x_c|^0.5/max|w_c|^0.5, applies x/s and W*s, and then the same random-sign full Hadamard.
+
+The DuQuant-style row was implemented after reading the [pinned official code](https://github.com/Hsu1023/DuQuant/tree/d56cfc6fe97c34c0eb100fec82fe439865905679) and the [NeurIPS 2024 paper](https://papers.nips.cc/paper_files/paper/2024/file/9febda1c8344cc5f2d51713964864e93-Paper-Conference.pdf). It uses the official zigzag distribution based on calibration-channel absolute maxima; within every resulting block of 128 it maps the single largest channel row to the uniform direction and uses a seeded random orthogonal basis on the complement. The official implementation can apply a greedy multi-step rotation, retain the prefix minimizing range, permute, and apply a second greedy rotation. The requested fair row deliberately omits that global multi-step prefix and second post-permutation rotation. Relative to NAR it aligns one greedy channel per block rather than top-k second-moment eigen-directions and has no explicit DC/zero-point alignment.
+
+For Llama-3.2-3B q/k/v, requested k=32 is dimension-capped to the 24 available group-128 DC slots; all other reported k values are realized as requested. E11 calibration used the same 128 sequences, three-pass randomized eigensolver, and stride-32 permutation-energy sample. Full eigenvalue/energy/Ritz-residual CSVs are retained; transient eigenvector checkpoints were discarded after factor construction to respect project quota.
+
+## Stop decision
+
+The pre-registered stop condition did not fire: neither SmoothQuant+Hadamard nor the DuQuant-style row matches NAR within the paired 90% CI on either model. The decision is based on baseline-minus-NAR PPL with a paired two-sided 90% Student-t CI over the three seeds; a lower bound <= 0 denotes compatible-or-better and triggers the stop.
+
+The maximum measured relative bf16 weight-fold discrepancy across the E11 rows is 0.0106346. Negative rows and engineering failures are retained.
+
+# E12 — compact-WY deployable R4
+
+The sequential Householder product is represented exactly in compact WY form as G=I-WY^T, with W,Y in R^(8192 x k). Applying G therefore uses two small matrix multiplications; the complete R4 then applies the fixed permutation/sign and block H128. Results cover the E11 knee ranks k=16/32 and the original k=64. The unfused Hadamard reference is the same staged PyTorch FWHT as E6, not a custom fused kernel. Rotation timing is fp32 and down_proj timing is bf16, matching E6.
+
+| k | wy_vs_sequential_g_max_abs_error | wy_vs_sequential_g_relative_l2_error | wy_full_vs_dense_max_abs_error | wy_full_vs_dense_relative_l2_error |
+|---|---|---|---|---|
+| 16 | 2.38419e-06 | 1.09899e-07 | 1.43051e-06 | 2.8451e-07 |
+| 32 | 2.38419e-06 | 1.51184e-07 | 1.78814e-06 | 2.91399e-07 |
+| 64 | 2.38419e-06 | 2.13384e-07 | 1.66893e-06 | 3.10324e-07 |
+
+| tokens | k | r4_flop_ratio_vs_matmul | wy_g_ms | r4_wy_ms | unfused_hadamard_ms | down_matmul_ms | r4_wall_ratio_vs_unfused_hadamard | r4_wall_ratio_vs_down_matmul | r4_under_10pct_matmul_wall |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 16 | 0.0117188 | 0.0282944 | 0.2556 | 0.295857 | 0.0187339 | 0.863931 | 13.6437 | False |
+| 32 | 16 | 0.0117188 | 0.0270965 | 0.255299 | 0.294578 | 0.0230624 | 0.86666 | 11.0699 | False |
+| 2048 | 16 | 0.0117188 | 0.136342 | 2.0828 | 2.62036 | 0.552667 | 0.794852 | 3.76864 | False |
+| 1 | 32 | 0.0221354 | 0.0271787 | 0.257383 | 0.298996 | 0.0185568 | 0.860825 | 13.87 | False |
+| 32 | 32 | 0.0221354 | 0.0270997 | 0.257404 | 0.29579 | 0.0235264 | 0.870225 | 10.9411 | False |
+| 2048 | 32 | 0.0221354 | 0.153205 | 2.09457 | 2.61418 | 0.526053 | 0.801235 | 3.98167 | False |
+| 1 | 64 | 0.0429688 | 0.0256427 | 0.255199 | 0.29749 | 0.018576 | 0.85784 | 13.7381 | False |
+| 32 | 64 | 0.0429688 | 0.0272139 | 0.256044 | 0.296311 | 0.0233952 | 0.864103 | 10.9443 | False |
+| 2048 | 64 | 0.0429688 | 0.202283 | 2.13606 | 2.60901 | 0.524154 | 0.818726 | 4.07526 | False |
+
+**2048-token engineering gate: FAIL.** At least one measured compact-WY rank exceeds 10% of down_proj wall-clock.
+
+At one token the WY form is not under 10%; this regime is launch-bound. The unfused Hadamard has the same qualitative problem, so the single-token result is reported rather than hidden.
+
+The FLOP ratio includes both WY matmuls plus the block-Hadamard/sign term; wall-clock ratios include the entire R4. No fused kernel or timing-specific tuning was used.
+
+# E13 — zero-shot accuracy transfer
+
+The pinned lm-evaluation-harness is commit b954108c9baaaa934b4ad842033b31a97ee30816. All rows are zero-shot and use seed 20260902, the same task examples, prompts, tokenizer, and metric definitions. PIQA, ARC-e, ARC-c, and HellaSwag use normalized accuracy; WinoGrande and LAMBADA use accuracy. The mean is the unweighted mean of those six values. bf16, Hadamard, and NAR use the E5 both-site activation-only setting; this one-seed transfer check has no confidence interval.
+
+| model | method | task | metric | accuracy | delta_vs_bf16 |
+|---|---|---|---|---|---|
+| Llama-3.2-3B | bf16 | piqa | acc_norm,none | 0.778564 | 0 |
+| Llama-3.2-3B | bf16 | arc_easy | acc_norm,none | 0.720539 | 0 |
+| Llama-3.2-3B | bf16 | arc_challenge | acc_norm,none | 0.461604 | 0 |
+| Llama-3.2-3B | bf16 | hellaswag | acc_norm,none | 0.741287 | 0 |
+| Llama-3.2-3B | bf16 | winogrande | acc,none | 0.693765 | 0 |
+| Llama-3.2-3B | bf16 | lambada_openai | acc,none | 0.69804 | 0 |
+| Llama-3.2-3B | bf16 | mean | unweighted_mean_selected_accuracy | 0.6823 | 0 |
+| Llama-3.2-3B | hadamard | piqa | acc_norm,none | 0.773667 | -0.00489663 |
+| Llama-3.2-3B | hadamard | arc_easy | acc_norm,none | 0.718855 | -0.0016835 |
+| Llama-3.2-3B | hadamard | arc_challenge | acc_norm,none | 0.457338 | -0.00426621 |
+| Llama-3.2-3B | hadamard | hellaswag | acc_norm,none | 0.735312 | -0.00597491 |
+| Llama-3.2-3B | hadamard | winogrande | acc,none | 0.684294 | -0.00947119 |
+| Llama-3.2-3B | hadamard | lambada_openai | acc,none | 0.685232 | -0.0128081 |
+| Llama-3.2-3B | hadamard | mean | unweighted_mean_selected_accuracy | 0.675783 | -0.00651675 |
+| Llama-3.2-3B | nar | piqa | acc_norm,none | 0.767682 | -0.0108814 |
+| Llama-3.2-3B | nar | arc_easy | acc_norm,none | 0.713805 | -0.00673401 |
+| Llama-3.2-3B | nar | arc_challenge | acc_norm,none | 0.455631 | -0.0059727 |
+| Llama-3.2-3B | nar | hellaswag | acc_norm,none | 0.737901 | -0.00338578 |
+| Llama-3.2-3B | nar | winogrande | acc,none | 0.68824 | -0.00552486 |
+| Llama-3.2-3B | nar | lambada_openai | acc,none | 0.692412 | -0.00562779 |
+| Llama-3.2-3B | nar | mean | unweighted_mean_selected_accuracy | 0.675945 | -0.00635442 |
+| Llama-3.1-8B | bf16 | piqa | acc_norm,none | 0.806311 | 0 |
+| Llama-3.1-8B | bf16 | arc_easy | acc_norm,none | 0.825337 | 0 |
+| Llama-3.1-8B | bf16 | arc_challenge | acc_norm,none | 0.546075 | 0 |
+| Llama-3.1-8B | bf16 | hellaswag | acc_norm,none | 0.793368 | 0 |
+| Llama-3.1-8B | bf16 | winogrande | acc,none | 0.743489 | 0 |
+| Llama-3.1-8B | bf16 | lambada_openai | acc,none | 0.747332 | 0 |
+| Llama-3.1-8B | bf16 | mean | unweighted_mean_selected_accuracy | 0.743652 | 0 |
+| Llama-3.1-8B | hadamard | piqa | acc_norm,none | 0.803047 | -0.00326442 |
+| Llama-3.1-8B | hadamard | arc_easy | acc_norm,none | 0.822811 | -0.00252525 |
+| Llama-3.1-8B | hadamard | arc_challenge | acc_norm,none | 0.53413 | -0.0119454 |
+| Llama-3.1-8B | hadamard | hellaswag | acc_norm,none | 0.78799 | -0.00537741 |
+| Llama-3.1-8B | hadamard | winogrande | acc,none | 0.7206 | -0.0228887 |
+| Llama-3.1-8B | hadamard | lambada_openai | acc,none | 0.742092 | -0.00523967 |
+| Llama-3.1-8B | hadamard | mean | unweighted_mean_selected_accuracy | 0.735112 | -0.00854014 |
+| Llama-3.1-8B | nar | piqa | acc_norm,none | 0.804679 | -0.00163221 |
+| Llama-3.1-8B | nar | arc_easy | acc_norm,none | 0.818182 | -0.00715488 |
+| Llama-3.1-8B | nar | arc_challenge | acc_norm,none | 0.544369 | -0.00170648 |
+| Llama-3.1-8B | nar | hellaswag | acc_norm,none | 0.788588 | -0.00477992 |
+| Llama-3.1-8B | nar | winogrande | acc,none | 0.741121 | -0.0023678 |
+| Llama-3.1-8B | nar | lambada_openai | acc,none | 0.747138 | -0.000194062 |
+| Llama-3.1-8B | nar | mean | unweighted_mean_selected_accuracy | 0.740679 | -0.00297256 |
+
+Paired aggregate transfer: Llama-3.2-3B: NAR-Hadamard mean-accuracy delta +0.000162; Llama-3.1-8B: NAR-Hadamard mean-accuracy delta +0.005568.
+
+These accuracy results are reported regardless of sign. No task subset, prompt, batch-size, or metric was selected after observing outputs.
+
 # E14 — end-to-end W4A4KV4 (in progress)
 
 ## Released-code sanity anchor
 
 The official released QuaRot W4A4KV4 pipeline produced WikiText-2 PPL **6.355** for Llama-2-7B, versus the published **6.10** target (absolute error **0.255**; requested tolerance ±0.10). The sanity anchor is therefore a recorded **FAIL**. Per the explicit project decision, this release/paper discrepancy is retained as a negative reproducibility result and the frozen 3B/8B experiment matrix proceeds without reclassifying the anchor. No anchor result was tuned or rerun after this decision.
+
+## Provisional full-test PPL
+
+These are the first completed paired seed only, shown to make progress auditable; they are not the requested three-seed conclusion.
+
+| model | seed | row | full WikiText-2 PPL | paired delta vs Hadamard |
+|---|---|---|---|---|
+| Llama-3.2-3B | 0 | Hadamard + asymmetric g128 | 9.20901 | 0 |
+| Llama-3.2-3B | 0 | NAR k=8 R1/R4 + NAR R2 + asymmetric g128 | 8.75623 | -0.452776 |

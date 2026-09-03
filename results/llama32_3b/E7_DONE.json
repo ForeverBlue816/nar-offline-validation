@@ -129,7 +129,7 @@
   },
   "model": "llama32_3b",
   "model_id": "unsloth/Llama-3.2-3B",
-  "paired_source": "$NAR_WORKDIR/activations/llama32_3b/v_cal_a/dumps",
+  "paired_source": "/projects/_ssd/river/nar-validation/activations/llama32_3b/v_cal_a/dumps",
   "rotation": "per-head V rotation; R^T folded blockwise into o_proj input columns",
   "seed": 20260902
 }

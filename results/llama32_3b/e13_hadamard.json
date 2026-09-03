@@ -1,0 +1,153 @@
+{
+  "activation_quantizer": "dynamic asymmetric per-token group-128 INT4",
+  "activation_site": "both",
+  "batch_size": 2,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 24734 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "136328",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "max_length": 2048,
+  "mean_accuracy": 0.6757828889638638,
+  "mean_definition": "unweighted mean of the six selected accuracy metrics",
+  "method": "hadamard",
+  "model": "llama32_3b",
+  "model_id": "unsloth/Llama-3.2-3B",
+  "num_fewshot": 0,
+  "raw_results": {
+    "arc_challenge": {
+      "acc,none": 0.4206484641638225,
+      "acc_norm,none": 0.45733788395904434,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_challenge",
+      "name": "arc_challenge",
+      "sample_len": 1172
+    },
+    "arc_easy": {
+      "acc,none": 0.7403198653198653,
+      "acc_norm,none": 0.7188552188552189,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    },
+    "hellaswag": {
+      "acc,none": 0.5521808404700259,
+      "acc_norm,none": 0.7353116908982275,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "hellaswag",
+      "name": "hellaswag",
+      "sample_len": 10042
+    },
+    "lambada_openai": {
+      "acc,none": 0.685231903745391,
+      "acc_stderr,none": "N/A",
+      "alias": "lambada_openai",
+      "name": "lambada_openai",
+      "perplexity,none": 4.0553904765057025,
+      "perplexity_stderr,none": "N/A",
+      "sample_len": 5153
+    },
+    "piqa": {
+      "acc,none": 0.7665941240478781,
+      "acc_norm,none": 0.7736670293797606,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "piqa",
+      "name": "piqa",
+      "sample_len": 1838
+    },
+    "winogrande": {
+      "acc,none": 0.6842936069455406,
+      "acc_stderr,none": "N/A",
+      "alias": "winogrande",
+      "name": "winogrande",
+      "sample_len": 1267
+    }
+  },
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "lambada_openai": {
+      "effective": 5153,
+      "original": 5153
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 20260902,
+  "smoke_limit": null,
+  "task_versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "hellaswag": 1.0,
+    "lambada_openai": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "tasks": [
+    {
+      "accuracy": 0.7736670293797606,
+      "metric": "acc_norm,none",
+      "task": "piqa"
+    },
+    {
+      "accuracy": 0.7188552188552189,
+      "metric": "acc_norm,none",
+      "task": "arc_easy"
+    },
+    {
+      "accuracy": 0.45733788395904434,
+      "metric": "acc_norm,none",
+      "task": "arc_challenge"
+    },
+    {
+      "accuracy": 0.7353116908982275,
+      "metric": "acc_norm,none",
+      "task": "hellaswag"
+    },
+    {
+      "accuracy": 0.6842936069455406,
+      "metric": "acc,none",
+      "task": "winogrande"
+    },
+    {
+      "accuracy": 0.685231903745391,
+      "metric": "acc,none",
+      "task": "lambada_openai"
+    }
+  ],
+  "weight_fold_max_relative_error": 0.0025041678454726934
+}

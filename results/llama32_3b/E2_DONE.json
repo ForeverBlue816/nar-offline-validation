@@ -12,9 +12,9 @@
       9
     ],
     "gpu_name": "NVIDIA RTX 6000 Ada Generation",
-    "hostname": "gpu-6000ada-1.cluster02.eee.ntu.edu.sg",
+    "hostname": "gpu-node",
     "nvidia_smi": [
-      "0, NVIDIA RTX 6000 Ada Generation, GPU-909d1900-a4f6-c32d-2700-e477d79a7be1, 46068 MiB, 32687 MiB, 580.173.02"
+      "0, NVIDIA RTX 6000 Ada Generation, GPU-REDACTED, 46068 MiB, 32687 MiB, 580.173.02"
     ],
     "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
     "slurm_job_gpus": "3",

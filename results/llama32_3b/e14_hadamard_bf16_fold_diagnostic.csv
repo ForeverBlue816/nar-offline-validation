@@ -1,0 +1,6 @@
+model,rotation,stage,model_dtype,tokens,max_abs_logit_error,relative_l2_logit_error
+llama32_3b,hadamard,norm_only,torch.bfloat16,128,1.1875,0.018591919913887978
+llama32_3b,hadamard,norm_r1,torch.bfloat16,128,1.3125,0.042883798480033875
+llama32_3b,hadamard,norm_r1_r2,torch.bfloat16,128,1.2421875,0.0414903499186039
+llama32_3b,hadamard,norm_r1_r4,torch.bfloat16,128,1.1875,0.04071088135242462
+llama32_3b,hadamard,norm_r1_r2_r4,torch.bfloat16,128,1.40625,0.04341438412666321

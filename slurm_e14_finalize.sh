@@ -8,4 +8,6 @@ code_dir="${NAR_CODE_DIR:-${SLURM_SUBMIT_DIR:-$PWD}}"
 : "${NAR_WORKDIR:?Set NAR_WORKDIR}"
 python_bin="$NAR_WORKDIR/venv/bin/python"
 "$python_bin" "$code_dir/nar/e14_w4a4kv4.py" --workdir "$NAR_WORKDIR" finalize
-exec "$python_bin" "$code_dir/nar/e14_report.py" --workdir "$NAR_WORKDIR"
+"$python_bin" "$code_dir/nar/e14_report.py" --workdir "$NAR_WORKDIR"
+"$python_bin" "$code_dir/nar/publish_results.py" "$NAR_WORKDIR/results" "$code_dir/results"
+cp "$NAR_WORKDIR/report.md" "$code_dir/report.md"

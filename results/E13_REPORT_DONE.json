@@ -1,0 +1,69 @@
+{
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "models": [
+    "llama32_3b",
+    "llama31_8b"
+  ],
+  "no_tuning": true,
+  "seed": 20260902,
+  "source": [
+    {
+      "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+      "methods": [
+        "bf16",
+        "hadamard",
+        "nar"
+      ],
+      "metrics": {
+        "arc_challenge": "acc_norm,none",
+        "arc_easy": "acc_norm,none",
+        "hellaswag": "acc_norm,none",
+        "lambada_openai": "acc,none",
+        "piqa": "acc_norm,none",
+        "winogrande": "acc,none"
+      },
+      "model": "llama32_3b",
+      "no_tuning": true,
+      "num_fewshot": 0,
+      "paired": "same harness revision, task examples, prompts, metrics, and seed for every method",
+      "seed": 20260902,
+      "tasks": [
+        "piqa",
+        "arc_easy",
+        "arc_challenge",
+        "hellaswag",
+        "winogrande",
+        "lambada_openai"
+      ]
+    },
+    {
+      "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+      "methods": [
+        "bf16",
+        "hadamard",
+        "nar"
+      ],
+      "metrics": {
+        "arc_challenge": "acc_norm,none",
+        "arc_easy": "acc_norm,none",
+        "hellaswag": "acc_norm,none",
+        "lambada_openai": "acc,none",
+        "piqa": "acc_norm,none",
+        "winogrande": "acc,none"
+      },
+      "model": "llama31_8b",
+      "no_tuning": true,
+      "num_fewshot": 0,
+      "paired": "same harness revision, task examples, prompts, metrics, and seed for every method",
+      "seed": 20260902,
+      "tasks": [
+        "piqa",
+        "arc_easy",
+        "arc_challenge",
+        "hellaswag",
+        "winogrande",
+        "lambada_openai"
+      ]
+    }
+  ]
+}
