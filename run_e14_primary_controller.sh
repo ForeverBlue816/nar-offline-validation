@@ -14,13 +14,16 @@ state_dir="$workdir/orchestration"
 state_file="$state_dir/e14_primary_jobs.tsv"
 max_submitted=4
 accept_failed_anchor="${NAR_ACCEPT_FAILED_ANCHOR:-0}"
+resume_controller="${NAR_RESUME_CONTROLLER:-0}"
 mkdir -p "$state_dir" "$code_dir/runs"
 
-if [[ -s "$state_file" && "${NAR_ALLOW_RESUBMIT:-0}" != 1 ]]; then
+if [[ -s "$state_file" && "$resume_controller" != 1 ]]; then
     echo "refusing duplicate E14 submission; manifest exists: $state_file" >&2
     exit 2
 fi
-: > "$state_file"
+if [[ "$resume_controller" != 1 ]]; then
+    : > "$state_file"
+fi
 
 log() {
     printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
@@ -32,12 +35,25 @@ record() {
 }
 
 job_state() {
-    sacct -X -j "$1" --format=State -n -P | awk 'NF {sub(/[+|].*/, "", $1); print $1; exit}'
+    local output
+    for attempt in 1 2 3 4 5; do
+        if output="$(sacct -X -j "$1" --format=State -n -P)"; then
+            awk 'NF {sub(/[+|].*/, "", $1); print $1; exit}' <<< "$output"
+            return 0
+        fi
+        printf '%s WARN sacct query failed job=%s attempt=%s\n' \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$1" "$attempt" >&2
+        sleep 10
+    done
+    return 1
 }
 
 require_success() {
     local label="$1" job="$2" state
-    state="$(job_state "$job")"
+    if ! state="$(job_state "$job")"; then
+        log "WARN: unable to query $label job=$job; retaining it"
+        return 0
+    fi
     case "$state" in
         FAILED|CANCELLED|TIMEOUT|OUT_OF_MEMORY|NODE_FAIL|BOOT_FAIL|DEADLINE)
             log "STOP: $label job=$job state=$state"
@@ -49,7 +65,11 @@ require_success() {
 wait_job() {
     local label="$1" job="$2" state
     while true; do
-        state="$(job_state "$job")"
+        if ! state="$(job_state "$job")"; then
+            log "WARN: unable to query $label job=$job; waiting"
+            sleep 30
+            continue
+        fi
         case "$state" in
             COMPLETED)
                 log "$label completed job=$job"
@@ -70,7 +90,11 @@ wait_anchor() {
 
     while true; do
         local state
-        state="$(job_state "$job_id")"
+        if ! state="$(job_state "$job_id")"; then
+            log "WARN: unable to query $label job=$job_id; waiting"
+            sleep 30
+            continue
+        fi
         case "$state" in
             COMPLETED)
                 log "$label job=$job_id state=$state"
@@ -103,11 +127,33 @@ submit() {
     printf '%s' "$output"
 }
 
-record anchor_gate "$anchor_job"
-wait_anchor anchor_gate "$anchor_job"
+if [[ "$resume_controller" == 1 ]]; then
+    recorded_anchor="$(awk -F '\t' '$1 == "anchor_gate" {print $2; exit}' "$state_file")"
+    if [[ "$recorded_anchor" != "$anchor_job" ]]; then
+        log "STOP: resume anchor mismatch manifest=$recorded_anchor requested=$anchor_job"
+        exit 2
+    fi
+    if awk -F '\t' '$1 == "anchor_override" {found=1} END {exit !found}' "$state_file"; then
+        log "RESUME: retaining recorded failed-anchor override job=$anchor_job"
+    else
+        wait_anchor anchor_gate "$anchor_job"
+    fi
+else
+    record anchor_gate "$anchor_job"
+    wait_anchor anchor_gate "$anchor_job"
+fi
 
 jobs=()
 for ((task = 0; task < 18; task++)); do
+    label="primary_task_$task"
+    if [[ "$resume_controller" == 1 ]]; then
+        recorded_job="$(awk -F '\t' -v label="$label" '$1 == label {print $2; exit}' "$state_file")"
+        if [[ -n "$recorded_job" ]]; then
+            jobs[$task]="$recorded_job"
+            log "RESUME: $label job=$recorded_job"
+            continue
+        fi
+    fi
     for prior in "${jobs[@]}"; do
         require_success "primary_task" "$prior"
     done
@@ -120,8 +166,8 @@ for ((task = 0; task < 18; task++)); do
     job="$(submit --array="$task" \
         --export="ALL,NAR_WORKDIR=$workdir,NAR_CODE_DIR=$code_dir" \
         "$code_dir/slurm_e14_primary_array.sh")"
-    jobs+=("$job")
-    record "primary_task_$task" "$job"
+    jobs[$task]="$job"
+    record "$label" "$job"
 done
 
 for index in "${!jobs[@]}"; do
