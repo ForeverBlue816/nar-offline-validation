@@ -13,6 +13,11 @@ python_bin="$NAR_WORKDIR/quarot-env/bin/python"
 anchor_root="${NAR_E14_ANCHOR_ROOT:-$NAR_WORKDIR/artifacts/e14/quarot_release_anchor}"
 checkpoint="$anchor_root/quarot_release_llama2_7b.pt"
 mkdir -p "$(dirname "$checkpoint")"
+qmodel_args=(--save_qmodel_path "$checkpoint")
+if [[ -s "$checkpoint" ]]; then
+    qmodel_args=(--load_qmodel_path "$checkpoint")
+    echo "Resuming anchor evaluation from $checkpoint"
+fi
 export HF_HOME="$anchor_root/huggingface"
 export HUGGINGFACE_HUB_CACHE="$anchor_root/huggingface/hub"
 export HF_DATASETS_CACHE="$anchor_root/datasets"
@@ -30,5 +35,5 @@ exec "$python_bin" main.py \
     --k_bits 4 \
     --w_bits 4 \
     --w_clip \
-    --save_qmodel_path "$checkpoint" \
+    "${qmodel_args[@]}" \
     --save_name e14_quarot_release_anchor
