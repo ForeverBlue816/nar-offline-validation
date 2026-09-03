@@ -45,6 +45,10 @@ W4A4KV4; E15 is the no-zero-point FP4 boundary check. No stage performs
 result-driven configuration tuning. Models are Llama-3.2-3B, Llama-3.2-1B,
 and Llama-3.1-8B; data are fixed WikiText-2 chunks.
 
+SpinQuant and other training-dependent baselines are citation-only unless an
+explicitly approved released artifact is supplied. This repository never
+trains baseline rotation matrices (including Cayley/Stiefel optimization).
+
 The complete protocol, exact fit statistics, summary tables, confidence
 intervals, caveats, and results are in [`report.md`](report.md). Exact per-layer
 CSV/JSON outputs and figures are committed under [`results/`](results/), with execution

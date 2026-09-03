@@ -440,6 +440,12 @@ The official released QuaRot W4A4KV4 pipeline produced WikiText-2 PPL **6.355** 
 
 E14 was explicitly amended to one seed per configuration to accelerate completion. Seed 0 is the sole planned E14 seed; partial seed-1 work is excluded from the headline comparison. Direct paired deltas are reported without seed-level confidence intervals. Existing completed E5/E11 multi-seed results are unchanged.
 
+## Citation-only trained baselines
+
+SpinQuant is citation-only: no rotation artifact is downloaded or evaluated, and no Cayley/Stiefel optimization is run. The [SpinQuant paper](https://arxiv.org/abs/2405.16406) reports W4A4KV4 results of 61.4 zero-shot average and 11.6 WikiText-2 PPL for LLaMA-3.2-3B without the online Hadamard (61.8 and 11.7 with it), and 68.6 and 6.7 for LLaMA-3-8B. These values are quoted, not reproduced. The same released-artifact-or-citation-only rule applies to every other baseline whose method requires training.
+
+*Footnote:* The published 8B model is LLaMA-3-8B, not Llama-3.1-8B, and the authors' quantizer, cache policy, calibration, and evaluation setting differ from the present metadata-matched KIVI/asymmetric-g128 protocol. Citation-only values are therefore not included in paired deltas or used for a superiority claim.
+
 | model | seed | row | full WikiText-2 PPL | paired delta vs Hadamard |
 |---|---|---|---|---|
 | Llama-3.2-3B | 0 | Hadamard + asymmetric g128 | 9.20901 | 0 |

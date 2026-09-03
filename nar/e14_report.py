@@ -75,6 +75,20 @@ def build(args: argparse.Namespace) -> None:
         ),
         "Weights use the GPTQ implementation and fixed clipping search from spcl/QuaRot commit 5008669b08c1f11f9b64d52d16fddd47ca754c5a: symmetric W4 per output channel, one group across the full input row, MSE norm 2.4, grid 100, max shrink 0.8, block 128, damp 0.01, no act order, and 128 fixed WikiText-2 calibration sequences. Embeddings and lm_head remain bf16 as in the upstream fake-quant path.\n",
         _table(frame[columns]) + "\n",
+        (
+            "## Citation-only trained baselines\n\n"
+            "SpinQuant is citation-only: no rotation artifact is downloaded or evaluated, and no "
+            "Cayley/Stiefel optimization is run. The [SpinQuant paper]"
+            "(https://arxiv.org/abs/2405.16406) reports W4A4KV4 results of 61.4 zero-shot "
+            "average and 11.6 WikiText-2 PPL for LLaMA-3.2-3B without the online Hadamard "
+            "(61.8 and 11.7 with it), and 68.6 and 6.7 for LLaMA-3-8B. These values are "
+            "quoted, not reproduced. The same released-artifact-or-citation-only rule applies "
+            "to every other baseline whose method requires training.\n\n"
+            "*Footnote:* The published 8B model is LLaMA-3-8B, not Llama-3.1-8B, and the "
+            "authors' quantizer, cache policy, calibration, and evaluation setting differ from "
+            "the present metadata-matched KIVI/asymmetric-g128 protocol. Citation-only values "
+            "are therefore not included in paired deltas or used for a superiority claim.\n"
+        ),
         "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with residual window R=32. V keeps the latest 32 tokens bf16 and quantizes older values dynamically asymmetric per token over one 128-channel head group. The Q/K rotation used by released QuaRot's per-token K path is omitted because per-channel K replaces it for every row. Hadamard rows retain random-sign R1, per-head V Hadamard plus the cross-head o_proj factor, and R4. NAR rows use calibrated global R1, per-layer per-head R2, and per-layer R4 at k=8 or k=max.\n",
         "The first row preserves upstream symmetric per-token A4 semantics while using the common KIVI K policy. The other rows quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. GPTQ uses the released seed-0 random-window sampler: 128 WikiText-2 train windows of length 2048. Following the explicit protocol amendment, every E14 configuration uses one paired seed; direct paired deltas are reported and seed-level confidence intervals are not estimable. Zero-shot evaluation uses batch size one so padding cannot shift token-group boundaries.\n",
         "Effective bits include metadata separately for W, A, K, and V; they are not summed across tensors. Asymmetric group-128 A4 is 4+(16+16)/128=4.25 bits/value. Cache columns include the 32-token bf16 residual at context 2048.\n",

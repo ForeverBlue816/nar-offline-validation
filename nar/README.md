@@ -63,6 +63,11 @@ Git. All comparisons are paired and no result-driven tuning is used.
   with asymmetric KIVI-style per-channel K4 over 32-token groups and the
   standard 128-token residual policy; V is asymmetric per-token V4 with a
   128-token bf16 residual. NAR R4 uses the E12 compact-WY representation.
+- SpinQuant is a citation-only baseline. Do not download or evaluate its
+  artifacts and never run Cayley/Stiefel rotation optimization. More generally,
+  any baseline requiring training is allowed only as a released-artifact
+  evaluation when explicitly requested; otherwise quote its published result
+  with the exact model/setting and mark setting differences in a footnote.
 - E15 uses nearest E2M1 with one E4M3FN max/6 scale per block of 16 and no
   zero-point. Its Hadamard baseline is a fixed random-sign H16 aligned to each
   scale block. It samples every 128th retained E1c token and includes one fixed
