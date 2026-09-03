@@ -544,3 +544,20 @@ Each cell is `global NMSE / worst-1% error share / mean token group-energy CV`. 
 The pre-registered down_input MSE-optimal recovery is **-0.4856**: Pi-only worsens H128 by 0.00012162 instead of closing the 0.00025046 H128-to-aligned gap. It also changes group-energy CV only from 1.0682 to 1.0625. The rule therefore attributes the residual FP4 gain to **directional separation by G(V)**, not load balancing across groups. G(V) must overcome the Pi degradation and supplies a 0.00037208 improvement from Pi-only to aligned H128. The aligned transform's CV actually rises to 1.3217 while NMSE falls, so group-energy uniformity cannot explain the gain.
 
 For q_input, Pi-only and H128-only remain effectively tied under MSE-optimal scaling (0.00659067 vs 0.00659000), as does aligned H128 (0.00659209). This preserves the earlier boundary: q_input is a mixing-width result with no measurable alignment benefit. Exact combined rows are in `results/llama32_3b/e15_alignment_width_pi_control.csv`; per-layer CVs and the frozen decision metadata are retained alongside it.
+
+# E16 — post-hoc SmoothQuant robustness
+
+This section is explicitly post-hoc and uses one seed, following the amended single-seed execution rule. The E11 Hadamard and NAR rows are reused without rerunning; all variants use the same 64 WikiText-2 chunks, both activation sites unless noted, asymmetric group-128 INT4, and 4.25 effective activation bits/value. Alpha is not swept beyond the two requested robustness points.
+
+| model | variant | alpha | smoothing sites | PPL | delta vs Hadamard | delta vs NAR kmax |
+|---|---|---:|---|---:|---:|---:|
+| Llama-3.2-3B | SmoothQuant+Hadamard | 0.65 | qkv+down | 7.809241 | +0.042031 | +0.094050 |
+| Llama-3.2-3B | SmoothQuant+Hadamard | 0.80 | qkv+down | 7.889249 | +0.122038 | +0.174058 |
+| Llama-3.2-3B | SmoothQuant(qkv-only)+Hadamard | 0.50 | qkv | 7.762114 | -0.005097 | +0.046922 |
+| Llama-3.1-8B | SmoothQuant+Hadamard | 0.65 | qkv+down | 6.373599 | +0.028626 | +0.089016 |
+| Llama-3.1-8B | SmoothQuant+Hadamard | 0.80 | qkv+down | 6.454014 | +0.109041 | +0.169432 |
+| Llama-3.1-8B | SmoothQuant(qkv-only)+Hadamard | 0.50 | qkv | 6.335159 | -0.009813 | +0.050577 |
+
+Increasing alpha to 0.65 and 0.80 degrades both models monotonically relative to plain Hadamard. Restricting alpha=0.5 smoothing to its original q/k/v placement is marginally better than Hadamard (-0.0051 PPL on 3B, -0.0098 on 8B), showing that smoothing down_input caused most of E11's degradation; it still trails NAR kmax by +0.0469 and +0.0506 PPL. This robustness check therefore does not overturn E11. Confidence intervals are not estimable with one seed and are not implied.
+
+Exact rows are in `results/llama32_3b/e16_smoothquant_summary.csv` and `results/llama31_8b/e16_smoothquant_summary.csv`.

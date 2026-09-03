@@ -1,0 +1,4 @@
+model,method,seed,alpha,smoothing_sites,ppl,ppl_delta_vs_hadamard,ppl_delta_vs_nar_kmax,effective_activation_bits,paired_ci
+llama32_3b,smoothquant_a065_both,20260902,0.65,qkv+down,7.809241230433195,0.04203071446839157,0.09404999674179226,4.25,not estimable with one seed
+llama32_3b,smoothquant_a080_both,20260902,0.8,qkv+down,7.889248751488027,0.12203823552322302,0.1740575177966237,4.25,not estimable with one seed
+llama32_3b,smoothquant_a050_qkv_only,20260902,0.5,qkv,7.76211354708632,-0.005096968878484098,0.04692231339491659,4.25,not estimable with one seed

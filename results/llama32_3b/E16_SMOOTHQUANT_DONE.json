@@ -1,0 +1,89 @@
+{
+  "effective_bits": "4 + (16-bit scale + 16-bit zero-point)/128 = 4.25",
+  "eval_sequences": 64,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 90317 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137317",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "llama32_3b",
+  "model_id": "unsloth/Llama-3.2-3B",
+  "negative_results_reported": true,
+  "no_tuning": true,
+  "paired": "same 64 WikiText-2 test chunks and same seed as reused E11 rows",
+  "paired_ci": "not estimable with one seed",
+  "post_hoc": true,
+  "references_reused_without_rerun": [
+    "E11 hadamard_g128_asym",
+    "E11 nar_b128_kmax"
+  ],
+  "scale_formula": "s=max|x|^alpha/max|w|^(1-alpha); x'=x/s; W'=W*s",
+  "seed": 20260902,
+  "seed_count": 1,
+  "sequence_length": 2048,
+  "summary": [
+    {
+      "alpha": 0.65,
+      "effective_activation_bits": 4.25,
+      "method": "smoothquant_a065_both",
+      "model": "llama32_3b",
+      "paired_ci": "not estimable with one seed",
+      "ppl": 7.809241230433195,
+      "ppl_delta_vs_hadamard": 0.04203071446839157,
+      "ppl_delta_vs_nar_kmax": 0.09404999674179226,
+      "seed": 20260902,
+      "smoothing_sites": "qkv+down"
+    },
+    {
+      "alpha": 0.8,
+      "effective_activation_bits": 4.25,
+      "method": "smoothquant_a080_both",
+      "model": "llama32_3b",
+      "paired_ci": "not estimable with one seed",
+      "ppl": 7.889248751488027,
+      "ppl_delta_vs_hadamard": 0.12203823552322302,
+      "ppl_delta_vs_nar_kmax": 0.1740575177966237,
+      "seed": 20260902,
+      "smoothing_sites": "qkv+down"
+    },
+    {
+      "alpha": 0.5,
+      "effective_activation_bits": 4.25,
+      "method": "smoothquant_a050_qkv_only",
+      "model": "llama32_3b",
+      "paired_ci": "not estimable with one seed",
+      "ppl": 7.76211354708632,
+      "ppl_delta_vs_hadamard": -0.005096968878484098,
+      "ppl_delta_vs_nar_kmax": 0.04692231339491659,
+      "seed": 20260902,
+      "smoothing_sites": "qkv"
+    }
+  ],
+  "variants": {
+    "smoothquant_a050_qkv_only": [
+      0.5,
+      true
+    ],
+    "smoothquant_a065_both": [
+      0.65,
+      false
+    ],
+    "smoothquant_a080_both": [
+      0.8,
+      false
+    ]
+  },
+  "weight_max_recovery": "from frozen E11 alpha=.5 statistics: max|w|=max|x|/s_.5^2"
+}

@@ -400,7 +400,7 @@ def prepare_token_chunks(
     workdir: Path,
 ) -> torch.Tensor:
     from datasets import load_dataset
-    from transformers import AutoTokenizer
+    from transformers import AutoConfig, AutoTokenizer
 
     model_key = model_key_from_id(model_id)
     cache_file = workdir / "cache" / "tokenized" / f"{model_key}-{split}-o{offset}-n{n_sequences}-l{seq_len}.pt"
@@ -414,7 +414,12 @@ def prepare_token_chunks(
     tokens = tokenizer(text, add_special_tokens=False, return_attention_mask=False)["input_ids"]
     bos = tokenizer.bos_token_id
     if bos is None:
-        raise RuntimeError("Llama tokenizer has no BOS token")
+        # Qwen3 exposes its document prefix in config.json while deliberately
+        # leaving tokenizer.bos_token_id unset (add_bos_token=false).
+        config = AutoConfig.from_pretrained(model_id, cache_dir=str(workdir / "cache" / "huggingface"))
+        bos = getattr(config, "bos_token_id", None)
+    if bos is None:
+        raise RuntimeError(f"{model_id} has no BOS/document-prefix token in tokenizer or config")
     content_len = seq_len - 1
     need = (offset + n_sequences) * content_len
     if len(tokens) < need:

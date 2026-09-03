@@ -107,12 +107,18 @@ def paley_hadamard_28(device: torch.device, dtype: torch.dtype) -> torch.Tensor:
 def full_hadamard_rows(x: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
     n = x.shape[-1]
     quotient, remainder = divmod(n, 28)
-    if remainder or quotient < 1 or quotient & (quotient - 1):
-        return ext._full_hadamard_rows(x, signs)
-    signed = x * signs
-    factored = ext._fast_walsh_hadamard(signed.reshape(-1, 28, quotient))
-    h28 = paley_hadamard_28(x.device, x.dtype)
-    return (factored.transpose(1, 2) @ h28.T).transpose(1, 2).reshape_as(x)
+    if not remainder and quotient >= 1 and not quotient & (quotient - 1):
+        signed = x * signs
+        factored = ext._fast_walsh_hadamard(signed.reshape(-1, 28, quotient))
+        h28 = paley_hadamard_28(x.device, x.dtype)
+        return (factored.transpose(1, 2) @ h28.T).transpose(1, 2).reshape_as(x)
+    quotient, remainder = divmod(n, 12)
+    if not remainder and quotient >= 1 and not quotient & (quotient - 1):
+        signed = x * signs
+        factored = ext._fast_walsh_hadamard(signed.reshape(-1, 12, quotient))
+        h12 = ext._paley_hadamard_12(x.device, x.dtype)
+        return (factored.transpose(1, 2) @ h12.T).transpose(1, 2).reshape_as(x)
+    return ext._full_hadamard_rows(x, signs)
 
 
 def balanced_orders(x_after_g: torch.Tensor, rank: int, b: int) -> tuple[torch.Tensor, torch.Tensor]:
