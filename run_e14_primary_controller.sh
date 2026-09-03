@@ -13,6 +13,7 @@ code_dir="$(cd "$(dirname "$0")" && pwd)"
 state_dir="$workdir/orchestration"
 state_file="$state_dir/e14_primary_jobs.tsv"
 max_submitted=4
+accept_failed_anchor="${NAR_ACCEPT_FAILED_ANCHOR:-0}"
 mkdir -p "$state_dir" "$code_dir/runs"
 
 if [[ -s "$state_file" && "${NAR_ALLOW_RESUBMIT:-0}" != 1 ]]; then
@@ -63,6 +64,35 @@ wait_job() {
     done
 }
 
+wait_anchor() {
+    local label="$1"
+    local job_id="$2"
+
+    while true; do
+        local state
+        state="$(job_state "$job_id")"
+        case "$state" in
+            COMPLETED)
+                log "$label job=$job_id state=$state"
+                return 0
+                ;;
+            FAILED|CANCELLED|TIMEOUT|OUT_OF_MEMORY|NODE_FAIL|PREEMPTED|BOOT_FAIL|DEADLINE)
+                if [[ "$accept_failed_anchor" == "1" ]]; then
+                    log "OVERRIDE: $label job=$job_id state=$state; proceeding with recorded anchor failure"
+                    printf 'anchor_override\taccepted_failed_anchor:%s\n' "$job_id" >> "$state_file"
+                    return 0
+                fi
+                log "STOP: $label job=$job_id state=$state"
+                return 1
+                ;;
+            *)
+                log "$label job=$job_id state=${state:-UNKNOWN}; waiting"
+                sleep 30
+                ;;
+        esac
+    done
+}
+
 submit() {
     local output
     if ! output="$(sbatch --parsable "$@")"; then
@@ -74,7 +104,7 @@ submit() {
 }
 
 record anchor_gate "$anchor_job"
-wait_job anchor_gate "$anchor_job"
+wait_anchor anchor_gate "$anchor_job"
 
 jobs=()
 for ((task = 0; task < 18; task++)); do

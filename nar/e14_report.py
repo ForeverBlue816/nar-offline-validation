@@ -35,6 +35,8 @@ def _table(frame: pd.DataFrame) -> str:
 
 def build(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
+    anchor_path = workdir / "results" / "e14" / "quarot_release_anchor.json"
+    anchor = json.loads(anchor_path.read_text()) if anchor_path.exists() else None
     done_path = workdir / "results" / "E14_DONE.json"
     if not done_path.exists():
         raise FileNotFoundError(done_path)
@@ -56,6 +58,18 @@ def build(args: argparse.Namespace) -> None:
         report = report.split(marker, 1)[0].rstrip() + "\n"
     section = [
         "# E14 — end-to-end W4A4KV4\n",
+        (
+            "## Released-code sanity anchor\n\n"
+            f"The official released QuaRot W4A4KV4 pipeline produced WikiText-2 PPL "
+            f"{anchor['reproduced_ppl']:.3f} for Llama-2-7B, versus the published "
+            f"{anchor['published_ppl']:.2f} target (absolute error "
+            f"{anchor['absolute_error']:.3f}; requested tolerance ±{anchor['tolerance']:.2f}). "
+            "The sanity anchor therefore remains a recorded **FAIL**. Per the explicit project "
+            "decision, this release/paper discrepancy is retained as a negative reproducibility "
+            "result and the frozen 3B/8B matrix proceeds without reclassifying the anchor.\n"
+            if anchor is not None else
+            "## Released-code sanity anchor\n\nNo anchor result was available when this section was generated.\n"
+        ),
         "Weights use the GPTQ implementation and fixed clipping search from spcl/QuaRot commit 5008669b08c1f11f9b64d52d16fddd47ca754c5a: symmetric W4 per output channel, one group across the full input row, MSE norm 2.4, grid 100, max shrink 0.8, block 128, damp 0.01, no act order, and 128 fixed WikiText-2 calibration sequences. Embeddings and lm_head remain bf16 as in the upstream fake-quant path.\n",
         _table(frame[columns]) + "\n",
         "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with residual window R=32. V keeps the latest 32 tokens bf16 and quantizes older values dynamically asymmetric per token over one 128-channel head group. The Q/K rotation used by released QuaRot's per-token K path is omitted because per-channel K replaces it for every row. Hadamard rows retain random-sign R1, per-head V Hadamard plus the cross-head o_proj factor, and R4. NAR rows use calibrated global R1, per-layer per-head R2, and per-layer R4 at k=8 or k=max.\n",
@@ -65,7 +79,7 @@ def build(args: argparse.Namespace) -> None:
     ]
     report_path.write_text(report.rstrip() + "\n\n" + "\n".join(section))
     base.atomic_json(workdir / "results" / "E14_REPORT_DONE.json", {
-        "source": done, "rows": len(frame), "no_tuning": True,
+        "source": done, "anchor": anchor, "rows": len(frame), "no_tuning": True,
     })
 
 
