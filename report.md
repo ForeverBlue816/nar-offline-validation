@@ -747,17 +747,112 @@ Verification is exact on 4 frozen random token rows: both methods have code-matc
 
 Exact timings and verification metadata are in `results/llama32_3b/e17_fused_r4_timings.csv` and `E17_DONE.json`.
 
-# E18 — Qwen3-8B generality
+# E18 v2 — Qwen3 diagnosis and the Base-model rerun
 
-Qwen3-8B has head_dim=128, hidden=4096, and intermediate=12288; group 128 therefore provides 32 q/k/v-input slots and 96 down-input slots. The paired both-sites E5 protocol is unchanged: 128 calibration sequences, 64 WikiText-2 test chunks at context 2048, bf16 weights/KV/all other activations, and dynamic asymmetric group-128 INT4 (4.25 effective bits/value) only at the two target activation sites. One seed is used under the amended execution rule.
+## E18 v1 (Qwen/Qwen3-8B, superseded)
 
-| method | PPL | delta vs bf16 | delta vs Hadamard | effective bits/value |
-|---|---:|---:|---:|---:|
-| bf16 | 12.925526 | +0.000000 | +nan | 16.00 |
-| Hadamard | 13.499615 | +0.574089 | +0.000000 | 4.25 |
-| NAR k=8 | 13.433859 | +0.508333 | -0.065755 | 4.25 |
-| NAR k=max | 12.621483 | -0.304042 | -0.878131 | 4.25 |
+The v1 row set is withdrawn and must not be cited. On 64 chunks it reported bf16 12.925526, Hadamard 13.499615, NAR k=8 13.433859 and NAR k=max 12.621483, i.e. NAR k=max **below** the unquantized model. Per chunk, NAR k=max beat bf16 on **53 of 64** chunks (83%), mean NLL delta -0.023804 with std 0.016826; NAR k=8 beat it on 0/64 (mean +0.038574) and Hadamard on 4/64 (mean +0.043457). An orthogonal rotation followed by a quantizer cannot systematically beat the unquantized model, so the network function had changed. Two independent defects were found, plus a checkpoint-selection error.
 
-NAR k=8 recovers only 11.5% of the Hadamard-to-bf16 gap on this model, substantially less than on the Llama models. NAR k=max recovers 153.0% and yields a PPL 0.3040 below the bf16 row. The latter is reported as a surprising one-seed observation, not a claim that quantization improves the base model: no seed-level CI is estimable, no hyperparameter was tuned, and no confirmation rerun was performed. The paired chunks and weight-fold audits are retained for diagnosis.
+## Step 0 — loss precision
 
-Exact outputs are in `results/qwen3_8b/e18_per_sequence.csv`, `e18_summary.csv`, and `E18_DONE.json`.
+`nar/e18_70b.py:evaluate` computed `F.cross_entropy(...).float()`: the logits were bf16, so log_softmax, the token reduction and the stored value were all bf16 and the cast came too late. Every one of the 256 v1 per-chunk NLLs is exactly bf16-representable (the grid step is ~0.008 at NLL 2.5, and the deltas being measured were ~0.02). The Llama E5/E11/E14 rows are unaffected: they go through `activation_experiments.evaluate_nlls`, which uses the HuggingFace `labels=` loss and upcasts the logits to fp32 first. Only this sharded E18/70B path diverged.
+
+The fix casts the logits to fp32 before `cross_entropy` and asserts the loss dtype. Recomputing only the bf16 row of the *same* checkpoint changes its perplexity from 12.925526 to 12.917326 — a shift of 0.0082, comparable to the effect sizes v1 was reporting.
+
+## Step 1 — rotation-only control (the decisive test)
+
+The E18 pipeline was run with the INT4 quantizer replaced by the identity, on the same 64 chunks and seed 20260902, on the current Qwen/Qwen3-8B so it is comparable to the anomalous run. Every row should reproduce the bf16 row.
+
+| method | fold | rotation-only PPL | dPPL vs bf16 12.917326 | chunks below bf16 | mean dNLL |
+|---|---|---:|---:|---:|---:|
+| Hadamard | v1 weight fold | 12.808083 | **-0.109243** | 61/64 | -0.008493 |
+| NAR k=8 | v1 weight fold | 13.079177 | +0.161851 | 0/64 | +0.012452 |
+| NAR k=max | v1 weight fold | 12.817806 | **-0.099520** | 61/64 | -0.007734 |
+
+**With no quantization anywhere, two of the three rotations already beat bf16 on 61 of 64 chunks.** The anomaly is therefore in the fold, not in the quantizer, and it is not NAR-specific: plain Hadamard shows it too. Logits moved by 1.9%-3.4% relative L2 and the layer-0 output by 0.43%-0.46%.
+
+## Steps 2 and 3a — what is *not* the cause
+
+**Orthogonality (fp32, layers 0/18/35, per site and method).** All rotations are orthogonal to fp32 precision, so a non-orthogonal R is excluded:
+
+| method | site | active reflectors | max \|\|R^T R - I\|\|_max | condition-number bound |
+|---|---|---:|---:|---:|
+| Hadamard | qkv | 32 | 0.000e+00 | 1.0000000 |
+| Hadamard | down | 96 | 9.769e-05 | 1.0000977 |
+| NAR k=8 | qkv | 8 | 3.517e-06 | 1.0000100 |
+| NAR k=8 | down | 8 | 4.053e-05 | 1.0001914 |
+| NAR k=max | qkv | 32 | 1.311e-06 | 1.0000040 |
+| NAR k=max | down | 96 | 3.201e-05 | 1.0001849 |
+
+The bound is `sqrt((1+e)/(1-e))` with `e` the spectral norm of `R^T R - I` obtained by power iteration. Anchor errors are <= 1.0e-05 and the recorded `weight_fold_max_relative_error` is 3.8e-03-4.0e-03 (Llama-3.1-8B E5 max is 3.1e-03).
+
+**Qwen3 architecture.** Audited on the loaded model, not assumed:
+
+- `config.tie_word_embeddings` is **false** on Qwen3-8B and Qwen3-8B-Base, and the embedding and `lm_head` do not share storage. In any case this protocol folds R only into the *consuming* linear's input axis at two activation sites; there is no R1 residual-stream rotation, no embedding or `lm_head` fold and no R2 head_dim rotation, so a double-application through tying is structurally impossible here.
+- Qwen3's per-head `q_norm`/`k_norm` are present (72 modules over 36 layers) and are **untouched**: the pipeline performs no RMSNorm gamma fusion at all. It hooks the *output* of `input_layernorm`, which already contains gamma, exactly as the Llama E5 protocol does.
+- No linear in the model carries a bias (`attention_bias` false, and the audit enumerates zero `nn.Linear` modules with a bias), so no bias needs rotating.
+- head_dim 128, hidden 4096, intermediate 12288, giving 32 q/k/v-input slots and 96 down-input slots at group 128.
+
+## The root cause and the fix
+
+`ShardedWeights.rotate_all` folded R into the consuming weight and wrote the result back **in bf16**. `R W` is a dense mixture of the original rows, so re-rounding it to bf16 injects a ~0.4% rotation-dependent perturbation that the bf16 baseline row does not carry — a comparison bug, even though each row is individually a valid quantized model. Its sign depends on the rotation, which is how a quantized row came to beat bf16.
+
+The fix removes the weight fold from the measurement entirely. Since `W R^T R x = W x`, fake-quantizing as
+
+    x  ->  R^T Q(R x)
+
+is the same operator, applied at the activation, with **every row on identical weights and identical kernels**; the only difference measured is the quantizer. The hand-derived transposes (`G^T P^-1 S H` for NAR, and the untransposed Paley factor for the full Hadamard) are guarded by a round-trip check: `||R^T R x - x|| / ||x||` is 1.2e-07-2.9e-07 at both sites for all methods.
+
+Re-running Step 1 on the same Qwen/Qwen3-8B checkpoint with the exact fold:
+
+| method | fold | rotation-only PPL | dPPL vs bf16 | chunks below bf16 | mean dNLL |
+|---|---|---:|---:|---:|---:|
+| Hadamard | exact transpose | 12.920415 | +0.003089 | 32/64 | +0.000239 |
+| NAR k=8 | exact transpose | 12.979796 | +0.062470 | 5/64 | +0.004824 |
+| NAR k=max | exact transpose | 13.097875 | +0.180549 | 0/64 | +0.013900 |
+
+The systematic advantage is gone: Hadamard is now unbiased at 32/64, and no row is below bf16 on balance. A small positive offset remains, ordered by how strongly the rotation concentrates energy, and it is a residual precision cost of the round trip; Step 4 controls for it by pairing.
+
+## Step 4 — Qwen3-8B-Base
+
+The v1 checkpoint was `Qwen/Qwen3-8B`, the post-trained (thinking) model; its bf16 WikiText-2 perplexity of 12.92 reflects that. Perplexity benchmarking belongs on `Qwen/Qwen3-8B-Base`, whose bf16 perplexity here is **8.823410**. The v1 checkpoint has been deleted from the cache.
+
+Protocol: E5 unchanged except as stated — 128 calibration sequences from the train split, dynamic asymmetric group-128 INT4 (4.25 effective bits/value) at the q/k/v-input and down-input sites only, bf16 weights/KV/everything else, one seed, exact-transpose fold, fp32 per-chunk NLL. Evaluation uses the **full WikiText-2 test set**: 146 non-overlapping context windows at 2048. Calibration is drawn from `train` and evaluation from `test`, so the chunk sets cannot overlap; the run asserts the splits differ.
+
+| method | PPL | delta vs bf16 | delta vs Hadamard | recovered (vs bf16) | rotation-only offset | quantization cost | recovered (control-corrected) | chunks below bf16 | eff. bits |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| bf16 | 8.823410 | +0.000000 | -0.441665 | — | — | — | — | 0/146 | 16.00 |
+| Hadamard | 9.265075 | +0.441665 | +0.000000 | 0.000 | +0.003638 | +0.438027 | 0.000 | 5/146 | 4.25 |
+| NAR k=8 | 9.003966 | +0.180556 | -0.261109 | 0.591 | +0.022420 | +0.158136 | 0.639 | 13/146 | 4.25 |
+| NAR k=16 | 9.035522 | +0.212112 | -0.229553 | 0.520 | +0.026739 | +0.185373 | 0.577 | 5/146 | 4.25 |
+| NAR k=32 | 8.887143 | +0.063733 | -0.377932 | 0.856 | +0.021270 | +0.042463 | 0.903 | 47/146 | 4.25 |
+| NAR k=64 | 8.824087 | +0.000677 | -0.440988 | 0.998 | +0.025160 | -0.024483 | 1.056 | 69/146 | 4.25 |
+| NAR k=max (96) | 8.823651 | +0.000241 | -0.441424 | 0.999 | +0.022508 | -0.022267 | 1.051 | 70/146 | 4.25 |
+
+`rotation-only offset` is the same rotation evaluated with the identity quantizer, paired chunk by chunk; `quantization cost` is the row minus its own control. **Every row is at or above bf16** (`delta vs bf16` >= 0), so the stop condition is not triggered. At k >= 64 the two-site INT4 activation quantization costs essentially nothing on this model: +0.0007 and +0.0002 PPL, and the per-chunk sign is balanced (69/146 and 70/146) rather than the 83% of v1.
+
+The control-corrected column over-corrects at k >= 64, where it turns slightly negative (-0.024 at k=64, -0.022 at k=max). The two errors are not additive: the round-trip artifact that the control isolates is swamped by the much larger INT4 error in the quantized row, so subtracting it removes more than it should. The honest reading is that the true quantization cost at k >= 64 lies between 0 and ~0.025 PPL, and the uncorrected `delta vs bf16` column is the conservative primary.
+
+### Theory check against the sqrt(1-f) law
+
+Mean captured energy `f(k)` over the 36 layers of the Base-model calibration eigenspace, with the predicted range reduction `1 - sqrt(1-f)`:
+
+| k | f(k) qkv | pred. reduction qkv | f(k) down | pred. reduction down | observed recovery |
+|---:|---:|---:|---:|---:|---:|
+| 8 | 0.5102 | 0.300 | 0.1941 | 0.102 | 0.591 |
+| 16 | 0.5654 | 0.341 | 0.2224 | 0.118 | 0.520 |
+| 32 | 0.6202 | 0.384 | 0.2583 | 0.139 | 0.856 |
+| 64 | 0.6202 (capped) | 0.384 | 0.3017 | 0.164 | 0.998 |
+| 96 | 0.6202 (capped) | 0.384 | 0.3284 | 0.180 | 0.999 |
+
+The q/k/v site has only 32 group-128 slots on Qwen3, so k=64 and k=max are capped to rank 32 there and only the down site's rank grows beyond 32.
+
+The v1 claim that "NAR k=8 recovers only 11.5% of the Hadamard gap on Qwen3" does not survive the fixes: on the Base model with fp32 losses and the exact fold, **NAR k=8 recovers 59.1% of the Hadamard-to-bf16 gap** (63.9% control-corrected), which is in the same regime as Llama-3.1-8B's 74% and consistent with Qwen3's *higher* captured energy at k=8 (qkv 0.510 vs Llama's 0.301). The stated tension between the eigenspace data and the observed recovery was an artifact of the two defects, not a property of the model.
+
+One anomaly is reported without adjustment: recovery is **not monotone** in k between k=8 (0.591) and k=16 (0.520). No hyperparameter was tuned and no confirmation rerun was performed; with one seed and no per-seed CI this is recorded as an open observation, not a result.
+
+Exact outputs are in `results/qwen3_8b_base/` (`e18v2_per_sequence.csv` with fp32 NLLs, `e18v2_summary.csv`, `e18v2_f_of_k.csv`, `e18v2_rotation_only_control.csv`, `e18v2_orthogonality_audit.csv`, `e18v2_calibration_eigenspace.csv`, `E18V2_DONE.json`, `e18v2_fold_audit.json`) and the diagnosis on the superseded checkpoint in `results/qwen3_8b/` (`e18v2_rotation_only_control_weight_fold.csv` for the pre-fix control, `e18v2_rotation_only_control.csv` for the post-fix control, `e18v2_orthogonality_audit.csv`, `e18v2_fold_audit.json`). Code is in `nar/e18_v2.py` and `nar/e18_70b.py`.
+
+### Carry-over to the Llama rows
+
+The bf16 loss defect is confined to the sharded E18/70B path. The weight-fold comparison bug is **not**: `activation_experiments` folds the rotation into the consuming weight and stores it in bf16 for the E5/E11/E14 Llama rows too, and those runs record `weight_fold_max_relative_error` up to 3.1e-03. On Llama the quantization penalty (~0.5 PPL) is an order of magnitude larger than the fold artifact measured here (0.003-0.18 PPL), so the sign of those results is not in question, but the artifact is not negligible relative to the NAR-versus-Hadamard *differences* and the Llama rows have not been re-measured under the exact-transpose fold. This is recorded as an open item, not as a correction to those tables.

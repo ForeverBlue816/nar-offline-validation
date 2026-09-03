@@ -1,0 +1,152 @@
+{
+  "architecture_audit": {
+    "architecture": "Qwen3ForCausalLM",
+    "attention_bias": false,
+    "embedding_and_lm_head_share_storage": false,
+    "folded_weights": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "down_proj"
+    ],
+    "folds_embedding_or_lm_head": false,
+    "head_dim": 128,
+    "head_dim_rotation_r2": false,
+    "hidden_size": 4096,
+    "intermediate_size": 12288,
+    "linear_modules_with_bias": [],
+    "max_gram_deviation": 9.769201278686523e-05,
+    "model_id": "Qwen/Qwen3-8B-Base",
+    "num_hidden_layers": 36,
+    "orthogonality_audit_layers": [
+      0,
+      18,
+      35
+    ],
+    "per_head_qk_norm_left_untouched": true,
+    "per_head_qk_norm_modules": 72,
+    "quantized_sites": [
+      "input_layernorm output (q/k/v_proj input)",
+      "down_proj input"
+    ],
+    "residual_stream_rotation_r1": false,
+    "rms_norm_eps": 1e-06,
+    "rmsnorm_gamma_fusion_performed": false,
+    "rmsnorm_module_kinds": [
+      "input_layernorm",
+      "k_norm",
+      "norm",
+      "post_attention_layernorm",
+      "q_norm"
+    ],
+    "slot_counts": {
+      "down": 96,
+      "qkv": 32
+    },
+    "tie_word_embeddings": false
+  },
+  "factor_root": "/projects/_hdd/nar/nar-validation/activations/qwen3_8b_base/e18v2_factors",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-pro6000-3.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-01028339-4041-385f-06f0-f6db221b7491, 97887 MiB, 80883 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "3",
+    "slurm_job_id": "137951",
+    "torch": "2.11.0+cu128"
+  },
+  "rotation_only_control": [
+    {
+      "bf16_ppl": 8.823410419427475,
+      "check_rows": 64,
+      "chunks": 146,
+      "chunks_below_bf16": 67,
+      "fold": "exact_transpose",
+      "layer0_max_abs_difference": 0.00390625,
+      "layer0_relative_l2": 0.00033459701808169484,
+      "logits_max_abs_difference": 0.5,
+      "logits_relative_l2": 0.005591168534010649,
+      "max_abs_nll_delta": 0.008312225341796875,
+      "mean_nll_delta": 0.00041218571466942355,
+      "method": "hadamard",
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "passed": false,
+      "ppl_abs_difference": 0.0036376333683048045,
+      "quantizer": "identity",
+      "required_max_abs_nll_delta": 0.001,
+      "required_ppl_abs_difference": 0.01,
+      "required_relative_l2": 0.001,
+      "rotation_only_ppl": 8.82704805279578,
+      "roundtrip_relative_error_down": 1.5644177153717465e-07,
+      "roundtrip_relative_error_qkv": 1.333712020823441e-07,
+      "seed": 20260902,
+      "std_nll_delta": 0.0022994896275687375,
+      "weight_fold_max_relative_error": 0.0
+    },
+    {
+      "bf16_ppl": 8.823410419427475,
+      "check_rows": 64,
+      "chunks": 146,
+      "chunks_below_bf16": 26,
+      "fold": "exact_transpose",
+      "layer0_max_abs_difference": 0.001953125,
+      "layer0_relative_l2": 2.190205304941628e-05,
+      "logits_max_abs_difference": 1.625,
+      "logits_relative_l2": 0.007616266142576933,
+      "max_abs_nll_delta": 0.10646891593933105,
+      "mean_nll_delta": 0.0025376848978539038,
+      "method": "nar_k8",
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "passed": false,
+      "ppl_abs_difference": 0.022419470112817308,
+      "quantizer": "identity",
+      "required_max_abs_nll_delta": 0.001,
+      "required_ppl_abs_difference": 0.01,
+      "required_relative_l2": 0.001,
+      "rotation_only_ppl": 8.845829889540292,
+      "roundtrip_relative_error_down": 1.5200650693714124e-07,
+      "roundtrip_relative_error_qkv": 1.2616185074421082e-07,
+      "seed": 20260902,
+      "std_nll_delta": 0.010504814010152482,
+      "weight_fold_max_relative_error": 0.0
+    },
+    {
+      "bf16_ppl": 8.823410419427475,
+      "check_rows": 64,
+      "chunks": 146,
+      "chunks_below_bf16": 20,
+      "fold": "exact_transpose",
+      "layer0_max_abs_difference": 0.0009765625,
+      "layer0_relative_l2": 1.6223475540755317e-05,
+      "logits_max_abs_difference": 3.25,
+      "logits_relative_l2": 0.015623499639332294,
+      "max_abs_nll_delta": 0.11791133880615234,
+      "mean_nll_delta": 0.0025476437725432933,
+      "method": "nar_kmax",
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "passed": false,
+      "ppl_abs_difference": 0.02250756506287388,
+      "quantizer": "identity",
+      "required_max_abs_nll_delta": 0.001,
+      "required_ppl_abs_difference": 0.01,
+      "required_relative_l2": 0.001,
+      "rotation_only_ppl": 8.845917984490349,
+      "roundtrip_relative_error_down": 2.947276414033695e-07,
+      "roundtrip_relative_error_qkv": 1.8559748582447355e-07,
+      "seed": 20260902,
+      "std_nll_delta": 0.01175326919275872,
+      "weight_fold_max_relative_error": 0.0
+    }
+  ]
+}
