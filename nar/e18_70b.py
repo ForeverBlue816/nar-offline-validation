@@ -408,13 +408,22 @@ def run(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     base.setup_logging(workdir, f"e18-{args.model_key}")
     base.seed_everything(args.seed)
+    result_dir = workdir / "results" / args.model_key
+    done = result_dir / "E18_DONE.json"
+    if done.exists():
+        # Idempotence guard. The 4-GPU and 8-GPU launchers are queued together
+        # as a race for whichever GPU count frees up first; only one can run at
+        # a time under the per-user GPU limit, and the loser must not re-run a
+        # completed experiment if it is scheduled later. Same reason the
+        # calibration step already skips on its own checkpoint.
+        LOG.info("E18 checkpoint exists, nothing to do: %s", done)
+        return
     model = load_sharded_model(args.model_id, workdir)
     layers = selected_layers(model, args.max_layers)
     dimensions = {"qkv": int(model.config.hidden_size), "down": int(model.config.intermediate_size)}
     LOG.info("E18 dimensions=%s layers=%d slots=%s", dimensions, layers, {k: v // GROUP for k, v in dimensions.items()})
     calibrate(args, model, args.model_id, args.model_key, dimensions, layers)
     tokens = base.prepare_token_chunks(args.model_id, "test", 0, args.eval_sequences, args.seq_len, workdir)
-    result_dir = workdir / "results" / args.model_key
     partial = result_dir / "e18_per_sequence.partial.csv"
     rows: list[dict[str, Any]] = base.read_csv(partial) if partial.exists() else []
     completed = {str(row["method"]) for row in rows}
