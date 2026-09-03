@@ -524,6 +524,23 @@ To separate alignment from mixing width, the missing seeded block-H128 row appli
 
 On q_input, H128-only and aligned H128 are effectively tied under MSE-optimal scaling (0.00659000 vs 0.00659209; aligned is 0.032% worse), and H128-only is 2.70% better under absmax. Thus q_input's b=128 FP4 behavior is a mixing-width effect; NAR alignment contributes nothing beyond wider Hadamard mixing in this control.
 
-On down_input, H128-only improves over H16-only by 13.9% under absmax and 31.0% under MSE-optimal, so mixing width explains a substantial part. Aligned H128 then improves over H128-only by a further 24.9% and 26.4%, respectively, while reducing the worst-1% error share from 63.7% to 59.5% and from 45.3% to 38.8%. Therefore down_input is **not** an H128-only result: alignment adds a measurable contribution beyond width. Since E2M1 has no zero-point, that contribution remains a directional outlier-redistribution effect, not DC/null-space evidence.
+On down_input, H128-only improves over H16-only by 13.9% under absmax and 31.0% under MSE-optimal, so mixing width explains a substantial part. Aligned H128 then improves over H128-only by a further 24.9% and 26.4%, respectively, while reducing the worst-1% error share from 63.7% to 59.5% and from 45.3% to 38.8%. The final permutation-only control below attributes this residual specifically to G(V), rather than to Pi load balancing. Since E2M1 has no zero-point, the contribution remains directional outlier separation, not DC/null-space evidence.
 
 The added raw control is `results/llama32_3b/e15_h128_control.csv`; the per-layer file is retained alongside it.
+
+## E15 final permutation-versus-direction control
+
+The decision rule was fixed before the run: for down_input with MSE-optimal scaling, define Pi recovery as `(NMSE_H128 - NMSE_H128+Pi)/(NMSE_H128 - NMSE_aligned-H128)`. Recovery >=70% is attributed to cross-group load balancing, recovery <=30% to directional separation by G(V), and an intermediate value receives no single-cause label. The only new quantization row applies the frozen NAR-b128 `source_order/target_order` Pi, then the frozen signs and block H128, with every Householder in G(V) omitted. Existing rows were not requantized; they were transformed again only for the new energy-dispersion diagnostic.
+
+Each cell is `global NMSE / worst-1% error share / mean token group-energy CV`. The CV is the population coefficient of variation across per-128-group signal energies for each token, averaged over the identical sampled tokens and layers.
+
+| site | scale | H128 only | H128 + Pi only | aligned H128 (NAR-b128) | H16 only |
+|---|---|---|---|---|---|
+| q_input | absmax | 0.00917609 / 0.0528 / 0.4950 | 0.00914655 / 0.0483 / 0.4655 | 0.00942352 / 0.0951 / 0.9759 | 0.00949634 / 0.1192 / 0.4950 |
+| q_input | MSE-optimal | 0.00659000 / 0.0466 / 0.4950 | 0.00659067 / 0.0425 / 0.4655 | 0.00659209 / 0.0818 / 0.9759 | 0.00657511 / 0.0994 / 0.4950 |
+| down_input | absmax | 0.00199692 / 0.6366 / 1.0682 | 0.00220798 / 0.6694 / 1.0625 | 0.00150053 / 0.5950 / 1.3217 | 0.00231981 / 0.7376 / 1.0682 |
+| down_input | MSE-optimal | 0.000947645 / 0.4532 / 1.0682 | 0.00106927 / 0.5115 / 1.0625 | 0.000697182 / 0.3878 / 1.3217 | 0.00137337 / 0.6957 / 1.0682 |
+
+The pre-registered down_input MSE-optimal recovery is **-0.4856**: Pi-only worsens H128 by 0.00012162 instead of closing the 0.00025046 H128-to-aligned gap. It also changes group-energy CV only from 1.0682 to 1.0625. The rule therefore attributes the residual FP4 gain to **directional separation by G(V)**, not load balancing across groups. G(V) must overcome the Pi degradation and supplies a 0.00037208 improvement from Pi-only to aligned H128. The aligned transform's CV actually rises to 1.3217 while NMSE falls, so group-energy uniformity cannot explain the gain.
+
+For q_input, Pi-only and H128-only remain effectively tied under MSE-optimal scaling (0.00659067 vs 0.00659000), as does aligned H128 (0.00659209). This preserves the earlier boundary: q_input is a mixing-width result with no measurable alignment benefit. Exact combined rows are in `results/llama32_3b/e15_alignment_width_pi_control.csv`; per-layer CVs and the frozen decision metadata are retained alongside it.

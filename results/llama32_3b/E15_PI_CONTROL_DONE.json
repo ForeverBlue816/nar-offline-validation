@@ -1,0 +1,46 @@
+{
+  "decision": {
+    "aligned_h128_nmse": 0.0006971822496278072,
+    "attribution": "directional_separation_by_GV",
+    "h128_only_nmse": 0.0009476454295615472,
+    "h128_pi_nmse": 0.0010692650996672627,
+    "pi_gap_recovery_fraction": -0.4855790385552477,
+    "pi_improvement": -0.0001216196701057155,
+    "remaining_GV_improvement": 0.0003720828500394555,
+    "scale_rule": "mse_optimal",
+    "site": "down_input",
+    "thresholds": {
+      "directional_at_or_below": 0.3,
+      "load_balance_at_or_above": 0.7
+    },
+    "total_gap": 0.00025046317993374003
+  },
+  "decision_rule_preregistered_before_run": "down_input MSE-optimal Pi recovery >=0.70 => load balancing; <=0.30 => G(V) directional separation; otherwise mixed",
+  "existing_rows_recomputed_only_for_new_diagnostic": "per-token group-128 signal-energy CV",
+  "existing_rows_rerun": false,
+  "group_energy_dispersion": "population coefficient of variation across per-128-group signal energies, then mean over identical sampled tokens and layers",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-3.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-b82432db-af48-c9bc-7d38-9bc1f22c4f53, 32607 MiB, 31330 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137578",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "llama32_3b",
+  "negative_results_reported": true,
+  "new_row": "H128 + frozen NAR Pi only; no G(V)",
+  "no_tuning": true,
+  "pi_source": "source_order/target_order from frozen preregistered NAR-b128 factor checkpoint",
+  "sample_stride": 128,
+  "seed": 20260902
+}
