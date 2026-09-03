@@ -17,9 +17,10 @@ except ImportError:
 
 LABELS = {
     "llama32_3b": "Llama-3.2-3B", "llama31_8b": "Llama-3.1-8B",
-    "quarot": "QuaRot Hadamard + symmetric token A4",
+    "quarot_released": "QuaRot released A4 + Hadamard",
     "hadamard_asym_g128": "QuaRot Hadamard + asymmetric g128 A4",
-    "nar_asym_g128": "NAR R1/R2/R4 + asymmetric g128 A4",
+    "nar_k8_asym_g128": "NAR k=8 R1/R4 + NAR R2 + asymmetric g128 A4",
+    "nar_kmax_asym_g128": "NAR k=max R1/R4 + NAR R2 + asymmetric g128 A4",
 }
 
 
@@ -41,15 +42,12 @@ def build(args: argparse.Namespace) -> None:
     frame = pd.read_csv(workdir / "results" / "e14_w4a4kv4_summary.csv")
     frame["model"] = frame.model.map(LABELS)
     frame["row"] = frame.row.map(LABELS)
-    reference = frame[frame.row == LABELS["quarot"]].set_index("model")
-    frame["ppl_delta_vs_quarot"] = frame.apply(
-        lambda row: row.ppl - reference.loc[row.model].ppl, axis=1
-    )
-    frame["mean_acc_delta_vs_quarot"] = frame.apply(
-        lambda row: row.mean_accuracy - reference.loc[row.model].mean_accuracy, axis=1
-    )
-    columns = ["model", "row", "ppl", "ppl_delta_vs_quarot", "mean_accuracy",
-               "mean_acc_delta_vs_quarot", "piqa", "arc_easy", "arc_challenge",
+    columns = ["model", "row", "seeds", "ppl", "paired_ppl_delta_vs_hadamard",
+               "paired_ppl_ci90_low", "paired_ppl_ci90_high", "mean_accuracy",
+               "paired_accuracy_delta_vs_hadamard", "paired_accuracy_ci90_low",
+               "paired_accuracy_ci90_high", "w4_effective_bits", "a4_qkv_effective_bits",
+               "a4_down_effective_bits", "k4_effective_bits_at_ctx2048",
+               "v4_effective_bits_at_ctx2048", "piqa", "arc_easy", "arc_challenge",
                "hellaswag", "winogrande", "lambada_openai"]
     report_path = workdir / "report.md"
     report = report_path.read_text()
@@ -60,8 +58,9 @@ def build(args: argparse.Namespace) -> None:
         "# E14 — end-to-end W4A4KV4\n",
         "Weights use the GPTQ implementation and fixed clipping search from spcl/QuaRot commit 5008669b08c1f11f9b64d52d16fddd47ca754c5a: symmetric W4 per output channel, one group across the full input row, MSE norm 2.4, grid 100, max shrink 0.8, block 128, damp 0.01, no act order, and 128 fixed WikiText-2 calibration sequences. Embeddings and lm_head remain bf16 as in the upstream fake-quant path.\n",
         _table(frame[columns]) + "\n",
-        "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with the standard R=128 residual policy. Completed 128-token K residual chunks are quantized together, so each query sees 1..128 recent bf16 K tokens; V keeps the latest 128 tokens bf16 and quantizes older values per token over one 128-channel head group. This replaces QuaRot R3/per-token K in all rows. Hadamard rows use QuaRot's random-sign R1 and exact unsigned R2/R4; the NAR row uses calibrated global R1, per-layer per-head R2, and per-layer R4.\n",
-        "The first row preserves upstream symmetric per-token A4 semantics. The other two quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. Zero-shot evaluation uses batch size one so padding cannot shift KIVI's token-group boundaries. The same seed, GPTQ calibration chunks, full contiguous WikiText-2 test stream, harness revision, prompts, tasks, and metrics are paired. This is a frozen one-seed end-to-end check, so no confidence interval is claimed.\n",
+        "Every row uses post-RoPE KIVI-style K4: dynamic asymmetric per-channel quantization over contiguous 32-token groups, with residual window R=32. V keeps the latest 32 tokens bf16 and quantizes older values dynamically asymmetric per token over one 128-channel head group. The Q/K rotation used by released QuaRot's per-token K path is omitted because per-channel K replaces it for every row. Hadamard rows retain random-sign R1, per-head V Hadamard plus the cross-head o_proj factor, and R4. NAR rows use calibrated global R1, per-layer per-head R2, and per-layer R4 at k=8 or k=max.\n",
+        "The first row preserves upstream symmetric per-token A4 semantics while using the common KIVI K policy. The other rows quantize inputs to q/k/v/o/gate/up/down with fp16-scale/fp16-offset asymmetric group-128 A4. GPTQ uses the released seed-0 random-window sampler: 128 WikiText-2 train windows of length 2048. Rows 2–4 use three paired rotation seeds and two-sided 90% Student-t intervals over seed-level differences. Zero-shot evaluation uses batch size one so padding cannot shift token-group boundaries.\n",
+        "Effective bits include metadata separately for W, A, K, and V; they are not summed across tensors. Asymmetric group-128 A4 is 4+(16+16)/128=4.25 bits/value. Cache columns include the 32-token bf16 residual at context 2048.\n",
         "E12 already shows that the current unfused NAR R4 is not deployable: even a favorable quality result here does not override that engineering failure. All negative task and PPL deltas are retained.\n",
     ]
     report_path.write_text(report.rstrip() + "\n\n" + "\n".join(section))

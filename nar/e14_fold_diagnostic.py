@@ -100,8 +100,9 @@ def _apply_stages(model: torch.nn.Module, rotations: RotationSet, stages: set[st
         if "r2" in stages:
             weight = block.self_attn.o_proj.weight.detach()
             shaped = weight.reshape(weight.shape[0], heads, head_dim)
-            rotated = rotations.apply("r2", layer, shaped.reshape(-1, head_dim)).to(weight.dtype)
-            weight.copy_(rotated.reshape_as(shaped).reshape_as(weight))
+            rotated = rotations.apply("r2", layer, shaped.reshape(-1, head_dim)).reshape_as(shaped)
+            rotated = rotations.apply_r3(rotated.reshape_as(weight)).to(weight.dtype)
+            weight.copy_(rotated.reshape_as(weight))
         if "r4" in stages:
             _right(block.mlp.down_proj,
                    lambda value, layer=layer: rotations.apply("r4", layer, value), batch)
@@ -116,6 +117,10 @@ class _OnlineStages:
                     shape = output.shape
                     return rotations.apply("r2", layer, output.reshape(-1, rotations.head_dim)).reshape(shape).to(output.dtype)
                 self.handles.append(block.self_attn.v_proj.register_forward_hook(rotate_v))
+                if rotations.method == "hadamard":
+                    def rotate_o(_module, inputs):
+                        return (rotations.apply_r3(inputs[0]).to(inputs[0].dtype),) + inputs[1:]
+                    self.handles.append(block.self_attn.o_proj.register_forward_pre_hook(rotate_o))
         if "r4" in stages:
             for layer, block in enumerate(model.model.layers):
                 def rotate_down(_module, inputs, layer=layer):
@@ -177,7 +182,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workdir", required=True)
     parser.add_argument("--model", choices=("llama32_3b", "llama31_8b"), default="llama32_3b")
-    parser.add_argument("--rotation", choices=("hadamard", "nar"), default="hadamard")
+    parser.add_argument("--rotation", choices=("hadamard", "nar_k8", "nar_kmax"), default="hadamard")
     parser.add_argument("--seed", type=int, default=20260902)
     parser.add_argument("--seq-len", type=int, default=2048)
     parser.add_argument("--tokens", type=int, default=128)

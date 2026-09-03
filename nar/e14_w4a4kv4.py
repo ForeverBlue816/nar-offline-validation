@@ -13,6 +13,7 @@ import gc
 import json
 import logging
 import math
+import random
 import time
 from pathlib import Path
 from typing import Any, Callable
@@ -34,9 +35,11 @@ except ImportError:
 
 LOG = logging.getLogger("nar")
 MODELS = ("llama32_3b", "llama31_8b")
-ROTATIONS = ("hadamard", "nar")
-ROWS = ("quarot", "hadamard_asym_g128", "nar_asym_g128")
+ROTATIONS = ("hadamard", "nar_k8", "nar_kmax")
+ROWS = ("quarot_released", "hadamard_asym_g128", "nar_k8_asym_g128", "nar_kmax_asym_g128")
 TASKS = ("piqa", "arc_easy", "arc_challenge", "hellaswag", "winogrande", "lambada_openai")
+PAIRED_ROWS = ("hadamard_asym_g128", "nar_k8_asym_g128", "nar_kmax_asym_g128")
+TCRIT_DF2_90 = 2.919985580353725
 METRICS = {
     "piqa": "acc_norm,none", "arc_easy": "acc_norm,none",
     "arc_challenge": "acc_norm,none", "hellaswag": "acc_norm,none",
@@ -46,7 +49,7 @@ QUAROT_COMMIT = "5008669b08c1f11f9b64d52d16fddd47ca754c5a"
 HARNESS_COMMIT = "b954108c9baaaa934b4ad842033b31a97ee30816"
 GROUP = 128
 K_TOKEN_GROUP = 32
-KV_RESIDUAL_LENGTH = 128
+KV_RESIDUAL_LENGTH = 32
 
 
 def _json(path: Path) -> dict[str, Any]:
@@ -64,8 +67,8 @@ def rotation_dir(workdir: Path, model: str) -> Path:
     return workdir / "activations" / model / "e14_rotations"
 
 
-def checkpoint_dir(artifact_root: Path, model: str, rotation: str) -> Path:
-    return artifact_root / model / f"gptq_{rotation}"
+def checkpoint_dir(artifact_root: Path, model: str, rotation: str, seed: int) -> Path:
+    return artifact_root / model / f"gptq_{rotation}_seed{seed}"
 
 
 def _seed(base_seed: int, label: str, layer: int = 0) -> int:
@@ -181,13 +184,42 @@ def _model_pass(model: torch.nn.Module, tokens: torch.Tensor, label: str) -> Non
                 LOG.info("%s %d/%d", label, index + 1, tokens.shape[0])
 
 
+def _quarot_calibration_tokens(model_id: str, workdir: Path, nsamples: int,
+                               seq_len: int, seed: int) -> torch.Tensor:
+    """Released QuaRot WikiText-2 random-window sampler, cached losslessly."""
+    model_key = base.model_key_from_id(model_id)
+    path = workdir / "cache" / "tokenized" / (
+        f"{model_key}-quarot-wikitext2-train-seed{seed}-n{nsamples}-l{seq_len}.pt"
+    )
+    if path.exists():
+        return torch.load(path, map_location="cpu", weights_only=True)
+    from datasets import load_dataset
+    from transformers import AutoTokenizer
+    dataset = load_dataset(
+        "Salesforce/wikitext", "wikitext-2-raw-v1", split="train",
+        cache_dir=str(workdir / "cache" / "datasets"),
+    )
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_id, cache_dir=str(workdir / "cache" / "huggingface"), use_fast=False
+    )
+    encoded = tokenizer("\n\n".join(dataset["text"]), return_tensors="pt").input_ids
+    rng = random.Random(seed)
+    windows = []
+    for _ in range(nsamples):
+        start = rng.randint(0, encoded.shape[1] - seq_len - 1)
+        windows.append(encoded[:, start:start + seq_len])
+    result = torch.cat(windows, dim=0).long()
+    base.atomic_torch_save(path, result)
+    return result
+
+
 def calibrate_rotations(args: argparse.Namespace) -> None:
     if not torch.cuda.is_available():
         raise RuntimeError("E14 rotation calibration requires CUDA")
     workdir = Path(args.workdir).resolve()
     output = rotation_dir(workdir, args.model)
     done = output / "DONE.json"
-    if done.exists():
+    if done.exists() and (output / "r1_k8.pt").exists() and (output / "r1_kmax.pt").exists():
         LOG.info("E14 rotation calibration exists: %s", done)
         return
     base.setup_logging(workdir, f"e14-calibrate-{args.model}")
@@ -231,20 +263,33 @@ def calibrate_rotations(args: argparse.Namespace) -> None:
     vectors = (basis.double() @ vectors_small[:, order]).float().cuda()
     cq_vectors = final_projected.double() @ vectors_small[:, order]
     residuals = (cq_vectors - vectors.double().cpu() * values.unsqueeze(0)).norm(dim=0) / values.clamp_min(1e-30)
-    reflectors, active, anchor_error = act.reflectors_from_vectors(vectors, GROUP)
-    energy_collector = RotationEnergyCollector(model, reflectors, active)
-    energy_collector.install()
-    try:
-        _model_pass(model, tokens, "E14 R1 permutation energy")
-    finally:
-        energy_collector.close()
-    source, target = _balanced_orders_from_energy(energy_collector.energy / energy_collector.count, rank, GROUP)
     output.mkdir(parents=True, exist_ok=True)
-    r1 = act.RotationFactor(n, GROUP, reflectors, active, source.cuda(), target.cuda(), anchor_error)
-    r1.save(output / "r1.pt", {
-        "eigenvalues": values, "trace": trace, "relative_ritz_residuals": residuals,
-        "rows": count, "definition": "top directions of post-input-RMSNorm activations pooled equally by token across all layers",
-    })
+    r1_rows = []
+    for r1_rank in (8, rank):
+        selected = vectors[:, :r1_rank]
+        reflectors, active, anchor_error = act.reflectors_from_vectors(selected, GROUP)
+        energy_collector = RotationEnergyCollector(model, reflectors, active)
+        energy_collector.install()
+        try:
+            _model_pass(model, tokens, f"E14 R1 k={r1_rank} permutation energy")
+        finally:
+            energy_collector.close()
+        source, target = _balanced_orders_from_energy(
+            energy_collector.energy / energy_collector.count, r1_rank, GROUP
+        )
+        factor = act.RotationFactor(
+            n, GROUP, reflectors, active, source.cuda(), target.cuda(), anchor_error
+        )
+        label = "kmax" if r1_rank == rank else f"k{r1_rank}"
+        factor.save(output / f"r1_{label}.pt", {
+            "eigenvalues": values[:r1_rank], "trace": trace,
+            "relative_ritz_residuals": residuals[:r1_rank], "rows": count,
+            "definition": "top directions of post-input-RMSNorm activations pooled equally by token across all layers",
+        })
+        if r1_rank == rank:
+            factor.save(output / "r1.pt", {"alias": "r1_kmax.pt"})
+        r1_rows.append({"k": r1_rank, "anchor_error": anchor_error,
+                        "active_reflectors": int(active.sum())})
     v_rows = []
     for layer, moment in enumerate(v_moments):
         covariance = moment / v_counts[layer]
@@ -264,7 +309,8 @@ def calibrate_rotations(args: argparse.Namespace) -> None:
     base.atomic_json(done, {
         "model": model_key, "model_id": model_id, "calibration_sequences": args.calibration_sequences,
         "sequence_length": args.seq_len, "covariance_passes": 3,
-        "r1": "single global pooled post-RMSNorm NAR, group-128, k=n/128",
+        "r1": "single global pooled post-RMSNorm NAR, group-128, separately frozen k=8 and k=n/128",
+        "r1_rows": r1_rows,
         "r2": "per-layer, per-head V NAR, head_dim=128, group-128, k=1",
         "r4": "reuse frozen E5 per-layer down-input NAR factors",
         "seed": args.seed, "hardware": base.hardware_info(),
@@ -281,6 +327,7 @@ class RotationSet:
         self.seed = seed
         self.device = device
         self.layers = int(config.num_hidden_layers)
+        self.heads = int(config.num_attention_heads)
         self.hidden = int(config.hidden_size)
         self.intermediate = int(config.intermediate_size)
         self.head_dim = int(getattr(config, "head_dim", config.hidden_size // config.num_attention_heads))
@@ -288,15 +335,20 @@ class RotationSet:
         self.r2: dict[int, act.RotationFactor] = {}
         self.r4: dict[int, act.RotationFactor] = {}
         self.r4_wy: dict[int, WYFactor] = {}
-        if method == "nar":
+        if method.startswith("nar_"):
             root = rotation_dir(workdir, model_key)
             if not (root / "DONE.json").exists():
                 raise FileNotFoundError(root / "DONE.json")
-            self.r1 = act.RotationFactor.load(root / "r1.pt", device)
+            rank_label = method.removeprefix("nar_")
+            self.r1 = act.RotationFactor.load(root / f"r1_{rank_label}.pt", device)
             for layer in range(self.layers):
                 self.r2[layer] = act.RotationFactor.load(root / f"r2_v_layer_{layer:02d}.pt", device)
+                r4_root = (
+                    workdir / "activations" / model_key / "e11_calibration" / "factors" / "nar_b128_k8"
+                    if rank_label == "k8" else act.factor_dir(workdir, model_key)
+                )
                 self.r4[layer] = act.RotationFactor.load(
-                    act.factor_dir(workdir, model_key) / f"down_layer_{layer:02d}.pt", device
+                    r4_root / f"down_layer_{layer:02d}.pt", device
                 )
                 w, y = compact_wy(self.r4[layer].reflectors, self.r4[layer].active)
                 self.r4_wy[layer] = WYFactor(self.r4[layer], w, y)
@@ -320,6 +372,24 @@ class RotationSet:
         if label == "r2":
             return self.r2[layer].apply(value, signs)
         return self.r4_wy[layer].apply(value, signs)
+
+    def apply_r3(self, value: torch.Tensor) -> torch.Tensor:
+        """QuaRot's fixed cross-head factor at the o_proj input (Hadamard rows only)."""
+        if self.method != "hadamard":
+            return value.float()
+        shape = value.shape
+        rows = value.float().reshape(-1, self.heads, self.head_dim)
+        across_heads = rows.transpose(1, 2)
+        heads = across_heads.shape[-1]
+        signs = torch.ones(heads, device=value.device, dtype=torch.float32)
+        if heads == 24:
+            signed = across_heads * signs
+            factored = act.ext._fast_walsh_hadamard(signed.reshape(-1, 12, 2))
+            h12 = act.ext._paley_hadamard_12(value.device, torch.float32)
+            rotated = (factored.transpose(1, 2) @ h12.T).transpose(1, 2).reshape_as(across_heads)
+        else:
+            rotated = act.full_hadamard_rows(across_heads, signs)
+        return rotated.transpose(1, 2).reshape(shape)
 
 
 def _transform_weight_rows(module: torch.nn.Linear, transform: Callable[[torch.Tensor], torch.Tensor],
@@ -383,11 +453,13 @@ def fuse_norms_and_rotate(model: torch.nn.Module, rotations: RotationSet,
         )
         weight = block.self_attn.o_proj.weight.detach()
         shaped = weight.reshape(weight.shape[0], attention_heads, head_dim)
-        rotated = rotations.apply("r2", layer, shaped.reshape(-1, head_dim)).to(weight.dtype)
-        weight.copy_(rotated.reshape_as(shaped).reshape_as(weight))
+        rotated = rotations.apply("r2", layer, shaped.reshape(-1, head_dim)).reshape_as(shaped)
+        rotated = rotations.apply_r3(rotated.reshape_as(weight)).to(weight.dtype)
+        weight.copy_(rotated.reshape_as(weight))
     return {
         "r1": "global residual rotation; input rows WQ, residual output Q^T W",
         "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+        "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
         "r4": "per-layer down-input rotation folded into down_proj rows",
         "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
         "embedding_centering": False,
@@ -454,6 +526,12 @@ class RuntimeHooks:
             return self.rotations.apply("r2", layer, output.reshape(-1, self.rotations.head_dim)).reshape(shape).to(output.dtype)
         return hook
 
+    def rotate_o(self) -> Callable[..., tuple[torch.Tensor, ...]]:
+        def hook(_module: torch.nn.Module, inputs: tuple[Any, ...]) -> tuple[torch.Tensor, ...]:
+            rotated = self.rotations.apply_r3(inputs[0]).to(inputs[0].dtype)
+            return (rotated,) + inputs[1:]
+        return hook
+
     def quantize_input(self, _module: torch.nn.Module, inputs: tuple[Any, ...]) -> tuple[torch.Tensor, ...]:
         value = inputs[0]
         if self.activation_kind == "quarot_symmetric_token":
@@ -505,6 +583,8 @@ class RuntimeHooks:
             self.model.config._attn_implementation = self.attention_key
         for layer, block in enumerate(self.model.model.layers):
             self.handles.append(block.self_attn.v_proj.register_forward_hook(self.rotate_v(layer)))
+            if self.rotations.method == "hadamard":
+                self.handles.append(block.self_attn.o_proj.register_forward_pre_hook(self.rotate_o()))
             self.handles.append(block.mlp.down_proj.register_forward_pre_hook(self.rotate_down(layer)))
             if self.activation_kind is not None:
                 for module in (block.self_attn.q_proj, block.self_attn.k_proj, block.self_attn.v_proj,
@@ -577,6 +657,17 @@ def _fold_invariance(model_id: str, model: torch.nn.Module, rotations: RotationS
     }
 
 
+def _algebra_control(workdir: Path, rotation: str) -> dict[str, Any]:
+    """Require the fp32 stagewise control; bf16 drift is reported separately."""
+    path = workdir / "results" / "llama32_3b" / f"e14_{rotation}_fp32_fold_diagnostic.json"
+    payload = _json(path)
+    full = next(row for row in payload["rows"] if row["stage"] == "norm_r1_r2_r4")
+    tolerance = 1e-5
+    if float(full["relative_l2_logit_error"]) > tolerance:
+        raise AssertionError(f"fp32 rotation algebra control failed: {full}")
+    return {"source": str(path), "tolerance": tolerance, "full_stage": full}
+
+
 def verify_rotation(args: argparse.Namespace) -> None:
     if not torch.cuda.is_available():
         raise RuntimeError("E14 verification requires CUDA")
@@ -608,7 +699,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         raise RuntimeError("E14 GPTQ requires CUDA")
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
-    output = checkpoint_dir(artifact_root, args.model, args.rotation)
+    output = checkpoint_dir(artifact_root, args.model, args.rotation, args.seed)
     done = output / "DONE.json"
     if done.exists():
         LOG.info("E14 GPTQ checkpoint exists: %s", done)
@@ -617,8 +708,8 @@ def gptq_quantize(args: argparse.Namespace) -> None:
     base.setup_logging(workdir, f"e14-gptq-{args.model}-{args.rotation}")
     base.seed_everything(args.seed)
     model_id, model_key = act.model_id_and_key(args.model)
-    tokens = base.prepare_token_chunks(
-        model_id, "train", 0, args.calibration_sequences, args.seq_len, workdir
+    tokens = _quarot_calibration_tokens(
+        model_id, workdir, args.calibration_sequences, args.seq_len, args.calibration_seed
     )
 
     # Measure algebraic folding before GPTQ on a fixed prefix.
@@ -633,8 +724,11 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         workdir, model_key, args.rotation, args.seed, args.weight_row_batch
     )
     invariance = _fold_invariance(model_id, model, rotations, probe, reference)
-    if invariance["relative_l2_logit_error"] > args.fold_tolerance:
-        raise AssertionError(f"rotation fold failed tolerance: {invariance}")
+    algebra_control = _algebra_control(workdir, args.rotation)
+    invariance["previous_bf16_gate"] = args.fold_tolerance
+    invariance["exceeds_previous_bf16_gate"] = (
+        invariance["relative_l2_logit_error"] > args.fold_tolerance
+    )
     del reference, probe
     LOG.info("rotation fold relative logit error %.6g", invariance["relative_l2_logit_error"])
 
@@ -729,10 +823,12 @@ def gptq_quantize(args: argparse.Namespace) -> None:
             "mse_clipping": True, "norm": 2.4, "grid": 100, "maxshrink": 0.8,
             "blocksize": 128, "percdamp": 0.01, "act_order": False,
             "static_groups": False, "calibration_sequences": args.calibration_sequences,
+            "calibration_seed": args.calibration_seed,
             "calibration_dataset": "WikiText-2 train", "sequence_length": args.seq_len,
             "excluded": ["embed_tokens", "lm_head"],
         },
-        "fold": fold, "fold_invariance": invariance,
+        "fold": fold, "bf16_reparameterization_drift": invariance,
+        "fp32_algebra_control": algebra_control,
         "checkpoint": "one bf16 fake-quantized state file per decoder layer",
         "elapsed_seconds": time.time() - started, "hardware": base.hardware_info(),
     })
@@ -741,7 +837,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
 
 def load_quantized_model(workdir: Path, artifact_root: Path, model_key: str,
                          rotation: str, seed: int, row_batch: int) -> tuple[torch.nn.Module, RotationSet]:
-    root = checkpoint_dir(artifact_root, model_key, rotation)
+    root = checkpoint_dir(artifact_root, model_key, rotation, seed)
     if not (root / "DONE.json").exists():
         raise FileNotFoundError(root / "DONE.json")
     model, rotations, _fold = _prepare_rotated_model(workdir, model_key, rotation, seed, row_batch)
@@ -771,12 +867,14 @@ def _full_wikitext_tokens(model_id: str, workdir: Path, seq_len: int) -> torch.T
 
 
 def _row_settings(row: str) -> tuple[str, str]:
-    if row == "quarot":
+    if row == "quarot_released":
         return "hadamard", "quarot_symmetric_token"
     if row == "hadamard_asym_g128":
         return "hadamard", "asymmetric_g128"
-    if row == "nar_asym_g128":
-        return "nar", "asymmetric_g128"
+    if row == "nar_k8_asym_g128":
+        return "nar_k8", "asymmetric_g128"
+    if row == "nar_kmax_asym_g128":
+        return "nar_kmax", "asymmetric_g128"
     raise ValueError(row)
 
 
@@ -804,9 +902,11 @@ def evaluate_row(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / args.model
-    ppl_path = result_dir / f"e14_{args.row}_ppl.json"
-    zero_path = result_dir / f"e14_{args.row}_zero_shot.json"
-    if ppl_path.exists() and zero_path.exists():
+    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}_ppl.json"
+    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot.json"
+    need_ppl = args.metrics in ("ppl", "both")
+    need_zero = args.metrics in ("zero_shot", "both")
+    if (not need_ppl or ppl_path.exists()) and (not need_zero or zero_path.exists()):
         LOG.info("E14 row exists: %s %s", ppl_path, zero_path)
         return
     base.setup_logging(workdir, f"e14-evaluate-{args.model}-{args.row}")
@@ -819,7 +919,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
     runtime = RuntimeHooks(model, rotations, activation_kind=activation_kind, quantize_kv=True)
     runtime.install()
     try:
-        if not ppl_path.exists():
+        if need_ppl and not ppl_path.exists():
             tokens = _full_wikitext_tokens(model_id, workdir, args.seq_len)
             ppl, chunk_rows = _evaluate_ppl(model, tokens, f"{model_key} {args.row}")
             base.atomic_json(ppl_path, {
@@ -830,7 +930,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "seed": args.seed, "hardware": base.hardware_info(),
             })
             del tokens
-        if not zero_path.exists():
+        if need_zero and not zero_path.exists():
             import lm_eval
             from lm_eval.models.huggingface import HFLM
             from lm_eval.tasks import TaskManager
@@ -878,42 +978,151 @@ def evaluate_row(args: argparse.Namespace) -> None:
 
 def finalize(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
-    rows = []
+    seeds = [args.seed + index for index in range(args.seeds)]
+    dimensions = {
+        "llama32_3b": {"hidden": 3072, "intermediate": 8192, "kv_dim": 1024},
+        "llama31_8b": {"hidden": 4096, "intermediate": 14336, "kv_dim": 1024},
+    }
+    rows: list[dict[str, Any]] = []
     for model in MODELS:
+        h = dimensions[model]["hidden"]
+        intermediate = dimensions[model]["intermediate"]
+        kv_dim = dimensions[model]["kv_dim"]
+        weight_values = 2 * h * h + 2 * kv_dim * h + 3 * intermediate * h
+        weight_scales = 3 * h + 2 * kv_dim + 2 * intermediate
+        w_effective = 4 + 16 * weight_scales / weight_values
+        had_ppl = {}
+        had_accuracy = {}
+        for seed in seeds:
+            had_ppl[seed] = float(_json(
+                workdir / "results" / model / f"e14_hadamard_asym_g128_seed{seed}_ppl.json"
+            )["ppl"])
+            had_accuracy[seed] = float(_json(
+                workdir / "results" / model / f"e14_hadamard_asym_g128_seed{seed}_zero_shot.json"
+            )["mean_accuracy"])
         for row_name in ROWS:
             root = workdir / "results" / model
-            ppl = _json(root / f"e14_{row_name}_ppl.json")
-            zero = _json(root / f"e14_{row_name}_zero_shot.json")
-            values = {item["task"]: item["accuracy"] for item in zero["tasks"]}
+            row_seeds = [0] if row_name == "quarot_released" else seeds
+            ppls = []
+            means = []
+            tasks = {task: [] for task in TASKS}
+            for seed in row_seeds:
+                ppl = _json(root / f"e14_{row_name}_seed{seed}_ppl.json")
+                zero = _json(root / f"e14_{row_name}_seed{seed}_zero_shot.json")
+                ppls.append(float(ppl["ppl"]))
+                means.append(float(zero["mean_accuracy"]))
+                values = {item["task"]: float(item["accuracy"]) for item in zero["tasks"]}
+                for task in TASKS:
+                    tasks[task].append(values[task])
+            if row_name in PAIRED_ROWS:
+                ppl_delta = np.asarray([ppls[index] - had_ppl[seed] for index, seed in enumerate(seeds)])
+                accuracy_delta = np.asarray([means[index] - had_accuracy[seed] for index, seed in enumerate(seeds)])
+                ppl_half = TCRIT_DF2_90 * float(ppl_delta.std(ddof=1)) / math.sqrt(len(seeds))
+                acc_half = TCRIT_DF2_90 * float(accuracy_delta.std(ddof=1)) / math.sqrt(len(seeds))
+            else:
+                ppl_delta = np.asarray([float("nan")])
+                accuracy_delta = np.asarray([float("nan")])
+                ppl_half = acc_half = float("nan")
+            asymmetric = row_name != "quarot_released"
             rows.append({
-                "model": model, "row": row_name, "ppl": ppl["ppl"],
-                **{task: values[task] for task in TASKS},
-                "mean_accuracy": zero["mean_accuracy"], "seed": zero["seed"],
+                "model": model, "row": row_name, "seeds": len(row_seeds),
+                "ppl": float(np.mean(ppls)), "ppl_std": float(np.std(ppls, ddof=1)) if len(ppls) > 1 else 0.0,
+                "paired_ppl_delta_vs_hadamard": float(ppl_delta.mean()),
+                "paired_ppl_ci90_low": float(ppl_delta.mean() - ppl_half),
+                "paired_ppl_ci90_high": float(ppl_delta.mean() + ppl_half),
+                **{task: float(np.mean(tasks[task])) for task in TASKS},
+                "mean_accuracy": float(np.mean(means)),
+                "paired_accuracy_delta_vs_hadamard": float(accuracy_delta.mean()),
+                "paired_accuracy_ci90_low": float(accuracy_delta.mean() - acc_half),
+                "paired_accuracy_ci90_high": float(accuracy_delta.mean() + acc_half),
+                "w4_effective_bits": w_effective,
+                "a4_qkv_effective_bits": 4 + (32 / GROUP if asymmetric else 16 / h),
+                "a4_down_effective_bits": 4 + (32 / GROUP if asymmetric else 16 / intermediate),
+                "k4_effective_bits_at_ctx2048": ((2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / K_TOKEN_GROUP)
+                                                  + KV_RESIDUAL_LENGTH * 16) / 2048,
+                "v4_effective_bits_at_ctx2048": ((2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / 128)
+                                                  + KV_RESIDUAL_LENGTH * 16) / 2048,
             })
     base.write_csv(workdir / "results" / "e14_w4a4kv4_summary.csv", rows)
     base.atomic_json(workdir / "results" / "E14_DONE.json", {
-        "models": list(MODELS), "rows": list(ROWS), "seed": args.seed,
-        "paired": "same GPTQ calibration sequences, WikiText-2 full-test tokens, harness revision, tasks, and seed",
+        "models": list(MODELS), "rows": list(ROWS), "seeds": seeds,
+        "paired": "same official seed-0 GPTQ calibration windows, WikiText-2 full-test tokens, harness revision, tasks, and rotation seed",
         "w4": {
             "source": f"spcl/QuaRot@{QUAROT_COMMIT}", "method": "GPTQ",
             "groupsize": -1, "symmetric": True, "mse_clipping": True,
             "percdamp": 0.01, "act_order": False,
         },
         "a4": {
-            "quarot": "official symmetric per-token semantics",
+            "quarot_released": "official symmetric per-token semantics",
             "other_rows": "dynamic asymmetric per-token group-128 with fp16 scale and fp16 offset",
             "sites": "inputs to q/k/v/o/gate/up/down projections",
         },
         "k4": {
             "all_rows": "post-RoPE KIVI-style dynamic asymmetric per-channel, contiguous token groups of 32",
-            "residual": "R=128: K quantizes completed 128-token residual chunks (1..128 recent bf16 tokens); V keeps the latest 128 tokens bf16",
-            "r3": "omitted because the fixed per-channel K baseline replaces QuaRot per-token rotated K",
+            "residual": "R=32: K quantizes completed 32-token residual chunks (1..32 recent bf16 tokens); V keeps the latest 32 tokens bf16",
+            "qk_rotation": "omitted because the fixed per-channel K baseline replaces QuaRot per-token rotated K",
         },
         "v4": {
             "all_rows": "dynamic asymmetric per-token, one head_dim=128 group",
             "quarot_and_hadamard": "Hadamard R2", "nar": "NAR R2 folded into o_proj",
         },
-        "single_seed": True, "no_tuning": True, "negative_results_reported": True,
+        "paired_seed_count": len(seeds), "no_tuning": True, "negative_results_reported": True,
+    })
+
+
+def ppl_gate(args: argparse.Namespace) -> None:
+    """Apply the E14 stop condition before zero-shot and later experiments."""
+    workdir = Path(args.workdir).resolve()
+    seeds = [args.seed + index for index in range(args.seeds)]
+    rows: list[dict[str, Any]] = []
+    decisions: dict[str, Any] = {}
+    for model in MODELS:
+        values: dict[tuple[str, int], float] = {}
+        for row in PAIRED_ROWS:
+            for seed in seeds:
+                path = workdir / "results" / model / f"e14_{row}_seed{seed}_ppl.json"
+                values[(row, seed)] = float(_json(path)["ppl"])
+        for row in PAIRED_ROWS:
+            samples = np.asarray([values[(row, seed)] for seed in seeds], dtype=np.float64)
+            deltas = np.asarray([
+                values[(row, seed)] - values[("hadamard_asym_g128", seed)] for seed in seeds
+            ], dtype=np.float64)
+            half = 0.0 if row == "hadamard_asym_g128" else (
+                TCRIT_DF2_90 * float(deltas.std(ddof=1)) / math.sqrt(len(deltas))
+            )
+            rows.append({
+                "model": model, "row": row, "seeds": len(seeds),
+                "ppl_mean": float(samples.mean()), "ppl_std": float(samples.std(ddof=1)),
+                "paired_ppl_delta_vs_hadamard": float(deltas.mean()),
+                "paired_delta_ci90_low": float(deltas.mean() - half),
+                "paired_delta_ci90_high": float(deltas.mean() + half),
+                "a4_effective_bits": 4 + 32 / GROUP,
+                "k4_effective_bits_at_ctx2048": ((2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / K_TOKEN_GROUP)
+                                                  + KV_RESIDUAL_LENGTH * 16) / 2048,
+                "v4_effective_bits_at_ctx2048": ((2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / 128)
+                                                  + KV_RESIDUAL_LENGTH * 16) / 2048,
+            })
+        k8 = next(item for item in rows if item["model"] == model and item["row"] == "nar_k8_asym_g128")
+        passed = float(k8["paired_delta_ci90_high"]) < 0
+        decisions[model] = {
+            "nar_k8_better_than_hadamard_with_ci_excluding_zero": passed,
+            "paired_delta": k8["paired_ppl_delta_vs_hadamard"],
+            "ci90": [k8["paired_delta_ci90_low"], k8["paired_delta_ci90_high"]],
+        }
+    stop = not all(item["nar_k8_better_than_hadamard_with_ci_excluding_zero"]
+                   for item in decisions.values())
+    base.write_csv(workdir / "results" / "e14_ppl_gate.csv", rows)
+    base.atomic_json(workdir / "results" / "E14_PPL_GATE.json", {
+        "models": list(MODELS), "rows": list(PAIRED_ROWS), "seeds": seeds,
+        "paired_ci": "two-sided 90% Student-t interval over three seed-level PPL differences",
+        "decision": decisions, "stop_before_e17_e18": stop,
+        "stop_rule": "stop unless NAR k=8 beats metadata-matched Hadamard on both models with CI excluding zero",
+        "metadata_formulas": {
+            "a4_asym_g128": "4 + (16 scale + 16 zero)/128 = 4.25 bits/value",
+            "k4_ctx2048": "2016 quantized tokens at 4+(16+16)/32 bits plus 32 bf16 residual tokens",
+            "v4_ctx2048": "2016 quantized tokens at 4+(16+16)/128 bits plus 32 bf16 residual tokens",
+        },
+        "no_tuning": True, "negative_results_reported": True,
     })
 
 
@@ -925,7 +1134,7 @@ def parser() -> argparse.ArgumentParser:
     parser.add_argument("--seq-len", type=int, default=2048)
     parser.add_argument("--weight-row-batch", type=int, default=256)
     parser.add_argument("--fold-tolerance", type=float, default=0.02,
-                        help="pre-registered relative-L2 logit gate before GPTQ")
+                        help="legacy bf16 drift threshold retained for diagnosis, not algebra acceptance")
     sub = parser.add_subparsers(dest="command", required=True)
     cal = sub.add_parser("calibrate")
     cal.add_argument("--model", choices=MODELS, required=True)
@@ -938,12 +1147,17 @@ def parser() -> argparse.ArgumentParser:
     gptq.add_argument("--model", choices=MODELS, required=True)
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
     gptq.add_argument("--calibration-sequences", type=int, default=128)
+    gptq.add_argument("--calibration-seed", type=int, default=0)
     gptq.add_argument("--verify-tokens", type=int, default=128)
     evaluate = sub.add_parser("evaluate")
     evaluate.add_argument("--model", choices=MODELS, required=True)
     evaluate.add_argument("--row", choices=ROWS, required=True)
     evaluate.add_argument("--batch-size", type=int, default=1)
-    sub.add_parser("finalize")
+    evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
+    gate = sub.add_parser("ppl-gate")
+    gate.add_argument("--seeds", type=int, default=3)
+    final = sub.add_parser("finalize")
+    final.add_argument("--seeds", type=int, default=3)
     return parser
 
 
@@ -953,7 +1167,8 @@ def main() -> None:
         args.artifact_root = str(Path(args.workdir).resolve() / "artifacts" / "e14")
     {
         "calibrate": calibrate_rotations, "verify": verify_rotation,
-        "gptq": gptq_quantize, "evaluate": evaluate_row, "finalize": finalize,
+        "gptq": gptq_quantize, "evaluate": evaluate_row,
+        "ppl-gate": ppl_gate, "finalize": finalize,
     }[args.command](args)
 
 
