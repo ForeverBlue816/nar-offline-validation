@@ -561,3 +561,19 @@ This section is explicitly post-hoc and uses one seed, following the amended sin
 Increasing alpha to 0.65 and 0.80 degrades both models monotonically relative to plain Hadamard. Restricting alpha=0.5 smoothing to its original q/k/v placement is marginally better than Hadamard (-0.0051 PPL on 3B, -0.0098 on 8B), showing that smoothing down_input caused most of E11's degradation; it still trails NAR kmax by +0.0469 and +0.0506 PPL. This robustness check therefore does not overturn E11. Confidence intervals are not estimable with one seed and are not implied.
 
 Exact rows are in `results/llama32_3b/e16_smoothquant_summary.csv` and `results/llama31_8b/e16_smoothquant_summary.csv`.
+
+# E17 — fused one-pass R4
+
+The final kernel is a literal one-read implementation: each bf16 token row is loaded once, the rank-8 compact-WY projections are formed, the frozen permutation is performed with a Triton register gather, and signs, block-H128, dynamic asymmetric group-128 INT4 quantization, and INT4 packing are completed in the same kernel launch. It emits two INT4 codes per uint8 plus one fp16 scale and one fp16 real-valued zero per group. The matched Hadamard kernel fuses signs, block-H128, and exactly the same quantizer/packer.
+
+Verification is exact on 4 frozen random token rows: both methods have code-match fraction 1.0 and zero max error in packed codes, fp16 scales, fp16 zero-points, and dequantized values versus the PyTorch reference (allowed bf16 tolerance 0.03125).
+
+| tokens | NAR fused ms | Hadamard fused ms | down_proj bf16 ms | NAR / Hadamard | NAR / matmul | transform FLOP / matmul |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 0.114222 | 0.008628 | 0.020619 | 13.238× | 5.540× | 0.006348 |
+| 32 | 0.127383 | 0.008292 | 0.024695 | 15.363× | 5.158× | 0.006348 |
+| 2048 | 1.813272 | 0.061917 | 0.429138 | 29.286× | 4.225× | 0.006348 |
+
+**2048-token engineering gate: FAIL.** The strict fused NAR kernel costs 4.225× the down_proj matmul and 29.286× the matched fused Hadamard kernel, far above the 10% limit. E12 is therefore **not superseded**. The arithmetic count is only 0.635% of the matmul FLOPs, but the one-program-per-token global reductions plus an arbitrary 8192-element register gather create severe register pressure and low occupancy; this implementation is bandwidth/compiler-scheduling bound rather than FLOP bound. At one token both transforms are also launch-bound, but NAR remains 5.540× the matmul versus 0.419× for fused Hadamard. This negative deployability result is retained without tuning.
+
+Exact timings and verification metadata are in `results/llama32_3b/e17_fused_r4_timings.csv` and `E17_DONE.json`.
