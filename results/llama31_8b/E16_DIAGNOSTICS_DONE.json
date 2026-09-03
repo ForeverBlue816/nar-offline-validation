@@ -1,0 +1,39 @@
+{
+  "alignment_methods": [
+    "hadamard",
+    "smoothquant_hadamard",
+    "duquant_style",
+    "nar"
+  ],
+  "calibration_sequences": 128,
+  "directions": "top-8 frozen second-moment directions plus top-magnitude channel",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 14208 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137708",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "llama31_8b",
+  "model_id": "unsloth/Meta-Llama-3.1-8B",
+  "no_tuning": true,
+  "official_duquant": "excluded by later citation-only/no-local-run protocol amendment; E11 DuQuant-style diagnostic retained",
+  "offline_methods": [
+    "Hadamard",
+    "SmoothQuant(alpha=.5)+Hadamard"
+  ],
+  "paired": "same frozen E11 calibration chunks, signs, statistics, and model",
+  "s_i": "squared energy in per-group-128 uniform/DC subspace divided by original direction energy",
+  "seed": 20260902,
+  "sequence_length": 2048
+}

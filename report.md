@@ -562,6 +562,45 @@ Increasing alpha to 0.65 and 0.80 degrades both models monotonically relative to
 
 Exact rows are in `results/llama32_3b/e16_smoothquant_summary.csv` and `results/llama31_8b/e16_smoothquant_summary.csv`.
 
+## E16 offline location diagnostic
+
+The paired offline check uses the same frozen 128 calibration sequences and compares plain Hadamard with SmoothQuant(alpha=0.5)+Hadamard. Values are arithmetic means over layers. SmoothQuant sharply contracts the transformed ranges, but slightly *increases* normalized INT4 error at both sites; range contraction alone therefore does not explain accuracy.
+
+| model | site | Had range | SQ+Had range | Had NMSE | SQ+Had NMSE |
+|---|---|---:|---:|---:|---:|
+| Llama-3.2-3B | q_input | 2.200200 | 0.547637 | 0.0099235 | 0.0099472 |
+| Llama-3.2-3B | down_input | 0.398241 | 0.077617 | 0.0094245 | 0.0097785 |
+| Llama-3.1-8B | q_input | 2.391442 | 0.516604 | 0.0098867 | 0.0099371 |
+| Llama-3.1-8B | down_input | 0.386387 | 0.061497 | 0.0095256 | 0.0097963 |
+
+## E16 DC-alignment diagnostic
+
+Here `s_i = ||P_DC R v_i||^2 / ||v_i||^2`, averaged across layers, for the frozen top-eight q_input second-moment directions. The top-channel column uses the highest-magnitude calibration channel. SmoothQuant+Hadamard is non-orthogonal, so its denominator remains the original direction energy as pre-specified. Official DuQuant is omitted under the later citation-only/no-local-run amendment; `DuQuant-style` is the frozen E11 construction.
+
+### Llama-3.2-3B
+
+| method | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | top-8 mean | top channel |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Hadamard | 0.0023 | 0.0027 | 0.0025 | 0.0032 | 0.0022 | 0.0018 | 0.0021 | 0.0025 | 0.0024 | 0.0000 |
+| SmoothQuant+Hadamard | 0.0002 | 0.0003 | 0.0002 | 0.0003 | 0.0002 | 0.0002 | 0.0002 | 0.0002 | 0.0002 | 0.0000 |
+| DuQuant-style | 0.3843 | 0.3774 | 0.3470 | 0.3772 | 0.4185 | 0.4484 | 0.4519 | 0.4095 | 0.4018 | 1.0000 |
+| NAR | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.5579 |
+
+### Llama-3.1-8B
+
+| method | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | top-8 mean | top channel |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Hadamard | 0.0048 | 0.0082 | 0.0043 | 0.0043 | 0.0059 | 0.0046 | 0.0051 | 0.0057 | 0.0054 | 0.0000 |
+| SmoothQuant+Hadamard | 0.0002 | 0.0004 | 0.0003 | 0.0003 | 0.0003 | 0.0002 | 0.0003 | 0.0002 | 0.0003 | 0.0000 |
+| DuQuant-style | 0.5924 | 0.5051 | 0.4638 | 0.5330 | 0.5266 | 0.5246 | 0.5378 | 0.5156 | 0.5249 | 1.0000 |
+| NAR | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.6690 |
+
+
+NAR places essentially all top-eight eigendirection energy into the group-128 DC subspace on both models (mean 1.0000). DuQuant-style captures only 0.4018 on 3B and 0.5249 on 8B because it greedily aligns one magnitude channel rather than the top eigenspace; accordingly, its selected top channel scores 1.0000. Plain Hadamard scores 0.0024/0.0054, while SmoothQuant+Hadamard scores just 0.00023/0.00027. This directly supports the claimed structural distinction: NAR explicitly uses the asymmetric quantizer's zero-point null space; the fair baselines do not reproduce its top-eigenspace alignment.
+
+Exact per-layer and aggregate rows are in `e16_offline_per_layer.csv`, `e16_dc_alignment_per_layer.csv`, and `e16_dc_alignment_summary.csv` under each model's result directory.
+
+
 # E17 — fused one-pass R4
 
 The final kernel is a literal one-read implementation: each bf16 token row is loaded once, the rank-8 compact-WY projections are formed, the frozen permutation is performed with a Triton register gather, and signs, block-H128, dynamic asymmetric group-128 INT4 quantization, and INT4 packing are completed in the same kernel launch. It emits two INT4 codes per uint8 plus one fp16 scale and one fp16 real-valued zero per group. The matched Hadamard kernel fuses signs, block-H128, and exactly the same quantizer/packer.
