@@ -454,3 +454,45 @@ SpinQuant is citation-only: no rotation artifact is downloaded or evaluated, and
 | Llama-3.2-3B | 0 | QuaRot released symmetric A4 | 10.33237 | +1.12336 |
 
 Completed six-task zero-shot means are 0.643694 for metadata-matched Hadamard and 0.651201 for NAR k=8, a direct paired gain of +0.007507 for NAR. The released QuaRot zero-shot row is still running.
+
+# E15 — FP4 boundary verification follow-up
+
+The first E15 result contradicted the pre-registered expectation, so it is not interpreted without this paired audit. E2M1 uses blocks of 16 and no zero-point. Two E4M3FN block-scale rules are reported: **absmax** rounds `clamp(max(abs(x))/6, 2^-9, 448)` to E4M3FN, while **MSE-optimal** exhaustively evaluates all 126 positive finite E4M3FN scale codes and selects the exact minimum-block-SSE value. No clipping grid, search window, or fitted hyperparameter is used.
+
+The pre-registered NAR used b=128 (k=24 for q_input and k=64 for down_input), whereas the FP4 block is 16. Therefore its DC direction spans eight FP4 blocks and no zero-point/null-space mechanism can apply. The matched NAR-b16 row reuses exactly the same frozen eigendirections and the same k, changing only DC spacing and the terminal Hadamard group from 128 to 16. It is not a new kmax sweep (which would have 192/512 slots).
+
+| site | method | scale | global NMSE | block median | p90 | p99 | worst 1% error share | same blocks' signal share |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| q_input | identity | absmax | 0.00839854 | 0.00820578 | 0.0132268 | 0.0184187 | 0.1044 | 0.0923 |
+| q_input | H16 | absmax | 0.00949634 | 0.00899939 | 0.0140817 | 0.0188897 | 0.1192 | 0.0919 |
+| q_input | NAR-b128 | absmax | 0.00942352 | 0.00896046 | 0.0140194 | 0.0185047 | 0.0951 | 0.0718 |
+| q_input | NAR-b16 | absmax | 0.0102516 | 0.00901433 | 0.0141601 | 0.0191001 | 0.3127 | 0.2416 |
+| q_input | identity | MSE-optimal | 0.00702770 | 0.00680880 | 0.00923091 | 0.0120340 | 0.1200 | 0.0936 |
+| q_input | H16 | MSE-optimal | 0.00657511 | 0.00666925 | 0.00882075 | 0.0108903 | 0.0994 | 0.0940 |
+| q_input | NAR-b128 | MSE-optimal | 0.00659209 | 0.00664989 | 0.00877918 | 0.0105010 | 0.0818 | 0.0742 |
+| q_input | NAR-b16 | MSE-optimal | 0.00635560 | 0.00667932 | 0.00887864 | 0.0112499 | 0.2240 | 0.2421 |
+| down_input | identity | absmax | 0.00188898 | 0.00854037 | 0.0152020 | 0.0341282 | 0.7237 | 0.9347 |
+| down_input | H16 | absmax | 0.00231981 | 0.00964295 | 0.0154495 | 0.0332220 | 0.7376 | 0.9351 |
+| down_input | NAR-b128 | absmax | 0.00150053 | 0.00941896 | 0.0150545 | 0.0292535 | 0.5950 | 0.8074 |
+| down_input | NAR-b16 | absmax | 0.00258707 | 0.00969910 | 0.0155847 | 0.0368565 | 0.8140 | 0.9489 |
+| down_input | identity | MSE-optimal | 0.00138871 | 0.00720256 | 0.0104541 | 0.0187911 | 0.6836 | 0.9352 |
+| down_input | H16 | MSE-optimal | 0.00137337 | 0.00707734 | 0.00980412 | 0.0160124 | 0.6957 | 0.9355 |
+| down_input | NAR-b128 | MSE-optimal | 0.000697182 | 0.00699635 | 0.00955567 | 0.0150215 | 0.3878 | 0.8077 |
+| down_input | NAR-b16 | MSE-optimal | 0.00108109 | 0.00711736 | 0.00988656 | 0.0172607 | 0.6981 | 0.9498 |
+
+The worst 1% is selected globally by per-block squared error; the signal column refers to those same blocks. Down_input is strongly dominated by massive-activation blocks: the worst 1% carries 59.5–81.4% of total error and 80.7–95.0% of signal energy, depending on transform and scale rule. Consequently the global NMSE can be much smaller than the median per-block NMSE.
+
+| site | method | mean transformed Pearson kurtosis | corr(layer kurtosis delta, layer NMSE delta), absmax | same correlation, MSE-optimal |
+|---|---|---:|---:|---:|
+| q_input | H16 | 4.43088 | — | — |
+| q_input | NAR-b128 | 3.68167 | 0.874 | 0.670 |
+| q_input | NAR-b16 | 11.7546 | -0.707 | -0.914 |
+| down_input | H16 | 586.648 | — | — |
+| down_input | NAR-b128 | 86.4212 | 0.040 | 0.362 |
+| down_input | NAR-b16 | 673.809 | 0.129 | -0.390 |
+
+For each NAR row, the correlation uses its per-layer NAR-minus-H16 kurtosis and NMSE differences. Q_input NAR-b128 differences track kurtosis fairly strongly, but its small absmax NMSE advantage disappears under MSE-optimal scaling. Down_input NAR-b128 greatly lowers mean kurtosis and worst-block concentration, but the layerwise delta correlation is only 0.04–0.36; kurtosis alone therefore does not explain the down_input result. NAR-b16 even has higher mean kurtosis than H16 while obtaining lower MSE-optimal global NMSE.
+
+The original q_input identity-best observation **is an absmax scale-selection artifact**: identity beats H16 under absmax (0.008399 vs 0.009496), but loses under exact MSE-optimal selection (0.007028 vs 0.006575). With matched b=16, NAR loses to H16 under absmax at both sites, yet wins under MSE-optimal scaling (q_input 0.006356 vs 0.006575; down_input 0.001081 vs 0.001373). NAR-b128 remains strongest on down_input (0.000697), where it spreads extreme blocks over a wider 128-channel transform. Because E2M1 has no zero-point and its blocks are only 16 channels, none of these residual FP4 gains is evidence for DC/zero-point alignment. They are a separate distribution-shaping/outlier-redistribution effect, not support for the paper's main null-space mechanism.
+
+Exact paired outputs are in `results/llama32_3b/e15_followup_block_distribution.csv`, `e15_followup_per_layer.csv`, and `e15_followup_kurtosis_correlation.csv`.

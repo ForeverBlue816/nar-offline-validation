@@ -1,0 +1,47 @@
+{
+  "e2m1_block_size": 16,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-2.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-0ecdf3ba-0c2f-bbe5-43d3-92651ede3912, 32607 MiB, 31346 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137455",
+    "torch": "2.11.0+cu128"
+  },
+  "identity_best_is_absmax_scale_artifact": true,
+  "identity_q_input": {
+    "absmax": {
+      "hadamard_nmse": 0.009496335252074115,
+      "identity_better": true,
+      "identity_minus_hadamard": -0.001097792299174517,
+      "identity_nmse": 0.008398542952899598
+    },
+    "mse_optimal": {
+      "hadamard_nmse": 0.006575108872364096,
+      "identity_better": false,
+      "identity_minus_hadamard": 0.0004525917334616764,
+      "identity_nmse": 0.007027700605825773
+    }
+  },
+  "model": "llama32_3b",
+  "nar_b128": "preregistered factor: k=24 q_input, k=64 down_input; DC spacing and terminal Hadamard b=128",
+  "nar_b16": "same frozen directions and same k; DC spacing and terminal Hadamard changed to b=16 to match FP4 blocks",
+  "negative_results_reported": true,
+  "no_tuning": true,
+  "paired": "identical frozen E1c token vectors for every method and scale rule",
+  "sample_stride": 128,
+  "scale_rules": {
+    "absmax": "round clamp(max(abs(x))/6, 2^-9, 448) to nearest E4M3FN",
+    "mse_optimal": "exact exhaustive argmin of block SSE over all 126 positive finite E4M3FN scale codes"
+  },
+  "tail_definition": "worst 1% selected globally by per-block squared error; signal share is for the same selected blocks"
+}
