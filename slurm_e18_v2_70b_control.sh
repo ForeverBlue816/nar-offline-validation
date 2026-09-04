@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=nar-70b-ctl
-#SBATCH --gpus=pro6000:8
-#SBATCH --qos=override-limits-but-killable
+#SBATCH --gpus=pro6000:4
 #SBATCH --time=06:00:00
 #SBATCH --output=runs/e18v2-70b-ctl-%j.out
 #SBATCH --error=runs/e18v2-70b-ctl-%j.err
