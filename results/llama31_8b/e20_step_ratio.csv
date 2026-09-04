@@ -1,0 +1,5 @@
+model,site,pair,measured_hadamard_step_ratio,analytic_gaussian_ratio,expected_max_numerator,expected_max_denominator,relative_error,source
+llama31_8b,down,256/128,1.0886824430992221,1.089520437339618,2.8268232789392194,2.594557368599467,-0.0007691404508592559,"E[max of g iid N(0,1)] by quadrature; no fitted parameter"
+llama31_8b,down,128/64,1.1054644531415596,1.10703784742239,2.594557368599467,2.343693465079441,-0.0014212651215980941,"E[max of g iid N(0,1)] by quadrature; no fitted parameter"
+llama31_8b,qkv,256/128,1.0877039404876732,1.089520437339618,2.8268232789392194,2.594557368599467,-0.0016672444037674455,"E[max of g iid N(0,1)] by quadrature; no fitted parameter"
+llama31_8b,qkv,128/64,1.10661447125587,1.10703784742239,2.594557368599467,2.343693465079441,-0.00038244055296372917,"E[max of g iid N(0,1)] by quadrature; no fitted parameter"

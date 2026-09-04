@@ -13,6 +13,7 @@ import argparse
 import gc
 import json
 import logging
+import collections
 import math
 from dataclasses import dataclass
 from pathlib import Path
@@ -656,6 +657,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--range-rows", type=int, default=4096)
     result.add_argument("--range-layer-stride", type=int, default=1)
     result.add_argument("--range-directions", type=int, default=256)
+    result.add_argument("--range-capture-sequences", type=int, default=4)
     result.add_argument("--f-directions", type=int, default=256)
     result.add_argument("--theory-only", action="store_true")
     result.add_argument("--two-term-only", action="store_true")
@@ -690,7 +692,63 @@ def run(args: argparse.Namespace) -> None:
 # ------------------------------------------- measured range reduction (E1c) ---
 
 E1C_SITE = {"qkv": "q_input", "down": "down_input"}
-RANGE_MODEL = "llama32_3b"          # only this model has frozen E1c dumps
+RANGE_MODEL = "llama32_3b"          # the model with frozen E1c dumps
+
+
+def expected_max_gaussian(g: int, lo: float = -12.0, hi: float = 14.0,
+                          points: int = 400001) -> float:
+    """E[max of g iid N(0,1)], by quadrature on 1 - Phi^g.
+
+    The group-size factor in the two-term predictor is this, not a fitted
+    constant: for a rotated group the coordinates are approximately iid
+    Gaussian, so the expected range is 2 E[max_g] and the step ratio between
+    two group sizes is E[max_g2] / E[max_g1] with no free parameter.
+    """
+    x = np.linspace(lo, hi, points)
+    phi = 0.5 * (1.0 + np.vectorize(math.erf)(x / math.sqrt(2.0)))
+    cdf = phi ** g
+    positive = x >= 0
+    return float(np.trapezoid(1.0 - cdf[positive], x[positive])
+                 - np.trapezoid(cdf[~positive], x[~positive]))
+
+
+@torch.inference_mode()
+def capture_range_rows(workdir: Path, model_key: str, layers: list[int],
+                       rows: int, sequences: int, seq_len: int
+                       ) -> dict[tuple[str, int], torch.Tensor]:
+    """Activations at the two sites for models without frozen E1c dumps."""
+    model_id, _ = act.model_id_and_key(model_key)
+    tokens = base.prepare_token_chunks(model_id, "train", 0, sequences, seq_len, workdir)
+    model = base.load_model(model_id, workdir)
+    store: dict[tuple[str, int], torch.Tensor] = {}
+    handles: list[Any] = []
+
+    def keep(site: str, layer: int, value: torch.Tensor) -> None:
+        key = (site, layer)
+        flat = value.detach().reshape(-1, value.shape[-1]).to("cpu", torch.bfloat16)
+        if key not in store:
+            store[key] = flat[:rows].clone()
+        elif store[key].shape[0] < rows:
+            store[key] = torch.cat((store[key], flat))[:rows].clone()
+
+    for layer in layers:
+        block = model.model.layers[layer]
+        handles.append(block.input_layernorm.register_forward_hook(
+            lambda _m, _i, out, layer=layer: keep("qkv", layer, out)))
+        handles.append(block.mlp.down_proj.register_forward_pre_hook(
+            lambda _m, inputs, layer=layer: keep("down", layer, inputs[0])))
+    try:
+        for index in range(tokens.shape[0]):
+            model(input_ids=tokens[index:index + 1].cuda(), use_cache=False)
+            if all(v.shape[0] >= rows for v in store.values()) and len(store) == 2 * len(layers):
+                break
+    finally:
+        for handle in handles:
+            handle.remove()
+        del model
+        gc.collect()
+        torch.cuda.empty_cache()
+    return store
 
 
 @torch.inference_mode()
@@ -706,20 +764,44 @@ def range_command(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     base.setup_logging(workdir, "e20-range")
     device = torch.device("cuda")
-    wide = workdir / "activations" / RANGE_MODEL / "wide_cal_a"
-    meta = json.loads((wide / "DONE.json").read_text())
-    dimensions = {"qkv": int(meta["hidden_size"]), "down": int(meta["intermediate_size"])}
-    layers = list(range(0, int(meta["num_layers"]), args.range_layer_stride))
-    fractions = eigen_fractions(workdir, RANGE_MODEL)
+    for model_key in args.models:
+        range_model(args, workdir, model_key, device)
+
+
+def range_model(args: argparse.Namespace, workdir: Path, model_key: str,
+                device: torch.device) -> None:
+    from transformers import AutoConfig
+
+    wide = workdir / "activations" / model_key / "wide_cal_a"
+    use_dumps = (wide / "DONE.json").exists()
+    if use_dumps:
+        meta = json.loads((wide / "DONE.json").read_text())
+        dimensions = {"qkv": int(meta["hidden_size"]), "down": int(meta["intermediate_size"])}
+        layer_total = int(meta["num_layers"])
+    else:
+        model_id, _ = act.model_id_and_key(model_key)
+        config = AutoConfig.from_pretrained(
+            model_id, cache_dir=str(workdir / "cache" / "huggingface"))
+        dimensions = {"qkv": int(config.hidden_size), "down": int(config.intermediate_size)}
+        layer_total = int(config.num_hidden_layers)
+        meta = {}
+    layers = list(range(0, layer_total, args.range_layer_stride))
+    captured = ({} if use_dumps
+                else capture_range_rows(workdir, model_key, layers, args.range_rows,
+                                        args.range_capture_sequences, args.seq_len))
+    fractions = eigen_fractions(workdir, model_key)
     configs = [row for row in ROWS if row.method != "bf16"]
     rows: list[dict[str, Any]] = []
 
     for site, n in dimensions.items():
         for layer in layers:
-            mapped = act.ext._open_site(wide, meta, E1C_SITE[site], layer)
-            x = act.ext._bits_to_tensor(
-                mapped.reshape(-1, n)[: args.range_rows], device).float()
-            vectors, energy = load_site_data(workdir, RANGE_MODEL, site, layer, device)
+            if use_dumps:
+                mapped = act.ext._open_site(wide, meta, E1C_SITE[site], layer)
+                x = act.ext._bits_to_tensor(
+                    mapped.reshape(-1, n)[: args.range_rows], device).float()
+            else:
+                x = captured[(site, layer)].to(device).float()
+            vectors, energy = load_site_data(workdir, model_key, site, layer, device)
             weights = torch.tensor(fractions[(site, layer)], device=device, dtype=torch.float32)
             signs = {(site, layer): torch.randint(
                 0, 2, (n,), generator=torch.Generator(device="cpu").manual_seed(
@@ -750,7 +832,7 @@ def range_command(args: argparse.Namespace) -> None:
                 share = (share @ projector.T).square().sum(-1) / share.square().sum(-1).clamp_min(1e-30)
                 f = float((share * weights[:take]).sum())
                 rows.append({
-                    "model": RANGE_MODEL, "row": row.name, "site": site, "layer": layer,
+                    "model": model_key, "row": row.name, "site": site, "layer": layer,
                     "group": g, "m": m, "slots": row.slots(n),
                     "effective_bits": row.bits, "rows_used": int(x.shape[0]),
                     "mean_group_range": measured,
@@ -767,14 +849,16 @@ def range_command(args: argparse.Namespace) -> None:
             torch.cuda.empty_cache()
             LOG.info("E20 range %s layer %d done", site, layer)
 
-    result_dir = workdir / "results" / RANGE_MODEL
+    result_dir = workdir / "results" / model_key
     base.write_csv(result_dir / "e20_range_vs_config.csv", rows)
+    base.write_csv(result_dir / "e20_step_ratio.csv", step_ratio_rows(rows, model_key))
 
     # E7's fit, pooled over layers, separately per m so the m>1 points can be
     # read against the m=1 line rather than averaged into it.
     fit_rows: list[dict[str, Any]] = []
     for key, label in (((1,), "m=1"), ((2,), "m=2"), ((3,), "m=3"), ((1, 2, 3), "all m")):
-        subset = [r for r in rows if r["m"] in key and r["row"].startswith("nar")]
+        subset = [r for r in rows if r["m"] in key and r["row"].startswith("nar")
+                  and not r["row"].endswith("_c32")]
         if len(subset) < 3:
             continue
         predictor = np.asarray([r["sqrt_one_minus_f"] for r in subset])
@@ -785,7 +869,7 @@ def range_command(args: argparse.Namespace) -> None:
         residual = float(np.square(response - predicted).sum())
         total = float(np.square(response - response.mean()).sum())
         fit_rows.append({
-            "model": RANGE_MODEL, "subset": label, "points": len(subset),
+            "model": model_key, "subset": label, "points": len(subset),
             "intercept": float(intercept), "slope": float(slope),
             "r_squared": 1 - residual / total if total > 0 else math.nan,
             "rmse": math.sqrt(residual / len(response)),
@@ -796,6 +880,31 @@ def range_command(args: argparse.Namespace) -> None:
     base.write_csv(result_dir / "e20_range_fit.csv", fit_rows)
     plot_range(rows, fit_rows, result_dir / "e20_range_vs_sqrt_one_minus_f.png")
     print(json.dumps(fit_rows, indent=2), flush=True)
+
+
+def step_ratio_rows(rows: list[dict[str, Any]], model_key: str) -> list[dict[str, Any]]:
+    """Measured Hadamard step ratio between group sizes against the analytic one."""
+    had: dict[tuple[str, int], list[float]] = collections.defaultdict(list)
+    for r in rows:
+        had[(str(r["site"]), int(r["group"]))].append(float(r["hadamard_reference_range"]))
+    analytic = {g: expected_max_gaussian(g) for g in (64, 128, 256)}
+    out: list[dict[str, Any]] = []
+    for site in sorted({site for site, _ in had}):
+        for big, small in ((256, 128), (128, 64)):
+            if (site, big) not in had or (site, small) not in had:
+                continue
+            measured = float(np.mean(had[(site, big)])) / float(np.mean(had[(site, small)]))
+            predicted = analytic[big] / analytic[small]
+            out.append({
+                "model": model_key, "site": site, "pair": f"{big}/{small}",
+                "measured_hadamard_step_ratio": measured,
+                "analytic_gaussian_ratio": predicted,
+                "expected_max_numerator": analytic[big],
+                "expected_max_denominator": analytic[small],
+                "relative_error": (measured - predicted) / predicted,
+                "source": "E[max of g iid N(0,1)] by quadrature; no fitted parameter",
+            })
+    return out
 
 
 def plot_range(rows: list[dict[str, Any]], fit_rows: list[dict[str, Any]], path: Path) -> None:
@@ -920,7 +1029,12 @@ def two_term_command(args: argparse.Namespace) -> None:
     that back using the measured Hadamard step at the same group size.
     """
     workdir = Path(args.workdir).resolve()
-    model_key = RANGE_MODEL
+    for model_key in args.models:
+        if (workdir / "results" / model_key / "e20_range_vs_config.csv").exists():
+            two_term_model(workdir, model_key)
+
+
+def two_term_model(workdir: Path, model_key: str) -> None:
     result_dir = workdir / "results" / model_key
     range_rows = base.read_csv(result_dir / "e20_range_vs_config.csv")
     summary = {r["row"]: r for r in base.read_csv(result_dir / "e20_summary.csv")}
@@ -1001,7 +1115,12 @@ def two_term_command(args: argparse.Namespace) -> None:
         })
     base.write_csv(result_dir / "e20_two_term_theory.csv", rows)
     base.write_csv(result_dir / "e20_two_term_ranking.csv", fits)
-    print(json.dumps(fits, indent=2), flush=True)
+    print(json.dumps([{k: f[k] for k in ("model", "site", "spearman_one_term_f",
+                                         "spearman_two_term_step",
+                                         "one_term_places_g256_m3_above_g128_m1",
+                                         "two_term_places_g256_m3_above_g128_m1",
+                                         "two_term_order", "measured_ppl_order")}
+                      for f in fits], indent=2), flush=True)
 
 
 if __name__ == "__main__":

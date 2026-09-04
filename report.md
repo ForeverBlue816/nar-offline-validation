@@ -1208,19 +1208,41 @@ The fair statement is therefore: **the 8B non-replication is partly a coefficien
 
     step_pred(g, m) = step_Hadamard(g) * sqrt(1 - f(g, m))
 
-Ranking the six bit-accounted NAR rows on the 3B, against measured PPL:
+**The second factor is analytic, not fitted**: for a rotated group the coordinates are approximately iid Gaussian, so the expected range is `2 E[max_g]` and the step ratio between two group sizes is `E[max_g2] / E[max_g1]` with no free parameter. Computed by quadrature on `1 - Phi^g`, it predicts `step(256)/step(128) = 1.0895` and `step(128)/step(64) = 1.1070`, against the measured Hadamard step ratios:
 
-| predictor | Spearman vs measured PPL | ordering |
-|---|---:|---|
-| one term, `f` alone | 0.8286 | g64 m1 > g128 m2 > **g256 m3 > g256 m2 > g128 m1** > g256 m1 |
-| two term, `step_Had(g)*sqrt(1-f)` | **1.0000** | g64 m1 > g128 m2 > **g128 m1** > g256 m3 > g256 m2 > g256 m1 |
-| measured PPL | — | g64 m1 > g128 m2 > **g128 m1** > g256 m3 > g256 m2 > g256 m1 |
+| model | site | pair | measured | analytic | relative error |
+|---|---|---|---:|---:|---:|
+| 3B | qkv | 256/128 | 1.0882 | 1.0895 | -0.12% |
+| 3B | qkv | 128/64 | 1.1060 | 1.1070 | -0.09% |
+| 3B | down | 256/128 | 1.0875 | 1.0895 | -0.18% |
+| 3B | down | 128/64 | 1.1049 | 1.1070 | -0.20% |
+| 8B | qkv | 256/128 | 1.0877 | 1.0895 | -0.17% |
+| 8B | qkv | 128/64 | 1.1066 | 1.1070 | -0.04% |
+| 8B | down | 256/128 | 1.0887 | 1.0895 | -0.08% |
+| 8B | down | 128/64 | 1.1055 | 1.1070 | -0.14% |
 
-**The one-term ranking places NAR g256 m=3 above NAR g128 m=1, at positions 3 and 5, and it is wrong: the measured order has them at 3 and 4 the other way round. The two-term ranking corrects it and reproduces the measured order exactly**, Spearman 1.0000, at every site and combined.
+Eight independent measurements agree with the parameter-free prediction to between 0.04% and 0.20%, all slightly below it, which is the expected sign: real rotated activations are marginally lighter-tailed than exact Gaussians at these group sizes. The two-term predictor therefore adds no fitted freedom over the one-term law — it multiplies by a constant that the Gaussian model hands over.
+
+Ranking the six bit-accounted NAR rows against measured PPL, on both models:
+
+| model | site | one term, `f` alone | two term, `step_Had(g)*sqrt(1-f)` |
+|---|---|---:|---:|
+| 3B | qkv | 0.9429 | **1.0000** |
+| 3B | down | 0.8286 | **1.0000** |
+| 3B | combined | 0.8286 | **1.0000** |
+| 8B | qkv | 0.8986 | **1.0000** |
+| 8B | down | 0.8117 | **1.0000** |
+| 8B | combined | 0.8286 | **1.0000** |
+
+Both models give the identical two-term ordering, and it is the measured one:
+
+    g64 m1 > g128 m2 > g128 m1 > g256 m3 > g256 m2 > g256 m1
+
+**The one-term ranking places NAR g256 m=3 above NAR g128 m=1 at every site on both models, and it is wrong: the measured order has them the other way round. The two-term ranking corrects it and reproduces the measured order exactly**, Spearman 1.0000 in all six site-model combinations.
 
 This is the mechanism behind H1 and H2 failing, stated without reference to perplexity. Extra null-space dimensions raise `f`, and `f` is all the one-term law knows, so it predicts that g256 m=3 with 96 slots should beat g128 m=1 with 64. What it omits is that the step it multiplies is the step of a 256-wide group, which the range measurement shows to be larger. Once both terms are present the ordering is exact. The same term is visible directly in the range table, where NAR g128 m=1 and NAR g256 m=2 share `f` = 0.2773 at the down site by construction yet reduce the range by 0.2233 and 0.2097: identical captured energy, different starting step.
 
-Outputs are in `results/llama32_3b/e20_two_term_theory.csv` and `e20_two_term_ranking.csv`.
+Outputs are in `e20_two_term_theory.csv`, `e20_two_term_ranking.csv` and `e20_step_ratio.csv` under each model's result directory.
 
 ## Plain statement across both models
 
