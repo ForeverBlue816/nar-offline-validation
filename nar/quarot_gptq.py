@@ -66,6 +66,7 @@ class WeightQuantizer(torch.nn.Module):
         xmax = torch.maximum(xmin.abs(), xmax).clamp(min=1e-5)
         self.scale = xmax / self.maxq
         self.zero = torch.zeros_like(self.scale)
+        self.shrink = torch.ones(x.shape[0], device=x.device)
         if self.mse:
             best = torch.full((x.shape[0],), float("inf"), device=x.device)
             for index in range(int(self.maxshrink * self.grid)):
@@ -76,6 +77,7 @@ class WeightQuantizer(torch.nn.Module):
                 if torch.any(better):
                     best[better] = error[better]
                     self.scale[better] = scale[better]
+                    self.shrink[better] = shrink
         if not self.perchannel:
             self.scale = self.scale.repeat(shape[0])
             self.zero = self.zero.repeat(shape[0])
@@ -98,6 +100,27 @@ class GPTQAudit:
     damp: float
     groupsize: int
     blocksize: int
+    act_order: bool = False
+    # Conditioning of the Hessian GPTQ inverts. A rotation that concentrates
+    # activation energy onto a few input coordinates makes diag(H) spiky, and
+    # because the damping is a fixed fraction of the *mean* diagonal, the same
+    # spikes that raise the mean over-damp every ordinary coordinate.
+    hessian_diag_max_over_median: float = 0.0
+    hessian_diag_mean_over_median: float = 0.0
+    damp_over_median_diag: float = 0.0
+    # Share of diag(H) mass on the null-space slots, input coordinates
+    # 0, 128, 256, ... which are the group DC slots the rotation aligns to.
+    # The uninformative baseline is slot_count/columns = 1/128.
+    null_slot_diag_share: float = 0.0
+    null_slot_baseline: float = 0.0
+    # MSE clipping is per output row here (groupsize -1 gives one scale per
+    # row), so a per-input-column shrink does not exist under this protocol.
+    rows_clipped: int = 0
+    mean_shrink: float = 1.0
+    # Of the rows that clipped, the share of their weight mass sitting on
+    # null-space-slot input coordinates, against the same 1/128 baseline.
+    clipped_row_null_slot_mass_share: float = 0.0
+    unclipped_row_null_slot_mass_share: float = 0.0
 
 
 class GPTQ:
@@ -127,7 +150,8 @@ class GPTQ:
 
     @torch.no_grad()
     def fasterquant(self, blocksize: int = 128, percdamp: float = 0.01,
-                    groupsize: int = -1) -> GPTQAudit:
+                    groupsize: int = -1, act_order: bool = False,
+                    null_slot_stride: int = 128) -> GPTQAudit:
         weight = self.layer.weight.data.float().clone()
         if not self.quantizer.ready():
             self.quantizer.find_params(weight)
@@ -137,6 +161,14 @@ class GPTQ:
         dead_count = int(dead.sum())
         hessian[dead, dead] = 1
         weight[:, dead] = 0
+        stats = self._diagnostics(hessian, weight, percdamp, null_slot_stride)
+        if act_order:
+            # QuaRot's activation ordering: quantize the highest-curvature
+            # columns first, then undo the permutation at the end.
+            order = torch.argsort(torch.diag(hessian), descending=True)
+            weight = weight[:, order]
+            hessian = hessian[order][:, order]
+            inverse_order = torch.argsort(order)
         damp = float(percdamp * torch.mean(torch.diag(hessian)))
         diagonal = torch.arange(self.columns, device=weight.device)
         hessian[diagonal, diagonal] += damp
@@ -164,10 +196,44 @@ class GPTQ:
             output[:, block_start:block_stop] = quantized
             weight[:, block_stop:] -= errors @ hinv[block_start:block_stop, block_stop:]
         torch.cuda.synchronize()
+        if act_order:
+            output = output[:, inverse_order]
         self.layer.weight.data.copy_(output.to(self.layer.weight.dtype))
         if torch.any(torch.isnan(self.layer.weight)):
             raise ValueError("NaN in GPTQ weights")
         return GPTQAudit(
             columns=self.columns, rows=self.rows, hessian_sequences=self.nsamples,
             dead_columns=dead_count, damp=damp, groupsize=groupsize, blocksize=blocksize,
+            act_order=act_order, **stats,
         )
+
+    @torch.no_grad()
+    def _diagnostics(self, hessian: torch.Tensor, weight: torch.Tensor,
+                     percdamp: float, stride: int) -> dict[str, float]:
+        diag = torch.diag(hessian).float()
+        median = float(diag.median())
+        median = median if median > 0 else float("nan")
+        slots = torch.zeros(self.columns, dtype=torch.bool, device=diag.device)
+        slots[::stride] = True
+        total = float(diag.sum())
+        mass = weight.abs().pow(2)
+        row_mass = mass.sum(1).clamp_min(1e-30)
+        slot_share = (mass[:, slots].sum(1) / row_mass)
+        shrink = getattr(self.quantizer, "shrink", None)
+        if shrink is None:
+            shrink = torch.ones(self.rows, device=diag.device)
+        shrink = shrink.flatten().to(diag.device)
+        clipped = shrink < 1
+        return {
+            "hessian_diag_max_over_median": float(diag.max()) / median,
+            "hessian_diag_mean_over_median": float(diag.mean()) / median,
+            "damp_over_median_diag": percdamp * float(diag.mean()) / median,
+            "null_slot_diag_share": float(diag[slots].sum()) / total if total > 0 else float("nan"),
+            "null_slot_baseline": float(slots.sum()) / self.columns,
+            "rows_clipped": int(clipped.sum()),
+            "mean_shrink": float(shrink.mean()),
+            "clipped_row_null_slot_mass_share": (
+                float(slot_share[clipped].mean()) if bool(clipped.any()) else float("nan")),
+            "unclipped_row_null_slot_mass_share": (
+                float(slot_share[~clipped].mean()) if bool((~clipped).any()) else float("nan")),
+        }

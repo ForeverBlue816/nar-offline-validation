@@ -73,8 +73,16 @@ def rotation_dir(workdir: Path, model: str) -> Path:
     return workdir / "activations" / model / "e14_rotations"
 
 
-def checkpoint_dir(artifact_root: Path, model: str, rotation: str, seed: int) -> Path:
-    return artifact_root / model / f"gptq_{rotation}_seed{seed}"
+def checkpoint_dir(artifact_root: Path, model: str, rotation: str, seed: int,
+                   protocol: str = "") -> Path:
+    """Where a GPTQ checkpoint lives.
+
+    The default protocol keeps the original path so every completed E14 and E19
+    checkpoint is still found; an alternative protocol gets its own directory so
+    nothing already measured is overwritten.
+    """
+    suffix = f"_{protocol}" if protocol else ""
+    return artifact_root / model / f"gptq_{rotation}_seed{seed}{suffix}"
 
 
 def _seed(base_seed: int, label: str, layer: int = 0) -> int:
@@ -712,7 +720,10 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         raise RuntimeError("E14 GPTQ requires CUDA")
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
-    output = checkpoint_dir(artifact_root, args.model, args.rotation, args.seed)
+    act_order = bool(getattr(args, "act_order", False))
+    weight_groupsize = int(getattr(args, "weight_groupsize", -1))
+    protocol = getattr(args, "protocol", "") or ""
+    output = checkpoint_dir(artifact_root, args.model, args.rotation, args.seed, protocol)
     done = output / "DONE.json"
     if done.exists():
         LOG.info("E14 GPTQ checkpoint exists: %s", done)
@@ -802,7 +813,8 @@ def gptq_quantize(args: argparse.Namespace) -> None:
                 handle.remove()
             for name, _module in group:
                 audit = engines[name].fasterquant(
-                    blocksize=128, percdamp=0.01, groupsize=-1
+                    blocksize=128, percdamp=0.01, groupsize=weight_groupsize,
+                    act_order=act_order,
                 )
                 audit_rows.append({
                     "model": model_key, "rotation": args.rotation, "layer": layer_index,
@@ -833,9 +845,10 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         "model": model_key, "model_id": model_id, "rotation": args.rotation,
         "quarot_commit": QUAROT_COMMIT,
         "gptq": {
-            "bits": 4, "perchannel": True, "symmetric": True, "groupsize": -1,
+            "bits": 4, "perchannel": True, "symmetric": True, "groupsize": weight_groupsize,
             "mse_clipping": True, "norm": 2.4, "grid": 100, "maxshrink": 0.8,
-            "blocksize": 128, "percdamp": 0.01, "act_order": False,
+            "blocksize": 128, "percdamp": 0.01, "act_order": act_order,
+            "protocol": protocol or "default",
             "static_groups": False, "calibration_sequences": args.calibration_sequences,
             "calibration_seed": args.calibration_seed,
             "calibration_dataset": "WikiText-2 train", "sequence_length": args.seq_len,
@@ -850,8 +863,9 @@ def gptq_quantize(args: argparse.Namespace) -> None:
 
 
 def load_quantized_model(workdir: Path, artifact_root: Path, model_key: str,
-                         rotation: str, seed: int, row_batch: int) -> tuple[torch.nn.Module, RotationSet]:
-    root = checkpoint_dir(artifact_root, model_key, rotation, seed)
+                         rotation: str, seed: int, row_batch: int,
+                         protocol: str = "") -> tuple[torch.nn.Module, RotationSet]:
+    root = checkpoint_dir(artifact_root, model_key, rotation, seed, protocol)
     if not (root / "DONE.json").exists():
         raise FileNotFoundError(root / "DONE.json")
     model, rotations, _fold = _prepare_rotated_model(workdir, model_key, rotation, seed, row_batch)

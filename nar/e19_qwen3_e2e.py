@@ -57,14 +57,34 @@ ROWS = {
     "nar_kmax_asym_g128": ("nar_kmax", "asymmetric_g128"),
 }
 ZERO_SHOT_ROWS = ("hadamard_asym_g128", "nar_k8_asym_g128", "nar_kmax_asym_g128")
+# Protocol selection runs on held-out WikiText-2 train windows, past the
+# block GPTQ calibrates on, so the test set never chooses the protocol.
+CALIBRATION_OFFSET = 256
+CALIBRATION_WINDOWS = 64
 # Decomposition rows for the k-dependence diagnosis: each turns on exactly one
 # of the three quantizers so the component carrying the k-dependence can be
 # read off directly.  Values are (rotation, activation_kind, weights, kv).
 # The A-only arm is not here because E18 v2 already measured it.
+# Alternative GPTQ protocols for the W-only k-dependence. "default" is the
+# frozen E14 setting; the other two are the two standard mitigations for an
+# ill-conditioned Hessian, applied identically to every rotation they are run
+# for so the comparison stays matched.
+GPTQ_PROTOCOLS = {
+    "default": {"act_order": False, "weight_groupsize": -1},
+    "act_order": {"act_order": True, "weight_groupsize": -1},
+    "g128": {"act_order": False, "weight_groupsize": 128},
+}
 COMPONENT_ROWS = {
     f"{name}_{rotation}": (rotation, kind, weights, kv)
     for name, kind, weights, kv in (("kv_only", None, False, True),
                                     ("w_only", None, True, False))
+    for rotation in ("hadamard", "nar_k8", "nar_kmax")
+}
+# Full W4A4KV4 rows under an alternative GPTQ protocol. The row name carries the
+# protocol so its artifacts never collide with the default-protocol rows.
+PROTOCOL_ROWS = {
+    f"{rotation}_{protocol}": (rotation, "asymmetric_g128", protocol)
+    for protocol in ("act_order", "g128")
     for rotation in ("hadamard", "nar_k8", "nar_kmax")
 }
 # Expected Qwen3-8B-Base shape contract; every value is asserted at load time.
@@ -342,8 +362,18 @@ def round_trip_audit(rotations: e14.RotationSet, layers: int, rows: int = 8,
 
 # ------------------------------------------------------------- evaluation ---
 
-def eval_tokens(workdir: Path, seq_len: int) -> torch.Tensor:
-    """The same 146 WikiText-2 test windows E18 v2 used, for comparability."""
+def eval_tokens(workdir: Path, seq_len: int, split: str = "test") -> torch.Tensor:
+    """Evaluation windows.
+
+    "test" is the same 146 WikiText-2 test windows E18 v2 used.  "calibration"
+    is a disjoint block of WikiText-2 *train* windows, used to choose between
+    GPTQ protocols without letting the test set pick the protocol.  The offset
+    skips the first 128 train windows so the selection set does not overlap the
+    sequences GPTQ itself calibrated on.
+    """
+    if split == "calibration":
+        return base.prepare_token_chunks(MODEL_ID, "train", CALIBRATION_OFFSET,
+                                         CALIBRATION_WINDOWS, seq_len, workdir)
     return base.prepare_token_chunks(MODEL_ID, "test", 0, EVAL_WINDOWS, seq_len, workdir)
 
 
@@ -551,6 +581,12 @@ def control_command(args: argparse.Namespace) -> None:
 def gptq_command(args: argparse.Namespace) -> None:
     install_extension_hooks()
     args.model = MODEL_KEY
+    protocol = getattr(args, "protocol", "default")
+    for name, value in GPTQ_PROTOCOLS[protocol].items():
+        setattr(args, name, value)
+    # "default" keeps the original artifact path so the checkpoints already on
+    # disk are reused rather than recomputed.
+    args.protocol = "" if protocol == "default" else protocol
     e14.gptq_quantize(args)
 
 
@@ -595,7 +631,9 @@ def evaluate_command(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / MODEL_KEY
-    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}_ppl.json"
+    split = getattr(args, "split", "test")
+    tag = "" if split == "test" else f"_{split}"
+    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{tag}_ppl.json"
     zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot.json"
     need_ppl = args.metrics in ("ppl", "both")
     need_zero = args.metrics in ("zero_shot", "both") and args.row in ZERO_SHOT_ROWS
@@ -605,12 +643,16 @@ def evaluate_command(args: argparse.Namespace) -> None:
     base.setup_logging(workdir, f"e19-evaluate-{args.row}")
     base.seed_everything(args.seed)
     install_extension_hooks()
+    checkpoint_protocol = ""
     if args.row in ROWS:
         rotation, activation_kind = ROWS[args.row]
         quantize_weights = rotation is not None
         quantize_kv = rotation is not None
-    else:
+    elif args.row in COMPONENT_ROWS:
         rotation, activation_kind, quantize_weights, quantize_kv = COMPONENT_ROWS[args.row]
+    else:
+        rotation, activation_kind, checkpoint_protocol = PROTOCOL_ROWS[args.row]
+        quantize_weights = quantize_kv = True
 
     provenance = {
         "model": MODEL_KEY, "model_id": MODEL_ID, "row": args.row,
@@ -641,11 +683,16 @@ def evaluate_command(args: argparse.Namespace) -> None:
     else:
         if quantize_weights:
             model, rotations = e14.load_quantized_model(
-                workdir, artifact_root, MODEL_KEY, rotation, args.seed, args.weight_row_batch
+                workdir, artifact_root, MODEL_KEY, rotation, args.seed, args.weight_row_batch,
+                protocol=checkpoint_protocol,
             )
-            provenance["weight_fold_audit"] = json.loads(
-                (e14.checkpoint_dir(artifact_root, MODEL_KEY, rotation, args.seed) / "DONE.json").read_text()
-            )["fold"]
+            done = json.loads((e14.checkpoint_dir(
+                artifact_root, MODEL_KEY, rotation, args.seed, checkpoint_protocol
+            ) / "DONE.json").read_text())
+            provenance["weight_fold_audit"] = done["fold"]
+            provenance["gptq_protocol"] = done["gptq"].get("protocol", "default")
+            provenance["gptq_act_order"] = done["gptq"]["act_order"]
+            provenance["gptq_weight_groupsize"] = done["gptq"]["groupsize"]
         else:
             # KV-only: the same rotated model without the GPTQ layer states, so
             # no GPTQ run is needed and the weights stay unquantized.
@@ -664,12 +711,16 @@ def evaluate_command(args: argparse.Namespace) -> None:
         hooks.install()
     try:
         if need_ppl and not ppl_path.exists():
-            tokens = eval_tokens(workdir, args.seq_len)
-            ppl, chunk_rows = evaluate_ppl_fp32(model, tokens, f"{MODEL_KEY} {args.row}")
+            tokens = eval_tokens(workdir, args.seq_len, split)
+            ppl, chunk_rows = evaluate_ppl_fp32(model, tokens, f"{MODEL_KEY} {args.row} {split}")
             base.atomic_json(ppl_path, {
                 **provenance, "ppl": ppl, "chunks": chunk_rows,
                 "chunks_evaluated": len(chunk_rows),
-                "dataset": "WikiText-2 raw test, full set, 146 windows at context 2048",
+                "dataset": ("WikiText-2 raw test, full set, 146 windows at context 2048"
+                            if split == "test" else
+                            f"WikiText-2 raw train, {CALIBRATION_WINDOWS} windows from offset "
+                            f"{CALIBRATION_OFFSET}, held out from the GPTQ calibration block"),
+                "split": split,
                 "sequence_length": args.seq_len, "nll_dtype": "float32",
             })
             del tokens
@@ -727,6 +778,7 @@ def decompose_command(args: argparse.Namespace) -> None:
     why no absolute perplexity from it is placed in the table.
     """
     workdir = Path(args.workdir).resolve()
+    base.setup_logging(workdir, "e19-decompose")
     result_dir = workdir / "results" / MODEL_KEY
     rotations = ("hadamard", "nar_k8", "nar_kmax")
 
@@ -776,16 +828,19 @@ def decompose_command(args: argparse.Namespace) -> None:
                  entry["a_only_delta_vs_bf16"], entry["kv_only_delta_vs_bf16"],
                  entry["w_only_delta_vs_bf16"], entry["sum_of_components"],
                  entry["all_three_delta_vs_bf16"])
-    spread = {}
-    for name in ("a_only", "kv_only", "w_only"):
-        values = [entry[f"{name}_delta_vs_bf16"] for entry in table]
-        if not any(math.isnan(v) for v in values):
-            spread[name] = values[-1] - values[0]   # nar_kmax minus hadamard
-    if spread:
-        LOG.info("k-dependence carried by: %s",
-                 max(spread, key=lambda key: abs(spread[key])))
-        for name, value in spread.items():
-            LOG.info("   %-8s nar_kmax - hadamard = %+.5f", name, value)
+    # The question is which component gets *worse* as k rises, not which moves
+    # most: A-only moves furthest but in the expected direction, so ranking by
+    # absolute spread would name the wrong component.
+    by_rotation = {entry["rotation"]: entry for entry in table}
+    if {"nar_k8", "nar_kmax"} <= set(by_rotation):
+        for name in ("a_only", "kv_only", "w_only"):
+            key = f"{name}_delta_vs_bf16"
+            low = by_rotation["nar_k8"][key]
+            high = by_rotation["nar_kmax"][key]
+            if not (math.isnan(low) or math.isnan(high)):
+                verdict = "worsens with k" if high > low + 1e-3 else "does not worsen with k"
+                LOG.info("   %-8s k=8 %+.5f -> k=max %+.5f  (%+.5f, %s)",
+                         name, low, high, high - low, verdict)
 
 
 def finalize_command(args: argparse.Namespace) -> None:
@@ -902,9 +957,12 @@ def parser() -> argparse.ArgumentParser:
     control.add_argument("--control-nll-tolerance", type=float, default=1e-3)
     gptq = sub.add_parser("gptq")
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
+    gptq.add_argument("--protocol", choices=tuple(GPTQ_PROTOCOLS), default="default")
     evaluate = sub.add_parser("evaluate")
-    evaluate.add_argument("--row", choices=tuple(ROWS) + tuple(COMPONENT_ROWS), required=True)
+    evaluate.add_argument("--row", choices=tuple(ROWS) + tuple(COMPONENT_ROWS) + tuple(PROTOCOL_ROWS),
+                          required=True)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
+    evaluate.add_argument("--split", choices=("test", "calibration"), default="test")
     decompose = sub.add_parser("decompose")
     sub.add_parser("finalize")
     return result
