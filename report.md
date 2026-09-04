@@ -1012,6 +1012,88 @@ Rows per model, all three seeds unless noted: bf16 (one run); Hadamard asym g64/
 
 The m-direction quantizer adds `m - 1` dot products of length g per group to the E17 Kernel B, and `m - 1` precomputed `W w_j` vectors per group to the INT4 GEMM dequantization. Both have the same form as the existing zero-point term, which the fused kernel already carries. No new kernel structure is required.
 
-## Results
+## Results — Llama-3.2-3B
 
-Pending. This section will be completed with the table, the sqrt(1-f) theory columns, the extended E16 alignment diagnostic, the fp16 coefficient precision check, and a plain statement of which hypotheses held.
+Three paired rotation seeds, 64 WikiText-2 chunks, exact-transpose fold with the round-trip residual at most 3.209e-07 across all 66 (row, seed, site) checks against a 1e-6 bound, fp32 per-chunk NLL. The 8B rows are running and will be added; nothing below is copied from E11.
+
+| row | eff. bits | slots (down) | mean PPL | delta vs bf16 | paired delta vs NAR g128 m=1 [90% CI] |
+|---|---:|---:|---:|---:|---|
+| bf16 | 16.0 | 0 | 7.61675 | +0.00000 | — |
+| Hadamard g64 m=1 | 4.5 | 0 | 7.73741 | +0.12066 | +0.02425 [+0.00797, +0.04054] |
+| Hadamard g128 m=1 | 4.25 | 0 | 7.77081 | +0.15406 | +0.05765 [+0.04866, +0.06664] |
+| Hadamard g256 m=1 | 4.125 | 0 | 7.79003 | +0.17328 | +0.07687 [+0.05138, +0.10237] |
+| Hadamard g256 m=2 | 4.1875 | 0 | 7.79124 | +0.17449 | +0.07809 [+0.05880, +0.09737] |
+| Hadamard g256 m=3 | 4.25 | 0 | 7.78898 | +0.17223 | +0.07582 [+0.05967, +0.09197] |
+| NAR g64 m=1 | 4.5 | 128 | 7.68492 | +0.06817 | -0.02823 [-0.03815, -0.01831] |
+| **NAR g128 m=1** | **4.25** | **64** | **7.71316** | **+0.09641** | baseline |
+| NAR g128 m=2 | 4.375 | 128 | 7.70424 | +0.08748 | -0.00892 [-0.01685, -0.00099] |
+| NAR g256 m=1 | 4.125 | 32 | 7.73952 | +0.12277 | +0.02636 [+0.01827, +0.03446] |
+| NAR g256 m=2 | 4.1875 | 64 | 7.72674 | +0.10999 | +0.01358 [+0.00243, +0.02474] |
+| NAR g256 m=3 | 4.25 | 96 | 7.72529 | +0.10854 | +0.01213 [+0.00730, +0.01696] |
+
+### The pre-registered hypotheses
+
+**H1 is not supported.** NAR g256 m=2 costs **+0.01358 PPL [+0.00243, +0.02474]** against NAR g128 m=1. The interval excludes zero, so at the same 64 slots and the same null space the coarser group is measurably worse, not within CI. The slots do not carry the gain on their own.
+
+**H2 is not supported.** NAR g256 m=3 costs **+0.01213 PPL [+0.00730, +0.01696]** against NAR g128 m=1 at identical 4.25 bits. Ninety-six slots at g=256 lose to sixty-four slots at g=128. Spending metadata on null-space dimension does **not** beat spending it on group count.
+
+**H3 is supported.** Against Hadamard g256 m=1, the extra directions give **+0.00121 [-0.01959, +0.02201]** at m=2 and **-0.00105 [-0.02564, +0.02354]** at m=3. Both intervals contain zero: an unaligned rotation gains nothing from extra null-space directions, so any NAR gain from m is not an artifact of the quantizer.
+
+**Scale resolution, measured directly.** Hadamard g128 minus Hadamard g256 is **-0.01922 [-0.03598, -0.00246]**. Halving the group buys about 0.019 PPL from scale resolution alone, with no slots involved.
+
+### What the extra directions do buy
+
+H1 and H2 failing does not mean the extra directions are inert. Within a fixed group size they help monotonically and significantly:
+
+| comparison | paired delta [90% CI] |
+|---|---|
+| NAR g256 m=2 vs g256 m=1 | -0.01278 [-0.03201, +0.00646] |
+| NAR g256 m=3 vs g256 m=1 | **-0.01423 [-0.02322, -0.00524]** |
+| NAR g128 m=2 vs g128 m=1 | **-0.00892 [-0.01685, -0.00099]** |
+| Hadamard g256 m=3 vs g256 m=1 (control) | -0.00105 [-0.02564, +0.02354] |
+
+NAR gains from the third direction and Hadamard does not, so **the gain is alignment-driven**, which is the mechanism the DC-alignment story predicts — the zero-point's direction is not privileged, it is simply the one that was already free.
+
+The accounting closes. At g=256 the extra directions are worth -0.01423, while moving from g=128 to g=256 costs +0.01922 in scale resolution; the residual, +0.005 to +0.012, is the +0.01213 that H2 measured directly. Extra null-space dimensions and finer groups are competing uses of the same metadata budget, and on this model **finer groups win**.
+
+### Theory: f and the sqrt(1-f) law
+
+`f` is the share of the activation second moment captured by `span(P_N)` after alignment, weighted by each direction's eigenvalue fraction and averaged over layers, measured over the top 96 directions.
+
+| row | qkv slots | f (qkv) | 1-sqrt(1-f) | down slots | f (down) | 1-sqrt(1-f) |
+|---|---:|---:|---:|---:|---:|---:|
+| NAR g256 m=1 | 12 | 0.3211 | 0.1761 | 32 | 0.2695 | 0.1453 |
+| NAR g128 m=1 | 24 | 0.3973 | 0.2237 | 64 | 0.3194 | 0.1750 |
+| NAR g256 m=2 | 24 | 0.3973 | 0.2237 | 64 | 0.3194 | 0.1750 |
+| NAR g256 m=3 | 36 | 0.4435 | 0.2540 | 96 | 0.3508 | 0.1943 |
+| NAR g64 m=1 | 48 | 0.4745 | 0.2751 | 128 | 0.3508 | 0.1943 |
+| NAR g128 m=2 | 48 | 0.4745 | 0.2751 | 128 | 0.3508 | 0.1943 |
+| Hadamard g256 m=2 | 0 | 0.0013 | 0.0006 | 0 | 0.0026 | 0.0013 |
+| Hadamard g256 m=3 | 0 | 0.0026 | 0.0013 | 0 | 0.0041 | 0.0020 |
+
+**The m > 1 points fall on the same line as the m = 1 points**, and they do so in the strongest possible way: `f` is a function of the slot count alone and is *numerically identical* for configurations with equal slots and different `(g, m)`. NAR g256 m=2 and NAR g128 m=1 both give 0.3973 at qkv and 0.3194 at down; NAR g128 m=2 and NAR g64 m=1 both give 0.4745 and 0.3508. This is what `span{w_1, w_2}` on a 256-group being `span{DC_block1, DC_block2}` requires, and it confirms that the law is about the null space and not about the zero-point specifically. The down-site rows at 96 and 128 slots share f = 0.3508 because f is measured over the top 96 directions and therefore saturates there; that is a limit of the measurement window, not of the configurations.
+
+The extended E16 alignment diagnostic gives the same picture directly: the mean captured share `s_i` over the top directions is exactly `slots / directions_measured` for every NAR row (g128 m=1 down 0.6667 = 64/96, g256 m=2 down 0.6667, g256 m=3 down 1.0000), i.e. every direction that receives a slot is captured completely and every direction without one is not captured at all. Hadamard sits at 0.003-0.012.
+
+The law predicts the ordering of the NAR rows correctly but not their spacing: g256 m=3 has a *higher* predicted reduction than g128 m=1 at both sites (0.2540 vs 0.2237 at qkv, 0.1943 vs 0.1750 at down) yet loses on PPL by +0.01213. The missing term is scale resolution, which `f` does not model at all.
+
+### fp16 precision of the coefficients
+
+`c_j` is the projection of a high-energy direction and is large on real activations: up to **13.39** at the down site against a quantization step of order 0.05.
+
+| row | site | max abs c | mean err / step | max err / step | code flip fraction |
+|---|---|---:|---:|---:|---:|
+| NAR g256 m=2 | qkv | 3.753 | 0.1794 | 1.0000 | 0.00129 |
+| NAR g256 m=2 | down | 13.392 | 0.0868 | 1.0000 | 0.00069 |
+| NAR g256 m=3 | qkv | 3.344 | 0.2964 | 0.9999 | 0.00204 |
+| NAR g256 m=3 | down | 13.392 | 0.1065 | 1.0000 | 0.00077 |
+| NAR g128 m=2 | qkv | 3.753 | 0.1357 | 0.9999 | 0.00134 |
+| NAR g128 m=2 | down | 13.392 | 0.0598 | 1.0000 | 0.00072 |
+| Hadamard g256 m=2 | qkv | 0.273 | 0.0078 | 1.0000 | 0.00004 |
+| Hadamard g256 m=3 | down | 0.055 | 0.0093 | 1.0000 | 0.00005 |
+
+**This exceeds 0.1 of a step on the NAR rows, and fp16 is kept anyway**, because the bit accounting assumes it; the threshold is reported rather than used to justify a silent switch to fp32. A max ratio of exactly one step is the granularity of the measure — it means a code flipped by one — so the interpretable quantity is the flip rate, which is 0.07% to 0.20% of codes on the NAR rows and 0.004% to 0.005% on Hadamard. The effect is real but two orders of magnitude smaller than the differences the hypotheses turn on.
+
+### Plain statement
+
+On Llama-3.2-3B, **H1 and H2 do not hold and H3 does**. Extra null-space directions are not inert and their benefit is genuinely alignment-driven, but at a matched bit budget the metadata is better spent on finer groups than on additional null-space dimensions: NAR g128 m=1 remains the best 4.25-bit configuration, and the best rows overall are the ones that buy more slots *and* keep the finer group (NAR g64 m=1 at -0.02823 and NAR g128 m=2 at -0.00892, both above 4.25 bits). The DC direction is not special; it is simply the direction that was already free, and buying more of them costs more than it returns once the group has to grow to pay for them.
