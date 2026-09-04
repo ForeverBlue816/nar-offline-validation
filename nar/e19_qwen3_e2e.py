@@ -509,11 +509,19 @@ def control_command(args: argparse.Namespace) -> None:
             merged[str(row[key])] = row
         base.write_csv(path, list(merged.values()))
 
-    merge_csv(control_path(workdir), rows, "method")
+    merge_csv(control_path(workdir), rows, "rotation")
     trip_path = workdir / "results" / MODEL_KEY / "e19_round_trip_audit.csv"
+
+    def trip_key(entry: dict[str, Any]) -> str:
+        return f"{entry['rotation']}|{entry['site']}|{entry['layer']}"
+
+    merged_trips: dict[str, dict[str, Any]] = {}
+    if trip_path.exists():
+        for existing in base.read_csv(trip_path):
+            merged_trips[trip_key(existing)] = existing
     for entry in round_trips:
-        entry["merge_key"] = f"{entry['rotation']}|{entry['site']}|{entry['layer']}"
-    merge_csv(trip_path, round_trips, "merge_key")
+        merged_trips[trip_key(entry)] = entry
+    base.write_csv(trip_path, list(merged_trips.values()))
     base.atomic_json(workdir / "results" / MODEL_KEY / "e19_control.json", {
         "model": MODEL_KEY, "model_id": MODEL_ID, "control_chunks": int(tokens.shape[0]),
         "reference_ppl": reference_ppl, "rows": rows,
