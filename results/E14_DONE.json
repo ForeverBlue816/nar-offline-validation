@@ -1,0 +1,44 @@
+{
+  "a4": {
+    "other_rows": "dynamic asymmetric per-token group-128 with fp16 scale and fp16 offset",
+    "quarot_released": "official symmetric per-token semantics",
+    "sites": "inputs to q/k/v/o/gate/up/down projections"
+  },
+  "k4": {
+    "all_rows": "post-RoPE KIVI-style dynamic asymmetric per-channel, contiguous token groups of 32",
+    "qk_rotation": "omitted because the fixed per-channel K baseline replaces QuaRot per-token rotated K",
+    "residual": "R=32: K quantizes completed 32-token residual chunks (1..32 recent bf16 tokens); V keeps the latest 32 tokens bf16"
+  },
+  "models": [
+    "llama32_3b",
+    "llama31_8b"
+  ],
+  "negative_results_reported": true,
+  "no_tuning": true,
+  "paired": "same official seed-0 GPTQ calibration windows, WikiText-2 full-test tokens, harness revision, tasks, and rotation seed",
+  "paired_seed_count": 1,
+  "rows": [
+    "quarot_released",
+    "hadamard_asym_g128",
+    "nar_k8_asym_g128",
+    "nar_kmax_asym_g128"
+  ],
+  "seeds": [
+    0
+  ],
+  "uncertainty": "not estimable: protocol amended to one paired seed",
+  "v4": {
+    "all_rows": "dynamic asymmetric per-token, one head_dim=128 group",
+    "nar": "NAR R2 folded into o_proj",
+    "quarot_and_hadamard": "Hadamard R2"
+  },
+  "w4": {
+    "act_order": false,
+    "groupsize": -1,
+    "method": "GPTQ",
+    "mse_clipping": true,
+    "percdamp": 0.01,
+    "source": "spcl/QuaRot@5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+    "symmetric": true
+  }
+}

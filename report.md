@@ -430,7 +430,7 @@ Paired aggregate transfer: Llama-3.2-3B: NAR-Hadamard mean-accuracy delta +0.000
 
 These accuracy results are reported regardless of sign. No task subset, prompt, batch-size, or metric was selected after observing outputs.
 
-# E14 — end-to-end W4A4KV4 (in progress)
+# E14 — end-to-end W4A4KV4
 
 ## Released-code sanity anchor
 
@@ -448,14 +448,37 @@ SpinQuant is citation-only: no rotation artifact is downloaded or evaluated, and
 
 **Protocol amendment:** the official end-to-end DuQuant baseline is citation-only. Only official published data, with its exact model and quantization setting stated, will be used; no local DuQuant reproduction is run and it is excluded from paired claims when settings differ. This does not alter the already completed E11 `DuQuant-style` construction audit, which is explicitly not an official end-to-end DuQuant row. The optional Qwen3-30B-A3B MoE experiment is deferred and receives no GPU time.
 
-| model | seed | row | full WikiText-2 PPL | paired delta vs Hadamard |
-|---|---|---|---|---|
-| Llama-3.2-3B | 0 | Hadamard + asymmetric g128 | 9.20901 | 0 |
-| Llama-3.2-3B | 0 | NAR k=8 R1/R4 + NAR R2 + asymmetric g128 | 8.75623 | -0.452776 |
-| Llama-3.2-3B | 0 | NAR k=max R1/R4 + NAR R2 + asymmetric g128 | 8.71445 | -0.494562 |
-| Llama-3.2-3B | 0 | QuaRot released symmetric A4 | 10.33237 | +1.12336 |
+## Results
 
-Completed six-task zero-shot means are 0.643694 for metadata-matched Hadamard and 0.651201 for NAR k=8, a direct paired gain of +0.007507 for NAR. The released QuaRot zero-shot row is still running.
+All four rows are complete on both models, seed 0, evaluated on the full WikiText-2 test token stream and the frozen E13 six-task suite at the pinned harness revision. Effective widths are identical across the rotated rows: W 4.004/4.003 bits, activations 4.25 at both sites, K 5.171 and V 4.433 at context 2048. The released-QuaRot row uses the official symmetric per-token A4 semantics, which is why its activation width is 4.00 rather than 4.25.
+
+### Llama-3.2-3B
+
+| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task zero-shot | paired delta vs Hadamard |
+|---|---|---:|---:|---:|---:|
+| A | QuaRot released, symmetric A4 | 10.33237 | — | 0.6078 | — |
+| B | Hadamard + asymmetric g128 | 9.20901 | 0 | 0.6437 | 0 |
+| C | NAR k=8 R1/R4 + NAR R2 | 8.75623 | **-0.452776** | 0.6512 | **+0.007507** |
+| C | NAR k=max R1/R4 + NAR R2 | 8.71445 | **-0.494562** | 0.6537 | **+0.009996** |
+
+### Llama-3.1-8B
+
+| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task zero-shot | paired delta vs Hadamard |
+|---|---|---:|---:|---:|---:|
+| A | QuaRot released, symmetric A4 | 8.34771 | — | 0.6553 | — |
+| B | Hadamard + asymmetric g128 | 7.20638 | 0 | 0.7073 | 0 |
+| C | NAR k=8 R1/R4 + NAR R2 | 6.98984 | **-0.216543** | 0.7072 | -0.000075 |
+| C | NAR k=max R1/R4 + NAR R2 | 6.91467 | **-0.291712** | 0.7118 | **+0.004532** |
+
+Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`; the six tasks are piqa, arc_easy, arc_challenge, hellaswag, winogrande and lambada_openai.
+
+**NAR beats the metadata-matched Hadamard row on perplexity on both models**, by 0.4946 at k=max and 0.4528 at k=8 on the 3B, and by 0.2917 and 0.2165 on the 8B. The ordering k=max better than k=8 better than Hadamard holds on both.
+
+**The perplexity gain does not transfer proportionally to the downstream tasks.** On the 3B the six-task mean moves +0.0100 at k=max against a 0.4946 PPL gain; on the 8B it moves +0.0045 against 0.2917, and NAR k=8 is flat at -0.000075, statistically indistinguishable from Hadamard on a single seed. Whatever the rotation buys in perplexity is worth roughly a percentage point of zero-shot accuracy at best, and the 8B k=8 row shows it can be worth nothing. This is reported as measured; no row was rerun or reweighted.
+
+The protocol was amended to one seed, so no confidence interval is estimable for any of these deltas and none is quoted. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
+
+No bf16 reference row was run for E14, so no "recovered fraction versus bf16" is reported here. Every E14 claim is a paired delta against the metadata-matched Hadamard row on identical chunks, which is the comparison the experiment was designed for. A recovered fraction would need a bf16 perplexity on E14's own chunking — contiguous 2048-token windows without a BOS prefix — and a published figure computed under a different convention is not a valid denominator, since that choice alone moves WikiText-2 perplexity by more than the effects measured here.
 
 # E15 — FP4 boundary verification follow-up
 

@@ -1,0 +1,95 @@
+{
+  "batch_size": 1,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-5.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-c456f1a1-92c3-b503-cbb8-e75a86e2654e, 32607 MiB, 19216 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "136793",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "mean_accuracy": 0.651201470072356,
+  "mean_definition": "unweighted mean of six frozen accuracy metrics",
+  "model": "llama32_3b",
+  "model_id": "unsloth/Llama-3.2-3B",
+  "num_fewshot": 0,
+  "rotation_checkpoint": "nar_k8",
+  "row": "nar_k8_asym_g128",
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "lambada_openai": {
+      "effective": 5153,
+      "original": 5153
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 0,
+  "task_versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "hellaswag": 1.0,
+    "lambada_openai": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "tasks": [
+    {
+      "accuracy": 0.766050054406964,
+      "metric": "acc_norm,none",
+      "task": "piqa"
+    },
+    {
+      "accuracy": 0.6856060606060606,
+      "metric": "acc_norm,none",
+      "task": "arc_easy"
+    },
+    {
+      "accuracy": 0.4377133105802048,
+      "metric": "acc_norm,none",
+      "task": "arc_challenge"
+    },
+    {
+      "accuracy": 0.7058354909380602,
+      "metric": "acc_norm,none",
+      "task": "hellaswag"
+    },
+    {
+      "accuracy": 0.6677190213101816,
+      "metric": "acc,none",
+      "task": "winogrande"
+    },
+    {
+      "accuracy": 0.6442848825926645,
+      "metric": "acc,none",
+      "task": "lambada_openai"
+    }
+  ]
+}
