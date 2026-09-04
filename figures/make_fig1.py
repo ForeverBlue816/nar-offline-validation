@@ -1,503 +1,467 @@
 #!/usr/bin/env python3
-"""Render Figure 1 from the frozen Llama-3.2-3B E1c down-input dump."""
+"""Build revised Figure 1 as seven final-size standalone matplotlib panels."""
 
 from __future__ import annotations
 
 import argparse
 import json
-import shutil
 import sys
 from pathlib import Path
 from typing import Any
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
-from matplotlib import colors
-from mpl_toolkits.mplot3d.art3d import Line3DCollection
+from matplotlib.colors import Normalize
 
-from palette import get_palette, resolved_serif_family
+from figure_style import (
+    PALETTE,
+    SEQUENTIAL_CMAP,
+    clean_2d_axis,
+    configure_style,
+    resolved_serif_family,
+    save_panel,
+)
+
+MODEL = "llama32_3b"
 GROUP = 128
-LAYER = 1
-TOKEN_ROWS = 1024
-TOKEN_STRIDE = 32
-COLOR_CHUNK_ROWS = 128
 SEED = 20260902
-
-
-def configure_style() -> None:
-    mpl.rcParams.update(
-        {
-            "font.family": "serif",
-            "font.serif": ["Times New Roman", "Nimbus Roman", "Liberation Serif", "DejaVu Serif"],
-            "mathtext.fontset": "stix",
-            "font.size": 8.0,
-            "axes.labelsize": 8.0,
-            "xtick.labelsize": 8.0,
-            "ytick.labelsize": 8.0,
-            "legend.fontsize": 8.0,
-            "text.color": "#000000",
-            "axes.labelcolor": "#000000",
-            "xtick.color": "#000000",
-            "ytick.color": "#000000",
-            "axes.linewidth": 0.55,
-            "xtick.major.width": 0.45,
-            "ytick.major.width": 0.45,
-            "xtick.major.size": 2.2,
-            "ytick.major.size": 2.2,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-            "svg.fonttype": "none",
-            "savefig.transparent": False,
-            "savefig.facecolor": "white",
-        }
-    )
+EVAL_STRIDE = 32
+LANDSCAPE_TOKENS = 512
+LANDSCAPE_CHANNELS = 2048
 
 
 def import_project(repo: Path) -> tuple[Any, Any]:
     sys.path.insert(0, str(repo))
     from nar import activation_experiments as act
     from nar import extended_experiment as ext
-
     return act, ext
 
 
-def import_alignment_helper() -> Any:
-    helper = Path.home() / ".codex" / "skills" / "nature-figure" / "scripts"
-    sys.path.insert(0, str(helper))
-    from audit_panel_alignment import require_matplotlib_panel_alignment
-
-    return require_matplotlib_panel_alignment
-
-
-def sampled_non_bos_rows(wide: Path, ext: Any) -> tuple[torch.Tensor, np.ndarray, np.ndarray, dict[str, Any]]:
-    meta = json.loads((wide / "DONE.json").read_text())
-    mmap = ext._open_site(wide, meta, "down_input", LAYER)
-    positions = np.arange(TOKEN_STRIDE, int(meta["seq_len"]), TOKEN_STRIDE, dtype=np.int64)
-    sequence_index = np.repeat(np.arange(int(meta["sequences"]), dtype=np.int64), positions.size)
-    token_position = np.tile(positions, int(meta["sequences"]))
-    selected = mmap[:, positions, :].reshape(-1, int(meta["intermediate_size"]))[:TOKEN_ROWS]
-    x = ext._bits_to_tensor(selected, torch.device("cpu")).float()
-    if x.shape != (TOKEN_ROWS, 8192):
-        raise AssertionError(f"unexpected Figure 1 tensor shape: {tuple(x.shape)}")
-    if np.any(token_position[:TOKEN_ROWS] == 0):
-        raise AssertionError("BOS position 0 leaked into Figure 1")
-    return x, sequence_index[:TOKEN_ROWS], token_position[:TOKEN_ROWS], meta
-
-
-def subtract_group_means(x: torch.Tensor) -> torch.Tensor:
-    grouped = x.reshape(x.shape[0], -1, GROUP)
-    return (grouped - grouped.mean(dim=-1, keepdim=True)).reshape_as(x)
+def select_site_layer(repo: Path) -> tuple[str, int, dict[str, float], list[dict[str, Any]]]:
+    data = pd.read_csv(repo / "results" / MODEL / "e1c_per_layer.csv")
+    selected = data[data.method.isin(["hadamard_full", "nar_kmax"])]
+    pivot = selected.pivot(index=["site", "layer"], columns="method", values="mean_group_range").dropna()
+    pivot["absolute_reduction"] = pivot.hadamard_full - pivot.nar_kmax
+    pivot["relative_reduction"] = pivot.absolute_reduction / pivot.hadamard_full
+    ranked = pivot.sort_values("absolute_reduction", ascending=False).reset_index()
+    best = ranked.iloc[0]
+    evidence = {
+        "hadamard_mean_group_range": float(best.hadamard_full),
+        "prismquant_mean_group_range": float(best.nar_kmax),
+        "absolute_reduction": float(best.absolute_reduction),
+        "relative_reduction_percent": 100.0 * float(best.relative_reduction),
+    }
+    top = [
+        {
+            "site": str(row.site),
+            "layer": int(row.layer),
+            "absolute_reduction": float(row.absolute_reduction),
+            "relative_reduction_percent": 100.0 * float(row.relative_reduction),
+        }
+        for row in ranked.head(5).itertuples(index=False)
+    ]
+    return str(best.site), int(best.layer), evidence, top
 
 
-def receiving_group(factor: Any, signs: torch.Tensor, channel: int) -> tuple[int, float]:
-    basis = torch.zeros((1, factor.n), dtype=torch.float32)
-    basis[0, channel] = 1.0
-    mapped = factor.apply(basis, signs).reshape(-1, GROUP)
-    energy = mapped.square().sum(-1)
-    group = int(energy.argmax())
-    return group, float(energy[group])
+def load_rows(ext: Any, mmap: np.memmap, indices: np.ndarray) -> torch.Tensor:
+    bits = np.asarray(mmap[indices], dtype=np.uint16)
+    return ext._bits_to_tensor(bits, torch.device("cpu")).float()
 
 
-def signed_peak(values: np.ndarray, axis: int) -> np.ndarray:
-    maxima = np.max(values, axis=axis)
-    minima = np.min(values, axis=axis)
-    return np.where(np.abs(maxima) >= np.abs(minima), maxima, minima)
+def select_hero(ext: Any, mmap: np.memmap, v1: torch.Tensor, seq_len: int) -> dict[str, Any]:
+    positions = np.arange(EVAL_STRIDE, seq_len, EVAL_STRIDE, dtype=np.int64)
+    projections: list[torch.Tensor] = []
+    for sequence in range(mmap.shape[0]):
+        bits = np.asarray(mmap[sequence, positions, :], dtype=np.uint16)
+        rows = ext._bits_to_tensor(bits, torch.device("cpu")).float()
+        projections.append(rows.mv(v1))
+    projection = torch.cat(projections)
+    absolute = projection.abs()
+    q90 = float(torch.quantile(absolute, 0.90))
+    q95 = float(torch.quantile(absolute, 0.95))
+    row = int((absolute - q95).abs().argmin())
+    sequence = row // len(positions)
+    token = int(positions[row % len(positions)])
+    if float(absolute[row]) < q90 or token == 0:
+        raise AssertionError("hero selection is not a non-BOS top-decile v1 projection")
+    return {
+        "evaluation_rows": int(len(projection)),
+        "selection_rule": "non-BOS stride-32 row nearest the 95th percentile of |projection on v1|",
+        "top_decile_threshold_abs_projection": q90,
+        "target_percentile_abs_projection": q95,
+        "evaluation_row": row,
+        "sequence_index": sequence,
+        "token_position": token,
+        "projection_on_v1": float(projection[row]),
+        "absolute_projection_on_v1": float(absolute[row]),
+    }
 
 
-def make_data(repo: Path, workdir: Path, trace_csv: Path, landscape_csv: Path) -> dict[str, Any]:
-    act, ext = import_project(repo)
-    model = "llama32_3b"
-    wide = workdir / "activations" / model / "wide_cal_a"
-    x, sequences, positions, dump_meta = sampled_non_bos_rows(wide, ext)
+def centered_window(center: int, length: int, total: int, minimum: int = 0) -> tuple[int, int]:
+    start = center - length // 2
+    start = max(minimum, min(start, total - length))
+    return int(start), int(start + length)
+
+
+def group_aligned_channel_window(center_channel: int, n: int) -> tuple[int, int]:
+    groups_wide = LANDSCAPE_CHANNELS // GROUP
+    center_group = center_channel // GROUP
+    start_group = max(0, min(n // GROUP - groups_wide, center_group - groups_wide // 2))
+    return start_group * GROUP, (start_group + groups_wide) * GROUP
+
+
+def transform_rows(
+    act: Any,
+    ext: Any,
+    workdir: Path,
+    site: str,
+    layer: int,
+    x: torch.Tensor,
+    v1: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor, int, float, torch.Tensor]:
     n = x.shape[1]
-
-    persistent = x.abs().median(dim=0).values
-    strong_channel = int(persistent.argmax())
-    hero_row = int(x[:, strong_channel].abs().argmax())
-
+    site_index = {"q_input": 0, "down_input": 1}[site]
     generator = torch.Generator(device="cpu").manual_seed(
-        SEED + 1000 * LAYER + 10 + GROUP
+        SEED + 1000 * layer + 10 * site_index + GROUP
     )
     signs = torch.randint(0, 2, (n,), generator=generator, dtype=torch.int64)
     signs = signs.float().mul_(2).sub_(1)
-    h128 = ext.base.hadamard(GROUP, dtype=torch.float32)
-    had = ext._block_hadamard_rows(x, GROUP, signs, h128)
-
-    factor_path = workdir / "activations" / model / "activation_factors" / f"down_layer_{LAYER:02d}.pt"
-    factor = act.RotationFactor.load(factor_path, torch.device("cpu"))
-    nar = factor.apply(x, signs)
-    nar_residual = subtract_group_means(nar)
-    target_group, target_group_energy = receiving_group(factor, signs, strong_channel)
-
-    transforms = {
-        "raw": x,
-        "random_rotation": had,
-        "nar_kmax": nar,
-        "nar_kmax_zero_point_removed": nar_residual,
-    }
-    source_group = strong_channel // GROUP
-    trace_groups = {
-        "raw": source_group,
-        "random_rotation": source_group,
-        "nar_kmax": target_group,
-        "nar_kmax_zero_point_removed": target_group,
-    }
-
-    trace_rows: list[dict[str, Any]] = []
-    for method, tensor in transforms.items():
-        group = trace_groups[method]
-        values = tensor[hero_row, group * GROUP : (group + 1) * GROUP]
-        mean = float(values.mean())
-        value_range = float(values.max() - values.min())
-        for relative_channel, value in enumerate(values.tolist()):
-            trace_rows.append(
-                {
-                    "model": model,
-                    "site": "down_input",
-                    "layer": LAYER,
-                    "method": method,
-                    "sample_row": hero_row,
-                    "sequence_index": int(sequences[hero_row]),
-                    "token_position": int(positions[hero_row]),
-                    "source_persistent_channel": strong_channel,
-                    "display_group": group,
-                    "relative_channel": relative_channel,
-                    "signed_value": float(value),
-                    "group_mean": mean,
-                    "group_range": value_range,
-                    "group_size": GROUP,
-                    "bos_excluded": True,
-                }
-            )
-    pd.DataFrame(trace_rows).to_csv(trace_csv, index=False)
-
-    landscape_frames: list[pd.DataFrame] = []
-    chunks = TOKEN_ROWS // COLOR_CHUNK_ROWS
-    if TOKEN_ROWS % COLOR_CHUNK_ROWS:
-        raise AssertionError("token rows must divide evenly into landscape color chunks")
-    for method, tensor in transforms.items():
-        values = tensor.numpy()
-        channel_median = np.median(values, axis=0)
-        channel_abs_median = np.median(np.abs(values), axis=0)
-        panel_absmax = float(np.abs(values).max())
-        for chunk in range(chunks):
-            start = chunk * COLOR_CHUNK_ROWS
-            stop = (chunk + 1) * COLOR_CHUNK_ROWS
-            peaks = signed_peak(values[start:stop], axis=0)
-            landscape_frames.append(
-                pd.DataFrame(
-                    {
-                        "model": np.repeat(model, n),
-                        "site": np.repeat("down_input", n),
-                        "layer": np.repeat(LAYER, n),
-                        "method": np.repeat(method, n),
-                        "channel": np.arange(n, dtype=np.int32),
-                        "token_row_start": np.repeat(start, n),
-                        "token_row_stop_exclusive": np.repeat(stop, n),
-                        "signed_color_value": peaks,
-                        "channel_signed_median": channel_median,
-                        "channel_median_abs": channel_abs_median,
-                        "panel_absmax": np.repeat(panel_absmax, n),
-                        "bos_excluded": np.repeat(True, n),
-                    }
-                )
-            )
-    pd.concat(landscape_frames, ignore_index=True).to_csv(landscape_csv, index=False)
-
-    nar_groups = nar.reshape(TOKEN_ROWS, -1, GROUP)
-    plateau_means = nar_groups.mean(-1)
-    bright_group = int(plateau_means.abs().amax(dim=0).argmax())
-    shared_absmax = float(had.abs().max())
-    plateau_peak = float(plateau_means[:, bright_group].abs().max())
-    plateau_visible = plateau_peak / max(shared_absmax, 1e-30) >= 0.08
-
-    metadata: dict[str, Any] = {
-        "model": model,
-        "site": "down_input",
-        "layer": LAYER,
-        "channels": n,
-        "group_size": GROUP,
-        "token_stride": TOKEN_STRIDE,
-        "source_rows_before_bos_exclusion": int(dump_meta["sequences"] * (dump_meta["seq_len"] // TOKEN_STRIDE)),
-        "rows_after_bos_exclusion": int(dump_meta["sequences"] * (dump_meta["seq_len"] // TOKEN_STRIDE - 1)),
-        "plotted_token_rows": TOKEN_ROWS,
-        "bos_exclusion_rule": "exclude sequence position 0 from every sequence before deterministic row selection",
-        "strongest_persistent_channel": strong_channel,
-        "strongest_channel_median_abs": float(persistent[strong_channel]),
-        "hero_sample_row": hero_row,
-        "hero_sequence_index": int(sequences[hero_row]),
-        "hero_token_position": int(positions[hero_row]),
-        "hero_raw_value": float(x[hero_row, strong_channel]),
-        "source_group": source_group,
-        "nar_receiving_group": target_group,
-        "nar_receiving_group_basis_energy_fraction": target_group_energy,
-        "brightest_nar_plateau_group": bright_group,
-        "brightest_nar_plateau_peak_abs_mean": plateau_peak,
-        "shared_rotated_z_absmax": shared_absmax,
-        "nar_plateau_visible_ratio": plateau_peak / max(shared_absmax, 1e-30),
-        "zoom_strip_added": not plateau_visible,
-        "panel_absmax": {method: float(tensor.abs().max()) for method, tensor in transforms.items()},
-        "nar_anchor_error": float(factor.anchor_error),
-        "trace_groups": trace_groups,
-        "transform_seed": SEED,
-        "resolved_font_family": resolved_serif_family(),
-        "landscape_color_rule": (
-            "coolwarm; symmetric per-panel normalization to that panel's full absmax; "
-            "each channel line is locally colored by the signed maximum-absolute value "
-            f"within consecutive {COLOR_CHUNK_ROWS}-row segments; no color clipping"
-        ),
-        "source": "frozen E1c wide calibration dump and frozen k=max factor",
-    }
-    return metadata
-
-
-def load_landscape_tensors(repo: Path, workdir: Path, meta: dict[str, Any]) -> dict[str, torch.Tensor]:
-    act, ext = import_project(repo)
-    wide = workdir / "activations" / "llama32_3b" / "wide_cal_a"
-    x, _sequences, _positions, _dump_meta = sampled_non_bos_rows(wide, ext)
-    n = x.shape[1]
-    generator = torch.Generator(device="cpu").manual_seed(SEED + 1000 * LAYER + 10 + GROUP)
-    signs = torch.randint(0, 2, (n,), generator=generator, dtype=torch.int64)
-    signs = signs.float().mul_(2).sub_(1)
-    h128 = ext.base.hadamard(GROUP, dtype=torch.float32)
-    had = ext._block_hadamard_rows(x, GROUP, signs, h128)
+    hadamard = ext._full_hadamard_rows(x, signs)
+    factor_name = "qkv" if site == "q_input" else "down"
     factor = act.RotationFactor.load(
-        workdir / "activations" / "llama32_3b" / "activation_factors" / f"down_layer_{LAYER:02d}.pt",
+        workdir / "activations" / MODEL / "activation_factors" / f"{factor_name}_layer_{layer:02d}.pt",
         torch.device("cpu"),
     )
-    nar = factor.apply(x, signs)
-    return {
-        "raw": x,
-        "random_rotation": had,
-        "nar_kmax": nar,
-        "nar_kmax_zero_point_removed": subtract_group_means(nar),
+    prism = factor.apply(x, signs)
+    mapped_v1 = factor.apply(v1.reshape(1, -1), signs).reshape(-1, GROUP)
+    group_energy = mapped_v1.square().sum(dim=-1)
+    receiving_group = int(group_energy.argmax())
+    captured = float(group_energy[receiving_group] / group_energy.sum())
+    return hadamard, prism, receiving_group, captured, signs
+
+
+def build_data(repo: Path, workdir: Path) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
+    act, ext = import_project(repo)
+    site, layer, e1c, top_layers = select_site_layer(repo)
+    if site != "down_input":
+        raise AssertionError("the selected strongest E1c case is not the required down site")
+    wide = workdir / "activations" / MODEL / "wide_cal_a"
+    dump_meta = json.loads((wide / "DONE.json").read_text())
+    mmap = ext._open_site(wide, dump_meta, site, layer)
+    eig = torch.load(
+        wide / "analysis" / "eigenspaces" / f"{site}_layer_{layer:02d}.pt",
+        map_location="cpu",
+        weights_only=True,
+    )
+    v1 = eig["vectors"][:, 0].float()
+    hero = select_hero(ext, mmap, v1, int(dump_meta["seq_len"]))
+    token_start, token_stop = centered_window(
+        int(hero["token_position"]), LANDSCAPE_TOKENS, int(dump_meta["seq_len"]), minimum=1
+    )
+    bits = np.asarray(
+        mmap[int(hero["sequence_index"]), token_start:token_stop, :], dtype=np.uint16
+    )
+    raw = ext._bits_to_tensor(bits, torch.device("cpu")).float()
+    hadamard, prism, receiving_group, capture, _signs = transform_rows(
+        act, ext, workdir, site, layer, raw, v1
+    )
+    n = raw.shape[1]
+    v1_peak_channel = int(v1.abs().argmax())
+    raw_start, raw_stop = group_aligned_channel_window(v1_peak_channel, n)
+    rotated_start = max(0, min(n - LANDSCAPE_CHANNELS, receiving_group * GROUP))
+    rotated_start = (rotated_start // GROUP) * GROUP
+    rotated_stop = rotated_start + LANDSCAPE_CHANNELS
+
+    had_groups = hadamard.reshape(LANDSCAPE_TOKENS, -1, GROUP)
+    prism_groups = prism.reshape(LANDSCAPE_TOKENS, -1, GROUP)
+    had_range = had_groups.amax(dim=-1) - had_groups.amin(dim=-1)
+    prism_range = prism_groups.amax(dim=-1) - prism_groups.amin(dim=-1)
+    had_mean = float(had_range.mean())
+    prism_mean = float(prism_range.mean())
+    plotted_reduction = 100.0 * (had_mean - prism_mean) / had_mean
+    p90_reduction = 100.0 * (
+        float(torch.quantile(had_range, 0.90)) - float(torch.quantile(prism_range, 0.90))
+    ) / float(torch.quantile(had_range, 0.90))
+    if plotted_reduction < 10.0:
+        raise AssertionError(
+            f"PrismQuant range landscape is not visibly lower ({plotted_reduction:.1f}%); "
+            "select the next strongest measured layer instead of altering data"
+        )
+
+    raw_group = v1_peak_channel // GROUP
+    hero_offset = int(hero["token_position"]) - token_start
+    traces = {
+        "raw": raw[hero_offset, raw_group * GROUP : (raw_group + 1) * GROUP].numpy(),
+        "hadamard": hadamard[
+            hero_offset, receiving_group * GROUP : (receiving_group + 1) * GROUP
+        ].numpy(),
+        "nar_kmax": prism[
+            hero_offset, receiving_group * GROUP : (receiving_group + 1) * GROUP
+        ].numpy(),
     }
+    token_axis = np.arange(token_start, token_stop, dtype=np.int32)
+    arrays = {
+        "raw_magnitude": raw[:, raw_start:raw_stop].abs().numpy(),
+        "hadamard_magnitude": hadamard[:, rotated_start:rotated_stop].abs().numpy(),
+        "hadamard_range": had_range.numpy(),
+        "nar_kmax_range": prism_range.numpy(),
+        "token_axis": token_axis,
+        "trace_raw": traces["raw"],
+        "trace_hadamard": traces["hadamard"],
+        "trace_nar_kmax": traces["nar_kmax"],
+    }
+    metadata: dict[str, Any] = {
+        "model": MODEL,
+        "site": site,
+        "layer": layer,
+        "site_layer_selection_rule": "largest absolute measured mean-group-range reduction of nar_kmax versus hadamard_full across both E1c sites",
+        "e1c_selected_case": e1c,
+        "top_five_e1c_cases_by_absolute_reduction": top_layers,
+        "group_size": GROUP,
+        "groups": n // GROUP,
+        "hero": hero,
+        "token_window": {
+            "sequence_index": int(hero["sequence_index"]),
+            "position_start": token_start,
+            "position_stop_exclusive": token_stop,
+            "rows": LANDSCAPE_TOKENS,
+            "bos_excluded": True,
+        },
+        "channel_windows": {
+            "raw": [raw_start, raw_stop - 1],
+            "hadamard_and_prismquant": [rotated_start, rotated_stop - 1],
+            "width": LANDSCAPE_CHANNELS,
+            "raw_window_rule": "group-aligned window centered on the largest-|loading| channel of frozen v1",
+            "rotated_window_rule": "matched output-coordinate window beginning at the group receiving v1 under PrismQuant",
+        },
+        "group_window": [0, n // GROUP - 1],
+        "v1_peak_channel": v1_peak_channel,
+        "raw_trace_group": raw_group,
+        "prismquant_receiving_group": receiving_group,
+        "receiving_group_fraction_of_mapped_v1_energy": capture,
+        "plotted_mean_ranges": {
+            "hadamard": had_mean,
+            "prismquant_kmax": prism_mean,
+            "reduction_percent": plotted_reduction,
+            "p90_reduction_percent": p90_reduction,
+        },
+        "trace_ranges": {
+            name: float(values.max() - values.min()) for name, values in traces.items()
+        },
+        "trace_zero_points": {
+            name: float(values.mean()) for name, values in traces.items()
+        },
+        "transform_seed": SEED,
+        "font_family_resolved": resolved_serif_family(),
+        "row1_series": LANDSCAPE_CHANNELS,
+        "row2_series": n // GROUP,
+        "row1_z_limits": {
+            "raw": [0.0, float(arrays["raw_magnitude"].max())],
+            "hadamard": [0.0, float(arrays["hadamard_magnitude"].max())],
+        },
+        "row2_shared_z_limits": [0.0, float(arrays["hadamard_range"].max())],
+        "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
+    }
+    return arrays, metadata
 
 
-def panel_letter(ax: plt.Axes, letter: str) -> None:
-    draw_text = ax.text2D if hasattr(ax, "text2D") else ax.text
-    offset = mpl.transforms.ScaledTranslation(-8 / 72, 4 / 72, ax.figure.dpi_scale_trans)
-    draw_text(
-        0,
-        1,
-        letter,
-        transform=ax.transAxes + offset,
-        fontsize=9.0,
-        fontweight="bold",
-        color="#000000",
-        va="bottom",
-        ha="right",
-    )
-
-
-def style_3d(ax: plt.Axes, zlim: float, first: bool) -> None:
-    ax.set_xlim(0, 8191)
-    ax.set_ylim(0, TOKEN_ROWS - 1)
-    ax.set_zlim(-zlim, zlim)
-    ax.set_xticks([0, 8191])
-    ax.set_yticks([0, TOKEN_ROWS - 1])
-    ax.set_zticks([-zlim, zlim])
-    ax.set_xticklabels(["0", "8191"])
-    ax.set_yticklabels(["0", "1023"])
-    ax.set_zticklabels([f"−{zlim:.2g}", f"{zlim:.2g}"])
-    ax.tick_params(pad=-2, width=0.4, length=1.8)
-    ax.set_xlabel("channel", labelpad=-8)
-    ax.set_ylabel("token", labelpad=-9)
-    if first:
-        ax.set_zlabel("value", labelpad=-8)
-    else:
-        ax.set_zlabel("")
-    ax.view_init(elev=22, azim=-62)
-    ax.set_box_aspect((1.25, 1.0, 0.62))
+def style_3d(
+    ax: plt.Axes,
+    x_limits: tuple[int, int],
+    token_limits: tuple[int, int],
+    zmax: float,
+    xlabel: str,
+    zlabel: str,
+) -> None:
+    ax.set_xlim(*x_limits)
+    ax.set_ylim(*token_limits)
+    ax.set_zlim(0.0, zmax)
+    ax.set_xticks(list(x_limits))
+    ax.set_yticks(list(token_limits))
+    ax.set_zticks([0.0, zmax])
+    ax.set_xticklabels([str(x_limits[0]), f"{x_limits[1]}\u2003\u2003"])
+    ax.set_yticklabels([f"\u2003\u2003{token_limits[0]}", str(token_limits[1])])
+    ax.set_zticklabels(["0", f"{zmax:.2g}"])
+    ax.set_xlabel(xlabel, fontsize=8.0, labelpad=-7)
+    ax.set_ylabel("token", fontsize=8.0, labelpad=-8)
+    ax.set_zlabel("")
+    ax.tick_params(labelsize=7.0, pad=-2, length=1.8, width=0.45)
+    ax.view_init(elev=24, azim=-58)
+    ax.set_box_aspect((2.4, 1.3, 0.9))
+    try:
+        ax.dist = 8.5
+    except Exception:
+        pass
+    ax.grid(False)
     for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-        axis.pane.set_facecolor((0.94, 0.94, 0.94, 1.0))
-        axis.pane.set_edgecolor((0.72, 0.72, 0.72, 1.0))
-        axis._axinfo["grid"]["linewidth"] = 0.30
-        axis._axinfo["grid"]["color"] = (0.78, 0.78, 0.78, 0.6)
-        axis._axinfo["axisline"]["linewidth"] = 0.45
-        axis.label.set_rasterized(True)
-        for tick_label in axis.get_ticklabels():
-            tick_label.set_rasterized(True)
+        axis.pane.fill = False
+        axis.pane.set_edgecolor(PALETTE["pane_edge"])
+        axis._axinfo["grid"]["linewidth"] = 0.0
+        axis._axinfo["axisline"]["color"] = PALETTE["text"]
+        axis._axinfo["axisline"]["linewidth"] = 0.5
 
 
-def add_landscape(ax: plt.Axes, values: np.ndarray, zlim: float, first: bool) -> None:
-    token_count, channels = values.shape
-    chunk = COLOR_CHUNK_ROWS
-    chunk_count = token_count // chunk
-    point_count = chunk + 1
-    segments = np.empty((channels, chunk_count, point_count, 3), dtype=np.float32)
-    channel_axis = np.arange(channels, dtype=np.float32)
-    color_values = np.empty((channels, chunk_count), dtype=np.float32)
-    for part in range(chunk_count):
-        start = part * chunk
-        stop = (part + 1) * chunk
-        source_stop = min(stop + 1, token_count)
-        local = values[start:source_stop]
-        if local.shape[0] < point_count:
-            local = np.concatenate((local, local[-1:]), axis=0)
-        segments[:, part, :, 0] = channel_axis[:, None]
-        token_axis = np.arange(start, start + point_count, dtype=np.float32)
-        token_axis[-1] = min(float(token_axis[-1]), float(token_count - 1))
-        segments[:, part, :, 1] = token_axis[None, :]
-        segments[:, part, :, 2] = local.T
-        color_values[:, part] = signed_peak(values[start:stop], axis=0)
-    absmax = max(float(np.abs(values).max()), 1e-12)
-    norm = colors.TwoSlopeNorm(vmin=-absmax, vcenter=0.0, vmax=absmax)
-    collection = Line3DCollection(
-        segments.reshape(-1, point_count, 3),
-        cmap="coolwarm",
-        norm=norm,
-        linewidths=0.4,
-        alpha=0.9,
-        rasterized=True,
+def render_landscape(
+    values: np.ndarray,
+    x_values: np.ndarray,
+    token_values: np.ndarray,
+    zmax: float,
+    xlabel: str,
+    zlabel: str,
+    outbase: Path,
+    mean_label: str | None = None,
+) -> None:
+    configure_style()
+    fig = plt.figure(figsize=(3.2, 2.45))
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    ax = fig.add_subplot(111, projection="3d")
+    ax.set_position([0, 0, 1, 1])
+    norm = Normalize(vmin=0.0, vmax=max(zmax, 1e-12))
+    for column, x_value in enumerate(x_values):
+        line = values[:, column]
+        color = SEQUENTIAL_CMAP(norm(float(line.max())))
+        ax.plot3D(
+            np.full_like(token_values, x_value, dtype=np.float32),
+            token_values,
+            line,
+            color=color,
+            lw=0.7,
+            alpha=0.95,
+            solid_capstyle="butt",
+            rasterized=values.shape[1] > 128,
+        )
+    style_3d(
+        ax,
+        (int(x_values[0]), int(x_values[-1])),
+        (int(token_values[0]), int(token_values[-1])),
+        zmax,
+        xlabel,
+        zlabel,
     )
-    collection.set_array(color_values.reshape(-1))
-    ax.add_collection3d(collection)
-    style_3d(ax, zlim, first)
-
-
-def clean_2d(ax: plt.Axes) -> None:
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    overlay = fig.add_axes([0, 0, 1, 1], zorder=100)
+    overlay.patch.set_alpha(0.0)
+    overlay.axis("off")
+    overlay.text(0.965, 0.55, zlabel, fontsize=8.0, color=PALETTE["text"],
+                 rotation=90, ha="center", va="center")
+    if mean_label is not None:
+        overlay.text(
+            0.035, 0.955, mean_label, fontsize=7.5, color=PALETTE["text"],
+            ha="left", va="top",
+            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.88, "pad": 0.4},
+        )
+    save_panel(fig, outbase)
 
 
 def add_range_bracket(ax: plt.Axes, values: np.ndarray, color: str) -> None:
-    lo, hi = float(values.min()), float(values.max())
-    x = 124.0
-    cap = 2.2
-    ax.vlines(x, lo, hi, color=color, lw=0.75)
-    ax.hlines([lo, hi], x - cap, x + cap, color=color, lw=0.75)
+    low, high = float(values.min()), float(values.max())
+    x = 134.0
+    ax.vlines(x, low, high, color=color, lw=0.75)
+    ax.hlines([low, high], 131.5, 136.5, color=color, lw=0.75)
+    ax.text(
+        139.0,
+        0.5 * (low + high),
+        f"{high - low:.3f}",
+        color=PALETTE["text"],
+        fontsize=7.5,
+        ha="left",
+        va="center",
+    )
 
 
-
-def render(
-    repo: Path,
-    workdir: Path,
-    trace_csv: Path,
+def render_trace(
+    values: np.ndarray,
+    method: str,
+    y_limits: tuple[float, float],
     outbase: Path,
-    metadata: dict[str, Any],
-    palette_name: str,
+    ylabel: bool,
+    xlabel: bool,
+    zero_point: bool,
 ) -> None:
     configure_style()
-    palette = get_palette(palette_name)
-    raw_color = palette["identity"]
-    had_color = palette["hadamard"]
-    prism_color = palette["prismquant"]
-    tensors = load_landscape_tensors(repo, workdir, metadata)
-    trace = pd.read_csv(trace_csv)
-    methods = ["raw", "random_rotation", "nar_kmax", "nar_kmax_zero_point_removed"]
-    titles = ["raw", "random rotation", "PrismQuant (ours)", "PrismQuant\nzero-point removed"]
-    method_colors = [raw_color, had_color, prism_color, prism_color]
+    colors = {
+        "raw": PALETTE["identity"],
+        "hadamard": PALETTE["hadamard"],
+        "nar_kmax": PALETTE["prismquant"],
+    }
+    fig, ax = plt.subplots(figsize=(1.8, 1.52))
+    fig.subplots_adjust(left=0.28 if ylabel else 0.15, right=0.84, bottom=0.28, top=0.96)
+    x = np.arange(GROUP)
+    color = colors[method]
+    ax.axhline(0.0, color=PALETTE["pane_edge"], lw=0.5, zorder=0)
+    ax.plot(x, values, color=color, lw=1.0)
+    if zero_point:
+        mean = float(values.mean())
+        ax.axhline(mean, color=PALETTE["reference"], lw=0.8, ls=(0, (3, 2)))
+        pad = 0.035 * (y_limits[1] - y_limits[0])
+        ax.text(3, mean + pad, "zero-point", fontsize=7.5, color=PALETTE["text"], ha="left", va="bottom")
+    add_range_bracket(ax, values, color)
+    ax.set_xlim(0, 154)
+    ax.set_ylim(*y_limits)
+    ax.set_xticks([0, 127])
+    if ylabel:
+        ax.set_ylabel("signed value", fontsize=8.0)
+    else:
+        ax.set_yticklabels([])
+    if xlabel:
+        ax.set_xlabel("channel in group", fontsize=8.0)
+    clean_2d_axis(ax)
+    save_panel(fig, outbase)
 
-    fig = plt.figure(figsize=(5.50, 4.20))
-    grid = fig.add_gridspec(
-        2,
-        4,
-        height_ratios=[1.78, 1.0],
-        left=0.105,
-        right=0.935,
-        bottom=0.175,
-        top=0.925,
-        hspace=0.52,
-        wspace=0.42,
-    )
-    landscape_axes = [fig.add_subplot(grid[0, index], projection="3d") for index in range(4)]
-    trace_axes = [fig.add_subplot(grid[1, index]) for index in range(4)]
 
-    shared_z = float(metadata["shared_rotated_z_absmax"])
-    for index, (ax, method, title) in enumerate(zip(landscape_axes, methods, titles)):
-        values = tensors[method].numpy()
-        zlim = float(np.abs(values).max()) if method == "raw" else shared_z
-        add_landscape(ax, values, zlim, first=index == 0)
-        ax.set_title(title, fontsize=8.0, pad=1.5, color=method_colors[index], linespacing=1.2)
-        panel_letter(ax, chr(ord("a") + index))
+def write_summary_csvs(arrays: dict[str, np.ndarray], metadata: dict[str, Any], here: Path) -> None:
+    trace_rows: list[dict[str, Any]] = []
+    for method in ("raw", "hadamard", "nar_kmax"):
+        values = arrays[f"trace_{method}"]
+        for channel, value in enumerate(values):
+            trace_rows.append(
+                {
+                    "method": method,
+                    "channel_in_group": channel,
+                    "signed_value": float(value),
+                    "group_mean": float(values.mean()),
+                    "group_range": float(values.max() - values.min()),
+                }
+            )
+    pd.DataFrame(trace_rows).to_csv(here / "fig1_ranges.csv", index=False)
 
-    if bool(metadata["zoom_strip_added"]):
-        parent = landscape_axes[2]
-        group = int(metadata["brightest_nar_plateau_group"])
-        center = group * GROUP + GROUP // 2
-        start = max(0, min(8192 - 512, center - 256))
-        inset = parent.inset_axes([0.08, -0.06, 0.84, 0.19])
-        zoom = tensors["nar_kmax"][:, start : start + 512].numpy()
-        mean = zoom.reshape(TOKEN_ROWS, 4, GROUP).mean(-1)
-        inset.plot(np.arange(4), np.median(mean, axis=0), color=prism_color, lw=1.0, marker="o", ms=2.2)
-        inset.axhline(0, color="#A0A0A0", lw=0.45)
-        inset.set_xticks([0, 3], [str(start), str(start + 511)])
-        inset.set_yticks([])
-        inset.set_title("512-channel plateau zoom", fontsize=7.5, pad=0.5, color=prism_color)
-        clean_2d(inset)
+    summary_rows: list[dict[str, Any]] = []
+    for panel, method, values in (
+        ("a", "raw", arrays["raw_magnitude"]),
+        ("b", "hadamard", arrays["hadamard_magnitude"]),
+        ("c", "hadamard", arrays["hadamard_range"]),
+        ("d", "nar_kmax", arrays["nar_kmax_range"]),
+    ):
+        for line in range(values.shape[1]):
+            summary_rows.append(
+                {
+                    "panel": panel,
+                    "method": method,
+                    "line_index": line,
+                    "line_mean": float(values[:, line].mean()),
+                    "line_max": float(values[:, line].max()),
+                    "tokens": values.shape[0],
+                }
+            )
+    pd.DataFrame(summary_rows).to_csv(here / "fig1_landscape_channels.csv", index=False)
 
-    for index, (ax, method, color) in enumerate(zip(trace_axes, methods, method_colors)):
-        part = trace[trace.method.eq(method)].sort_values("relative_channel")
-        x = part.relative_channel.to_numpy()
-        y = part.signed_value.to_numpy()
-        mean = float(part.group_mean.iloc[0])
-        ax.axhline(0, color="#C8C8C8", lw=0.55, zorder=0)
-        ax.plot(x, y, color=color, lw=1.2)
-        ax.axhline(mean, color=color, lw=0.8, ls=(0, (3, 2)))
-        ax.text(0.50, 0.94, "zero-point", transform=ax.transAxes,
-                color="#000000", fontsize=7.5, ha="center", va="top")
-        add_range_bracket(ax, y, color)
-        span = float(y.max()) - float(y.min())
-        lower_margin = max(0.08 * span, 0.004)
-        upper_margin = max(0.34 * span, 0.012)
-        ax.set_ylim(float(y.min()) - lower_margin, float(y.max()) + upper_margin)
-        ax.set_xlim(0, 127)
-        ax.set_xticks([0, 127])
-        ax.set_xlabel("")
-        if index == 0:
-            ax.set_ylabel("signed value")
-        else:
-            ax.set_yticklabels([])
-        group = int(part.display_group.iloc[0])
-        value_range = float(y.max() - y.min())
-        ax.set_title(f"group {group} · range {value_range:.3f}", fontsize=7.5,
-                     color="#000000", loc="center", pad=2.0)
-        clean_2d(ax)
-        panel_letter(ax, chr(ord("e") + index))
 
-    fig.text(
-        0.105,
-        0.032,
-        (
-            f"Llama-3.2-3B · down input · layer {LAYER} · seq {metadata['hero_sequence_index']}, "
-            f"token {metadata['hero_token_position']} · channel {metadata['strongest_persistent_channel']}\n"
-            f"1,024 rows × 8,192 channels · BOS excluded"
-        ),
-        fontsize=7.0,
-        color="#000000",
-        ha="left",
-        va="bottom",
-    )
-    fig.text(0.52, 0.130, "channel within group", fontsize=8.0, color="#000000", ha="center", va="top")
-
-    fig.canvas.draw()
-    require_matplotlib_panel_alignment = import_alignment_helper()
-    require_matplotlib_panel_alignment(
-        fig,
-        axes=[*landscape_axes, *trace_axes],
-        panel_ids=list("abcdefgh"),
-        row_groups=[
-            {"id": "landscapes", "panels": list("abcd")},
-            {"id": "traces", "panels": list("efgh")},
-        ],
-        column_groups=[
-            {"id": f"column-{i}", "panels": [top, bottom]}
-            for i, (top, bottom) in enumerate(zip("abcd", "efgh"))
-        ],
-        require_panel_labels=True,
-        json_out=outbase.with_suffix(".alignment.json"),
-        overlay_svg=outbase.with_suffix(".alignment-overlay.svg"),
-        tolerance_pt=1.5,
-        gutter_tolerance_pt=1.5,
-        strict=True,
-    )
-    fig.savefig(outbase.with_suffix(".svg"))
-    fig.savefig(outbase.with_suffix(".pdf"))
-    fig.savefig(outbase.with_suffix(".png"), dpi=300)
+def make_preview(here: Path) -> None:
+    configure_style()
+    fig = plt.figure(figsize=(6.6, 7.25))
+    grid = fig.add_gridspec(3, 6, height_ratios=[1, 1, 0.72], hspace=0.02, wspace=0.02)
+    placements = {
+        "a": grid[0, 0:3], "b": grid[0, 3:6],
+        "c": grid[1, 0:3], "d": grid[1, 3:6],
+        "e": grid[2, 0:2], "f": grid[2, 2:4], "g": grid[2, 4:6],
+    }
+    for letter, slot in placements.items():
+        ax = fig.add_subplot(slot)
+        ax.imshow(plt.imread(here / f"fig1{letter}.png"))
+        ax.axis("off")
+    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    fig.savefig(here / "fig1_preview.png", dpi=300)
     plt.close(fig)
 
 
@@ -506,29 +470,47 @@ def main() -> None:
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--workdir", type=Path, required=True)
     args = parser.parse_args()
-
     here = Path(__file__).resolve().parent
-    trace_csv = here / "fig1_ranges.csv"
-    landscape_csv = here / "fig1_landscape_channels.csv"
-    metadata = make_data(args.repo.resolve(), args.workdir.resolve(), trace_csv, landscape_csv)
-    for palette_name in ("A", "B"):
-        render(args.repo.resolve(), args.workdir.resolve(), trace_csv,
-               here / f"fig1_variant{palette_name}", metadata, palette_name)
-    for suffix in (".svg", ".pdf", ".png", ".alignment.json", ".alignment-overlay.svg"):
-        shutil.copyfile(here / f"fig1_variantA{suffix}", here / f"fig1_pm_vs_plus{suffix}")
-    (here / "fig1_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
-    caption = (
-        "Persistent activation outliers become removable common mode. "
-        "Signed down-projection inputs are shown for 1,024 stride-32 token rows and all 8,192 channels "
-        "before rotation, after random-sign block-H128, after PrismQuant k=max alignment, and after subtracting each "
-        "128-channel group's mean. BOS position 0 is excluded from every sequence. The lower row shows "
-        f"the paired non-BOS token at sequence {metadata['hero_sequence_index']}, position "
-        f"{metadata['hero_token_position']}, selected on persistent channel "
-        f"{metadata['strongest_persistent_channel']}; dashed lines are group zero points and brackets "
-        "report max−min range. Colors are normalized independently to each panel's own absolute maximum; "
-        "panels b–d share b's signed z limits."
+    arrays, metadata = build_data(args.repo.resolve(), args.workdir.resolve())
+    token_axis = arrays["token_axis"]
+    raw_start = int(metadata["channel_windows"]["raw"][0])
+    rotated_start = int(metadata["channel_windows"]["hadamard_and_prismquant"][0])
+    render_landscape(
+        arrays["raw_magnitude"],
+        np.arange(raw_start, raw_start + LANDSCAPE_CHANNELS),
+        token_axis,
+        float(arrays["raw_magnitude"].max()),
+        "channel", "|x|", here / "fig1a",
     )
-    (here / "fig1_caption.txt").write_text(caption + "\n")
+    render_landscape(
+        arrays["hadamard_magnitude"],
+        np.arange(rotated_start, rotated_start + LANDSCAPE_CHANNELS),
+        token_axis,
+        float(arrays["hadamard_magnitude"].max()),
+        "channel", "|x|", here / "fig1b",
+    )
+    shared_range_z = float(arrays["hadamard_range"].max())
+    render_landscape(
+        arrays["hadamard_range"], np.arange(arrays["hadamard_range"].shape[1]), token_axis,
+        shared_range_z, "group", "range", here / "fig1c",
+        f"mean range {metadata['plotted_mean_ranges']['hadamard']:.2f}",
+    )
+    render_landscape(
+        arrays["nar_kmax_range"], np.arange(arrays["nar_kmax_range"].shape[1]), token_axis,
+        shared_range_z, "group", "range", here / "fig1d",
+        f"mean range {metadata['plotted_mean_ranges']['prismquant_kmax']:.2f}",
+    )
+    trace_values = [arrays["trace_raw"], arrays["trace_hadamard"], arrays["trace_nar_kmax"]]
+    trace_low = min(float(x.min()) for x in trace_values)
+    trace_high = max(float(x.max()) for x in trace_values)
+    margin = max(0.08 * (trace_high - trace_low), 1e-3)
+    y_limits = (trace_low - margin, trace_high + margin)
+    render_trace(arrays["trace_raw"], "raw", y_limits, here / "fig1e", True, False, False)
+    render_trace(arrays["trace_hadamard"], "hadamard", y_limits, here / "fig1f", False, True, False)
+    render_trace(arrays["trace_nar_kmax"], "nar_kmax", y_limits, here / "fig1g", False, False, True)
+    write_summary_csvs(arrays, metadata, here)
+    (here / "fig1_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    make_preview(here)
     print(json.dumps(metadata, indent=2))
 
 

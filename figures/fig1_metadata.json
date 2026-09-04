@@ -1,43 +1,120 @@
 {
   "model": "llama32_3b",
   "site": "down_input",
-  "layer": 1,
-  "channels": 8192,
-  "group_size": 128,
-  "token_stride": 32,
-  "source_rows_before_bos_exclusion": 8192,
-  "rows_after_bos_exclusion": 8064,
-  "plotted_token_rows": 1024,
-  "bos_exclusion_rule": "exclude sequence position 0 from every sequence before deterministic row selection",
-  "strongest_persistent_channel": 1419,
-  "strongest_channel_median_abs": 0.1416015625,
-  "hero_sample_row": 684,
-  "hero_sequence_index": 10,
-  "hero_token_position": 1760,
-  "hero_raw_value": 0.478515625,
-  "source_group": 11,
-  "nar_receiving_group": 0,
-  "nar_receiving_group_basis_energy_fraction": 0.9943668842315674,
-  "brightest_nar_plateau_group": 4,
-  "brightest_nar_plateau_peak_abs_mean": 0.10909394174814224,
-  "shared_rotated_z_absmax": 0.20196452736854553,
-  "nar_plateau_visible_ratio": 0.5401638751594594,
-  "zoom_strip_added": false,
-  "panel_absmax": {
-    "raw": 1.796875,
-    "random_rotation": 0.20196452736854553,
-    "nar_kmax": 0.23604892194271088,
-    "nar_kmax_zero_point_removed": 0.23087280988693237
+  "layer": 27,
+  "site_layer_selection_rule": "largest absolute measured mean-group-range reduction of nar_kmax versus hadamard_full across both E1c sites",
+  "e1c_selected_case": {
+    "hadamard_mean_group_range": 1.91482412815094,
+    "prismquant_mean_group_range": 0.8850160241127014,
+    "absolute_reduction": 1.0298081040382385,
+    "relative_reduction_percent": 53.78081928770545
   },
-  "nar_anchor_error": 2.384185791015625e-07,
-  "trace_groups": {
-    "raw": 11,
-    "random_rotation": 11,
-    "nar_kmax": 0,
-    "nar_kmax_zero_point_removed": 0
+  "top_five_e1c_cases_by_absolute_reduction": [
+    {
+      "site": "down_input",
+      "layer": 27,
+      "absolute_reduction": 1.0298081040382385,
+      "relative_reduction_percent": 53.78081928770545
+    },
+    {
+      "site": "q_input",
+      "layer": 13,
+      "absolute_reduction": 0.5808343887329102,
+      "relative_reduction_percent": 24.455369730221555
+    },
+    {
+      "site": "q_input",
+      "layer": 18,
+      "absolute_reduction": 0.575101971626282,
+      "relative_reduction_percent": 22.51125865070149
+    },
+    {
+      "site": "q_input",
+      "layer": 24,
+      "absolute_reduction": 0.5738263130187988,
+      "relative_reduction_percent": 21.53897012879878
+    },
+    {
+      "site": "q_input",
+      "layer": 12,
+      "absolute_reduction": 0.563899040222168,
+      "relative_reduction_percent": 24.135984032372836
+    }
+  ],
+  "group_size": 128,
+  "groups": 64,
+  "hero": {
+    "evaluation_rows": 8064,
+    "selection_rule": "non-BOS stride-32 row nearest the 95th percentile of |projection on v1|",
+    "top_decile_threshold_abs_projection": 24.094221115112305,
+    "target_percentile_abs_projection": 25.574243545532227,
+    "evaluation_row": 7446,
+    "sequence_index": 118,
+    "token_position": 416,
+    "projection_on_v1": 25.575366973876953,
+    "absolute_projection_on_v1": 25.575366973876953
+  },
+  "token_window": {
+    "sequence_index": 118,
+    "position_start": 160,
+    "position_stop_exclusive": 672,
+    "rows": 512,
+    "bos_excluded": true
+  },
+  "channel_windows": {
+    "raw": [
+      2176,
+      4223
+    ],
+    "hadamard_and_prismquant": [
+      0,
+      2047
+    ],
+    "width": 2048,
+    "raw_window_rule": "group-aligned window centered on the largest-|loading| channel of frozen v1",
+    "rotated_window_rule": "matched output-coordinate window beginning at the group receiving v1 under PrismQuant"
+  },
+  "group_window": [
+    0,
+    63
+  ],
+  "v1_peak_channel": 3286,
+  "raw_trace_group": 25,
+  "prismquant_receiving_group": 0,
+  "receiving_group_fraction_of_mapped_v1_energy": 1.0,
+  "plotted_mean_ranges": {
+    "hadamard": 1.7640141248703003,
+    "prismquant_kmax": 0.8404273986816406,
+    "reduction_percent": 52.35710492151341,
+    "p90_reduction_percent": 49.27603385273945
+  },
+  "trace_ranges": {
+    "raw": 11.65625,
+    "hadamard": 1.7078814506530762,
+    "nar_kmax": 0.7634278535842896
+  },
+  "trace_zero_points": {
+    "raw": 0.03076837956905365,
+    "hadamard": 0.04235752299427986,
+    "nar_kmax": -2.260563373565674
   },
   "transform_seed": 20260902,
-  "resolved_font_family": "DejaVu Serif",
-  "landscape_color_rule": "coolwarm; symmetric per-panel normalization to that panel's full absmax; each channel line is locally colored by the signed maximum-absolute value within consecutive 128-row segments; no color clipping",
-  "source": "frozen E1c wide calibration dump and frozen k=max factor"
+  "font_family_resolved": "DejaVu Serif",
+  "row1_series": 2048,
+  "row2_series": 64,
+  "row1_z_limits": {
+    "raw": [
+      0.0,
+      39.75
+    ],
+    "hadamard": [
+      0.0,
+      3.616786241531372
+    ]
+  },
+  "row2_shared_z_limits": [
+    0.0,
+    6.389837265014648
+  ],
+  "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun"
 }
