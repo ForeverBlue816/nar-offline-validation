@@ -1,0 +1,22 @@
+{
+  "qkv_crosscheck_max_abs": {
+    "llama31_8b": 1.4901161193847656e-06,
+    "llama32_3b": 1.3113021850585938e-06
+  },
+  "main_summary": {
+    "qkv_hadamard_mean": 0.005386510317634879,
+    "qkv_duquant_style_mean": 0.5248707717983052,
+    "qkv_nar_mean": 0.9999999809078872,
+    "down_hadamard_mean": 0.006913304942226452,
+    "down_duquant_style_mean": 0.05536123701767789,
+    "down_nar_mean": 0.9999995057005435
+  },
+  "appendix_summary": {
+    "qkv_hadamard_mean": 0.0024113367884897492,
+    "qkv_duquant_style_mean": 0.40176087797486354,
+    "qkv_nar_mean": 0.9999999707298619,
+    "down_hadamard_mean": 0.012184689914661416,
+    "down_duquant_style_mean": 0.05749269010110373,
+    "down_nar_mean": 0.9999998387481485
+  }
+}
