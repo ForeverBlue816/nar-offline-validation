@@ -1,8 +1,7 @@
-> **Naming:** the method is PrismQuant in the paper. Code, CSV method columns and artifact filenames retain the development name `nar` (`nar_k8` = PrismQuant k=8, `nar_kmax` = PrismQuant k=max, etc.). The development abbreviation was retired because “NAR” is the established abbreviation for non-autoregressive in NLP.
+Naming: the method is PrismQuant in the paper. Code, CSV method columns and artifact filenames retain the development name 'nar' (nar_k8 = PrismQuant k=8, nar_kmax = PrismQuant k=max, etc.). The development abbreviation was retired because 'NAR' is the established abbreviation for non-autoregressive in NLP.
 
----
 
-# NAR offline tensor validation — corrected gate and activation extension
+# PrismQuant offline tensor validation — corrected gate and activation extension
 
 ## Outcome
 

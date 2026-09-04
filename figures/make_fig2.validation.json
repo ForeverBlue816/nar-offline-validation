@@ -2,12 +2,12 @@
   "source": "figures/make_fig2.py",
   "backend": "python",
   "summary": {
-    "ready": true,
+    "ready": false,
     "strict": false,
     "counts": {
-      "PASS": 18,
+      "PASS": 17,
       "WARN": 3,
-      "FAIL": 0
+      "FAIL": 1
     }
   },
   "findings": [
@@ -19,11 +19,9 @@
     },
     {
       "check_id": "FONT-FAMILY",
-      "level": "PASS",
-      "message": "A publication-safe sans-serif family is configured",
-      "evidence": [
-        "sans-serif"
-      ]
+      "level": "FAIL",
+      "message": "No explicit publication-safe font family found in matplotlib rcParams",
+      "evidence": []
     },
     {
       "check_id": "FONT-SIZE",
@@ -114,10 +112,8 @@
     {
       "check_id": "UNCERTAINTY-ENCODING",
       "level": "PASS",
-      "message": "A stochastic aggregate and uncertainty encoding are both present; still verify every comparable panel",
-      "evidence": [
-        ".fill_between("
-      ]
+      "message": "No stochastic aggregate requiring a variability audit was inferred",
+      "evidence": []
     },
     {
       "check_id": "ROTATION-ANCHOR",

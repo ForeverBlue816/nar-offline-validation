@@ -1,22 +1,36 @@
 {
-  "qkv_crosscheck_max_abs": {
-    "llama31_8b": 1.4901161193847656e-06,
-    "llama32_3b": 1.3113021850585938e-06
+  "crosscheck": {
+    "llama32_3b_mean_group_range_max_abs": 0.001876420931693934,
+    "llama32_3b_nmse_max_abs": 1.2993189832199645e-05
   },
-  "main_summary": {
-    "qkv_hadamard_mean": 0.005386510317634879,
-    "qkv_duquant_style_mean": 0.5248707717983052,
-    "qkv_nar_mean": 0.9999999809078872,
-    "down_hadamard_mean": 0.006913304942226452,
-    "down_duquant_style_mean": 0.05536123701767789,
-    "down_nar_mean": 0.9999995057005435
+  "rows": 360,
+  "figures": {
+    "main_3b_down_variantA": {
+      "null_space_reference_G_over_d": 0.0078125,
+      "mean_range_reduction_percent": 25.300744078136486,
+      "mean_nmse_reduction_percent": 40.40835032693099
+    },
+    "main_3b_down_variantB": {
+      "null_space_reference_G_over_d": 0.0078125,
+      "mean_range_reduction_percent": 25.300744078136486,
+      "mean_nmse_reduction_percent": 40.40835032693099
+    },
+    "appendix_3b_qkv": {
+      "null_space_reference_G_over_d": 0.0078125,
+      "mean_range_reduction_percent": 23.755037281933607,
+      "mean_nmse_reduction_percent": 40.45060465882832
+    },
+    "appendix_8b_down": {
+      "null_space_reference_G_over_d": 0.0078125,
+      "mean_range_reduction_percent": 25.401246256351783,
+      "mean_nmse_reduction_percent": 40.19934184023816
+    },
+    "appendix_8b_qkv": {
+      "null_space_reference_G_over_d": 0.0078125,
+      "mean_range_reduction_percent": 26.521253676294965,
+      "mean_nmse_reduction_percent": 44.461008741539125
+    }
   },
-  "appendix_summary": {
-    "qkv_hadamard_mean": 0.0024113367884897492,
-    "qkv_duquant_style_mean": 0.40176087797486354,
-    "qkv_nar_mean": 0.9999999707298619,
-    "down_hadamard_mean": 0.012184689914661416,
-    "down_duquant_style_mean": 0.05749269010110373,
-    "down_nar_mean": 0.9999998387481485
-  }
+  "resolved_font_family": "DejaVu Serif",
+  "naming": "paper label PrismQuant; CSV method value nar retained"
 }
