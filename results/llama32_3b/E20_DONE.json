@@ -18,6 +18,8 @@
   "models": {
     "llama31_8b": [
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "16.0",
         "group": "0",
         "m": "0",
@@ -35,6 +37,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "128",
         "m": "1",
@@ -52,6 +56,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.125",
         "group": "256",
         "m": "1",
@@ -69,6 +75,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.1875",
         "group": "256",
         "m": "2",
@@ -86,6 +94,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "256",
         "m": "3",
@@ -103,6 +113,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.5",
         "group": "64",
         "m": "1",
@@ -120,6 +132,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "128",
         "m": "1",
@@ -137,6 +151,8 @@
         "slots": "112"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.375",
         "group": "128",
         "m": "2",
@@ -154,6 +170,27 @@
         "slots": "224"
       },
       {
+        "bit_accounted": "False",
+        "coeff": "fp32",
+        "effective_bits": "4.375",
+        "group": "128",
+        "m": "2",
+        "mean_ppl": "6.282955507185278",
+        "method": "nar",
+        "model": "llama31_8b",
+        "paired_90ci_high": "-0.0005795077105231672",
+        "paired_90ci_low": "-0.006797324942740036",
+        "paired_delta_vs_nar_g128_m1": "-0.0036884163266316015",
+        "ppl_delta_vs_bf16": "0.07853034200373532",
+        "row": "nar_g128_m2_c32",
+        "seed_ppl_std": "0.0010519096941271652",
+        "seed_ppls": "6.282499 6.284159 6.282209",
+        "seeds": "3",
+        "slots": "224"
+      },
+      {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.125",
         "group": "256",
         "m": "1",
@@ -171,6 +208,8 @@
         "slots": "56"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.1875",
         "group": "256",
         "m": "2",
@@ -188,6 +227,8 @@
         "slots": "112"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "256",
         "m": "3",
@@ -205,6 +246,27 @@
         "slots": "168"
       },
       {
+        "bit_accounted": "False",
+        "coeff": "fp32",
+        "effective_bits": "4.25",
+        "group": "256",
+        "m": "3",
+        "mean_ppl": "6.29807386871353",
+        "method": "nar",
+        "model": "llama31_8b",
+        "paired_90ci_high": "0.016005854993472915",
+        "paired_90ci_low": "0.00685403540976604",
+        "paired_delta_vs_nar_g128_m1": "0.011429945201619477",
+        "ppl_delta_vs_bf16": "0.09364870353198729",
+        "row": "nar_g256_m3_c32",
+        "seed_ppl_std": "0.0024101702332505574",
+        "seed_ppls": "6.296210 6.300796 6.297216",
+        "seeds": "3",
+        "slots": "168"
+      },
+      {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.5",
         "group": "64",
         "m": "1",
@@ -224,6 +286,8 @@
     ],
     "llama32_3b": [
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "16.0",
         "group": "0",
         "m": "0",
@@ -241,6 +305,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "128",
         "m": "1",
@@ -258,6 +324,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.125",
         "group": "256",
         "m": "1",
@@ -275,6 +343,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.1875",
         "group": "256",
         "m": "2",
@@ -292,6 +362,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "256",
         "m": "3",
@@ -309,6 +381,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.5",
         "group": "64",
         "m": "1",
@@ -326,6 +400,8 @@
         "slots": "0"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "128",
         "m": "1",
@@ -343,6 +419,8 @@
         "slots": "64"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.375",
         "group": "128",
         "m": "2",
@@ -360,6 +438,27 @@
         "slots": "128"
       },
       {
+        "bit_accounted": "False",
+        "coeff": "fp32",
+        "effective_bits": "4.375",
+        "group": "128",
+        "m": "2",
+        "mean_ppl": "7.704386849865643",
+        "method": "nar",
+        "model": "llama32_3b",
+        "paired_90ci_high": "-0.002020209362109394",
+        "paired_90ci_low": "-0.01552098635994505",
+        "paired_delta_vs_nar_g128_m1": "-0.008770597861027222",
+        "ppl_delta_vs_bf16": "0.08763482742644424",
+        "row": "nar_g128_m2_c32",
+        "seed_ppl_std": "0.007022276962205137",
+        "seed_ppls": "7.701242 7.699486 7.712432",
+        "seeds": "3",
+        "slots": "128"
+      },
+      {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.125",
         "group": "256",
         "m": "1",
@@ -377,6 +476,8 @@
         "slots": "32"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.1875",
         "group": "256",
         "m": "2",
@@ -394,6 +495,8 @@
         "slots": "64"
       },
       {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.25",
         "group": "256",
         "m": "3",
@@ -411,6 +514,27 @@
         "slots": "96"
       },
       {
+        "bit_accounted": "False",
+        "coeff": "fp32",
+        "effective_bits": "4.25",
+        "group": "256",
+        "m": "3",
+        "mean_ppl": "7.729383509328064",
+        "method": "nar",
+        "model": "llama32_3b",
+        "paired_90ci_high": "0.01920213099475971",
+        "paired_90ci_low": "0.013249992208026777",
+        "paired_delta_vs_nar_g128_m1": "0.016226061601393244",
+        "ppl_delta_vs_bf16": "0.11263148688886471",
+        "row": "nar_g256_m3_c32",
+        "seed_ppl_std": "0.0032394686595569534",
+        "seed_ppls": "7.728415 7.726739 7.732997",
+        "seeds": "3",
+        "slots": "96"
+      },
+      {
+        "bit_accounted": "",
+        "coeff": "",
         "effective_bits": "4.5",
         "group": "64",
         "m": "1",
@@ -442,7 +566,9 @@
     "nar_g256_m1",
     "nar_g256_m2",
     "nar_g256_m3",
-    "nar_g128_m2"
+    "nar_g128_m2",
+    "nar_g128_m2_c32",
+    "nar_g256_m3_c32"
   ],
   "seeds": [
     0,

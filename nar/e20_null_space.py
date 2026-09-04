@@ -47,12 +47,24 @@ class Row:
     method: str          # "bf16" | "hadamard" | "nar"
     group: int
     m: int
+    coeff: str = "fp16"  # "fp32" rows are diagnostics, not bit-accounted
 
     @property
     def name(self) -> str:
         if self.method == "bf16":
             return "bf16"
-        return f"{self.method}_g{self.group}_m{self.m}"
+        suffix = "" if self.coeff == "fp16" else "_c32"
+        return f"{self.method}_g{self.group}_m{self.m}{suffix}"
+
+    @property
+    def coefficient_dtype(self) -> torch.dtype:
+        return torch.float16 if self.coeff == "fp16" else torch.float32
+
+    @property
+    def bit_accounted(self) -> bool:
+        """fp32 coefficients cost 32 bits per group, which the 4 + 16(m+1)/g
+        accounting does not charge; those rows are diagnostics only."""
+        return self.coeff == "fp16"
 
     @property
     def bits(self) -> float:
@@ -68,6 +80,9 @@ ROWS = (
     Row("hadamard", 256, 2), Row("hadamard", 256, 3),
     Row("nar", 64, 1), Row("nar", 128, 1), Row("nar", 256, 1),
     Row("nar", 256, 2), Row("nar", 256, 3), Row("nar", 128, 2),
+    # Diagnostics: identical rotations and chunks, c_j stored fp32 instead of
+    # fp16. Not bit-accounted; they isolate coefficient precision.
+    Row("nar", 128, 2, "fp32"), Row("nar", 256, 3, "fp32"),
 )
 BASELINE = "nar_g128_m1"
 
@@ -239,7 +254,8 @@ class Hooks:
         if self.rotation is None:
             return value
         rotated = self.rotation.apply(site, layer, value)
-        result = aq.quantize_affine(rotated, self.row.group, self.row.m).dequant
+        result = aq.quantize_affine(rotated, self.row.group, self.row.m,
+                                    self.row.coefficient_dtype).dequant
         return self.rotation.apply_transpose(site, layer, result).to(value.dtype)
 
     def install(self) -> None:
@@ -384,7 +400,7 @@ def eigen_fractions(workdir: Path, model_key: str) -> dict[tuple[str, int], list
 @torch.inference_mode()
 def alignment_and_theory(workdir: Path, model_key: str, row: Row, rotation: Rotation,
                          dimensions: dict[str, int], layers: int, device: torch.device,
-                         top: int = 96) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+                         top: int = 256) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """s_i = ||P_N R v_i||^2 / ||v_i||^2, and f as the energy-weighted capture.
 
     f must weight each direction by its share of the total second moment, not
@@ -420,6 +436,8 @@ def alignment_and_theory(workdir: Path, model_key: str, row: Row, rotation: Rota
             "min_captured_fraction": float(np.min(captured)),
             "max_captured_fraction": float(np.max(captured)),
             "predicted_range_reduction": 1.0 - math.sqrt(max(0.0, 1.0 - mean)),
+            "directions_measured": int(min(top, vectors.shape[1])),
+            "window_saturated": bool(row.slots(n) >= min(top, vectors.shape[1])),
         })
         del projector
     return align_rows, theory_rows
@@ -533,7 +551,8 @@ def run_model(args: argparse.Namespace, model_key: str) -> None:
                 gc.collect()
                 torch.cuda.empty_cache()
             rows.extend({"model": model_key, "row": row.name, "method": row.method,
-                         "group": row.group, "m": row.m, "seed": seed_index,
+                         "group": row.group, "m": row.m, "coeff": row.coeff,
+                         "bit_accounted": row.bit_accounted, "seed": seed_index,
                          "chunk": index, "nll": value,
                          "tokens_scored": int(tokens.shape[1] - 1),
                          "effective_bits": row.bits, "slots": row.slots(dimensions["down"])}
@@ -541,12 +560,24 @@ def run_model(args: argparse.Namespace, model_key: str) -> None:
             base.write_csv(path, rows)
             LOG.info("E20 %s seed %d ppl=%.6f", row.name, seed_index, ppl)
 
-    for name, payload in (("e20_round_trip_audit.csv", round_trips),
-                          ("e20_alignment_diagnostic.csv", align_rows),
-                          ("e20_f_of_config.csv", theory_rows),
-                          ("e20_c_precision.csv", precision_rows)):
-        if payload:
-            base.write_csv(result_dir / name, payload)
+    # Merge rather than overwrite: a run restricted to --rows only computes a
+    # subset, and writing it wholesale would clobber the rows another
+    # invocation produced. Keyed on the identifying columns of each table.
+    for name, payload, keys in (
+            ("e20_round_trip_audit.csv", round_trips, ("row", "seed", "site")),
+            ("e20_alignment_diagnostic.csv", align_rows, ("row", "site", "layer", "direction")),
+            ("e20_f_of_config.csv", theory_rows, ("row", "site")),
+            ("e20_c_precision.csv", precision_rows, ("row", "site"))):
+        if not payload:
+            continue
+        path = result_dir / name
+        merged: dict[tuple, dict[str, Any]] = {}
+        if path.exists():
+            for existing in base.read_csv(path):
+                merged[tuple(str(existing.get(k, "")) for k in keys)] = existing
+        for fresh in payload:
+            merged[tuple(str(fresh.get(k, "")) for k in keys)] = fresh
+        base.write_csv(path, list(merged.values()))
     del model
     gc.collect()
     torch.cuda.empty_cache()
@@ -563,7 +594,9 @@ def summarize(workdir: Path, model_key: str, dimensions: dict[str, int]) -> None
     for r in raw:
         by.setdefault((str(r["row"]), int(r["seed"])), []).append(float(r["nll"]))
         meta[str(r["row"])] = {"method": r["method"], "group": int(r["group"]),
-                               "m": int(r["m"]), "effective_bits": float(r["effective_bits"]),
+                               "m": int(r["m"]), "coeff": r.get("coeff", "fp16"),
+                               "bit_accounted": r.get("bit_accounted", "True"),
+                               "effective_bits": float(r["effective_bits"]),
                                "slots": int(r["slots"])}
     ppl = {key: math.exp(float(np.mean(values))) for key, values in by.items()}
     names = sorted({name for name, _ in ppl})
@@ -622,13 +655,24 @@ def parser() -> argparse.ArgumentParser:
                         help="measured range reduction on the E1c dumps, plus the plot")
     result.add_argument("--range-rows", type=int, default=4096)
     result.add_argument("--range-layer-stride", type=int, default=1)
-    result.add_argument("--range-directions", type=int, default=96)
+    result.add_argument("--range-directions", type=int, default=256)
+    result.add_argument("--f-directions", type=int, default=256)
+    result.add_argument("--theory-only", action="store_true")
+    result.add_argument("--two-term-only", action="store_true")
     return result
 
 
 def run(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     base.setup_logging(workdir, "e20")
+    if args.two_term_only:
+        two_term_command(args)
+        return
+    if args.theory_only:
+        if not torch.cuda.is_available():
+            raise RuntimeError("E20 theory recomputation requires CUDA")
+        theory_command(args)
+        return
     if args.range_only:
         if not torch.cuda.is_available():
             raise RuntimeError("E20 range measurement requires CUDA")
@@ -804,6 +848,161 @@ def plot_range(rows: list[dict[str, Any]], fit_rows: list[dict[str, Any]], path:
     path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(path, dpi=180)
     plt.close(figure)
+
+# --------------------------------------------- close-out diagnostics (E20) ---
+
+def spearman(a: list[float], b: list[float]) -> float:
+    """Rank correlation without scipy; ties averaged."""
+    def ranks(values: list[float]) -> list[float]:
+        order = sorted(range(len(values)), key=lambda i: values[i])
+        out = [0.0] * len(values)
+        i = 0
+        while i < len(order):
+            j = i
+            while j + 1 < len(order) and values[order[j + 1]] == values[order[i]]:
+                j += 1
+            mean_rank = (i + j) / 2.0 + 1.0
+            for k in range(i, j + 1):
+                out[order[k]] = mean_rank
+            i = j + 1
+        return out
+    ra, rb = ranks(a), ranks(b)
+    ma, mb = float(np.mean(ra)), float(np.mean(rb))
+    num = sum((x - ma) * (y - mb) for x, y in zip(ra, rb))
+    den = math.sqrt(sum((x - ma) ** 2 for x in ra) * sum((y - mb) ** 2 for y in rb))
+    return num / den if den else math.nan
+
+
+@torch.inference_mode()
+def theory_command(args: argparse.Namespace) -> None:
+    """Recompute f with a wider measurement window and re-emit the theory CSV."""
+    from transformers import AutoConfig
+
+    workdir = Path(args.workdir).resolve()
+    base.setup_logging(workdir, "e20-theory")
+    device = torch.device("cuda")
+    for model_key in args.models:
+        model_id, _ = act.model_id_and_key(model_key)
+        config = AutoConfig.from_pretrained(
+            model_id, cache_dir=str(workdir / "cache" / "huggingface"))
+        dimensions = {"qkv": int(config.hidden_size), "down": int(config.intermediate_size)}
+        layers = int(config.num_hidden_layers)
+        theory_rows: list[dict[str, Any]] = []
+        align_rows: list[dict[str, Any]] = []
+        for row in ROWS:
+            if row.method == "bf16" or (row.method == "hadamard" and row.m == 1):
+                continue
+            if not row.bit_accounted:
+                continue          # identical rotation to its fp16 twin
+            rotation = build_rotation(workdir, model_key, row, dimensions, layers,
+                                      args.seeds[0], args.seed, device)
+            a, t = alignment_and_theory(workdir, model_key, row, rotation, dimensions,
+                                        layers, device, top=args.f_directions)
+            align_rows.extend(a)
+            theory_rows.extend(t)
+            LOG.info("E20 theory %s %s done", model_key, row.name)
+            del rotation
+            gc.collect()
+            torch.cuda.empty_cache()
+        result_dir = workdir / "results" / model_key
+        base.write_csv(result_dir / "e20_f_of_config.csv", theory_rows)
+        base.write_csv(result_dir / "e20_alignment_diagnostic.csv", align_rows)
+        print(json.dumps([{k: r[k] for k in ("row", "site", "slots", "mean_captured_fraction",
+                                             "directions_measured", "window_saturated")}
+                          for r in theory_rows], indent=2), flush=True)
+
+
+def two_term_command(args: argparse.Namespace) -> None:
+    """Rank the NAR rows by f alone and by step_Hadamard(g) * sqrt(1-f).
+
+    f is scale-free, so a ranking built on it cannot see that a 256-wide group
+    starts from a larger step than a 128-wide one. The two-term predictor puts
+    that back using the measured Hadamard step at the same group size.
+    """
+    workdir = Path(args.workdir).resolve()
+    model_key = RANGE_MODEL
+    result_dir = workdir / "results" / model_key
+    range_rows = base.read_csv(result_dir / "e20_range_vs_config.csv")
+    summary = {r["row"]: r for r in base.read_csv(result_dir / "e20_summary.csv")}
+
+    per_site: dict[tuple[str, str], dict[str, float]] = {}
+    for r in range_rows:
+        # The six bit-accounted NAR rows only; the fp32-coefficient rows are
+        # diagnostics on the same rotations and would double-count them.
+        if not str(r["row"]).startswith("nar") or str(r["row"]).endswith("_c32"):
+            continue
+        key = (str(r["row"]), str(r["site"]))
+        entry = per_site.setdefault(key, {"f": [], "had": [], "measured": []})
+        entry["f"].append(float(r["absorbed_energy_fraction"]))
+        entry["had"].append(float(r["hadamard_reference_range"]))
+        entry["measured"].append(float(r["mean_group_range"]))
+
+    rows: list[dict[str, Any]] = []
+    names = sorted({name for name, _ in per_site})
+    for name in names:
+        combined_one, combined_two, combined_meas = [], [], []
+        for site in ("qkv", "down"):
+            entry = per_site[(name, site)]
+            f = float(np.mean(entry["f"]))
+            had_step = float(np.mean(entry["had"])) / 15.0
+            step_pred = had_step * math.sqrt(max(0.0, 1.0 - f))
+            step_meas = float(np.mean(entry["measured"])) / 15.0
+            rows.append({
+                "model": model_key, "row": name, "site": site,
+                "group": int(summary[name]["group"]), "m": int(summary[name]["m"]),
+                "slots": int(summary[name]["slots"]), "f": f,
+                "hadamard_step": had_step, "one_term_score_f": f,
+                "two_term_step_pred": step_pred, "measured_step": step_meas,
+                "mean_ppl": float(summary[name]["mean_ppl"]),
+            })
+            combined_one.append(f)
+            combined_two.append(step_pred)
+            combined_meas.append(step_meas)
+        rows.append({
+            "model": model_key, "row": name, "site": "combined",
+            "group": int(summary[name]["group"]), "m": int(summary[name]["m"]),
+            "slots": int(summary[name]["slots"]), "f": float(np.mean(combined_one)),
+            "hadamard_step": math.nan, "one_term_score_f": float(np.mean(combined_one)),
+            "two_term_step_pred": float(np.mean(combined_two)),
+            "measured_step": float(np.mean(combined_meas)),
+            "mean_ppl": float(summary[name]["mean_ppl"]),
+        })
+
+    fits: list[dict[str, Any]] = []
+    for site in ("qkv", "down", "combined"):
+        subset = [r for r in rows if r["site"] == site]
+        ppl = [r["mean_ppl"] for r in subset]
+        # Lower PPL is better; higher f is better, lower step_pred is better.
+        one = spearman([-r["one_term_score_f"] for r in subset], ppl)
+        two = spearman([r["two_term_step_pred"] for r in subset], ppl)
+        by_one = sorted(subset, key=lambda r: -r["one_term_score_f"])
+        by_two = sorted(subset, key=lambda r: r["two_term_step_pred"])
+        by_ppl = sorted(subset, key=lambda r: r["mean_ppl"])
+        def position(ordering: list[dict[str, Any]], name: str) -> int:
+            return [r["row"] for r in ordering].index(name) + 1
+        fits.append({
+            "model": model_key, "site": site, "rows": len(subset),
+            "spearman_one_term_f": one, "spearman_two_term_step": two,
+            "one_term_order": " > ".join(r["row"] for r in by_one),
+            "two_term_order": " > ".join(r["row"] for r in by_two),
+            "measured_ppl_order": " > ".join(r["row"] for r in by_ppl),
+            "one_term_rank_g256_m3": position(by_one, "nar_g256_m3"),
+            "one_term_rank_g128_m1": position(by_one, "nar_g128_m1"),
+            "two_term_rank_g256_m3": position(by_two, "nar_g256_m3"),
+            "two_term_rank_g128_m1": position(by_two, "nar_g128_m1"),
+            "measured_rank_g256_m3": position(by_ppl, "nar_g256_m3"),
+            "measured_rank_g128_m1": position(by_ppl, "nar_g128_m1"),
+            "one_term_places_g256_m3_above_g128_m1":
+                position(by_one, "nar_g256_m3") < position(by_one, "nar_g128_m1"),
+            "two_term_places_g256_m3_above_g128_m1":
+                position(by_two, "nar_g256_m3") < position(by_two, "nar_g128_m1"),
+            "measured_places_g256_m3_above_g128_m1":
+                position(by_ppl, "nar_g256_m3") < position(by_ppl, "nar_g128_m1"),
+        })
+    base.write_csv(result_dir / "e20_two_term_theory.csv", rows)
+    base.write_csv(result_dir / "e20_two_term_ranking.csv", fits)
+    print(json.dumps(fits, indent=2), flush=True)
+
 
 if __name__ == "__main__":
     run(parser().parse_args())

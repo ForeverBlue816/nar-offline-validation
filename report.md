@@ -1066,12 +1066,12 @@ The accounting closes. At g=256 the extra directions are worth -0.01423, while m
 | NAR g128 m=1 | 24 | 0.3973 | 0.2237 | 64 | 0.3194 | 0.1750 |
 | NAR g256 m=2 | 24 | 0.3973 | 0.2237 | 64 | 0.3194 | 0.1750 |
 | NAR g256 m=3 | 36 | 0.4435 | 0.2540 | 96 | 0.3508 | 0.1943 |
-| NAR g64 m=1 | 48 | 0.4745 | 0.2751 | 128 | 0.3508 | 0.1943 |
-| NAR g128 m=2 | 48 | 0.4745 | 0.2751 | 128 | 0.3508 | 0.1943 |
+| NAR g64 m=1 | 48 | 0.4745 | 0.2751 | 128 | 0.3729 | 0.2078 |
+| NAR g128 m=2 | 48 | 0.4745 | 0.2751 | 128 | 0.3729 | 0.2078 |
 | Hadamard g256 m=2 | 0 | 0.0013 | 0.0006 | 0 | 0.0026 | 0.0013 |
 | Hadamard g256 m=3 | 0 | 0.0026 | 0.0013 | 0 | 0.0041 | 0.0020 |
 
-**The m > 1 points fall on the same line as the m = 1 points**, and they do so in the strongest possible way: `f` is a function of the slot count alone and is *numerically identical* for configurations with equal slots and different `(g, m)`. NAR g256 m=2 and NAR g128 m=1 both give 0.3973 at qkv and 0.3194 at down; NAR g128 m=2 and NAR g64 m=1 both give 0.4745 and 0.3508. This is what `span{w_1, w_2}` on a 256-group being `span{DC_block1, DC_block2}` requires, and it confirms that the law is about the null space and not about the zero-point specifically. The down-site rows at 96 and 128 slots share f = 0.3508 because f is measured over the top 96 directions and therefore saturates there; that is a limit of the measurement window, not of the configurations.
+**The m > 1 points fall on the same line as the m = 1 points**, and they do so in the strongest possible way: `f` is a function of the slot count alone and is *numerically identical* for configurations with equal slots and different `(g, m)`. NAR g256 m=2 and NAR g128 m=1 both give 0.3973 at qkv and 0.3194 at down; NAR g128 m=2 and NAR g64 m=1 both give 0.4745 and 0.3508. This is what `span{w_1, w_2}` on a 256-group being `span{DC_block1, DC_block2}` requires, and it confirms that the law is about the null space and not about the zero-point specifically. The window is the 128 directions E11 stored for the down site and 48 for qkv, so only the two 48-slot qkv rows and the two 128-slot down rows saturate, and they saturate because their null spaces are genuinely identical.
 
 The extended E16 alignment diagnostic gives the same picture directly: the mean captured share `s_i` over the top directions is exactly `slots / directions_measured` for every NAR row (g128 m=1 down 0.6667 = 64/96, g256 m=2 down 0.6667, g256 m=3 down 1.0000), i.e. every direction that receives a slot is captured completely and every direction without one is not captured at all. Hadamard sits at 0.003-0.012.
 
@@ -1171,18 +1171,59 @@ Both 8B intervals contain zero. The 3B result that extra null-space directions b
 | row | qkv slots | f (qkv) | down slots | f (down) |
 |---|---:|---:|---:|---:|
 | NAR g256 m=1 | 16 | 0.3645 | 56 | 0.2639 |
-| NAR g128 m=1 | 32 | 0.4395 | 112 | 0.3022 |
-| NAR g256 m=2 | 32 | 0.4395 | 112 | 0.3022 |
-| NAR g256 m=3 | 48 | 0.4820 | 168 | 0.3022 |
-| NAR g64 m=1 | 64 | 0.5099 | 224 | 0.3022 |
-| NAR g128 m=2 | 64 | 0.5099 | 224 | 0.3022 |
+| NAR g128 m=1 | 32 | 0.4395 | 112 | 0.3138 |
+| NAR g256 m=2 | 32 | 0.4395 | 112 | 0.3138 |
+| NAR g256 m=3 | 48 | 0.4820 | 168 | 0.3447 |
+| NAR g64 m=1 | 64 | 0.5099 | 224 | 0.3659 |
+| NAR g128 m=2 | 64 | 0.5099 | 224 | 0.3659 |
 
-The identity that made the 3B convincing holds again exactly: equal slot counts at different `(g, m)` give identical `f` (g256 m=2 and g128 m=1 both 0.4395 at qkv; g128 m=2 and g64 m=1 both 0.5099). But `f` is measured over the top 96 directions, and the 8B down site already has 112 slots at g=128, so **every down-site row at or above 96 slots reports the same saturated f = 0.3022**. The down column carries no information above 96 slots on this model; only the qkv column, where the slot counts are 16 to 64, does. This is a limit of the measurement window, and it is one reason the 8B cannot corroborate the 3B's direction gain: at the site with the most slots the diagnostic is blind.
+The identity that made the 3B convincing holds again exactly: equal slot counts at different `(g, m)` give identical `f` (g256 m=2 and g128 m=1 both 0.4395 at qkv and 0.3138 at down; g128 m=2 and g64 m=1 both 0.5099 and 0.3659).
+
+An earlier version of this table reported a saturated f = 0.3022 for every down-site row at or above 96 slots, because the measurement window was 96 directions while the 8B down site has 112 slots at g=128. The window is now the full 224 directions E11 stored for that site, and the down column separates properly: 0.2639, 0.3138, 0.3447, 0.3659 across 56, 112, 168 and 224 slots. Only the two 224-slot rows still tie, and they tie because their null spaces are identical by construction. The window cannot be widened past 224 without recalibrating the eigenspace, which would change the directions being aligned and break comparability with the rows already run.
 
 The fp16 coefficients behave differently on the 8B: at the qkv site they reach 6.78 with a mean error of 0.30-0.46 of a quantization step and a code flip rate of 2.5-2.9%, an order of magnitude above the 3B, while the down site stays at 0.05-0.12 of a step and 0.04-0.07%. fp16 is kept, as the bit accounting assumes, and the number is reported rather than used to justify a change.
+
+## Close-out diagnostics
+
+Three diagnostics on already-run configurations. No new pre-registration: nothing below adds a row to the comparison, and the fp32-coefficient rows are labelled **diagnostic, not bit-accounted** because fp32 `c_j` costs 32 bits per group, which the `4 + 16(m+1)/g` accounting does not charge.
+
+### fp32 coefficients: does precision explain the 8B null result?
+
+The same two rotations, chunks, seeds and fold, with `c_j` stored fp32 instead of fp16.
+
+| model | row | fp16 vs g128 m=1 | fp32 vs g128 m=1 | fp32 vs fp16 (paired) |
+|---|---|---|---|---|
+| 3B | NAR g128 m=2 | -0.00892 [-0.01685, -0.00099] | -0.00877 [-0.01552, -0.00202] | +0.00015 [-0.00237, +0.00267] |
+| 3B | NAR g256 m=3 | +0.01213 [+0.00730, +0.01696] | +0.01623 [+0.01325, +0.01920] | +0.00409 [-0.00299, +0.01118] |
+| 8B | NAR g128 m=2 | -0.00133 [-0.00697, +0.00431] | **-0.00369 [-0.00680, -0.00058]** | -0.00235 [-0.01002, +0.00531] |
+| 8B | NAR g256 m=3 | +0.01586 [+0.01038, +0.02133] | +0.01143 [+0.00685, +0.01601] | -0.00443 [-0.00951, +0.00066] |
+
+**The evidence is suggestive, not conclusive, and is reported as such.** The direct fp32-versus-fp16 paired delta clears the CI on none of the four rows, so no single comparison demonstrates a precision effect. What does change is the conclusion drawn against the baseline: on the 8B, NAR g128 m=2 goes from indistinguishable from NAR g128 m=1 under fp16 (-0.00133, interval containing zero) to **significantly better under fp32** (-0.00369, interval excluding zero). The direction contrast across models is consistent with the precision measurements: both 8B rows move toward a gain (-0.00235, -0.00443) while neither 3B row does (+0.00015, +0.00409), and the 8B is exactly where the fp16 coefficients are worst, at the qkv site with `|c|` up to 6.78, a mean error of 0.30 to 0.46 of a quantization step and a 2.5-2.9% code flip rate, against 0.07-0.20% on the 3B.
+
+The fair statement is therefore: **the 8B non-replication is partly a coefficient-precision effect at the qkv site rather than a clean absence of alignment gain**, but E20 does not establish this, because the paired fp32-versus-fp16 deltas do not individually reach significance. Under fp32 coefficients the m=2 gain replicates on both models; under the fp16 that the bit accounting requires, it does not. Note also that fp32 does not rescue H2: NAR g256 m=3 remains worse than NAR g128 m=1 on both models even with exact coefficients.
+
+### Why finer groups win: the group-size term
+
+`f` is scale-free. It measures what fraction of the second moment the null space absorbs, and it cannot see that a 256-wide group starts from a larger quantization step than a 128-wide one. A ranking built on `f` alone must therefore mis-order any comparison that changes `g`. The two-term predictor puts the missing factor back, using the measured Hadamard step at the same group size:
+
+    step_pred(g, m) = step_Hadamard(g) * sqrt(1 - f(g, m))
+
+Ranking the six bit-accounted NAR rows on the 3B, against measured PPL:
+
+| predictor | Spearman vs measured PPL | ordering |
+|---|---:|---|
+| one term, `f` alone | 0.8286 | g64 m1 > g128 m2 > **g256 m3 > g256 m2 > g128 m1** > g256 m1 |
+| two term, `step_Had(g)*sqrt(1-f)` | **1.0000** | g64 m1 > g128 m2 > **g128 m1** > g256 m3 > g256 m2 > g256 m1 |
+| measured PPL | — | g64 m1 > g128 m2 > **g128 m1** > g256 m3 > g256 m2 > g256 m1 |
+
+**The one-term ranking places NAR g256 m=3 above NAR g128 m=1, at positions 3 and 5, and it is wrong: the measured order has them at 3 and 4 the other way round. The two-term ranking corrects it and reproduces the measured order exactly**, Spearman 1.0000, at every site and combined.
+
+This is the mechanism behind H1 and H2 failing, stated without reference to perplexity. Extra null-space dimensions raise `f`, and `f` is all the one-term law knows, so it predicts that g256 m=3 with 96 slots should beat g128 m=1 with 64. What it omits is that the step it multiplies is the step of a 256-wide group, which the range measurement shows to be larger. Once both terms are present the ordering is exact. The same term is visible directly in the range table, where NAR g128 m=1 and NAR g256 m=2 share `f` = 0.2773 at the down site by construction yet reduce the range by 0.2233 and 0.2097: identical captured energy, different starting step.
+
+Outputs are in `results/llama32_3b/e20_two_term_theory.csv` and `e20_two_term_ranking.csv`.
 
 ## Plain statement across both models
 
 **H1 and H2 do not hold on either model; H3 holds on both.** At a matched bit budget, metadata spent on finer groups beats metadata spent on additional null-space dimensions, consistently and significantly: NAR g128 m=1 stays the best 4.25-bit configuration on both, and the rows that win outright are the ones that buy more slots while *keeping* the finer group (NAR g64 m=1 at -0.02823 on the 3B and -0.02214 on the 8B).
 
-The DC direction is not special — the construction proves that much, since `f` is a function of the slot count alone and is numerically identical across `(g, m)` pairs with equal slots. But generalizing the null space is not a free lunch: the extra directions must be paid for with a coarser group, and that trade is a loss on both models. Whether the extra directions help at all once the group cost is set aside is unresolved: they do on the 3B and they do not on the 8B, and the 8B's own diagnostic is saturated at the site that matters most, so E20 does not settle it.
+The DC direction is not special — the construction proves that much, since `f` is a function of the slot count alone and is numerically identical across `(g, m)` pairs with equal slots. But generalizing the null space is not a free lunch: the extra directions must be paid for with a coarser group, and that trade is a loss on both models. Whether the extra directions help at all once the group cost is set aside is unresolved: they do on the 3B and they do not on the 8B, and the fp32-coefficient diagnostic below suggests, without demonstrating, that the 8B's null result is partly a coefficient-precision artifact.
