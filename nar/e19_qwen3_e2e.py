@@ -497,8 +497,23 @@ def control_command(args: argparse.Namespace) -> None:
         gc.collect()
         torch.cuda.empty_cache()
 
-    base.write_csv(control_path(workdir), rows)
-    base.write_csv(workdir / "results" / MODEL_KEY / "e19_round_trip_audit.csv", round_trips)
+    # Merge on the method column: a run restricted with --rotations computes a
+    # subset, and writing it wholesale would delete the rows another
+    # invocation produced. GPTQ gates on this file, so losing a row breaks it.
+    def merge_csv(path: Path, fresh: list[dict[str, Any]], key: str) -> None:
+        merged: dict[str, dict[str, Any]] = {}
+        if path.exists():
+            for existing in base.read_csv(path):
+                merged[str(existing[key])] = existing
+        for row in fresh:
+            merged[str(row[key])] = row
+        base.write_csv(path, list(merged.values()))
+
+    merge_csv(control_path(workdir), rows, "method")
+    trip_path = workdir / "results" / MODEL_KEY / "e19_round_trip_audit.csv"
+    for entry in round_trips:
+        entry["merge_key"] = f"{entry['rotation']}|{entry['site']}|{entry['layer']}"
+    merge_csv(trip_path, round_trips, "merge_key")
     base.atomic_json(workdir / "results" / MODEL_KEY / "e19_control.json", {
         "model": MODEL_KEY, "model_id": MODEL_ID, "control_chunks": int(tokens.shape[0]),
         "reference_ppl": reference_ppl, "rows": rows,
@@ -724,7 +739,10 @@ def parser() -> argparse.ArgumentParser:
     sub.add_parser("calibrate")
     sub.add_parser("audit")
     control = sub.add_parser("control")
-    control.add_argument("--rotations", nargs="+", default=["hadamard", "nar_k8", "nar_kmax"])
+    # Every rotation that later gets a GPTQ pass needs a control row, because
+    # gptq_command gates on this file; nar_k32 was missing and aborted the run.
+    control.add_argument("--rotations", nargs="+",
+                         default=["hadamard", "nar_k8", "nar_k32", "nar_kmax"])
     control.add_argument("--control-chunks", type=int, default=64)
     control.add_argument("--control-ppl-tolerance", type=float, default=0.01)
     control.add_argument("--control-nll-tolerance", type=float, default=1e-3)
