@@ -108,11 +108,24 @@ class GPTQAudit:
     hessian_diag_max_over_median: float = 0.0
     hessian_diag_mean_over_median: float = 0.0
     damp_over_median_diag: float = 0.0
-    # Share of diag(H) mass on the null-space slots, input coordinates
-    # 0, 128, 256, ... which are the group DC slots the rotation aligns to.
-    # The uninformative baseline is slot_count/columns = 1/128.
+    # Share of diag(H) mass on input coordinates 0, 128, 256, ... against the
+    # uninformative baseline slot_count/columns = 1/128.  This is the literal
+    # "null-space slot" coordinate set, and it is the WRONG basis: the rotation
+    # applies its per-group Hadamard last, so the anchor slot a reflector fills
+    # becomes the group's constant direction downstream, and the Hessian GPTQ
+    # builds is on the post-Hadamard activation.  Kept because it was asked for
+    # and because reading it at exactly the baseline is the evidence for that.
     null_slot_diag_share: float = 0.0
     null_slot_baseline: float = 0.0
+    # The same quantity in the basis GPTQ actually sees: the share of trace(H)
+    # carried by the per-group all-ones direction, which is what an asymmetric
+    # zero-point absorbs and what the anchor slot maps onto through H.  Same
+    # 1/128 baseline, so the two are directly comparable.
+    null_space_dc_share: float = 0.0
+    # (tr H)^2 / ||H||_F^2, the effective number of directions the Hessian
+    # spreads over. Equals the column count for an isotropic Hessian and falls
+    # towards 1 as energy concentrates.
+    hessian_participation_ratio: float = 0.0
     # MSE clipping is per output row here (groupsize -1 gives one scale per
     # row), so a per-input-column shrink does not exist under this protocol.
     rows_clipped: int = 0
@@ -216,6 +229,16 @@ class GPTQ:
         slots = torch.zeros(self.columns, dtype=torch.bool, device=diag.device)
         slots[::stride] = True
         total = float(diag.sum())
+        groups = self.columns // stride
+        dc_share = float("nan")
+        if groups * stride == self.columns and total > 0:
+            # sum_g (1^T H_g 1) / |g|, the energy on each group's constant
+            # direction, summed over groups and normalised by the trace.
+            blocks = hessian.view(groups, stride, groups, stride)
+            index = torch.arange(groups, device=diag.device)
+            diagonal_blocks = blocks[index, :, index, :]
+            dc_share = float(diagonal_blocks.sum(dim=(1, 2)).sum()) / (stride * total)
+        frobenius = float(hessian.pow(2).sum())
         mass = weight.abs().pow(2)
         row_mass = mass.sum(1).clamp_min(1e-30)
         slot_share = (mass[:, slots].sum(1) / row_mass)
@@ -230,6 +253,8 @@ class GPTQ:
             "damp_over_median_diag": percdamp * float(diag.mean()) / median,
             "null_slot_diag_share": float(diag[slots].sum()) / total if total > 0 else float("nan"),
             "null_slot_baseline": float(slots.sum()) / self.columns,
+            "null_space_dc_share": dc_share,
+            "hessian_participation_ratio": (total * total / frobenius) if frobenius > 0 else float("nan"),
             "rows_clipped": int(clipped.sum()),
             "mean_shrink": float(shrink.mean()),
             "clipped_row_null_slot_mass_share": (

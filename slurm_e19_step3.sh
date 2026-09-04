@@ -22,17 +22,20 @@ main_root="${NAR_E19_ARTIFACT_ROOT:-$NAR_WORKDIR/artifacts/e19}"
 # the diagnostics are regenerated into a separate root. The weights are
 # deterministic and identical; only gptq_audit.csv is wanted from this pass, and
 # the committed checkpoints are left untouched.
-audit_root="$NAR_WORKDIR/artifacts/e19_audit"
+audit_root="${NAR_E19_AUDIT_ROOT:-$NAR_WORKDIR/artifacts/e19_audit}"
 seed="${NAR_E19_SEED:-0}"
 rotations="hadamard nar_k8 nar_kmax"
 
 run() { "$python_bin" "$code_dir/nar/e19_qwen3_e2e.py" --workdir "$NAR_WORKDIR" \
         --seed "$seed" "$@"; }
 
+if [ "${NAR_E19_STEP3_PHASES:-all}" = all ] || [ "${NAR_E19_STEP3_PHASES:-}" = 3a ]; then
 echo "== 3a: default-protocol Hessian and clipping diagnostics =="
 for rot in $rotations; do
     run --artifact-root "$audit_root" gptq --rotation "$rot" --protocol default
 done
+fi
+[ "${NAR_E19_STEP3_PHASES:-all}" = 3a ] && { echo "== 3a only =="; exit 0; }
 
 echo "== 3b: alternative protocols, matched across rotations =="
 for protocol in act_order g128; do
