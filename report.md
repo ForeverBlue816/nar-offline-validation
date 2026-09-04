@@ -1077,6 +1077,44 @@ The extended E16 alignment diagnostic gives the same picture directly: the mean 
 
 The law predicts the ordering of the NAR rows correctly but not their spacing: g256 m=3 has a *higher* predicted reduction than g128 m=1 at both sites (0.2540 vs 0.2237 at qkv, 0.1943 vs 0.1750 at down) yet loses on PPL by +0.01213. The missing term is scale resolution, which `f` does not model at all.
 
+### Measured range reduction on the E1c dumps
+
+`f` and the prediction are only half of what the law claims; the other half is the measured group range. Following the E7 convention exactly, the response is the mean group range (max minus min, already invariant to the DC component the zero-point absorbs) and the reference is the Hadamard rotation at the same group size. For m > 1 the extra directions are projected out before the range is taken, because that is what the affine quantizer's scale actually sees. Measured on the frozen E1c dumps, 4096 rows per site, layers 0/4/8/12/16/20/24 of the 3B.
+
+![E20 range versus sqrt(1-f)](results/llama32_3b/e20_range_vs_sqrt_one_minus_f.png)
+
+| row | site | slots | f | predicted `1-sqrt(1-f)` | measured | measured - predicted |
+|---|---|---:|---:|---:|---:|---:|
+| NAR g256 m=1 | qkv | 12 | 0.3389 | 0.1880 | 0.2546 | +0.0666 |
+| NAR g128 m=1 | qkv | 24 | 0.4194 | 0.2396 | 0.2890 | +0.0494 |
+| NAR g256 m=2 | qkv | 24 | 0.4194 | 0.2396 | 0.2884 | +0.0488 |
+| NAR g256 m=3 | qkv | 36 | 0.4662 | 0.2713 | 0.3102 | +0.0389 |
+| NAR g64 m=1 | qkv | 48 | 0.4968 | 0.2928 | 0.3247 | +0.0319 |
+| NAR g128 m=2 | qkv | 48 | 0.4968 | 0.2928 | 0.3252 | +0.0324 |
+| NAR g256 m=1 | down | 32 | 0.2248 | 0.1202 | 0.1892 | +0.0690 |
+| NAR g128 m=1 | down | 64 | 0.2773 | 0.1506 | 0.2233 | +0.0727 |
+| NAR g256 m=2 | down | 64 | 0.2773 | 0.1506 | 0.2097 | +0.0590 |
+| NAR g256 m=3 | down | 96 | 0.3106 | 0.1705 | 0.2262 | +0.0557 |
+| NAR g64 m=1 | down | 128 | 0.3106 | 0.1705 | 0.2599 | +0.0893 |
+| NAR g128 m=2 | down | 128 | 0.3106 | 0.1705 | 0.2490 | +0.0785 |
+| Hadamard g256 m=2 | qkv | 0 | 0.0011 | 0.0006 | 0.0012 | +0.0006 |
+| Hadamard g256 m=3 | qkv | 0 | 0.0025 | 0.0012 | 0.0029 | +0.0017 |
+| Hadamard g256 m=2 | down | 0 | 0.0024 | 0.0012 | 0.0018 | +0.0006 |
+| Hadamard g256 m=3 | down | 0 | 0.0034 | 0.0017 | 0.0037 | +0.0020 |
+
+Fitting E7's regression, `range / range_hadamard = intercept + slope * sqrt(1-f)`, pooled over layers and sites:
+
+| subset | points | intercept | slope | R^2 | mean measured | mean predicted |
+|---|---:|---:|---:|---:|---:|---:|
+| m = 1 | 42 | -0.1520 | 1.1102 | 0.7881 | 0.2568 | 0.1936 |
+| m = 2 | 28 | -0.1575 | 1.1307 | 0.8115 | 0.2681 | 0.2134 |
+| m = 3 | 14 | -0.2242 | 1.2270 | 0.8599 | 0.2682 | 0.2209 |
+| all m | 84 | -0.1520 | 1.1186 | 0.8010 | 0.2624 | 0.2048 |
+
+**The m = 2 and m = 3 points fall on the same line as the m = 1 points.** The fitted slopes are 1.1102, 1.1307 and 1.2270 against 1.1186 for the pooled fit; m = 2 is within 2% of m = 1, and m = 3 is 10% higher on only fourteen points. This is the check that the law is about the null space rather than about the zero-point specifically, and it passes: nothing distinguishes the directions the zero-point absorbs from the directions an extra fp16 coefficient absorbs.
+
+Two things the measurement adds that `f` alone did not show. First, **sqrt(1-f) under-predicts**: every NAR configuration reduces the range by more than the law says, by +0.03 to +0.09 absolute, and the fitted intercept is -0.15 rather than 0. The law is a lower bound here, not an equality. Second, and directly relevant to H1, **configurations with identical f do not have identical measured reduction once the group size differs**: NAR g128 m=1 and NAR g256 m=2 share f = 0.2773 at the down site by construction, yet reduce the range by 0.2233 and 0.2097 respectively. The coarser group reduces less for the same captured energy. That gap, which `f` cannot see, is the same scale-resolution term that makes H1 fail on PPL, and it appears here in the range measurement independently of any perplexity.
+
 ### fp16 precision of the coefficients
 
 `c_j` is the projection of a high-energy direction and is large on real activations: up to **13.39** at the down site against a quantization step of order 0.05.

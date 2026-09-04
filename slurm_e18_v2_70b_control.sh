@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=nar-70b-ctl
-#SBATCH --gpus=pro6000:4
+#SBATCH --gpus=pro6000:8
 #SBATCH --qos=override-limits-but-killable
 #SBATCH --time=06:00:00
 #SBATCH --output=runs/e18v2-70b-ctl-%j.out
@@ -17,17 +17,25 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True TMPDIR="$NAR_WORKDIR/tmp
 mkdir -p "$TMPDIR" "$code_dir/runs"
 out="$NAR_WORKDIR/results/llama31_70b"
 run() { "$python_bin" "$code_dir/nar/e18_v2.py" --workdir "$NAR_WORKDIR" \
-        --model-key llama31_70b --eval-sequences 64 --check-rows 32 "$@"; }
+        --model-key llama31_70b --eval-sequences 64 --check-rows 32 --report-only "$@"; }
 
 # The E18 70B row set was produced with the v1 weight fold. Run the control
 # both ways: the exact transpose isolates the quantizer, the weight fold
 # reproduces the path that produced PPL 15025.
-echo "===== exact-transpose fold ====="
-run --rotation-only-control
-cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_exact.csv"
-cp -f "$out/e18v2_control.json" "$out/e18v2_control_exact.json"
+# Each arm is skipped if its artifact already exists, so a rerun only fills in
+# what is missing rather than repeating a 70B pass that already succeeded.
+if [[ ! -f "$out/e18v2_rotation_only_control_exact.csv" ]]; then
+    echo "===== exact-transpose fold ====="
+    run --rotation-only-control
+    cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_exact.csv"
+    cp -f "$out/e18v2_control.json" "$out/e18v2_control_exact.json"
+else
+    echo "===== exact-transpose fold already recorded, skipping ====="
+fi
 
-echo "===== v1 weight fold ====="
-run --rotation-only-control --weight-fold
-cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_weight_fold.csv"
-cp -f "$out/e18v2_control.json" "$out/e18v2_control_weight_fold.json"
+if [[ ! -f "$out/e18v2_rotation_only_control_weight_fold.csv" ]]; then
+    echo "===== v1 weight fold ====="
+    run --rotation-only-control --weight-fold
+    cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_weight_fold.csv"
+    cp -f "$out/e18v2_control.json" "$out/e18v2_control_weight_fold.json"
+fi

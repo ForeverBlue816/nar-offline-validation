@@ -1,0 +1,5 @@
+model,subset,points,intercept,slope,r_squared,rmse,mean_measured_reduction,mean_predicted_reduction,fit
+llama32_3b,m=1,42,-0.1519853492762226,1.110165477257831,0.788089606403083,0.04116558801509961,0.2567677567341128,0.19361787870278072,"OLS range/range_hadamard = intercept + slope*sqrt(1-f), pooled over layers and sites"
+llama32_3b,m=2,28,-0.1574759325333348,1.1306794186231122,0.8115457420094494,0.03935307154875055,0.26806686181698264,0.21338528316060415,"OLS range/range_hadamard = intercept + slope*sqrt(1-f), pooled over layers and sites"
+llama32_3b,m=3,14,-0.22417106208805548,1.2270173477315864,0.8599042821832414,0.03359574911611871,0.26820410142766765,0.22090183775502004,"OLS range/range_hadamard = intercept + slope*sqrt(1-f), pooled over layers and sites"
+llama32_3b,all m,84,-0.1520201781040856,1.118622886410347,0.8009603925351777,0.04018359236638802,0.26244018254399515,0.2047543400307618,"OLS range/range_hadamard = intercept + slope*sqrt(1-f), pooled over layers and sites"

@@ -503,7 +503,12 @@ def run(args: argparse.Namespace) -> None:
             control_rows.append(row)
         base.write_csv(result_dir / "e18v2_rotation_only_control.csv", control_rows)
         LOG.info("Step 1 control: %s", json.dumps(control_rows, indent=2))
-        if args.require_control and not all(row["passed"] for row in control_rows):
+        failed = [row["method"] for row in control_rows if not row["passed"]]
+        if failed and args.report_only:
+            # Diagnostic mode: record the arm and continue, so a later arm of
+            # the same investigation still runs. Never used for a reported row.
+            LOG.warning("rotation-only control did not pass for %s; continuing (report-only)", failed)
+        elif args.require_control and failed:
             raise AssertionError("Step 1 rotation-only control failed; refusing to report E18 v2")
 
     if args.orthogonality_audit:
@@ -630,6 +635,8 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--skip-hadamard", action="store_true")
     result.add_argument("--weight-fold", action="store_true",
                         help="reproduce the v1 path that folds R into the consuming weight")
+    result.add_argument("--report-only", action="store_true",
+                        help="record a failing control instead of aborting; diagnostics only")
     result.add_argument("--require-control", action="store_true",
                         help="abort unless every rotation-only row reproduces bf16")
     result.add_argument("--check-rows", type=int, default=64,

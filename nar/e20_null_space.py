@@ -618,12 +618,22 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--seq-len", type=int, default=2048)
     result.add_argument("--round-trip-tolerance", type=float, default=1e-6)
     result.add_argument("--finalize-only", action="store_true")
+    result.add_argument("--range-only", action="store_true",
+                        help="measured range reduction on the E1c dumps, plus the plot")
+    result.add_argument("--range-rows", type=int, default=4096)
+    result.add_argument("--range-layer-stride", type=int, default=1)
+    result.add_argument("--range-directions", type=int, default=96)
     return result
 
 
 def run(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     base.setup_logging(workdir, "e20")
+    if args.range_only:
+        if not torch.cuda.is_available():
+            raise RuntimeError("E20 range measurement requires CUDA")
+        range_command(args)
+        return
     if not args.finalize_only:
         if not torch.cuda.is_available():
             raise RuntimeError("E20 requires CUDA")
@@ -631,6 +641,169 @@ def run(args: argparse.Namespace) -> None:
             run_model(args, model_key)
     finalize(args)
 
+
+
+# ------------------------------------------- measured range reduction (E1c) ---
+
+E1C_SITE = {"qkv": "q_input", "down": "down_input"}
+RANGE_MODEL = "llama32_3b"          # only this model has frozen E1c dumps
+
+
+@torch.inference_mode()
+def range_command(args: argparse.Namespace) -> None:
+    """Measured range reduction on the E1c dump rows, against 1 - sqrt(1-f).
+
+    Follows the E7 convention exactly: the response is the mean group range
+    (max - min), which is already invariant to the DC component the zero-point
+    absorbs, and the reference is the Hadamard rotation at the same group size.
+    For m > 1 the extra directions are projected out before the range is taken,
+    because that is what the affine quantizer's scale actually sees.
+    """
+    workdir = Path(args.workdir).resolve()
+    base.setup_logging(workdir, "e20-range")
+    device = torch.device("cuda")
+    wide = workdir / "activations" / RANGE_MODEL / "wide_cal_a"
+    meta = json.loads((wide / "DONE.json").read_text())
+    dimensions = {"qkv": int(meta["hidden_size"]), "down": int(meta["intermediate_size"])}
+    layers = list(range(0, int(meta["num_layers"]), args.range_layer_stride))
+    fractions = eigen_fractions(workdir, RANGE_MODEL)
+    configs = [row for row in ROWS if row.method != "bf16"]
+    rows: list[dict[str, Any]] = []
+
+    for site, n in dimensions.items():
+        for layer in layers:
+            mapped = act.ext._open_site(wide, meta, E1C_SITE[site], layer)
+            x = act.ext._bits_to_tensor(
+                mapped.reshape(-1, n)[: args.range_rows], device).float()
+            vectors, energy = load_site_data(workdir, RANGE_MODEL, site, layer, device)
+            weights = torch.tensor(fractions[(site, layer)], device=device, dtype=torch.float32)
+            signs = {(site, layer): torch.randint(
+                0, 2, (n,), generator=torch.Generator(device="cpu").manual_seed(
+                    args.seed + 1000 * layer + (0 if site == "qkv" else 100_000)),
+            ).float().mul_(2).sub_(1).to(device)}
+            hadamard = Rotation(Row("hadamard", 128, 1), {}, signs)
+            had_x = hadamard.apply(site, layer, x)
+            had_range = {g: base.mean_group_range(had_x, g) for g in (64, 128, 256)}
+            del had_x
+
+            for row in configs:
+                g, m = row.group, row.m
+                if row.method == "nar":
+                    factor = build_nar_factor(vectors, energy, g, m)
+                    rotation = Rotation(row, {(site, layer): factor}, signs)
+                else:
+                    rotation = Rotation(row, {}, signs)
+                rotated = rotation.apply(site, layer, x)
+                grouped = base.group_view(rotated, g)
+                if m > 1:
+                    basis = aq.walsh_basis(g, m, device)[1:]
+                    grouped = grouped - (grouped @ basis.T) @ basis
+                measured = float((grouped.amax(-1) - grouped.amin(-1)).mean())
+                # f over the same P_N used by the quantizer, energy-weighted.
+                projector = null_space_basis(n, g, m, device)
+                take = min(args.range_directions, vectors.shape[1], weights.numel())
+                share = rotation.apply(site, layer, vectors[:, :take].T)
+                share = (share @ projector.T).square().sum(-1) / share.square().sum(-1).clamp_min(1e-30)
+                f = float((share * weights[:take]).sum())
+                rows.append({
+                    "model": RANGE_MODEL, "row": row.name, "site": site, "layer": layer,
+                    "group": g, "m": m, "slots": row.slots(n),
+                    "effective_bits": row.bits, "rows_used": int(x.shape[0]),
+                    "mean_group_range": measured,
+                    "hadamard_reference_range": had_range[g],
+                    "range_ratio_vs_hadamard": measured / had_range[g],
+                    "measured_range_reduction": (had_range[g] - measured) / had_range[g],
+                    "absorbed_energy_fraction": f,
+                    "sqrt_one_minus_f": math.sqrt(max(0.0, 1.0 - f)),
+                    "predicted_range_reduction": 1.0 - math.sqrt(max(0.0, 1.0 - f)),
+                })
+                del rotated, grouped, projector, share
+            del x, vectors
+            gc.collect()
+            torch.cuda.empty_cache()
+            LOG.info("E20 range %s layer %d done", site, layer)
+
+    result_dir = workdir / "results" / RANGE_MODEL
+    base.write_csv(result_dir / "e20_range_vs_config.csv", rows)
+
+    # E7's fit, pooled over layers, separately per m so the m>1 points can be
+    # read against the m=1 line rather than averaged into it.
+    fit_rows: list[dict[str, Any]] = []
+    for key, label in (((1,), "m=1"), ((2,), "m=2"), ((3,), "m=3"), ((1, 2, 3), "all m")):
+        subset = [r for r in rows if r["m"] in key and r["row"].startswith("nar")]
+        if len(subset) < 3:
+            continue
+        predictor = np.asarray([r["sqrt_one_minus_f"] for r in subset])
+        response = np.asarray([r["range_ratio_vs_hadamard"] for r in subset])
+        design = np.column_stack((np.ones_like(predictor), predictor))
+        intercept, slope = np.linalg.lstsq(design, response, rcond=None)[0]
+        predicted = design @ np.asarray([intercept, slope])
+        residual = float(np.square(response - predicted).sum())
+        total = float(np.square(response - response.mean()).sum())
+        fit_rows.append({
+            "model": RANGE_MODEL, "subset": label, "points": len(subset),
+            "intercept": float(intercept), "slope": float(slope),
+            "r_squared": 1 - residual / total if total > 0 else math.nan,
+            "rmse": math.sqrt(residual / len(response)),
+            "mean_measured_reduction": float(np.mean([r["measured_range_reduction"] for r in subset])),
+            "mean_predicted_reduction": float(np.mean([r["predicted_range_reduction"] for r in subset])),
+            "fit": "OLS range/range_hadamard = intercept + slope*sqrt(1-f), pooled over layers and sites",
+        })
+    base.write_csv(result_dir / "e20_range_fit.csv", fit_rows)
+    plot_range(rows, fit_rows, result_dir / "e20_range_vs_sqrt_one_minus_f.png")
+    print(json.dumps(fit_rows, indent=2), flush=True)
+
+
+def plot_range(rows: list[dict[str, Any]], fit_rows: list[dict[str, Any]], path: Path) -> None:
+    """The sqrt(1-f) plot with the m = 2 and m = 3 points added."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    figure, axes = plt.subplots(1, 2, figsize=(11, 4.6))
+    styles = {1: ("o", "#1b4965"), 2: ("s", "#c1666b"), 3: ("^", "#48a9a6")}
+    nar = [r for r in rows if r["row"].startswith("nar")]
+    for m, (marker, colour) in styles.items():
+        subset = [r for r in nar if r["m"] == m]
+        if not subset:
+            continue
+        axes[0].scatter([r["sqrt_one_minus_f"] for r in subset],
+                        [r["range_ratio_vs_hadamard"] for r in subset],
+                        s=26, marker=marker, alpha=0.65, color=colour,
+                        edgecolors="none", label=f"NAR m={m}")
+    grid = np.linspace(0.6, 1.0, 50)
+    axes[0].plot(grid, grid, "k--", linewidth=1.2, label="range ratio = sqrt(1-f)")
+    fit = next((f for f in fit_rows if f["subset"] == "all m"), None)
+    if fit:
+        axes[0].plot(grid, fit["intercept"] + fit["slope"] * grid, color="#8d6a9f",
+                     linewidth=1.6,
+                     label=f"OLS all m (slope {fit['slope']:.2f}, R^2 {fit['r_squared']:.2f})")
+    axes[0].set_xlabel(r"$\sqrt{1-f}$")
+    axes[0].set_ylabel("mean group range / Hadamard reference")
+    axes[0].set_title("E20: the law holds for m > 1")
+    axes[0].legend(fontsize=8, frameon=False)
+    axes[0].grid(alpha=0.25, linewidth=0.5)
+
+    for m, (marker, colour) in styles.items():
+        subset = [r for r in nar if r["m"] == m]
+        if not subset:
+            continue
+        axes[1].scatter([r["predicted_range_reduction"] for r in subset],
+                        [r["measured_range_reduction"] for r in subset],
+                        s=26, marker=marker, alpha=0.65, color=colour,
+                        edgecolors="none", label=f"NAR m={m}")
+    limit = max(0.05, max(r["measured_range_reduction"] for r in nar),
+                max(r["predicted_range_reduction"] for r in nar))
+    axes[1].plot([0, limit], [0, limit], "k--", linewidth=1.2, label="measured = predicted")
+    axes[1].set_xlabel(r"predicted reduction $1-\sqrt{1-f}$")
+    axes[1].set_ylabel("measured range reduction")
+    axes[1].set_title("E20: predicted versus measured")
+    axes[1].legend(fontsize=8, frameon=False)
+    axes[1].grid(alpha=0.25, linewidth=0.5)
+    figure.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    figure.savefig(path, dpi=180)
+    plt.close(figure)
 
 if __name__ == "__main__":
     run(parser().parse_args())
