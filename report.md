@@ -1052,7 +1052,7 @@ H1 and H2 failing does not mean the extra directions are inert. Within a fixed g
 | NAR g128 m=2 vs g128 m=1 | **-0.00892 [-0.01685, -0.00099]** |
 | Hadamard g256 m=3 vs g256 m=1 (control) | -0.00105 [-0.02564, +0.02354] |
 
-NAR gains from the third direction and Hadamard does not, so **the gain is alignment-driven**, which is the mechanism the DC-alignment story predicts — the zero-point's direction is not privileged, it is simply the one that was already free.
+NAR gains from the third direction and Hadamard does not, which points at an alignment-driven gain — the mechanism the DC-alignment story predicts, in which the zero-point's direction is not privileged but simply the one that was already free. **This does not replicate on the 8B** (see below), so it is reported as a 3B observation and not as a general property.
 
 The accounting closes. At g=256 the extra directions are worth -0.01423, while moving from g=128 to g=256 costs +0.01922 in scale resolution; the residual, +0.005 to +0.012, is the +0.01213 that H2 measured directly. Extra null-space dimensions and finer groups are competing uses of the same metadata budget, and on this model **finer groups win**.
 
@@ -1094,6 +1094,57 @@ The law predicts the ordering of the NAR rows correctly but not their spacing: g
 
 **This exceeds 0.1 of a step on the NAR rows, and fp16 is kept anyway**, because the bit accounting assumes it; the threshold is reported rather than used to justify a silent switch to fp32. A max ratio of exactly one step is the granularity of the measure — it means a code flipped by one — so the interpretable quantity is the flip rate, which is 0.07% to 0.20% of codes on the NAR rows and 0.004% to 0.005% on Hadamard. The effect is real but two orders of magnitude smaller than the differences the hypotheses turn on.
 
-### Plain statement
+### Plain statement for the 3B
 
 On Llama-3.2-3B, **H1 and H2 do not hold and H3 does**. Extra null-space directions are not inert and their benefit is genuinely alignment-driven, but at a matched bit budget the metadata is better spent on finer groups than on additional null-space dimensions: NAR g128 m=1 remains the best 4.25-bit configuration, and the best rows overall are the ones that buy more slots *and* keep the finer group (NAR g64 m=1 at -0.02823 and NAR g128 m=2 at -0.00892, both above 4.25 bits). The DC direction is not special; it is simply the direction that was already free, and buying more of them costs more than it returns once the group has to grow to pay for them.
+
+## Results — Llama-3.1-8B
+
+Same protocol, three seeds, 64 chunks, exact-transpose fold with the round-trip residual at most 4.102e-07 across all 66 checks.
+
+| row | eff. bits | slots (down) | mean PPL | delta vs bf16 | paired delta vs NAR g128 m=1 [90% CI] |
+|---|---:|---:|---:|---:|---|
+| bf16 | 16.0 | 0 | 6.20443 | +0.00000 | — |
+| Hadamard g64 m=1 | 4.5 | 0 | 6.33500 | +0.13058 | +0.04836 [+0.02214, +0.07459] |
+| Hadamard g128 m=1 | 4.25 | 0 | 6.34661 | +0.14218 | +0.05996 [+0.05704, +0.06289] |
+| Hadamard g256 m=1 | 4.125 | 0 | 6.37356 | +0.16914 | +0.08692 [+0.06841, +0.10543] |
+| Hadamard g256 m=2 | 4.1875 | 0 | 6.37722 | +0.17279 | +0.09057 [+0.07763, +0.10352] |
+| Hadamard g256 m=3 | 4.25 | 0 | 6.36874 | +0.16432 | +0.08210 [+0.06961, +0.09459] |
+| NAR g64 m=1 | 4.5 | 224 | 6.26450 | +0.06008 | -0.02214 [-0.02657, -0.01771] |
+| **NAR g128 m=1** | **4.25** | **112** | **6.28664** | **+0.08222** | baseline |
+| NAR g128 m=2 | 4.375 | 224 | 6.28531 | +0.08088 | -0.00133 [-0.00697, +0.00431] |
+| NAR g256 m=1 | 4.125 | 56 | 6.30503 | +0.10060 | +0.01838 [+0.01345, +0.02331] |
+| NAR g256 m=2 | 4.1875 | 112 | 6.30471 | +0.10029 | +0.01807 [+0.00921, +0.02693] |
+| NAR g256 m=3 | 4.25 | 168 | 6.30250 | +0.09808 | +0.01586 [+0.01038, +0.02133] |
+
+**The three hypotheses land the same way as on the 3B.** H1 is not supported: NAR g256 m=2 costs +0.01807 [+0.00921, +0.02693]. H2 is not supported: NAR g256 m=3 costs +0.01586 [+0.01038, +0.02133] at identical 4.25 bits. H3 is supported: Hadamard's extra directions give +0.00365 [-0.00707, +0.01437] at m=2 and -0.00482 [-0.01196, +0.00231] at m=3, both containing zero. Scale resolution alone, Hadamard g128 minus g256, is -0.02695 [-0.04811, -0.00580], larger than the 3B's -0.01922.
+
+**What does not replicate is the gain from the extra directions.** On the 8B they are statistically indistinguishable from doing nothing:
+
+| comparison | 3B | 8B |
+|---|---|---|
+| NAR g256 m=3 vs g256 m=1 | **-0.01423 [-0.02322, -0.00524]** | -0.00253 [-0.00911, +0.00405] |
+| NAR g128 m=2 vs g128 m=1 | **-0.00892 [-0.01685, -0.00099]** | -0.00133 [-0.00697, +0.00431] |
+
+Both 8B intervals contain zero. The 3B result that extra null-space directions buy a real, alignment-driven improvement therefore **does not generalize**, and the honest summary across the two models is the weaker one: extra directions are at best model-dependent, while the cost of the coarser group needed to pay for them is consistent and significant on both.
+
+### Theory on the 8B, and a limit of the measurement
+
+| row | qkv slots | f (qkv) | down slots | f (down) |
+|---|---:|---:|---:|---:|
+| NAR g256 m=1 | 16 | 0.3645 | 56 | 0.2639 |
+| NAR g128 m=1 | 32 | 0.4395 | 112 | 0.3022 |
+| NAR g256 m=2 | 32 | 0.4395 | 112 | 0.3022 |
+| NAR g256 m=3 | 48 | 0.4820 | 168 | 0.3022 |
+| NAR g64 m=1 | 64 | 0.5099 | 224 | 0.3022 |
+| NAR g128 m=2 | 64 | 0.5099 | 224 | 0.3022 |
+
+The identity that made the 3B convincing holds again exactly: equal slot counts at different `(g, m)` give identical `f` (g256 m=2 and g128 m=1 both 0.4395 at qkv; g128 m=2 and g64 m=1 both 0.5099). But `f` is measured over the top 96 directions, and the 8B down site already has 112 slots at g=128, so **every down-site row at or above 96 slots reports the same saturated f = 0.3022**. The down column carries no information above 96 slots on this model; only the qkv column, where the slot counts are 16 to 64, does. This is a limit of the measurement window, and it is one reason the 8B cannot corroborate the 3B's direction gain: at the site with the most slots the diagnostic is blind.
+
+The fp16 coefficients behave differently on the 8B: at the qkv site they reach 6.78 with a mean error of 0.30-0.46 of a quantization step and a code flip rate of 2.5-2.9%, an order of magnitude above the 3B, while the down site stays at 0.05-0.12 of a step and 0.04-0.07%. fp16 is kept, as the bit accounting assumes, and the number is reported rather than used to justify a change.
+
+## Plain statement across both models
+
+**H1 and H2 do not hold on either model; H3 holds on both.** At a matched bit budget, metadata spent on finer groups beats metadata spent on additional null-space dimensions, consistently and significantly: NAR g128 m=1 stays the best 4.25-bit configuration on both, and the rows that win outright are the ones that buy more slots while *keeping* the finer group (NAR g64 m=1 at -0.02823 on the 3B and -0.02214 on the 8B).
+
+The DC direction is not special — the construction proves that much, since `f` is a function of the slot count alone and is numerically identical across `(g, m)` pairs with equal slots. But generalizing the null space is not a free lunch: the extra directions must be paid for with a coarser group, and that trade is a loss on both models. Whether the extra directions help at all once the group cost is set aside is unresolved: they do on the 3B and they do not on the 8B, and the 8B's own diagnostic is saturated at the site that matters most, so E20 does not settle it.
