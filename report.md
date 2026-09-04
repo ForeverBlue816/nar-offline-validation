@@ -480,6 +480,8 @@ Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`; the six tasks are 
 
 **The perplexity gain does not transfer proportionally to the downstream tasks.** On the 3B the six-task mean moves +0.0100 at k=max against a 0.4946 PPL gain; on the 8B it moves +0.0045 against 0.2917, and NAR k=8 is flat at -0.000075, statistically indistinguishable from Hadamard on a single seed. Whatever the rotation buys in perplexity is worth roughly a percentage point of zero-shot accuracy at best, and the 8B k=8 row shows it can be worth nothing. This is reported as measured; no row was rerun or reweighted.
 
+A second reason not to read the zero-shot deltas as a verdict on the full W4A4KV4 configuration is that the suite barely exercises the KV quantizer at all: measured against the same KIVI policy E14 uses, a majority of the six tasks' requests are short enough that no cache entry is ever quantized, and PIQA's never are. The measurement is in [E19's section](#the-zero-shot-suite-barely-exercises-the-kv-quantizer) and applies unchanged here.
+
 The protocol was amended to one seed, so no confidence interval is estimable for any of these deltas and none is quoted. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
 
 ## 16-bit reference row
@@ -503,7 +505,7 @@ No reference row was run for Llama-3.2-3B, so the 3B rows remain paired-delta on
 
 E19 carries the E14 pipeline to a second architecture family. It extends E14 rather than forking it: `e14_w4a4kv4.py` gained three optional hooks (`LOAD_MODEL`, `ROTATION_SET`, `ALGEBRA_CONTROL`) that are unset for Llama, so every E14 number above is produced by the same code path as before, and `e19_qwen3_e2e.py` supplies Qwen3 implementations of those three. The quantizer, the GPTQ configuration, the KIVI cache policy and the six-task zero-shot suite are shared objects, not reimplementations.
 
-Two protocol changes distinguish E19 from E14, both adopted because [E18 v2](#e18-v2--qwen3-diagnosis-and-the-base-model-rerun) traced the unusable E18 v1 Qwen3 result to exactly these two places. **E19 evaluates in fp32 containers with fp32 NLL**, and **the rotation is applied by an exact transpose** `x -> R^T Q(R x)` rather than folded into weights in bf16. This makes E19's absolute perplexities incomparable with E14's, which are bf16 with HuggingFace's loss; no number is ever subtracted across the two experiments.
+Two protocol changes distinguish E19 from E14, both adopted because [E18 v2](#e18-v2--qwen3-diagnosis-and-the-base-model-rerun) traced the unusable E18 v1 Qwen3 result to exactly these two places. **E19 runs the whole pipeline in fp32 containers with fp32 NLL**, and **the rotation is folded into the weights in fp32** rather than bf16, with an **exact-transpose** `x -> R^T Q(R x)` arm used as the control that validates the fold. This makes E19's absolute perplexities incomparable with E14's, which are bf16 with HuggingFace's loss; no number is ever subtracted across the two experiments.
 
 ## Architecture audit
 
@@ -532,7 +534,20 @@ Round-trip error is measured per site per layer against a 1e-6 tolerance; the wo
 
 ## Results
 
-Seed 0, 146 contiguous 2048-token windows of the full WikiText-2 test stream, fp32 NLL; six-task zero-shot at the pinned harness revision. Effective widths are identical across the quantized rows: W 4.0, activations 4.25 at both sites, K and V 4.25.
+Seed 0, 146 contiguous 2048-token windows of the full WikiText-2 test stream, fp32 NLL; six-task zero-shot at the pinned harness revision.
+
+Effective widths are identical across the quantized rows and are **not** the 4.25 originally printed here for the cache. That figure is the per-value width of the V quantizer's own group, not the width of the cache: KIVI keeps the newest `KV_RESIDUAL_LENGTH = 32` tokens in bf16, and K is grouped along tokens in chunks of `K_TOKEN_GROUP = 32` rather than along the head dimension, so both cache widths depend on the context length. Recomputed from the constants the run actually uses — E19 shares `e14.RuntimeHooks`, so these are E14's numbers by construction, and Qwen3 and Llama-3.1-8B have the same head dimension of 128, so the two experiments agree exactly:
+
+| quantizer | grouping | effective bits |
+|---|---|---:|
+| weights | per-channel symmetric, fp16 scale per output row | 4.003227 |
+| activations, both sites | asymmetric g128, fp16 scale + zero | 4.25 |
+| K cache at context 2048 | per-channel, token group 32, newest 32 tokens bf16 | **5.171875** |
+| V cache at context 2048 | per-token, group `head_dim` = 128, newest 32 tokens bf16 | **4.43359375** |
+
+`e19_summary.csv` previously carried a hard-coded 4.25 for both cache entries and 4.0 for the weights; the widths are now derived in `effective_bits()` and recomputed in `finalize`, so rows written before the fix are corrected without re-running them.
+
+**These rows are provisional.** The three quantizers are switched on together, so a perplexity that varies with `k` does not say which of them carries the variation. A decomposition is running and the rows below are not to be cited until it lands; the rank-ordering paragraph that follows is likewise not cited anywhere else in this report.
 
 | tier | row | PPL | Δ vs bf16 | Δ vs Hadamard | recovered | six-task zero-shot | Δ vs Hadamard |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -546,7 +561,7 @@ Per-task accuracies are in the per-row JSON files; the six tasks are the frozen 
 
 **The NAR advantage on Qwen3 is an order of magnitude larger than on Llama.** Plain Hadamard under this quantizer costs +3.205 PPL on Qwen3-8B-Base — 36.4% above bf16 — where on Llama-3.1-8B the same row costs +0.965 (15.5%). NAR k=8 removes 70.7% of that gap and lands at +0.940 (10.7%). The paired zero-shot delta is +0.0166, versus −0.000075 for the corresponding Llama row. Qwen3 is simply a harder model for a data-independent rotation, and that is where a data-dependent one has room to work.
 
-## The rank ordering inverts, and the offline proxy mispredicts it
+## The rank ordering inverts, and the offline proxy mispredicts it (provisional, not cited)
 
 On Llama the ordering is k=max better than k=8 better than Hadamard, on both models. **On Qwen3 the ordering among the NAR rows is exactly reversed and strictly monotone:**
 
@@ -564,6 +579,28 @@ Two observations constrain any future explanation but do not settle it. First, t
 
 The consequence for the headline is limited and is stated rather than hidden: the E19 result reported above is the k=8 row, and on Qwen3 increasing the rank makes it worse. No k=16 or k=64 point was measured, so the curve is pinned at three ranks only.
 
+## The zero-shot suite barely exercises the KV quantizer
+
+This applies to E14 as much as to E19: both use the same six-task suite and the same KIVI policy, so the observation belongs to both and is stated once here.
+
+KIVI quantizes K only for completed chunks — `prefix = floor((T-1)/R)*R` tokens with `R = KV_RESIDUAL_LENGTH = 32`, so a prompt of `T ≤ 32` tokens has **no K quantized at all** — and keeps the most recent `R` tokens of V in full precision per query position, so a key is quantized for a query only when `k ≤ q - R`. Measuring the request contexts the harness actually builds, tokenized with the Qwen3 tokenizer:
+
+| task | requests | ctx p50 | ctx max | requests with no KV quantized | K quantized | V quantized |
+|---|---:|---:|---:|---:|---:|---:|
+| piqa | 3676 | 12 | 30 | **100.0%** | **0.0%** | **0.0%** |
+| arc_easy | 9501 | 22 | 164 | 74.7% | 33.9% | 12.6% |
+| arc_challenge | 4687 | 26 | 176 | 62.9% | 44.3% | 15.8% |
+| hellaswag | 40168 | 52 | 104 | 22.0% | 64.4% | 21.9% |
+| winogrande | 2534 | 16 | 34 | 99.8% | 0.3% | 0.0% |
+| lambada_openai | 5153 | 72 | 222 | 0.0% | 80.0% | 34.8% |
+| unweighted mean over the six | | | | 59.9% | 37.1% | 14.2% |
+
+"K quantized" is the share of context tokens whose K entry is quantized; "V quantized" is the share of causal query-key pairs whose V entry is quantized. Against the perplexity evaluation, which runs 2048-token windows and quantizes **98.4%** of K and **96.9%** of V pairs, the contrast is stark.
+
+**PIQA never exercises the KV quantizer, and WinoGrande effectively never does.** Across the suite, a majority of requests — 59.9% unweighted — run with the cache entirely in full precision, and the mean quantized share is 37.1% for K and 14.2% for V.
+
+The consequence is a limit on what the zero-shot columns in E14 and E19 can be read as. They are close to a W4A4 measurement with a mostly-unquantized cache, not a W4A4KV4 measurement, and any effect that lives in the KV quantizer will be largely invisible to them while remaining fully visible in perplexity. That is not a defect in the numbers; it is a statement of what they measure, and it was not stated when the E14 and E19 zero-shot columns were first reported. Outputs are in `e19_zero_shot_context_lengths.json`.
+
 ## Relation to E14
 
 | | Llama-3.1-8B (E14) | Qwen3-8B-Base (E19) |
@@ -572,7 +609,7 @@ The consequence for the headline is limited and is stated rather than hidden: th
 | Hadamard + asym g128 | 7.20638 (+15.5%) | 12.00138 (+36.4%) |
 | best NAR row | 6.91467 at k=max (+10.8%) | 9.73628 at k=8 (+10.7%) |
 | NAR gain over Hadamard | −0.29171 | −2.26510 |
-| rank ordering | k=max > k=8 | k=8 > k=32 > k=max |
+| rank ordering | k=max > k=8 | withheld pending the decomposition |
 
 The two 16-bit references are measured under different evaluation paths (E14 bf16 with HuggingFace's loss, E19 fp32 containers with fp32 NLL) and the two models tokenize WikiText-2 into different window counts, 141 versus 146. Absolute perplexities therefore do not compare across the two columns; the percentages, which are each row divided by its own reference, do.
 
@@ -1401,8 +1438,8 @@ OffQ's Llama column is **Llama-3-8B**, not 3.1, and the paper does not state the
 | **NAR k=max (this work)** | Llama-3.1-8B | 6.91467 | **+0.6736** | **10.8%** |
 | ResQ (quoted) | Qwen 2.5-7B | 8.20 | +1.40 | 20.6% |
 | **OffQ** | Qwen 2.5-7B | 7.66 | +0.86 | 12.6% |
-| **NAR k=8 (this work)** | Qwen3-8B-Base | 9.73628 | **+0.9402** | **10.7%** |
+| NAR k=8 (this work, provisional) | Qwen3-8B-Base | 9.73628 | +0.9402 | 10.7% |
 
 **The quantizer is confounded in OffQ's own table and is not confounded here.** Their implementation section states that OffQ uses per-group asymmetric quantization at group 128 while the baselines "follow their official implementations using per-token asymmetric quantization". Part of the reported QuaRot → OffQ margin is therefore the quantizer rather than the offsetting. E14's `hadamard_asym_g128` row is precisely the control that separates them — plain Hadamard under OffQ's own quantizer — and it degrades 15.5%, already below their quoted ResQ at 16.4% and close to OffQ at 14.4%.
 
-One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.29 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin of −2.27 is not in that regime, and it is where the claim is strongest.
+One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.29 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin of −2.27 is not in that regime and is where the claim would be strongest, but it rests on the provisional E19 rows and is not asserted until the decomposition attributes it.

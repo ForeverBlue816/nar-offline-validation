@@ -1,0 +1,95 @@
+{
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "key": 4.25,
+    "value": 4.25,
+    "weight": 4.0
+  },
+  "fold_dtype": "float32",
+  "git_commit": "3ea21c471723c48c9165632ccc1e456af7d5d987",
+  "gptq_config_hash": "840ce7663403eb99",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "3",
+    "slurm_job_id": "138143",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "mean_accuracy": 0.6995182103962265,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "ranks": {
+    "r1_rank": null,
+    "r1_slots": 32,
+    "r2_rank": null,
+    "r4_rank": null,
+    "r4_slots": 96
+  },
+  "rotation_calibration_hash": "54b748928067c5b6",
+  "rotation_checkpoint": "hadamard",
+  "round_trip_max_relative_error": 1.574283174932134e-07,
+  "row": "hadamard_asym_g128",
+  "seed": 0,
+  "tasks": [
+    {
+      "accuracy": 0.7758433079434167,
+      "metric": "acc_norm,none",
+      "task": "piqa"
+    },
+    {
+      "accuracy": 0.7756734006734006,
+      "metric": "acc_norm,none",
+      "task": "arc_easy"
+    },
+    {
+      "accuracy": 0.5366894197952219,
+      "metric": "acc_norm,none",
+      "task": "arc_challenge"
+    },
+    {
+      "accuracy": 0.7513443537143996,
+      "metric": "acc_norm,none",
+      "task": "hellaswag"
+    },
+    {
+      "accuracy": 0.6882399368587214,
+      "metric": "acc,none",
+      "task": "winogrande"
+    },
+    {
+      "accuracy": 0.6693188433921987,
+      "metric": "acc,none",
+      "task": "lambada_openai"
+    }
+  ],
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "hellaswag": 1.0,
+    "lambada_openai": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "weight_fold_audit": {
+    "embedding_centering": false,
+    "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+    "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+    "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+    "r4": "per-layer down-input rotation folded into down_proj rows",
+    "tied_embeddings_materialized_before_final_norm_fusion": false
+  }
+}

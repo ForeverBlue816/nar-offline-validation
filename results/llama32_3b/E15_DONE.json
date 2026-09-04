@@ -1,0 +1,48 @@
+{
+  "comparison": [
+    {
+      "global_nar_minus_hadamard_nmse": -7.281114338804177e-05,
+      "layers": 28,
+      "mean_nar_minus_hadamard_nmse": -7.404081361288284e-05,
+      "model": "llama32_3b",
+      "nar_better_layers": 20,
+      "nar_loses_zero_point_advantage": false,
+      "site": "q_input"
+    },
+    {
+      "global_nar_minus_hadamard_nmse": -0.0008192760500244922,
+      "layers": 28,
+      "mean_nar_minus_hadamard_nmse": -0.00019365476581722084,
+      "model": "llama32_3b",
+      "nar_better_layers": 23,
+      "nar_loses_zero_point_advantage": false,
+      "site": "down_input"
+    }
+  ],
+  "fp4": "nearest finite E2M1; one max/6 E4M3FN scale per block of 16; no zero-point",
+  "hadamard": "fixed random-sign orthonormal H16 inside each aligned FP4 scale block",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 30450 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "137308",
+    "torch": "2.11.0+cu128"
+  },
+  "logdiag": "fixed seeded diagonal exp(linspace(-ln4,ln4)) with random permutation; condition number 16; exact inverse applied before NMSE",
+  "model": "llama32_3b",
+  "no_tuning": true,
+  "paired": "identical frozen E1c vectors for all methods",
+  "sample_stride": 128,
+  "seed": 20260902,
+  "source": "/projects/_hdd/nar/nar-validation/activations/llama32_3b/wide_cal_a"
+}

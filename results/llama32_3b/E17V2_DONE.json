@@ -8,9 +8,9 @@
       0
     ],
     "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-    "hostname": "gpu-pro6000-3.cluster02.eee.ntu.edu.sg",
+    "hostname": "gpu-node",
     "nvidia_smi": [
-      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-01028339-4041-385f-06f0-f6db221b7491, 97887 MiB, 94321 MiB, 580.173.02"
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 94321 MiB, 580.173.02"
     ],
     "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
     "slurm_job_gpus": "3",

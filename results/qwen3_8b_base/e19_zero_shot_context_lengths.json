@@ -1,0 +1,92 @@
+{
+  "k_rule": "prefix = floor((T-1)/R)*R tokens are quantized; the rest stay bf16",
+  "kv_residual_length": 32,
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "tasks": [
+    {
+      "ctx_max": 30,
+      "ctx_mean": 12.69,
+      "ctx_min": 6,
+      "ctx_p50": 12,
+      "ctx_p90": 18,
+      "quantized_k_share_of_ctx": 0.0,
+      "quantized_k_tokens_mean": 0.0,
+      "quantized_v_share_of_causal_pairs": 0.0,
+      "requests": 3676,
+      "share_ctx_le_R": 1.0,
+      "share_no_kv_quantized_at_all": 1.0,
+      "task": "piqa"
+    },
+    {
+      "ctx_max": 164,
+      "ctx_mean": 26.8,
+      "ctx_min": 8,
+      "ctx_p50": 22,
+      "ctx_p90": 47,
+      "quantized_k_share_of_ctx": 0.3388,
+      "quantized_k_tokens_mean": 9.08,
+      "quantized_v_share_of_causal_pairs": 0.1263,
+      "requests": 9501,
+      "share_ctx_le_R": 0.747,
+      "share_no_kv_quantized_at_all": 0.747,
+      "task": "arc_easy"
+    },
+    {
+      "ctx_max": 176,
+      "ctx_mean": 30.59,
+      "ctx_min": 8,
+      "ctx_p50": 26,
+      "ctx_p90": 52,
+      "quantized_k_share_of_ctx": 0.4432,
+      "quantized_k_tokens_mean": 13.56,
+      "quantized_v_share_of_causal_pairs": 0.1583,
+      "requests": 4687,
+      "share_ctx_le_R": 0.6292,
+      "share_no_kv_quantized_at_all": 0.6292,
+      "task": "arc_challenge"
+    },
+    {
+      "ctx_max": 104,
+      "ctx_mean": 49.39,
+      "ctx_min": 12,
+      "ctx_p50": 52,
+      "ctx_p90": 71,
+      "quantized_k_share_of_ctx": 0.6436,
+      "quantized_k_tokens_mean": 31.79,
+      "quantized_v_share_of_causal_pairs": 0.219,
+      "requests": 40168,
+      "share_ctx_le_R": 0.2199,
+      "share_no_kv_quantized_at_all": 0.2199,
+      "task": "hellaswag"
+    },
+    {
+      "ctx_max": 34,
+      "ctx_mean": 16.36,
+      "ctx_min": 2,
+      "ctx_p50": 16,
+      "ctx_p90": 22,
+      "quantized_k_share_of_ctx": 0.0031,
+      "quantized_k_tokens_mean": 0.05,
+      "quantized_v_share_of_causal_pairs": 0.0,
+      "requests": 2534,
+      "share_ctx_le_R": 0.9984,
+      "share_no_kv_quantized_at_all": 0.9984,
+      "task": "winogrande"
+    },
+    {
+      "ctx_max": 222,
+      "ctx_mean": 74.69,
+      "ctx_min": 47,
+      "ctx_p50": 72,
+      "ctx_p90": 91,
+      "quantized_k_share_of_ctx": 0.7996,
+      "quantized_k_tokens_mean": 59.73,
+      "quantized_v_share_of_causal_pairs": 0.3476,
+      "requests": 5153,
+      "share_ctx_le_R": 0.0,
+      "share_no_kv_quantized_at_all": 0.0,
+      "task": "lambada_openai"
+    }
+  ],
+  "v_rule": "the most recent R tokens are kept bf16 per query position"
+}

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""E16 offline SmoothQuant error and DC-alignment diagnostics.
+"""E16 offline SmoothQuant, DC-alignment, and whole-activation diagnostics.
 
 Uses the frozen E11 calibration chunks/statistics and one seed.  It does not
 evaluate or extract official DuQuant artifacts, following the later
 citation-only protocol amendment; the already implemented E11 DuQuant-style
 construction is retained as the matched diagnostic baseline.
+
 """
 
 from __future__ import annotations
@@ -112,6 +113,194 @@ class OfflineCollector:
         return result
 
 
+class NullSpaceEnergyCollector:
+    """Accumulate whole-activation null-space and total energy on fixed rows."""
+
+    def __init__(
+        self,
+        model: torch.nn.Module,
+        signs: dict[tuple[str, int], torch.Tensor],
+        duquant: e11.Transform,
+        nar_factors: dict[tuple[str, int], act.RotationFactor],
+        layers: int,
+        dimensions: dict[str, int],
+        sample_stride: int,
+    ):
+        self.model = model
+        self.signs = signs
+        self.duquant = duquant
+        self.nar_factors = nar_factors
+        self.layers = layers
+        self.dimensions = dimensions
+        self.sample_stride = sample_stride
+        self.handles: list[Any] = []
+        self.values: dict[tuple[str, str, int, str], torch.Tensor] = {}
+
+    def consume(self, site: str, layer: int, value: torch.Tensor) -> None:
+        sampled = value.detach()[:, :: self.sample_stride, :].float()
+        signs = self.signs[(site, layer)]
+        transformed_rows = (
+            ("hadamard", act.full_hadamard_rows(sampled, signs)),
+            ("duquant_style", self.duquant.activation(site, layer, sampled)),
+            ("nar", self.nar_factors[(site, layer)].apply(sampled, signs)),
+        )
+        for method, transformed in transformed_rows:
+            rows = transformed.float().reshape(-1, transformed.shape[-1])
+            blocks = rows.reshape(rows.shape[0], -1, 128)
+            entries = {
+                "null_energy": (blocks.sum(-1).square() / 128).double().sum(),
+                "energy": rows.square().double().sum(),
+                "rows": torch.tensor(rows.shape[0], device=rows.device, dtype=torch.float64),
+            }
+            if method in ("hadamard", "nar"):
+                dequant, _, _, _ = base.dynamic_asym_int4(rows, 128)
+                entries.update({
+                    "range_sum": (blocks.amax(-1) - blocks.amin(-1)).double().sum(),
+                    "groups": torch.tensor(blocks.numel() // 128, device=rows.device, dtype=torch.float64),
+                    "quant_error": (dequant.float() - rows).square().double().sum(),
+                })
+            for name, number in entries.items():
+                key = (method, site, layer, name)
+                if key not in self.values:
+                    self.values[key] = torch.zeros((), device=rows.device, dtype=torch.float64)
+                self.values[key] += number
+            del rows, blocks, transformed
+        del sampled
+
+    def q_hook(self, layer: int) -> Callable[..., torch.Tensor]:
+        def hook(_module: torch.nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> torch.Tensor:
+            self.consume("qkv", layer, output)
+            return output
+        return hook
+
+    def down_hook(self, layer: int) -> Callable[..., None]:
+        def hook(_module: torch.nn.Module, inputs: tuple[Any, ...]) -> None:
+            self.consume("down", layer, inputs[0])
+        return hook
+
+    def install(self) -> None:
+        for layer, block in enumerate(self.model.model.layers[: self.layers]):
+            self.handles.append(block.input_layernorm.register_forward_hook(self.q_hook(layer)))
+            self.handles.append(block.mlp.down_proj.register_forward_pre_hook(self.down_hook(layer)))
+
+    def close(self) -> None:
+        for handle in self.handles:
+            handle.remove()
+        self.handles.clear()
+
+    def rows(self, model_key: str) -> list[dict[str, Any]]:
+        output: list[dict[str, Any]] = []
+        for method in ("hadamard", "duquant_style", "nar"):
+            for site in ("qkv", "down"):
+                for layer in range(self.layers):
+                    get = lambda name: float(self.values[(method, site, layer, name)].cpu())
+                    energy = get("energy")
+                    quantitative = method in ("hadamard", "nar")
+                    output.append({
+                        "model": model_key,
+                        "method": method,
+                        "site": site,
+                        "layer": layer,
+                        "f": get("null_energy") / energy,
+                        "mean_group_range": get("range_sum") / get("groups") if quantitative else float("nan"),
+                        "nmse": get("quant_error") / energy if quantitative else float("nan"),
+                        "rows_used": int(get("rows")),
+                        "groups_observed": int(get("groups")) if quantitative else 0,
+                        "slots": self.dimensions[site] // 128,
+                        "d": self.dimensions[site],
+                        "group_size": 128,
+                        "sample_stride": self.sample_stride,
+                    })
+        return output
+
+
+def run_null_space_energy(args: argparse.Namespace) -> None:
+    if not torch.cuda.is_available():
+        raise RuntimeError("E16 null-space energy requires CUDA")
+    if args.seq_len % args.sample_stride:
+        raise ValueError("sequence length must be divisible by sample stride")
+    workdir = Path(args.workdir).resolve()
+    model_id, model_key = act.model_id_and_key(args.model)
+    base.setup_logging(workdir, f"e16-null-space-energy-{model_key}")
+    result_dir = (
+        Path(args.output_dir).resolve() / model_key
+        if args.output_dir
+        else workdir / "results" / model_key
+    )
+    result_dir.mkdir(parents=True, exist_ok=True)
+    output = result_dir / "e16_null_space_energy_per_layer.csv"
+    done = result_dir / "E16_NULL_SPACE_ENERGY_DONE.json"
+    if done.exists() and output.exists():
+        return
+
+    calibration = e11.calibration_dir(workdir, model_key)
+    stats = torch.load(calibration / "channel_stats.pt", map_location="cpu", weights_only=True)
+    model = base.load_model(model_id, workdir)
+    layers = int(model.config.num_hidden_layers)
+    dimensions = {"qkv": int(model.config.hidden_size), "down": int(model.config.intermediate_size)}
+    device = torch.device("cuda")
+    signs = {}
+    for site_index, (site, n) in enumerate(dimensions.items()):
+        for layer in range(layers):
+            generator = torch.Generator(device="cpu").manual_seed(
+                args.seed + 1000 * layer + 10 * site_index + 128
+            )
+            signs[(site, layer)] = torch.randint(
+                0, 2, (n,), generator=generator, dtype=torch.int64
+            ).float().mul_(2).sub_(1).to(device)
+    duquant = e11.Transform(
+        "duquant_style_g128_asym", model_key, workdir, 0, args.seed,
+        layers, dimensions, device, stats
+    )
+    nar_factors = {
+        (site, layer): act.RotationFactor.load(
+            _factor_path(workdir, model_key, site, layer), device
+        )
+        for site in ("qkv", "down")
+        for layer in range(layers)
+    }
+    tokens = base.prepare_token_chunks(
+        model_id, "train", 0, args.calibration_sequences, args.seq_len, workdir
+    )
+    collector = NullSpaceEnergyCollector(
+        model, signs, duquant, nar_factors, layers, dimensions, args.sample_stride
+    )
+    collector.install()
+    try:
+        act._model_pass(model, tokens, args.batch_size, "E16 whole-activation null-space energy")
+    finally:
+        collector.close()
+    rows = collector.rows(model_key)
+    expected_rows = args.calibration_sequences * (args.seq_len // args.sample_stride)
+    if any(row["rows_used"] != expected_rows for row in rows):
+        raise AssertionError("E16 null-space row-count mismatch")
+    base.write_csv(output, rows)
+    base.atomic_json(done, {
+        "model": model_key,
+        "model_id": model_id,
+        "seed": args.seed,
+        "calibration_split": "train",
+        "calibration_offset": 0,
+        "calibration_sequences": args.calibration_sequences,
+        "sequence_length": args.seq_len,
+        "sample_stride": args.sample_stride,
+        "rows_used_per_layer_site": expected_rows,
+        "group_size": 128,
+        "methods": ["Hadamard", "DuQuant-style", "PrismQuant k=max"],
+        "metrics": {
+            "f": "squared energy in the per-group quantizer null space divided by total transformed activation energy",
+            "mean_group_range": "mean per-token per-group max-minus-min",
+            "nmse": "global dynamic asymmetric INT4 squared error divided by transformed activation energy",
+        },
+        "paired": "same calibration chunks, sampled token positions, model, statistics, and fixed transform seed",
+        "no_tuning": True,
+        "hardware": base.hardware_info(),
+    })
+    del model, tokens, collector, signs, duquant, nar_factors
+    gc.collect()
+    torch.cuda.empty_cache()
+
+
 def run(args: argparse.Namespace) -> None:
     if not torch.cuda.is_available():
         raise RuntimeError("E16 diagnostics require CUDA")
@@ -210,8 +399,15 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--calibration-sequences", type=int, default=128)
     result.add_argument("--seq-len", type=int, default=2048)
     result.add_argument("--batch-size", type=int, default=1)
+    result.add_argument("--sample-stride", type=int, default=32)
+    result.add_argument("--null-space-only", action="store_true")
+    result.add_argument("--output-dir", default=None)
     return result
 
 
 if __name__ == "__main__":
-    run(parser().parse_args())
+    arguments = parser().parse_args()
+    if arguments.null_space_only:
+        run_null_space_energy(arguments)
+    else:
+        run(arguments)

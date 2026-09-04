@@ -18,6 +18,7 @@ Two deviations from E14 are deliberate and follow the E18 v2 root cause:
 from __future__ import annotations
 
 import argparse
+import csv
 import gc
 import hashlib
 import json
@@ -56,6 +57,16 @@ ROWS = {
     "nar_kmax_asym_g128": ("nar_kmax", "asymmetric_g128"),
 }
 ZERO_SHOT_ROWS = ("hadamard_asym_g128", "nar_k8_asym_g128", "nar_kmax_asym_g128")
+# Decomposition rows for the k-dependence diagnosis: each turns on exactly one
+# of the three quantizers so the component carrying the k-dependence can be
+# read off directly.  Values are (rotation, activation_kind, weights, kv).
+# The A-only arm is not here because E18 v2 already measured it.
+COMPONENT_ROWS = {
+    f"{name}_{rotation}": (rotation, kind, weights, kv)
+    for name, kind, weights, kv in (("kv_only", None, False, True),
+                                    ("w_only", None, True, False))
+    for rotation in ("hadamard", "nar_k8", "nar_kmax")
+}
 # Expected Qwen3-8B-Base shape contract; every value is asserted at load time.
 EXPECTED = {
     "num_attention_heads": 32, "num_key_value_heads": 8, "head_dim": 128,
@@ -522,9 +533,12 @@ def control_command(args: argparse.Namespace) -> None:
     for entry in round_trips:
         merged_trips[trip_key(entry)] = entry
     base.write_csv(trip_path, list(merged_trips.values()))
+    # The CSV is merged by rotation but this JSON was rewritten wholesale, so a
+    # later single-rotation invocation erased the rows an earlier one had
+    # written. Read the merged CSV back instead of writing only this call's rows.
     base.atomic_json(workdir / "results" / MODEL_KEY / "e19_control.json", {
         "model": MODEL_KEY, "model_id": MODEL_ID, "control_chunks": int(tokens.shape[0]),
-        "reference_ppl": reference_ppl, "rows": rows,
+        "reference_ppl": reference_ppl, "rows": base.read_csv(control_path(workdir)),
         "kv_group_counts": audit["kv_group_counts"],
         "compute_dtype": "float32", "git_commit": git_commit(),
         "hardware": base.hardware_info(),
@@ -538,6 +552,41 @@ def gptq_command(args: argparse.Namespace) -> None:
     install_extension_hooks()
     args.model = MODEL_KEY
     e14.gptq_quantize(args)
+
+
+def effective_bits(activation_kind: str | None, quantize_weights: bool,
+                   quantize_kv: bool, shapes: dict[str, int],
+                   context: int = 2048) -> dict[str, float]:
+    """Effective widths derived from the constants the run actually uses.
+
+    These were previously hard-coded, and the KV entries were wrong: 4.25 is the
+    per-value width of the V quantizer's own group, not the width of the cache.
+    KIVI keeps the newest KV_RESIDUAL_LENGTH tokens in bf16 and K is grouped
+    along tokens in chunks of K_TOKEN_GROUP, so both cache widths depend on the
+    context length and neither equals 4.25.  E19 shares e14.RuntimeHooks, so the
+    numbers are E14's by construction and are computed here from the same
+    constants rather than restated.
+    """
+    residual = e14.KV_RESIDUAL_LENGTH
+    quantized = max(0, context - residual)
+    head_dim = shapes["head_dim"]
+    hidden, inter = shapes["hidden_size"], shapes["intermediate_size"]
+    kv_dim = shapes["num_key_value_heads"] * head_dim
+    weight_values = 2 * hidden * hidden + 2 * kv_dim * hidden + 3 * inter * hidden
+    weight_scales = 3 * hidden + 2 * kv_dim + 2 * inter
+    return {
+        "activation": (4 + 32 / GROUP) if activation_kind else 16.0,
+        "weight": (4 + 16 * weight_scales / weight_values) if quantize_weights else 16.0,
+        "key": ((quantized * (4 + 32 / e14.K_TOKEN_GROUP) + residual * 16) / context
+                if quantize_kv else 16.0),
+        "value": ((quantized * (4 + 32 / head_dim) + residual * 16) / context
+                  if quantize_kv else 16.0),
+        "key_definition": (f"KIVI per-channel K, token group {e14.K_TOKEN_GROUP}, "
+                           f"fp16 scale+zero, newest {residual} tokens bf16, at context {context}"),
+        "value_definition": (f"per-token V, group head_dim={head_dim}, fp16 scale+zero, "
+                             f"newest {residual} tokens bf16, at context {context}"),
+        "context": context,
+    }
 
 
 def evaluate_command(args: argparse.Namespace) -> None:
@@ -556,7 +605,12 @@ def evaluate_command(args: argparse.Namespace) -> None:
     base.setup_logging(workdir, f"e19-evaluate-{args.row}")
     base.seed_everything(args.seed)
     install_extension_hooks()
-    rotation, activation_kind = ROWS[args.row]
+    if args.row in ROWS:
+        rotation, activation_kind = ROWS[args.row]
+        quantize_weights = rotation is not None
+        quantize_kv = rotation is not None
+    else:
+        rotation, activation_kind, quantize_weights, quantize_kv = COMPONENT_ROWS[args.row]
 
     provenance = {
         "model": MODEL_KEY, "model_id": MODEL_ID, "row": args.row,
@@ -569,12 +623,12 @@ def evaluate_command(args: argparse.Namespace) -> None:
             "calibration_sequences": args.calibration_sequences,
             "calibration_seed": args.calibration_seed, "sequence_length": args.seq_len,
         }),
-        "effective_bits": {
-            "activation": 4.25 if activation_kind else 16.0,
-            "key": 4.25 if rotation else 16.0,
-            "value": 4.25 if rotation else 16.0,
-            "weight": 4.0 if rotation else 16.0,
-        },
+        "effective_bits": effective_bits(
+            activation_kind, quantize_weights=quantize_weights,
+            quantize_kv=quantize_kv, shapes=EXPECTED, context=args.seq_len,
+        ),
+        "components": {"activation": bool(activation_kind),
+                       "weight": quantize_weights, "kv": quantize_kv},
     }
 
     if args.row == "bf16":
@@ -585,19 +639,28 @@ def evaluate_command(args: argparse.Namespace) -> None:
         provenance["weight_fold_audit"] = {"folded": False}
         hooks = None
     else:
-        model, rotations = e14.load_quantized_model(
-            workdir, artifact_root, MODEL_KEY, rotation, args.seed, args.weight_row_batch
-        )
+        if quantize_weights:
+            model, rotations = e14.load_quantized_model(
+                workdir, artifact_root, MODEL_KEY, rotation, args.seed, args.weight_row_batch
+            )
+            provenance["weight_fold_audit"] = json.loads(
+                (e14.checkpoint_dir(artifact_root, MODEL_KEY, rotation, args.seed) / "DONE.json").read_text()
+            )["fold"]
+        else:
+            # KV-only: the same rotated model without the GPTQ layer states, so
+            # no GPTQ run is needed and the weights stay unquantized.
+            model, rotations, fold = e14._prepare_rotated_model(
+                workdir, MODEL_KEY, rotation, args.seed, args.weight_row_batch
+            )
+            provenance["weight_fold_audit"] = fold
         trip = round_trip_audit(rotations, rotations.layers, tolerance=args.round_trip_tolerance)
         provenance["round_trip_max_relative_error"] = max(
             entry["round_trip_relative_error"] for entry in trip)
         calibration = e14.rotation_dir(workdir, MODEL_KEY) / "DONE.json"
         provenance["rotation_calibration_hash"] = config_hash(json.loads(calibration.read_text()))
-        provenance["weight_fold_audit"] = json.loads(
-            (e14.checkpoint_dir(artifact_root, MODEL_KEY, rotation, args.seed) / "DONE.json").read_text()
-        )["fold"]
         provenance["ranks"] = rotations.ranks()
-        hooks = e14.RuntimeHooks(model, rotations, activation_kind=activation_kind, quantize_kv=True)
+        hooks = e14.RuntimeHooks(model, rotations, activation_kind=activation_kind,
+                                 quantize_kv=quantize_kv)
         hooks.install()
     try:
         if need_ppl and not ppl_path.exists():
@@ -648,6 +711,83 @@ def evaluate_command(args: argparse.Namespace) -> None:
         torch.cuda.empty_cache()
 
 
+def decompose_command(args: argparse.Namespace) -> None:
+    """Attribute the k-dependence to one of the three quantizers.
+
+    The full E19 rows turn on the activation, weight and KV quantizers at once,
+    so a perplexity that worsens with k says nothing about which of the three
+    carries the effect.  Each component row here turns on exactly one, against
+    the same 146 windows and the same fp32 path, and the table is reported as a
+    delta against each experiment's own bf16 reference so the A-only arm can be
+    read beside the other two.
+
+    The A-only arm is E18 v2's, which ran the model in bf16 with an fp32 loss
+    rather than in fp32 containers.  Its bf16 reference therefore differs
+    (8.8234 against E19's 8.7961) and only its deltas are comparable, which is
+    why no absolute perplexity from it is placed in the table.
+    """
+    workdir = Path(args.workdir).resolve()
+    result_dir = workdir / "results" / MODEL_KEY
+    rotations = ("hadamard", "nar_k8", "nar_kmax")
+
+    def ppl_of(row: str) -> float | None:
+        path = result_dir / f"e19_{row}_seed{args.seed}_ppl.json"
+        return json.loads(path.read_text())["ppl"] if path.exists() else None
+
+    bf16 = ppl_of("bf16")
+    if bf16 is None:
+        raise FileNotFoundError("the E19 bf16 reference row is required")
+
+    # A-only comes from E18 v2, whose own bf16 row is the correct denominator.
+    a_only: dict[str, float] = {}
+    e18 = result_dir / "e18v2_summary.csv"
+    if e18.exists():
+        with e18.open() as handle:
+            rows = {row["method"]: row for row in csv.DictReader(handle)
+                    if row["model"] == MODEL_KEY and row["site"] == "both"}
+        for rotation in rotations:
+            if rotation in rows:
+                a_only[rotation] = float(rows[rotation]["ppl_delta_vs_bf16"])
+
+    table = []
+    for rotation in rotations:
+        entry = {"model": MODEL_KEY, "rotation": rotation, "bf16_reference": bf16,
+                 "windows": 146, "seed": args.seed}
+        for name in ("kv_only", "w_only"):
+            ppl = ppl_of(f"{name}_{rotation}")
+            entry[f"{name}_ppl"] = ppl if ppl is not None else math.nan
+            entry[f"{name}_delta_vs_bf16"] = (ppl - bf16) if ppl is not None else math.nan
+        entry["a_only_delta_vs_bf16"] = a_only.get(rotation, math.nan)
+        entry["a_only_source"] = "e18v2_summary.csv (bf16 compute, fp32 NLL)"
+        full = ppl_of(f"{rotation}_asym_g128" if rotation != "hadamard" else "hadamard_asym_g128")
+        entry["all_three_delta_vs_bf16"] = (full - bf16) if full is not None else math.nan
+        components = [entry["a_only_delta_vs_bf16"], entry["kv_only_delta_vs_bf16"],
+                      entry["w_only_delta_vs_bf16"]]
+        entry["sum_of_components"] = (sum(components)
+                                      if not any(math.isnan(v) for v in components) else math.nan)
+        table.append(entry)
+    base.write_csv(result_dir / "e19_decomposition.csv", table)
+
+    LOG.info("E19 component decomposition, delta vs each experiment's own bf16:")
+    LOG.info("%-10s %10s %10s %10s | %10s %10s", "rotation", "A-only", "KV-only", "W-only",
+             "sum", "all three")
+    for entry in table:
+        LOG.info("%-10s %10.5f %10.5f %10.5f | %10.5f %10.5f", entry["rotation"],
+                 entry["a_only_delta_vs_bf16"], entry["kv_only_delta_vs_bf16"],
+                 entry["w_only_delta_vs_bf16"], entry["sum_of_components"],
+                 entry["all_three_delta_vs_bf16"])
+    spread = {}
+    for name in ("a_only", "kv_only", "w_only"):
+        values = [entry[f"{name}_delta_vs_bf16"] for entry in table]
+        if not any(math.isnan(v) for v in values):
+            spread[name] = values[-1] - values[0]   # nar_kmax minus hadamard
+    if spread:
+        LOG.info("k-dependence carried by: %s",
+                 max(spread, key=lambda key: abs(spread[key])))
+        for name, value in spread.items():
+            LOG.info("   %-8s nar_kmax - hadamard = %+.5f", name, value)
+
+
 def finalize_command(args: argparse.Namespace) -> None:
     """Aggregate whatever exists; never depends on a live controller."""
     workdir = Path(args.workdir).resolve()
@@ -676,7 +816,13 @@ def finalize_command(args: argparse.Namespace) -> None:
     tiers = {"bf16": "reference", "hadamard_asym_g128": "B",
              "nar_k8_asym_g128": "C", "nar_k32_asym_g128": "C", "nar_kmax_asym_g128": "C"}
     for row, payload in present.items():
-        bits = payload.get("effective_bits", {})
+        # Recomputed rather than read back: rows written before the widths were
+        # derived carry a hard-coded 4.25 for K and V, which is not the width of
+        # either cache under the KIVI residual policy.
+        kind = ROWS[row][1] if row in ROWS else None
+        quantized = row != "bf16"
+        bits = effective_bits(kind, quantize_weights=quantized, quantize_kv=quantized,
+                              shapes=EXPECTED, context=args.seq_len)
         mean_zero = zero.get(row, {}).get("mean_accuracy")
         summary.append({
             "model": MODEL_KEY, "tier": tiers[row], "row": row, "seed": args.seed,
@@ -757,8 +903,9 @@ def parser() -> argparse.ArgumentParser:
     gptq = sub.add_parser("gptq")
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
     evaluate = sub.add_parser("evaluate")
-    evaluate.add_argument("--row", choices=tuple(ROWS), required=True)
+    evaluate.add_argument("--row", choices=tuple(ROWS) + tuple(COMPONENT_ROWS), required=True)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
+    decompose = sub.add_parser("decompose")
     sub.add_parser("finalize")
     return result
 
@@ -769,6 +916,7 @@ def main() -> None:
         args.artifact_root = str(Path(args.workdir) / "artifacts" / "e19")
     {"calibrate": calibrate_command, "audit": audit_command, "control": control_command,
      "gptq": gptq_command, "evaluate": evaluate_command,
+     "decompose": decompose_command,
      "finalize": finalize_command}[args.command](args)
 
 

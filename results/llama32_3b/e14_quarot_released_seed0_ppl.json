@@ -716,9 +716,9 @@
       0
     ],
     "gpu_name": "NVIDIA GeForce RTX 5090",
-    "hostname": "gpu-5090-4.cluster02.eee.ntu.edu.sg",
+    "hostname": "gpu-node",
     "nvidia_smi": [
-      "0, NVIDIA GeForce RTX 5090, GPU-863baede-8a7e-b78d-f306-65af1c8b44f2, 32607 MiB, 19292 MiB, 580.173.02"
+      "0, NVIDIA GeForce RTX 5090, GPU-REDACTED, 32607 MiB, 19292 MiB, 580.173.02"
     ],
     "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
     "slurm_job_gpus": "3",
