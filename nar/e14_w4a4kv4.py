@@ -66,6 +66,31 @@ def task_set(name: str) -> tuple[tuple[str, ...], dict[str, str], str]:
     if name == "extra":
         return EXTRA_TASKS, EXTRA_METRICS, "_extra"
     return TASKS, METRICS, ""
+# GPTQ weight protocols. "default" is the frozen E14 protocol and keeps every
+# artifact path it always had. The others exist because E19 showed the whole
+# k-dependence of the W4A4KV4 rows sits in the weight quantizer: the rotation
+# concentrates the Hessian on each group's constant direction, and a single
+# per-row symmetric scale cannot absorb that. act_order is bit-neutral; g128 is
+# QuaRot's per-group symmetric scale (4 + 16/128 = 4.125 bits); g128_asym adds
+# QuaRot's integer zero-point (4 + 20/128 = 4.15625 bits), the weight-side
+# counterpart of the activation zero-point that already absorbs the activation's
+# constant direction.
+WEIGHT_PROTOCOLS = {
+    "default": {"act_order": False, "weight_groupsize": -1, "weight_sym": True},
+    "act_order": {"act_order": True, "weight_groupsize": -1, "weight_sym": True},
+    "g128": {"act_order": False, "weight_groupsize": 128, "weight_sym": True},
+    "g128_asym": {"act_order": False, "weight_groupsize": 128, "weight_sym": False},
+}
+
+
+def weight_effective_bits(protocol: str) -> float:
+    settings = WEIGHT_PROTOCOLS[protocol or "default"]
+    group = settings["weight_groupsize"]
+    if group == -1:
+        return 4.0  # one fp16 scale per output row is 16/columns, reported by finalize
+    return 4.0 + (16 + (0 if settings["weight_sym"] else 4)) / group
+
+
 QUAROT_COMMIT = "5008669b08c1f11f9b64d52d16fddd47ca754c5a"
 HARNESS_COMMIT = "b954108c9baaaa934b4ad842033b31a97ee30816"
 GROUP = 128
@@ -780,9 +805,12 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         raise RuntimeError("E14 GPTQ requires CUDA")
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
-    act_order = bool(getattr(args, "act_order", False))
-    weight_groupsize = int(getattr(args, "weight_groupsize", -1))
     protocol = getattr(args, "protocol", "") or ""
+    protocol = "" if protocol == "default" else protocol
+    settings = WEIGHT_PROTOCOLS.get(protocol or "default", WEIGHT_PROTOCOLS["default"])
+    act_order = bool(getattr(args, "act_order", settings["act_order"]))
+    weight_groupsize = int(getattr(args, "weight_groupsize", settings["weight_groupsize"]))
+    weight_sym = bool(getattr(args, "weight_sym", settings["weight_sym"]))
     output = checkpoint_dir(artifact_root, args.model, args.rotation, args.seed, protocol)
     done = output / "DONE.json"
     if done.exists():
@@ -857,7 +885,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
 
         layer.cuda()
         for group_index, group in enumerate(_linear_groups(layer)):
-            engines = {name: GPTQ(module) for name, module in group}
+            engines = {name: GPTQ(module, sym=weight_sym) for name, module in group}
             handles = []
             for name, module in group:
                 def capture(_module: torch.nn.Module, inputs: tuple[Any, ...],
@@ -905,7 +933,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         "model": model_key, "model_id": model_id, "rotation": args.rotation,
         "quarot_commit": QUAROT_COMMIT,
         "gptq": {
-            "bits": 4, "perchannel": True, "symmetric": True, "groupsize": weight_groupsize,
+            "bits": 4, "perchannel": True, "symmetric": weight_sym, "groupsize": weight_groupsize,
             "mse_clipping": True, "norm": 2.4, "grid": 100, "maxshrink": 0.8,
             "blocksize": 128, "percdamp": 0.01, "act_order": act_order,
             "protocol": protocol or "default",
@@ -991,8 +1019,15 @@ def evaluate_row(args: argparse.Namespace) -> None:
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / args.model
     tasks, metrics, suffix = task_set(getattr(args, "task_set", "frozen"))
-    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}_ppl.json"
-    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot{suffix}.json"
+    # The default protocol with the KV cache quantized is the E14 row and keeps
+    # its path; anything else is a variant and gets its own artifact, so no
+    # variant can ever be mistaken for, or overwrite, a table row.
+    protocol = getattr(args, "protocol", "") or ""
+    protocol = "" if protocol == "default" else protocol
+    quantize_kv = getattr(args, "kv", "quantized") == "quantized"
+    variant = (f"_{protocol}" if protocol else "") + ("" if quantize_kv else "_kvoff")
+    ppl_path = result_dir / f"e14_{args.row}{variant}_seed{args.seed}_ppl.json"
+    zero_path = result_dir / f"e14_{args.row}{variant}_seed{args.seed}_zero_shot{suffix}.json"
     need_ppl = args.metrics in ("ppl", "both") and suffix == ""
     need_zero = args.metrics in ("zero_shot", "both")
     if (not need_ppl or ppl_path.exists()) and (not need_zero or zero_path.exists()):
@@ -1003,9 +1038,10 @@ def evaluate_row(args: argparse.Namespace) -> None:
     rotation, activation_kind = _row_settings(args.row)
     model_id, model_key = act.model_id_and_key(args.model)
     model, rotations = load_quantized_model(
-        workdir, artifact_root, model_key, rotation, args.seed, args.weight_row_batch
+        workdir, artifact_root, model_key, rotation, args.seed, args.weight_row_batch,
+        protocol=protocol,
     )
-    runtime = RuntimeHooks(model, rotations, activation_kind=activation_kind, quantize_kv=True)
+    runtime = RuntimeHooks(model, rotations, activation_kind=activation_kind, quantize_kv=quantize_kv)
     runtime.install()
     try:
         if need_ppl and not ppl_path.exists():
@@ -1016,6 +1052,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "rotation_checkpoint": rotation, "ppl": ppl, "chunks": chunk_rows,
                 "dataset": "WikiText-2 raw test full contiguous token stream",
                 "sequence_length": args.seq_len, "chunks_evaluated": len(chunk_rows),
+                "gptq_protocol": protocol or "default", "kv_cache_quantized": quantize_kv,
                 "seed": args.seed, "hardware": base.hardware_info(),
             })
             del tokens
@@ -1056,6 +1093,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
                          "eight-task mean is formed in finalize from these plus five "
                          "of the frozen six, excluding lambada_openai"),
                 "task_set": getattr(args, "task_set", "frozen"),
+                "gptq_protocol": protocol or "default", "kv_cache_quantized": quantize_kv,
                 "seed": args.seed, "num_fewshot": 0, "harness_commit": HARNESS_COMMIT,
                 "batch_size": args.batch_size,
                 "task_versions": _serializable(result.get("versions", {})),
@@ -1277,6 +1315,8 @@ def parser() -> argparse.ArgumentParser:
     gptq.add_argument("--calibration-sequences", type=int, default=128)
     gptq.add_argument("--calibration-seed", type=int, default=0)
     gptq.add_argument("--verify-tokens", type=int, default=128)
+    gptq.add_argument("--protocol", choices=tuple(WEIGHT_PROTOCOLS), default="default",
+                      help="GPTQ weight protocol; anything but default writes its own checkpoint")
     evaluate = sub.add_parser("evaluate")
     evaluate.add_argument("--model", choices=MODELS, required=True)
     evaluate.add_argument("--row", choices=ROWS, required=True)
@@ -1285,6 +1325,11 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen",
                           help="'extra' evaluates only boolq/openbookqa/social_iqa into a "
                                "separate artifact; the frozen six are never re-run")
+    evaluate.add_argument("--protocol", choices=tuple(WEIGHT_PROTOCOLS), default="default",
+                          help="load the checkpoint GPTQ wrote under this protocol")
+    evaluate.add_argument("--kv", choices=("quantized", "off"), default="quantized",
+                          help="'off' leaves the KV cache in bf16 for a diagnostic row; "
+                               "the artifact is suffixed _kvoff and is never a table row")
     gate = sub.add_parser("ppl-gate")
     gate.add_argument("--seeds", type=int, default=1)
     final = sub.add_parser("finalize")

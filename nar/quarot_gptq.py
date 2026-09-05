@@ -7,6 +7,13 @@ and ``fake_quant/quant_utils.py`` from spcl/QuaRot commit
 choices are deliberately unchanged: per-output-channel symmetric W4, optional
 MSE clipping with norm=2.4/grid=100/maxshrink=.8, block size 128, damp=.01,
 one group per output channel, and no activation-order permutation.
+
+The asymmetric path is QuaRot's own ``sym=False`` branch, restored for the
+``g128_asym`` weight protocol: a per-group scale plus an integer zero-point,
+which is the weight-side counterpart of the activation quantizer's zero-point
+and therefore the one weight quantizer that can absorb the per-group constant
+direction the rotation concentrates the Hessian on.  The symmetric path is
+byte-for-byte what it was.
 """
 
 from __future__ import annotations
@@ -19,6 +26,12 @@ import torch
 
 def _sym_qdq(x: torch.Tensor, scale: torch.Tensor, maxq: torch.Tensor) -> torch.Tensor:
     return torch.clamp(torch.round(x / scale), -(maxq + 1), maxq) * scale
+
+
+def _asym_qdq(x: torch.Tensor, scale: torch.Tensor, zero: torch.Tensor,
+              maxq: torch.Tensor) -> torch.Tensor:
+    """QuaRot's asymmetric quantize/dequantize: integer zero, grid [0, maxq]."""
+    return scale * (torch.clamp(torch.round(x / scale) + zero, 0, maxq) - zero)
 
 
 class WeightQuantizer(torch.nn.Module):
@@ -62,22 +75,23 @@ class WeightQuantizer(torch.nn.Module):
         xmin = torch.minimum(x.min(1).values, zeros)
         xmax = torch.maximum(x.max(1).values, zeros)
         if not self.sym:
-            raise NotImplementedError("E14 freezes QuaRot's default symmetric W4")
-        xmax = torch.maximum(xmin.abs(), xmax).clamp(min=1e-5)
-        self.scale = xmax / self.maxq
-        self.zero = torch.zeros_like(self.scale)
-        self.shrink = torch.ones(x.shape[0], device=x.device)
-        if self.mse:
-            best = torch.full((x.shape[0],), float("inf"), device=x.device)
-            for index in range(int(self.maxshrink * self.grid)):
-                shrink = 1 - index / self.grid
-                scale = shrink * xmax / self.maxq
-                error = _sym_qdq(x, scale.unsqueeze(1), self.maxq).sub(x).abs_().pow_(self.norm).sum(1)
-                better = error < best
-                if torch.any(better):
-                    best[better] = error[better]
-                    self.scale[better] = scale[better]
-                    self.shrink[better] = shrink
+            self._find_params_asym(x, xmin, xmax)
+        else:
+            xmax = torch.maximum(xmin.abs(), xmax).clamp(min=1e-5)
+            self.scale = xmax / self.maxq
+            self.zero = torch.zeros_like(self.scale)
+            self.shrink = torch.ones(x.shape[0], device=x.device)
+            if self.mse:
+                best = torch.full((x.shape[0],), float("inf"), device=x.device)
+                for index in range(int(self.maxshrink * self.grid)):
+                    shrink = 1 - index / self.grid
+                    scale = shrink * xmax / self.maxq
+                    error = _sym_qdq(x, scale.unsqueeze(1), self.maxq).sub(x).abs_().pow_(self.norm).sum(1)
+                    better = error < best
+                    if torch.any(better):
+                        best[better] = error[better]
+                        self.scale[better] = scale[better]
+                        self.shrink[better] = shrink
         if not self.perchannel:
             self.scale = self.scale.repeat(shape[0])
             self.zero = self.zero.repeat(shape[0])
@@ -85,9 +99,40 @@ class WeightQuantizer(torch.nn.Module):
         self.scale = self.scale.reshape(parameter_shape)
         self.zero = self.zero.reshape(parameter_shape)
 
+    def _find_params_asym(self, x: torch.Tensor, xmin: torch.Tensor, xmax: torch.Tensor) -> None:
+        """QuaRot's ``sym=False`` branch, with the same clipping search.
+
+        The range is shrunk from both ends by the same factor and the zero
+        follows the shrunk minimum, exactly as in the upstream search; the
+        scale floor mirrors the symmetric branch's so a constant group cannot
+        divide by zero.
+        """
+        span = (xmax - xmin).clamp(min=1e-5)
+        self.scale = span / self.maxq
+        self.zero = torch.round(-xmin / self.scale)
+        self.shrink = torch.ones(x.shape[0], device=x.device)
+        if self.mse:
+            best = torch.full((x.shape[0],), float("inf"), device=x.device)
+            for index in range(int(self.maxshrink * self.grid)):
+                shrink = 1 - index / self.grid
+                xmin1, xmax1 = shrink * xmin, shrink * xmax
+                scale = (xmax1 - xmin1).clamp(min=1e-5) / self.maxq
+                zero = torch.round(-xmin1 / scale)
+                error = _asym_qdq(
+                    x, scale.unsqueeze(1), zero.unsqueeze(1), self.maxq
+                ).sub(x).abs_().pow_(self.norm).sum(1)
+                better = error < best
+                if torch.any(better):
+                    best[better] = error[better]
+                    self.scale[better] = scale[better]
+                    self.zero[better] = zero[better]
+                    self.shrink[better] = shrink
+
     def quantize(self, value: torch.Tensor) -> torch.Tensor:
         if self.bits < 16 and self.ready():
-            return _sym_qdq(value, self.scale, self.maxq).to(value.dtype)
+            if self.sym:
+                return _sym_qdq(value, self.scale, self.maxq).to(value.dtype)
+            return _asym_qdq(value, self.scale, self.zero, self.maxq).to(value.dtype)
         return value
 
 
@@ -101,6 +146,7 @@ class GPTQAudit:
     groupsize: int
     blocksize: int
     act_order: bool = False
+    symmetric: bool = True
     # Conditioning of the Hessian GPTQ inverts. A rotation that concentrates
     # activation energy onto a few input coordinates makes diag(H) spiky, and
     # because the damping is a fixed fraction of the *mean* diagonal, the same
@@ -139,13 +185,13 @@ class GPTQAudit:
 class GPTQ:
     """The official QuaRot GPTQ update, separated from model traversal."""
 
-    def __init__(self, layer: torch.nn.Linear) -> None:
+    def __init__(self, layer: torch.nn.Linear, sym: bool = True) -> None:
         self.layer = layer
         self.rows, self.columns = layer.weight.shape
         self.hessian = torch.zeros((self.columns, self.columns), device=layer.weight.device)
         self.nsamples = 0
         self.quantizer = WeightQuantizer()
-        self.quantizer.configure(4, perchannel=True, sym=True, mse=True)
+        self.quantizer.configure(4, perchannel=True, sym=sym, mse=True)
 
     def add_batch(self, inp: torch.Tensor) -> None:
         # Preserve QuaRot's sequence-count normalization exactly.  A [B,T,C]
@@ -217,7 +263,7 @@ class GPTQ:
         return GPTQAudit(
             columns=self.columns, rows=self.rows, hessian_sequences=self.nsamples,
             dead_columns=dead_count, damp=damp, groupsize=groupsize, blocksize=blocksize,
-            act_order=act_order, **stats,
+            act_order=act_order, symmetric=bool(self.quantizer.sym), **stats,
         )
 
     @torch.no_grad()
