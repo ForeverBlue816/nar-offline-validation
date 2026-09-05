@@ -12,8 +12,16 @@
         4.545
       ],
       "y_limits": [
-        7.606282574249385,
-        7.801712273792579
+        7.6,
+        7.866242825602765
+      ],
+      "horizontal_tick_labels": true,
+      "legend_location": "inside upper right",
+      "scale_bracket_y": 7.803242825602765,
+      "null_bracket_x": 4.25,
+      "null_bracket_marker_gap": [
+        7.7214236773857605,
+        7.729154305306863
       ],
       "null_space_gap_at_4_25": 0.057650417489194083,
       "scale_resolution_gap": 0.01922330101617309,
@@ -40,8 +48,16 @@
         4.545
       ],
       "y_limits": [
-        6.194057725475732,
-        6.387583266650873
+        6.19,
+        6.4522158269450625
+      ],
+      "horizontal_tick_labels": true,
+      "legend_location": "inside upper right",
+      "scale_bracket_y": 6.389215826945062,
+      "null_bracket_x": 4.25,
+      "null_bracket_marker_gap": [
+        6.298693553754519,
+        6.306307253723888
       ],
       "null_space_gap_at_4_25": 0.05996411950033842,
       "scale_resolution_gap": 0.0269543669459118,
@@ -76,6 +92,13 @@
         0,
         10
       ],
+      "legend_location": "inside lower right",
+      "deployment_note": "on Llama, k beyond 8 buys little; on Qwen3 it buys more, at rising cost",
+      "k8_recovery_labels": {
+        "llama32_3b": "0.39",
+        "llama31_8b": "0.36",
+        "qwen3_8b_base": "0.59"
+      },
       "hadamard_timing_reference": "k=8 row for each model",
       "share_denominator": "decoder_layer_ms + online_transform_ms",
       "missing_k_categories": {

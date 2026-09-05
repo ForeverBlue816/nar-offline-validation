@@ -68,7 +68,8 @@ are retained; the addendum lives in the per-layer CSV and done metadata.
 `fig4a` (3B metadata budget), `fig4b` (recovery and kernel cost), and
 `fig4a_8b` (appendix) are separate 2.7-by-4.2-inch SVG/PDF/300-dpi PNG panels.
 `fig4_preview.png` and `fig4.pdf/svg` combine the two main panels. The figures
-contain no titles, footers, experiment notes, or missing-data notices.
+contain no titles, footers, protocol notes, or missing-data notices. The
+requested short deployment interpretation appears inside panel b.
 
 The budget panels retain every requested existing E20 configuration, with
 mean PPL recomputed from three seeds on 64 chunks and effective bits
@@ -76,6 +77,25 @@ mean PPL recomputed from three seeds on 64 chunks and effective bits
 Each panel's CSV lists the exact summary-file row and physical CSV line for
 every point and the bf16 reference. Bracket endpoints are those same plotted
 points; their source lines and PPL differences are in `fig4_metadata.json`.
+
+The revised presentation keeps both canvases at 2.7 by 4.2 inches and aligns
+their plot-area top and bottom edges. Legends are now inside, upper-right in
+a and lower-right in b, with matching 6.5-pt type and padding. Budget tick
+labels are horizontal. The scale-resolution bracket is horizontal over the
+exact x span of the Hadamard (256,1)/(128,1) pair, with its label immediately
+above and no leader. The null-space bracket lies exactly at x=4.25; a small
+stroke gap at the intervening measured (256,3) triangle avoids crossing it.
+Point-specific label offsets avoid the nearby control labels.
+
+The 3B y lower bound is 7.60. The bf16 reference remains at its measured
+7.61675 and the lowest quantized point at 7.68493; their true numerical gap
+is retained on the linear axis. The 8B appendix uses the same presentation.
+Panel b labels the measured k=8 recoveries (0.39, 0.36, 0.59) and kernel
+shares (5.5%/4.3% at k=8, 8.5%/7.6% at k=32), rounded only for display.
+The deployed band labels k=8 explicitly and stops above the annotation and
+legend region. The supplied interpretation sentence wraps over three lines
+inside the narrow panel to retain its requested 6.5-pt size. All source CSV
+numbers remain unchanged by this presentation revision.
 
 The recovery panel evaluates `(mean PPL_Hadamard - mean PPL_k) /
 (mean PPL_Hadamard - PPL_bf16)`, directly from PPLs. It does not reuse legacy

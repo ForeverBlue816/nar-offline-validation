@@ -6,15 +6,23 @@
     "fig4"
   ],
   "checks": [
-    "Source-row and raw-loss linkage passed for all plotted values",
-    "All five recovery categories measured for every model",
-    "Final PDF labels readable and contained; no titles or footers",
-    "No text or stroke collisions in final PDF audits",
-    "Common top and bottom plot-area edges verified"
+    "All data CSVs byte-identical to their prior committed versions",
+    "Horizontal x tick labels and per-point labels visually reviewed",
+    "Horizontal scale bracket has no leader; vertical null bracket at x=4.25 avoids interior triangle",
+    "Matching inside legends and same outer dimensions",
+    "All seven requested recovery/cost labels verified against measured values",
+    "Three-line deployment interpretation fits inside b",
+    "Final main and appendix PDFs have no collision FAIL or WARN",
+    "Shared plot-area top and bottom edges verified"
   ],
   "intentional_overlays": [
     "Deployed band behind k=8",
     "Vector axes and curve markers"
   ],
-  "user_style": "Upright serif, palette and sizes supplied by user; no generic journal defaults imposed"
+  "user_style": "Upright serif, palette and sizes supplied by user; no generic journal defaults imposed",
+  "data_sha256": {
+    "fig4a.csv": "dfab3fd4786ab80c20c8ab77f871b7c91f1cea189af511859aa7f268dcf475b6",
+    "fig4a_8b.csv": "b945440f230a01bb9ec79eb53ba90682e0e8dc85878a852cc1a7fefb538bd074",
+    "fig4b.csv": "c775446485ed7f7bbc0f3e5ac0426ffeb4aca9300030b53e5ec3d72abedf5cc3"
+  }
 }

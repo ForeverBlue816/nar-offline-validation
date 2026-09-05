@@ -174,7 +174,7 @@ def point_labels(fig, ax, data):
             paths.append(annotation.arrow_patch.get_path().transformed(annotation.arrow_patch.get_transform()))
 
 def render_budget(data, outbase):
-    configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.20,.27,.75,.49]);ax.set_facecolor('none')
+    configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.19,.13,.77,.82]);ax.set_facecolor('none')
     pts=data[data.kind.eq('point')]; bf=float(data[data.kind.eq('bf16_reference')].ppl.iloc[0])
     for method,color,lw,marker in [('hadamard',LIGHT,1.2,'o'),('nar',BLUE,1.6,'s')]:
         part=pts[pts.method.eq(method)&pts.m.eq(1)].sort_values('effective_bits')
@@ -189,56 +189,73 @@ def render_budget(data, outbase):
     ax.axhline(bf,color=BLUE,lw=.7,ls=(0,(3,2)))
     ax.annotate('bf16',xy=(1,bf),xycoords=('axes fraction','data'),xytext=(-1,3),textcoords='offset points',ha='right',fontsize=6.5)
     ymin=min(bf,float(pts.ppl.min())); ymax=max(bf,float(pts.ppl.max())); pad=.06*(ymax-ymin)
-    ax.set_ylim(ymin-pad,ymax+pad); ax.set_xlim(4.085,4.545)
-    ax.set_xticks([4.125,4.1875,4.25,4.375,4.5]); ax.set_xticklabels(['4.125','4.1875','4.25','4.375','4.5'],rotation=35,ha='right')
+    lower=7.60 if bf>7 else 6.19
+    upper=ymax+.075
+    ax.set_ylim(lower,upper); ax.set_xlim(4.085,4.545)
+    ax.set_xticks([4.125,4.1875,4.25,4.375,4.5]); ax.set_xticklabels(['4.125','4.1875','4.25','4.375','4.5'],rotation=0,ha='center')
     ax.set_xlabel('effective bits per value',fontsize=7); ax.set_ylabel('WikiText-2 PPL (64 chunks)',fontsize=7)
     ax.tick_params(labelsize=6); ax.spines[['top','right']].set_visible(False)
-    ax.axvline(4.25,color=STEEL,lw=.45,alpha=.65,zorder=0)
-    ax.annotate('4.25 b',xy=(4.25,1),xycoords=('data','axes fraction'),xytext=(0,7),textcoords='offset points',ha='center',fontsize=6.5,color=STEEL)
+    ax.plot([4.25,4.25],[lower,ymax+.008],color=STEEL,lw=.45,alpha=.65,zorder=0)
+    ax.annotate('4.25 b',xy=(4.25,1),xycoords=('data','axes fraction'),xytext=(0,3),textcoords='offset points',ha='center',fontsize=6.5,color=STEEL)
     def pick(method,g,m): return pts[pts.method.eq(method)&pts.g.eq(g)&pts.m.eq(m)].iloc[0]
     had128=pick('hadamard',128,1); prism128=pick('nar',128,1); had256=pick('hadamard',256,1)
-    gap_x=4.271
-    ax.plot([gap_x-.005,gap_x,gap_x,gap_x-.005],[prism128.ppl,prism128.ppl,had128.ppl,had128.ppl],color=STEEL,lw=.6,zorder=3)
-    ax.text(gap_x+.013,(prism128.ppl+had128.ppl)/2,'null-space\nterm',fontsize=6.5,color=STEEL,ha='left',va='center',linespacing=1.2)
-    dy=.025*(ymax-ymin)
-    ax.plot([had256.effective_bits,had128.effective_bits],[had256.ppl+dy,had128.ppl+dy],color=STEEL,lw=.6)
-    for row in [had256,had128]: ax.plot([row.effective_bits,row.effective_bits],[row.ppl+dy*.55,row.ppl+dy*1.45],color=STEEL,lw=.6)
-    ax.annotate('scale-resolution term',xy=((had256.effective_bits+had128.effective_bits)/2,(had256.ppl+had128.ppl)/2+dy),
-        xytext=(.16,.825),textcoords='figure fraction',fontsize=6.5,color=STEEL,ha='left',va='center',
-        arrowprops={'arrowstyle':'-','lw':.45,'color':STEEL,'shrinkA':2,'shrinkB':3})
+    # The bracket follows the shared-budget guide. Leave space at the real
+    # interior triangle so its stroke never crosses that measurement.
+    gap_x=4.25
+    scale_per_pt=(upper-lower)/(HEIGHT*72*.82)
+    interior=float(pick('nar',256,3).ppl);gap=3.6*scale_per_pt
+    ax.plot([gap_x,gap_x],[prism128.ppl,interior-gap],color=STEEL,lw=.65,zorder=2)
+    ax.plot([gap_x,gap_x],[interior+gap,had128.ppl],color=STEEL,lw=.65,zorder=2)
+    for y in [prism128.ppl,had128.ppl]:
+        ax.plot([gap_x,gap_x+.013],[y,y],color=STEEL,lw=.65,zorder=2)
+    ax.text(gap_x+.018,(prism128.ppl+had128.ppl)/2,'null-space\nterm',fontsize=6.5,color=STEEL,ha='left',va='center',linespacing=1.2)
+    bracket_y=float(pts[pts.method.eq('hadamard')].ppl.max())+.012
+    cap=2.5*scale_per_pt
+    ax.plot([had256.effective_bits,had256.effective_bits,had128.effective_bits,had128.effective_bits],
+            [bracket_y-cap,bracket_y,bracket_y,bracket_y-cap],color=STEEL,lw=.65)
+    ax.annotate('scale-resolution term',xy=((had256.effective_bits+had128.effective_bits)/2,bracket_y),
+        xytext=(4,4),textcoords='offset points',fontsize=6.5,color=STEEL,ha='center',va='bottom')
     handles=[Line2D([],[],color=LIGHT,lw=1.2,marker='o',ms=3.5,label='Hadamard'),
         Line2D([],[],color=LIGHT,lw=0,marker='o',mfc='white',mec=LIGHT,ms=3.5,label='Hadamard + extra directions'),
         Line2D([],[],color=BLUE,lw=1.6,marker='s',ms=3.5,label='PrismQuant'),
         Line2D([],[],color=BLUE,lw=.65,ls=':',marker='^',ms=3.5,label='PrismQuant + extra directions')]
-    fig.legend(handles=handles,loc='upper right',bbox_to_anchor=(.98,.985),fontsize=6.5,frameon=False,handlelength=1.6,labelspacing=.6)
+    ax.legend(handles=handles,loc='upper right',bbox_to_anchor=(.98,.995),fontsize=6.5,frameon=False,handlelength=1.6,labelspacing=.15,borderpad=.15,borderaxespad=0)
     point_labels(fig,ax,pts)
     save_panel(fig,outbase,dpi=300,axes=[ax])
     plt.close(fig)
-    return {'size_inches':[WIDTH,HEIGHT],'x_limits':[4.085,4.545],'y_limits':[ymin-pad,ymax+pad],
+    return {'size_inches':[WIDTH,HEIGHT],'x_limits':[4.085,4.545],'y_limits':[lower,upper],'horizontal_tick_labels':True,
+            'legend_location':'inside upper right','scale_bracket_y':bracket_y,'null_bracket_x':gap_x,
+            'null_bracket_marker_gap':[interior-gap,interior+gap],
             'null_space_gap_at_4_25':float(had128.ppl-prism128.ppl),'scale_resolution_gap':float(had256.ppl-had128.ppl),
             'annotation_sources':{'null_space_term':[int(had128.source_csv_line),int(prism128.source_csv_line)],
                                   'scale_resolution_term':[int(had256.source_csv_line),int(had128.source_csv_line)]}}
 
 def render_knobs(data,outbase):
-    configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.22,.27,.54,.49]); cost=ax.twinx()
-    ax.axvspan(-.23,.23,facecolor=PALETTE['zero'],zorder=0)
-    ax.text(0,1.065,'deployed',ha='center',va='bottom',fontsize=6.5,clip_on=False)
+    configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.21,.13,.60,.82]); cost=ax.twinx()
+    ax.axvspan(-.95,.27,ymin=.32,facecolor=PALETTE['zero'],zorder=0)
+    ax.text(-.95,1.065,'k = 8 (deployed)',ha='left',va='bottom',fontsize=6.5,clip_on=False)
     specs=[('llama32_3b',LIGHT,'Llama-3.2-3B',1.2),('llama31_8b',STEEL,'Llama-3.1-8B',1.2),('qwen3_8b_base',BLUE,'Qwen3-8B-Base',1.6)]
     handles=[]
     for model,color,label,lw in specs:
         part=data[data.kind.eq('recovery')&data.model.eq(model)].copy()
         part['x']=part.k_category.map({k:i for i,k in enumerate(CATEGORIES)}); part=part.sort_values('x')
         line,=ax.plot(part.x,part.recovery,color=color,marker='o',ms=3.5,lw=lw,label=label,zorder=4); handles.append(line)
+        first=part[part.k_category.eq('8')].iloc[0]
+        offsets={model:(-4,0) for model in MODELS}
+        ax.annotate(f'{first.recovery:.2f}',(0,first.recovery),xytext=offsets[model],textcoords='offset points',fontsize=6,color=color,ha='right',va='center')
     for model,label,style,offset in [('llama32_3b','3B','-',6),('llama31_8b','8B',(0,(1.5,1.5)),-6)]:
         part=data[data.kind.eq('kernel_share')&data.model.eq(model)].sort_values('k')
         x=[CATEGORIES.index(str(int(k))) for k in part.k]
         cost.plot(x,part.share_percent,color=RED,lw=.7,ls=style,marker='D',ms=3.5,mfc='white',mec=RED,mew=.8,zorder=3)
-        cost.annotate(label,xy=(x[-1],float(part.share_percent.iloc[-1])),xytext=(-12,8) if label=='3B' else (5,-3),textcoords='offset points',fontsize=6,color=RED,va='center')
+        for xpos,share in zip(x,part.share_percent):
+            offsets={('3B',0):(-4,-8),('3B',2):(-9,10),('8B',0):(6,0),('8B',2):(5,-5)}
+            annotation=f'{share:.1f}%'+(('\n3B' if label=='3B' else ' 8B') if xpos==0 else '')
+            cost.annotate(annotation,(xpos,share),xytext=offsets[(label,xpos)],textcoords='offset points',fontsize=6,color=RED,ha='right' if (label=='3B' and xpos==0) else 'left',va='center')
         base=float(data[data.kind.eq('hadamard_kernel_share')&data.model.eq(model)].share_percent.iloc[0])
         cost.axhline(base,color=RED,lw=.6,ls=(0,(3,2)),alpha=.85)
         cost.annotate(f'Hadamard, {label}',xy=(4.1,base),xytext=(-1,offset),textcoords='offset points',ha='right',va='center',fontsize=6,color=RED,
                       arrowprops={'arrowstyle':'-','color':RED,'lw':.35,'shrinkA':2,'shrinkB':1})
-    ax.set_xlim(-.35,4.35); ax.set_ylim(0,1.05); cost.set_ylim(0,10)
+    ax.set_xlim(-.95,4.4); ax.set_ylim(0,1.05); cost.set_ylim(0,10)
     ax.set_xticks(range(5),CATEGORIES); ax.set_yticks([0,.25,.5,.75,1]); ax.yaxis.set_major_formatter(FormatStrFormatter('%g'))
     ax.set_xlabel('directions retained, k',fontsize=7); ax.set_ylabel('recovered fraction of Hadamard gap',fontsize=7)
     cost.set_yticks([0,2.5,5,7.5,10],['0%','2.5%','5%','7.5%','10%']); cost.tick_params(axis='y',colors=RED,labelsize=6,pad=2)
@@ -246,10 +263,13 @@ def render_knobs(data,outbase):
     ax.tick_params(labelsize=6); ax.spines['top'].set_visible(False); cost.spines['top'].set_visible(False)
     cost.spines['right'].set_color(RED)
     handles.append(Line2D([],[],color=RED,lw=.7,marker='D',ms=3.5,mfc='white',label='kernel share (right axis)'))
-    fig.legend(handles=handles,loc='lower right',bbox_to_anchor=(.985,.005),fontsize=6.5,frameon=False,handlelength=1.6,labelspacing=.6)
+    ax.text(.98,.25,'on Llama, k beyond 8 buys little;\non Qwen3 it buys more,\nat rising cost',transform=ax.transAxes,ha='right',va='top',fontsize=6.5,color=BLUE,linespacing=1.2)
+    ax.legend(handles=handles,loc='lower right',bbox_to_anchor=(.98,.005),fontsize=6.5,frameon=False,handlelength=1.6,labelspacing=.15,borderpad=.15,borderaxespad=0)
     save_panel(fig,outbase,dpi=300,axes=[ax])
     plt.close(fig)
     return {'size_inches':[WIDTH,HEIGHT],'x_categories':CATEGORIES,'recovery_limits':[0,1.05],'kernel_share_percent_limits':[0,10],
+            'legend_location':'inside lower right','deployment_note':'on Llama, k beyond 8 buys little; on Qwen3 it buys more, at rising cost',
+            'k8_recovery_labels':{model:f"{data[data.kind.eq('recovery') & data.model.eq(model) & data.k_category.eq('8')].recovery.iloc[0]:.2f}" for model in MODELS},
             'hadamard_timing_reference':'k=8 row for each model','share_denominator':'decoder_layer_ms + online_transform_ms'}
 
 def compose(here):

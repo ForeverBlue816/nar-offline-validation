@@ -43,6 +43,10 @@ All five categorical recovery positions contain actual measurements. No
 interpolation, smoothing, invented uncertainty, or substituted protocols.
 Independent source-row and per-sequence-loss audits accompany each CSV.
 Both main plot areas share top and bottom edges; panel b is narrower to make
-room for its second y axis. The legends retain the requested upper-right
-and lower-right positions. Bare 2.7-inch-wide panels contain only the
+room for its second y axis. The legends are inside the requested upper-right
+and lower-right positions with matching padding. Horizontal budget ticks,
+a horizontal scale bracket, and a null-space bracket exactly on x=4.25
+replace the former presentation. The null bracket leaves a stroke gap at the
+interior measured triangle. The deployed point and both measured kernel
+costs carry numeric labels; the supplied short interpretation stays inside b. Bare 2.7-inch-wide panels contain only the
 requested data marks, labels, brackets, references, and legend.
