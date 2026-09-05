@@ -27,7 +27,7 @@ if [[ ! -f "$out/e18v2_rotation_only_control_exact.csv" ]]; then
     echo "===== exact-transpose fold ====="
     run --rotation-only-control
     cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_exact.csv"
-    cp -f "$out/e18v2_control.json" "$out/e18v2_control_exact.json"
+    cp -f "$out/e18v2_fold_audit.json" "$out/e18v2_fold_audit_exact.json"
 else
     echo "===== exact-transpose fold already recorded, skipping ====="
 fi
@@ -36,5 +36,5 @@ if [[ ! -f "$out/e18v2_rotation_only_control_weight_fold.csv" ]]; then
     echo "===== v1 weight fold ====="
     run --rotation-only-control --weight-fold
     cp -f "$out/e18v2_rotation_only_control.csv" "$out/e18v2_rotation_only_control_weight_fold.csv"
-    cp -f "$out/e18v2_control.json" "$out/e18v2_control_weight_fold.json"
+    cp -f "$out/e18v2_fold_audit.json" "$out/e18v2_fold_audit_weight_fold.json"
 fi

@@ -168,6 +168,14 @@ def dynamic_asym_int4(x: torch.Tensor, group_size: int) -> tuple[torch.Tensor, t
     hi = xg.amax(dim=-1, keepdim=True)
     raw_scale = (hi - lo) / QMAX
     scale16 = torch.where(raw_scale > 0, raw_scale, torch.ones_like(raw_scale)).to(torch.float16)
+    # The fp32 test above cannot see a raw scale that is positive in fp32 but
+    # rounds to zero in fp16, which happens once (hi - lo)/QMAX falls below half
+    # the fp16 subnormal floor.  Such a group is degenerate by the same
+    # definition and must take the same s=1, q=0 path; without this the division
+    # below is by zero.  Where the group minimum is exactly representable in
+    # fp16 that division is 0/0, which produces a NaN that clamp does not
+    # remove and that then destroys every downstream layer.
+    scale16 = torch.where(scale16 > 0, scale16, torch.ones_like(scale16))
     zero16 = lo.to(torch.float16)
     scale = scale16.float()
     zero = zero16.float()

@@ -440,7 +440,8 @@ def run(args: argparse.Namespace) -> None:
     base.seed_everything(args.seed)
     model_id = MODELS[args.model_key]
     result_dir = workdir / "results" / args.model_key
-    model = e18.load_sharded_model(model_id, workdir)
+    compute_dtype = getattr(torch, getattr(args, "compute_dtype", "bfloat16"))
+    model = e18.load_sharded_model(model_id, workdir, compute_dtype)
     layers = e18.selected_layers(model, args.max_layers)
     dimensions = {"qkv": int(model.config.hidden_size), "down": int(model.config.intermediate_size)}
     audit = architecture_audit(model, model_id)
@@ -490,6 +491,7 @@ def run(args: argparse.Namespace) -> None:
                 "model": args.model_key, "model_id": model_id, "method": method,
                 "quantizer": "identity",
                 "fold": "weight_fold" if args.weight_fold else "exact_transpose",
+                "compute_dtype": str(compute_dtype).replace("torch.", ""),
                 "seed": args.seed, "bf16_ppl": bf16_ppl,
                 "rotation_only_ppl": math.exp(sum(losses) / len(losses)),
                 "weight_fold_max_relative_error": error,
@@ -633,6 +635,9 @@ def parser() -> argparse.ArgumentParser:
                         help="build the full k-curve factor set under e18v2_factors")
     result.add_argument("--full-test-set", action="store_true")
     result.add_argument("--skip-hadamard", action="store_true")
+    result.add_argument("--compute-dtype", choices=("bfloat16", "float32"), default="bfloat16",
+                        help="container precision; float32 removes the bf16 rounding floor that "
+                             "keeps the 70B exact-transpose control above the per-chunk gate")
     result.add_argument("--weight-fold", action="store_true",
                         help="reproduce the v1 path that folds R into the consuming weight")
     result.add_argument("--report-only", action="store_true",

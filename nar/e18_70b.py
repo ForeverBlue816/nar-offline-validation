@@ -56,7 +56,16 @@ def _input_device(model: torch.nn.Module) -> torch.device:
     return model.model.embed_tokens.weight.device
 
 
-def load_sharded_model(model_id: str, workdir: Path) -> torch.nn.Module:
+def load_sharded_model(model_id: str, workdir: Path,
+                       dtype: torch.dtype = torch.bfloat16) -> torch.nn.Module:
+    """Shard the model across the visible GPUs.
+
+    ``dtype`` selects the container precision.  bfloat16 is the original E18
+    path.  float32 holds the same bf16 values in fp32 containers, which is what
+    E19 does on the 8B: it does not change the weights, it stops the forward and
+    the rotation round trip from rounding, and at 70B that rounding is the floor
+    the exact-transpose control could not get under.
+    """
     from transformers import AutoModelForCausalLM
 
     gpu_count = torch.cuda.device_count()
@@ -65,11 +74,12 @@ def load_sharded_model(model_id: str, workdir: Path) -> torch.nn.Module:
     total_gib = [torch.cuda.get_device_properties(i).total_memory // 2**30 for i in range(gpu_count)]
     # Leave room for activations, logits, rotations, and temporary weight-fold buffers.
     max_memory = {i: f"{max(8, gib - 10)}GiB" for i, gib in enumerate(total_gib)}
-    LOG.info("loading %s on %d GPUs with max_memory=%s", model_id, gpu_count, max_memory)
+    LOG.info("loading %s on %d GPUs as %s with max_memory=%s",
+             model_id, gpu_count, dtype, max_memory)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
         cache_dir=str(workdir / "cache" / "huggingface"),
-        dtype=torch.bfloat16,
+        dtype=dtype,
         low_cpu_mem_usage=True,
         attn_implementation="sdpa",
         device_map="balanced",
