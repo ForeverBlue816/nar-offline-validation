@@ -1,0 +1,13 @@
+kind,model,method,g,m,effective_bits,ppl,seeds,seed_ids,chunks,source_file,source_row,source_csv_line,formula
+point,llama31_8b,hadamard,64.0,1.0,4.5,6.335004871595902,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,hadamard_g64_m1,7,4 + 16*(m+1)/g
+point,llama31_8b,hadamard,128.0,1.0,4.25,6.346608043012249,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,hadamard_g128_m1,3,4 + 16*(m+1)/g
+point,llama31_8b,hadamard,256.0,1.0,4.125,6.3735624099581605,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,hadamard_g256_m1,4,4 + 16*(m+1)/g
+point,llama31_8b,hadamard,256.0,2.0,4.1875,6.377215826945062,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,hadamard_g256_m2,5,4 + 16*(m+1)/g
+point,llama31_8b,hadamard,256.0,3.0,4.25,6.368741461051276,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,hadamard_g256_m3,6,4 + 16*(m+1)/g
+point,llama31_8b,nar,64.0,1.0,4.5,6.264503276116856,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g64_m1,15,4 + 16*(m+1)/g
+point,llama31_8b,nar,128.0,1.0,4.25,6.28664392351191,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g128_m1,8,4 + 16*(m+1)/g
+point,llama31_8b,nar,256.0,1.0,4.125,6.30502633556351,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g256_m1,11,4 + 16*(m+1)/g
+point,llama31_8b,nar,256.0,2.0,4.1875,6.304714954276931,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g256_m2,12,4 + 16*(m+1)/g
+point,llama31_8b,nar,256.0,3.0,4.25,6.302500403739203,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g256_m3,13,4 + 16*(m+1)/g
+point,llama31_8b,nar,128.0,2.0,4.375,6.28530992137538,3,"[0, 1, 2]",64,results/llama31_8b/e20_summary.csv,nar_g128_m2,9,4 + 16*(m+1)/g
+bf16_reference,llama31_8b,bf16,,,,6.204425165181543,1,,64,results/llama31_8b/e20_summary.csv,bf16,2,

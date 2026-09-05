@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "composed matplotlib panels",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 1,
+    "exemptions": 1
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "composed matplotlib panels",
+    "figure": {
+      "width_pt": 388.8,
+      "height_pt": 302.40000000000003
+    },
+    "panels": [
+      {
+        "id": "fig4a",
+        "bbox_pt": [
+          38.88,
+          81.64800000000001,
+          184.68,
+          229.82400000000004
+        ]
+      },
+      {
+        "id": "fig4b",
+        "bbox_pt": [
+          237.168,
+          81.64800000000001,
+          342.144,
+          229.82400000000004
+        ]
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "fig4a",
+          "fig4b"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": [
+      {
+        "panels": [
+          "fig4b"
+        ],
+        "checks": [
+          "panel-width"
+        ],
+        "reason": "Room for the requested second y axis and its labels."
+      }
+    ]
+  },
+  "findings": []
+}

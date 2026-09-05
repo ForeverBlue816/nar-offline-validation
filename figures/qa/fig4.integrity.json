@@ -1,0 +1,44 @@
+{
+  "panels": {
+    "fig4a": {
+      "verified_source_rows": 12,
+      "all_three_readings_supported": true,
+      "export_dimensions_inches": [
+        2.7,
+        4.2
+      ]
+    },
+    "fig4a_8b": {
+      "verified_source_rows": 12,
+      "all_three_readings_supported": true,
+      "export_dimensions_inches": [
+        2.7,
+        4.2
+      ]
+    },
+    "fig4b": {
+      "recovery_points": 15,
+      "kernel_points": 4,
+      "hadamard_references": 2,
+      "missing_k": [],
+      "export_dimensions_inches": [
+        2.7,
+        4.2
+      ]
+    }
+  },
+  "measurements": {
+    "llama31_8b": {
+      "sequences": 192,
+      "mean_ppl": 6.28674352322354,
+      "max_basis_reconstruction_error": 2.589076757431031e-07,
+      "evaluation_token_sha256": "f2ede7fbb9bc50eabec8e59efc4b344bd21bd7f11aad6be51ab5fe25c34039a4"
+    },
+    "llama32_3b": {
+      "sequences": 192,
+      "mean_ppl": 7.708128095933049,
+      "max_basis_reconstruction_error": 3.1723669735583826e-07,
+      "evaluation_token_sha256": "f2ede7fbb9bc50eabec8e59efc4b344bd21bd7f11aad6be51ab5fe25c34039a4"
+    }
+  }
+}

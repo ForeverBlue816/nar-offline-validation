@@ -1,0 +1,22 @@
+{
+  "code_commit": "f424b82",
+  "device": "NVIDIA RTX A6000",
+  "evaluation_token_sha256": "f2ede7fbb9bc50eabec8e59efc4b344bd21bd7f11aad6be51ab5fe25c34039a4",
+  "factor_cache": "/home/yanlongc/fig4-k64/scratch/activations/llama31_8b/e11_calibration",
+  "model": "llama31_8b",
+  "no_eigensolver_rerun": true,
+  "source_calibration": "/projects/nar/nar-validation/activations/llama31_8b/e11_calibration",
+  "summary": {
+    "chunks": 64,
+    "mean_ppl": 6.28674352322354,
+    "method": "nar_b128_k64",
+    "model": "llama31_8b",
+    "protocol": "frozen E11 activation-only, original 64 chunks, three original rotation seeds",
+    "seed_ppl_std": 0.0025095940161466443,
+    "seed_ppls": "{\"20260902\": 6.284650271042182, \"20260903\": 6.2860547002066935, \"20260904\": 6.2895255984217435}",
+    "seeds": 3,
+    "site_k_actual": "{\"down\": 64, \"qkv\": 32}",
+    "site_kmax": "{\"down\": 112, \"qkv\": 32}",
+    "source": "e11_k64_per_sequence.csv"
+  }
+}

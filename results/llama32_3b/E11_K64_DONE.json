@@ -1,0 +1,22 @@
+{
+  "code_commit": "f424b82",
+  "device": "NVIDIA L40S",
+  "evaluation_token_sha256": "f2ede7fbb9bc50eabec8e59efc4b344bd21bd7f11aad6be51ab5fe25c34039a4",
+  "factor_cache": "/home/yanlongc/fig4-k64/scratch/activations/llama32_3b/e11_calibration",
+  "model": "llama32_3b",
+  "no_eigensolver_rerun": true,
+  "source_calibration": "/projects/nar/nar-validation/activations/llama32_3b/e11_calibration",
+  "summary": {
+    "chunks": 64,
+    "mean_ppl": 7.708128095933049,
+    "method": "nar_b128_k64",
+    "model": "llama32_3b",
+    "protocol": "frozen E11 activation-only, original 64 chunks, three original rotation seeds",
+    "seed_ppl_std": 0.010482347608017206,
+    "seed_ppls": "{\"20260902\": 7.7191825103919145, \"20260903\": 7.70687049666033, \"20260904\": 7.6983312807469035}",
+    "seeds": 3,
+    "site_k_actual": "{\"down\": 64, \"qkv\": 24}",
+    "site_kmax": "{\"down\": 64, \"qkv\": 24}",
+    "source": "e11_k64_per_sequence.csv"
+  }
+}

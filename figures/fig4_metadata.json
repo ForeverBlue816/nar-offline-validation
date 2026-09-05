@@ -1,0 +1,116 @@
+{
+  "panels": {
+    "fig4a": {
+      "model": "llama32_3b",
+      "missing_configurations": [],
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_limits": [
+        4.085,
+        4.545
+      ],
+      "y_limits": [
+        7.606282574249385,
+        7.801712273792579
+      ],
+      "null_space_gap_at_4_25": 0.057650417489194083,
+      "scale_resolution_gap": 0.01922330101617309,
+      "annotation_sources": {
+        "null_space_term": [
+          3,
+          8
+        ],
+        "scale_resolution_term": [
+          4,
+          3
+        ]
+      }
+    },
+    "fig4a_8b": {
+      "model": "llama31_8b",
+      "missing_configurations": [],
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_limits": [
+        4.085,
+        4.545
+      ],
+      "y_limits": [
+        6.194057725475732,
+        6.387583266650873
+      ],
+      "null_space_gap_at_4_25": 0.05996411950033842,
+      "scale_resolution_gap": 0.0269543669459118,
+      "annotation_sources": {
+        "null_space_term": [
+          3,
+          8
+        ],
+        "scale_resolution_term": [
+          4,
+          3
+        ]
+      }
+    },
+    "fig4b": {
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_categories": [
+        "8",
+        "16",
+        "32",
+        "64",
+        "max"
+      ],
+      "recovery_limits": [
+        0,
+        1.05
+      ],
+      "kernel_share_percent_limits": [
+        0,
+        10
+      ],
+      "hadamard_timing_reference": "k=8 row for each model",
+      "share_denominator": "decoder_layer_ms + online_transform_ms",
+      "missing_k_categories": {
+        "llama32_3b": [],
+        "llama31_8b": [],
+        "qwen3_8b_base": []
+      },
+      "protocols": {
+        "llama32_3b": {
+          "site_kmax": {
+            "down": 64,
+            "qkv": 24
+          },
+          "seeds": 3,
+          "chunks": 64
+        },
+        "llama31_8b": {
+          "site_kmax": {
+            "down": 112,
+            "qkv": 32
+          },
+          "seeds": 3,
+          "chunks": 64
+        },
+        "qwen3_8b_base": {
+          "site_kmax": {
+            "down": 96,
+            "qkv": 32
+          },
+          "seeds": 1,
+          "chunks": 146
+        }
+      },
+      "recovery_formula": "ratio computed from mean PPLs; not the legacy stored recovery column"
+    }
+  },
+  "backend": "plain matplotlib"
+}

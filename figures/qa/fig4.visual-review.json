@@ -1,0 +1,20 @@
+{
+  "reviewed_panels": [
+    "fig4a",
+    "fig4b",
+    "fig4a_8b",
+    "fig4"
+  ],
+  "checks": [
+    "Source-row and raw-loss linkage passed for all plotted values",
+    "All five recovery categories measured for every model",
+    "Final PDF labels readable and contained; no titles or footers",
+    "No text or stroke collisions in final PDF audits",
+    "Common top and bottom plot-area edges verified"
+  ],
+  "intentional_overlays": [
+    "Deployed band behind k=8",
+    "Vector axes and curve markers"
+  ],
+  "user_style": "Upright serif, palette and sizes supplied by user; no generic journal defaults imposed"
+}

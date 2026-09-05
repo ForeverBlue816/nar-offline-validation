@@ -1,0 +1,2 @@
+model,method,seeds,mean_ppl,seed_ppl_std,seed_ppls,chunks,site_kmax,site_k_actual,source,protocol
+llama32_3b,nar_b128_k64,3,7.708128095933049,0.010482347608017206,"{""20260902"": 7.7191825103919145, ""20260903"": 7.70687049666033, ""20260904"": 7.6983312807469035}",64,"{""down"": 64, ""qkv"": 24}","{""down"": 64, ""qkv"": 24}",e11_k64_per_sequence.csv,"frozen E11 activation-only, original 64 chunks, three original rotation seeds"

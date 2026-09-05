@@ -1,4 +1,4 @@
-# Figure contracts — revision 5
+# Figure contracts — revision 6
 
 User-requested bare panels; upright serif, 6-pt ticks, 7-pt axis labels,
 6.5-pt legends. Editable SVG/PDF text. No in-panel titles or footer captions.
@@ -27,3 +27,16 @@ in the main plots. Insets only enlarge the declared 0.85–1.0 corner.
 
 QA independently recomputes selection/statistics/fit, confirms full cloud and
 range-law bounds, checks PDF glyph sizes and overlaps, and reviews final renders.
+
+4. Figure 4: distinguish metadata scale resolution from aligned null-space
+allocation, and show measured activation recovery alongside measured online
+cost. Panel a uses all requested accounted E20 rows and measured bf16;
+a second version uses 8B. Panel b uses activation-only E11/E18 v2 PPL means,
+including direct supplementary E11 k64 measurements, and E17 v3 timing shares.
+All five categorical recovery positions contain actual measurements. No
+interpolation, smoothing, invented uncertainty, or substituted protocols.
+Independent source-row and per-sequence-loss audits accompany each CSV.
+Both main plot areas share top and bottom edges; panel b is narrower to make
+room for its second y axis. The legends retain the requested upper-right
+and lower-right positions. Bare 2.7-inch-wide panels contain only the
+requested data marks, labels, brackets, references, and legend.
