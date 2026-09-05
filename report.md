@@ -457,27 +457,33 @@ All four rows are complete on both models, seed 0, evaluated on the full WikiTex
 
 ### Llama-3.2-3B
 
-| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task zero-shot | paired delta vs Hadamard |
-|---|---|---:|---:|---:|---:|
-| A | QuaRot released, symmetric A4 | 10.33237 | — | 0.6078 | — |
-| B | Hadamard + asymmetric g128 | 9.20901 | 0 | 0.6437 | 0 |
-| C | NAR k=8 R1/R4 + NAR R2 | 8.75623 | **-0.452776** | 0.6512 | **+0.007507** |
-| C | NAR k=max R1/R4 + NAR R2 | 8.71445 | **-0.494562** | 0.6537 | **+0.009996** |
+| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task | Δ6 | eight-task | Δ8 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| A | QuaRot released, symmetric A4 | 10.33237 | — | 60.78 | — | 56.21 | — |
+| B | Hadamard + asymmetric g128 | 9.20901 | 0 | 64.37 | 0 | 59.38 | 0 |
+| C | NAR k=8 R1/R4 + NAR R2 | 8.75623 | **-0.452776** | 65.12 | **+0.75** | 59.29 | **−0.08** |
+| C | NAR k=max R1/R4 + NAR R2 | 8.71445 | **-0.494562** | 65.37 | **+1.00** | 60.19 | **+0.81** |
 
 ### Llama-3.1-8B
 
-| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task zero-shot | paired delta vs Hadamard |
-|---|---|---:|---:|---:|---:|
-| A | QuaRot released, symmetric A4 | 8.34771 | — | 0.6553 | — |
-| B | Hadamard + asymmetric g128 | 7.20638 | 0 | 0.7073 | 0 |
-| C | NAR k=8 R1/R4 + NAR R2 | 6.98984 | **-0.216543** | 0.7072 | -0.000075 |
-| C | NAR k=max R1/R4 + NAR R2 | 6.91467 | **-0.291712** | 0.7118 | **+0.004532** |
+| tier | row | full WikiText-2 PPL | paired delta vs Hadamard | six-task | Δ6 | eight-task | Δ8 |
+|---|---|---:|---:|---:|---:|---:|---:|
+| A | QuaRot released, symmetric A4 | 8.34771 | — | 65.53 | — | 60.82 | — |
+| B | Hadamard + asymmetric g128 | 7.20638 | 0 | 70.73 | 0 | 65.37 | 0 |
+| C | NAR k=8 R1/R4 + NAR R2 | 6.98984 | **-0.216543** | 70.72 | −0.01 | 65.36 | −0.01 |
+| C | NAR k=max R1/R4 + NAR R2 | 6.91467 | **-0.291712** | 71.18 | **+0.45** | 65.43 | +0.07 |
 
-Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`; the six tasks are piqa, arc_easy, arc_challenge, hellaswag, winogrande and lambada_openai.
+Accuracies are percentages and the deltas are percentage points. Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`.
+
+**Two means are reported.** The **six-task** mean is the frozen E13 suite: `piqa`, `arc_easy`, `arc_challenge`, `hellaswag`, `winogrande`, `lambada_openai`. The **eight-task** mean is the set the published W4A4KV4 tables use: `arc_easy`, `arc_challenge`, `boolq`, `hellaswag`, `openbookqa`, `piqa`, `social_iqa`, `winogrande` — no LAMBADA. All nine tasks are at harness revision `b954108c9baaaa934b4ad842033b31a97ee30816`, zero-shot, and the metric is `acc_norm` where the task defines one (`piqa`, `arc_easy`, `arc_challenge`, `hellaswag`, `openbookqa`) and `acc` otherwise (`winogrande`, `lambada_openai`, `boolq`, `social_iqa`). `boolq`, `openbookqa` and `social_iqa` were evaluated on their own into a separate artifact; no frozen task was re-run.
 
 **NAR beats the metadata-matched Hadamard row on perplexity on both models**, by 0.4946 at k=max and 0.4528 at k=8 on the 3B, and by 0.2917 and 0.2165 on the 8B. The ordering k=max better than k=8 better than Hadamard holds on both.
 
-**The perplexity gain does not transfer proportionally to the downstream tasks.** On the 3B the six-task mean moves +0.0100 at k=max against a 0.4946 PPL gain; on the 8B it moves +0.0045 against 0.2917, and NAR k=8 is flat at -0.000075, statistically indistinguishable from Hadamard on a single seed. Whatever the rotation buys in perplexity is worth roughly a percentage point of zero-shot accuracy at best, and the 8B k=8 row shows it can be worth nothing. This is reported as measured; no row was rerun or reweighted.
+**The perplexity gain does not transfer proportionally to the downstream tasks, and the eight-task set makes that sharper.** On the 3B the six-task mean moves +1.00 points at k=max against a 0.4946 PPL gain; on the 8B it moves +0.45 against 0.2917, and NAR k=8 is flat at −0.01. Whatever the rotation buys in perplexity is worth roughly a percentage point of zero-shot accuracy at best, and the 8B k=8 row shows it can be worth nothing.
+
+Widening to the published eight-task set shrinks the transfer further, and on one row it removes it. **On the 3B, NAR k=8 goes from +0.75 on six tasks to −0.08 on eight**, entirely because of BoolQ: k=8 scores 65.35 against Hadamard's 68.26, and BoolQ is one eighth of the eight-task mean while being absent from the six. On the 8B, k=max's advantage falls from +0.45 to +0.07 for the same kind of reason. The one place the eight-task mean holds up is Qwen3, where NAR k=8 keeps +1.15 points against Hadamard.
+
+The honest summary across the three models is that the downstream benefit of the rotation is at most about a point on six tasks, and closer to zero on the published eight — while the perplexity margin, which the [seed intervals](#seeds-and-intervals-llama-31-8b) show is real, is not in doubt. This is reported as measured; no row was rerun or reweighted.
 
 A second reason not to read the zero-shot deltas as a verdict on the full W4A4KV4 configuration is that the suite barely exercises the KV quantizer at all: measured against the same KIVI policy E14 uses, a majority of the six tasks' requests are short enough that no cache entry is ever quantized, and PIQA's never are. The measurement is in [E19's section](#the-zero-shot-suite-barely-exercises-the-kv-quantizer) and applies unchanged here.
 
@@ -559,15 +565,15 @@ Effective widths are identical across the quantized rows and are **not** the 4.2
 
 Seed 0. `quarot_released` has no counterpart here: no released QuaRot artifact exists for Qwen3.
 
-| tier | row | PPL | Δ vs bf16 | Δ vs Hadamard | recovered | six-task zero-shot | Δ vs Hadamard |
-|---|---|---:|---:|---:|---:|---:|---:|
-| reference | bf16 | 8.79606 | 0 | −3.20532 | — | — | — |
-| B | Hadamard + asym g128 | 12.00138 | +3.20532 | 0 | 0% | 0.6995 | 0 |
-| C | NAR k=8 | 9.73628 | +0.94022 | −2.26510 | 70.7% | 0.7161 | +0.0166 |
-| C | NAR k=32 | 10.38430 | +1.58824 | −1.61707 | 50.4% | — | — |
-| C | NAR k=max | 10.79652 | +2.00046 | −1.20486 | 37.6% | 0.7158 | +0.0163 |
+| tier | row | PPL | Δ vs bf16 | Δ vs Hadamard | recovered | six-task | Δ6 | eight-task | Δ8 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| reference | bf16 | 8.79606 | 0 | −3.20532 | — | 73.32 | — | 68.46 | — |
+| B | Hadamard + asym g128 | 12.00138 | +3.20532 | 0 | 0% | 69.95 | 0 | 65.87 | 0 |
+| C | NAR k=8 | 9.73628 | +0.94022 | −2.26510 | 70.7% | 71.61 | **+1.66** | 67.02 | **+1.15** |
+| C | NAR k=32 | 10.38430 | +1.58824 | −1.61707 | 50.4% | — | — | — | — |
+| C | NAR k=max | 10.79652 | +2.00046 | −1.20486 | 37.6% | 71.58 | **+1.63** | 66.96 | **+1.09** |
 
-Per-task accuracies are in the per-row JSON files; the six tasks are the frozen E13 suite.
+Accuracies are percentages and the deltas are percentage points; the two task sets and their metrics are defined in [the E14 section](#e14--end-to-end-w4a4kv4). The bf16 row's accuracies were measured for the first time here, so that the eight-task mean has a 16-bit reference on this model; the quantized rows lose 2.6 points of it at best. **NAR is the one model of the three where the advantage survives the wider task set**, +1.15 points against a metadata-matched Hadamard on eight tasks against +1.66 on six. No zero-shot was run for `nar_k32`.
 
 **These rows are the default GPTQ protocol, and that protocol turns out to be a large part of what they measure.** The −2.265 margin above is the largest NAR-over-Hadamard delta anywhere in this report, and the protocol comparison below shows it shrinks to −0.759 once GPTQ is given activation ordering. The rows are kept because they are the direct analogue of E14's, but the headline claim for Qwen3 is the act_order row, not this one.
 

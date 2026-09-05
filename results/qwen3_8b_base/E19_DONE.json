@@ -3,7 +3,7 @@
   "complete": true,
   "compute_dtype": "float32",
   "eval_windows": 146,
-  "git_commit": "39cdd32293d6db5e004300bbb3d0e3c84be15386",
+  "git_commit": "3b6ac614f02e6ac907bb6b362a5a39e675eef069",
   "hardware": {
     "cuda_available": false,
     "hostname": "gpu-node",
@@ -172,8 +172,9 @@
       "row": "bf16",
       "seed": 0,
       "tier": "reference",
-      "zero_shot_delta_vs_hadamard": NaN,
-      "zero_shot_mean": NaN
+      "zero_shot_delta_vs_hadamard": 0.033705793060298195,
+      "zero_shot_mean": 0.7332240034565247,
+      "zero_shot_mean_eight_task": 0.6846387873409228
     },
     {
       "chunks_evaluated": 146,
@@ -198,7 +199,8 @@
       "seed": 0,
       "tier": "B",
       "zero_shot_delta_vs_hadamard": 0.0,
-      "zero_shot_mean": 0.6995182103962265
+      "zero_shot_mean": 0.6995182103962265,
+      "zero_shot_mean_eight_task": 0.6586964054237369
     },
     {
       "chunks_evaluated": 146,
@@ -223,7 +225,8 @@
       "seed": 0,
       "tier": "C",
       "zero_shot_delta_vs_hadamard": 0.016551848857474405,
-      "zero_shot_mean": 0.7160700592537009
+      "zero_shot_mean": 0.7160700592537009,
+      "zero_shot_mean_eight_task": 0.6701715475588897
     },
     {
       "chunks_evaluated": 146,
@@ -248,7 +251,8 @@
       "seed": 0,
       "tier": "C",
       "zero_shot_delta_vs_hadamard": NaN,
-      "zero_shot_mean": NaN
+      "zero_shot_mean": NaN,
+      "zero_shot_mean_eight_task": NaN
     },
     {
       "chunks_evaluated": 146,
@@ -273,7 +277,8 @@
       "seed": 0,
       "tier": "C",
       "zero_shot_delta_vs_hadamard": 0.016310816857833643,
-      "zero_shot_mean": 0.7158290272540602
+      "zero_shot_mean": 0.7158290272540602,
+      "zero_shot_mean_eight_task": 0.6696238305375269
     }
   ]
 }
