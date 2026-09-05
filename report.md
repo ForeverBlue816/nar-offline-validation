@@ -517,6 +517,53 @@ Both models now have one. **Llama-3.1-8B bf16 = 6.241035** and **Llama-3.2-3B bf
 
 The two models agree closely once each row is divided by its own reference: NAR k=8 costs 12.0% on both, and k=max 10.8% against 11.4%. The absolute margins differ — the 3B's Hadamard row is 1.389 above its reference against the 8B's 0.965 — so the 3B has more headroom for the rotation to recover, and NAR recovers a larger absolute amount there (−0.495 against −0.292) for a similar relative result.
 
+## GPTQ protocols and the KV probe on Llama-3.2-3B
+
+[E19's decomposition](#e19--end-to-end-w4a4kv4-on-qwen3-8b-base) located the whole k-dependence of the W4A4KV4 rows in the weight quantizer, and its protocol comparison showed the GPTQ protocol moving a Hadamard row by more than most published method-versus-method gaps. E14's rows were all run under the default protocol. Llama-3.2-3B is the one checkpoint this repository shares with the published W4A4KV4 tables, so it is where a protocol change can be read against them directly. Three things were tried on it, each following from the E19 diagnosis rather than from a search: `act_order` (bit-neutral), QuaRot's per-group symmetric scale at group 128 (`g128`, 4.125 weight bits), and QuaRot's own asymmetric branch restored in `quarot_gptq.py` (`g128_asym`, per-group scale plus a 4-bit integer zero, 4.15625 weight bits). The asymmetric branch is the weight-side counterpart of the activation zero-point that already absorbs each group's constant direction; the symmetric path is unchanged and 50 randomized trials match the previous code bit for bit. Each protocol writes its own checkpoint and artifact, so no default-protocol number above was touched. All rows are seed 0; no protocol was selected on these numbers and all twelve are reported.
+
+| 3B, full WikiText-2 PPL | Hadamard | NAR k=8 | NAR k=max | k=8 − H | k=max − H | k=max, Δ vs 16-bit |
+|---|---:|---:|---:|---:|---:|---:|
+| default (4.003 W bits) | 9.20901 | 8.75623 | 8.71445 | −0.453 | −0.495 | +0.8949 (11.4%) |
+| act_order (4.003) | 9.22458 | 8.74344 | 8.69875 | −0.481 | −0.526 | +0.8792 (11.2%) |
+| g128 (4.125) | 9.13029 | 8.65965 | 8.62424 | −0.471 | **−0.506** | +0.8047 (10.3%) |
+| g128_asym (4.156) | 9.04241 | 8.63633 | **8.59702** | −0.406 | −0.445 | **+0.7774 (9.9%)** |
+
+The 16-bit reference is this repository's own 7.819581. Three findings, in decreasing order of how much they change.
+
+**`act_order` is a null on Llama-3.2-3B.** All three rows move by less than 0.016, in both directions. On Qwen3 the same switch repaired 1.25 PPL of the Hadamard row; the Hessian ill-conditioning it addresses is therefore a Qwen3 property, and the open item recorded in [Relation to E14](#relation-to-e14) — that the Llama margins might not survive the protocol E19 selected — is closed in the direction of the margins surviving, at −0.481 and −0.526.
+
+**Finer weight groups help every row by a near-constant amount, and the NAR ordering survives.** k=max < k=8 < Hadamard under all four protocols, with k=max − k=8 between −0.035 and −0.045 throughout. NAR's margin over the matched Hadamard is widest under symmetric g128 (−0.506) and narrowest under g128_asym (−0.445), because the zero-point buys Hadamard 0.088 more than symmetric groups alone but buys the NAR rows only 0.023–0.027. That is the opposite of what the DC-concentration mechanism predicted: if NAR's loss to the weight quantizer were a per-group offset, the weight zero-point would have repaired NAR selectively. On Llama it does not, and the offset the rotation concentrates is evidently already absorbed well enough by GPTQ's error feedback. The mechanism remains the explanation of the Qwen3 k-dependence, where the rank inversion was real; it does not transfer to Llama as a source of headroom.
+
+**The best NAR row on this checkpoint is k=max under g128_asym at 8.59702, a 9.9% degradation**, at 4.156 weight bits. Against the published table's own 16-bit denominator of 7.8 that is +0.797 (10.2%); the comparison is in the [OffQ section](#external-comparison--offq-arxiv-260607116), with the bit cost declared.
+
+### The KV cache is not what NAR k=8 loses on BoolQ
+
+On the eight-task set NAR k=8 loses 2.9 points to Hadamard on BoolQ alone (65.35 against 68.26) while k=max gains 2.3 there. BoolQ is also, by a wide margin, the task whose prompts are long enough to exercise the KV quantizer. `nar/e14_zero_shot_context_lengths.py` extends the E19 measurement to all nine tasks with the Llama-3.2-3B tokenizer:
+
+| task | requests | ctx p50 | ctx max | no KV quantized | K quantized | V quantized |
+|---|---:|---:|---:|---:|---:|---:|
+| boolq | 6540 | **130** | **1163** | **0.0%** | **88.6%** | **68.1%** |
+| lambada_openai | 5153 | 72 | 222 | 0.0% | 79.9% | 34.7% |
+| hellaswag | 40168 | 52 | 95 | 22.0% | 64.3% | 21.7% |
+| arc_challenge | 4687 | 26 | 172 | 63.3% | 44.1% | 15.3% |
+| arc_easy | 9501 | 22 | 160 | 74.9% | 33.4% | 12.1% |
+| social_iqa | 5862 | 27 | 60 | 88.1% | 13.9% | 0.8% |
+| openbookqa | 2000 | 9 | 66 | 96.4% | 10.4% | 3.4% |
+| winogrande | 2534 | 16 | 34 | 99.8% | 0.3% | 0.0% |
+| piqa | 3676 | 12 | 30 | 100.0% | 0.0% | 0.0% |
+
+BoolQ is the only task of the eight where more than half the causal value pairs are quantized, three times the next task. The hypothesis that the k=8 BoolQ loss is a KV interaction was therefore the first one to test, and it is cheap: the three extra tasks re-run with the KV cache left in bf16 (`evaluate --kv off`, artifact suffix `_kvoff`), default protocol, seed 0.
+
+| 3B, seed 0 | BoolQ, KV4 | BoolQ, KV bf16 | Δ | OBQA, KV4 → bf16 | SIQA, KV4 → bf16 |
+|---|---:|---:|---:|---:|---:|
+| Hadamard | 68.26 | 68.13 | −0.13 | 40.20 → 38.80 | 45.09 → 44.83 |
+| NAR k=8 | 65.35 | 64.83 | −0.52 | 38.80 → 40.00 | 43.91 → 44.32 |
+| NAR k=max | 70.58 | 71.13 | +0.55 | 40.00 → 40.00 | 44.52 → 45.14 |
+
+**Rejected.** Removing KV quantization moves BoolQ by at most 0.55 points in either direction — about 18 questions — and k=8 does not recover any of its 2.9-point loss. Two conclusions follow. The k=8 BoolQ deficit belongs to the rank-8 R1 rotation and the weight quantizer, not to the cache, and it is the same component the protocol table above shows is hard to move. And the KV4 cache is measurably lossless on the one task that exercises it, which is the strongest evidence in this report that the KIVI policy is not where any W4A4KV4 degradation comes from; the [E19 decomposition](#e19--end-to-end-w4a4kv4-on-qwen3-8b-base) said the same thing for perplexity.
+
+Zero-shot accuracies for the nine protocol rows are being measured and are not yet in this section. Until they are, the protocol table is a perplexity result only, and nothing here changes the eight-task comparison above.
+
 # E19 — end-to-end W4A4KV4 on Qwen3-8B-Base
 
 E19 carries the E14 pipeline to a second architecture family. It extends E14 rather than forking it: `e14_w4a4kv4.py` gained three optional hooks (`LOAD_MODEL`, `ROTATION_SET`, `ALGEBRA_CONTROL`) that are unset for Llama, so every E14 number above is produced by the same code path as before, and `e19_qwen3_e2e.py` supplies Qwen3 implementations of those three. The quantizer, the GPTQ configuration, the KIVI cache policy and the six-task zero-shot suite are shared objects, not reimplementations.
@@ -717,7 +764,7 @@ Compared at each experiment's chosen protocol. E14 has only ever run the default
 
 The two 16-bit references are measured under different evaluation paths (E14 bf16 with HuggingFace's loss, E19 fp32 containers with fp32 NLL) and the two models tokenize WikiText-2 into different window counts, 141 versus 146. Absolute perplexities therefore do not compare across the two columns; the percentages, which are each row divided by its own reference, do.
 
-**E14 has not been run under `act_order`.** Since that protocol repairs 1.25 PPL of the Qwen3 Hadamard row, the Llama column may be similarly protocol-sensitive and its −0.292 may not survive the same treatment. This is an open item, not a correction: no Llama row has been re-measured under an alternative GPTQ protocol, and until one is, the cross-model comparison above holds only protocol-by-protocol, not as a statement about the two models.
+**E14 has since been run under `act_order` on Llama-3.2-3B, and it is a null there**: all three rows move by less than 0.016 ([protocol table](#gptq-protocols-and-the-kv-probe-on-llama-32-3b)). The 1.25 PPL that activation ordering repairs on the Qwen3 Hadamard row is a Qwen3 property, and the Llama margins survive the protocol E19 selected. Llama-3.1-8B has not been re-run under it; the 3B result makes that a consistency check rather than an open question.
 
 # E15 — FP4 boundary verification follow-up
 
@@ -1596,6 +1643,28 @@ OffQ's Llama column is **Llama-3-8B**, not 3.1, and the paper does not state the
 | NAR k=max (this work, g128, 4.125 W bits) | Qwen3-8B-Base | 9.42002 | +0.6240 | 7.1% |
 
 **The quantizer is confounded in OffQ's own table and is not confounded here.** Their implementation section states that OffQ uses per-group asymmetric quantization at group 128 while the baselines "follow their official implementations using per-token asymmetric quantization". Part of the reported QuaRot → OffQ margin is therefore the quantizer rather than the offsetting. E14's `hadamard_asym_g128` row is precisely the control that separates them — plain Hadamard under OffQ's own quantizer — and it degrades 15.5%, already below their quoted ResQ at 16.4% and close to OffQ at 14.4%.
+
+## Llama-3.2-3B: the same checkpoint
+
+OffQ's Table 1 also reports Llama-3.2-3B, which is the checkpoint E14 uses, so on this row alone the comparison is like for like: same weights, same eight tasks, same harness family. Their 16-bit row is 7.8 and 62.73; this repository measures 7.819581 on its own 141-window stream, 0.25% away, so even the perplexity protocols are close. Their denominators are used below so that nothing on this side is chosen. Two calibration checks first. **QuaRot, which both sides evaluate, lands at 56.21 here against their quoted 56.06** — 0.15 points on the eight-task mean, 0.23 PPL — so the two evaluation pipelines agree on a shared method. But the per-task scatter on that same shared method is ±2–3 points (ARC-e 62.37 here against 59.0 there, PIQA 72.36 against 74.4), so only the mean is comparable and per-task differences of a point or two are not.
+
+| Llama-3.2-3B | W bits | PPL | Δ vs 7.8 | eight-task | Δ vs 62.73 |
+|---|---:|---:|---:|---:|---:|
+| QuaRot (quoted) | 4 | 10.1 | +2.30 | 56.06 | −6.67 |
+| QuaRot released (this work) | 4 | 10.33 | +2.53 | 56.21 | −6.52 |
+| SpinQuant (quoted) | 4 | 9.2 | +1.40 | 57.89 | −4.84 |
+| KurTail (quoted) | 4 | 9.0 | +1.20 | 59.04 | −3.69 |
+| ResQ (quoted) | 4 | 8.8 | +1.00 | 58.99 | −3.74 |
+| **OffQ** | 4 | **8.78** | **+0.98** | **60.80** | **−1.93** |
+| Hadamard + asym g128 (this work) | 4.003 | 9.20901 | +1.41 | 59.38 | −3.35 |
+| NAR k=8 (this work) | 4.003 | 8.75623 | +0.96 | 59.29 | −3.44 |
+| **NAR k=max (this work)** | 4.003 | **8.71445** | **+0.91** | 60.19 | −2.54 |
+| NAR k=max, g128 (this work) | 4.125 | 8.62424 | +0.82 | pending | |
+| NAR k=max, g128_asym (this work) | 4.156 | **8.59702** | **+0.80** | pending | |
+
+**Perplexity: NAR is below OffQ at both ranks, by little.** k=max is 0.066 lower and k=8 0.024 lower at matched per-channel weights. On Llama-3.1-8B the Hadamard row alone moves 0.035 between seeds and k=8 moves 0.06, so 0.024 is inside seed noise and 0.066 is at its edge; these are single-seed numbers and the honest reading is "not worse". The finer-group weight rows put k=max 0.156 and 0.183 below OffQ, at 0.12–0.15 extra bits per weight that their per-channel rows do not spend.
+
+**Accuracy: OffQ is above NAR, by little at k=max and by more at k=8.** k=max is 0.61 points below OffQ on the eight-task mean, with six of the eight tasks each a fraction of a point lower and none catastrophic (ARC-c −1.9, SIQA −1.1, BoolQ −1.0, WinoGrande −0.6, HellaSwag −0.6, PIQA −0.4, ARC-e +0.3, OBQA +0.4). Given the ±2–3 per-task scatter measured on the shared QuaRot row, 0.61 on the mean is within what two pipelines disagree by on the same method. k=8 is 1.51 points below, and that difference has a location: BoolQ at −6.27, the same task where k=8 loses 2.9 points to this repository's own Hadamard; the [KV probe](#the-kv-cache-is-not-what-nar-k8-loses-on-boolq) shows the cache is not the cause. Whether the g128 rows close the accuracy gap is being measured.
 
 One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.292 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin is larger but smaller than it first appeared: −0.759 at the matched-bit protocol E19 selects, not the −2.265 the default GPTQ protocol produces. That question is now settled on Llama-3.1-8B: over three seeds the k=max margin is −0.313 with a 90% interval of [−0.374, −0.252], an order of magnitude outside the 0.02 their ablation reports, so it is separable from run-to-run variation. The Qwen3 margin remains single-seed and carries no interval.
 
