@@ -633,10 +633,16 @@ def evaluate_command(args: argparse.Namespace) -> None:
     result_dir = workdir / "results" / MODEL_KEY
     split = getattr(args, "split", "test")
     tag = "" if split == "test" else f"_{split}"
-    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{tag}_ppl.json"
-    zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot.json"
-    need_ppl = args.metrics in ("ppl", "both")
-    need_zero = args.metrics in ("zero_shot", "both") and args.row in ZERO_SHOT_ROWS
+    tasks, metrics, task_suffix = e14.task_set(getattr(args, "task_set", "frozen"))
+    # Same runtime-only K grouping as E14; a non-default value gets its own files.
+    k_group = int(getattr(args, "k_token_group", e14.K_TOKEN_GROUP))
+    e14.K_TOKEN_GROUP = k_group
+    kv_suffix = "" if k_group == 32 else f"_kg{k_group}"
+    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{kv_suffix}{tag}_ppl.json"
+    zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot{kv_suffix}{task_suffix}.json"
+    need_ppl = args.metrics in ("ppl", "both") and task_suffix == ""
+    need_zero = args.metrics in ("zero_shot", "both") and (
+        args.row in ZERO_SHOT_ROWS or getattr(args, "all_rows_zero_shot", False))
     if (not need_ppl or ppl_path.exists()) and (not need_zero or zero_path.exists()):
         LOG.info("E19 row already complete: %s", args.row)
         return
@@ -720,7 +726,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
                             if split == "test" else
                             f"WikiText-2 raw train, {CALIBRATION_WINDOWS} windows from offset "
                             f"{CALIBRATION_OFFSET}, held out from the GPTQ calibration block"),
-                "split": split,
+                "split": split, "k_token_group": k_group,
                 "sequence_length": args.seq_len, "nll_dtype": "float32",
             })
             del tokens
@@ -737,7 +743,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
             lm = HFLM(pretrained=model, tokenizer=tokenizer, batch_size=args.batch_size,
                       max_batch_size=args.batch_size, max_length=args.seq_len)
             result = lm_eval.simple_evaluate(
-                model=lm, tasks=list(e14.TASKS), num_fewshot=0, batch_size=args.batch_size,
+                model=lm, tasks=list(tasks), num_fewshot=0, batch_size=args.batch_size,
                 max_batch_size=args.batch_size, task_manager=TaskManager(), cache_requests=False,
                 bootstrap_iters=0, log_samples=False, random_seed=args.seed,
                 numpy_random_seed=args.seed, torch_random_seed=args.seed,
@@ -745,12 +751,13 @@ def evaluate_command(args: argparse.Namespace) -> None:
             )
             if result is None:
                 raise RuntimeError("lm-eval returned no result")
-            task_rows = [{"task": task, "metric": e14.METRICS[task],
-                          "accuracy": float(result["results"][task][e14.METRICS[task]])}
-                         for task in e14.TASKS]
+            task_rows = [{"task": task, "metric": metrics[task],
+                          "accuracy": float(result["results"][task][metrics[task]])}
+                         for task in tasks]
             base.atomic_json(zero_path, {
                 **provenance, "tasks": task_rows,
                 "mean_accuracy": float(np.mean([row["accuracy"] for row in task_rows])),
+                "task_set": getattr(args, "task_set", "frozen"),
                 "harness_commit": e14.HARNESS_COMMIT,
                 "versions": e14._serializable(result.get("versions", {})),
             })
@@ -870,6 +877,18 @@ def finalize_command(args: argparse.Namespace) -> None:
     gap = (had_ppl - bf16_ppl) if (bf16_ppl is not None and had_ppl is not None) else None
     tiers = {"bf16": "reference", "hadamard_asym_g128": "B",
              "nar_k8_asym_g128": "C", "nar_k32_asym_g128": "C", "nar_kmax_asym_g128": "C"}
+    def eight_task_mean(row: str) -> float:
+        """Mean over the published eight, from the frozen and extra artifacts."""
+        values: dict[str, float] = {}
+        for suffix in ("", "_extra"):
+            path = result_dir / f"e19_{row}_seed{args.seed}_zero_shot{suffix}.json"
+            if path.exists():
+                values.update({item["task"]: float(item["accuracy"])
+                               for item in json.loads(path.read_text())["tasks"]})
+        picked = [values[task] for task in e14.EIGHT_TASKS if task in values]
+        return (sum(picked) / len(picked) if len(picked) == len(e14.EIGHT_TASKS)
+                else math.nan)
+
     for row, payload in present.items():
         # Recomputed rather than read back: rows written before the widths were
         # derived carry a hard-coded 4.25 for K and V, which is not the width of
@@ -892,6 +911,7 @@ def finalize_command(args: argparse.Namespace) -> None:
                 if gap not in (None, 0) and row not in ("bf16", "hadamard_asym_g128") else math.nan
             ),
             "zero_shot_mean": mean_zero if mean_zero is not None else math.nan,
+            "zero_shot_mean_eight_task": eight_task_mean(row),
             "zero_shot_delta_vs_hadamard": (
                 mean_zero - had_zero if (mean_zero is not None and had_zero is not None) else math.nan
             ),
@@ -963,6 +983,11 @@ def parser() -> argparse.ArgumentParser:
                           required=True)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
     evaluate.add_argument("--split", choices=("test", "calibration"), default="test")
+    evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen")
+    evaluate.add_argument("--k-token-group", type=int, default=e14.K_TOKEN_GROUP)
+    evaluate.add_argument("--all-rows-zero-shot", action="store_true",
+                          help="evaluate zero-shot for rows outside ZERO_SHOT_ROWS, "
+                               "which the eight-task mean needs for bf16 and nar_k32")
     decompose = sub.add_parser("decompose")
     sub.add_parser("finalize")
     return result

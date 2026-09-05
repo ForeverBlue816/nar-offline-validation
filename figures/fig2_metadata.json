@@ -1,4 +1,12 @@
 {
+  "duquant_offline_addendum": {
+    "completed_models": [
+      "llama32_3b"
+    ],
+    "missing_frozen_e1c_models": [
+      "llama31_8b"
+    ]
+  },
   "model": "llama32_3b",
   "site": "down",
   "layers": 28,

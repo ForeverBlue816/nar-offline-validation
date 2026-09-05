@@ -1,0 +1,34 @@
+{
+  "checked_at": "2026-09-05T07:49:55.474712+00:00",
+  "models": {
+    "llama32_3b": {
+      "repository_per_layer": {
+        "path": "/home/yanlongc/nar-offline-validation/results/llama32_3b/e1c_per_layer.csv",
+        "exists": true
+      },
+      "repository_done": {
+        "path": "/home/yanlongc/nar-offline-validation/results/llama32_3b/E1C_DONE.json",
+        "exists": true
+      },
+      "asset_done": {
+        "path": "/projects/nar/nar-validation/activations/llama32_3b/wide_cal_a/DONE.json",
+        "exists": true
+      }
+    },
+    "llama31_8b": {
+      "repository_per_layer": {
+        "path": "/home/yanlongc/nar-offline-validation/results/llama31_8b/e1c_per_layer.csv",
+        "exists": false
+      },
+      "repository_done": {
+        "path": "/home/yanlongc/nar-offline-validation/results/llama31_8b/E1C_DONE.json",
+        "exists": false
+      },
+      "asset_done": {
+        "path": "/projects/nar/nar-validation/activations/llama31_8b/wide_cal_a/DONE.json",
+        "exists": false
+      }
+    }
+  },
+  "model_rerun_allowed": false
+}

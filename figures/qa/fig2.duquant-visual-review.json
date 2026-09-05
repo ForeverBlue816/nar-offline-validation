@@ -1,0 +1,15 @@
+{
+  "panels": [
+    "fig2a",
+    "fig2b",
+    "fig2c",
+    "fig2"
+  ],
+  "visual_review": "All three series visible, original layout preserved; red DuQuant series is close to Hadamard in the down-site NMSE panel.",
+  "panel_a_png_byte_identical": true,
+  "original_e1c_csv_prefix_byte_identical": true,
+  "original_done_fields_unchanged": true,
+  "main_model": "llama32_3b",
+  "missing_offline_model": "llama31_8b",
+  "missing_input_detail": "No frozen E1c dump or E1c source table at the checked experiment roots."
+}

@@ -8,11 +8,60 @@ editable; dense scientific marks are embedded rasters.
 
 - Figure 1: fig1a through fig1g, each in SVG/PDF/transparent 300-dpi PNG.
   fig1_preview.png and fig1.pdf/svg compose the seven bare panels.
-- Figure 2: the existing fig2a/b/c and assembly, unchanged.
+- Figure 2: fig2a/b/c and assembly; Hadamard, DuQuant, and PrismQuant in all three panels.
 - Figure 3: fig3a (cloud), fig3b (energy), and fig3c (two-part range law).
   fig3c1 and fig3c2 are also exported independently in SVG/PDF/PNG.
   fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
   the side-by-side range-law comparison. No in-panel titles or footer captions.
+
+## Figure 2 DuQuant addendum
+
+Panels b/c now include the measured DuQuant-style diagnostic in #E63946.
+The 3B down-input main figure retains the existing Hadamard/PrismQuant
+measurements, capture values, sizes, axes, palette, and shared three-method
+legend. `fig2b.csv` and `fig2c.csv` each contain 84 plotted values with exact
+physical source-CSV line numbers and source method/site/layer keys.
+The displayed percentage reduction still compares PrismQuant with Hadamard.
+
+The 3B addendum applies E16's existing `e11._duquant_blocks` construction to
+all 8192 original E1c evaluation rows at both sites and all 28 layers.
+Block size is 128; seed is 20260902, with the original site/layer offsets.
+The descending-absmax zigzag permutation uses the frozen E11 channel scores,
+and the original seeded QR construction builds each block rotation.
+No model is loaded or rerun. Computation ran on an allocated CPU node;
+parallel exact bf16 row reads reduce network-file latency without changing
+which rows are evaluated. Hadamard was replayed on every layer/site to
+check agreement with its frozen range and NMSE. `experiment.quant_metrics`
+computes the exact same range, global relative error, and paired deltas.
+
+The 56 new `method=duquant` rows are appended to the original
+`results/llama32_3b/e1c_per_layer.csv`. Every byte of the existing CSV prefix
+is preserved. `E1C_DONE.json` records an independently timestamped
+`duquant_addendum`, construction/source hashes, row count, and checks.
+`e1c_duquant_sanity.csv` records every paired range comparison, sampled-row
+hash, permutation hash, and measured null-space capture. The renderer refuses
+to plot if the DuQuant addendum is incomplete or outside the requested
+paired Hadamard/PrismQuant bracket (relative numerical tolerance 2e-5).
+
+The requested 8B offline addendum is **not complete**: no frozen 8B
+`wide_cal_a` dump, `e1c_per_layer.csv`, or `E1C_DONE.json` exists in the checked
+repository or `/projects/nar/nar-validation` asset root. The existing 8B E16
+aggregates and E11 factors do not contain the individual activation rows
+needed to reconstruct range or NMSE. The missing-input record is in
+`fig2_duquant_inputs.json`. No 8B data is fabricated and no model rerun is
+substituted for the requested frozen-dump diagnostic. An existing 8B frozen
+dump location is needed to complete that part.
+
+```bash
+python figures/make_fig2.py
+python figures/verify_fig2_duquant.py
+python figures/audit_exports.py --figure 2
+```
+
+`measure_fig2_duquant.py` performs the offline addendum. It accepts the same
+asset and frozen-code roots as the Figure 4 measurement helper, supports CPU
+or CUDA, and resumes complete per-layer checkpoints. Original E1c summaries
+are retained; the addendum lives in the per-layer CSV and done metadata.
 
 ## Figure 4
 

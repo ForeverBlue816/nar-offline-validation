@@ -23,4 +23,4 @@ mkdir -p "$TMPDIR" "$code_dir/runs"
 # reference is measuring a different token stream and must not be reported.
 "$python_bin" "$code_dir/nar/e14_bf16_reference.py" \
     --workdir "$NAR_WORKDIR" --model "${NAR_E14_BF16_MODEL:-llama31_8b}" \
-    --seq-len 2048 --seed "${NAR_E14_BF16_SEED:-0}" --expect-chunks 141
+    --seq-len 2048 --seed "${NAR_E14_BF16_SEED:-0}" --expect-chunks ${NAR_E14_BF16_CHUNKS:-141}

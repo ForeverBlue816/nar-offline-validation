@@ -1,0 +1,36 @@
+{
+  "fig2a.text": {
+    "exit_code": 0
+  },
+  "fig2a.collision": {
+    "exit_code": 0
+  },
+  "fig2b.text": {
+    "exit_code": 0
+  },
+  "fig2b.collision": {
+    "exit_code": 0
+  },
+  "fig2c.text": {
+    "exit_code": 0
+  },
+  "fig2c.collision": {
+    "exit_code": 0
+  },
+  "fig2.text": {
+    "exit_code": 0
+  },
+  "fig2.collision": {
+    "exit_code": 0
+  },
+  "make_fig2.py.source": {
+    "raw_exit_code": 1,
+    "resolutions": [
+      {
+        "check_id": "FONT-FAMILY",
+        "resolution": "User explicitly requests serif. The static checker only accepts sans-serif names; actual PDFs use embedded DejaVu Serif and all glyph sizes pass."
+      }
+    ],
+    "unresolved_failures": 0
+  }
+}

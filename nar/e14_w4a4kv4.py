@@ -45,6 +45,27 @@ METRICS = {
     "arc_challenge": "acc_norm,none", "hellaswag": "acc_norm,none",
     "winogrande": "acc,none", "lambada_openai": "acc,none",
 }
+# Added so an eight-task mean comparable with the published W4A4KV4 tables can
+# be reported. The frozen six above are never re-run; these are evaluated on
+# their own and merged. acc_norm is used where the task defines it, matching the
+# convention of the six: boolq and social_iqa define only acc, openbookqa
+# defines both.
+EXTRA_TASKS = ("boolq", "openbookqa", "social_iqa")
+EXTRA_METRICS = {
+    "boolq": "acc,none", "openbookqa": "acc_norm,none", "social_iqa": "acc,none",
+}
+# The published eight-task mean: the five of the frozen suite that overlap it,
+# plus the three above. LAMBADA is in neither.
+EIGHT_TASKS = ("arc_easy", "arc_challenge", "boolq", "hellaswag",
+               "openbookqa", "piqa", "social_iqa", "winogrande")
+ALL_METRICS = {**METRICS, **EXTRA_METRICS}
+
+
+def task_set(name: str) -> tuple[tuple[str, ...], dict[str, str], str]:
+    """Tasks, their metrics, and the artifact suffix, for one evaluation set."""
+    if name == "extra":
+        return EXTRA_TASKS, EXTRA_METRICS, "_extra"
+    return TASKS, METRICS, ""
 QUAROT_COMMIT = "5008669b08c1f11f9b64d52d16fddd47ca754c5a"
 HARNESS_COMMIT = "b954108c9baaaa934b4ad842033b31a97ee30816"
 GROUP = 128
@@ -969,9 +990,17 @@ def evaluate_row(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / args.model
-    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}_ppl.json"
-    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot.json"
-    need_ppl = args.metrics in ("ppl", "both")
+    tasks, metrics, suffix = task_set(getattr(args, "task_set", "frozen"))
+    # The K quantizer's token group is a runtime property of the cache, not of
+    # any stored weight, so changing it needs no GPTQ rerun. A non-default value
+    # writes to its own artifact so the frozen K=32 rows are never overwritten.
+    global K_TOKEN_GROUP
+    k_group = int(getattr(args, "k_token_group", K_TOKEN_GROUP))
+    K_TOKEN_GROUP = k_group
+    kv_suffix = "" if k_group == 32 else f"_kg{k_group}"
+    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}{kv_suffix}_ppl.json"
+    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot{kv_suffix}{suffix}.json"
+    need_ppl = args.metrics in ("ppl", "both") and suffix == ""
     need_zero = args.metrics in ("zero_shot", "both")
     if (not need_ppl or ppl_path.exists()) and (not need_zero or zero_path.exists()):
         LOG.info("E14 row exists: %s %s", ppl_path, zero_path)
@@ -994,6 +1023,10 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "rotation_checkpoint": rotation, "ppl": ppl, "chunks": chunk_rows,
                 "dataset": "WikiText-2 raw test full contiguous token stream",
                 "sequence_length": args.seq_len, "chunks_evaluated": len(chunk_rows),
+                "k_token_group": k_group,
+                "k4_effective_bits_at_ctx2048": (
+                    (2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / k_group)
+                    + KV_RESIDUAL_LENGTH * 16) / 2048,
                 "seed": args.seed, "hardware": base.hardware_info(),
             })
             del tokens
@@ -1010,7 +1043,7 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 max_batch_size=args.batch_size, max_length=args.seq_len,
             )
             result = lm_eval.simple_evaluate(
-                model=lm, tasks=list(TASKS), num_fewshot=0,
+                model=lm, tasks=list(tasks), num_fewshot=0,
                 batch_size=args.batch_size, max_batch_size=args.batch_size,
                 task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
                 log_samples=False, random_seed=args.seed, numpy_random_seed=args.seed,
@@ -1020,15 +1053,21 @@ def evaluate_row(args: argparse.Namespace) -> None:
             if result is None:
                 raise RuntimeError("lm-eval returned no result")
             task_rows = [
-                {"task": task, "metric": METRICS[task],
-                 "accuracy": float(result["results"][task][METRICS[task]])}
-                for task in TASKS
+                {"task": task, "metric": metrics[task],
+                 "accuracy": float(result["results"][task][metrics[task]])}
+                for task in tasks
             ]
             base.atomic_json(zero_path, {
                 "model": model_key, "model_id": model_id, "row": args.row,
                 "rotation_checkpoint": rotation, "tasks": task_rows,
                 "mean_accuracy": float(np.mean([row["accuracy"] for row in task_rows])),
-                "mean_definition": "unweighted mean of six frozen accuracy metrics",
+                "mean_definition": (
+                    "unweighted mean of six frozen accuracy metrics" if suffix == ""
+                    else "unweighted mean of the three added accuracy metrics; the "
+                         "eight-task mean is formed in finalize from these plus five "
+                         "of the frozen six, excluding lambada_openai"),
+                "task_set": getattr(args, "task_set", "frozen"),
+                "k_token_group": k_group,
                 "seed": args.seed, "num_fewshot": 0, "harness_commit": HARNESS_COMMIT,
                 "batch_size": args.batch_size,
                 "task_versions": _serializable(result.get("versions", {})),
@@ -1072,15 +1111,26 @@ def finalize(args: argparse.Namespace) -> None:
             row_seeds = [0] if row_name == "quarot_released" else seeds
             ppls = []
             means = []
-            tasks = {task: [] for task in TASKS}
+            eight_means: list[float] = []
+            tasks = {task: [] for task in set(TASKS) | set(EXTRA_TASKS)}
             for seed in row_seeds:
                 ppl = _json(root / f"e14_{row_name}_seed{seed}_ppl.json")
                 zero = _json(root / f"e14_{row_name}_seed{seed}_zero_shot.json")
                 ppls.append(float(ppl["ppl"]))
                 means.append(float(zero["mean_accuracy"]))
                 values = {item["task"]: float(item["accuracy"]) for item in zero["tasks"]}
-                for task in TASKS:
-                    tasks[task].append(values[task])
+                # The three added tasks live in their own artifact so the frozen
+                # six are never re-run; absent, the eight-task mean is nan and
+                # the six-task columns are unaffected.
+                extra_path = root / f"e14_{row_name}_seed{seed}_zero_shot_extra.json"
+                if extra_path.exists():
+                    values.update({item["task"]: float(item["accuracy"])
+                                   for item in _json(extra_path)["tasks"]})
+                for task in tasks:
+                    tasks[task].append(values.get(task, float("nan")))
+                eight = [values[task] for task in EIGHT_TASKS if task in values]
+                eight_means.append(float(np.mean(eight)) if len(eight) == len(EIGHT_TASKS)
+                                   else float("nan"))
             if row_name in PAIRED_ROWS:
                 ppl_delta = np.asarray([ppls[index] - had_ppl[seed] for index, seed in enumerate(seeds)])
                 accuracy_delta = np.asarray([means[index] - had_accuracy[seed] for index, seed in enumerate(seeds)])
@@ -1101,7 +1151,10 @@ def finalize(args: argparse.Namespace) -> None:
                 "paired_ppl_ci90_low": float(ppl_delta.mean() - ppl_half),
                 "paired_ppl_ci90_high": float(ppl_delta.mean() + ppl_half),
                 **{task: float(np.mean(tasks[task])) for task in TASKS},
+                **{task: float(np.mean(tasks[task])) for task in EXTRA_TASKS},
                 "mean_accuracy": float(np.mean(means)),
+                "mean_accuracy_eight_task": float(np.mean(eight_means)),
+                "eight_task_definition": "unweighted mean of " + ", ".join(EIGHT_TASKS),
                 "paired_accuracy_delta_vs_hadamard": float(accuracy_delta.mean()),
                 "paired_accuracy_ci90_low": float(accuracy_delta.mean() - acc_half),
                 "paired_accuracy_ci90_high": float(accuracy_delta.mean() + acc_half),
@@ -1241,6 +1294,15 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--row", choices=ROWS, required=True)
     evaluate.add_argument("--batch-size", type=int, default=1)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
+    evaluate.add_argument("--k-token-group", type=int, default=K_TOKEN_GROUP,
+                          help="tokens per fp16 (scale, zero) pair in the per-channel K "
+                               "quantizer. 32 is the frozen KIVI setting; 128 makes each "
+                               "quantized K value 4.25 bits like V. Runtime only: no weight "
+                               "and no GPTQ output changes, and a non-default value writes "
+                               "to its own artifact.")
+    evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen",
+                          help="'extra' evaluates only boolq/openbookqa/social_iqa into a "
+                               "separate artifact; the frozen six are never re-run")
     gate = sub.add_parser("ppl-gate")
     gate.add_argument("--seeds", type=int, default=1)
     final = sub.add_parser("finalize")

@@ -12,8 +12,14 @@ The e/f/g signed traces each carry both axes, ticks and labels; equal sizes,
 common y limits, measured brackets, actual zero-point line in g. Transparent
 300-dpi PNGs accompany all seven PDF/SVG panels.
 
-2. Figure 2: preserve all 28 paired layer measurements and existing mean
-reductions. No invented uncertainty intervals or new data exclusions.
+2. Figure 2: preserve all 28 paired Hadamard/PrismQuant layer measurements and
+existing mean reductions. Add the E16 DuQuant-style rotation on frozen E1c
+rows, seed 20260902, group 128. All measured layer/site ranges must pass the
+paired bracket gate before plotting. Append original per-layer CSV rows
+without modifying its existing byte prefix. Three series in b/c share the
+existing palette and legend; each point has a source-CSV line. No invented
+uncertainty intervals or new data exclusions. The 8B addendum requires its
+currently missing frozen E1c dump; do not substitute a model rerun.
 
 3. Figure 3: restore the historical scatter implementation from 721f253.
 Panel a uses non-BOS tokens and frozen v1/v2 from the Figure-1 layer. Standardize
