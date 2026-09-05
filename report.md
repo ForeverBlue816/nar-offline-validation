@@ -481,7 +481,7 @@ Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`; the six tasks are 
 
 A second reason not to read the zero-shot deltas as a verdict on the full W4A4KV4 configuration is that the suite barely exercises the KV quantizer at all: measured against the same KIVI policy E14 uses, a majority of the six tasks' requests are short enough that no cache entry is ever quantized, and PIQA's never are. The measurement is in [E19's section](#the-zero-shot-suite-barely-exercises-the-kv-quantizer) and applies unchanged here.
 
-The protocol was amended to one seed, so no confidence interval is estimable for any of these deltas and none is quoted. **A two-seed extension is running on Llama-3.1-8B** to supply one: seeds 1 and 2 re-run the rotation calibration, GPTQ and both metrics for the three paired rows, which varies the random sign vectors inside each rotation, the randomised sketch that finds the eigendirections, and the GPTQ calibration sample. `rotation_dir` is now keyed by seed — it was not, and a second seed would have silently reused seed 0's factors, which is exactly the failure a multi-seed run exists to rule out. Seed 0's path is unchanged. Until those rows land, the −0.29171 margin here carries no interval, and [OffQ's ablation](#external-comparison--offq-arxiv-260607116) shows a structureless rotation landing within 0.02 PPL of a tuned one, so the margin's separability from run-to-run variation is genuinely open. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
+The protocol was amended to one seed, so no confidence interval was estimable when these rows were first reported. Two further seeds have since been run on Llama-3.1-8B and the intervals are in the next subsection. **A two-seed extension was run on Llama-3.1-8B** to supply one: seeds 1 and 2 re-run the rotation calibration, GPTQ and both metrics for the three paired rows, which varies the random sign vectors inside each rotation, the randomised sketch that finds the eigendirections, and the GPTQ calibration sample. `rotation_dir` is now keyed by seed — it was not, and a second seed would have silently reused seed 0's factors, which is exactly the failure a multi-seed run exists to rule out. Seed 0's path is unchanged. Until those rows land, the −0.29171 margin here carries no interval, and [OffQ's ablation](#external-comparison--offq-arxiv-260607116) shows a structureless rotation landing within 0.02 PPL of a tuned one, so the margin's separability from run-to-run variation is genuinely open. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
 
 ## 16-bit reference row
 
@@ -648,6 +648,31 @@ Test perplexities for all nine rows, against bf16 = 8.79606:
 The single best configuration measured anywhere in E19 is **NAR k=max under g128: 9.42002, a 7.1% degradation from bf16**, at 4.125 weight bits rather than 4.003. It is reported rather than claimed, because the protocol was not selected on it.
 
 No zero-shot accuracies were measured for the six protocol rows; only perplexity was run.
+
+## Seeds and intervals, Llama-3.1-8B
+
+Seeds 1 and 2 re-run the rotation calibration, GPTQ for all three rotations, and perplexity. The seed varies the random sign vectors inside each rotation, the randomized sketch that finds the eigendirections, and the GPTQ calibration sample, so it exercises every stochastic element the pipeline has. Only perplexity was re-run: the zero-shot suite is 65,719 loglikelihood requests per row, and every delta these seeds exist to bound is a perplexity delta.
+
+| row | seed 0 | seed 1 | seed 2 | mean | std across seeds |
+|---|---:|---:|---:|---:|---:|
+| Hadamard + asym g128 | 7.206381 | 7.221612 | 7.272643 | 7.233545 | 0.034705 |
+| NAR k=8 | 6.989838 | 6.943700 | 6.944959 | 6.959499 | 0.026282 |
+| NAR k=max | 6.914669 | 6.929104 | 6.917793 | 6.920522 | **0.007594** |
+
+| row | paired delta vs Hadamard | std of the delta | 90% CI | excludes zero |
+|---|---:|---:|---:|:--:|
+| NAR k=8 | −0.27405 | 0.05567 | [−0.36790, −0.18019] | yes |
+| NAR k=max | −0.31302 | 0.03622 | [−0.37409, −0.25195] | yes |
+
+**Both margins exclude zero at 90% on three seeds.** This closes the question [OffQ's ablation](#external-comparison--offq-arxiv-260607116) raised: a structureless rotation lands within 0.02 PPL of a tuned one there, and the NAR k=max interval's upper end is −0.252, an order of magnitude outside that.
+
+Two qualifications, both against the presentation rather than the result.
+
+**Pairing does not help here and is reported only because it is E14's stated statistic.** Computing the interval from independent row means instead gives [−0.34744, −0.20065] for k=8 and [−0.37292, −0.25313] for k=max — narrower, not wider. Pairing removes a common perturbation, and there is none: each rotation draws its own sign vectors from its own seed stream, so a seed does not move Hadamard and NAR together. The conclusion is the same under either statistic, which is the useful thing to know about it.
+
+**NAR k=max is markedly more stable across seeds than Hadamard**, 0.0076 against 0.0347, a factor of 4.6. That is not something the experiment was designed to test and it rests on three seeds, but it is the largest difference between the rows in this table other than the mean itself, and it points the same way as the perplexity: the data-dependent rotation is less at the mercy of which random signs it happens to draw.
+
+Only Llama-3.1-8B has multiple seeds. Llama-3.2-3B and Qwen3-8B-Base remain single-seed and their deltas carry no interval.
 
 ## The zero-shot suite barely exercises the KV quantizer
 
@@ -1566,6 +1591,6 @@ OffQ's Llama column is **Llama-3-8B**, not 3.1, and the paper does not state the
 
 **The quantizer is confounded in OffQ's own table and is not confounded here.** Their implementation section states that OffQ uses per-group asymmetric quantization at group 128 while the baselines "follow their official implementations using per-token asymmetric quantization". Part of the reported QuaRot → OffQ margin is therefore the quantizer rather than the offsetting. E14's `hadamard_asym_g128` row is precisely the control that separates them — plain Hadamard under OffQ's own quantizer — and it degrades 15.5%, already below their quoted ResQ at 16.4% and close to OffQ at 14.4%.
 
-One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.292 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin is larger but smaller than it first appeared: −0.759 at the matched-bit protocol E19 selects, not the −2.265 the default GPTQ protocol produces. A multi-seed run on Llama-3.1-8B is under way to put a confidence interval on the −0.292; until it lands, neither margin is asserted as separable from run-to-run variation.
+One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.292 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin is larger but smaller than it first appeared: −0.759 at the matched-bit protocol E19 selects, not the −2.265 the default GPTQ protocol produces. That question is now settled on Llama-3.1-8B: over three seeds the k=max margin is −0.313 with a 90% interval of [−0.374, −0.252], an order of magnitude outside the 0.02 their ablation reports, so it is separable from run-to-run variation. The Qwen3 margin remains single-seed and carries no interval.
 
 The comparison also inherits E19's protocol caveat in the other direction. OffQ's own rows use the ResQ codebase's GPTQ settings throughout, and this work has now shown that on Qwen3 the choice of GPTQ protocol moves a Hadamard baseline by 1.25 PPL — more than most of the method-versus-method gaps in their Table 1. Nothing here suggests their ordering is wrong, but the same sensitivity applies to it and is not controlled for there either.

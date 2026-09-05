@@ -18,6 +18,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True TMPDIR="$NAR_WORKDIR/tmp
 mkdir -p "$TMPDIR" "$code_dir/runs"
 model="${NAR_SEED_MODEL:-llama31_8b}"
 artifact_root="${NAR_E14_ARTIFACT_ROOT:-$NAR_WORKDIR/artifacts/e14}"
+metrics="${NAR_SEED_METRICS:-ppl}"
 
 run() { "$python_bin" "$code_dir/nar/e14_w4a4kv4.py" --workdir "$NAR_WORKDIR" \
         --artifact-root "$artifact_root" "$@"; }
@@ -35,10 +36,21 @@ for seed in ${NAR_SEEDS:-1 2}; do
         echo "===== seed $seed: GPTQ $rotation ====="
         run --seed "$seed" gptq --model "$model" --rotation "$rotation" --calibration-seed "$seed"
     done
+    # Perplexity only by default. The zero-shot suite is 65,719 loglikelihood
+    # requests per row, about five hours, and every headline delta this run
+    # exists to put an interval on is a perplexity delta. Set NAR_SEED_METRICS
+    # to "both" to add accuracy at roughly ten times the cost.
     for row in hadamard_asym_g128 nar_k8_asym_g128 nar_kmax_asym_g128; do
-        echo "===== seed $seed: evaluate $row ====="
-        run --seed "$seed" evaluate --model "$model" --row "$row" --metrics both
+        echo "===== seed $seed: evaluate $row ($metrics) ====="
+        run --seed "$seed" evaluate --model "$model" --row "$row" --metrics "$metrics"
     done
 done
-echo "===== finalize across seeds ====="
-run --seed 0 finalize --seeds $(( 1 + $(echo ${NAR_SEEDS:-1 2} | wc -w) )) || true
+# finalize reads a zero_shot artifact for every seed, which a perplexity-only
+# run does not produce, so the paired interval is computed separately.
+if [ "$metrics" = both ]; then
+    echo "===== finalize across seeds ====="
+    run --seed 0 finalize --seeds $(( 1 + $(echo ${NAR_SEEDS:-1 2} | wc -w) )) || true
+fi
+echo "===== paired perplexity interval ====="
+"$python_bin" "$code_dir/nar/e14_seed_interval.py" --workdir "$NAR_WORKDIR" \
+    --model "$model" --seeds 0 ${NAR_SEEDS:-1 2} || true

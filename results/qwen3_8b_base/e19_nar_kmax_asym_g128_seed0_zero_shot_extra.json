@@ -1,0 +1,89 @@
+{
+  "components": {
+    "activation": true,
+    "kv": true,
+    "weight": true
+  },
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "context": 2048,
+    "key": 5.171875,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 4.43359375,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 4.003226902173913
+  },
+  "fold_dtype": "float32",
+  "git_commit": "4f2cba9dae3cd7c8ad6dc0d41c183fd23d1800a3",
+  "gptq_act_order": false,
+  "gptq_config_hash": "840ce7663403eb99",
+  "gptq_protocol": "default",
+  "gptq_weight_groupsize": -1,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5",
+    "slurm_job_id": "140702",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "mean_accuracy": 0.5857798645085697,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "ranks": {
+    "r1_rank": 32,
+    "r1_slots": 32,
+    "r2_rank": 1,
+    "r4_rank": 96,
+    "r4_slots": 96
+  },
+  "rotation_calibration_hash": "54b748928067c5b6",
+  "rotation_checkpoint": "nar_kmax",
+  "round_trip_max_relative_error": 7.159657684496779e-07,
+  "row": "nar_kmax_asym_g128",
+  "seed": 0,
+  "task_set": "extra",
+  "tasks": [
+    {
+      "accuracy": 0.8318042813455657,
+      "metric": "acc,none",
+      "task": "boolq"
+    },
+    {
+      "accuracy": 0.424,
+      "metric": "acc_norm,none",
+      "task": "openbookqa"
+    },
+    {
+      "accuracy": 0.5015353121801432,
+      "metric": "acc,none",
+      "task": "social_iqa"
+    }
+  ],
+  "versions": {
+    "boolq": 2.0,
+    "openbookqa": 1.0,
+    "social_iqa": 0.0
+  },
+  "weight_fold_audit": {
+    "embedding_centering": false,
+    "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+    "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+    "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+    "r4": "per-layer down-input rotation folded into down_proj rows",
+    "tied_embeddings_materialized_before_final_norm_fusion": false
+  }
+}

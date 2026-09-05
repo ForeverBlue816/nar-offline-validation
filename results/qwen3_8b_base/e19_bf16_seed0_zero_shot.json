@@ -1,0 +1,90 @@
+{
+  "components": {
+    "activation": false,
+    "kv": false,
+    "weight": false
+  },
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0
+  },
+  "fold_dtype": "float32",
+  "git_commit": "4f2cba9dae3cd7c8ad6dc0d41c183fd23d1800a3",
+  "gptq_config_hash": "840ce7663403eb99",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5",
+    "slurm_job_id": "140702",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "mean_accuracy": 0.7332240034565247,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "rotation_calibration_hash": null,
+  "rotation_checkpoint": null,
+  "round_trip_max_relative_error": 0.0,
+  "row": "bf16",
+  "seed": 0,
+  "task_set": "frozen",
+  "tasks": [
+    {
+      "accuracy": 0.7932535364526659,
+      "metric": "acc_norm,none",
+      "task": "piqa"
+    },
+    {
+      "accuracy": 0.8000841750841751,
+      "metric": "acc_norm,none",
+      "task": "arc_easy"
+    },
+    {
+      "accuracy": 0.5691126279863481,
+      "metric": "acc_norm,none",
+      "task": "arc_challenge"
+    },
+    {
+      "accuracy": 0.7862975502887871,
+      "metric": "acc_norm,none",
+      "task": "hellaswag"
+    },
+    {
+      "accuracy": 0.728492501973165,
+      "metric": "acc,none",
+      "task": "winogrande"
+    },
+    {
+      "accuracy": 0.7221036289540074,
+      "metric": "acc,none",
+      "task": "lambada_openai"
+    }
+  ],
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "hellaswag": 1.0,
+    "lambada_openai": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "weight_fold_audit": {
+    "folded": false
+  }
+}
