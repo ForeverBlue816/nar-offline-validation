@@ -1,4 +1,4 @@
-# PrismQuant manuscript figures — revision 3
+# PrismQuant manuscript figures — revision 4
 
 All scientific drawing uses plain Python/matplotlib. The method's display name
 is PrismQuant; existing CSV/code keys retain `nar` / `nar_kmax`. Outputs include
@@ -24,26 +24,28 @@ its historical range-law observations remain in `fig3_range_law.csv`.
 Height map: `#F1FAEE → #A8DADC → #457B9D → #1D3557`.
 Every 3D segment is colored by its local maximum; unlike the previous renderer,
 a high point does not determine the color of an entire token-long polyline.
-Figure 1a/b use separate normalizations; c/d share a single complete scale.
-The normalization is written on each panel. Three back panes, thin borders,
-and light pane grids are enabled; view is elevation 22°, azimuth −60° and
-box aspect 2.6:1.2:0.85. All tokens/channels/groups remain represented.
+Figure 1a/b share the 0–40 height and color scale; c/d share the 0–8.92
+height and color scale. Panels a–d are bare 3D exports with axes, ticks, labels,
+and surface only. Three back panes, thin borders, and dense light pane grids are
+enabled. Row 1 uses elev=22, azim=-60; row 2 uses elev=18, azim=-62. The box
+aspect is 2.6:1.2:0.85. All tokens/channels/groups remain represented.
 
 Actual font: DejaVu Serif. Ticks 6 pt, labels/annotations 7 pt, legends 6.5 pt;
-upright axis labels. Standalone panels omit LaTeX panel letters and method
-titles. Complete assemblies add reading-order labels. Individual 3D panels
-are 3.2 × 2.45 in; traces 1.8 × 1.52 in; Figure 2 panels 1.85 × 1.72 in.
-PNG panel exports are 600 dpi. Complete Figure 1 retains the physical sizes
-of its individual panels. Its PDF/SVG compose original matplotlib exports
-without scaling the source text; its 300-dpi PNG is a review preview.
+upright axis labels. Standalone panels omit LaTeX panel letters and method titles. Figure 1a–d
+also omit every scale/statistic annotation so slide captions can be added
+externally. Individual 3D panels are 3.2 × 2.45 in and export transparent
+SVG/PDF plus 300-dpi transparent PNG; traces remain 1.8 × 1.52 in with their
+existing exports. Figure 2 panels are 1.85 × 1.72 in. The complete Figure 1
+PDF/SVG and 300-dpi PNG are annotation-free review compositions.
 
 ## Figure 1: correctness findings and resolution
 
 **The arrays and labels were not swapped.** The old whole-polyline max coloring
 made dense regions and isolated peaks hard to compare. More fundamentally,
 a smaller mean range does not imply smaller maxima or a smoother surface.
-The new plot preserves the actual distributions and computes mean annotations
-inside the renderer from its own array using float64 accumulation.
+The new plot preserves the actual distributions. Median, mean, and 95th
+percentile are computed from each complete array with float64 accumulation and
+stored in `fig1_metadata.json`; they are not printed on panels a–d.
 
 A further real bug was found: the old c/d upper limit was Hadamard's maximum
 6.389837, whereas PrismQuant contains a maximum of 8.919331. The revised common

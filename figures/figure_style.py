@@ -68,7 +68,13 @@ def clean_2d_axis(ax: plt.Axes) -> None:
     ax.tick_params(labelsize=6.0)
 
 
-def save_panel(fig: plt.Figure, outbase: Path, dpi: int = 600, **alignment) -> None:
+def save_panel(
+    fig: plt.Figure,
+    outbase: Path,
+    dpi: int = 600,
+    transparent: bool = False,
+    **alignment,
+) -> None:
     """Exact physical dimensions, editable vector text, render-time alignment."""
     from audit_panel_alignment import require_matplotlib_panel_alignment
     qa = outbase.parent / "qa"
@@ -76,9 +82,9 @@ def save_panel(fig: plt.Figure, outbase: Path, dpi: int = 600, **alignment) -> N
     require_matplotlib_panel_alignment(
         fig, json_out=qa / (outbase.name + ".alignment.json"),
         tolerance_pt=1.5, gutter_tolerance_pt=1.5, strict=True, **alignment)
-    fig.savefig(outbase.with_suffix(".svg"), dpi=dpi)
+    fig.savefig(outbase.with_suffix(".svg"), dpi=dpi, transparent=transparent)
     svg_path = outbase.with_suffix(".svg")
     svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
-    fig.savefig(outbase.with_suffix(".pdf"), dpi=dpi)
-    fig.savefig(outbase.with_suffix(".png"), dpi=dpi)
+    fig.savefig(outbase.with_suffix(".pdf"), dpi=dpi, transparent=transparent)
+    fig.savefig(outbase.with_suffix(".png"), dpi=dpi, transparent=transparent)
     plt.close(fig)

@@ -1,17 +1,18 @@
-# Figure contracts — revision 3
+# Figure contracts — revision 4
 
 Python/matplotlib; serif; ticks 6 pt, axes and annotations 7 pt, legend 6.5 pt.
-Editable SVG/PDF and 600-dpi PNG, exact physical sizes. Standalone panels omit
-letters/titles for LaTeX; assembled previews supply reading-order captions.
+Editable SVG/PDF and exact physical sizes. Figure 1a–d use transparent
+SVG/PDF and 300-dpi transparent PNG; their preview is annotation-free.
 
 1. Figure 1 (image plate + quantitative traces): rotation suppresses raw
 outliers; PrismQuant further reduces group range. a/b compare magnitudes in
-identical numerical channel windows, with independent height scales; c/d
-compare every paired token/group range with shared scales; e/g/f describe a
-single token. These are a selected strong case, not a population estimate.
-The landscape mean must come from the drawn array; f/g must equal the exact
-selected c/d cells. A smaller mean does not guarantee a smaller maximum or
-less roughness. All samples retained, including isolated PrismQuant peaks.
+identical numerical channel windows and one shared 0–40 height/color scale;
+c/d compare every paired token/group range on one shared 0–8.92 scale; e/g/f
+describe a single token. Panels a–d contain only axes, ticks, axis labels, and
+the surface. Row 2 uses elev=18, azim=-62 and 0.9-pt surface lines. Range
+median/mean/95th percentile belong in metadata only. The landscape statistics
+must come from the drawn arrays; f/g must equal the exact selected c/d cells.
+All samples are retained, including isolated PrismQuant peaks.
 
 2. Figure 2 (quantitative grid): layerwise null-space capture accompanies lower
 range and activation NMSE. Preserve all 28 paired layers and the existing

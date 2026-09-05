@@ -105,16 +105,16 @@
   "row1_z_limits": {
     "raw": [
       0.0,
-      39.75
+      40.0
     ],
     "hadamard": [
       0.0,
-      3.2732126712799072
+      40.0
     ]
   },
   "row2_shared_z_limits": [
     0.0,
-    8.919330596923828
+    8.92
   ],
   "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
   "range_averaging": {
@@ -148,8 +148,8 @@
   "correctness_resolution": {
     "labels_or_arrays_swapped": false,
     "old_rendering_problem": "Whole polylines were colored by their maximum; opaque near lines obscure far lines. Mean range does not determine maximum or roughness.",
-    "fix": "Color every segment by local height on shared c/d normalization; annotations computed inside renderer from its values array.",
-    "old_z_clipping": "PrismQuant maximum 8.9193306 exceeded old common upper limit 6.3898373; common upper limit now covers both arrays."
+    "fix": "Color every segment by local height with a fixed row-wise normalization; put range summaries in metadata only.",
+    "old_z_clipping": "PrismQuant maximum 8.9193306 exceeded the older 6.3898373 limit; the shared 0\u20138.92 scale covers both arrays."
   },
   "geometry_covariance": {
     "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
@@ -165,8 +165,11 @@
   "rendered_panel_statistics": {
     "c": {
       "method": "Hadamard",
-      "mean_from_plotted_array": 1.764014204069099,
-      "max": 6.389837265014648,
+      "median": 1.6807422637939453,
+      "mean": 1.764014204069099,
+      "percentile_95": 2.5171279907226562,
+      "maximum": 6.389837265014648,
+      "count": 32768,
       "shape": [
         512,
         64
@@ -174,8 +177,11 @@
     },
     "d": {
       "method": "PrismQuant",
-      "mean_from_plotted_array": 0.8404273132182425,
-      "max": 8.919330596923828,
+      "median": 0.7972100973129272,
+      "mean": 0.8404273132182425,
+      "percentile_95": 1.2450511455535889,
+      "maximum": 8.919330596923828,
+      "count": 32768,
       "shape": [
         512,
         64
@@ -199,5 +205,71 @@
     "zero": "#F1FAEE",
     "pane_edge": "#C9D6DF",
     "grid": "#DCE4EA"
+  },
+  "range_statistics": {
+    "hadamard": {
+      "median": 1.6807422637939453,
+      "mean": 1.764014204069099,
+      "percentile_95": 2.5171279907226562,
+      "maximum": 6.389837265014648,
+      "count": 32768
+    },
+    "prismquant_kmax": {
+      "median": 0.7972100973129272,
+      "mean": 0.8404273132182425,
+      "percentile_95": 1.2450511455535889,
+      "maximum": 8.919330596923828,
+      "count": 32768
+    }
+  },
+  "row1_data_maxima": {
+    "raw": 39.75,
+    "hadamard": 3.2732126712799072
+  },
+  "row1_shared_z_limits": [
+    0.0,
+    40.0
+  ],
+  "rendering_contract": {
+    "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
+    "background": "transparent SVG/PDF/PNG",
+    "png_dpi": 300,
+    "row1": {
+      "z_limits": [
+        0.0,
+        40.0
+      ],
+      "normalization": [
+        0.0,
+        40.0
+      ],
+      "view": {
+        "elevation": 22,
+        "azimuth": -60
+      },
+      "linewidth_pt": 0.7
+    },
+    "row2": {
+      "z_limits": [
+        0.0,
+        8.92
+      ],
+      "normalization": [
+        0.0,
+        8.92
+      ],
+      "view": {
+        "elevation": 18,
+        "azimuth": -62
+      },
+      "linewidth_pt": 0.9
+    },
+    "dense_grid": {
+      "channel_interval": 250,
+      "token_interval": 100,
+      "group_interval": 10,
+      "row1_z_interval": 5,
+      "row2_z_interval": 1
+    }
   }
 }

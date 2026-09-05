@@ -1,7 +1,12 @@
 {
   "status": "PASS",
   "checks": [
-    "range annotations recomputed independently from stored plotted arrays",
+    "bare a\u2013d panels contain axes/ticks/labels only",
+    "transparent 300-dpi a\u2013d PNG exports",
+    "shared 0\u201340 row-1 limits and normalization",
+    "shared 0\u20138.92 row-2 limits and normalization",
+    "dense grid contract recorded",
+    "median/mean/95th-percentile independently recomputed in metadata",
     "full c/d extrema inside common normalization",
     "identical numerical channel windows",
     "trace ranges equal selected landscape cells",
@@ -64,7 +69,7 @@
     ],
     "fig1": [
       6.600000169542101,
-      7.299999660915798
+      7.0
     ],
     "fig2": [
       6.399999830457899,

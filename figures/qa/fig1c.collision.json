@@ -1,17 +1,17 @@
 {
   "pdf": "/home/yanlongc/nar-offline-validation/figures/fig1c.pdf",
   "auditable": true,
-  "verdict": "PASS",
+  "verdict": "REVIEW REQUIRED",
   "page_count": 1,
-  "visible_text_box_count": 15,
-  "text_trace_count": 15,
-  "stroke_path_count": 28,
-  "filled_region_count": 5,
+  "visible_text_box_count": 14,
+  "text_trace_count": 14,
+  "stroke_path_count": 50,
+  "filled_region_count": 3,
   "image_region_count": 1,
   "summary": {
     "fail": 0,
-    "warn": 0,
-    "contained_fill_overlays": 0,
+    "warn": 3,
+    "contained_fill_overlays": 1,
     "contained_image_overlays": 0
   },
   "thresholds": {
@@ -19,5 +19,78 @@
     "min_overlap_ratio": 0.05,
     "clipping_tolerance_pt": 0.5
   },
-  "findings": []
+  "findings": [
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "group",
+      "text_bbox": [
+        81.63818359375,
+        130.64085388183594,
+        103.58527374267578,
+        141.3218231201172
+      ],
+      "other_text": null,
+      "other_bbox": [
+        36.8471565246582,
+        88.58203887939453,
+        199.0597686767578,
+        131.69711303710938
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "40",
+      "text_bbox": [
+        112.8897933959961,
+        127.39588928222656,
+        120.52317810058594,
+        133.39588928222656
+      ],
+      "other_text": null,
+      "other_bbox": [
+        36.8471565246582,
+        88.58203887939453,
+        199.0597686767578,
+        131.69711303710938
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "400",
+      "text_bbox": [
+        189.06312561035156,
+        126.572021484375,
+        200.51251220703125,
+        132.572021484375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        36.8471565246582,
+        88.58203887939453,
+        199.0597686767578,
+        131.69711303710938
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    }
+  ]
 }

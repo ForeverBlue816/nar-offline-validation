@@ -13,21 +13,57 @@ def main():
     m=json.loads((HERE/'fig1_metadata.json').read_text())
     arrays=np.load(HERE/'fig1_source_arrays.npz')
     assert m['channel_windows']['raw']==m['channel_windows']['hadamard_and_prismquant']
-    zmax=m['row2_shared_z_limits'][1]
-    for letter,method,key in [('c','hadamard','hadamard_range'),('d','nar_kmax','nar_kmax_range')]:
-        x=arrays[key]
-        assert x.shape==(512,64) and np.isfinite(x).all() and x.min()>=0
-        assert float(x.max())<=zmax
-        actual=float(x.mean(dtype=np.float64))
-        assert abs(actual-m['rendered_panel_statistics'][letter]['mean_from_plotted_array'])<1e-12
-        with pymupdf.open(HERE/f'fig1{letter}.pdf') as doc:
-            text=doc[0].get_text()
-            assert f'mean range {actual:.3f}' in text
-        trace=arrays[f'trace_{method}']
-        row=m['hero']['token_position']-m['token_window']['position_start']
-        cell=x[row,m['prismquant_receiving_group']]
-        np.testing.assert_allclose(np.ptp(trace),cell,rtol=1e-6)
-        assert m['trace_zero_points'][method]==float(np.float16(trace.min()))
+    assert m["row1_shared_z_limits"] == [0.0, 40.0]
+    assert m["row1_z_limits"] == {"raw": [0.0, 40.0], "hadamard": [0.0, 40.0]}
+    assert m["row2_shared_z_limits"] == [0.0, 8.92]
+    assert m["rendering_contract"]["row1"]["normalization"] == [0.0, 40.0]
+    assert m["rendering_contract"]["row2"]["normalization"] == [0.0, 8.92]
+    assert m["rendering_contract"]["row2"]["view"] == {"elevation": 18, "azimuth": -62}
+    assert m["rendering_contract"]["dense_grid"] == {
+        "channel_interval": 250,
+        "token_interval": 100,
+        "group_interval": 10,
+        "row1_z_interval": 5,
+        "row2_z_interval": 1,
+    }
+    forbidden = ("local height scale", "shared height scale", "mean range", "Hadamard", "PrismQuant")
+    for letter in "abcd":
+        with pymupdf.open(HERE / f"fig1{letter}.pdf") as doc:
+            text = doc[0].get_text()
+            assert not any(token in text for token in forbidden), (letter, text)
+            assert "token" in text
+            assert ("channel" if letter in "ab" else "group") in text
+        from PIL import Image
+        with Image.open(HERE / f"fig1{letter}.png") as image:
+            assert image.mode == "RGBA", (letter, image.mode)
+            assert image.size == (960, 735), (letter, image.size)
+            assert image.getpixel((0, 0))[3] == 0, letter
+    for letter, trace_method, statistics_method, key in (
+        ("c", "hadamard", "hadamard", "hadamard_range"),
+        ("d", "nar_kmax", "prismquant_kmax", "nar_kmax_range"),
+    ):
+        values = arrays[key]
+        assert values.shape == (512, 64)
+        assert np.isfinite(values).all() and values.min() >= 0
+        assert float(values.max()) <= m["row2_shared_z_limits"][1]
+        expected = {
+            "median": float(np.median(values)),
+            "mean": float(values.mean(dtype=np.float64)),
+            "percentile_95": float(np.quantile(values, 0.95)),
+            "maximum": float(values.max()),
+            "count": int(values.size),
+        }
+        actual = m["range_statistics"][statistics_method]
+        for statistic, value in expected.items():
+            if isinstance(value, float):
+                assert abs(actual[statistic] - value) < 1e-12
+            else:
+                assert actual[statistic] == value
+        trace = arrays[f"trace_{trace_method}"]
+        row = m["hero"]["token_position"] - m["token_window"]["position_start"]
+        cell = values[row, m["prismquant_receiving_group"]]
+        np.testing.assert_allclose(np.ptp(trace), cell, rtol=1e-6)
+        assert m["trace_zero_points"][trace_method] == float(np.float16(trace.min()))
     f3=json.loads((HERE/'fig3_metadata.json').read_text())
     assert f3['layer']==m['layer'] and f3['token_window']==m['token_window']
     score=arrays['geometry_scores']; covariance=np.cov(score,rowvar=False,ddof=1)
@@ -55,7 +91,10 @@ def main():
             assert doc[0].get_fonts()
     for name in ['fig1a','fig1b','fig1c','fig1d']:
         np.testing.assert_allclose(sizes[name],[3.2,2.45],atol=1e-6)
-    result={'status':'PASS','checks':['range annotations recomputed independently from stored plotted arrays',
+    result={'status':'PASS','checks':['bare a–d panels contain axes/ticks/labels only',
+        'transparent 300-dpi a–d PNG exports','shared 0–40 row-1 limits and normalization',
+        'shared 0–8.92 row-2 limits and normalization','dense grid contract recorded',
+        'median/mean/95th-percentile independently recomputed in metadata',
         'full c/d extrema inside common normalization','identical numerical channel windows',
         'trace ranges equal selected landscape cells','zero point equals fp16 minimum',
         'Figure 3 eigenvalues independently recovered from centered score covariance',
