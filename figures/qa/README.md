@@ -1,73 +1,60 @@
-# Final rendered QA — revision 4
+# Final rendered QA — revision 5
 
-Numerical regression checks: PASS (`numerical-verification.json`).
-All 15 PDFs (12 standalone panels + 3 full figures) have editable text, embedded
-fonts, and a rendered minimum size of 6 pt. No PDF has a clipping, text–text,
-or text–stroke FAIL in the final audit. Figure 1a/b have zero WARNs; c/d each
-have three transparent-raster bounding-box WARNs for `group`, `40`, and `400`.
-Final-size review confirms all six labels are clear. All complete-figure
-comparable-panel alignment gates pass at 1.5 pt with no exemptions.
+Independent scientific/export verification: PASS (numerical-verification.json).
+The saved range and trace arrays, rank-256 energy table, and range-law table
+remain identical to commit 91b2ffe (final-data-integrity.json).
 
-Figure 1's composed PDF has 16 ambiguous fill/image-edge WARNs. Each was
-reviewed against the actual rendered PDF, not merely its separate PNG preview:
+All 18 audited PDFs have embedded fonts, editable text, and no rendered text
+below 6 pt. The final audit reports zero clipping, text-text, or text-stroke
+FAILs. Figure 1a/b/e/f/g and Figure 3a/b/c1/c2 have zero WARNs. Figure 2 remains
+unchanged. Render-time alignment checks pass; the two range-law subpanels
+have identical comparable plot rectangles. The energy plot reserves room
+for direct labels and is not treated as geometrically comparable to the cloud.
 
-- 11 fill-edge WARNs concern a/b channel labels, c/d group labels, all three
-  range numbers, and the four token-600 tick labels. Source-page background
-  and pane bounding rectangles in the composed PDF create these candidate
-  overlaps; the actual text is clear and does not cross a visible edge.
-- 5 image-edge WARNs concern a/b channel labels, d's group label, d's group-40
-  tick and d's token-400 tick. The rectangular bounds of the rasterized 3D
-  marks include transparent regions. These text items occupy clear space
-  outside the visible data marks. Panels a/b have zero WARNs; c/d carry only the three reviewed\n  transparent-raster boundary WARNs documented above.
+## Resolved visual-review findings
 
-The raw composed-PDF verdict remains REVIEW REQUIRED; the 16 items are
-resolved by the documented visual inspection above. No global tolerance was
-relaxed, no WARN was recast as an automatic PASS, and no data was masked.
+The unmodified collision checker retains the following ambiguous warnings:
 
-## Panel-by-panel review
+- Figure 1c/d: three fill-edge WARNs each for group, group tick 40, and token
+  tick 400. Transparent raster/pane bounds intersect the text rectangles;
+  the actual visible surfaces and grid lines do not obscure the labels.
+- Combined Figure 1: 12 fill/image-edge WARNs involving transparent surface
+  bounds and channel/group/token labels. These are composed bounds rather
+  than actual opaque marks at the text locations.
+- Combined Figure 3c: three image-edge WARNs; combined Figure 3: six. These
+  concern labels next to the transparent point-cloud and inset raster
+  rectangles. All original Figure 3 standalone panels have zero WARNs.
 
-All panels use the requested method mapping and 6/7/6.5-pt typography.
-No stochastic uncertainty interval is inferred for these fixed diagnostic
-measurements. Data exclusions are the inherited, disclosed layer/window
-selection and BOS rule; no extra rows are removed for appearance.
+The actual composed PDFs were rasterized and visually inspected after the
+last render. All flagged labels are clear. Raw REVIEW REQUIRED verdicts are
+retained, with this visual resolution; no tolerance was relaxed and no data
+were masked to suppress the audit.
 
-| Panel | Evidence role / statistic | Unit and spread | Visual and rendered result |
-|---|---|---|---|
-| 1a | Raw activation magnitude | 512 tokens × 2048 channels; every value | Bare panel; shared 0–40 scale; dense box grid; pass |
-| 1b | Hadamard magnitude | Same token/channel counts; rotated coordinates | Same 0–40 scale/ticks; pale floor is intentional; pass |
-| 1c | Hadamard quantizer range | 32768 token/group cells; median/mean/p95 in metadata | Shared 0–8.92 scale; solid mid-blue field; pass after visual review |
-| 1d | PrismQuant quantizer range | Same cells; median/mean/p95 in metadata | Pale floor and retained dark extrema; pass after visual review |
-| 1e | Raw signed trace | One token × 128 channels; min/max bracket | Actual range, shared signed-value scale; pass |
-| 1f | Hadamard signed trace | One selected cell of 1c | Exact trace/cell agreement; bracket avoids zero baseline; pass |
-| 1g | PrismQuant signed trace | One selected cell of 1d | Actual fp16(min) zero point, not mean; pass |
-| 2a | Null-space energy fraction | All 28 layer rows for each of 3 methods | Shared figure legend separated from curves; pass |
-| 2b | Mean group range | 28 paired layer rows | Original mean reduction 25.30%; pass |
-| 2c | Activation NMSE | 28 paired layer rows | Original mean reduction 40.41%; pass |
-| 3a | Calibrated 2D alignment illustration | Covariance ellipse, 512 scores, 2-s.d. semiaxes; not a CI | Both complete ellipses and all score extents inside common axes; measured ranges separately scaled; pass |
-| 3b | Spectral energy capacity | 256 measured ranks in each of 3 layers | All curves, distinguishable line styles, no 64-slot marker; pass |
+## Scientific checks
 
-## Source preflight interpretation
+- Recomputed all 6145 candidate peak-density counts from the stored full-width
+  channel medians; start 1254, count 21, earliest of 183 ties.
+- Confirmed the selected raw/Hadamard values fit the independent 0–40/0–4
+  axes, and every c/d value fits the shared 0–10 axis.
+- Recomputed median, mean, and 95th-percentile ranges from complete arrays.
+- Confirmed exact trace/cell equality, fp16(min) zero-point, complete ticks,
+  both axis labels, equal trace sizes, and transparent 300-dpi Figure 1 PNGs.
+- Confirmed all 8064 layer-27 projection rows exclude BOS, use an orthonormal
+  frozen basis, and lie inside the recorded expanded frame.
+- Confirmed PrismQuant's unit direction is aligned with v1 to numerical
+  tolerance; the measured Hadamard in-plane length is 0.0150056.
+- Recomputed x=sqrt(1-f), the pooled fit, R²=0.8613894973, and all 2912 source
+  counts. Source populations are disjoint between c1 and c2; both label the
+  fit as pooled, and both main plots include their complete observations.
 
-The unmodified source checker is designed for Nature-style defaults and
-recognizes only sans-serif font names. The requested figure uses serif.
-Its FONT-FAMILY finding is therefore a documented user-instruction override;
-we verified the actual embedded DejaVu Serif font. The checker was not edited.
+## Style overrides and reproduction
 
-Source-closure reports inspect each plot script together with its imported
-shared style/export helper, avoiding false reports of missing SVG/PDF export,
-editable-text configuration, or alignment integration. No other source FAIL
-remains. `summary.json` records the raw checker return codes and resolution.
-Other source warnings are reviewed as follows: TIFF is not requested
-(transparent 300-dpi PNG and vector PDF/SVG are supplied for Figure 1a–d);
-the complete Figure 1 PNG is a 300-dpi preview; requested standalone widths
-differ from generic Nature
-89/183-mm defaults; and a deterministic random-sign seed does not imply
-multiple-seed aggregates needing error bars. Full raw data are preserved in
-the committed derived arrays, with an independent covariance/range check.
+The user explicitly chose upright serif, 6/7/6.5-pt typography and the supplied
+palette. Generic Nature font/width/TIFF defaults are not the design authority.
+The source checker itself is unchanged; its serif FONT-FAMILY finding is
+resolved in summary.json. Other source diagnostics are advisory for the
+requested export formats and dimensions.
 
-## Re-run
-
-`python figures/audit_exports.py` runs installed source/PDF auditors and writes
-fresh reports. Supply `--qa-tools` if their installation is elsewhere.
-`python figures/verify_figures.py` independently checks scientific linkage and
-export completeness. Regeneration already runs the bundled alignment gate.
+Run python figures/verify_figures.py and python figures/audit_exports.py after
+regeneration. The latter refreshes source-closure, PDF text, collision, and
+composition reports. See figures/README.md for the frozen-data commands.

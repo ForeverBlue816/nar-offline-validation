@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "baseline_commit": "91b2ffe",
+  "unchanged_arrays": [
+    "hadamard_range",
+    "nar_kmax_range",
+    "token_axis",
+    "trace_raw",
+    "trace_hadamard",
+    "trace_nar_kmax",
+    "geometry_scores",
+    "geometry_covariance_eigenvalues"
+  ],
+  "unchanged_tables": [
+    "fig3_eigenspace_r256.csv",
+    "fig3_range_law.csv"
+  ],
+  "changed_data": "Only requested Figure 1 channel-window slices and Figure 3 layer-27 projection refresh"
+}

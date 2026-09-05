@@ -1,0 +1,16 @@
+Nature Figure Rendered Collision Audit
+pdf: /home/yanlongc/nar-offline-validation/figures/fig3c.pdf
+pages: 1
+visible text boxes: 37
+stroke paths: 52
+
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'Pooled R² = 0.86'
+  text bbox: (61.513919830322266, 14.02791976928711, 121.44129180908203, 21.02791976928711)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '1.00'
+  text bbox: (62.37641143798828, 24.230297088623047, 75.73379516601562, 30.230297088623047)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0.85'
+  text bbox: (62.37641143798828, 51.471500396728516, 75.73379516601562, 57.471500396728516)
+
+summary: 0 fail, 3 warn, 0 contained fill overlays, 2 contained image overlays
+verdict: REVIEW REQUIRED
+note: contained overlays can be intentional; WARN findings need final-size visual review

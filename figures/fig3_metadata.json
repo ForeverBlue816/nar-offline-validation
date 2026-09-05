@@ -2,77 +2,76 @@
   "model": "llama32_3b",
   "site": "down_input",
   "layer": 27,
-  "token_window": {
-    "sequence_index": 118,
-    "position_start": 160,
-    "position_stop_exclusive": 672,
-    "rows": 512,
-    "bos_excluded": true
+  "restored_from_commit": "721f253",
+  "geometry": {
+    "model": "llama32_3b",
+    "site": "down_input",
+    "layer": 27,
+    "arrows": {
+      "hadamard": {
+        "projection_v1": 0.014288674108684063,
+        "projection_v2": -0.0045826914720237255,
+        "in_plane_length": 0.015005574561655521,
+        "norm": 1.0
+      },
+      "nar": {
+        "projection_v1": 0.9999948740005493,
+        "projection_v2": 1.605070849564072e-07,
+        "in_plane_length": 0.9999948740005493,
+        "norm": 0.9999998807907104
+      }
+    },
+    "target_group": 0,
+    "dimensions": 8192,
+    "group_size": 128,
+    "projection_rows": 8064,
+    "projection_stride": 32,
+    "bos_exclusion_rule": "all projection token positions start at 32; BOS position 0 excluded",
+    "basis": "frozen E1c uncentered second-moment v1/v2, same basis and factor as Figure 1",
+    "hadamard_definition": "full-width random-sign Hadamard, identical to Figure 1",
+    "arrow_definition": "unit group-DC direction pulled back through each orthogonal transform; sign oriented toward positive v1",
+    "base_seed": 20260902,
+    "source": "frozen wide_cal_a; no eigensolver or model rerun",
+    "cloud": {
+      "initial_percentile_limits": [
+        [
+          -2.7937827974849965,
+          -0.8747241015570117
+        ],
+        [
+          2.527154840497252,
+          6.133074457460065
+        ]
+      ],
+      "axis_limits": [
+        [
+          -3.9695884615079087,
+          6.7671226710294885
+        ],
+        [
+          -2.578381569653816,
+          19.904577810609812
+        ]
+      ],
+      "rows": 8064,
+      "inside_frame": 8064,
+      "projection_mean": [
+        18.227300990215774,
+        -0.193240206309809
+      ],
+      "projection_sd_ddof0": [
+        5.270287337108155,
+        9.472277245981612
+      ],
+      "bounds_rule": "0.5-99.5 percentiles expanded to all observations, plus 8% padding",
+      "arrow_scale": 1.0
+    }
   },
-  "covariance": {
-    "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
-    "top_two_eigenvalues": [
-      97.52831250027364,
-      57.37043599625988
-    ],
-    "rows": 512,
-    "centered_pc1_cosine_with_prism_receiving_dc": 0.10168235749006271,
-    "frozen_second_moment_v1_dc_energy_fraction": 1.0,
-    "raw_pc1_cosine_with_group_dc": 0.013828529768916017
-  },
-  "ellipse_semiaxes_two_sd": [
-    19.751284768366197,
-    15.148654857281537
-  ],
-  "angles_degrees": [
-    134.20765835298585,
-    45.0
-  ],
-  "rotation_degrees": -89.20765835298585,
-  "axis_limits_shared": [
-    -34.04339284472629,
-    64.6892829329064
-  ],
-  "initial_percentile_limits_0_5_to_99_5": [
-    [
-      -24.932924003196785,
-      -11.009701092402725
-    ],
-    [
-      41.74905636249908,
-      42.06471621845723
-    ]
-  ],
-  "cloud_counts": {
-    "before": 512,
-    "after": 512,
-    "inside_frame": [
-      512,
-      512
-    ],
-    "excluded": 0
-  },
-  "ranges": {
-    "before_raw": 11.65625,
-    "after_prismquant": 0.7634278535842896,
-    "raw_group": 25,
-    "prismquant_group": 0,
-    "sequence": 118,
-    "token": 416,
-    "statistic": "max-minus-min of the 128 actual channel values in Figure 1e/g",
-    "bracket_scale_shared": [
-      0,
-      12.0
-    ]
-  },
-  "interpretation": "Calibrated 2D rigid-rotation illustration: true centered-covariance eigenvalues from the same layer/window, leading ellipse axis aligned exactly with (1,1) after rotation. This is not an exact projection of the full k=max transform; its mapped centered PC1 DC cosine is recorded separately. Brackets are independently scaled measured group ranges, not ellipse projection widths.",
-  "covariance_vs_energy": "Panel a uses centered sample covariance on the 512-token Figure 1 window. Panel b uses the existing uncentered second moment over 262016 non-BOS calibration rows; these have different estimands and populations.",
   "panels": [
-    "a_before",
-    "a_after",
-    "b"
+    "a",
+    "b",
+    "c"
   ],
-  "removed_panel": "c (range-law data retained; no c exports)",
   "palette": {
     "prismquant": "#1D3557",
     "prismquant_light": "#457B9D",
@@ -85,5 +84,52 @@
     "pane_edge": "#C9D6DF",
     "grid": "#DCE4EA"
   },
-  "font_family_resolved": "DejaVu Serif"
+  "panel_size_inches": [
+    2.65,
+    2.35
+  ],
+  "range_law_points": 2912,
+  "point_counts": {
+    "E1c activations": 2520,
+    "E7 V cache": 280,
+    "E20 multi-slot": 112
+  },
+  "font_family_resolved": "DejaVu Serif",
+  "fit_intercept": 0.05980223276470587,
+  "fit_slope": 0.8665147718600141,
+  "fit_r_squared": 0.8613894973078933,
+  "corner_inset": true,
+  "inset_limits": [
+    0.85,
+    1.0
+  ],
+  "fit_definition": "pooled ordinary least squares with intercept; all source rows included",
+  "main_axis_limits": [
+    [
+      0.0,
+      1.02
+    ],
+    [
+      0.0,
+      1.0474256430291942
+    ]
+  ],
+  "range_law_subpanels": {
+    "fig3c1": {
+      "families": [
+        "E1c activations"
+      ],
+      "points": 2520,
+      "inset": true
+    },
+    "fig3c2": {
+      "families": [
+        "E7 V cache",
+        "E20 multi-slot"
+      ],
+      "points": 392,
+      "inset": true
+    }
+  },
+  "fit_display": "same pooled fit in both views; not a per-family fit"
 }

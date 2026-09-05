@@ -1,10 +1,22 @@
 Nature Figure Rendered Collision Audit
 pdf: /home/yanlongc/nar-offline-validation/figures/fig3.pdf
 pages: 1
-visible text boxes: 50
-stroke paths: 77
+visible text boxes: 66
+stroke paths: 83
 
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'Pooled R² = 0.86'
+  text bbox: (61.513919830322266, 183.22792053222656, 121.44129180908203, 190.22792053222656)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'Hadamard'
+  text bbox: (62.124481201171875, 14.62014389038086, 99.68743896484375, 21.62014389038086)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0.015'
+  text bbox: (62.124481201171875, 22.44826889038086, 82.16009521484375, 29.44826889038086)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '1.00'
+  text bbox: (62.37641143798828, 193.4302978515625, 75.73379516601562, 199.4302978515625)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0.85'
+  text bbox: (62.37641143798828, 220.6715087890625, 75.73379516601562, 226.6715087890625)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'PrismQuant'
+  text bbox: (132.94943237304688, 14.62014389038086, 175.21441650390625, 21.62014389038086)
 
-summary: 0 fail, 0 warn, 3 contained fill overlays, 0 contained image overlays
-verdict: PASS
+summary: 0 fail, 6 warn, 17 contained fill overlays, 3 contained image overlays
+verdict: REVIEW REQUIRED
 note: contained overlays can be intentional; WARN findings need final-size visual review

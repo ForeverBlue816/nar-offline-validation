@@ -1,123 +1,110 @@
-# PrismQuant manuscript figures — revision 4
+# PrismQuant manuscript figures — revision 5
 
-All scientific drawing uses plain Python/matplotlib. The method's display name
-is PrismQuant; existing CSV/code keys retain `nar` / `nar_kmax`. Outputs include
-individual panels, complete PDF/SVG figures, PNG previews, reproducible scripts,
-source tables/arrays, metadata, captions, and rendered QA reports.
+Scientific plots are generated with Python/matplotlib. User-specified presentation
+choices take precedence over journal-style defaults. SVG/PDF axes and text remain
+editable; dense scientific marks are embedded rasters.
 
-Current panels: `fig1a`–`fig1g`, `fig2a`–`fig2c`, `fig3a`–`fig3b`.
-`fig3a` contains the two adjacent geometric views. Figure 3c has been removed;
-its historical range-law observations remain in `fig3_range_law.csv`.
+## Current exports
 
-## Fixed palette and typography
+- Figure 1: fig1a through fig1g, each in SVG/PDF/transparent 300-dpi PNG.
+  fig1_preview.png and fig1.pdf/svg compose the seven bare panels.
+- Figure 2: the existing fig2a/b/c and assembly, unchanged.
+- Figure 3: fig3a (cloud), fig3b (energy), and fig3c (two-part range law).
+  fig3c1 and fig3c2 are also exported independently in SVG/PDF/PNG.
+  fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
+  the side-by-side range-law comparison. No in-panel titles or footer captions.
 
-| Role | Color |
-|---|---|
-| PrismQuant; axes and text | `#1D3557` (Deep Space Blue) |
-| Hadamard | `#A8DADC` (Frosted Blue) |
-| Raw / identity | `#457B9D` (Steel Blue) |
-| DuQuant | `#E63946` (Strawberry Red) |
-| Light fills / floor | `#F1FAEE` (Honeydew) |
-| Pane edges | `#C9D6DF` |
-| Pane grid | `#DCE4EA` |
+## Figure 1
 
-Height map: `#F1FAEE → #A8DADC → #457B9D → #1D3557`.
-Every 3D segment is colored by its local maximum; unlike the previous renderer,
-a high point does not determine the color of an entire token-long polyline.
-Figure 1a/b share the 0–40 height and color scale; c/d share the 0–8.92
-height and color scale. Panels a–d are bare 3D exports with axes, ticks, labels,
-and surface only. Three back panes, thin borders, and dense light pane grids are
-enabled. Row 1 uses elev=22, azim=-60; row 2 uses elev=18, azim=-62. The box
-aspect is 2.6:1.2:0.85. All tokens/channels/groups remain represented.
+All contiguous, stride-1, 2048-channel windows are ranked by the number of
+channels whose median absolute activation over the 512 displayed tokens exceeds
+1.0. The best count is 21. Of 183 tied best windows, the earliest starts at 1254;
+a and b therefore both show channels 1254–3301. The metadata records the rule,
+count, tie handling, and all 6145 candidate-window counts are preserved in the
+source NPZ together with all 8192 channel medians. This is a density-selected
+illustration, not an average-case estimate.
 
-Actual font: DejaVu Serif. Ticks 6 pt, labels/annotations 7 pt, legends 6.5 pt;
-upright axis labels. Standalone panels omit LaTeX panel letters and method titles. Figure 1a–d
-also omit every scale/statistic annotation so slide captions can be added
-externally. Individual 3D panels are 3.2 × 2.45 in and export transparent
-SVG/PDF plus 300-dpi transparent PNG; traces remain 1.8 × 1.52 in with their
-existing exports. Figure 2 panels are 1.85 × 1.72 in. The complete Figure 1
-PDF/SVG and 300-dpi PNG are annotation-free review compositions.
+Panel a uses z/color limits 0–40; the selected window's maximum is 18.125.
+Panel b uses its own 0–4 z/color scale. Both use elev=22, azim=-60 and identical
+channel/token ticks. Panels c/d use the same 0–10 height/color scale, elev=18,
+azim=-62, and 0.9-pt lines. The aspect ratio is 2.6:1.2:0.85. Grids are denser
+than the labeled ticks. No values are clipped, subsampled, or smoothed.
 
-## Figure 1: correctness findings and resolution
+Panels a–d contain only axes, tick labels, axis labels, and data. Median, mean,
+and 95th-percentile ranges are recorded in fig1_metadata.json. The 32768 range
+cells and all three signed traces remain numerically identical to revision 4.
+The f/g traces are exact token-416, group-0 cells of c/d; e is raw group 25.
 
-**The arrays and labels were not swapped.** The old whole-polyline max coloring
-made dense regions and isolated peaks hard to compare. More fundamentally,
-a smaller mean range does not imply smaller maxima or a smoother surface.
-The new plot preserves the actual distributions. Median, mean, and 95th
-percentile are computed from each complete array with float64 accumulation and
-stored in `fig1_metadata.json`; they are not printed on panels a–d.
+Panels e/f/g have equal 2.1-by-1.75-inch canvases, common y limits, y ticks
+−5/0/5, and x ticks 0/32/64/96/127. Every trace has both “signed value” and
+“channel in group” labels. Range brackets remain; g retains the actual affine
+INT4 offset fp16(min x) as its dashed zero-point line. Panels a–d remain
+3.2 by 2.45 inches.
 
-A further real bug was found: the old c/d upper limit was Hadamard's maximum
-6.389837, whereas PrismQuant contains a maximum of 8.919331. The revised common
-limit covers **both** datasets. No peaks are clipped or removed to make the
-method appear flatter. `fig1_metadata.json` records this finding explicitly.
+## Figure 3
 
-**The two range summaries have different populations.** c/d average all 32,768
-cells (512 tokens × 64 groups) from sequence 118, tokens 160–671, layer-27
-`down_input`. Their means are 1.764014 / 0.840427, a 52.36% reduction.
-f/g are the single token-416, group-0 cells of those exact arrays, with ranges
-1.707881 / 0.763428. The script asserts trace/cell equality. The raw trace is
-group 25, selected by the frozen leading direction's peak loading. Full E1c
-means (1.914824 / 0.885016) are a third, separately labeled population used
-for site/layer selection. No means are silently substituted for trace ranges.
+make_fig3.py was restored from the scatter implementation at commit 721f253,
+then updated. Its ellipse replacement is no longer rendered.
 
-Both a/b now use numerical channel indices 2176–4223 with equal width 2048;
-b is in the rotated basis. All 8192 channels contribute to the c/d group ranges.
-The former trace label also called a group mean a zero point: the new dashed
-line uses the actual experimental quantizer offset `fp16(min(values))`.
-Group means and quantizer offsets are separately recorded in metadata.
+Panel a projects 8064 non-BOS, stride-32 tokens from layer 27 onto the same
+frozen uncentered second-moment v1/v2 basis used by Figure 1. Each coordinate
+is centered and divided by its own sample standard deviation (ddof=0).
+The 0.5–99.5 percentile frame is expanded to the full observed extrema and
+padded 8%, so every point lies inside it. Metadata records both frames.
 
-## Figure 2: preserve measurements
+The arrows show the unit receiving-group DC direction pulled back through the
+full-width Hadamard and frozen PrismQuant transforms, projected onto v1/v2.
+Their lengths are 0.0150056 and 0.9999949. Arrow coordinates use unit-direction
+cosines overlaid on the standardized token cloud; their lengths are not token
+standard deviations. Their common plotting multiplier is 1.0. The sign of a
+null direction is arbitrary and is oriented toward positive v1.
 
-All 28 layers and original mean reductions (25.30% range, 40.41% NMSE) are
-unchanged. The 6.5-pt boxed legend sits in the entire figure's upper-right
-margin, clear of every curve, with labels PrismQuant / Hadamard / DuQuant.
-DuQuant remains the requested display name for `duquant_style` source rows;
-this is the prior simplified diagnostic, not the official complete algorithm.
+Panel b retains the existing rank-256 energy measurements for layers 1/13/27.
+The x axis is logarithmic from 1 to 256. Layer 27 uses deep blue; the other two
+use frosted blue with solid/dashed lines and direct endpoint labels.
 
-## Figure 3: calibrated geometry, with its limits stated
+Panel c is split by source population: fig3c1 contains all 2520 E1c activation
+points; fig3c2 contains all 280 E7 V-cache and 112 E20 multi-slot points. Both
+use identical axes, the dashed identity line, and the same thin pooled OLS fit.
+Both explicitly label “Pooled R² = 0.86”: this is not a fit estimated within
+either subpanel. The exact pooled fit is y = 0.0598022 + 0.8665148 x,
+R² = 0.8613894973, with x = sqrt(1-f). Small upper-left insets enlarge the
+0.85–1.0 corner. Every point remains in its main plot; inset filtering only
+selects the zoom region. The measured range-law table is unchanged.
 
-The previous geometry came from layer 1; the new geometry uses the same
-layer-27 window as Figure 1. The **centered** sample covariance eigenvalues
-are 97.5283125 and 57.3704360; the 2-s.d. semiaxes are calculated from them.
-Their modest aspect ratio is a measured fact: the ellipse is not elongated
-artificially. Every score is inside the shared frame; percentile-initialized
-bounds expand to complete score/ellipse extents, with zero discarded rows.
+Standalone Figure 3 panels are 2.65 by 2.35 inches with 600-dpi PNGs.
+Combined review PNGs are 300 dpi. The paired fig3c canvas is 5.3 by 2.35 inches.
 
-The 2D rigid rotation illustrates exact alignment with the free (1,1)
-direction. It is not claimed to be an exact projection of the full k=max
-transform. The mapped centered-PC1 DC cosine and the frozen uncentered-v1 DC
-energy are both recorded, so these different directions cannot be confused.
-Actual raw and PrismQuant group ranges use their own common 0–12 scale below
-the ellipses. Bracket lengths are measured values and are **not** the width of
-the 2D covariance ellipse. All numerical/calibration choices are in
-`fig3_metadata.json`. Figure 3b preserves the measured uncentered rank-256
-energy curves from layers 1/13/27; no 64-slot line is drawn.
+## Palette and type
 
-## Reproduce and audit
+Height map: #F1FAEE → #A8DADC → #457B9D → #1D3557.
+Text/PrismQuant: #1D3557; raw/cloud/E7: #457B9D; Hadamard/E20: #A8DADC.
+Pane edges: #C9D6DF; grids: #DCE4EA. All labels use upright DejaVu Serif,
+6-pt ticks, 7-pt axis labels, and 6.5-pt legends.
 
-Use the existing Python environment with numpy, pandas, torch, matplotlib,
-Pillow, and PyMuPDF. Re-render from the committed derived arrays:
+## Reproduce
+
+Use the existing environment with numpy, pandas, torch, matplotlib, Pillow,
+and PyMuPDF. From the committed derived arrays and tables:
 
 ```bash
 python figures/make_fig1.py --reuse-data
-python figures/make_fig2.py
 python figures/make_fig3.py
 python figures/verify_figures.py
 python figures/audit_exports.py
 ```
 
-To recompute the Figure 1 arrays from the frozen experiment artifacts, replace
-its command with `python figures/make_fig1.py --workdir "$NAR_WORKDIR"`.
-No model run or rotation training is needed. `fig1_source_arrays.npz` stores
-all plotted landscape/trace arrays and centered covariance scores; the
-original large activation dumps remain outside Git. Selection rules are
-unchanged and recorded in metadata. These diagnostic figures do not imply
-new seed-level confidence intervals.
+To refresh from the frozen activation artifacts, first run:
 
-Render-time alignment reports and final PDF text/collision audit results are
-in `qa/`; human panel-by-panel review is summarized in `qa/README.md`.
+```bash
+python figures/make_fig1.py --workdir "$NAR_WORKDIR"
+python figures/prepare_fig3.py --workdir "$NAR_WORKDIR" --geometry-only
+python figures/make_fig3.py
+```
 
-The legacy layer-1 projection CSV and its geometry metadata are retained solely
-as historical source provenance; the current Figure 3 reads the layer-27
-arrays and `fig3_metadata.json`.
+The geometry-only route reuses the frozen layer-27 basis and factor. It does
+not rerun a model or eigensolver. The old fig3_eigvecs_layer1.npz is retained as
+historical provenance and is not used by the current renderer.
+
+Scientific linkage, data-integrity comparisons, and rendered export audits are
+in qa/. Figure 2's measurements and files are preserved.

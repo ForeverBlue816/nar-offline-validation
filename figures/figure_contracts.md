@@ -1,35 +1,29 @@
-# Figure contracts — revision 4
+# Figure contracts — revision 5
 
-Python/matplotlib; serif; ticks 6 pt, axes and annotations 7 pt, legend 6.5 pt.
-Editable SVG/PDF and exact physical sizes. Figure 1a–d use transparent
-SVG/PDF and 300-dpi transparent PNG; their preview is annotation-free.
+User-requested bare panels; upright serif, 6-pt ticks, 7-pt axis labels,
+6.5-pt legends. Editable SVG/PDF text. No in-panel titles or footer captions.
 
-1. Figure 1 (image plate + quantitative traces): rotation suppresses raw
-outliers; PrismQuant further reduces group range. a/b compare magnitudes in
-identical numerical channel windows and one shared 0–40 height/color scale;
-c/d compare every paired token/group range on one shared 0–8.92 scale; e/g/f
-describe a single token. Panels a–d contain only axes, ticks, axis labels, and
-the surface. Row 2 uses elev=18, azim=-62 and 0.9-pt surface lines. Range
-median/mean/95th percentile belong in metadata only. The landscape statistics
-must come from the drawn arrays; f/g must equal the exact selected c/d cells.
-All samples are retained, including isolated PrismQuant peaks.
+1. Figure 1: density-selected activation illustration. Rank every contiguous
+2048-wide window by count(median |x| > 1), earliest start breaks ties. Both a/b
+use the same window and camera, with independent z/color scales 0–40 and 0–4.
+Panels c/d share 0–10 limits and normalization, camera 18/−62, and 0.9-pt lines.
+No sample removal or clipping. Report range statistics in metadata only.
+The e/f/g signed traces each carry both axes, ticks and labels; equal sizes,
+common y limits, measured brackets, actual zero-point line in g. Transparent
+300-dpi PNGs accompany all seven PDF/SVG panels.
 
-2. Figure 2 (quantitative grid): layerwise null-space capture accompanies lower
-range and activation NMSE. Preserve all 28 paired layers and the existing
-estimators. Descriptive diagnostic rows, no invented uncertainty intervals.
-Shared boxed figure legend occupies a dedicated top strip clear of data.
+2. Figure 2: preserve all 28 paired layer measurements and existing mean
+reductions. No invented uncertainty intervals or new data exclusions.
 
-3. Figure 3 (schematic-led composite): explain alignment with a free direction
-and show how much energy a limited number of directions captures. a contains
-two equal-scale covariance ellipses using the SAME layer/window as Figure 1;
-b preserves the three measured rank-256 energy curves. Remove c from the
-current manuscript exports but retain its source measurements in Git.
-The 2D ellipse is a calibrated rigid-rotation illustration, not an exact
-projection of the 8192D transform. Centered covariance and uncentered second
-moment are distinct. Measured 128-channel ranges have their own linear scale;
-never equate those to the 2D ellipse width. All such distinctions go in metadata
-and the caption. Axis bounds include full transformed score extents and the
-complete 2-s.d. ellipses, using percentile bounds only as an initial estimate.
+3. Figure 3: restore the historical scatter implementation from 721f253.
+Panel a uses non-BOS tokens and frozen v1/v2 from the Figure-1 layer. Standardize
+token projections; retain all observations within percentile-initialized,
+full-extrema-expanded bounds. Overlay measured unit-direction projections,
+recording their distinct coordinate meaning. Panel b retains all rank-256
+spectra, log-x, direct labels, and no slot threshold line. Panel c comprises
+two standalone source-population views, E1c versus E7/E20, with shared axes,
+identity lines, and explicitly pooled OLS fit. Every scientific point remains
+in the main plots. Insets only enlarge the declared 0.85–1.0 corner.
 
-QA: measured comparable plot rectangles within 1.5 pt; source, PDF glyph-size
-and collision audits; inspect each rendered panel and complete composition.
+QA independently recomputes selection/statistics/fit, confirms full cloud and
+range-law bounds, checks PDF glyph sizes and overlaps, and reviews final renders.

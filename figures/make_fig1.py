@@ -172,10 +172,12 @@ def build_data(repo: Path, workdir: Path) -> tuple[dict[str, np.ndarray], dict[s
     )
     n = raw.shape[1]
     v1_peak_channel = int(v1.abs().argmax())
-    raw_start, raw_stop = group_aligned_channel_window(v1_peak_channel, n)
-    rotated_start = raw_start
-    rotated_start = (rotated_start // GROUP) * GROUP
-    rotated_stop = rotated_start + LANDSCAPE_CHANNELS
+    channel_medians = np.median(raw.abs().numpy(), axis=0)
+    cumulative = np.r_[0, np.cumsum(channel_medians > 1.0)]
+    window_counts = cumulative[LANDSCAPE_CHANNELS:] - cumulative[:-LANDSCAPE_CHANNELS]
+    raw_start = int(np.argmax(window_counts))  # Earliest start wins a density tie.
+    raw_stop = raw_start + LANDSCAPE_CHANNELS
+    rotated_start, rotated_stop = raw_start, raw_stop
 
     had_groups = hadamard.reshape(LANDSCAPE_TOKENS, -1, GROUP)
     prism_groups = prism.reshape(LANDSCAPE_TOKENS, -1, GROUP)
@@ -236,7 +238,7 @@ def build_data(repo: Path, workdir: Path) -> tuple[dict[str, np.ndarray], dict[s
             "raw": [raw_start, raw_stop - 1],
             "hadamard_and_prismquant": [rotated_start, rotated_stop - 1],
             "width": LANDSCAPE_CHANNELS,
-            "raw_window_rule": "group-aligned window centered on the largest-|loading| channel of frozen v1",
+            "raw_window_rule": "maximize count of channels with median absolute activation > 1.0 over the plotted tokens; all stride-1 2048-wide windows; earliest start breaks ties",
             "rotated_window_rule": "same numerical channel interval as raw; coordinates are in the rotated basis",
         },
         "group_window": [0, n // GROUP - 1],
@@ -266,6 +268,16 @@ def build_data(repo: Path, workdir: Path) -> tuple[dict[str, np.ndarray], dict[s
         },
         "row2_shared_z_limits": [0.0, float(arrays["hadamard_range"].max())],
         "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
+    }
+    arrays["all_channel_median_magnitudes"] = channel_medians
+    arrays["peak_density_window_counts"] = window_counts
+    metadata["peak_density_selection"] = {
+        "start_channel": raw_start, "stop_channel_exclusive": raw_stop,
+        "qualifying_channel_count": int(window_counts[raw_start]),
+        "median_threshold_strictly_greater_than": 1.0,
+        "candidate_windows": int(len(window_counts)), "stride": 1,
+        "tied_best_windows": int(np.sum(window_counts == window_counts.max())),
+        "tie_break": "smallest start channel", "tokens": metadata["token_window"],
     }
     for method, key in (("hadamard", "hadamard_range"), ("nar_kmax", "nar_kmax_range")):
         measured = float(np.ptp(arrays[f"trace_{method}"]))
@@ -334,7 +346,7 @@ def style_3d(
     ax.set_yticklabels(token_tick_labels)
     ax.set_zticks(z_ticks)
     ax.set_zticklabels(z_tick_labels)
-    ax.set_xlabel(xlabel, fontsize=7, labelpad=2, fontstyle="normal")
+    ax.set_xlabel(xlabel, fontsize=7, labelpad=5 if xlabel == "channel" else 2, fontstyle="normal")
     ax.set_ylabel("token", fontsize=7, labelpad=0, fontstyle="normal")
     ax.set_zlabel("")
     ax.tick_params(labelsize=6, pad=-1, length=1.8, width=0.45)
@@ -477,8 +489,8 @@ def render_trace(
         "hadamard": PALETTE["hadamard"],
         "nar_kmax": PALETTE["prismquant"],
     }
-    fig, ax = plt.subplots(figsize=(1.8, 1.52))
-    fig.subplots_adjust(left=0.28, right=0.84, bottom=0.28, top=0.96)
+    fig, ax = plt.subplots(figsize=(2.1, 1.75))
+    fig.subplots_adjust(left=0.25, right=0.82, bottom=0.27, top=0.95)
     x = np.arange(GROUP)
     color = colors[method]
     ax.hlines(0.0, 0, 127, color=PALETTE["pane_edge"], lw=0.5, zorder=0)
@@ -491,15 +503,12 @@ def render_trace(
     add_range_bracket(ax, values, color)
     ax.set_xlim(0, 154)
     ax.set_ylim(*y_limits)
-    ax.set_xticks([0, 127])
-    if ylabel:
-        ax.set_ylabel("signed value", fontsize=7.0)
-    else:
-        ax.set_yticklabels([])
-    if xlabel:
-        ax.set_xlabel("channel in group", fontsize=7.0)
+    ax.set_xticks([0, 32, 64, 96, 127])
+    ax.set_yticks([-5, 0, 5])
+    ax.set_ylabel("signed value", fontsize=7.0)
+    ax.set_xlabel("channel in group", fontsize=7.0)
     clean_2d_axis(ax)
-    save_panel(fig, outbase)
+    save_panel(fig, outbase, dpi=300, transparent=True)
 
 
 def write_summary_csvs(arrays: dict[str, np.ndarray], metadata: dict[str, Any], here: Path) -> None:
@@ -550,8 +559,8 @@ def make_preview(here: Path) -> None:
     places = {
         "a": (0, 4.55, 3.2, 2.45), "b": (3.4, 4.55, 3.2, 2.45),
         "c": (0, 1.95, 3.2, 2.45), "d": (3.4, 1.95, 3.2, 2.45),
-        "e": (0.1, 0.13, 1.8, 1.52), "f": (2.4, 0.13, 1.8, 1.52),
-        "g": (4.7, 0.13, 1.8, 1.52),
+        "e": (0.0, 0.08, 2.1, 1.75), "f": (2.25, 0.08, 2.1, 1.75),
+        "g": (4.5, 0.08, 2.1, 1.75),
     }
     fig = plt.figure(figsize=(width, height), facecolor="white")
     plot_axes = []
@@ -678,22 +687,22 @@ def main() -> None:
         "raw": float(arrays["raw_magnitude"].max()),
         "hadamard": float(arrays["hadamard_magnitude"].max()),
     }
-    metadata["row1_z_limits"] = {"raw": [0.0, 40.0], "hadamard": [0.0, 40.0]}
-    metadata["row1_shared_z_limits"] = [0.0, 40.0]
-    metadata["row2_shared_z_limits"] = [0.0, 8.92]
+    metadata["row1_z_limits"] = {"raw": [0.0, 40.0], "hadamard": [0.0, 4.0]}
+    metadata.pop("row1_shared_z_limits", None)
+    metadata["row2_shared_z_limits"] = [0.0, 10.0]
     metadata["rendering_contract"] = {
         "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
         "background": "transparent SVG/PDF/PNG",
         "png_dpi": 300,
         "row1": {
-            "z_limits": [0.0, 40.0],
-            "normalization": [0.0, 40.0],
+            "z_limits": metadata["row1_z_limits"],
+            "normalization": metadata["row1_z_limits"],
             "view": {"elevation": 22, "azimuth": -60},
             "linewidth_pt": 0.7,
         },
         "row2": {
-            "z_limits": [0.0, 8.92],
-            "normalization": [0.0, 8.92],
+            "z_limits": [0.0, 10.0],
+            "normalization": [0.0, 10.0],
             "view": {"elevation": 18, "azimuth": -62},
             "linewidth_pt": 0.9,
         },
@@ -702,7 +711,7 @@ def main() -> None:
             "token_interval": 100,
             "group_interval": 10,
             "row1_z_interval": 5,
-            "row2_z_interval": 1,
+            "row2_z_interval": 1.25,
         },
     }
     metadata["correctness_resolution"]["fix"] = (
@@ -711,7 +720,7 @@ def main() -> None:
     )
     metadata["correctness_resolution"]["old_z_clipping"] = (
         "PrismQuant maximum 8.9193306 exceeded the older 6.3898373 limit; "
-        "the shared 0–8.92 scale covers both arrays."
+        "the shared 0–10 scale covers both arrays."
     )
     metadata["palette"] = PALETTE
     if not args.reuse_data:
@@ -720,34 +729,35 @@ def main() -> None:
     token_axis = arrays["token_axis"]
     token_ticks = [200, 300, 400, 500, 600]
     token_tick_labels = ["200", "", "400", "", "600"]
-    channel_ticks = list(range(2250, 4250, 250))
+    window_start = metadata["channel_windows"]["raw"][0]
+    channel_ticks = list(range(250 * int(np.ceil(window_start / 250)), window_start + LANDSCAPE_CHANNELS, 250))
     channel_tick_labels = [str(value) if value % 500 == 0 else "" for value in channel_ticks]
     group_ticks = list(range(0, 61, 10))
     group_tick_labels = [str(value) if value % 20 == 0 else "" for value in group_ticks]
     row1_z_ticks = list(range(0, 41, 5))
     row1_z_tick_labels = [str(value) if value % 10 == 0 else "" for value in row1_z_ticks]
-    row2_z_ticks = list(range(0, 9)) + [8.92]
-    row2_z_tick_labels = [str(value) if value in (0, 2, 4, 6) else "" for value in range(0, 9)] + ["8.92"]
+    row2_z_ticks = np.arange(0, 10.01, 1.25)
+    row2_z_tick_labels = [f"{v:g}" if i % 2 == 0 else "" for i, v in enumerate(row2_z_ticks)]
     raw_start = int(metadata["channel_windows"]["raw"][0])
     rotated_start = int(metadata["channel_windows"]["hadamard_and_prismquant"][0])
 
     row1 = (
-        (arrays["raw_magnitude"], raw_start, here / "fig1a"),
-        (arrays["hadamard_magnitude"], rotated_start, here / "fig1b"),
+        (arrays["raw_magnitude"], raw_start, here / "fig1a", 40.0),
+        (arrays["hadamard_magnitude"], rotated_start, here / "fig1b", 4.0),
     )
-    for values, start, outbase in row1:
+    for values, start, outbase, zmax in row1:
         render_landscape(
             values,
             np.arange(start, start + LANDSCAPE_CHANNELS),
             token_axis,
-            (0.0, 40.0),
+            (0.0, zmax),
             "channel",
             channel_ticks,
             channel_tick_labels,
             token_ticks,
             token_tick_labels,
-            row1_z_ticks,
-            row1_z_tick_labels,
+            row1_z_ticks if zmax == 40 else np.arange(0, 4.01, 0.5),
+            row1_z_tick_labels if zmax == 40 else [str(i // 2) if i % 2 == 0 else "" for i in range(9)],
             (22, -60),
             0.7,
             outbase,
@@ -762,7 +772,7 @@ def main() -> None:
             values,
             np.arange(values.shape[1]),
             token_axis,
-            (0.0, 8.92),
+            (0.0, 10.0),
             "group",
             group_ticks,
             group_tick_labels,
@@ -775,6 +785,11 @@ def main() -> None:
             outbase,
         )
 
+    trace_values = [arrays[f"trace_{name}"] for name in ("raw", "hadamard", "nar_kmax")]
+    trace_low = min(float(v.min()) for v in trace_values)
+    trace_high = max(float(v.max()) for v in trace_values)
+    margin = max(0.08 * (trace_high - trace_low), 1e-3)
+    y_limits = (trace_low - margin, trace_high + margin)
     if args.reuse_traces:
         missing = [
             str(here / f"fig1{letter}.{suffix}")
@@ -794,6 +809,7 @@ def main() -> None:
         render_trace(arrays["trace_hadamard"], "hadamard", y_limits, here / "fig1f", False, True, False)
         render_trace(arrays["trace_nar_kmax"], "nar_kmax", y_limits, here / "fig1g", False, False, True)
 
+    metadata["trace_rendering"] = {"y_limits": list(y_limits), "y_ticks": [-5, 0, 5], "x_ticks": [0, 32, 64, 96, 127], "size_inches": [2.1, 1.75], "all_axes_labeled": True}
     metadata["rendered_panel_statistics"] = {
         letter: {
             "method": method,

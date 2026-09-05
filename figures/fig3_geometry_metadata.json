@@ -1,42 +1,30 @@
 {
-  "target_group": 0,
-  "target_coordinate": 0,
-  "anchor_error": 2.980232238769531e-07,
-  "arrows": {
-    "hadamard": {
-      "projection_v1": 0.005320304539054632,
-      "projection_v2": -0.010242563672363758,
-      "cosine_with_v1": 0.005320304539054632,
-      "in_plane_length": 0.011541913263499737,
-      "norm": 0.9999999403953552
-    },
-    "nar": {
-      "projection_v1": -0.9999998211860657,
-      "projection_v2": 2.2351741790771484e-08,
-      "cosine_with_v1": -0.9999998807907104,
-      "in_plane_length": 0.9999998211860657,
-      "norm": 0.9999998211860657
-    }
-  },
   "model": "llama32_3b",
   "site": "down_input",
-  "layer": 1,
+  "layer": 27,
+  "arrows": {
+    "hadamard": {
+      "projection_v1": 0.014288674108684063,
+      "projection_v2": -0.0045826914720237255,
+      "in_plane_length": 0.015005574561655521,
+      "norm": 1.0
+    },
+    "nar": {
+      "projection_v1": 0.9999948740005493,
+      "projection_v2": 1.605070849564072e-07,
+      "in_plane_length": 0.9999948740005493,
+      "norm": 0.9999998807907104
+    }
+  },
+  "target_group": 0,
   "dimensions": 8192,
   "group_size": 128,
-  "null_space_slots": 64,
-  "rank": 256,
-  "layers": [
-    1,
-    13,
-    27
-  ],
   "projection_rows": 8064,
   "projection_stride": 32,
-  "eigensolver_rows": 262016,
-  "bos_exclusion_rule": "exclude sequence position 0 before all covariance and projection operations",
+  "bos_exclusion_rule": "all projection token positions start at 32; BOS position 0 excluded",
+  "basis": "frozen E1c uncentered second-moment v1/v2, same basis and factor as Figure 1",
+  "hadamard_definition": "full-width random-sign Hadamard, identical to Figure 1",
+  "arrow_definition": "unit group-DC direction pulled back through each orthogonal transform; sign oriented toward positive v1",
   "base_seed": 20260902,
-  "oversample": 16,
-  "power_iterations": 1,
-  "covariance_passes": 3,
-  "source": "frozen E1c wide_cal_a down_input dump"
+  "source": "frozen wide_cal_a; no eigensolver or model rerun"
 }

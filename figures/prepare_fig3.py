@@ -187,18 +187,77 @@ def geometry(
     return frame, metadata
 
 
+def prepare_frozen_geometry(repo: Path, workdir: Path, output: Path) -> None:
+    """Refresh only the token cloud using the frozen Figure-1 basis and factor."""
+    act, ext = import_project(repo)
+    device = torch.device("cpu")
+    torch.set_num_threads(4)
+    figure1 = json.loads((output / "fig1_metadata.json").read_text())
+    layer, site = int(figure1["layer"]), figure1["site"]
+    wide = workdir / "activations" / "llama32_3b" / "wide_cal_a"
+    dump = json.loads((wide / "DONE.json").read_text())
+    mmap = ext._open_site(wide, dump, site, layer)
+    eig = torch.load(wide / "analysis" / "eigenspaces" / f"{site}_layer_{layer:02d}.pt",
+                     map_location="cpu", weights_only=True)
+    vectors = eig["vectors"][:, :2].float()
+    x, sequences, positions = sampled_rows(mmap, ext, device)
+    factor = act.RotationFactor.load(
+        workdir / "activations" / "llama32_3b" / "activation_factors" / f"down_layer_{layer:02d}.pt", device)
+    generator = torch.Generator(device="cpu").manual_seed(SEED + 1000 * layer + 10 + GROUP)
+    signs = torch.randint(0, 2, (vectors.shape[0],), generator=generator).float().mul_(2).sub_(1)
+    mapped = factor.apply(vectors[:, 0].reshape(1, -1), signs).reshape(-1, GROUP)
+    target_group = int(mapped.square().sum(1).argmax())
+    null_vector = torch.zeros((1, vectors.shape[0]))
+    null_vector[:, target_group * GROUP:(target_group + 1) * GROUP] = 1 / math.sqrt(GROUP)
+    directions = {
+        "hadamard": (ext._fast_walsh_hadamard(null_vector) * signs).squeeze(0),
+        "nar": inverse_factor(null_vector, factor, ext, signs).squeeze(0),
+    }
+    arrows = {}
+    for method, direction in directions.items():
+        coordinate = direction @ vectors
+        if coordinate[0] < 0:  # Null-space directions have an arbitrary sign.
+            coordinate = -coordinate
+        arrows[method] = {
+            "projection_v1": float(coordinate[0]), "projection_v2": float(coordinate[1]),
+            "in_plane_length": float(coordinate.norm()), "norm": float(direction.norm()),
+        }
+    projection = x @ vectors
+    pd.DataFrame({"model": "llama32_3b", "site": site, "layer": layer,
+        "sequence_index": sequences, "token_position": positions,
+        "projection_v1": projection[:, 0].numpy(), "projection_v2": projection[:, 1].numpy(),
+        "bos_excluded": True}).to_csv(output / "fig3_token_projections.csv", index=False)
+    np.savez_compressed(output / "fig3_geometry_vectors.npz", vectors=vectors.numpy())
+    metadata = {
+        "model": "llama32_3b", "site": site, "layer": layer, "arrows": arrows,
+        "target_group": target_group, "dimensions": vectors.shape[0], "group_size": GROUP,
+        "projection_rows": len(projection), "projection_stride": PROJECTION_STRIDE,
+        "bos_exclusion_rule": "all projection token positions start at 32; BOS position 0 excluded",
+        "basis": "frozen E1c uncentered second-moment v1/v2, same basis and factor as Figure 1",
+        "hadamard_definition": "full-width random-sign Hadamard, identical to Figure 1",
+        "arrow_definition": "unit group-DC direction pulled back through each orthogonal transform; sign oriented toward positive v1",
+        "base_seed": SEED, "source": "frozen wide_cal_a; no eigensolver or model rerun",
+    }
+    (output / "fig3_geometry_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    print(json.dumps(metadata, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--workdir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parent)
     parser.add_argument("--sequence-batch", type=int, default=4)
+    parser.add_argument("--geometry-only", action="store_true")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
     workdir = args.workdir.resolve()
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    if args.geometry_only:
+        prepare_frozen_geometry(repo, workdir, output)
+        return
     act, ext = import_project(repo)
     device = torch.device("cuda")
     torch.set_float32_matmul_precision("highest")

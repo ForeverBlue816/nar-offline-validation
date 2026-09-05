@@ -13,7 +13,7 @@ def main():
     tools=parser.parse_args().qa_tools
     root=Path(__file__).resolve().parent; qa=root/'qa';qa.mkdir(exist_ok=True)
     summary={}
-    panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in 'ab']
+    panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]
     for stem in panels+['fig1','fig2','fig3']:
         p=root/(stem+'.pdf')
         # The auditor omits an overlay for a clean PDF; remove old diagnostics.

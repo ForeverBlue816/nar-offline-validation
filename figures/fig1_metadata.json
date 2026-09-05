@@ -63,15 +63,15 @@
   },
   "channel_windows": {
     "raw": [
-      2176,
-      4223
+      1254,
+      3301
     ],
     "hadamard_and_prismquant": [
-      2176,
-      4223
+      1254,
+      3301
     ],
     "width": 2048,
-    "raw_window_rule": "group-aligned window centered on the largest-|loading| channel of frozen v1",
+    "raw_window_rule": "maximize count of channels with median absolute activation > 1.0 over the plotted tokens; all stride-1 2048-wide windows; earliest start breaks ties",
     "rotated_window_rule": "same numerical channel interval as raw; coordinates are in the rotated basis"
   },
   "group_window": [
@@ -109,14 +109,31 @@
     ],
     "hadamard": [
       0.0,
-      40.0
+      4.0
     ]
   },
   "row2_shared_z_limits": [
     0.0,
-    8.92
+    10.0
   ],
   "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
+  "peak_density_selection": {
+    "start_channel": 1254,
+    "stop_channel_exclusive": 3302,
+    "qualifying_channel_count": 21,
+    "median_threshold_strictly_greater_than": 1.0,
+    "candidate_windows": 6145,
+    "stride": 1,
+    "tied_best_windows": 183,
+    "tie_break": "smallest start channel",
+    "tokens": {
+      "sequence_index": 118,
+      "position_start": 160,
+      "position_stop_exclusive": 672,
+      "rows": 512,
+      "bos_excluded": true
+    }
+  },
   "range_averaging": {
     "c_d": {
       "statistic": "arithmetic mean of every plotted max-minus-min value",
@@ -149,7 +166,7 @@
     "labels_or_arrays_swapped": false,
     "old_rendering_problem": "Whole polylines were colored by their maximum; opaque near lines obscure far lines. Mean range does not determine maximum or roughness.",
     "fix": "Color every segment by local height with a fixed row-wise normalization; put range summaries in metadata only.",
-    "old_z_clipping": "PrismQuant maximum 8.9193306 exceeded the older 6.3898373 limit; the shared 0\u20138.92 scale covers both arrays."
+    "old_z_clipping": "PrismQuant maximum 8.9193306 exceeded the older 6.3898373 limit; the shared 0\u201310 scale covers both arrays."
   },
   "geometry_covariance": {
     "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
@@ -161,6 +178,121 @@
     "centered_pc1_cosine_with_prism_receiving_dc": 0.10168235749006271,
     "frozen_second_moment_v1_dc_energy_fraction": 1.0,
     "raw_pc1_cosine_with_group_dc": 0.013828529768916017
+  },
+  "range_statistics": {
+    "hadamard": {
+      "median": 1.6807422637939453,
+      "mean": 1.764014204069099,
+      "percentile_95": 2.5171279907226562,
+      "maximum": 6.389837265014648,
+      "count": 32768
+    },
+    "prismquant_kmax": {
+      "median": 0.7972100973129272,
+      "mean": 0.8404273132182425,
+      "percentile_95": 1.2450511455535889,
+      "maximum": 8.919330596923828,
+      "count": 32768
+    }
+  },
+  "trace_group_means": {
+    "raw": 0.03076837956905365,
+    "hadamard": 0.04235752299427986,
+    "nar_kmax": -2.260563373565674
+  },
+  "zero_point_definition": "Actual quantizer offset: fp16(min(values)), not the arithmetic group mean; dynamic_asym_int4 in nar/experiment.py.",
+  "row1_data_maxima": {
+    "raw": 18.125,
+    "hadamard": 3.047273874282837
+  },
+  "rendering_contract": {
+    "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
+    "background": "transparent SVG/PDF/PNG",
+    "png_dpi": 300,
+    "row1": {
+      "z_limits": {
+        "raw": [
+          0.0,
+          40.0
+        ],
+        "hadamard": [
+          0.0,
+          4.0
+        ]
+      },
+      "normalization": {
+        "raw": [
+          0.0,
+          40.0
+        ],
+        "hadamard": [
+          0.0,
+          4.0
+        ]
+      },
+      "view": {
+        "elevation": 22,
+        "azimuth": -60
+      },
+      "linewidth_pt": 0.7
+    },
+    "row2": {
+      "z_limits": [
+        0.0,
+        10.0
+      ],
+      "normalization": [
+        0.0,
+        10.0
+      ],
+      "view": {
+        "elevation": 18,
+        "azimuth": -62
+      },
+      "linewidth_pt": 0.9
+    },
+    "dense_grid": {
+      "channel_interval": 250,
+      "token_interval": 100,
+      "group_interval": 10,
+      "row1_z_interval": 5,
+      "row2_z_interval": 1.25
+    }
+  },
+  "palette": {
+    "prismquant": "#1D3557",
+    "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC",
+    "duquant": "#E63946",
+    "identity": "#457B9D",
+    "reference": "#1D3557",
+    "text": "#1D3557",
+    "zero": "#F1FAEE",
+    "pane_edge": "#C9D6DF",
+    "grid": "#DCE4EA"
+  },
+  "trace_rendering": {
+    "y_limits": [
+      -5.5575,
+      7.96375
+    ],
+    "y_ticks": [
+      -5,
+      0,
+      5
+    ],
+    "x_ticks": [
+      0,
+      32,
+      64,
+      96,
+      127
+    ],
+    "size_inches": [
+      2.1,
+      1.75
+    ],
+    "all_axes_labeled": true
   },
   "rendered_panel_statistics": {
     "c": {
@@ -186,90 +318,6 @@
         512,
         64
       ]
-    }
-  },
-  "trace_group_means": {
-    "raw": 0.03076837956905365,
-    "hadamard": 0.04235752299427986,
-    "nar_kmax": -2.260563373565674
-  },
-  "zero_point_definition": "Actual quantizer offset: fp16(min(values)), not the arithmetic group mean; dynamic_asym_int4 in nar/experiment.py.",
-  "palette": {
-    "prismquant": "#1D3557",
-    "prismquant_light": "#457B9D",
-    "hadamard": "#A8DADC",
-    "duquant": "#E63946",
-    "identity": "#457B9D",
-    "reference": "#1D3557",
-    "text": "#1D3557",
-    "zero": "#F1FAEE",
-    "pane_edge": "#C9D6DF",
-    "grid": "#DCE4EA"
-  },
-  "range_statistics": {
-    "hadamard": {
-      "median": 1.6807422637939453,
-      "mean": 1.764014204069099,
-      "percentile_95": 2.5171279907226562,
-      "maximum": 6.389837265014648,
-      "count": 32768
-    },
-    "prismquant_kmax": {
-      "median": 0.7972100973129272,
-      "mean": 0.8404273132182425,
-      "percentile_95": 1.2450511455535889,
-      "maximum": 8.919330596923828,
-      "count": 32768
-    }
-  },
-  "row1_data_maxima": {
-    "raw": 39.75,
-    "hadamard": 3.2732126712799072
-  },
-  "row1_shared_z_limits": [
-    0.0,
-    40.0
-  ],
-  "rendering_contract": {
-    "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
-    "background": "transparent SVG/PDF/PNG",
-    "png_dpi": 300,
-    "row1": {
-      "z_limits": [
-        0.0,
-        40.0
-      ],
-      "normalization": [
-        0.0,
-        40.0
-      ],
-      "view": {
-        "elevation": 22,
-        "azimuth": -60
-      },
-      "linewidth_pt": 0.7
-    },
-    "row2": {
-      "z_limits": [
-        0.0,
-        8.92
-      ],
-      "normalization": [
-        0.0,
-        8.92
-      ],
-      "view": {
-        "elevation": 18,
-        "azimuth": -62
-      },
-      "linewidth_pt": 0.9
-    },
-    "dense_grid": {
-      "channel_interval": 250,
-      "token_interval": 100,
-      "group_interval": 10,
-      "row1_z_interval": 5,
-      "row2_z_interval": 1
     }
   }
 }
