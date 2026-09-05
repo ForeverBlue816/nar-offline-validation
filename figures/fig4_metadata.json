@@ -16,12 +16,14 @@
         7.826242825602765
       ],
       "horizontal_tick_labels": true,
+      "hidden_tick_label": 4.1875,
+      "null_label_x": 4.29,
       "legend_location": "below plot, boxed",
       "legend_bbox_pt": [
         33.048,
-        13.607999999999999,
-        184.68,
-        52.52799999999999
+        13.608,
+        184.68000000000004,
+        52.92
       ],
       "scale_bracket_y": 7.803242825602765,
       "null_bracket_x": 4.25,
@@ -58,12 +60,14 @@
         6.412215826945062
       ],
       "horizontal_tick_labels": true,
+      "hidden_tick_label": 4.1875,
+      "null_label_x": 4.29,
       "legend_location": "below plot, boxed",
       "legend_bbox_pt": [
         33.048,
-        13.607999999999999,
-        184.68,
-        52.52799999999999
+        13.608,
+        184.68000000000004,
+        52.92
       ],
       "scale_bracket_y": 6.389215826945062,
       "null_bracket_x": 4.25,
@@ -104,14 +108,19 @@
         0,
         10
       ],
-      "legend_location": "below plot, boxed",
+      "layout": "stacked shared-x recovery and cost",
+      "plot_height_fractions": [
+        0.62,
+        0.38
+      ],
+      "legend_location": "below stack, boxed",
       "legend_bbox_pt": [
         33.048,
-        13.607999999999999,
-        184.68,
-        52.617999999999995
+        13.608,
+        184.68000000000004,
+        52.92
       ],
-      "deployment_note": "on Llama, k beyond 8 buys little; on Qwen3 it buys more, at rising cost",
+      "deployment_note": "Llama: little gain past 8; Qwen3: more at a cost.",
       "k8_recovery_labels": {
         "llama32_3b": "0.39",
         "llama31_8b": "0.36",
@@ -151,6 +160,24 @@
         }
       },
       "recovery_formula": "ratio computed from mean PPLs; not the legacy stored recovery column"
+    },
+    "fig4b1": {
+      "size_inches": [
+        2.7,
+        2.604
+      ],
+      "source_table": "fig4b.csv",
+      "rows": 15,
+      "legend": "shared in fig4b"
+    },
+    "fig4b2": {
+      "size_inches": [
+        2.7,
+        1.596
+      ],
+      "source_table": "fig4b.csv",
+      "rows": 6,
+      "legend": "shared in fig4b"
     }
   },
   "backend": "plain matplotlib"

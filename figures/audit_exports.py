@@ -15,8 +15,8 @@ def main():
     root=Path(__file__).resolve().parent; qa=root/'qa';qa.mkdir(exist_ok=True)
     summary={}
     panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]
-    targets=panels+['fig1','fig2','fig3']+['fig4a','fig4a_8b','fig4b','fig4']
-    if args.figure=='4': targets=['fig4a','fig4a_8b','fig4b','fig4']
+    targets=panels+['fig1','fig2','fig3']+['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
+    if args.figure=='4': targets=['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
     if args.figure=='2': targets=['fig2a','fig2b','fig2c','fig2']
     for stem in targets:
         p=root/(stem+'.pdf')

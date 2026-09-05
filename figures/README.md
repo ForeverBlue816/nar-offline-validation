@@ -78,26 +78,36 @@ Each panel's CSV lists the exact summary-file row and physical CSV line for
 every point and the bf16 reference. Bracket endpoints are those same plotted
 points; their source lines and PPL differences are in `fig4_metadata.json`.
 
-The revised presentation keeps both canvases at 2.7 by 4.2 inches and aligns
-their plot-area top and bottom edges. Both legends occupy a dedicated bottom
-row, side by side, with matching rectangular frames, 6.5-pt type and padding.
-Their frame widths, heights and baselines match to within 0.1 pt; the plot
-areas are shortened to leave clear space above this row. Budget tick
-labels are horizontal. The scale-resolution bracket is horizontal over the
-exact x span of the Hadamard (256,1)/(128,1) pair, with its label immediately
-above and no leader. The null-space bracket lies exactly at x=4.25; a small
-stroke gap at the intervening measured (256,3) triangle avoids crossing it.
-Point-specific label offsets avoid the nearby control labels.
+The revised presentation keeps both columns at 2.7 by 4.2 inches. Panel a
+spans the two stacked panels at right: b1 shows recovery, b2 shows kernel
+cost. Both right-hand axes have the same plot width as a, share their x
+limits, and use a 62:38 ratio of plot heights. Their combined top and bottom
+edges align with a. The two legends occupy a dedicated bottom row with
+matching rectangular frames and 6.5-pt type. Only the three model entries
+appear in the right-hand legend; b2 identifies the timing models directly.
 
-The 3B y lower bound is 7.60. The bf16 reference remains at its measured
-7.61675 and the lowest quantized point at 7.68493; their true numerical gap
-is retained on the linear axis. The 8B appendix uses the same presentation.
-Panel b labels the measured k=8 recoveries (0.39, 0.36, 0.59) and kernel
-shares (5.5%/4.3% at k=8, 8.5%/7.6% at k=32), rounded only for display.
-The deployed band labels k=8 explicitly and stops above the annotation and
-legend region. The supplied interpretation sentence wraps over three lines
-inside the narrow panel to retain its requested 6.5-pt size. All source CSV
-numbers remain unchanged by this presentation revision.
+The separate bare exports `fig4b1` and `fig4b2` have widths of 2.7 inches
+and heights of 2.604 and 1.596 inches (62:38, summing to a's 4.2 inches).
+They preserve the marks and font sizes while giving each panel its own
+margins. `fig4b` retains the assembled right column with its shared legend.
+`fig4b1.csv` and `fig4b2.csv` partition the unchanged `fig4b.csv`, preserving
+source rows for all 15 recovery points, four kernel points and two references.
+
+Budget tick labels are horizontal; the 4.1875 tick remains without text.
+The scale-resolution bracket spans the Hadamard (256,1)/(128,1) pair with
+its label above and no leader. The null-space bracket lies at x=4.25; its
+label sits to the right, clear of the (256,3) point label. A small stroke
+gap at the intervening measured triangle avoids crossing the marker.
+The 3B lower bound stays at 7.60, and the measured bf16 line at 7.61675.
+The 8B appendix uses the same presentation.
+
+The green deployed band extends through both right-hand axes. Recovery
+labels (0.39, 0.36, 0.59) sit to the left of k=8, staggered for clearance.
+The two-line interpretation sits at the upper left of b1. Only b2 carries
+x tick labels and the shared x-axis label. Its two solid red diamond lines
+connect measured k=8 and k=32 costs, with percentages beside the markers
+and model names at the ends. Dashed Hadamard references have right-aligned
+labels. All source CSV numbers remain unchanged by this layout revision.
 
 The recovery panel evaluates `(mean PPL_Hadamard - mean PPL_k) /
 (mean PPL_Hadamard - PPL_bf16)`, directly from PPLs. It does not reuse legacy

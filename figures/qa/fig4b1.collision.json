@@ -1,17 +1,17 @@
 {
-  "pdf": "/home/yanlongc/nar-offline-validation/figures/fig4.pdf",
+  "pdf": "/home/yanlongc/nar-offline-validation/figures/fig4b1.pdf",
   "auditable": true,
   "verdict": "REVIEW REQUIRED",
   "page_count": 1,
-  "visible_text_box_count": 66,
-  "text_trace_count": 66,
-  "stroke_path_count": 100,
-  "filled_region_count": 73,
+  "visible_text_box_count": 13,
+  "text_trace_count": 13,
+  "stroke_path_count": 30,
+  "filled_region_count": 28,
   "image_region_count": 0,
   "summary": {
     "fail": 0,
     "warn": 2,
-    "contained_fill_overlays": 24,
+    "contained_fill_overlays": 3,
     "contained_image_overlays": 0
   },
   "thresholds": {
@@ -27,21 +27,21 @@
       "message": "Text partially overlaps the edge of 1 filled region(s)",
       "text": "Llama: little gain past 8;",
       "text_bbox": [
-        235.07818603515625,
-        16.908504486083984,
-        315.76214599609375,
-        23.408504486083984
+        40.678199768066406,
+        20.987285614013672,
+        121.36215209960938,
+        27.487285614013672
       ],
       "other_text": null,
       "other_bbox": [
-        231.3359832763672,
-        15.1199951171875,
-        265.4704284667969,
-        125.7379150390625
+        36.93600082397461,
+        18.748809814453125,
+        71.0704574584961,
+        159.36480712890625
       ],
       "object_count": 1,
       "object_indexes": [
-        68000
+        2000
       ]
     },
     {
@@ -51,21 +51,21 @@
       "message": "Text partially overlaps the edge of 1 filled region(s)",
       "text": "Qwen3: more at a cost.",
       "text_bbox": [
-        235.07818603515625,
-        24.846004486083984,
-        311.5563659667969,
-        31.346004486083984
+        40.678199768066406,
+        28.924785614013672,
+        117.1563720703125,
+        35.42478561401367
       ],
       "other_text": null,
       "other_bbox": [
-        231.3359832763672,
-        15.1199951171875,
-        265.4704284667969,
-        125.7379150390625
+        36.93600082397461,
+        18.748809814453125,
+        71.0704574584961,
+        159.36480712890625
       ],
       "object_count": 1,
       "object_indexes": [
-        68000
+        2000
       ]
     }
   ]

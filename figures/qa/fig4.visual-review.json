@@ -1,46 +1,206 @@
 {
   "reviewed_panels": [
     "fig4a",
-    "fig4b",
     "fig4a_8b",
+    "fig4b1",
+    "fig4b2",
+    "fig4b",
     "fig4"
   ],
   "checks": [
-    "All data CSVs byte-identical to their prior committed versions",
-    "Horizontal x tick labels and per-point labels visually reviewed",
-    "Horizontal scale bracket has no leader; vertical null bracket at x=4.25 avoids interior triangle",
-    "Matching framed bottom legends, aligned side by side, with unchanged outer dimensions",
-    "All seven requested recovery/cost labels verified against measured values",
-    "Three-line deployment interpretation fits inside b",
-    "Final main and appendix PDFs have no collision FAIL or WARN",
-    "Shared plot-area top and bottom edges verified"
+    "Original data CSVs byte-identical to prior committed versions; split CSVs preserve all source rows",
+    "4.1875 tick remains with no text; null-space label clears the (256,3) label",
+    "Stacked plot heights in a 62:38 ratio, shared x limits, and widths matching a",
+    "Standalone widths 2.7 inches and heights 2.604/1.596 inches",
+    "Left-staggered k=8 recovery labels; cost labels clear of both solid red lines",
+    "Two-line interpretation in the recovery upper left",
+    "Shared three-model legend below stack; matched frames in both columns",
+    "No x tick labels or x-axis label on b1; full x axis on b2",
+    "No rendered collision failures; all glyph sizes and page bounds verified"
   ],
   "intentional_overlays": [
-    "Deployed band behind k=8",
+    "The green deployed band extends through both axes; the two-line note crosses its light background boundary without obscuring data",
     "Vector axes and curve markers"
   ],
-  "user_style": "Upright serif, palette and sizes supplied by user; no generic journal defaults imposed",
-  "data_sha256": {
-    "fig4a.csv": "dfab3fd4786ab80c20c8ab77f871b7c91f1cea189af511859aa7f268dcf475b6",
-    "fig4a_8b.csv": "b945440f230a01bb9ec79eb53ba90682e0e8dc85878a852cc1a7fefb538bd074",
-    "fig4b.csv": "c775446485ed7f7bbc0f3e5ac0426ffeb4aca9300030b53e5ec3d72abedf5cc3"
+  "reviewed_collision_warnings": {
+    "fig4": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          235.07818603515625,
+          16.908504486083984,
+          315.76214599609375,
+          23.408504486083984
+        ],
+        "other_text": null,
+        "other_bbox": [
+          231.3359832763672,
+          15.1199951171875,
+          265.4704284667969,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          68000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          235.07818603515625,
+          24.846004486083984,
+          311.5563659667969,
+          31.346004486083984
+        ],
+        "other_text": null,
+        "other_bbox": [
+          231.3359832763672,
+          15.1199951171875,
+          265.4704284667969,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          68000
+        ]
+      }
+    ],
+    "fig4a": [],
+    "fig4a_8b": [],
+    "fig4b": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          40.678199768066406,
+          16.908504486083984,
+          121.36215209960938,
+          23.408504486083984
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          15.1199951171875,
+          71.0704574584961,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          22000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          40.678199768066406,
+          24.846004486083984,
+          117.1563720703125,
+          31.346004486083984
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          15.1199951171875,
+          71.0704574584961,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          22000
+        ]
+      }
+    ],
+    "fig4b1": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          40.678199768066406,
+          20.987285614013672,
+          121.36215209960938,
+          27.487285614013672
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          18.748809814453125,
+          71.0704574584961,
+          159.36480712890625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          2000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          40.678199768066406,
+          28.924785614013672,
+          117.1563720703125,
+          35.42478561401367
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          18.748809814453125,
+          71.0704574584961,
+          159.36480712890625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          2000
+        ]
+      }
+    ],
+    "fig4b2": []
   },
   "legend_alignment": {
     "verdict": "PASS",
     "bbox_pt": [
       [
         33.048,
-        13.607999999999999,
-        184.68,
-        52.52799999999999
+        13.608,
+        184.68000000000004,
+        52.92
       ],
       [
         227.448,
-        13.607999999999999,
+        13.608,
         379.08000000000004,
-        52.617999999999995
+        52.92
       ]
     ],
     "tolerance_pt": 0.1
+  },
+  "user_style": "User palette, upright serif, plain matplotlib; user layout takes precedence over generic journal defaults",
+  "data_sha256": {
+    "fig4a_8b.csv": "b945440f230a01bb9ec79eb53ba90682e0e8dc85878a852cc1a7fefb538bd074",
+    "fig4b1.csv": "61b2e4027b2648399e496744d25ca7ecacf095d8ada0e8fc2598ed8461bc3c29",
+    "fig4b2.csv": "e9cb433f3231739ae64dfd8a58db9c0ee189e3e33570386f00cb829e3ff370b7",
+    "fig4b.csv": "c775446485ed7f7bbc0f3e5ac0426ffeb4aca9300030b53e5ec3d72abedf5cc3",
+    "fig4a.csv": "dfab3fd4786ab80c20c8ab77f871b7c91f1cea189af511859aa7f268dcf475b6"
   }
 }

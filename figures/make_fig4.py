@@ -174,14 +174,15 @@ def point_labels(fig, ax, data):
             paths.append(annotation.arrow_patch.get_path().transformed(annotation.arrow_patch.get_transform()))
 
 def bottom_legend(fig, handles, outbase):
-    legend=fig.legend(handles=handles,loc='lower left',bbox_to_anchor=(.17,.045,.78,.16),
-        mode='expand',ncol=1,fontsize=6.5,frameon=True,fancybox=False,
-        edgecolor=PALETTE['pane_edge'],facecolor='white',framealpha=1,
+    # Fixed outer frame keeps three- and four-entry legends aligned.
+    frame=(.17,.045,.78,.13)
+    fig.add_artist(plt.Rectangle(frame[:2],frame[2],frame[3],transform=fig.transFigure,
+        facecolor='white',edgecolor=PALETTE['pane_edge'],lw=.65,zorder=2))
+    fig.legend(handles=handles,loc='center',bbox_to_anchor=frame,
+        mode='expand',ncol=1,fontsize=6.5,frameon=False,
         handlelength=1.6,labelspacing=.3,borderpad=.55,borderaxespad=0)
-    legend.get_frame().set_linewidth(.65)
-    fig.canvas.draw()
-    box=legend.get_window_extent(fig.canvas.get_renderer())
-    bounds=[value*72/fig.dpi for value in [box.x0,box.y0,box.x1,box.y1]]
+    bounds=[frame[0]*WIDTH*72,frame[1]*HEIGHT*72,
+            (frame[0]+frame[2])*WIDTH*72,(frame[1]+frame[3])*HEIGHT*72]
     (outbase.parent/'qa'/f'{outbase.name}.legend.json').write_text(json.dumps({
         'bbox_pt':bounds,'font_size_pt':6.5,'frame':True,'location':'below plot, aligned legend row'},indent=2)+'\n')
     return bounds
@@ -205,7 +206,7 @@ def render_budget(data, outbase):
     lower=7.60 if bf>7 else 6.19
     upper=ymax+.035
     ax.set_ylim(lower,upper); ax.set_xlim(4.085,4.545)
-    ax.set_xticks([4.125,4.1875,4.25,4.375,4.5]); ax.set_xticklabels(['4.125','4.1875','4.25','4.375','4.5'],rotation=0,ha='center')
+    ax.set_xticks([4.125,4.1875,4.25,4.375,4.5]); ax.set_xticklabels(['4.125','','4.25','4.375','4.5'],rotation=0,ha='center')
     ax.set_xlabel('effective bits per value',fontsize=7); ax.set_ylabel('WikiText-2 PPL (64 chunks)',fontsize=7)
     ax.tick_params(labelsize=6); ax.spines[['top','right']].set_visible(False)
     ax.plot([4.25,4.25],[lower,ymax+.008],color=STEEL,lw=.45,alpha=.65,zorder=0)
@@ -221,7 +222,7 @@ def render_budget(data, outbase):
     ax.plot([gap_x,gap_x],[interior+gap,had128.ppl],color=STEEL,lw=.65,zorder=2)
     for y in [prism128.ppl,had128.ppl]:
         ax.plot([gap_x,gap_x+.013],[y,y],color=STEEL,lw=.65,zorder=2)
-    ax.text(gap_x+.018,(prism128.ppl+had128.ppl)/2,'null-space\nterm',fontsize=6.5,color=STEEL,ha='left',va='center',linespacing=1.2)
+    ax.text(gap_x+.040,(prism128.ppl+had128.ppl)/2,'null-space\nterm',fontsize=6.5,color=STEEL,ha='left',va='center',linespacing=1.2)
     bracket_y=float(pts[pts.method.eq('hadamard')].ppl.max())+.012
     cap=2.5*scale_per_pt
     ax.plot([had256.effective_bits,had256.effective_bits,had128.effective_bits,had128.effective_bits],
@@ -236,54 +237,80 @@ def render_budget(data, outbase):
     point_labels(fig,ax,pts)
     save_panel(fig,outbase,dpi=300,axes=[ax])
     plt.close(fig)
-    return {'size_inches':[WIDTH,HEIGHT],'x_limits':[4.085,4.545],'y_limits':[lower,upper],'horizontal_tick_labels':True,
+    return {'size_inches':[WIDTH,HEIGHT],'x_limits':[4.085,4.545],'y_limits':[lower,upper],'horizontal_tick_labels':True,'hidden_tick_label':4.1875,'null_label_x':gap_x+.040,
             'legend_location':'below plot, boxed','legend_bbox_pt':legend_bounds,'scale_bracket_y':bracket_y,'null_bracket_x':gap_x,
             'null_bracket_marker_gap':[interior-gap,interior+gap],
             'null_space_gap_at_4_25':float(had128.ppl-prism128.ppl),'scale_resolution_gap':float(had256.ppl-had128.ppl),
             'annotation_sources':{'null_space_term':[int(had128.source_csv_line),int(prism128.source_csv_line)],
                                   'scale_resolution_term':[int(had256.source_csv_line),int(had128.source_csv_line)]}}
 
+def export_knob_panel(fig, ax, other, outbase, height, rect):
+    """Standalone bare panel, with the same marks and font sizes as the stack."""
+    original_size=fig.get_size_inches().copy(); original_pos=ax.get_position().bounds
+    other.set_visible(False)
+    for artist in [*fig.legends,*fig.artists]: artist.set_visible(False)
+    fig.set_size_inches(WIDTH,height);ax.set_position(rect)
+    save_panel(fig,outbase,dpi=300,axes=[ax])
+    fig.set_size_inches(original_size);ax.set_position(original_pos);other.set_visible(True)
+    for artist in [*fig.legends,*fig.artists]: artist.set_visible(True)
+
+
 def render_knobs(data,outbase):
-    configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.21,.30,.60,.65]); cost=ax.twinx()
-    ax.axvspan(-.95,.27,ymin=.32,facecolor=PALETTE['zero'],zorder=0)
-    ax.text(-.95,1.065,'k = 8 (deployed)',ha='left',va='bottom',fontsize=6.5,clip_on=False)
+    configure_style();fig=plt.figure(figsize=(WIDTH,HEIGHT))
+    bottom=.30;top=.95;gap=.06;available=top-bottom-gap
+    low_height=available*.38;high_height=available*.62
+    cost=fig.add_axes([.19,bottom,.77,low_height])
+    ax=fig.add_axes([.19,bottom+low_height+gap,.77,high_height],sharex=cost)
+    for axis in [ax,cost]:
+        axis.axvspan(-.95,.27,facecolor=PALETTE['zero'],zorder=0)
+        axis.spines[['top','right']].set_visible(False)
+        axis.set_xlim(-.95,4.4);axis.set_xticks(range(5),CATEGORIES)
+        axis.tick_params(labelsize=6)
+    ax.text(-.95,1.085,'k = 8 (deployed)',ha='left',va='bottom',fontsize=6.5,clip_on=False)
     specs=[('llama32_3b',LIGHT,'Llama-3.2-3B',1.2),('llama31_8b',STEEL,'Llama-3.1-8B',1.2),('qwen3_8b_base',BLUE,'Qwen3-8B-Base',1.6)]
     handles=[]
     for model,color,label,lw in specs:
         part=data[data.kind.eq('recovery')&data.model.eq(model)].copy()
-        part['x']=part.k_category.map({k:i for i,k in enumerate(CATEGORIES)}); part=part.sort_values('x')
-        line,=ax.plot(part.x,part.recovery,color=color,marker='o',ms=3.5,lw=lw,label=label,zorder=4); handles.append(line)
+        part['x']=part.k_category.map({k:i for i,k in enumerate(CATEGORIES)});part=part.sort_values('x')
+        line,=ax.plot(part.x,part.recovery,color=color,marker='o',ms=3.5,lw=lw,label=label,zorder=4);handles.append(line)
         first=part[part.k_category.eq('8')].iloc[0]
-        offsets={'llama32_3b':(-4,1),'llama31_8b':(-4,-1),'qwen3_8b_base':(-4,0)}
+        offsets={'llama32_3b':(-5,4),'llama31_8b':(-5,-4),'qwen3_8b_base':(-5,0)}
         ax.annotate(f'{first.recovery:.2f}',(0,first.recovery),xytext=offsets[model],textcoords='offset points',fontsize=6,color=color,ha='right',va='center')
-    for model,label,style,offset in [('llama32_3b','3B','-',6),('llama31_8b','8B',(0,(1.5,1.5)),-6)]:
+    ax.set_ylim(0,1.05);ax.set_yticks([0,.25,.5,.75,1]);ax.yaxis.set_major_formatter(FormatStrFormatter('%g'))
+    ax.tick_params(axis='x',labelbottom=False)
+    ax.set_ylabel('recovered fraction of\nHadamard gap',fontsize=7,labelpad=1)
+    note='Llama: little gain past 8;\nQwen3: more at a cost.'
+    ax.text(.025,.985,note,transform=ax.transAxes,ha='left',va='top',fontsize=6.5,color=BLUE,linespacing=1.2)
+    for model,label,offset in [('llama32_3b','3B',6),('llama31_8b','8B',-6)]:
         part=data[data.kind.eq('kernel_share')&data.model.eq(model)].sort_values('k')
         x=[CATEGORIES.index(str(int(k))) for k in part.k]
-        cost.plot(x,part.share_percent,color=RED,lw=.7,ls=style,marker='D',ms=3.5,mfc='white',mec=RED,mew=.8,zorder=3)
+        cost.plot(x,part.share_percent,color=RED,lw=.7,ls='-',marker='D',ms=3.5,mfc='white',mec=RED,mew=.8,zorder=3)
         for xpos,share in zip(x,part.share_percent):
-            offsets={('3B',0):(-4,-8),('3B',2):(-9,10),('8B',0):(6,0),('8B',2):(5,-5)}
-            annotation=f'{share:.1f}%'+(('\n3B' if label=='3B' else ' 8B') if xpos==0 else '')
-            cost.annotate(annotation,(xpos,share),xytext=offsets[(label,xpos)],textcoords='offset points',fontsize=6,color=RED,ha='right' if (label=='3B' and xpos==0) else 'left',va='center')
+            offsets={('3B',0):(-5,5),('3B',2):(-4,7),('8B',0):(11,-1),('8B',2):(-5,-12)}
+            cost.annotate(f'{share:.1f}%',(xpos,share),xytext=offsets[(label,xpos)],textcoords='offset points',fontsize=6,color=RED,
+                ha='left' if label=='8B' and xpos==0 else 'right',va='center')
+        cost.annotate(label,(x[-1],part.share_percent.iloc[-1]),xytext=(6,2 if label=='3B' else -2),
+            textcoords='offset points',fontsize=6,color=RED,ha='left',va='center')
         base=float(data[data.kind.eq('hadamard_kernel_share')&data.model.eq(model)].share_percent.iloc[0])
         cost.axhline(base,color=RED,lw=.6,ls=(0,(3,2)),alpha=.85)
-        cost.annotate(f'Hadamard, {label}',xy=(4.1,base),xytext=(-1,offset),textcoords='offset points',ha='right',va='center',fontsize=6,color=RED,
-                      arrowprops={'arrowstyle':'-','color':RED,'lw':.35,'shrinkA':2,'shrinkB':1})
-    ax.set_xlim(-.95,4.4); ax.set_ylim(0,1.05); cost.set_ylim(0,10)
-    ax.set_xticks(range(5),CATEGORIES); ax.set_yticks([0,.25,.5,.75,1]); ax.yaxis.set_major_formatter(FormatStrFormatter('%g'))
-    ax.set_xlabel('directions retained, k',fontsize=7); ax.set_ylabel('recovered fraction of Hadamard gap',fontsize=7)
-    cost.set_yticks([0,2.5,5,7.5,10],['0%','2.5%','5%','7.5%','10%']); cost.tick_params(axis='y',colors=RED,labelsize=6,pad=2)
-    cost.set_ylabel('share of decoder-layer time',fontsize=7,color=BLUE,labelpad=4)
-    ax.tick_params(labelsize=6); ax.spines['top'].set_visible(False); cost.spines['top'].set_visible(False)
-    cost.spines['right'].set_color(RED)
-    handles.append(Line2D([],[],color=RED,lw=.7,marker='D',ms=3.5,mfc='white',label='kernel share (right axis)'))
-    ax.text(.98,.19,'on Llama, k beyond 8 buys little;\non Qwen3 it buys more,\nat rising cost',transform=ax.transAxes,ha='right',va='top',fontsize=6.5,color=BLUE,linespacing=1.2)
+        cost.annotate(f'Hadamard, {label}',xy=(4.35,base),xytext=(0,offset),textcoords='offset points',
+            ha='right',va='center',fontsize=6,color=RED)
+    cost.set_ylim(0,10);cost.set_yticks([0,5,10],['0%','5%','10%'])
+    cost.tick_params(axis='y',colors=RED,labelsize=6)
+    cost.set_ylabel('share of decoder-\nlayer time',fontsize=7,color=RED,labelpad=1)
+    cost.spines['left'].set_color(RED)
+    cost.set_xlabel('directions retained, k',fontsize=7)
     legend_bounds=bottom_legend(fig,handles,outbase)
-    save_panel(fig,outbase,dpi=300,axes=[ax])
+    save_panel(fig,outbase,dpi=300,axes=[ax,cost],panel_ids=['fig4b1','fig4b2'],column_groups=[['fig4b1','fig4b2']])
+    # The separate panels have a 62:38 canvas-height split and no duplicated legend.
+    export_knob_panel(fig,ax,cost,outbase.with_name('fig4b1'),HEIGHT*.62,[.19,.15,.77,.75])
+    export_knob_panel(fig,cost,ax,outbase.with_name('fig4b2'),HEIGHT*.38,[.19,.27,.77,.64])
     plt.close(fig)
     return {'size_inches':[WIDTH,HEIGHT],'x_categories':CATEGORIES,'recovery_limits':[0,1.05],'kernel_share_percent_limits':[0,10],
-            'legend_location':'below plot, boxed','legend_bbox_pt':legend_bounds,'deployment_note':'on Llama, k beyond 8 buys little; on Qwen3 it buys more, at rising cost',
-            'k8_recovery_labels':{model:f"{data[data.kind.eq('recovery') & data.model.eq(model) & data.k_category.eq('8')].recovery.iloc[0]:.2f}" for model in MODELS},
-            'hadamard_timing_reference':'k=8 row for each model','share_denominator':'decoder_layer_ms + online_transform_ms'}
+        'layout':'stacked shared-x recovery and cost','plot_height_fractions':[.62,.38],
+        'legend_location':'below stack, boxed','legend_bbox_pt':legend_bounds,'deployment_note':note.replace('\n',' '),
+        'k8_recovery_labels':{model:f"{data[data.kind.eq('recovery') & data.model.eq(model) & data.k_category.eq('8')].recovery.iloc[0]:.2f}" for model in MODELS},
+        'hadamard_timing_reference':'k=8 row for each model','share_denominator':'decoder_layer_ms + online_transform_ms'}
 
 def compose(here):
     import pymupdf
@@ -293,13 +320,16 @@ def compose(here):
     legend_boxes=[]
     for i,stem in enumerate(['fig4a','fig4b']):
         layout=json.loads((here/'qa'/f'{stem}.alignment.json').read_text())['layout']
-        box=layout['panels'][0]['bbox_pt']
-        panels.append({'id':stem,'bbox_pt':[box[0]+i*WIDTH*72,box[1],box[2]+i*WIDTH*72,box[3]]})
+        for j,item in enumerate(layout['panels']):
+            box=item['bbox_pt']
+            panel_id=stem if stem=='fig4a' else f'fig4b{j+1}'
+            panels.append({'id':panel_id,'bbox_pt':[box[0]+i*WIDTH*72,box[1],box[2]+i*WIDTH*72,box[3]],
+                'grid_id':'figure4','row_start':0 if stem=='fig4a' else j,
+                'row_stop':2 if stem=='fig4a' else j+1,'col_start':i,'col_stop':i+1})
         legend=json.loads((here/'qa'/f'{stem}.legend.json').read_text())['bbox_pt']
         legend_boxes.append([legend[0]+i*WIDTH*72,legend[1],legend[2]+i*WIDTH*72,legend[3]])
     report=audit_layout_manifest({'schema_version':1,'backend':'composed matplotlib panels',
-        'figure':{'width_pt':2*WIDTH*72,'height_pt':HEIGHT*72},'panels':panels,'row_groups':[['fig4a','fig4b']],
-        'exemptions':[{'panels':['fig4b'],'checks':['panel-width'],'reason':'Room for the requested second y axis and its labels.'}]})
+        'figure':{'width_pt':2*WIDTH*72,'height_pt':HEIGHT*72},'panels':panels,'column_groups':[['fig4b1','fig4b2']]})
     write_json_report(report,here/'qa'/'fig4.alignment.json')
     if exit_code(report,strict=True): raise RuntimeError('Figure 4 alignment failed')
     np.testing.assert_allclose([legend_boxes[0][1],legend_boxes[0][3],legend_boxes[0][2]-legend_boxes[0][0]],
@@ -329,5 +359,9 @@ def main():
     data,missing,protocol=knobs_data(root);data.to_csv(here/'fig4b.csv',index=False)
     metadata['panels']['fig4b']={**render_knobs(data,here/'fig4b'),'missing_k_categories':missing,'protocols':protocol,
         'recovery_formula':'ratio computed from mean PPLs; not the legacy stored recovery column'}
+    for stem,kind,fraction in [('fig4b1','recovery',.62),('fig4b2','cost',.38)]:
+        subset=data[data.kind.eq('recovery') if kind=='recovery' else ~data.kind.eq('recovery')]
+        subset.to_csv(here/f'{stem}.csv',index=False)
+        metadata['panels'][stem]={'size_inches':[WIDTH,HEIGHT*fraction],'source_table':'fig4b.csv','rows':len(subset),'legend':'shared in fig4b'}
     compose(here);(here/'fig4_metadata.json').write_text(json.dumps(metadata,indent=2)+'\n');print(json.dumps(metadata,indent=2))
 if __name__=='__main__':main()

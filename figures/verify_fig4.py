@@ -81,15 +81,24 @@ def main():
             'max_basis_reconstruction_error':float(basis.reconstructed_k32_reflector_error.max()),
             'evaluation_token_sha256':done['evaluation_token_sha256']}
     report['panels']['fig4b']={'recovery_points':15,'kernel_points':4,'hadamard_references':2,'missing_k':[]}
-    for stem in ['fig4a','fig4a_8b','fig4b']:
+    for stem,mask in [('fig4b1',table.kind.eq('recovery')),('fig4b2',~table.kind.eq('recovery'))]:
+        split=pd.read_csv(FIG/f'{stem}.csv',dtype={'k_category':str})
+        pd.testing.assert_frame_equal(split,table[mask].reset_index(drop=True),check_dtype=False)
+        report['panels'][stem]={'verified_source_rows':len(split)}
+    layout=json.loads((FIG/'qa/fig4b.alignment.json').read_text())['layout']['panels']
+    top,bottom=[p['bbox_pt'] for p in layout]
+    close((top[3]-top[1])/(bottom[3]-bottom[1]),62/38)
+    close([top[0],top[2]],[bottom[0],bottom[2]])
+    for stem in ['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2']:
+        height=4.2*({'fig4b1':.62,'fig4b2':.38}.get(stem,1))
         doc=pymupdf.open(FIG/f'{stem}.pdf');page=doc[0]
-        np.testing.assert_allclose([page.rect.width,page.rect.height],[2.7*72,4.2*72],rtol=0,atol=1e-4)
+        np.testing.assert_allclose([page.rect.width,page.rect.height],[2.7*72,height*72],rtol=0,atol=1e-4)
         spans=[s for b in page.get_text('dict')['blocks'] if 'lines' in b for l in b['lines'] for s in l['spans']]
         assert all(5.99<=s['size']<=7.01 and 'Serif' in s['font'] for s in spans)
         for span in spans: assert page.rect.contains(pymupdf.Rect(span['bbox']))
-        with Image.open(FIG/f'{stem}.png') as png: assert png.size==(810,1260)
+        with Image.open(FIG/f'{stem}.png') as png: assert png.size==(810,int(height*300))
         svg=(FIG/f'{stem}.svg').read_text();assert '<text' in svg
-        report['panels'][stem]['export_dimensions_inches']=[2.7,4.2]
+        report['panels'][stem]['export_dimensions_inches']=[2.7,height]
     (FIG/'qa'/'fig4.integrity.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2))
 if __name__=='__main__': main()

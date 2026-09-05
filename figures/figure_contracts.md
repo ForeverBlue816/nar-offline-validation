@@ -42,12 +42,16 @@ including direct supplementary E11 k64 measurements, and E17 v3 timing shares.
 All five categorical recovery positions contain actual measurements. No
 interpolation, smoothing, invented uncertainty, or substituted protocols.
 Independent source-row and per-sequence-loss audits accompany each CSV.
-Both main plot areas share top and bottom edges; panel b is narrower to make
-room for its second y axis. Both legends sit below their plot areas in one
-aligned row, with equal rectangular frames and matching 6.5-pt type and padding.
-The outer canvases remain the same size. Horizontal budget ticks,
-a horizontal scale bracket, and a null-space bracket exactly on x=4.25
-replace the former presentation. The null bracket leaves a stroke gap at the
-interior measured triangle. The deployed point and both measured kernel
-costs carry numeric labels; the supplied short interpretation stays inside b. Bare 2.7-inch-wide panels contain only the
-requested data marks, labels, brackets, references, and legend.
+The metadata-budget panel spans two stacked shared-x panels: b1 measures
+recovery, b2 measures kernel cost, with a 62:38 plot-height ratio. All three
+plot areas have the same width. The right stack shares its outer top and
+bottom edges with a. Both framed legends remain below, aligned side by side;
+the right-hand legend lists only the recovery models. The green deployed
+band extends through b1 and b2. No x tick labels appear on b1. The two-line
+interpretation is in b1's upper left; direct timing labels identify b2's
+solid PrismQuant lines and dashed Hadamard references. The 4.1875 budget
+tick is unlabelled, and the null-space label clears the (256,3) label.
+Standalone b1/b2 canvases are 2.7 inches wide, with heights 2.604/1.596
+inches, summing to a's height. The assembled right column remains 2.7 by
+4.2 inches including the shared legend. Every plotted number is preserved
+in the per-panel source CSVs; no new measurements or exclusions are needed.
