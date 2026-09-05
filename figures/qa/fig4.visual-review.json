@@ -9,7 +9,7 @@
     "All data CSVs byte-identical to their prior committed versions",
     "Horizontal x tick labels and per-point labels visually reviewed",
     "Horizontal scale bracket has no leader; vertical null bracket at x=4.25 avoids interior triangle",
-    "Matching inside legends and same outer dimensions",
+    "Matching framed bottom legends, aligned side by side, with unchanged outer dimensions",
     "All seven requested recovery/cost labels verified against measured values",
     "Three-line deployment interpretation fits inside b",
     "Final main and appendix PDFs have no collision FAIL or WARN",
@@ -24,5 +24,23 @@
     "fig4a.csv": "dfab3fd4786ab80c20c8ab77f871b7c91f1cea189af511859aa7f268dcf475b6",
     "fig4a_8b.csv": "b945440f230a01bb9ec79eb53ba90682e0e8dc85878a852cc1a7fefb538bd074",
     "fig4b.csv": "c775446485ed7f7bbc0f3e5ac0426ffeb4aca9300030b53e5ec3d72abedf5cc3"
+  },
+  "legend_alignment": {
+    "verdict": "PASS",
+    "bbox_pt": [
+      [
+        33.048,
+        13.607999999999999,
+        184.68,
+        52.52799999999999
+      ],
+      [
+        227.448,
+        13.607999999999999,
+        379.08000000000004,
+        52.617999999999995
+      ]
+    ],
+    "tolerance_pt": 0.1
   }
 }

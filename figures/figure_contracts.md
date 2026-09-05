@@ -43,8 +43,9 @@ All five categorical recovery positions contain actual measurements. No
 interpolation, smoothing, invented uncertainty, or substituted protocols.
 Independent source-row and per-sequence-loss audits accompany each CSV.
 Both main plot areas share top and bottom edges; panel b is narrower to make
-room for its second y axis. The legends are inside the requested upper-right
-and lower-right positions with matching padding. Horizontal budget ticks,
+room for its second y axis. Both legends sit below their plot areas in one
+aligned row, with equal rectangular frames and matching 6.5-pt type and padding.
+The outer canvases remain the same size. Horizontal budget ticks,
 a horizontal scale bracket, and a null-space bracket exactly on x=4.25
 replace the former presentation. The null bracket leaves a stroke gap at the
 interior measured triangle. The deployed point and both measured kernel

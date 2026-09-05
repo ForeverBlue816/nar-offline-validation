@@ -79,8 +79,10 @@ every point and the bf16 reference. Bracket endpoints are those same plotted
 points; their source lines and PPL differences are in `fig4_metadata.json`.
 
 The revised presentation keeps both canvases at 2.7 by 4.2 inches and aligns
-their plot-area top and bottom edges. Legends are now inside, upper-right in
-a and lower-right in b, with matching 6.5-pt type and padding. Budget tick
+their plot-area top and bottom edges. Both legends occupy a dedicated bottom
+row, side by side, with matching rectangular frames, 6.5-pt type and padding.
+Their frame widths, heights and baselines match to within 0.1 pt; the plot
+areas are shortened to leave clear space above this row. Budget tick
 labels are horizontal. The scale-resolution bracket is horizontal over the
 exact x span of the Hadamard (256,1)/(128,1) pair, with its label immediately
 above and no leader. The null-space bracket lies exactly at x=4.25; a small
