@@ -22,7 +22,7 @@ matplotlib resolves the declared serif stack to **DejaVu Serif**. Rendered text
 is 7 pt for ticks/legends, 8 pt for axis labels, and 7.5 pt for annotations.
 No panel contains an in-file letter or footer.
 
-Previously committed A/B palette comparisons and their audit files are retained because they were explicitly requested not to be deleted. They are archival only; the current manuscript inputs are exactly `fig1a`–`fig1g`, `fig2a`–`fig2c`, and `fig3a`–`fig3c`.
+The current manuscript inputs are exactly `fig1a`–`fig1g`, `fig2a`–`fig2c`, and `fig3a`–`fig3c`.
 
 ## Figure 1
 
