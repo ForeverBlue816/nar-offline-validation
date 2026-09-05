@@ -287,7 +287,7 @@ class Qwen3RotationSet(e14.RotationSet):
         self.sign_cache: dict[tuple[str, int], torch.Tensor] = {}
         if not method.startswith("nar_"):
             return
-        root = e14.rotation_dir(workdir, model_key)
+        root = e14.rotation_dir(workdir, model_key, seed)
         if not (root / "DONE.json").exists():
             raise FileNotFoundError(root / "DONE.json")
         self.r1 = act.RotationFactor.load(root / f"r1_{self.R1_LABEL[method]}.pt", device)
@@ -703,7 +703,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
         trip = round_trip_audit(rotations, rotations.layers, tolerance=args.round_trip_tolerance)
         provenance["round_trip_max_relative_error"] = max(
             entry["round_trip_relative_error"] for entry in trip)
-        calibration = e14.rotation_dir(workdir, MODEL_KEY) / "DONE.json"
+        calibration = e14.rotation_dir(workdir, MODEL_KEY, args.seed) / "DONE.json"
         provenance["rotation_calibration_hash"] = config_hash(json.loads(calibration.read_text()))
         provenance["ranks"] = rotations.ranks()
         hooks = e14.RuntimeHooks(model, rotations, activation_kind=activation_kind,

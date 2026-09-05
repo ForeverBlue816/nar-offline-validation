@@ -481,7 +481,7 @@ Per-task accuracies are in `results/e14_w4a4kv4_summary.csv`; the six tasks are 
 
 A second reason not to read the zero-shot deltas as a verdict on the full W4A4KV4 configuration is that the suite barely exercises the KV quantizer at all: measured against the same KIVI policy E14 uses, a majority of the six tasks' requests are short enough that no cache entry is ever quantized, and PIQA's never are. The measurement is in [E19's section](#the-zero-shot-suite-barely-exercises-the-kv-quantizer) and applies unchanged here.
 
-The protocol was amended to one seed, so no confidence interval is estimable for any of these deltas and none is quoted. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
+The protocol was amended to one seed, so no confidence interval is estimable for any of these deltas and none is quoted. **A two-seed extension is running on Llama-3.1-8B** to supply one: seeds 1 and 2 re-run the rotation calibration, GPTQ and both metrics for the three paired rows, which varies the random sign vectors inside each rotation, the randomised sketch that finds the eigendirections, and the GPTQ calibration sample. `rotation_dir` is now keyed by seed — it was not, and a second seed would have silently reused seed 0's factors, which is exactly the failure a multi-seed run exists to rule out. Seed 0's path is unchanged. Until those rows land, the −0.29171 margin here carries no interval, and [OffQ's ablation](#external-comparison--offq-arxiv-260607116) shows a structureless rotation landing within 0.02 PPL of a tuned one, so the margin's separability from run-to-run variation is genuinely open. The per-task columns move in both directions within a single row — NAR k=8 on the 8B gains 2.2 points on lambada_openai and loses 1.5 on arc_challenge — which is the expected scatter of a single seed on task suites of this size and is a further reason not to read the zero-shot deltas as precise.
 
 ## 16-bit reference row
 
@@ -546,37 +546,97 @@ Effective widths are identical across the quantized rows and are **not** the 4.2
 
 `e19_summary.csv` previously carried a hard-coded 4.25 for both cache entries and 4.0 for the weights; the widths are now derived in `effective_bits()` and recomputed in `finalize`, so rows written before the fix are corrected without re-running them.
 
-**These rows are provisional.** The three quantizers are switched on together, so a perplexity that varies with `k` does not say which of them carries the variation. A decomposition is running and the rows below are not to be cited until it lands; the rank-ordering paragraph that follows is likewise not cited anywhere else in this report.
+Seed 0. `quarot_released` has no counterpart here: no released QuaRot artifact exists for Qwen3.
 
 | tier | row | PPL | Δ vs bf16 | Δ vs Hadamard | recovered | six-task zero-shot | Δ vs Hadamard |
 |---|---|---:|---:|---:|---:|---:|---:|
 | reference | bf16 | 8.79606 | 0 | −3.20532 | — | — | — |
 | B | Hadamard + asym g128 | 12.00138 | +3.20532 | 0 | 0% | 0.6995 | 0 |
-| C | NAR k=8 | **9.73628** | **+0.94022** | **−2.26510** | **70.7%** | **0.7161** | **+0.0166** |
+| C | NAR k=8 | 9.73628 | +0.94022 | −2.26510 | 70.7% | 0.7161 | +0.0166 |
 | C | NAR k=32 | 10.38430 | +1.58824 | −1.61707 | 50.4% | — | — |
 | C | NAR k=max | 10.79652 | +2.00046 | −1.20486 | 37.6% | 0.7158 | +0.0163 |
 
 Per-task accuracies are in the per-row JSON files; the six tasks are the frozen E13 suite.
 
-**The NAR advantage on Qwen3 is an order of magnitude larger than on Llama.** Plain Hadamard under this quantizer costs +3.205 PPL on Qwen3-8B-Base — 36.4% above bf16 — where on Llama-3.1-8B the same row costs +0.965 (15.5%). NAR k=8 removes 70.7% of that gap and lands at +0.940 (10.7%). The paired zero-shot delta is +0.0166, versus −0.000075 for the corresponding Llama row. Qwen3 is simply a harder model for a data-independent rotation, and that is where a data-dependent one has room to work.
+**These rows are the default GPTQ protocol, and that protocol turns out to be a large part of what they measure.** The −2.265 margin above is the largest NAR-over-Hadamard delta anywhere in this report, and the protocol comparison below shows it shrinks to −0.759 once GPTQ is given activation ordering. The rows are kept because they are the direct analogue of E14's, but the headline claim for Qwen3 is the act_order row, not this one.
 
-## The rank ordering inverts, and the offline proxy mispredicts it (provisional, not cited)
+## Which quantizer carries the rank dependence
 
-On Llama the ordering is k=max better than k=8 better than Hadamard, on both models. **On Qwen3 the ordering among the NAR rows is exactly reversed and strictly monotone:**
+The three quantizers are switched on together above, so a perplexity that varies with `k` says nothing about which of them varies. Each component row below turns on exactly one, over the same 146 windows on the same fp32 path. The A-only arm is E18 v2's, which ran the model in bf16 with an fp32 loss rather than in fp32 containers; its bf16 reference is therefore 8.8234 rather than 8.7961, so only deltas are compared and no absolute perplexity from it appears here.
 
-| k | PPL | recovered fraction |
-|---:|---:|---:|
-| 8 | 9.73628 | 70.7% |
-| 32 | 10.38430 | 50.4% |
-| max (32 qkv / 96 down) | 10.79652 | 37.6% |
+| rotation | A-only | KV-only | W-only | sum of components | all three | interaction |
+|---|---:|---:|---:|---:|---:|---:|
+| hadamard | +0.4417 | +0.0351 | **+1.0926** | +1.5694 | +3.2053 | +1.6359 |
+| nar_k8 | +0.1806 | −0.0027 | **+0.6572** | +0.8351 | +0.9402 | +0.1051 |
+| nar_kmax | +0.0002 | −0.0018 | **+1.1901** | +1.1885 | +2.0005 | +0.8119 |
 
-This is not one anomalous point. Three ranks fall in order, spanning 1.06 PPL, and the k=32 row was measured in a separate job from k=8 and k=max, so it is not an artifact of one run.
+Going from k=8 to k=max: **A-only improves by 0.1803**, ending at +0.0002, which is very nearly lossless and is exactly what the `f(k)` proxy predicts. **KV-only does not move** (+0.0008) and is near zero for every rotation, so the cache quantizer is close to free on this model. **W-only worsens by 0.5329**, against +1.0602 for the full row. The weight quantizer carries the rank dependence and it alone.
 
-It also contradicts this repository's own offline proxy. The E18 v2 `f(k)` curve on the same checkpoint is monotone *increasing* in k — mean cumulative captured fraction rises from 0.510 to 0.620 at the qkv site and from 0.194 to 0.328 at the down site as k goes from 8 to 32/96. By that metric more reflectors capture strictly more activation energy, and the end-to-end perplexity should improve. It gets worse. **On Qwen3, captured eigenspace energy does not predict end-to-end quantization quality, and predicts its ordering backwards.** That is recorded here as a negative result about the proxy, not explained away: no mechanism for it has been established, and none is asserted.
+Two qualifications. The components are **not additive** — the interaction term is +0.11 at k=8 and +0.81 at k=max — so this attributes the *direction*, not a budget: W-only explains 0.533 of the 1.060 and the rest sits in a W-with-A interaction. And the first attribution rule used here ranked components by absolute spread, which names A-only, because A-only moves furthest while moving the right way; the rule now asks which component worsens as `k` rises.
 
-Two observations constrain any future explanation but do not settle it. First, the effect is confined to perplexity — the six-task mean is flat between k=8 (0.7161) and k=max (0.7158), a difference of 0.0002 against a 1.06 PPL spread. Second, the rotation-only controls pass equally well at every k, so this is an interaction with quantization, not a defect in the rotation algebra.
+This also settles what the earlier draft called a failure of the offline proxy. The `f(k)` curve predicts the activation quantizer's behaviour and predicts it correctly: A-only falls monotonically as `k` rises, from +0.1806 to +0.0002. It was never a prediction about GPTQ, and reading it as one was the error.
 
-The consequence for the headline is limited and is stated rather than hidden: the E19 result reported above is the k=8 row, and on Qwen3 increasing the rank makes it worse. No k=16 or k=64 point was measured, so the curve is pinned at three ranks only.
+## Why the weight quantizer degrades as k rises
+
+GPTQ minimises weight error under `H = E[x xᵀ]` on the module input. The rotation cannot change that matrix's spectrum — `RᵀHR` is a similarity transform — so it can only change *where* the energy sits. The measurement below is the share of `tr(H)` carried by each 128-group's all-ones direction, which is what an asymmetric zero-point absorbs and what a reflector's anchor slot maps onto through the per-group Hadamard. The baseline for an isotropic Hessian is 1/128 = 0.0078. Medians over the 80 modules of each site across 36 layers:
+
+| site | rotation | null-space DC share | × baseline | participation ratio | diag max/median |
+|---|---|---:|---:|---:|---:|
+| R1 qkv | hadamard | 0.0041 | 0.5× | 5.2 | 4.2 |
+| R1 qkv | nar_k8 | 0.3331 | **42.6×** | 5.1 | 18.8 |
+| R1 qkv | nar_kmax | 0.4261 | **54.5×** | 5.2 | 16.1 |
+| R4 down | hadamard | 0.0076 | 1.0× | 482.5 | 1.6 |
+| R4 down | nar_k8 | 0.0691 | 8.8× | 475.9 | 4.2 |
+| R4 down | nar_kmax | 0.1910 | **24.4×** | 477.4 | 4.2 |
+| R2 head | hadamard | 0.0070 | 0.9× | 61.8 | 12.6 |
+| R2 head | nar_k8 | 0.0270 | 3.5× | 62.3 | 7.1 |
+| R2 head | nar_kmax | 0.0266 | 3.4× | 62.0 | 7.3 |
+
+**The rotation is doing exactly what it was built to do, monotonically in `k`, and that is the thing that hurts GPTQ.** NAR k=max places 42.6% of the qkv Hessian trace and 19.1% of the down Hessian trace on the null-space direction, against 33.3% and 6.9% at k=8, while the W-only cost rises from +0.657 to +1.190 over the same pair.
+
+The participation ratio `(tr H)² / ‖H‖_F²` is included as a control and behaves as theory requires: it is invariant under orthogonal conjugation, and it is the same for every rotation at every site to within the drift caused by differently-quantized upstream layers. It cannot distinguish the rotations, and its constancy is the check that the DC measurement is reading alignment rather than concentration.
+
+Two statistics that were asked for turned out to be uninformative, and both are recorded because the way they fail is the evidence for the argument above.
+
+**The Hessian diagonal at coordinates 0, 128, 256, …** reads 1.0× the 1/128 baseline in every cell of the table. That is not a null result about the rotation, it is the wrong basis: `RotationFactor.apply` runs G, then the permutation, then the signs, then a per-group Walsh–Hadamard, so the Hadamard is last and the anchor slot a reflector fills becomes the group's *constant direction* downstream, while the Hessian GPTQ builds is on the post-Hadamard activation. Verified directly on GPU: energy placed on the slot coordinates gives a diagonal share of 0.880 with the DC share at baseline, and energy placed on the group constant direction gives a DC share of 0.999 with the diagonal share at baseline **and a diagonal max/median of 1.0**. A per-group offset produces no diagonal spike at all, so the diagonal statistic was structurally blind to the case that matters.
+
+**The MSE clipping partition is degenerate.** Under `groupsize = -1` the clipping search runs per output row, so a per-input-column shrink does not exist in this protocol; and every row clips, 4096 of 4096 at every site for every rotation, with mean shrink 0.62–0.67 and no measurable difference between rotations. There is no clipped-versus-unclipped contrast to report. The per-column statistic would exist under the g128 protocol, but it was not captured there either, because the diagnostic runs before the per-group search rather than inside it.
+
+A candidate mechanism consistent with all of the above, stated as a hypothesis and not established: concentrating the Hessian on each group's constant direction makes the within-group correlation strong, GPTQ's block size of 128 is aligned to those same group boundaries, and a single per-output-row weight scale cannot absorb a block-structured Hessian. The protocol comparison below is the test that follows from it.
+
+## GPTQ protocol
+
+Two standard mitigations for an ill-conditioned Hessian, each applied identically to all three rotations. **The protocol was chosen on held-out WikiText-2 train windows** — 64 windows from offset 256, past the block GPTQ calibrates on — and the test numbers below did not revise that choice.
+
+| protocol | hadamard | nar_k8 | nar_kmax | mean | k=max − k=8 | weight bits |
+|---|---:|---:|---:|---:|---:|---:|
+| default (calibration) | 12.41473 | 10.03453 | 11.22011 | 11.2231 | +1.1856 | 4.003227 |
+| act_order (calibration) | 11.22074 | 10.27986 | 11.01124 | 10.8373 | +0.7314 | 4.003227 |
+| g128 (calibration) | 11.44538 | 11.10270 | **9.95739** | 10.8352 | **−1.1453** | 4.125000 |
+
+`act_order` and `g128` are indistinguishable on the mean, 10.8373 against 10.8352, and both beat the default. They are separated by cost: `act_order` is bit-neutral, `g128` buys its improvement with 0.122 extra bits per weight. **The selection rule, at matched effective bits, therefore chooses `act_order`.** The rule was fixed after seeing the calibration numbers and before any test number was computed.
+
+Test perplexities for all nine rows, against bf16 = 8.79606:
+
+| protocol | rotation | test PPL | Δ vs bf16 | Δ vs Hadamard | recovered |
+|---|---|---:|---:|---:|---:|
+| default | hadamard | 12.00138 | +3.20532 | 0 | — |
+| default | nar_k8 | 9.73628 | +0.94022 | −2.26510 | 70.7% |
+| default | nar_kmax | 10.79652 | +2.00046 | −1.20486 | 37.6% |
+| **act_order** | hadamard | 10.75077 | +1.95471 | 0 | — |
+| **act_order** | **nar_k8** | **9.99215** | **+1.19609** | **−0.75862** | **38.8%** |
+| **act_order** | nar_kmax | 10.42516 | +1.62909 | −0.32561 | 16.7% |
+| g128 | hadamard | 11.08738 | +2.29131 | 0 | — |
+| g128 | nar_k8 | 10.62460 | +1.82854 | −0.46278 | 20.2% |
+| g128 | **nar_kmax** | **9.42002** | **+0.62396** | **−1.66735** | **72.8%** |
+
+**The calibration set's prediction holds on the test set.** The rank inversion survives under `default` (+1.060) and under `act_order` (+0.433) and is reversed under `g128` (−1.205), exactly as the calibration windows said it would be. That is a held-out confirmation, not a fit.
+
+**And a large part of the Qwen3 NAR advantage was a property of the GPTQ protocol, not of the rotation.** Activation ordering alone repairs 1.25 PPL of the Hadamard row, 12.00138 to 10.75077, and NAR's margin over it falls from −2.265 to −0.759. At the chosen matched-bit protocol the honest Qwen3 numbers are **NAR k=8 at −0.759 over a metadata-matched Hadamard, recovering 38.8% of its gap** — still positive, still larger than Llama-3.1-8B's −0.292, but 2.6× rather than the 7.8× the default protocol suggested. The earlier claim that the Qwen3 advantage is "an order of magnitude larger than on Llama" is withdrawn.
+
+The single best configuration measured anywhere in E19 is **NAR k=max under g128: 9.42002, a 7.1% degradation from bf16**, at 4.125 weight bits rather than 4.003. It is reported rather than claimed, because the protocol was not selected on it.
+
+No zero-shot accuracies were measured for the six protocol rows; only perplexity was run.
 
 ## The zero-shot suite barely exercises the KV quantizer
 
@@ -602,15 +662,20 @@ The consequence is a limit on what the zero-shot columns in E14 and E19 can be r
 
 ## Relation to E14
 
-| | Llama-3.1-8B (E14) | Qwen3-8B-Base (E19) |
+Compared at each experiment's chosen protocol. E14 has only ever run the default GPTQ settings, so its column is the default protocol; E19's is `act_order`, which its calibration windows selected at matched effective bits.
+
+| | Llama-3.1-8B (E14, default) | Qwen3-8B-Base (E19, act_order) |
 |---|---:|---:|
 | 16-bit reference | 6.24104 | 8.79606 |
-| Hadamard + asym g128 | 7.20638 (+15.5%) | 12.00138 (+36.4%) |
-| best NAR row | 6.91467 at k=max (+10.8%) | 9.73628 at k=8 (+10.7%) |
-| NAR gain over Hadamard | −0.29171 | −2.26510 |
-| rank ordering | k=max > k=8 | withheld pending the decomposition |
+| Hadamard + asym g128 | 7.20638 (+15.5%) | 10.75077 (+22.2%) |
+| best NAR row | 6.91467 at k=max (+10.8%) | 9.99215 at k=8 (+13.6%) |
+| NAR gain over Hadamard | −0.29171 | −0.75862 |
+| recovered fraction of the Hadamard gap | 30.2% | 38.8% |
+| rank ordering | k=max > k=8 | k=8 > k=max, and reversed under g128 |
 
 The two 16-bit references are measured under different evaluation paths (E14 bf16 with HuggingFace's loss, E19 fp32 containers with fp32 NLL) and the two models tokenize WikiText-2 into different window counts, 141 versus 146. Absolute perplexities therefore do not compare across the two columns; the percentages, which are each row divided by its own reference, do.
+
+**E14 has not been run under `act_order`.** Since that protocol repairs 1.25 PPL of the Qwen3 Hadamard row, the Llama column may be similarly protocol-sensitive and its −0.292 may not survive the same treatment. This is an open item, not a correction: no Llama row has been re-measured under an alternative GPTQ protocol, and until one is, the cross-model comparison above holds only protocol-by-protocol, not as a statement about the two models.
 
 # E15 — FP4 boundary verification follow-up
 
@@ -1120,6 +1185,54 @@ Exact outputs are in `results/qwen3_8b_base/` (`e18v2_per_sequence.csv` with fp3
 The bf16 loss defect is confined to the sharded E18/70B path. The weight-fold comparison bug is **not**: `activation_experiments` folds the rotation into the consuming weight and stores it in bf16 for the E5/E11/E14 Llama rows too, and those runs record `weight_fold_max_relative_error` up to 3.1e-03. On Llama the quantization penalty (~0.5 PPL) is an order of magnitude larger than the fold artifact measured here (0.003-0.18 PPL), so the sign of those results is not in question, but the artifact is not negligible relative to the NAR-versus-Hadamard *differences* and the Llama rows have not been re-measured under the exact-transpose fold. This is recorded as an open item, not as a correction to those tables.
 
 
+# E18 on Llama-3.1-70B — withdrawn
+
+The E18 activation-only row set on Llama-3.1-70B is withdrawn and must not be cited. It read bf16 3.10527, Hadamard **15025.11**, NAR k=8 10.827, NAR k=max 3.653 over 64 windows: a plain global Hadamard destroying a 70B model under activation-only 4-bit quantization, while published W4A4KV4 results for a 70B Llama with a Hadamard rotation are around 5.7 perplexity. The setting here is strictly easier than that — weights stay bf16, and the activation quantizer is per-group asymmetric rather than per-token — so the number is not credible as a property of the model.
+
+Three hypotheses were tested and all three are eliminated.
+
+**It is not the rotation construction.** The Hadamard is global, not block-128: hidden 8192 is a power of two and takes a plain fast Walsh–Hadamard transform, intermediate 28672 factors as 28 × 1024 and takes the Paley-28 construction. Norm preservation holds to 1e-7 and the round trip to 1.9e-7 at n = 28672.
+
+**It is not the bf16 weight fold.** This was the working hypothesis for some time and it is wrong. Re-running the rows on the exact-transpose path moved Hadamard from 15025.11 to **15136.99** — essentially unchanged — while the rotation-only control on that same path passes on perplexity at ΔPPL 3e-5. The claim made earlier in this investigation, that the 70B destruction is explained by the weight fold, is withdrawn.
+
+**It is not the fp16 quantizer NaN documented above.** That defect produces a non-finite loss, and these are 64 finite per-sequence losses tightly clustered at 9.46–9.99. A uniform degradation is not a rare NaN cascade.
+
+What *was* established is that bf16 cannot certify the algebra at this scale, and that fp32 can. The rotation-only control in bf16 clears the 0.01 PPL gate but sits at 2.4–3.2e-3 against a per-chunk gate of 1e-3; in fp32 containers holding the same weights it passes at ΔPPL 1e-7 to 4.5e-6 and max |ΔNLL| 9.5e-7 to 6.9e-5, three orders of magnitude better, with logit relative L2 falling from 0.0126 to 8.0e-5.
+
+The rows were therefore never re-measured on the fp32 path, and the cause of the Hadamard result remains unidentified. This was a deliberate scope decision rather than a conclusion: the investigation was stopped in favour of the end-to-end 70B run below. The honest status is an unexplained negative result on a withdrawn row set.
+
+# E21 — end-to-end W4A4KV4 on Llama-3.1-70B (in progress)
+
+E14 could not run at 70B because it loads the whole model onto one GPU. `nar/e21_llama70b_e2e.py` supplies the three things the 70B needs and reuses E14 for everything else: a loader that shards across the visible GPUs for calibration and evaluation and leaves the model on the CPU for GPTQ, whose layer loop already moves one decoder layer to the GPU at a time; a rotation set that replicates its factors per device; and an R4 root, because E14 reuses frozen E5/E11 per-layer down-input factors and the 70B has no E11 run. E18's 70B down factors carry exactly the fields `RotationFactor.load` reads, so they are used directly rather than recalibrated. Three single-device assumptions inside E14 — the calibration sketch basis, the permutation-energy collector, and the weight-fold chunking — were made device-aware; all three are no-ops on a single GPU.
+
+The whole pipeline runs in fp32 containers holding the published bf16 values, for the reason established above: bf16 cannot certify the algebra at this scale.
+
+**There is deliberately no Hadamard row.** E21 therefore reports degradation against the model's own bf16 reference and has no paired delta against a metadata-matched rotation. Every claim it can support is of the form "NAR at 4.25-bit activations costs X% of perplexity", not "NAR beats Hadamard".
+
+The architecture audit passes: 80 layers, hidden 8192, intermediate 28672, 64 query heads over 8 KV heads, head dimension 128, no linear biases, no embedding tying, eight shards, `problems: []`. Effective widths are A 4.25, W 4.001570, K 5.171875, V 4.433594 at context 2048. Rotation calibration and the two GPTQ runs are under way; no perplexity has been measured yet and no row is reported.
+
+# Infrastructure defects found and fixed during E19
+
+Three defects were found while diagnosing the rank dependence. All three are recorded because each of them was invisible to every check that was in place, and two of them changed numbers that had already been reported.
+
+## A NaN in the activation quantizer's fp16 metadata
+
+`dynamic_asym_int4` stores one fp16 scale and one fp16 real-valued zero per group and documents that a degenerate group takes `s=1`, `q=0` and reproduces its fp16 offset. The guard implementing that tested the raw scale in fp32, which cannot see a scale that is positive in fp32 but rounds to zero in fp16 — that happens once `(hi−lo)/QMAX` falls below half the fp16 subnormal floor of 5.96e-08. The division that follows was then by zero, and for the element equal to a group minimum that is *exactly representable in fp16* it was 0/0, producing a NaN that `clamp` does not remove.
+
+It fired. On Qwen3-8B-Base window 19, NAR k=8 under the `act_order` protocol had exactly **one such group out of 24,145,920**: the first non-finite value appears at `layers.2.mlp.down_proj`, whose own inputs are all finite, and every one of that window's 311,164,928 logits is NaN. The same row under the default protocol has two underflowing groups on the same window and stays finite, because in those the group minimum is not fp16-exact, so the division is `x/0` rather than `0/0`, clamps to 15 and dequantises back to the offset.
+
+That distinction is why the fix required no reruns beyond the crashed rows. Where the old path was finite it returned `q·0 + zero = zero`; the repaired path returns `q = 0`, `deq = 0·1 + zero = zero`, the same value. `nar/quantizer_fp16_regression.py` pins both halves: the NaN case is repaired, and 200 randomised trials including constant and near-constant groups are bit-identical wherever the old path was finite.
+
+This also corrected an attribution made mid-investigation: `act_order` is **not** numerically unstable. It is a latent quantizer defect that any protocol could trigger, and `act_order` only happened to produce the activation that did.
+
+## Effective KV widths were hard-coded and wrong
+
+`e19_summary.csv` recorded 4.25 bits for both cache entries and 4.0 for the weights. 4.25 is the per-value width of the V quantizer's own group, not the width of either cache: KIVI keeps the newest 32 tokens in bf16 and K is grouped along *tokens* in chunks of 32 rather than along the head dimension, so both cache widths depend on the context length. The correct values at context 2048 are K **5.171875** and V **4.43359375**, weights **4.003227**. E19 shares `e14.RuntimeHooks` and both models have head dimension 128, so these are E14's numbers by construction, and E14's own summary already carried them. The widths are now derived from the constants the run uses and recomputed in `finalize`, so rows written before the fix are corrected without re-running.
+
+## The rotation-only control JSON was overwritten
+
+`e19_control.json` had been rewritten wholesale by the last single-rotation invocation and held only the `nar_k32` row; the CSV beside it was merged by rotation and held all four. The JSON now reads the merged CSV back. The file has been rebuilt with all four rotations, all passing.
+
 # E20 — the quantizer null space beyond the zero-point
 
 **This section was written and committed before any E20 row was run. The hypotheses below are pre-registered; no row was added or removed afterwards.**
@@ -1437,8 +1550,11 @@ OffQ's Llama column is **Llama-3-8B**, not 3.1, and the paper does not state the
 | **NAR k=max (this work)** | Llama-3.1-8B | 6.91467 | **+0.6736** | **10.8%** |
 | ResQ (quoted) | Qwen 2.5-7B | 8.20 | +1.40 | 20.6% |
 | **OffQ** | Qwen 2.5-7B | 7.66 | +0.86 | 12.6% |
-| NAR k=8 (this work, provisional) | Qwen3-8B-Base | 9.73628 | +0.9402 | 10.7% |
+| NAR k=8 (this work, act_order) | Qwen3-8B-Base | 9.99215 | +1.1961 | 13.6% |
+| NAR k=max (this work, g128, 4.125 W bits) | Qwen3-8B-Base | 9.42002 | +0.6240 | 7.1% |
 
 **The quantizer is confounded in OffQ's own table and is not confounded here.** Their implementation section states that OffQ uses per-group asymmetric quantization at group 128 while the baselines "follow their official implementations using per-token asymmetric quantization". Part of the reported QuaRot → OffQ margin is therefore the quantizer rather than the offsetting. E14's `hadamard_asym_g128` row is precisely the control that separates them — plain Hadamard under OffQ's own quantizer — and it degrades 15.5%, already below their quoted ResQ at 16.4% and close to OffQ at 14.4%.
 
-One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.29 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin of −2.27 is not in that regime and is where the claim would be strongest, but it rests on the provisional E19 rows and is not asserted until the decomposition attributes it.
+One result of theirs cuts against this work and is recorded as such. OffQ's Table 2 replaces the structured Hadamard with an arbitrary partially-random rotation whose first row is constant, and perplexity moves from 6.98 to 7.00. If the rotation's structure matters that little once the constant direction is present, then NAR's −0.292 margin over a matched Hadamard on Llama-3.1-8B is of a size that this repository cannot yet distinguish from that indifference on a single seed. The Qwen3 margin is larger but smaller than it first appeared: −0.759 at the matched-bit protocol E19 selects, not the −2.265 the default GPTQ protocol produces. A multi-seed run on Llama-3.1-8B is under way to put a confidence interval on the −0.292; until it lands, neither margin is asserted as separable from run-to-run variation.
+
+The comparison also inherits E19's protocol caveat in the other direction. OffQ's own rows use the ResQ codebase's GPTQ settings throughout, and this work has now shown that on Qwen3 the choice of GPTQ protocol moves a Hadamard baseline by 1.25 PPL — more than most of the method-versus-method gaps in their Table 1. Nothing here suggests their ordering is wrong, but the same sensitivity applies to it and is not controlled for there either.

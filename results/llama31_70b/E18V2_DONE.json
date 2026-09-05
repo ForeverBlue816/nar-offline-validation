@@ -1,0 +1,84 @@
+{
+  "activation_quantizer": "dynamic asymmetric per-token group-128 INT4",
+  "architecture_audit": {
+    "architecture": "LlamaForCausalLM",
+    "attention_bias": false,
+    "embedding_and_lm_head_share_storage": false,
+    "folded_weights": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "down_proj"
+    ],
+    "folds_embedding_or_lm_head": false,
+    "head_dim": 128,
+    "head_dim_rotation_r2": false,
+    "hidden_size": 8192,
+    "intermediate_size": 28672,
+    "linear_modules_with_bias": [],
+    "model_id": "unsloth/Meta-Llama-3.1-70B",
+    "num_hidden_layers": 80,
+    "per_head_qk_norm_left_untouched": true,
+    "per_head_qk_norm_modules": 0,
+    "quantized_sites": [
+      "input_layernorm output (q/k/v_proj input)",
+      "down_proj input"
+    ],
+    "residual_stream_rotation_r1": false,
+    "rms_norm_eps": 1e-05,
+    "rmsnorm_gamma_fusion_performed": false,
+    "rmsnorm_module_kinds": [
+      "input_layernorm",
+      "norm",
+      "post_attention_layernorm"
+    ],
+    "slot_counts": {
+      "down": 224,
+      "qkv": 64
+    },
+    "tie_word_embeddings": false
+  },
+  "calibration_sequences": 128,
+  "calibration_split": "train",
+  "eval_sequences": 64,
+  "eval_split": "test",
+  "fold": "exact_transpose",
+  "full_test_set": false,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 63543 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 62283 MiB, 580.173.02",
+      "2, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 62283 MiB, 580.173.02",
+      "3, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 63543 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1,2,3,4",
+    "slurm_job_id": "140329",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "llama31_70b",
+  "model_id": "unsloth/Meta-Llama-3.1-70B",
+  "nll_dtype": "float32",
+  "num_layers": 80,
+  "ranks": [
+    8,
+    "max"
+  ],
+  "rotation_only_control": [],
+  "seed": 20260902,
+  "sequence_length": 2048,
+  "sites": "post-RMSNorm q/k/v_proj input and down_proj input only",
+  "weight_fold_max_relative_error": {
+    "hadamard": 0.0,
+    "nar_k8": 0.0,
+    "nar_kmax": 0.0
+  }
+}

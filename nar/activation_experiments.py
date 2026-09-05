@@ -37,6 +37,9 @@ MODEL_IDS = {
     "llama31_8b": "unsloth/Meta-Llama-3.1-8B",
     # E18 v2 / E19 use the base checkpoint, never the post-trained Qwen/Qwen3-8B.
     "qwen3_8b_base": "Qwen/Qwen3-8B-Base",
+    # E21. The same id E18 used, so the tokenized caches and the 70B down-input
+    # factors both resolve without being recomputed.
+    "llama31_70b": "unsloth/Meta-Llama-3.1-70B",
 }
 SITES = ("qkv", "down")
 EVAL_SITES = ("qkv_only", "both", "down_only")

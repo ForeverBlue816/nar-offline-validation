@@ -53,6 +53,10 @@ KV_RESIDUAL_LENGTH = 32
 
 # Extension points for non-Llama architectures (E19 sets both for Qwen3).
 # The Llama rows behave exactly as before when these are left untouched.
+# Where the per-layer down-input R4 factors live. None keeps E14's frozen
+# choice, which reuses E5/E11 artifacts; a model that has no E11 run supplies
+# its own root here rather than having the path special-cased.
+R4_ROOT: Callable[[Path, str, str], Path] | None = None
 LOAD_MODEL: Callable[[str, Path], torch.nn.Module] = None  # type: ignore[assignment]
 ROTATION_SET: type | None = None
 ALGEBRA_CONTROL: Callable[[Path, str], dict[str, Any]] | None = None
@@ -69,8 +73,17 @@ def _serializable(value: Any) -> Any:
     )
 
 
-def rotation_dir(workdir: Path, model: str) -> Path:
-    return workdir / "activations" / model / "e14_rotations"
+def rotation_dir(workdir: Path, model: str, seed: int = 0) -> Path:
+    """Where a seed's calibrated R1/R2 factors live.
+
+    Seed 0 keeps the original unsuffixed path, so every artifact E14 and E19
+    already produced still resolves.  A second seed needs its own directory:
+    the calibration writes a fixed set of filenames and its DONE.json guard
+    would otherwise make a new seed silently reuse seed 0's factors, which is
+    exactly the failure that a multi-seed run exists to rule out.
+    """
+    suffix = "" if seed == 0 else f"_seed{seed}"
+    return workdir / "activations" / model / f"e14_rotations{suffix}"
 
 
 def checkpoint_dir(artifact_root: Path, model: str, rotation: str, seed: int,
@@ -126,13 +139,15 @@ class RotationCalibrationCollector:
         self.v_moments = [torch.zeros((head_dim, head_dim), dtype=torch.float64) for _ in model.model.layers]
         self.v_counts = [0 for _ in model.model.layers]
         self.handles: list[Any] = []
-        self.device_basis: torch.Tensor | None = None
+        # Keyed by device: a model sharded across GPUs presents activations on
+        # several devices, and caching one copy would fail on the second.
+        self.device_basis: dict[torch.device, torch.Tensor] = {}
 
     def consume_r1(self, value: torch.Tensor) -> None:
         rows = value.detach().float().reshape(-1, value.shape[-1])
-        if self.device_basis is None:
-            self.device_basis = self.basis.to(rows.device)
-        projection = rows @ self.device_basis
+        if rows.device not in self.device_basis:
+            self.device_basis[rows.device] = self.basis.to(rows.device)
+        projection = rows @ self.device_basis[rows.device]
         self.projected += (rows.T @ projection).double().cpu()
         self.trace += float(rows.square().sum(dtype=torch.float64))
         self.count += rows.shape[0]
@@ -161,7 +176,7 @@ class RotationCalibrationCollector:
         for handle in self.handles:
             handle.remove()
         self.handles.clear()
-        self.device_basis = None
+        self.device_basis.clear()
 
 
 class RotationEnergyCollector:
@@ -172,10 +187,17 @@ class RotationEnergyCollector:
         self.energy = torch.zeros(reflectors.shape[1], dtype=torch.float64)
         self.count = 0
         self.handles: list[Any] = []
+        # Same reason as the calibration sketch: on a sharded model the hook
+        # fires on several devices, so the reflectors are replicated lazily.
+        self.device_reflectors: dict[torch.device, tuple[torch.Tensor, torch.Tensor]] = {}
 
     def hook(self, _module: torch.nn.Module, _inputs: tuple[Any, ...], output: torch.Tensor) -> torch.Tensor:
         rows = output.detach()[:, ::32, :].float().reshape(-1, output.shape[-1])
-        transformed = act.apply_reflectors(rows, self.reflectors, self.active)
+        if rows.device not in self.device_reflectors:
+            self.device_reflectors[rows.device] = (self.reflectors.to(rows.device),
+                                                   self.active.to(rows.device))
+        reflectors, active = self.device_reflectors[rows.device]
+        transformed = act.apply_reflectors(rows, reflectors, active)
         self.energy += transformed.square().sum(0).double().cpu()
         self.count += transformed.shape[0]
         return output
@@ -188,6 +210,7 @@ class RotationEnergyCollector:
         for handle in self.handles:
             handle.remove()
         self.handles.clear()
+        self.device_reflectors.clear()
 
 
 def _model_pass(model: torch.nn.Module, tokens: torch.Tensor, label: str) -> None:
@@ -237,7 +260,7 @@ def calibrate_rotations(args: argparse.Namespace) -> None:
     if not torch.cuda.is_available():
         raise RuntimeError("E14 rotation calibration requires CUDA")
     workdir = Path(args.workdir).resolve()
-    output = rotation_dir(workdir, args.model)
+    output = rotation_dir(workdir, args.model, args.seed)
     done = output / "DONE.json"
     if done.exists() and (output / "r1_k8.pt").exists() and (output / "r1_kmax.pt").exists():
         LOG.info("E14 rotation calibration exists: %s", done)
@@ -356,7 +379,7 @@ class RotationSet:
         self.r4: dict[int, act.RotationFactor] = {}
         self.r4_wy: dict[int, WYFactor] = {}
         if method.startswith("nar_"):
-            root = rotation_dir(workdir, model_key)
+            root = rotation_dir(workdir, model_key, seed)
             if not (root / "DONE.json").exists():
                 raise FileNotFoundError(root / "DONE.json")
             rank_label = method.removeprefix("nar_")
@@ -364,6 +387,7 @@ class RotationSet:
             for layer in range(self.layers):
                 self.r2[layer] = act.RotationFactor.load(root / f"r2_v_layer_{layer:02d}.pt", device)
                 r4_root = (
+                    R4_ROOT(workdir, model_key, rank_label) if R4_ROOT is not None else
                     workdir / "activations" / model_key / "e11_calibration" / "factors" / "nar_b128_k8"
                     if rank_label == "k8" else act.factor_dir(workdir, model_key)
                 )
@@ -412,21 +436,36 @@ class RotationSet:
         return rotated.transpose(1, 2).reshape(shape)
 
 
+# Where the rotation tensors live. None means "wherever the weight already is",
+# which is the single-GPU case and leaves the arithmetic byte for byte as it was.
+# A sharded or CPU-resident model sets this so each chunk is streamed to the
+# rotation's device and the result written back in place.
+FOLD_DEVICE: torch.device | None = None
+
+
 def _transform_weight_rows(module: torch.nn.Linear, transform: Callable[[torch.Tensor], torch.Tensor],
                            row_batch: int) -> None:
     original = module.weight.detach()
+    home = original.device
     chunks = []
     for start in range(0, original.shape[0], row_batch):
-        chunks.append(transform(original[start:start + row_batch].float()).to(original.dtype))
+        chunk = original[start:start + row_batch].float()
+        if FOLD_DEVICE is not None:
+            chunk = chunk.to(FOLD_DEVICE)
+        chunks.append(transform(chunk).to(original.dtype).to(home))
     module.weight.data.copy_(torch.cat(chunks, 0))
 
 
 def _transform_weight_left(module: torch.nn.Linear, transform: Callable[[torch.Tensor], torch.Tensor],
                            row_batch: int) -> None:
     transposed = module.weight.detach().T
+    home = transposed.device
     chunks = []
     for start in range(0, transposed.shape[0], row_batch):
-        chunks.append(transform(transposed[start:start + row_batch].float()).to(transposed.dtype))
+        chunk = transposed[start:start + row_batch].float()
+        if FOLD_DEVICE is not None:
+            chunk = chunk.to(FOLD_DEVICE)
+        chunks.append(transform(chunk).to(transposed.dtype).to(home))
     module.weight.data.copy_(torch.cat(chunks, 0).T)
 
 
