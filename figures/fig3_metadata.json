@@ -1,16 +1,89 @@
 {
   "model": "llama32_3b",
   "site": "down_input",
-  "layer": 1,
-  "range_law_points": 2912,
-  "point_counts": {
-    "E1c activations": 2520,
-    "E7 V cache": 280,
-    "E20 multi-slot": 112
+  "layer": 27,
+  "token_window": {
+    "sequence_index": 118,
+    "position_start": 160,
+    "position_stop_exclusive": 672,
+    "rows": 512,
+    "bos_excluded": true
   },
-  "font_family_resolved": "DejaVu Serif",
-  "fit_intercept": 0.05980223276470587,
-  "fit_slope": 0.8665147718600141,
-  "fit_r_squared": 0.8613894973078933,
-  "corner_inset": true
+  "covariance": {
+    "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
+    "top_two_eigenvalues": [
+      97.52831250027364,
+      57.37043599625988
+    ],
+    "rows": 512,
+    "centered_pc1_cosine_with_prism_receiving_dc": 0.10168235749006271,
+    "frozen_second_moment_v1_dc_energy_fraction": 1.0,
+    "raw_pc1_cosine_with_group_dc": 0.013828529768916017
+  },
+  "ellipse_semiaxes_two_sd": [
+    19.751284768366197,
+    15.148654857281537
+  ],
+  "angles_degrees": [
+    134.20765835298585,
+    45.0
+  ],
+  "rotation_degrees": -89.20765835298585,
+  "axis_limits_shared": [
+    -34.04339284472629,
+    64.6892829329064
+  ],
+  "initial_percentile_limits_0_5_to_99_5": [
+    [
+      -24.932924003196785,
+      -11.009701092402725
+    ],
+    [
+      41.74905636249908,
+      42.06471621845723
+    ]
+  ],
+  "cloud_counts": {
+    "before": 512,
+    "after": 512,
+    "inside_frame": [
+      512,
+      512
+    ],
+    "excluded": 0
+  },
+  "ranges": {
+    "before_raw": 11.65625,
+    "after_prismquant": 0.7634278535842896,
+    "raw_group": 25,
+    "prismquant_group": 0,
+    "sequence": 118,
+    "token": 416,
+    "statistic": "max-minus-min of the 128 actual channel values in Figure 1e/g",
+    "bracket_scale_shared": [
+      0,
+      12.0
+    ]
+  },
+  "interpretation": "Calibrated 2D rigid-rotation illustration: true centered-covariance eigenvalues from the same layer/window, leading ellipse axis aligned exactly with (1,1) after rotation. This is not an exact projection of the full k=max transform; its mapped centered PC1 DC cosine is recorded separately. Brackets are independently scaled measured group ranges, not ellipse projection widths.",
+  "covariance_vs_energy": "Panel a uses centered sample covariance on the 512-token Figure 1 window. Panel b uses the existing uncentered second moment over 262016 non-BOS calibration rows; these have different estimands and populations.",
+  "panels": [
+    "a_before",
+    "a_after",
+    "b"
+  ],
+  "removed_panel": "c (range-law data retained; no c exports)",
+  "palette": {
+    "prismquant": "#1D3557",
+    "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC",
+    "duquant": "#E63946",
+    "identity": "#457B9D",
+    "reference": "#1D3557",
+    "text": "#1D3557",
+    "zero": "#F1FAEE",
+    "pane_edge": "#C9D6DF",
+    "grid": "#DCE4EA"
+  },
+  "font_family_resolved": "DejaVu Serif"
 }

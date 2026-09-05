@@ -67,12 +67,12 @@
       4223
     ],
     "hadamard_and_prismquant": [
-      0,
-      2047
+      2176,
+      4223
     ],
     "width": 2048,
     "raw_window_rule": "group-aligned window centered on the largest-|loading| channel of frozen v1",
-    "rotated_window_rule": "matched output-coordinate window beginning at the group receiving v1 under PrismQuant"
+    "rotated_window_rule": "same numerical channel interval as raw; coordinates are in the rotated basis"
   },
   "group_window": [
     0,
@@ -83,9 +83,9 @@
   "prismquant_receiving_group": 0,
   "receiving_group_fraction_of_mapped_v1_energy": 1.0,
   "plotted_mean_ranges": {
-    "hadamard": 1.7640141248703003,
-    "prismquant_kmax": 0.8404273986816406,
-    "reduction_percent": 52.35710492151341,
+    "hadamard": 1.764014204069099,
+    "prismquant_kmax": 0.8404273132182425,
+    "reduction_percent": 52.35711190535732,
     "p90_reduction_percent": 49.27603385273945
   },
   "trace_ranges": {
@@ -94,9 +94,9 @@
     "nar_kmax": 0.7634278535842896
   },
   "trace_zero_points": {
-    "raw": 0.03076837956905365,
-    "hadamard": 0.04235752299427986,
-    "nar_kmax": -2.260563373565674
+    "raw": -4.625,
+    "hadamard": -0.87060546875,
+    "nar_kmax": -2.611328125
   },
   "transform_seed": 20260902,
   "font_family_resolved": "DejaVu Serif",
@@ -109,12 +109,95 @@
     ],
     "hadamard": [
       0.0,
-      3.616786241531372
+      3.2732126712799072
     ]
   },
   "row2_shared_z_limits": [
     0.0,
-    6.389837265014648
+    8.919330596923828
   ],
-  "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun"
+  "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
+  "range_averaging": {
+    "c_d": {
+      "statistic": "arithmetic mean of every plotted max-minus-min value",
+      "sequence": 118,
+      "tokens_inclusive": [
+        160,
+        671
+      ],
+      "groups_inclusive": [
+        0,
+        63
+      ],
+      "count": 32768
+    },
+    "e": {
+      "statistic": "single raw token/group max-minus-min",
+      "token": 416,
+      "group": 25
+    },
+    "f_g": {
+      "statistic": "single rotated token/group max-minus-min",
+      "token": 416,
+      "group": 0,
+      "landscape_row": 256,
+      "cell_identity_verified": true
+    },
+    "reconciliation": "c/d average 512 tokens \u00d7 64 groups; f/g select one cell (token 416, group 0) of those SAME arrays, so their values need not equal the means."
+  },
+  "correctness_resolution": {
+    "labels_or_arrays_swapped": false,
+    "old_rendering_problem": "Whole polylines were colored by their maximum; opaque near lines obscure far lines. Mean range does not determine maximum or roughness.",
+    "fix": "Color every segment by local height on shared c/d normalization; annotations computed inside renderer from its values array.",
+    "old_z_clipping": "PrismQuant maximum 8.9193306 exceeded old common upper limit 6.3898373; common upper limit now covers both arrays."
+  },
+  "geometry_covariance": {
+    "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
+    "top_two_eigenvalues": [
+      97.52831250027364,
+      57.37043599625988
+    ],
+    "rows": 512,
+    "centered_pc1_cosine_with_prism_receiving_dc": 0.10168235749006271,
+    "frozen_second_moment_v1_dc_energy_fraction": 1.0,
+    "raw_pc1_cosine_with_group_dc": 0.013828529768916017
+  },
+  "rendered_panel_statistics": {
+    "c": {
+      "method": "Hadamard",
+      "mean_from_plotted_array": 1.764014204069099,
+      "max": 6.389837265014648,
+      "shape": [
+        512,
+        64
+      ]
+    },
+    "d": {
+      "method": "PrismQuant",
+      "mean_from_plotted_array": 0.8404273132182425,
+      "max": 8.919330596923828,
+      "shape": [
+        512,
+        64
+      ]
+    }
+  },
+  "trace_group_means": {
+    "raw": 0.03076837956905365,
+    "hadamard": 0.04235752299427986,
+    "nar_kmax": -2.260563373565674
+  },
+  "zero_point_definition": "Actual quantizer offset: fp16(min(values)), not the arithmetic group mean; dynamic_asym_int4 in nar/experiment.py.",
+  "palette": {
+    "prismquant": "#1D3557",
+    "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC",
+    "duquant": "#E63946",
+    "identity": "#457B9D",
+    "reference": "#1D3557",
+    "text": "#1D3557",
+    "zero": "#F1FAEE",
+    "pane_edge": "#C9D6DF",
+    "grid": "#DCE4EA"
+  }
 }

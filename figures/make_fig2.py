@@ -1,151 +1,88 @@
 #!/usr/bin/env python3
-"""Render Figure 2 as three final-size standalone matplotlib panels."""
-
+"""Figure 2: unchanged measurements with a shared, unobstructed legend."""
 from __future__ import annotations
-
 import argparse
 import json
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
-
 from figure_style import PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
+MODEL, SITE, LAYERS, GROUP = 'llama32_3b', 'down', 28, 128
 
-MODEL = "llama32_3b"
-SITE = "down"
-LAYERS = 28
-GROUP = 128
-
-
-def validate_data(data: pd.DataFrame) -> pd.DataFrame:
+def validate_data(data):
     subset = data[data.model.eq(MODEL) & data.site.eq(SITE)].copy()
-    expected = set(range(LAYERS))
-    for method in ("hadamard", "duquant_style", "nar"):
-        found = set(subset[subset.method.eq(method)].layer.astype(int))
-        if found != expected:
-            raise AssertionError(f"{method}: incomplete Figure 2 layers {sorted(expected - found)}")
-    paired = subset[subset.method.isin(["hadamard", "nar"])]
-    if paired[["mean_group_range", "nmse"]].isna().any().any():
-        raise AssertionError("Figure 2 contains blank range or NMSE values")
+    for method in ('hadamard', 'duquant_style', 'nar'):
+        part = subset[subset.method.eq(method)]
+        if set(part.layer.astype(int)) != set(range(LAYERS)) or len(part) != LAYERS:
+            raise AssertionError(f'{method}: missing or duplicated layers')
+    paired = subset[subset.method.isin(['hadamard', 'nar'])]
+    if not np.isfinite(paired[['mean_group_range','nmse']].to_numpy()).all():
+        raise AssertionError('Nonfinite measurement')
     return subset
 
+def paired_metric(data, column):
+    p = data[data.method.isin(['hadamard','nar'])].pivot(index='layer',columns='method',values=column).sort_index()
+    if (p.hadamard <= 0).any(): raise AssertionError('Nonpositive ratio denominator')
+    return p.index.to_numpy(),p.hadamard.to_numpy(),p.nar.to_numpy(),float((100*(p.hadamard-p.nar)/p.hadamard).mean())
 
-def paired_metric(data: pd.DataFrame, column: str) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
-    pivot = data[data.method.isin(["hadamard", "nar"])].pivot(
-        index="layer", columns="method", values=column
-    ).sort_index()
-    reduction = 100.0 * (pivot.hadamard - pivot.nar) / pivot.hadamard
-    return (
-        pivot.index.to_numpy(),
-        pivot.hadamard.to_numpy(),
-        pivot.nar.to_numpy(),
-        float(reduction.mean()),
-    )
-
-
-def new_panel() -> tuple[plt.Figure, plt.Axes]:
-    configure_style()
-    fig, ax = plt.subplots(figsize=(1.85, 1.72))
-    fig.subplots_adjust(left=0.28, right=0.96, bottom=0.25, top=0.95)
+def draw(ax, data, column):
     clean_2d_axis(ax)
-    ax.tick_params(labelsize=7.0)
+    if column == 'f':
+        ax.axhline(1/GROUP,color=PALETTE['reference'],lw=.65,ls=(0,(3,2)),zorder=0)
+        methods = [('hadamard','Hadamard'),('duquant_style','DuQuant'),('nar','PrismQuant')]
+        for method,label in methods:
+            p=data[data.method.eq(method)].sort_values('layer')
+            color=PALETTE[{'hadamard':'hadamard','duquant_style':'duquant','nar':'prismquant'}[method]]
+            ax.plot(p.layer,p.f,color=color,lw=1.8 if method=='nar' else 1.05,
+                    marker='o',ms=2.7 if method=='nar' else 2.2,mec='white',mew=.2,label=label)
+        ax.set_ylabel('null-space energy fraction, f')
+        reduction=None
+    else:
+        x,h,p,reduction=paired_metric(data,column)
+        ax.plot(x,h,color=PALETTE['hadamard'],lw=1,marker='o',ms=2.2)
+        ax.plot(x,p,color=PALETTE['prismquant'],lw=1.8,marker='o',ms=2.7,mec='white',mew=.2)
+        ax.set_ylabel('mean group range' if column=='mean_group_range' else 'activation NMSE')
+        ax.text(.98,1.06,f'mean reduction {reduction:.1f}%',transform=ax.transAxes,
+                ha='right',va='bottom',fontsize=7)
+    ax.set_xlim(-.8,LAYERS-.2); ax.set_xticks([0,27]); ax.set_xlabel('layer index')
     ax.yaxis.set_major_locator(MaxNLocator(nbins=4))
-    return fig, ax
-
-
-def render_a(data: pd.DataFrame, outbase: Path) -> None:
-    fig, ax = new_panel()
-    reference = 1.0 / GROUP
-    ax.axhline(reference, color=PALETTE["reference"], lw=0.65, ls=(0, (3, 2)), zorder=0)
-    specs = (
-        ("hadamard", "Hadamard", PALETTE["hadamard"], 1.0, 2.2),
-        ("duquant_style", "DuQuant", PALETTE["duquant"], 1.05, 2.2),
-        ("nar", "PrismQuant k=max", PALETTE["prismquant"], 1.8, 2.7),
-    )
-    for method, label, color, width, size in specs:
-        part = data[data.method.eq(method)].sort_values("layer")
-        ax.plot(
-            part.layer, part.f, color=color, lw=width, marker="o", ms=size,
-            mec="white", mew=0.2, label=label,
-        )
-    ax.set_xlim(-0.8, LAYERS - 0.2)
-    ax.set_xticks([0, LAYERS - 1])
-    ax.set_xlabel("layer index")
-    ax.set_ylabel("null-space energy fraction, f")
-    ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f"))
-    legend = ax.legend(
-        loc="upper right", fontsize=7.0, handlelength=1.05, handletextpad=0.35,
-        labelspacing=0.18, borderaxespad=0.15, frameon=False,
-    )
-    for text, color in zip(
-        legend.get_texts(),
-        [PALETTE["hadamard"], PALETTE["duquant"], PALETTE["prismquant"]],
-    ):
-        text.set_color(color)
-    save_panel(fig, outbase)
-
-
-def render_metric(data: pd.DataFrame, column: str, ylabel: str, outbase: Path) -> float:
-    fig, ax = new_panel()
-    fig.subplots_adjust(left=0.28, right=0.96, bottom=0.25, top=0.84)
-    layer, hadamard, prism, reduction = paired_metric(data, column)
-    ax.plot(layer, hadamard, color=PALETTE["hadamard"], lw=1.0, marker="o", ms=2.2)
-    ax.plot(
-        layer, prism, color=PALETTE["prismquant"], lw=1.8, marker="o", ms=2.7,
-        mec="white", mew=0.2,
-    )
-    ax.set_xlim(-0.8, LAYERS - 0.2)
-    ax.set_xticks([0, LAYERS - 1])
-    ax.set_xlabel("layer index")
-    ax.set_ylabel(ylabel)
-    ax.yaxis.set_major_formatter(FormatStrFormatter("%.2f" if column == "mean_group_range" else "%.3f"))
-    fig.text(
-        0.96, 0.955, f"mean reduction {reduction:.1f}%",
-        fontsize=7.5, color=PALETTE["text"], ha="right", va="top",
-    )
-    save_panel(fig, outbase)
+    ax.yaxis.set_major_formatter(FormatStrFormatter('%.3f' if column=='nmse' else '%.2f'))
     return reduction
 
+def shared_legend(fig):
+    handles=[Line2D([],[],color=PALETTE[k],lw=1.8 if k=='prismquant' else 1.05,marker='o',ms=2.5,label=label)
+             for k,label in [('prismquant','PrismQuant'),('hadamard','Hadamard'),('duquant','DuQuant')]]
+    legend=fig.legend(handles=handles,loc='upper right',bbox_to_anchor=(.985,.995),ncol=3,
+                      fontsize=6.5,frameon=True,edgecolor=PALETTE['pane_edge'],framealpha=1,
+                      handlelength=1.3,handletextpad=.4,columnspacing=1,borderpad=.4)
+    legend.get_frame().set_linewidth(.6)
 
-def make_preview(here: Path) -> None:
-    configure_style()
-    fig, axes = plt.subplots(1, 3, figsize=(5.55, 1.72))
-    for ax, letter in zip(axes, "abc"):
-        ax.imshow(plt.imread(here / f"fig2{letter}.png"))
-        ax.axis("off")
-    fig.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=0.01)
-    fig.savefig(here / "fig2_preview.png", dpi=300)
-    plt.close(fig)
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--csv", type=Path, default=Path(__file__).resolve().parent / "fig2_capture.csv")
-    args = parser.parse_args()
-    here = Path(__file__).resolve().parent
-    data = validate_data(pd.read_csv(args.csv))
-    render_a(data, here / "fig2a")
-    range_reduction = render_metric(data, "mean_group_range", "mean group range", here / "fig2b")
-    nmse_reduction = render_metric(data, "nmse", "activation NMSE", here / "fig2c")
-    make_preview(here)
-    metadata = {
-        "model": MODEL,
-        "site": SITE,
-        "layers": LAYERS,
-        "group_size": GROUP,
-        "mean_range_reduction_percent": range_reduction,
-        "mean_nmse_reduction_percent": nmse_reduction,
-        "font_family_resolved": resolved_serif_family(),
-        "duquant_display_label": "DuQuant",
-        "reference_line": "G/d retained but unlabeled",
-        "panel_b_secondary_series": "removed; it encoded reduction rather than raw range",
-    }
-    (here / "fig2_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
-    print(json.dumps(metadata, indent=2))
-
-
-if __name__ == "__main__":
-    main()
+def main():
+    parser=argparse.ArgumentParser(); parser.add_argument('--csv',type=Path,default=Path(__file__).with_name('fig2_capture.csv'))
+    args=parser.parse_args(); here=Path(__file__).resolve().parent
+    configure_style(); data=validate_data(pd.read_csv(args.csv)); reductions={}
+    for letter,column in zip('abc',['f','mean_group_range','nmse']):
+        fig,ax=plt.subplots(figsize=(1.85,1.72)); fig.subplots_adjust(left=.28,right=.96,bottom=.25,top=.80)
+        reductions[column]=draw(ax,data,column); save_panel(fig,here/f'fig2{letter}')
+    fig,axes=plt.subplots(1,3,figsize=(6.4,2.08)); fig.subplots_adjust(left=.09,right=.985,bottom=.24,top=.71,wspace=.56)
+    for ax,letter,column in zip(axes,'abc',['f','mean_group_range','nmse']):
+        draw(ax,data,column)
+        fig.text(ax.get_position().x0,.835,f'({letter})',fontsize=7,fontweight='bold')
+    shared_legend(fig)
+    save_panel(fig,here/'fig2')
+    # Same physical size and geometry as the manuscript assembly.
+    (here/'fig2_preview.png').write_bytes((here/'fig2.png').read_bytes())
+    metadata={'model':MODEL,'site':SITE,'layers':LAYERS,'group_size':GROUP,
+              'mean_range_reduction_percent':reductions['mean_group_range'],
+              'mean_nmse_reduction_percent':reductions['nmse'],
+              'font_family_resolved':resolved_serif_family(), 'palette':PALETTE,
+              'legend':'figure upper-right, dedicated top strip, 6.5 pt, boxed; PrismQuant / Hadamard / DuQuant',
+              'duquant_display_label':'DuQuant','duquant_implementation':'DuQuant-style diagnostic, not official full DuQuant; source method duquant_style',
+              'statistics':'same 28 measured layers; arithmetic mean of paired per-layer percentage decreases; no seed CI inferred',
+              'reference_line':'1 / group size, retained without label'}
+    (here/'fig2_metadata.json').write_text(json.dumps(metadata,indent=2)+'\n')
+    print(json.dumps(metadata,indent=2))
+if __name__=='__main__': main()

@@ -10,25 +10,13 @@ from matplotlib import font_manager
 from matplotlib.colors import LinearSegmentedColormap
 
 PALETTE = {
-    "prismquant": "#004C94",
-    "prismquant_light": "#3C93FA",
-    "hadamard": "#73CC80",
-    "duquant": "#0FA69D",
-    "identity": "#52647A",
-    "reference": "#2D3F54",
-    "text": "#2D3F54",
-    "zero": "#F2F4F6",
-    "pane_edge": "#D0D5DB",
+    "prismquant": "#1D3557", "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC", "duquant": "#E63946",
+    "identity": "#457B9D", "reference": "#1D3557", "text": "#1D3557",
+    "zero": "#F1FAEE", "pane_edge": "#C9D6DF", "grid": "#DCE4EA",
 }
-
 SEQUENTIAL_CMAP = LinearSegmentedColormap.from_list(
-    "prismquant_sequential",
-    [PALETTE["zero"], PALETTE["prismquant_light"], PALETTE["prismquant"]],
-)
-DIVERGING_CMAP = LinearSegmentedColormap.from_list(
-    "prismquant_diverging",
-    [PALETTE["hadamard"], PALETTE["zero"], PALETTE["prismquant"]],
-)
+    "prismquant_height", ["#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"])
 
 
 def configure_style() -> None:
@@ -38,11 +26,11 @@ def configure_style() -> None:
             "font.serif": ["Times New Roman", "Liberation Serif", "DejaVu Serif"],
             "mathtext.fontset": "stix",
             "font.size": 7.0,
-            "axes.labelsize": 8.0,
-            "axes.titlesize": 7.5,
-            "xtick.labelsize": 7.0,
-            "ytick.labelsize": 7.0,
-            "legend.fontsize": 7.0,
+            "axes.labelsize": 7.0,
+            "axes.titlesize": 7.0,
+            "xtick.labelsize": 6.0,
+            "ytick.labelsize": 6.0,
+            "legend.fontsize": 6.5,
             "text.color": PALETTE["text"],
             "axes.labelcolor": PALETTE["text"],
             "axes.edgecolor": PALETTE["text"],
@@ -77,12 +65,20 @@ def resolved_serif_family() -> str:
 def clean_2d_axis(ax: plt.Axes) -> None:
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.tick_params(labelsize=7.0)
+    ax.tick_params(labelsize=6.0)
 
 
-def save_panel(fig: plt.Figure, outbase: Path, dpi: int = 300) -> None:
-    """Save at the figure's exact physical dimensions; never post-scale."""
-    fig.savefig(outbase.with_suffix(".svg"))
-    fig.savefig(outbase.with_suffix(".pdf"))
+def save_panel(fig: plt.Figure, outbase: Path, dpi: int = 600, **alignment) -> None:
+    """Exact physical dimensions, editable vector text, render-time alignment."""
+    from audit_panel_alignment import require_matplotlib_panel_alignment
+    qa = outbase.parent / "qa"
+    qa.mkdir(exist_ok=True)
+    require_matplotlib_panel_alignment(
+        fig, json_out=qa / (outbase.name + ".alignment.json"),
+        tolerance_pt=1.5, gutter_tolerance_pt=1.5, strict=True, **alignment)
+    fig.savefig(outbase.with_suffix(".svg"), dpi=dpi)
+    svg_path = outbase.with_suffix(".svg")
+    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
+    fig.savefig(outbase.with_suffix(".pdf"), dpi=dpi)
     fig.savefig(outbase.with_suffix(".png"), dpi=dpi)
     plt.close(fig)

@@ -1,74 +1,121 @@
-Naming: the method is PrismQuant in the paper. Code, CSV method columns and artifact filenames retain the development name 'nar' (nar_k8 = PrismQuant k=8, nar_kmax = PrismQuant k=max, etc.). The development abbreviation was retired because 'NAR' is the established abbreviation for non-autoregressive in NLP.
+# PrismQuant manuscript figures — revision 3
 
-# Manuscript figures
+All scientific drawing uses plain Python/matplotlib. The method's display name
+is PrismQuant; existing CSV/code keys retain `nar` / `nar_kmax`. Outputs include
+individual panels, complete PDF/SVG figures, PNG previews, reproducible scripts,
+source tables/arrays, metadata, captions, and rendered QA reports.
 
-Figures 1–3 use plain Python/matplotlib and the single shared style module
-`figure_style.py`. Each manuscript panel is exported at its final physical
-size as SVG, PDF, and 300-dpi PNG. Panel letters, method titles, and footer
-captions are deliberately absent because LaTeX supplies them.
+Current panels: `fig1a`–`fig1g`, `fig2a`–`fig2c`, `fig3a`–`fig3b`.
+`fig3a` contains the two adjacent geometric views. Figure 3c has been removed;
+its historical range-law observations remain in `fig3_range_law.csv`.
 
-## Fixed paper palette
+## Fixed palette and typography
 
-- PrismQuant: `#004C94`; light PrismQuant accent: `#3C93FA`
-- Hadamard: `#73CC80`
-- DuQuant: `#0FA69D`
-- raw / identity: `#52647A`
-- bf16 / reference and neutral text/axes: `#2D3F54`
-- sequential 3D map: `#F2F4F6 → #3C93FA → #004C94`
-- signed diverging map: `#73CC80 → #F2F4F6 → #004C94`, centered at zero
+| Role | Color |
+|---|---|
+| PrismQuant; axes and text | `#1D3557` (Deep Space Blue) |
+| Hadamard | `#A8DADC` (Frosted Blue) |
+| Raw / identity | `#457B9D` (Steel Blue) |
+| DuQuant | `#E63946` (Strawberry Red) |
+| Light fills / floor | `#F1FAEE` (Honeydew) |
+| Pane edges | `#C9D6DF` |
+| Pane grid | `#DCE4EA` |
 
-The requested Times/Liberation Serif fonts are not installed on this machine;
-matplotlib resolves the declared serif stack to **DejaVu Serif**. Rendered text
-is 7 pt for ticks/legends, 8 pt for axis labels, and 7.5 pt for annotations.
-No panel contains an in-file letter or footer.
+Height map: `#F1FAEE → #A8DADC → #457B9D → #1D3557`.
+Every 3D segment is colored by its local maximum; unlike the previous renderer,
+a high point does not determine the color of an entire token-long polyline.
+Figure 1a/b use separate normalizations; c/d share a single complete scale.
+The normalization is written on each panel. Three back panes, thin borders,
+and light pane grids are enabled; view is elevation 22°, azimuth −60° and
+box aspect 2.6:1.2:0.85. All tokens/channels/groups remain represented.
 
-The current manuscript inputs are exactly `fig1a`–`fig1g`, `fig2a`–`fig2c`, and `fig3a`–`fig3c`.
+Actual font: DejaVu Serif. Ticks 6 pt, labels/annotations 7 pt, legends 6.5 pt;
+upright axis labels. Standalone panels omit LaTeX panel letters and method
+titles. Complete assemblies add reading-order labels. Individual 3D panels
+are 3.2 × 2.45 in; traces 1.8 × 1.52 in; Figure 2 panels 1.85 × 1.72 in.
+PNG panel exports are 600 dpi. Complete Figure 1 retains the physical sizes
+of its individual panels. Its PDF/SVG compose original matplotlib exports
+without scaling the source text; its 300-dpi PNG is a review preview.
 
-## Figure 1
+## Figure 1: correctness findings and resolution
 
-- Files: `fig1a`–`fig1g` in SVG/PDF/PNG; `fig1_preview.png` is checking-only.
-- Data: frozen Llama-3.2-3B E1c `down_input`, layer 27. This case maximizes the
-  absolute measured mean-range decrease over both sites: 1.914824 under
-  Hadamard versus 0.885016 under PrismQuant k=max (−53.78%).
-- Selection: hero sequence 118, token 416, the non-BOS stride-32 row nearest
-  the 95th percentile of absolute projection on frozen v1. The plotted token
-  window is positions 160–671. Raw channels are 2176–4223 around v1's largest
-  loading; transformed channels are 0–2047 around the group receiving v1.
-- Quantizer view: panels c/d include all 64 groups and share Hadamard's z limit.
-  On the plotted 512-token window the mean range is 1.7640 versus 0.8404
-  (−52.36%); the p90 reduction is 49.28%.
-- Source tables: `fig1_ranges.csv`, `fig1_landscape_channels.csv`, and
-  `fig1_metadata.json`. Large frozen dumps remain outside Git.
+**The arrays and labels were not swapped.** The old whole-polyline max coloring
+made dense regions and isolated peaks hard to compare. More fundamentally,
+a smaller mean range does not imply smaller maxima or a smoother surface.
+The new plot preserves the actual distributions and computes mean annotations
+inside the renderer from its own array using float64 accumulation.
 
-## Figure 2
+A further real bug was found: the old c/d upper limit was Hadamard's maximum
+6.389837, whereas PrismQuant contains a maximum of 8.919331. The revised common
+limit covers **both** datasets. No peaks are clipped or removed to make the
+method appear flatter. `fig1_metadata.json` records this finding explicitly.
 
-- Files: `fig2a`–`fig2c` in SVG/PDF/PNG; `fig2_preview.png` is checking-only.
-- Data: measured per-layer Llama-3.2-3B down-input rows in `fig2_capture.csv`.
-- Panel a retains the thin G/d reference without an in-panel label and uses the
-  display name DuQuant. Panel b contains no secondary dotted series: the old
-  gray line was a percent reduction, not raw range, so it was removed.
-- Mean per-layer PrismQuant reductions are 25.30% for range and 40.41% for NMSE.
+**The two range summaries have different populations.** c/d average all 32,768
+cells (512 tokens × 64 groups) from sequence 118, tokens 160–671, layer-27
+`down_input`. Their means are 1.764014 / 0.840427, a 52.36% reduction.
+f/g are the single token-416, group-0 cells of those exact arrays, with ranges
+1.707881 / 0.763428. The script asserts trace/cell equality. The raw trace is
+group 25, selected by the frozen leading direction's peak loading. Full E1c
+means (1.914824 / 0.885016) are a third, separately labeled population used
+for site/layer selection. No means are silently substituted for trace ranges.
 
-## Figure 3
+Both a/b now use numerical channel indices 2176–4223 with equal width 2048;
+b is in the rotated basis. All 8192 channels contribute to the c/d group ranges.
+The former trace label also called a group mean a zero point: the new dashed
+line uses the actual experimental quantizer offset `fp16(min(values))`.
+Group means and quantizer offsets are separately recorded in metadata.
 
-- Files: `fig3a`–`fig3c` in SVG/PDF/PNG; `fig3_preview.png` is checking-only.
-- Panel b omits the former 64-slot line. Panel c keeps all 2,912 measured rows:
-  2,520 E1c activation points, 280 E7 V-cache points, and 112 E20 multi-slot
-  points. The pooled fit is `range_ratio = 0.0598 + 0.8665 sqrt(1-f)`, R²=0.861.
-- The upper-right inset is included because 365 observations lie above 0.90 on
-  both axes. Source files are `fig3_token_projections.csv`,
-  `fig3_eigenspace_r256.csv`, `fig3_range_law.csv`, and metadata JSONs.
+## Figure 2: preserve measurements
 
-## Reproduce
+All 28 layers and original mean reductions (25.30% range, 40.41% NMSE) are
+unchanged. The 6.5-pt boxed legend sits in the entire figure's upper-right
+margin, clear of every curve, with labels PrismQuant / Hadamard / DuQuant.
+DuQuant remains the requested display name for `duquant_style` source rows;
+this is the prior simplified diagnostic, not the official complete algorithm.
+
+## Figure 3: calibrated geometry, with its limits stated
+
+The previous geometry came from layer 1; the new geometry uses the same
+layer-27 window as Figure 1. The **centered** sample covariance eigenvalues
+are 97.5283125 and 57.3704360; the 2-s.d. semiaxes are calculated from them.
+Their modest aspect ratio is a measured fact: the ellipse is not elongated
+artificially. Every score is inside the shared frame; percentile-initialized
+bounds expand to complete score/ellipse extents, with zero discarded rows.
+
+The 2D rigid rotation illustrates exact alignment with the free (1,1)
+direction. It is not claimed to be an exact projection of the full k=max
+transform. The mapped centered-PC1 DC cosine and the frozen uncentered-v1 DC
+energy are both recorded, so these different directions cannot be confused.
+Actual raw and PrismQuant group ranges use their own common 0–12 scale below
+the ellipses. Bracket lengths are measured values and are **not** the width of
+the 2D covariance ellipse. All numerical/calibration choices are in
+`fig3_metadata.json`. Figure 3b preserves the measured uncentered rank-256
+energy curves from layers 1/13/27; no 64-slot line is drawn.
+
+## Reproduce and audit
+
+Use the existing Python environment with numpy, pandas, torch, matplotlib,
+Pillow, and PyMuPDF. Re-render from the committed derived arrays:
 
 ```bash
-python figures/make_fig1.py --workdir /projects/nar/nar-validation
+python figures/make_fig1.py --reuse-data
 python figures/make_fig2.py
 python figures/make_fig3.py
+python figures/verify_figures.py
+python figures/audit_exports.py
 ```
 
-Before commit, all 13 standalone PNGs were inspected at their native 300-dpi
-pixel dimensions. The 3D panels use 3.2-in canvases, full-frame Axes3D,
-`box_aspect=(2.4, 1.3, 0.9)`, view `(24°, −58°)`, no pane fill, and one 0.7-pt
-polyline per channel/group. Figure 2 and 3 panels are 1.85 in wide; Figure 1
-trace panels are 1.8 in wide.
+To recompute the Figure 1 arrays from the frozen experiment artifacts, replace
+its command with `python figures/make_fig1.py --workdir "$NAR_WORKDIR"`.
+No model run or rotation training is needed. `fig1_source_arrays.npz` stores
+all plotted landscape/trace arrays and centered covariance scores; the
+original large activation dumps remain outside Git. Selection rules are
+unchanged and recorded in metadata. These diagnostic figures do not imply
+new seed-level confidence intervals.
+
+Render-time alignment reports and final PDF text/collision audit results are
+in `qa/`; human panel-by-panel review is summarized in `qa/README.md`.
+
+The legacy layer-1 projection CSV and its geometry metadata are retained solely
+as historical source provenance; the current Figure 3 reads the layer-27
+arrays and `fig3_metadata.json`.

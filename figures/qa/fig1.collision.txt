@@ -1,0 +1,42 @@
+Nature Figure Rendered Collision Audit
+pdf: /home/yanlongc/nar-offline-validation/figures/fig1.pdf
+pages: 1
+visible text boxes: 83
+stroke paths: 158
+
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'channel'
+  text bbox: (76.66795349121094, 152.65008544921875, 105.52660369873047, 165.93975830078125)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'group'
+  text bbox: (80.08303833007812, 340.5500793457031, 102.16109466552734, 352.2267761230469)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '11.656'
+  text bbox: (108.99490356445312, 444.73492431640625, 133.48251342773438, 451.73492431640625)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '600'
+  text bbox: (199.2961883544922, 141.50416564941406, 210.74557495117188, 147.50416564941406)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '600'
+  text bbox: (199.2961883544922, 328.70416259765625, 210.74557495117188, 334.70416259765625)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '1.708'
+  text bbox: (274.59490966796875, 451.44940185546875, 294.6305236816406, 458.44940185546875)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'channel'
+  text bbox: (321.4679870605469, 152.65008544921875, 350.32666015625, 165.93975830078125)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'group'
+  text bbox: (324.8830261230469, 340.5500793457031, 346.96112060546875, 352.2267761230469)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '0.763'
+  text bbox: (440.1949462890625, 463.624755859375, 460.2305603027344, 470.624755859375)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '600'
+  text bbox: (444.09619140625, 141.50416564941406, 455.5455627441406, 147.50416564941406)
+[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '600'
+  text bbox: (444.09619140625, 328.70416259765625, 455.5455627441406, 334.70416259765625)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'channel'
+  text bbox: (76.66795349121094, 152.65008544921875, 105.52660369873047, 165.93975830078125)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'channel'
+  text bbox: (321.4679870605469, 152.65008544921875, 350.32666015625, 165.93975830078125)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — 'group'
+  text bbox: (324.8830261230469, 340.5500793457031, 346.96112060546875, 352.2267761230469)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '40'
+  text bbox: (356.0949401855469, 338.3533935546875, 363.72833251953125, 344.3533935546875)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '400'
+  text bbox: (432.26171875, 338.5107421875, 443.7110900878906, 344.5107421875)
+
+summary: 0 fail, 16 warn, 125 contained fill overlays, 10 contained image overlays
+verdict: REVIEW REQUIRED
+note: contained overlays can be intentional; WARN findings need final-size visual review

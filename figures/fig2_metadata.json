@@ -6,7 +6,21 @@
   "mean_range_reduction_percent": 25.300744078136486,
   "mean_nmse_reduction_percent": 40.40835032693099,
   "font_family_resolved": "DejaVu Serif",
+  "palette": {
+    "prismquant": "#1D3557",
+    "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC",
+    "duquant": "#E63946",
+    "identity": "#457B9D",
+    "reference": "#1D3557",
+    "text": "#1D3557",
+    "zero": "#F1FAEE",
+    "pane_edge": "#C9D6DF",
+    "grid": "#DCE4EA"
+  },
+  "legend": "figure upper-right, dedicated top strip, 6.5 pt, boxed; PrismQuant / Hadamard / DuQuant",
   "duquant_display_label": "DuQuant",
-  "reference_line": "G/d retained but unlabeled",
-  "panel_b_secondary_series": "removed; it encoded reduction rather than raw range"
+  "duquant_implementation": "DuQuant-style diagnostic, not official full DuQuant; source method duquant_style",
+  "statistics": "same 28 measured layers; arithmetic mean of paired per-layer percentage decreases; no seed CI inferred",
+  "reference_line": "1 / group size, retained without label"
 }

@@ -1,55 +1,34 @@
-# Figure contracts
+# Figure contracts — revision 3
 
-All paper panels use the fixed PrismQuant palette in `figure_style.py`, plain
-Python/matplotlib, editable SVG/PDF and 300-dpi PNG. Panels are exported at
-their final physical width with no in-file panel letter, title, or footer;
-LaTeX supplies subcaptions and panel letters.
+Python/matplotlib; serif; ticks 6 pt, axes and annotations 7 pt, legend 6.5 pt.
+Editable SVG/PDF and 600-dpi PNG, exact physical sizes. Standalone panels omit
+letters/titles for LaTeX; assembled previews supply reading-order captions.
 
-## Figure 1 — outliers, quantizer range, and the null-space mechanism
+1. Figure 1 (image plate + quantitative traces): rotation suppresses raw
+outliers; PrismQuant further reduces group range. a/b compare magnitudes in
+identical numerical channel windows, with independent height scales; c/d
+compare every paired token/group range with shared scales; e/g/f describe a
+single token. These are a selected strong case, not a population estimate.
+The landscape mean must come from the drawn array; f/g must equal the exact
+selected c/d cells. A smaller mean does not guarantee a smaller maximum or
+less roughness. All samples retained, including isolated PrismQuant peaks.
 
-- Core conclusion: ordinary rotation flattens raw activation outliers, while
-  PrismQuant specifically lowers the per-group range that sets the asymmetric
-  INT4 step by moving the leading persistent direction toward a groupwise
-  zero-point-removable plateau.
-- Results-level question: does PrismQuant improve what the quantizer actually
-  sees, rather than merely making a full-tensor activation landscape look flat?
-- Archetype: image plate plus paired quantitative traces.
-- Evidence chain: a–b establish raw-versus-Hadamard outlier flattening; c–d
-  compare the exact paired token-by-group range seen by the quantizer; e–g show
-  raw concentration, signed Hadamard mixing, and the PrismQuant plateau for one
-  deterministic non-BOS token.
-- Source and selection: frozen Llama-3.2-3B E1c rows. The site/layer maximizes
-  the absolute measured mean-range decrease of `nar_kmax` versus
-  `hadamard_full` over both activation sites. The hero is the stride-32 non-BOS
-  row nearest the 95th percentile of absolute projection on frozen v1, inside
-  the requested top decile. The trace group receives v1 under the frozen
-  PrismQuant transform.
-- Integrity: a and b use independent z limits; c and d share c's limit. The
-  transformed landscapes use a matched 2,048-channel window and c/d use all 64
-  groups across the same 512 tokens. No clipping or data adjustment is allowed.
+2. Figure 2 (quantitative grid): layerwise null-space capture accompanies lower
+range and activation NMSE. Preserve all 28 paired layers and the existing
+estimators. Descriptive diagnostic rows, no invented uncertainty intervals.
+Shared boxed figure legend occupies a dedicated top strip clear of data.
 
-## Figure 2 — per-layer causal chain
+3. Figure 3 (schematic-led composite): explain alignment with a free direction
+and show how much energy a limited number of directions captures. a contains
+two equal-scale covariance ellipses using the SAME layer/window as Figure 1;
+b preserves the three measured rank-256 energy curves. Remove c from the
+current manuscript exports but retain its source measurements in Git.
+The 2D ellipse is a calibrated rigid-rotation illustration, not an exact
+projection of the 8192D transform. Centered covariance and uncentered second
+moment are distinct. Measured 128-channel ranges have their own linear scale;
+never equate those to the 2D ellipse width. All such distinctions go in metadata
+and the caption. Axis bounds include full transformed score extents and the
+complete 2-s.d. ellipses, using percentile bounds only as an initial estimate.
 
-- Core conclusion: layer-wise null-space energy placement is accompanied by
-  lower group range and lower dynamic INT4 activation NMSE.
-- Results-level question: does the proposed mechanism track both the
-  intermediate range and final quantization error across layers?
-- Archetype: quantitative grid exported as three independent 1.85-in panels.
-- Evidence chain: a measures null-space energy against Hadamard and DuQuant;
-  b measures paired range; c measures paired activation NMSE.
-- Integrity: all points remain measured paired rows in `fig2_capture.csv`; no
-  unexplained secondary series, interpolation, or model/site mixing.
-
-## Figure 3 — geometry, capacity, and predictive law
-
-- Core conclusion: PrismQuant aligns a leading activation direction with a
-  quantizer null-space direction, and residual energy predicts measured range
-  across the existing diagnostic families.
-- Results-level question: is the mechanism visible geometrically and does its
-  square-root energy law hold beyond one activation site?
-- Archetype: three complementary quantitative panels, each 1.85 in wide.
-- Evidence chain: a shows input-space geometry; b shows the retained
-  eigenspectrum; c tests the pooled law with source-family-specific points and
-  an identity reference.
-- Integrity: panel c retains every measured E1c, E7 and E20 point; dense marks
-  use alpha and rasterization rather than exclusion.
+QA: measured comparable plot rectangles within 1.5 pt; source, PDF glyph-size
+and collision audits; inspect each rendered panel and complete composition.

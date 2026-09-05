@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "checks": [
+    "range annotations recomputed independently from stored plotted arrays",
+    "full c/d extrema inside common normalization",
+    "identical numerical channel windows",
+    "trace ranges equal selected landscape cells",
+    "zero point equals fp16 minimum",
+    "Figure 3 eigenvalues independently recovered from centered score covariance",
+    "same-layer/window linkage and measured-range linkage",
+    "28 unchanged paired Figure 2 measurements",
+    "removed Figure 3c exports",
+    "editable text and complete vector export bundle"
+  ],
+  "source_array_sha256": "24553aedab562c00e9848c347ae857266b18b9330aacf3fadb56c495859536a1",
+  "pdf_sizes_inches": {
+    "fig1a": [
+      3.1999999152289496,
+      2.4499999152289496
+    ],
+    "fig1b": [
+      3.1999999152289496,
+      2.4499999152289496
+    ],
+    "fig1c": [
+      3.1999999152289496,
+      2.4499999152289496
+    ],
+    "fig1d": [
+      3.1999999152289496,
+      2.4499999152289496
+    ],
+    "fig1e": [
+      1.8000000847710504,
+      1.52000003390842
+    ],
+    "fig1f": [
+      1.8000000847710504,
+      1.52000003390842
+    ],
+    "fig1g": [
+      1.8000000847710504,
+      1.52000003390842
+    ],
+    "fig2a": [
+      1.8499999576144748,
+      1.7199999491373699
+    ],
+    "fig2b": [
+      1.8499999576144748,
+      1.7199999491373699
+    ],
+    "fig2c": [
+      1.8499999576144748,
+      1.7199999491373699
+    ],
+    "fig3a": [
+      4.149999830457899,
+      2.9499999152289496
+    ],
+    "fig3b": [
+      2.25,
+      2.1999999152289496
+    ],
+    "fig1": [
+      6.600000169542101,
+      7.299999660915798
+    ],
+    "fig2": [
+      6.399999830457899,
+      2.0799999237060547
+    ],
+    "fig3": [
+      6.399999830457899,
+      2.9499999152289496
+    ]
+  }
+}
