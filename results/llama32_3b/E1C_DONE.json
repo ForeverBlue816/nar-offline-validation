@@ -1,45 +1,4 @@
 {
-  "duquant_addendum": {
-    "appended_rows": 56,
-    "bracket_tolerance_relative": 2e-05,
-    "bracket_violations": 0,
-    "code_source_sha256": {
-      "e11_fair_baselines.py": "8516033bf3ce3da12f8827b0dba2e5cd4a371d299244246c64ebb36383769763",
-      "experiment.py": "199e3a5e674a9098ff0f67f28d503afaf415271293d7d6d093928179a2c66f6f",
-      "extended_experiment.py": "8331f9bb5cd20c7877c836b2db1115aacf5689337fac4a7428ac59f7eb834f8b"
-    },
-    "construction": "E16 uses e11._duquant_blocks: descending absmax zigzag permutation, tie by channel index; seeded block QR complement; peak channel maps to DC",
-    "construction_seed_formula": "20260902 + 100000*(site == down) + 1000*layer",
-    "device": "cpu",
-    "evaluation_token_stride": 32,
-    "evaluation_tokens_per_layer_site": 8192,
-    "group_size": 128,
-    "hardware": {
-      "cuda_available": false,
-      "hostname": "cpu-1.cluster02.eee.ntu.edu.sg",
-      "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
-      "slurm_job_gpus": null,
-      "slurm_job_id": "140695",
-      "torch": "2.11.0+cu128"
-    },
-    "layers": 28,
-    "method": "duquant",
-    "no_model_load_or_rerun": true,
-    "original_csv_bytes": 26165,
-    "original_csv_sha256": "0225a8ce70685492fe43377a1f7d10debd902543f6c20113a1adf82655aedd74",
-    "original_rows_unchanged": true,
-    "plotting_gate": "PASS",
-    "quantizer": "experiment.quant_metrics; fp16 scale and offset dynamic asymmetric INT4",
-    "sanity_source": "e1c_duquant_sanity.csv",
-    "score_source": "/projects/nar/nar-validation/activations/llama32_3b/e11_calibration/channel_stats.pt",
-    "score_source_sha256": "d08eff6a2d7b09469407a754dc140027d0a76020fc871eb30b86653f32755f61",
-    "seed": 20260902,
-    "sites": [
-      "q_input",
-      "down_input"
-    ],
-    "timestamp": "2026-09-05T07:48:28.949632+00:00"
-  },
   "model": "llama32_3b",
   "seed": 20260902,
   "settings": {

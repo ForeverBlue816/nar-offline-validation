@@ -634,12 +634,8 @@ def evaluate_command(args: argparse.Namespace) -> None:
     split = getattr(args, "split", "test")
     tag = "" if split == "test" else f"_{split}"
     tasks, metrics, task_suffix = e14.task_set(getattr(args, "task_set", "frozen"))
-    # Same runtime-only K grouping as E14; a non-default value gets its own files.
-    k_group = int(getattr(args, "k_token_group", e14.K_TOKEN_GROUP))
-    e14.K_TOKEN_GROUP = k_group
-    kv_suffix = "" if k_group == 32 else f"_kg{k_group}"
-    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{kv_suffix}{tag}_ppl.json"
-    zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot{kv_suffix}{task_suffix}.json"
+    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{tag}_ppl.json"
+    zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot{task_suffix}.json"
     need_ppl = args.metrics in ("ppl", "both") and task_suffix == ""
     need_zero = args.metrics in ("zero_shot", "both") and (
         args.row in ZERO_SHOT_ROWS or getattr(args, "all_rows_zero_shot", False))
@@ -726,7 +722,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
                             if split == "test" else
                             f"WikiText-2 raw train, {CALIBRATION_WINDOWS} windows from offset "
                             f"{CALIBRATION_OFFSET}, held out from the GPTQ calibration block"),
-                "split": split, "k_token_group": k_group,
+                "split": split,
                 "sequence_length": args.seq_len, "nll_dtype": "float32",
             })
             del tokens
@@ -984,7 +980,6 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
     evaluate.add_argument("--split", choices=("test", "calibration"), default="test")
     evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen")
-    evaluate.add_argument("--k-token-group", type=int, default=e14.K_TOKEN_GROUP)
     evaluate.add_argument("--all-rows-zero-shot", action="store_true",
                           help="evaluate zero-shot for rows outside ZERO_SHOT_ROWS, "
                                "which the eight-task mean needs for bf16 and nar_k32")

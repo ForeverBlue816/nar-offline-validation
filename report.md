@@ -489,7 +489,9 @@ E14's rows were originally reported as paired deltas against the metadata-matche
 
 The denominator has since been measured on Llama-3.1-8B under E14's own evaluation path (`nar/e14_bf16_reference.py`). The module imports E14's `_full_wikitext_tokens` and `_evaluate_ppl` rather than reimplementing either, so the model stays bf16 and the loss stays HuggingFace's, exactly as for the quantized rows; it reads the token file E14 itself wrote and asserts the window count is 141. The checkpoint is loaded without norm fusion, since fusion is exact in real arithmetic but rounds in bf16 and the 16-bit reference is the model as published. E14 itself is unmodified and the output file is outside `ROWS`, so `finalize` does not see it.
 
-**Llama-3.1-8B bf16 = 6.241035** over 141 windows, which places the rows at:
+Both models now have one. **Llama-3.1-8B bf16 = 6.241035** and **Llama-3.2-3B bf16 = 7.819581**, each over its own 141 windows.
+
+### Llama-3.1-8B
 
 | row | PPL | Δ vs 16-bit | relative degradation |
 |---|---:|---:|---:|
@@ -498,7 +500,16 @@ The denominator has since been measured on Llama-3.1-8B under E14's own evaluati
 | NAR k=8 | 6.98984 | +0.7488 | 12.0% |
 | NAR k=max | 6.91467 | **+0.6736** | **10.8%** |
 
-No reference row was run for Llama-3.2-3B, so the 3B rows remain paired-delta only.
+### Llama-3.2-3B
+
+| row | PPL | Δ vs 16-bit | relative degradation |
+|---|---:|---:|---:|
+| QuaRot released, symmetric A4 | 10.33237 | +2.5128 | 32.1% |
+| Hadamard + asymmetric g128 | 9.20901 | +1.3894 | 17.8% |
+| NAR k=8 | 8.75623 | +0.9367 | 12.0% |
+| NAR k=max | 8.71445 | **+0.8949** | **11.4%** |
+
+The two models agree closely once each row is divided by its own reference: NAR k=8 costs 12.0% on both, and k=max 10.8% against 11.4%. The absolute margins differ — the 3B's Hadamard row is 1.389 above its reference against the 8B's 0.965 — so the 3B has more headroom for the rotation to recover, and NAR recovers a larger absolute amount there (−0.495 against −0.292) for a similar relative result.
 
 # E19 — end-to-end W4A4KV4 on Qwen3-8B-Base
 

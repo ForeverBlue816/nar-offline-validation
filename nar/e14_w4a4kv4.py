@@ -991,15 +991,8 @@ def evaluate_row(args: argparse.Namespace) -> None:
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / args.model
     tasks, metrics, suffix = task_set(getattr(args, "task_set", "frozen"))
-    # The K quantizer's token group is a runtime property of the cache, not of
-    # any stored weight, so changing it needs no GPTQ rerun. A non-default value
-    # writes to its own artifact so the frozen K=32 rows are never overwritten.
-    global K_TOKEN_GROUP
-    k_group = int(getattr(args, "k_token_group", K_TOKEN_GROUP))
-    K_TOKEN_GROUP = k_group
-    kv_suffix = "" if k_group == 32 else f"_kg{k_group}"
-    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}{kv_suffix}_ppl.json"
-    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot{kv_suffix}{suffix}.json"
+    ppl_path = result_dir / f"e14_{args.row}_seed{args.seed}_ppl.json"
+    zero_path = result_dir / f"e14_{args.row}_seed{args.seed}_zero_shot{suffix}.json"
     need_ppl = args.metrics in ("ppl", "both") and suffix == ""
     need_zero = args.metrics in ("zero_shot", "both")
     if (not need_ppl or ppl_path.exists()) and (not need_zero or zero_path.exists()):
@@ -1023,10 +1016,6 @@ def evaluate_row(args: argparse.Namespace) -> None:
                 "rotation_checkpoint": rotation, "ppl": ppl, "chunks": chunk_rows,
                 "dataset": "WikiText-2 raw test full contiguous token stream",
                 "sequence_length": args.seq_len, "chunks_evaluated": len(chunk_rows),
-                "k_token_group": k_group,
-                "k4_effective_bits_at_ctx2048": (
-                    (2048 - KV_RESIDUAL_LENGTH) * (4 + 32 / k_group)
-                    + KV_RESIDUAL_LENGTH * 16) / 2048,
                 "seed": args.seed, "hardware": base.hardware_info(),
             })
             del tokens
@@ -1067,7 +1056,6 @@ def evaluate_row(args: argparse.Namespace) -> None:
                          "eight-task mean is formed in finalize from these plus five "
                          "of the frozen six, excluding lambada_openai"),
                 "task_set": getattr(args, "task_set", "frozen"),
-                "k_token_group": k_group,
                 "seed": args.seed, "num_fewshot": 0, "harness_commit": HARNESS_COMMIT,
                 "batch_size": args.batch_size,
                 "task_versions": _serializable(result.get("versions", {})),
@@ -1294,12 +1282,6 @@ def parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--row", choices=ROWS, required=True)
     evaluate.add_argument("--batch-size", type=int, default=1)
     evaluate.add_argument("--metrics", choices=("ppl", "zero_shot", "both"), default="both")
-    evaluate.add_argument("--k-token-group", type=int, default=K_TOKEN_GROUP,
-                          help="tokens per fp16 (scale, zero) pair in the per-channel K "
-                               "quantizer. 32 is the frozen KIVI setting; 128 makes each "
-                               "quantized K value 4.25 bits like V. Runtime only: no weight "
-                               "and no GPTQ output changes, and a non-default value writes "
-                               "to its own artifact.")
     evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen",
                           help="'extra' evaluates only boolq/openbookqa/social_iqa into a "
                                "separate artifact; the frozen six are never re-run")
