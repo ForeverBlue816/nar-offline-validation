@@ -356,7 +356,7 @@ def calibrate_rotations(args: argparse.Namespace) -> None:
     residuals = (cq_vectors - vectors.double().cpu() * values.unsqueeze(0)).norm(dim=0) / values.clamp_min(1e-30)
     output.mkdir(parents=True, exist_ok=True)
     r1_rows = []
-    for r1_rank in (8, rank):
+    for r1_rank in sorted({8, rank}):  # one pass when the residual has exactly 8 slots
         selected = vectors[:, :r1_rank]
         reflectors, active, anchor_error = act.reflectors_from_vectors(selected, GROUP)
         energy_collector = RotationEnergyCollector(model, reflectors, active)
@@ -379,6 +379,10 @@ def calibrate_rotations(args: argparse.Namespace) -> None:
         })
         if r1_rank == rank:
             factor.save(output / "r1.pt", {"alias": "r1_kmax.pt"})
+            if rank == 8:
+                # Qwen3-0.6B: hidden 1024 has eight group-128 slots, so k=8 is
+                # already k=max on R1 and the two rows share this factor.
+                factor.save(output / "r1_k8.pt", {"alias": "r1_kmax.pt"})
         r1_rows.append({"k": r1_rank, "anchor_error": anchor_error,
                         "active_reflectors": int(active.sum())})
     v_rows = []
@@ -587,13 +591,49 @@ def _symmetric_per_token_int4(value: torch.Tensor) -> torch.Tensor:
     return dequant.reshape_as(value).to(original_dtype)
 
 
-def _kivi_key_qdq(key: torch.Tensor) -> torch.Tensor:
+def _fill_padded_tokens(key: torch.Tensor, valid: torch.Tensor) -> torch.Tensor:
+    """Replace every padded token's key with its nearest valid token's.
+
+    Batched generation pads on the left and batched log-likelihood on the
+    right. A padded position is masked out of attention, but its key would
+    still enter the per-channel min/max of the 32-token chunk it shares with
+    real tokens and widen their grid. Copying a neighbouring real key in its
+    place keeps the chunk statistics those of real tokens only; the padded
+    positions' own quantized values are never attended to.
+    """
+    batch, length = valid.shape
+    positions = torch.arange(length, device=key.device)
+    last_valid = torch.cummax(torch.where(valid, positions, torch.full_like(positions, -1)), dim=-1).values
+    first_valid = valid.to(torch.int8).argmax(dim=-1)
+    source = torch.where(last_valid < 0, first_valid.unsqueeze(-1), last_valid)
+    index = source.view(batch, 1, length, 1).expand(batch, key.shape[1], length, key.shape[-1])
+    return key.gather(-2, index)
+
+
+def _key_validity(attention_mask: torch.Tensor | None, batch: int, kv_length: int) -> torch.Tensor | None:
+    """[batch, kv_length] bool, or None when nothing is padded."""
+    if attention_mask is None:
+        return None
+    if attention_mask.dim() == 4:
+        row = attention_mask[:, 0, -1, :kv_length]
+    elif attention_mask.dim() == 2:
+        row = attention_mask[:, :kv_length]
+    else:
+        return None
+    if row.shape[0] != batch or row.shape[-1] != kv_length:
+        return None
+    valid = row if row.dtype == torch.bool else row > -1.0
+    return None if bool(valid.all()) else valid
+
+
+def _kivi_key_qdq(key: torch.Tensor, valid: torch.Tensor | None = None) -> torch.Tensor:
     """Quantize completed KIVI residual chunks; keep the newest chunk bf16."""
     length = key.shape[-2]
     prefix = (max(0, length - 1) // KV_RESIDUAL_LENGTH) * KV_RESIDUAL_LENGTH
     if prefix == 0:
         return key
-    transposed = key[..., :prefix, :].transpose(-1, -2).contiguous()
+    source = key if valid is None else _fill_padded_tokens(key, valid)
+    transposed = source[..., :prefix, :].transpose(-1, -2).contiguous()
     quantized, _, _, _ = base.dynamic_asym_int4(transposed, K_TOKEN_GROUP)
     output = key.clone()
     output[..., :prefix, :] = quantized.transpose(-1, -2)
@@ -661,7 +701,12 @@ class RuntimeHooks:
         key_full_mask, value_full_mask = _residual_masks(
             query.shape[-2], key.shape[-2], query.device
         )
-        quantized_key = _kivi_key_qdq(key)
+        if attention_mask is not None and attention_mask.dtype == torch.bool:
+            # A boolean mask (True = attend) arrives for some attention
+            # interfaces; the additive form below is what this function adds.
+            attention_mask = torch.zeros(attention_mask.shape, dtype=query.dtype, device=query.device
+                                         ).masked_fill_(~attention_mask, torch.finfo(query.dtype).min)
+        quantized_key = _kivi_key_qdq(key, _key_validity(attention_mask, key.shape[0], key.shape[-2]))
         quantized_value, _, _, _ = base.dynamic_asym_int4(value, self.rotations.head_dim)
         key = repeat_kv(key, module.num_key_value_groups)
         value = repeat_kv(value, module.num_key_value_groups)

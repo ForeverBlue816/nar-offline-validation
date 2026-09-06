@@ -45,6 +45,8 @@ except ImportError:
 
 LOG = logging.getLogger("nar")
 MODEL_KEY = "qwen3_8b_base"
+# Artifact prefix. E22 points this module at other Qwen3 sizes and sets "e22".
+PREFIX = "e19"
 MODEL_ID = "Qwen/Qwen3-8B-Base"
 GROUP = e14.GROUP
 EVAL_WINDOWS = 146
@@ -73,6 +75,8 @@ GPTQ_PROTOCOLS = {
     "default": {"act_order": False, "weight_groupsize": -1},
     "act_order": {"act_order": True, "weight_groupsize": -1},
     "g128": {"act_order": False, "weight_groupsize": 128},
+    # E22's protocol: QuaRot's asymmetric per-group branch, 4.15625 weight bits.
+    "g128_asym": {"act_order": False, "weight_groupsize": 128, "weight_sym": False},
 }
 COMPONENT_ROWS = {
     f"{name}_{rotation}": (rotation, kind, weights, kv)
@@ -119,6 +123,18 @@ def load_model_fp32(workdir: Path) -> torch.nn.Module:
     )
     if model.config._name_or_path and MODEL_ID not in str(model.config._name_or_path):
         raise AssertionError(f"expected {MODEL_ID}, loaded {model.config._name_or_path}")
+    head = model.get_output_embeddings()
+    embed = model.get_input_embeddings()
+    if getattr(model.config, "tie_word_embeddings", False) or (
+            head is not None and head.weight.data_ptr() == embed.weight.data_ptr()):
+        # Qwen3-0.6B/1.7B/4B tie lm_head to the embedding. R1 folds into the
+        # embedding's output axis (E R1) and into lm_head's input axis
+        # (W R1), which for a shared matrix is the same transformation, but
+        # the fold applies it twice to shared storage. Untying is exact: the
+        # values are unchanged, and the two copies then each receive one fold.
+        head.weight = torch.nn.Parameter(embed.weight.detach().clone())
+        model.config.tie_word_embeddings = False
+        LOG.info("untied lm_head from the embedding for %s", MODEL_ID)
     return model.eval().cuda()
 
 
@@ -411,7 +427,7 @@ def install_extension_hooks() -> None:
 
 
 def control_path(workdir: Path) -> Path:
-    return workdir / "results" / MODEL_KEY / "e19_rotation_only_control.csv"
+    return workdir / "results" / MODEL_KEY / f"{PREFIX}_rotation_only_control.csv"
 
 
 def algebra_control(workdir: Path, rotation: str) -> dict[str, Any]:
@@ -447,7 +463,7 @@ def audit_command(args: argparse.Namespace) -> None:
     audit["compute_dtype"] = "float32"
     audit["git_commit"] = git_commit()
     audit["hardware"] = base.hardware_info()
-    base.atomic_json(workdir / "results" / MODEL_KEY / "e19_architecture_audit.json", audit)
+    base.atomic_json(workdir / "results" / MODEL_KEY / f"{PREFIX}_architecture_audit.json", audit)
     LOG.info("E19 architecture audit: %s", json.dumps(audit, indent=2))
 
 
@@ -551,7 +567,7 @@ def control_command(args: argparse.Namespace) -> None:
         base.write_csv(path, list(merged.values()))
 
     merge_csv(control_path(workdir), rows, "rotation")
-    trip_path = workdir / "results" / MODEL_KEY / "e19_round_trip_audit.csv"
+    trip_path = workdir / "results" / MODEL_KEY / f"{PREFIX}_round_trip_audit.csv"
 
     def trip_key(entry: dict[str, Any]) -> str:
         return f"{entry['rotation']}|{entry['site']}|{entry['layer']}"
@@ -566,7 +582,7 @@ def control_command(args: argparse.Namespace) -> None:
     # The CSV is merged by rotation but this JSON was rewritten wholesale, so a
     # later single-rotation invocation erased the rows an earlier one had
     # written. Read the merged CSV back instead of writing only this call's rows.
-    base.atomic_json(workdir / "results" / MODEL_KEY / "e19_control.json", {
+    base.atomic_json(workdir / "results" / MODEL_KEY / f"{PREFIX}_control.json", {
         "model": MODEL_KEY, "model_id": MODEL_ID, "control_chunks": int(tokens.shape[0]),
         "reference_ppl": reference_ppl, "rows": base.read_csv(control_path(workdir)),
         "kv_group_counts": audit["kv_group_counts"],
@@ -634,8 +650,8 @@ def evaluate_command(args: argparse.Namespace) -> None:
     split = getattr(args, "split", "test")
     tag = "" if split == "test" else f"_{split}"
     tasks, metrics, task_suffix = e14.task_set(getattr(args, "task_set", "frozen"))
-    ppl_path = result_dir / f"e19_{args.row}_seed{args.seed}{tag}_ppl.json"
-    zero_path = result_dir / f"e19_{args.row}_seed{args.seed}_zero_shot{task_suffix}.json"
+    ppl_path = result_dir / f"{PREFIX}_{args.row}_seed{args.seed}{tag}_ppl.json"
+    zero_path = result_dir / f"{PREFIX}_{args.row}_seed{args.seed}_zero_shot{task_suffix}.json"
     need_ppl = args.metrics in ("ppl", "both") and task_suffix == ""
     need_zero = args.metrics in ("zero_shot", "both") and (
         args.row in ZERO_SHOT_ROWS or getattr(args, "all_rows_zero_shot", False))
@@ -786,7 +802,7 @@ def decompose_command(args: argparse.Namespace) -> None:
     rotations = ("hadamard", "nar_k8", "nar_kmax")
 
     def ppl_of(row: str) -> float | None:
-        path = result_dir / f"e19_{row}_seed{args.seed}_ppl.json"
+        path = result_dir / f"{PREFIX}_{row}_seed{args.seed}_ppl.json"
         return json.loads(path.read_text())["ppl"] if path.exists() else None
 
     bf16 = ppl_of("bf16")
@@ -821,7 +837,7 @@ def decompose_command(args: argparse.Namespace) -> None:
         entry["sum_of_components"] = (sum(components)
                                       if not any(math.isnan(v) for v in components) else math.nan)
         table.append(entry)
-    base.write_csv(result_dir / "e19_decomposition.csv", table)
+    base.write_csv(result_dir / f"{PREFIX}_decomposition.csv", table)
 
     LOG.info("E19 component decomposition, delta vs each experiment's own bf16:")
     LOG.info("%-10s %10s %10s %10s | %10s %10s", "rotation", "A-only", "KV-only", "W-only",
@@ -855,8 +871,8 @@ def finalize_command(args: argparse.Namespace) -> None:
     zero: dict[str, dict[str, Any]] = {}
     missing: list[str] = []
     for row in ROWS:
-        ppl_path = result_dir / f"e19_{row}_seed{args.seed}_ppl.json"
-        zero_path = result_dir / f"e19_{row}_seed{args.seed}_zero_shot.json"
+        ppl_path = result_dir / f"{PREFIX}_{row}_seed{args.seed}_ppl.json"
+        zero_path = result_dir / f"{PREFIX}_{row}_seed{args.seed}_zero_shot.json"
         if ppl_path.exists():
             present[row] = json.loads(ppl_path.read_text())
         else:
@@ -877,7 +893,7 @@ def finalize_command(args: argparse.Namespace) -> None:
         """Mean over the published eight, from the frozen and extra artifacts."""
         values: dict[str, float] = {}
         for suffix in ("", "_extra"):
-            path = result_dir / f"e19_{row}_seed{args.seed}_zero_shot{suffix}.json"
+            path = result_dir / f"{PREFIX}_{row}_seed{args.seed}_zero_shot{suffix}.json"
             if path.exists():
                 values.update({item["task"]: float(item["accuracy"])
                                for item in json.loads(path.read_text())["tasks"]})
@@ -919,7 +935,7 @@ def finalize_command(args: argparse.Namespace) -> None:
             "gpu": (payload.get("hardware") or {}).get("gpu_name"),
         })
     if summary:
-        base.write_csv(result_dir / "e19_summary.csv", summary)
+        base.write_csv(result_dir / f"{PREFIX}_summary.csv", summary)
     control = control_path(workdir)
     nar_rows = [r for r in summary if r["row"].startswith("nar_")]
     best_nar = min((r["ppl"] for r in nar_rows), default=None)

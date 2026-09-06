@@ -1,0 +1,730 @@
+{
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "lm_eval_version": "0.4.14.dev0",
+  "benchmarks": {
+    "wikitext": {
+      "kind": "ppl"
+    },
+    "c4": {
+      "kind": "ppl"
+    },
+    "mmlu": {
+      "kind": "harness",
+      "tasks": [
+        "mmlu"
+      ],
+      "num_fewshot": 5,
+      "headline": [
+        "mmlu",
+        "acc,none"
+      ],
+      "task_configs": {
+        "mmlu": {
+          "task": "mmlu_abstract_algebra",
+          "dataset_path": "cais/mmlu",
+          "dataset_name": "abstract_algebra",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "{{question.strip()}}\nA. {{choices[0]}}\nB. {{choices[1]}}\nC. {{choices[2]}}\nD. {{choices[3]}}\nAnswer:",
+          "fewshot_config": {
+            "sampler": "first_n",
+            "split": "dev",
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "{{question.strip()}}\nA. {{choices[0]}}\nB. {{choices[1]}}\nC. {{choices[2]}}\nD. {{choices[3]}}\nAnswer:",
+            "doc_to_choice": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "doc_to_target": "answer",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "mmlu_abstract_algebra"
+        }
+      }
+    },
+    "mmlu_redux": {
+      "kind": "harness",
+      "tasks": [
+        "mmlu_redux_generative"
+      ],
+      "num_fewshot": 5,
+      "gen_kwargs": {
+        "max_gen_toks": 8,
+        "until": [
+          "</s>",
+          "\n"
+        ]
+      },
+      "headline": [
+        "mmlu_redux_generative",
+        "exact_match,default"
+      ],
+      "task_configs": {
+        "mmlu_redux_generative": {
+          "task": "mmlu_redux_abstract_algebra_generative",
+          "dataset_path": "fxmarty/mmlu-redux-2.0-ok",
+          "dataset_name": "abstract_algebra",
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "until": [
+              "</s>"
+            ]
+          },
+          "filter_list": [
+            {
+              "name": "default",
+              "filter": [
+                {
+                  "function": "regex",
+                  "regex_pattern": "([ABCD])"
+                },
+                {
+                  "function": "take_first"
+                }
+              ]
+            }
+          ],
+          "metric_list": [
+            {
+              "metric": "exact_match",
+              "aggregation": "mean",
+              "higher_is_better": true,
+              "ignore_case": true,
+              "ignore_punctuation": true
+            }
+          ],
+          "doc_to_text": "{{question.strip()}}\nA. {{choices[0]}}\nB. {{choices[1]}}\nC. {{choices[2]}}\nD. {{choices[3]}}\nPlease respond with the correct letter (A, B, C or D) without any additional comments, only the correct letter:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "{{question.strip()}}\nA. {{choices[0]}}\nB. {{choices[1]}}\nC. {{choices[2]}}\nD. {{choices[3]}}\nPlease respond with the correct letter (A, B, C or D) without any additional comments, only the correct letter:",
+            "doc_to_choice": null,
+            "doc_to_target": "{{['A','B','C','D'][answer]}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": ":"
+          },
+          "representative_leaf": "mmlu_redux_abstract_algebra_generative"
+        }
+      }
+    },
+    "bbh": {
+      "kind": "harness",
+      "tasks": [
+        "bbh_cot_fewshot"
+      ],
+      "num_fewshot": null,
+      "headline": [
+        "bbh_cot_fewshot",
+        "exact_match,get-answer"
+      ],
+      "task_configs": {
+        "bbh_cot_fewshot": {
+          "task": "bbh_cot_fewshot_boolean_expressions",
+          "dataset_path": "SaylorTwift/bbh",
+          "dataset_name": "boolean_expressions",
+          "num_fewshot": 3,
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "max_gen_toks": 1024,
+            "until": [
+              "</s>",
+              "Q",
+              "\n\n"
+            ],
+            "do_sample": false,
+            "temperature": 0.0
+          },
+          "filter_list": [
+            {
+              "name": "get-answer",
+              "filter": [
+                {
+                  "function": "regex",
+                  "regex_pattern": "(?<=the answer is )(.*)(?=.)"
+                },
+                {
+                  "function": "take_first"
+                }
+              ]
+            }
+          ],
+          "metric_list": [
+            {
+              "metric": "exact_match",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "Q: {{input}}\nA: Let's think step by step.\n",
+          "fewshot_config": {
+            "sampler": "first_n",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": [
+              {
+                "input": "not ( ( not not True ) ) is",
+                "target": "Remember that (i) expressions inside brackets are always evaluated first and that (ii) the order of operations from highest priority to lowest priority is \"not\", \"and\", \"or\", respectively.\nWe first simplify this expression \"Z\" as follows: \"Z = not ( ( not not True ) ) = not ( ( A ) )\" where \"A = not not True\".\nLet's evaluate A: A = not not True = not (not True) = not False = True.\nPlugging in A, we get: Z = not ( ( A ) ) = not ( ( True ) ) = not True = False. So the answer is False."
+              },
+              {
+                "input": "True and False and not True and True is",
+                "target": "Remember that (i) expressions inside brackets are always evaluated first and that (ii) the order of operations from highest priority to lowest priority is \"not\", \"and\", \"or\", respectively.\nWe first simplify this expression \"Z\" as follows: \"Z = True and False and not True and True = A and B\" where \"A = True and False\" and \"B = not True and True\".\nLet's evaluate A: A = True and False = False.\nLet's evaluate B: B = not True and True = not (True and True) = not (True) = False.\nPlugging in A and B, we get: Z = A and B = False and False = False. So the answer is False."
+              },
+              {
+                "input": "not not ( not ( False ) ) is",
+                "target": "Remember that (i) expressions inside brackets are always evaluated first and that (ii) the order of operations from highest priority to lowest priority is \"not\", \"and\", \"or\", respectively.\nWe first simplify this expression \"Z\" as follows: \"Z = not not ( not ( False ) ) = not not ( A )\" where \"A = not ( False )\".\nLet's evaluate A: A = not ( False ) = not False = True.\nPlugging in A, we get: Z = not not ( A ) = not not (True) = not not False = True. So the answer is True."
+              }
+            ],
+            "doc_to_text": "Q: {{input}}\nA: Let's think step by step.\n",
+            "doc_to_choice": null,
+            "doc_to_target": "{{target}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": ""
+          },
+          "representative_leaf": "bbh_cot_fewshot_boolean_expressions"
+        }
+      }
+    },
+    "gsm8k": {
+      "kind": "harness",
+      "tasks": [
+        "gsm8k_cot"
+      ],
+      "num_fewshot": 4,
+      "headline": [
+        "gsm8k_cot",
+        "exact_match,flexible-extract"
+      ],
+      "task_configs": {
+        "gsm8k_cot": {
+          "task": "gsm8k_cot",
+          "dataset_path": "openai/gsm8k",
+          "dataset_name": "main",
+          "num_fewshot": 8,
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "do_sample": false,
+            "until": [
+              "Q:",
+              "</s>",
+              "<|im_end|>"
+            ]
+          },
+          "filter_list": [
+            {
+              "filter": [
+                {
+                  "function": "regex",
+                  "regex_pattern": "The answer is (\\-?[0-9\\.\\,]+)."
+                },
+                {
+                  "function": "take_first"
+                }
+              ],
+              "name": "strict-match"
+            },
+            {
+              "filter": [
+                {
+                  "function": "regex",
+                  "group_select": -1,
+                  "regex_pattern": "(-?[$0-9.,]{2,})|(-?[0-9]+)"
+                },
+                {
+                  "function": "take_first"
+                }
+              ],
+              "name": "flexible-extract"
+            }
+          ],
+          "metric_list": [
+            {
+              "aggregation": "mean",
+              "higher_is_better": true,
+              "ignore_case": true,
+              "ignore_punctuation": false,
+              "metric": "exact_match",
+              "regexes_to_ignore": [
+                ",",
+                "\\$",
+                "(?s).*#### ",
+                "\\.$"
+              ]
+            }
+          ],
+          "doc_to_text": "Q: {{question}}\nA:",
+          "fewshot_config": {
+            "sampler": "first_n",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": [
+              {
+                "question": "There are 15 trees in the grove. Grove workers will plant trees in the grove today. After they are done, there will be 21 trees. How many trees did the grove workers plant today?",
+                "target": "There are 15 trees originally. Then there were 21 trees after some more were planted. So there must have been 21 - 15 = 6. The answer is 6."
+              },
+              {
+                "question": "If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are in the parking lot?",
+                "target": "There are originally 3 cars. 2 more cars arrive. 3 + 2 = 5. The answer is 5."
+              },
+              {
+                "question": "Leah had 32 chocolates and her sister had 42. If they ate 35, how many pieces do they have left in total?",
+                "target": "Originally, Leah had 32 chocolates. Her sister had 42. So in total they had 32 + 42 = 74. After eating 35, they had 74 - 35 = 39. The answer is 39."
+              },
+              {
+                "question": "Jason had 20 lollipops. He gave Denny some lollipops. Now Jason has 12 lollipops. How many lollipops did Jason give to Denny?",
+                "target": "Jason started with 20 lollipops. Then he had 12 after giving some to Denny. So he gave Denny 20 - 12 = 8. The answer is 8."
+              },
+              {
+                "question": "Shawn has five toys. For Christmas, he got two toys each from his mom and dad. How many toys does he have now?",
+                "target": "Shawn started with 5 toys. If he got 2 toys each from his mom and dad, then that is 4 more toys. 5 + 4 = 9. The answer is 9."
+              },
+              {
+                "question": "There were nine computers in the server room. Five more computers were installed each day, from monday to thursday. How many computers are now in the server room?",
+                "target": "There were originally 9 computers. For each of 4 days, 5 more computers were added. So 5 * 4 = 20 computers were added. 9 + 20 is 29. The answer is 29."
+              },
+              {
+                "question": "Michael had 58 golf balls. On tuesday, he lost 23 golf balls. On wednesday, he lost 2 more. How many golf balls did he have at the end of wednesday?",
+                "target": "Michael started with 58 golf balls. After losing 23 on tuesday, he had 58 - 23 = 35. After losing 2 more, he had 35 - 2 = 33 golf balls. The answer is 33."
+              },
+              {
+                "question": "Olivia has $23. She bought five bagels for $3 each. How much money does she have left?",
+                "target": "Olivia had 23 dollars. 5 bagels for 3 dollars each will be 5 x 3 = 15 dollars. So she has 23 - 15 dollars left. 23 - 15 is 8. The answer is 8."
+              }
+            ],
+            "doc_to_text": "Q: {{question}}\nA:",
+            "doc_to_choice": null,
+            "doc_to_target": "{{answer.split('####')[-1].strip() if answer is defined else target}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "gsm8k_cot"
+        }
+      }
+    },
+    "math": {
+      "kind": "harness",
+      "tasks": [
+        "minerva_math"
+      ],
+      "num_fewshot": null,
+      "gen_kwargs": {
+        "max_gen_toks": 512
+      },
+      "headline": [
+        "minerva_math",
+        "exact_match,none"
+      ],
+      "task_configs": {
+        "minerva_math": {
+          "task": "minerva_math_algebra",
+          "dataset_path": "EleutherAI/hendrycks_math",
+          "dataset_name": "algebra",
+          "num_fewshot": 4,
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "until": [
+              "Problem:"
+            ],
+            "do_sample": false,
+            "temperature": 0.0
+          },
+          "metric_list": [
+            {
+              "metric": "exact_match",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "math_verify",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    return \"Problem:\" + \"\\n\" + doc[\"problem\"] + \"\\n\\n\" + \"Solution:\"\n",
+          "fewshot_config": {
+            "sampler": "first_n",
+            "split": null,
+            "process_docs": "<function process_docs at 0x78db2f194cc0>",
+            "fewshot_indices": null,
+            "samples": "<function list_fewshot_samples at 0x78db2e094400>",
+            "doc_to_text": "<function doc_to_text at 0x78db2e35e980>",
+            "doc_to_choice": null,
+            "doc_to_target": "{{answer if few_shot is undefined else solution}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "minerva_math_algebra"
+        }
+      }
+    },
+    "math500": {
+      "kind": "harness",
+      "tasks": [
+        "minerva_math500"
+      ],
+      "num_fewshot": null,
+      "gen_kwargs": {
+        "max_gen_toks": 512
+      },
+      "headline": [
+        "minerva_math500",
+        "exact_match,none"
+      ],
+      "task_configs": {
+        "minerva_math500": {
+          "task": "minerva_math500",
+          "dataset_path": "HuggingFaceH4/MATH-500",
+          "dataset_name": "default",
+          "num_fewshot": 4,
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "until": [
+              "Problem:"
+            ],
+            "do_sample": false,
+            "temperature": 0.0
+          },
+          "metric_list": [
+            {
+              "metric": "exact_match",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "math_verify",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "def doc_to_text(doc: dict) -> str:\n    return \"Problem:\" + \"\\n\" + doc[\"problem\"] + \"\\n\\n\" + \"Solution:\"\n",
+          "fewshot_config": {
+            "sampler": "first_n",
+            "split": null,
+            "process_docs": "<function process_docs at 0x78db2f194cc0>",
+            "fewshot_indices": null,
+            "samples": "<function list_fewshot_samples at 0x78db2e094400>",
+            "doc_to_text": "<function doc_to_text at 0x78db2e35e980>",
+            "doc_to_choice": null,
+            "doc_to_target": "{{answer if few_shot is undefined else solution}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "minerva_math500"
+        }
+      }
+    },
+    "gpqa": {
+      "kind": "harness",
+      "tasks": [
+        "gpqa_main_cot_n_shot"
+      ],
+      "num_fewshot": 5,
+      "headline": [
+        "gpqa_main_cot_n_shot",
+        "exact_match,strict-match"
+      ],
+      "task_configs": {
+        "gpqa_main_cot_n_shot": {
+          "error": "Couldn't reach 'Idavidrein/gpqa' on the Hub (OfflineModeIsEnabled)"
+        }
+      }
+    },
+    "eight_task": {
+      "kind": "harness",
+      "tasks": [
+        "arc_easy",
+        "arc_challenge",
+        "boolq",
+        "hellaswag",
+        "openbookqa",
+        "piqa",
+        "social_iqa",
+        "winogrande"
+      ],
+      "num_fewshot": 0,
+      "headline": [
+        "__mean__",
+        "eight-task mean"
+      ],
+      "task_configs": {
+        "arc_easy": {
+          "task": "arc_easy",
+          "dataset_path": "allenai/ai2_arc",
+          "dataset_name": "ARC-Easy",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "Question: {{question}}\nAnswer:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "Question: {{question}}\nAnswer:",
+            "doc_to_choice": "{{choices.text}}",
+            "doc_to_target": "{{choices.label.index(answerKey)}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "arc_easy"
+        },
+        "arc_challenge": {
+          "task": "arc_challenge",
+          "dataset_path": "allenai/ai2_arc",
+          "dataset_name": "ARC-Challenge",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "Question: {{question}}\nAnswer:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "Question: {{question}}\nAnswer:",
+            "doc_to_choice": "{{choices.text}}",
+            "doc_to_target": "{{choices.label.index(answerKey)}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "arc_challenge"
+        },
+        "boolq": {
+          "task": "boolq",
+          "dataset_path": "aps/super_glue",
+          "dataset_name": "boolq",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc"
+            }
+          ],
+          "doc_to_text": "{{passage}}\nQuestion: {{question}}?\nAnswer:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "{{passage}}\nQuestion: {{question}}?\nAnswer:",
+            "doc_to_choice": [
+              "no",
+              "yes"
+            ],
+            "doc_to_target": "label",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "boolq"
+        },
+        "hellaswag": {
+          "task": "hellaswag",
+          "dataset_path": "Rowan/hellaswag",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "{{query}}",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": "<function process_docs at 0x78db2f196ac0>",
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "{{query}}",
+            "doc_to_choice": "choices",
+            "doc_to_target": "{{label}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "hellaswag"
+        },
+        "openbookqa": {
+          "task": "openbookqa",
+          "dataset_path": "allenai/openbookqa",
+          "dataset_name": "main",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "question_stem",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "question_stem",
+            "doc_to_choice": "{{choices.text}}",
+            "doc_to_target": "{{choices.label.index(answerKey.lstrip())}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "openbookqa"
+        },
+        "piqa": {
+          "task": "piqa",
+          "dataset_path": "baber/piqa",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "Question: {{goal}}\nAnswer:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "Question: {{goal}}\nAnswer:",
+            "doc_to_choice": "{{[sol1, sol2]}}",
+            "doc_to_target": "label",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "piqa"
+        },
+        "social_iqa": {
+          "task": "social_iqa",
+          "dataset_path": "lighteval/siqa",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "Q: {{context}} {{question}}\nA:",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "Q: {{context}} {{question}}\nA:",
+            "doc_to_choice": "{{[answerA, answerB, answerC]}}",
+            "doc_to_target": "{{ (label|int) - 1 }}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "social_iqa"
+        },
+        "winogrande": {
+          "task": "winogrande",
+          "dataset_path": "allenai/winogrande",
+          "dataset_name": "winogrande_xl",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "def doc_to_text(doc):\n    answer_to_num = {\"1\": 0, \"2\": 1}\n    return answer_to_num[doc[\"answer\"]]\n",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": null,
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "<function doc_to_text at 0x78db2e3a8b80>",
+            "doc_to_choice": "<function doc_to_choice at 0x78db2e3aa2a0>",
+            "doc_to_target": "<function doc_to_target at 0x78db2e3a8900>",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "winogrande"
+        }
+      }
+    }
+  },
+  "notes": {
+    "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted",
+    "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded",
+    "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
+    "math": "minerva_math (full test set, 4 fixed CoT exemplars) below 14B; minerva_math500 at 14B; exact_match is the headline, math_verify is recorded",
+    "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",
+    "generation": "greedy (do_sample false) throughout; the KV cache is quantized on every decode step by the E14 attention hook",
+    "padding": "batched decoding pads on the left; padded keys are replaced by their nearest valid neighbour before chunk statistics, and the chunk phase of padded sequences shifts by the pad length; measured by the generation gate"
+  }
+}

@@ -40,6 +40,12 @@ MODEL_IDS = {
     # E21. The same id E18 used, so the tokenized caches and the 70B down-input
     # factors both resolve without being recomputed.
     "llama31_70b": "unsloth/Meta-Llama-3.1-70B",
+    # E22: the Qwen3 Base family. Qwen3-32B-Base is not a public checkpoint
+    # (the Hub returns 404 for Qwen/Qwen3-32B-Base), so the family stops at 14B.
+    "qwen3_0.6b_base": "Qwen/Qwen3-0.6B-Base",
+    "qwen3_1.7b_base": "Qwen/Qwen3-1.7B-Base",
+    "qwen3_4b_base": "Qwen/Qwen3-4B-Base",
+    "qwen3_14b_base": "Qwen/Qwen3-14B-Base",
 }
 SITES = ("qkv", "down")
 EVAL_SITES = ("qkv_only", "both", "down_only")
@@ -109,6 +115,60 @@ def paley_hadamard_28(device: torch.device, dtype: torch.dtype) -> torch.Tensor:
     return matrix / math.sqrt(28)
 
 
+def _is_prime(q: int) -> bool:
+    return q > 1 and all(q % p for p in range(2, int(q ** 0.5) + 1))
+
+
+_PALEY_CACHE: dict[tuple[int, str, torch.dtype], torch.Tensor] = {}
+
+
+def paley_hadamard(order: int, device: torch.device, dtype: torch.dtype) -> torch.Tensor:
+    """A normalized Hadamard matrix of the given order by Paley's constructions.
+
+    Paley I gives order q+1 for a prime q = 3 (mod 4); Paley II gives order
+    2(q+1) for a prime q = 1 (mod 4). The Qwen3 family needs 20 (hidden 2560
+    and 5120 are 20 x 2^k, and the 14B has 40 heads), 68 (17408 = 68 x 256) and
+    76 (9728 = 76 x 128); the 12 and 28 the Llama models need keep their own
+    constructions. Every matrix is verified as H H^T = n I before use.
+    """
+    key = (order, str(device), dtype)
+    if key in _PALEY_CACHE:
+        return _PALEY_CACHE[key]
+    q = order - 1
+    if _is_prime(q) and q % 4 == 3:
+        residues = {value * value % q for value in range(1, q)}
+        core = torch.empty((q, q), dtype=torch.float64)
+        for row in range(q):
+            for column in range(q):
+                delta = (row - column) % q
+                core[row, column] = 0 if delta == 0 else (1 if delta in residues else -1)
+        matrix = torch.ones((order, order), dtype=torch.float64)
+        matrix[1:, 1:] = core - torch.eye(q, dtype=torch.float64)
+    elif order % 2 == 0 and _is_prime(order // 2 - 1) and (order // 2 - 1) % 4 == 1:
+        q = order // 2 - 1
+        residues = {value * value % q for value in range(1, q)}
+        core = torch.empty((q, q), dtype=torch.float64)
+        for row in range(q):
+            for column in range(q):
+                delta = (row - column) % q
+                core[row, column] = 0 if delta == 0 else (1 if delta in residues else -1)
+        conference = torch.zeros((q + 1, q + 1), dtype=torch.float64)
+        conference[0, 1:] = 1
+        conference[1:, 0] = 1
+        conference[1:, 1:] = core
+        eye = torch.eye(q + 1, dtype=torch.float64)
+        matrix = torch.cat((torch.cat((conference + eye, conference - eye), 1),
+                            torch.cat((conference - eye, -conference - eye), 1)), 0)
+    else:
+        raise ValueError(f"no Paley construction for Hadamard order {order}")
+    error = (matrix @ matrix.T - order * torch.eye(order, dtype=torch.float64)).abs().max()
+    if float(error) > 1e-9:
+        raise AssertionError(f"invalid Paley Hadamard of order {order}: {float(error)}")
+    result = (matrix / math.sqrt(order)).to(device=device, dtype=dtype)
+    _PALEY_CACHE[key] = result
+    return result
+
+
 def full_hadamard_rows(x: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
     n = x.shape[-1]
     quotient, remainder = divmod(n, 28)
@@ -123,6 +183,15 @@ def full_hadamard_rows(x: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
         factored = ext._fast_walsh_hadamard(signed.reshape(-1, 12, quotient))
         h12 = ext._paley_hadamard_12(x.device, x.dtype)
         return (factored.transpose(1, 2) @ h12.T).transpose(1, 2).reshape_as(x)
+    if n & (n - 1):
+        # Qwen3 widths that are neither a power of two nor 12 or 28 times one.
+        for order in (20, 68, 76):
+            quotient, remainder = divmod(n, order)
+            if not remainder and quotient >= 1 and not quotient & (quotient - 1):
+                signed = x * signs
+                factored = ext._fast_walsh_hadamard(signed.reshape(-1, order, quotient))
+                h = paley_hadamard(order, x.device, x.dtype)
+                return (factored.transpose(1, 2) @ h.T).transpose(1, 2).reshape_as(x)
     return ext._full_hadamard_rows(x, signs)
 
 
