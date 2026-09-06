@@ -20,8 +20,15 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from pathlib import Path
 
 import torch
+
+# When set, a Cholesky failure writes the damped Hessian and its statistics
+# here before re-raising, so the matrix that could not be factored can be
+# examined instead of guessed at.  e14.gptq_quantize points it at the
+# checkpoint directory being written.
+FAILURE_DUMP_DIR: Path | None = None
 
 
 def _sym_qdq(x: torch.Tensor, scale: torch.Tensor, maxq: torch.Tensor) -> torch.Tensor:
@@ -206,10 +213,39 @@ def _inverse_cholesky_upper(hessian: torch.Tensor) -> tuple[torch.Tensor, bool]:
         except RuntimeError as error:  # torch.linalg.LinAlgError is a RuntimeError
             if "positive-definite" not in str(error):
                 raise
-    chol = torch.linalg.cholesky(hessian.double())
+    try:
+        chol = torch.linalg.cholesky(hessian.double())
+    except RuntimeError as error:
+        _dump_cholesky_failure(hessian, str(error))
+        raise
     inverse = torch.cholesky_inverse(chol)
     del chol
     return torch.linalg.cholesky(inverse, upper=True).float(), True
+
+
+def _dump_cholesky_failure(hessian: torch.Tensor, message: str) -> None:
+    """Record what the un-factorable damped Hessian actually looks like."""
+    import logging
+    log = logging.getLogger("nar")
+    with torch.no_grad():
+        diag = torch.diag(hessian)
+        stats = {
+            "columns": int(hessian.shape[0]), "dtype": str(hessian.dtype),
+            "nan_entries": int(torch.isnan(hessian).sum()),
+            "inf_entries": int(torch.isinf(hessian).sum()),
+            "nan_diag": int(torch.isnan(diag).sum()),
+            "diag_min": float(diag.nan_to_num(nan=float("inf")).min()),
+            "diag_max": float(diag.nan_to_num(nan=float("-inf")).max()),
+            "diag_mean": float(diag.nanmean()),
+            "max_asymmetry": float((hessian - hessian.T).abs().nan_to_num(nan=0.0).max()),
+            "message": message,
+        }
+    log.error("Cholesky failure: %s", stats)
+    if FAILURE_DUMP_DIR is not None:
+        FAILURE_DUMP_DIR.mkdir(parents=True, exist_ok=True)
+        path = FAILURE_DUMP_DIR / "cholesky_failure.pt"
+        torch.save({"hessian": hessian.detach().cpu(), "stats": stats}, path)
+        log.error("damped Hessian written to %s", path)
 
 
 class GPTQ:

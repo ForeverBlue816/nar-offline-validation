@@ -25,10 +25,12 @@ try:
     from . import activation_experiments as act
     from . import experiment as base
     from .e12_wy import WYFactor, compact_wy
+    from . import quarot_gptq
     from .quarot_gptq import GPTQ
 except ImportError:
     import activation_experiments as act
     import experiment as base
+    import quarot_gptq
     from e12_wy import WYFactor, compact_wy
     from quarot_gptq import GPTQ
 
@@ -820,6 +822,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         LOG.info("E14 GPTQ checkpoint exists: %s", done)
         return
     output.mkdir(parents=True, exist_ok=True)
+    quarot_gptq.FAILURE_DUMP_DIR = output
     base.setup_logging(workdir, f"e14-gptq-{args.model}-{args.rotation}")
     base.seed_everything(args.seed)
     model_id, model_key = act.model_id_and_key(args.model)
@@ -908,10 +911,14 @@ def gptq_quantize(args: argparse.Namespace) -> None:
             for handle in handles:
                 handle.remove()
             for name, _module in group:
-                audit = engines[name].fasterquant(
-                    blocksize=128, percdamp=0.01, groupsize=weight_groupsize,
-                    act_order=act_order,
-                )
+                try:
+                    audit = engines[name].fasterquant(
+                        blocksize=128, percdamp=0.01, groupsize=weight_groupsize,
+                        act_order=act_order,
+                    )
+                except RuntimeError as error:
+                    LOG.error("GPTQ failed at layer %d module %s: %s", layer_index, name, error)
+                    raise
                 audit_rows.append({
                     "model": model_key, "rotation": args.rotation, "layer": layer_index,
                     "group": group_index, "module": name, **audit.__dict__,
