@@ -755,7 +755,7 @@ def _fold_invariance(model_id: str, model: torch.nn.Module, rotations: RotationS
         observed = model(input_ids=probe, use_cache=False).logits.float()
     finally:
         hooks.close()
-    difference = observed - reference
+    difference = observed - reference.to(observed.device)
     return {
         "max_abs_logit_error": float(difference.abs().max()),
         "relative_l2_logit_error": float(difference.norm() / reference.norm().clamp_min(1e-30)),
@@ -824,9 +824,12 @@ def gptq_quantize(args: argparse.Namespace) -> None:
         model_id, workdir, args.calibration_sequences, args.seq_len, args.calibration_seed
     )
 
-    # Measure algebraic folding before GPTQ on a fixed prefix.
-    probe = tokens[:1, :args.verify_tokens].cuda()
+    # Measure algebraic folding before GPTQ on a fixed prefix. The probe lives
+    # wherever the model's embedding does: on one GPU for the E14 models, on
+    # the CPU for a checkpoint too large to hold twice on the GPUs (E21 loads
+    # the 70B on the CPU for the layer loop, and a .cuda() here killed it).
     original = (LOAD_MODEL or base.load_model)(model_id, workdir)
+    probe = tokens[:1, :args.verify_tokens].to(original.get_input_embeddings().weight.device)
     with torch.inference_mode():
         reference = original(input_ids=probe, use_cache=False).logits.float()
     del original
@@ -835,6 +838,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
     model, rotations, fold = _prepare_rotated_model(
         workdir, model_key, args.rotation, args.seed, args.weight_row_batch
     )
+    probe = probe.to(model.get_input_embeddings().weight.device)
     invariance = _fold_invariance(model_id, model, rotations, probe, reference)
     algebra_control = (ALGEBRA_CONTROL or _algebra_control)(workdir, args.rotation)
     invariance["previous_bf16_gate"] = args.fold_tolerance
