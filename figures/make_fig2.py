@@ -12,7 +12,7 @@ from matplotlib.ticker import FormatStrFormatter, MaxNLocator
 from figure_style import PALETTE as SHARED_PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
 
 # Figure 2 uses a muted comparison color without changing other figures.
-PALETTE = {**SHARED_PALETTE, "duquant": "#52647A"}
+PALETTE = {**SHARED_PALETTE, "duquant": "#F5CBCB"}
 MODEL, SITE, LAYERS, GROUP = 'llama32_3b', 'down', 28, 128
 
 def add_duquant_diagnostics(data, here):

@@ -50,7 +50,7 @@ changing numerical limits.
 
 ## Figure 2 DuQuant addendum
 
-All three panels and the shared legend use muted slate blue #52647A for
+All three panels and the shared legend use soft pink #F5CBCB for
 DuQuant. Hadamard remains light cyan and PrismQuant remains deep blue; all
 line weights, markers, measurements, and layout are unchanged. Use
 `python figures/make_fig2.py --reuse-data` for presentation-only revisions

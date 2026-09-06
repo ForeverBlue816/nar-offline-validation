@@ -1,7 +1,7 @@
 {
   "verdict": "PASS",
-  "duquant_color": "#52647A",
-  "reason": "User-selected candidate: muted slate blue for a less prominent comparison series",
+  "duquant_color": "#F5CBCB",
+  "reason": "Selected the strongest pink among the three user-provided shades for visibility on white beside cyan and navy.",
   "hadamard_color": "#A8DADC",
   "prismquant_color": "#1D3557",
   "other_figures_unchanged": true,
@@ -14,7 +14,7 @@
   "geometry_unchanged": true,
   "line_widths_and_markers": "unchanged",
   "data_mode": "reuse existing plotted CSVs; cross-check range/NMSE against per-panel source tables",
-  "visual_review": "All three panels and shared legend inspected; the comparison is distinguishable while PrismQuant keeps its thicker line.",
+  "visual_review": "All three panels and the shared legend inspected with soft pink DuQuant, light cyan Hadamard, and navy PrismQuant. Line weights, markers, geometry and data remain unchanged.",
   "rendered_collision_reports": {
     "fig2": {
       "fail": 0,
