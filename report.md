@@ -1323,7 +1323,7 @@ What *was* established is that bf16 cannot certify the algebra at this scale, an
 
 The rows were therefore never re-measured on the fp32 path, and the cause of the Hadamard result remains unidentified. This was a deliberate scope decision rather than a conclusion: the investigation was stopped in favour of the end-to-end 70B run below. The honest status is an unexplained negative result on a withdrawn row set.
 
-# E21 — end-to-end W4A4KV4 on Llama-3.1-70B (k=max pending)
+# E21 — end-to-end W4A4KV4 on Llama-3.1-70B
 
 E14 could not run at 70B because it loads the whole model onto one GPU. `nar/e21_llama70b_e2e.py` supplies the three things the 70B needs and reuses E14 for everything else: a loader that shards across the visible GPUs for calibration and evaluation and leaves the model on the CPU for GPTQ, whose layer loop already moves one decoder layer to the GPU at a time; a rotation set that replicates its factors per device; and an R4 root, because E14 reuses frozen E5/E11 per-layer down-input factors and the 70B has no E11 run. E18's 70B down factors carry exactly the fields `RotationFactor.load` reads, so they are used directly rather than recalibrated. Three single-device assumptions inside E14 — the calibration sketch basis, the permutation-energy collector, and the weight-fold chunking — were made device-aware; all three are no-ops on a single GPU.
 
@@ -1333,15 +1333,17 @@ The whole pipeline runs in fp32 containers holding the published bf16 values, fo
 
 The architecture audit passes: 80 layers, hidden 8192, intermediate 28672, 64 query heads over 8 KV heads, head dimension 128, no linear biases, no embedding tying, eight shards, `problems: []`. Effective widths are A 4.25, W 4.001570, K 5.171875, V 4.433594 at context 2048.
 
-## Result, NAR k=8
+## Results
 
 | Llama-3.1-70B, seed 0 | PPL, 141 windows | Δ vs 16-bit | relative |
 |---|---:|---:|---:|
 | 16-bit (fp32 containers, this work) | 2.808525 | — | — |
 | **NAR k=8, W4A4KV4** | **3.848739** | **+1.0402** | **+37.0%** |
-| NAR k=max, W4A4KV4 | pending | | |
+| NAR k=max, W4A4KV4 | 3.890315 | +1.0818 | +38.5% |
 
-Same 141 contiguous 2048-token WikiText-2 windows as E14, fp32 containers and fp32 NLL as E19, the model's own reference measured under the same path. All 141 windows are worse than bf16 (per-window ΔNLL min +0.035, median +0.204, max +1.046); no window is non-finite. Ranks are R1 8 over 64 slots, R2 1, R4 8 over 224 slots.
+Same 141 contiguous 2048-token WikiText-2 windows as E14, fp32 containers and fp32 NLL as E19, the model's own reference measured under the same path (`results/llama31_70b/e21_summary.csv`). All 141 windows of both rows are worse than bf16 (per-window ΔNLL median +0.204 at k=8 and +0.208 at k=max, maxima +1.046 and +1.068); no window is non-finite. Ranks are R1 8 and 64 over 64 slots, R2 1, R4 8 and 224 over 224 slots; effective widths A 4.25, W 4.0016, K 5.17, V 4.43.
+
+**k=max is 0.042 worse than k=8, on 89 of 141 windows.** This is the rank inversion E19 found on Qwen3-8B-Base under the same default per-channel GPTQ protocol, where the decomposition placed it entirely in the weight quantizer and finer-group weights reversed it. On the 70B the down_proj Hessian audit says why the same mechanism is in play: the share of trace on the per-group DC direction has median 0.16 at k=max against 0.06 at k=8 across the 80 down_proj sites, and reaches 0.99 at layer 3 under both. The protocol that repaired it on the 3B ([g128_asym](#gptq-protocols-and-the-kv-probe-on-llama-32-3b)) has not been run on the 70B; at 12 hours per rotation it is a decision, not an oversight.
 
 **At 4.25-bit activations NAR k=8 costs the 70B 37.0% of its perplexity**, against 12.0% on the 3B and 8B under the same protocol. Larger Llama models degrade more under W4A4KV4 in every published table as well: OffQ's Llama-3-70B column (16-bit 2.9) has OffQ at 3.88 (+33.8%), OSTQuant 4.01 (+38.3%), ResQ 4.1 (+41.4%), KurTail 4.2 (+44.8%), DFRot 5.03, QuaRot 5.7 and SpinQuant 6.2. The NAR row's absolute perplexity is below every one of those; its relative degradation sits between OffQ's and OSTQuant's. The usual caveats are stronger here than anywhere else in this report: different checkpoint (3.1 against 3), unstated chunking on their side, one seed, and no Hadamard row on this side, so the number says what NAR costs and not what it saves.
 
@@ -1349,7 +1351,7 @@ Same 141 contiguous 2048-token WikiText-2 windows as E14, fp32 containers and fp
 
 The GPTQ stage failed twice before it ran, both times at layer 3 `down_proj` (28672 columns), with the damped Hessian reported not positive-definite at leading minor 6927–6928. The matrix was dumped and examined (`nar/e21_cholesky_probe.py`, `results/llama31_70b/e21_cholesky_probe.json`): no NaN or inf, exactly symmetric, diagonal in [0.039, 645] with mean 2.9, so GPTQ's damping was 0.029. Its leading 6928-column block has exactly **one negative eigenvalue, −2.1e-4**, and CPU LAPACK, cuSOLVER and MAGMA reject it at that column in fp32 and fp64 alike. The matrix is genuinely indefinite by about the size of the damping, which is the size of fp32 rounding in a 2048-term dot product on the large entries: an fp64 running sum could not repair it, because the error was already in the per-sequence products. This layer is the massive-activation layer — its Hessian diagonal max/median is 51,641 and **99.0% of its trace sits on the per-group DC direction** (median 6.3% across the other down_proj layers) — and 28672 columns dilute the mean diagonal, and with it the damping, to almost nothing.
 
-The fix computes the Gram products in fp64 for the 70B only (`GPTQ(product_dtype=torch.float64)`, set by E21's hooks), factors in fp64, and records both in every audit row; damping and the rest of the protocol are unchanged and the fp32 default is bit-identical to before. Layers 0–2 of the k=8 checkpoint were quantized in the first attempt with fp32 Hessians and are kept, because every later layer's calibration stream passed through them; the audit marks which rows used which width. fp64 products cost 9.3 minutes per layer against 1.9, 12 hours per rotation.
+The fix computes the Gram products in fp64 for the 70B only (`GPTQ(product_dtype=torch.float64)`, set by E21's hooks), factors in fp64, and records both in every audit row; damping and the rest of the protocol are unchanged and the fp32 default is bit-identical to before. Layers 0–2 of the k=8 checkpoint were quantized in the first attempt with fp32 Hessians and are kept, because every later layer's calibration stream passed through them; the audit marks which rows used which width, and the k=max checkpoint is fp64 throughout (560 of 560 audit rows). fp64 products cost 9.3 minutes per layer against 1.9, 12 hours per rotation.
 
 
 # Infrastructure defects found and fixed during E19
