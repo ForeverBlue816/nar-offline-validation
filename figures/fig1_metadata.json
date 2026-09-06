@@ -330,7 +330,15 @@
       "hadamard": "#A8DADC",
       "prismquant": "#1D3557",
       "range_map_shared": true,
-      "zero_point": "#1D3557"
+      "zero_point": "#73CC80",
+      "panel_a": "#601D49",
+      "panel_g": "#601D49",
+      "surface_a_colormap": [
+        "#FFF5F5",
+        "#EA9D9D",
+        "#BD5579",
+        "#601D49"
+      ]
     },
     "panel_placements_inches": {
       "a": [
@@ -382,7 +390,15 @@
     "hadamard": "#A8DADC",
     "prismquant": "#1D3557",
     "range_map_shared": true,
-    "zero_point": "#1D3557"
+    "zero_point": "#73CC80",
+    "panel_a": "#601D49",
+    "panel_g": "#601D49",
+    "surface_a_colormap": [
+      "#FFF5F5",
+      "#EA9D9D",
+      "#BD5579",
+      "#601D49"
+    ]
   },
   "trace_rendering": {
     "y_limits": [

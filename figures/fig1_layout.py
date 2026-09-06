@@ -13,13 +13,18 @@ from figure_style import PALETTE, SEQUENTIAL_CMAP, configure_style, save_panel
 
 INK='#24354B'; RAW='#64748B'
 HAD=PALETTE['hadamard']; PRISM=PALETTE['prismquant']
-CYAN=PALETTE['hadamard']; ZERO=PALETTE['reference']; GRID=PALETTE['grid']
+CYAN=PALETTE['hadamard']; ZERO='#73CC80'; GRID=PALETTE['grid']
+BURGUNDY='#601D49'; ROSE='#BD5579'; BLUSH='#EA9D9D'
 WIDTH,HEIGHT=6.6,4.25
 # Dimensions are inches. Dense panels keep all original sample segments.
 PLACES={'a':(.00,2.24,1.88,1.53),'b':(2.20,2.85,1.82,1.35),
         'c':(4.40,2.85,2.16,1.35),'d':(4.40,1.49,2.16,1.35),
         'e':(.10,.08,2.04,1.10),'f':(2.28,.08,2.04,1.10),'g':(4.46,.08,2.04,1.10)}
 RANGE_MAP=SEQUENTIAL_CMAP
+RAW_SURFACE_COLORS=['#FFF5F5',BLUSH,ROSE,BURGUNDY]
+FIG1_PALETTE={'raw':RAW,'hadamard':HAD,'prismquant':PRISM,
+    'range_map_shared':True,'zero_point':ZERO,'panel_a':BURGUNDY,
+    'panel_g':BURGUNDY,'surface_a_colormap':RAW_SURFACE_COLORS}
 
 def style():
     configure_style()
@@ -35,7 +40,7 @@ def landscape(values, letter, arrays, metadata, here):
     coords=np.empty((values.shape[1],values.shape[0],3),dtype=np.float32)
     coords[:,:,0]=x[:,None];coords[:,:,1]=tokens[None,:];coords[:,:,2]=values.T
     segments=np.stack([coords[:,:-1],coords[:,1:]],axis=2).reshape(-1,2,3)
-    cmap=LinearSegmentedColormap.from_list('magnitude',['#F5F7F9',RAW]) if letter=='a' else RANGE_MAP
+    cmap=LinearSegmentedColormap.from_list('magnitude',RAW_SURFACE_COLORS) if letter=='a' else RANGE_MAP
     mark=Line3DCollection(segments,cmap=cmap,norm=Normalize(0,zmax),linewidths=.9 if ranges else .7)
     mark.set_array(segments[:,:,2].max(1));mark.set_rasterized(True);ax.add_collection3d(mark)
     ax.set(xlim=(int(x[0]),int(x[-1])),ylim=(int(tokens[0]),int(tokens[-1])),zlim=(0,zmax))
@@ -69,7 +74,7 @@ def landscape(values, letter, arrays, metadata, here):
 
 def trace(values,letter,metadata,here):
     style();_,_,w,h=PLACES[letter];fig=plt.figure(figsize=(w,h))
-    ax=fig.add_axes([.16,.25,.81,.62]);color={'e':RAW,'f':HAD,'g':PRISM}[letter]
+    ax=fig.add_axes([.16,.25,.81,.62]);color={'e':RAW,'f':HAD,'g':BURGUNDY}[letter]
     ax.hlines(0,0,127,color=GRID,lw=.5,zorder=0)
     ax.plot(np.arange(128),values,color=color,lw=.8)
     low,high=map(float,[values.min(),values.max()])
@@ -123,7 +128,7 @@ def compose(here,metadata):
     style();fig=plt.figure(figsize=(WIDTH,HEIGHT));ax=fig.add_axes([0,0,1,1]);ax.set(xlim=(0,WIDTH),ylim=(0,HEIGHT));ax.axis('off')
     def text(x,y,t,size=7,color=INK,**kw):ax.text(x,y,t,fontsize=size,color=color,**kw)
     # An explicit fork: both branches start at the same raw activation.
-    ax.plot([1.88,1.98,1.98],[2.98,2.98,3.53],color=RAW,lw=.8)
+    ax.plot([1.88,1.98,1.98],[2.98,2.98,3.53],color=BURGUNDY,lw=.8)
     arrow(ax,(1.98,3.53),(2.22,3.53),HAD)
     ax.plot([1.98,1.98],[2.98,2.12],color=PRISM,lw=.8)
     arrow(ax,(1.98,2.12),(2.28,2.12),PRISM)
@@ -140,7 +145,7 @@ def compose(here,metadata):
     arrow(ax,(2.40,1.64),(2.40,1.43),ZERO,lw=.65,style='<->')
     ax.plot([2.50,2.72],[1.57,1.57],color=ZERO,lw=.7,ls=(0,(2,1)))
     text(2.81,1.50,'common offset → zero-point',size=6,color=ZERO,va='center')
-    text(.12,3.69,'(a)  Raw activations',size=8,color=RAW,weight='bold')
+    text(.12,3.69,'(a)  Raw activations',size=8,color=BURGUNDY,weight='bold')
     text(2.28,4.07,'(b)  Hadamard: spread energy',size=7.5,color=HAD,weight='bold')
     text(4.52,4.07,'(c)  Hadamard: spread',size=8,color=HAD,weight='bold')
     text(4.52,2.71,'(d)  PrismQuant: align',size=8,color=PRISM,weight='bold')
@@ -148,7 +153,7 @@ def compose(here,metadata):
     text(5.46,1.29,'residual within-group range',size=6,color=INK,ha='center')
     ax.plot([.12,6.49],[1.22,1.22],color=GRID,lw=.6)
     text(.13,1.31,'One token · measured group traces',size=7,color=INK)
-    for letter,title,color in [('e','Raw: concentrated',RAW),('f','Hadamard: spread',HAD),('g','PrismQuant: shared offset',PRISM)]:
+    for letter,title,color in [('e','Raw: concentrated',RAW),('f','Hadamard: spread',HAD),('g','PrismQuant: shared offset',BURGUNDY)]:
         x,y,w,h=PLACES[letter];text(x+.33,1.10,f'({letter})  {title}',size=7,color=color,weight='bold')
     fig.savefig(here/'qa/fig1_annotations.pdf',transparent=True);fig.savefig(here/'qa/fig1_annotations.svg',transparent=True);plt.close(fig)
     # Compose vectors at their native size; only scientific 3D marks are raster.
@@ -189,7 +194,7 @@ def render_figure(arrays,metadata,here):
         'scientific_panels':rendered,'icons':'unscaled vector schematics only; no new experimental measurements',
         'preserved_content':'all original arrays, windows, numeric scales, traces, brackets and affine offset',
         'range_semantics':'Rotations change within-group range. Subtracting an affine offset alone does not change max-minus-min.',
-        'palette':{'raw':RAW,'hadamard':HAD,'prismquant':PRISM,'range_map_shared':True,'zero_point':ZERO}}
+        'palette':FIG1_PALETTE.copy()}
     metadata['trace_rendering'].update({'size_inches':[2.04,1.10],'x_ticks':[0,64,127],
         'y_ticks':[-5,0,5],'all_axes_labeled':False,'shared_y_label':'signed value','y_tick_labels_on_all_panels':True})
     metadata['palette']=metadata['rendering_contract']['palette']
