@@ -327,10 +327,10 @@
     "range_semantics": "Rotations change within-group range. Subtracting an affine offset alone does not change max-minus-min.",
     "palette": {
       "raw": "#64748B",
-      "hadamard": "#E88932",
-      "prismquant": "#177DDC",
+      "hadamard": "#A8DADC",
+      "prismquant": "#1D3557",
       "range_map_shared": true,
-      "zero_point": "#2A9D8F"
+      "zero_point": "#1D3557"
     },
     "panel_placements_inches": {
       "a": [
@@ -379,10 +379,10 @@
   },
   "palette": {
     "raw": "#64748B",
-    "hadamard": "#E88932",
-    "prismquant": "#177DDC",
+    "hadamard": "#A8DADC",
+    "prismquant": "#1D3557",
     "range_map_shared": true,
-    "zero_point": "#2A9D8F"
+    "zero_point": "#1D3557"
   },
   "trace_rendering": {
     "y_limits": [

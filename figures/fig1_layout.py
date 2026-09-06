@@ -9,15 +9,17 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize, LinearSegmentedColormap
 from matplotlib.patches import FancyArrowPatch, Ellipse, Rectangle
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
-from figure_style import configure_style, save_panel
+from figure_style import PALETTE, SEQUENTIAL_CMAP, configure_style, save_panel
 
-INK='#24354B'; RAW='#64748B'; HAD='#E88932'; PRISM='#177DDC'; CYAN='#66C7E8'; ZERO='#2A9D8F'; GRID='#DCE4EA'
+INK='#24354B'; RAW='#64748B'
+HAD=PALETTE['hadamard']; PRISM=PALETTE['prismquant']
+CYAN=PALETTE['hadamard']; ZERO=PALETTE['reference']; GRID=PALETTE['grid']
 WIDTH,HEIGHT=6.6,4.25
 # Dimensions are inches. Dense panels keep all original sample segments.
 PLACES={'a':(.00,2.24,1.88,1.53),'b':(2.20,2.85,1.82,1.35),
         'c':(4.40,2.85,2.16,1.35),'d':(4.40,1.49,2.16,1.35),
         'e':(.10,.08,2.04,1.10),'f':(2.28,.08,2.04,1.10),'g':(4.46,.08,2.04,1.10)}
-RANGE_MAP=LinearSegmentedColormap.from_list('shared_range',['#F4F8FA',CYAN,PRISM,'#163A63'])
+RANGE_MAP=SEQUENTIAL_CMAP
 
 def style():
     configure_style()
@@ -33,7 +35,7 @@ def landscape(values, letter, arrays, metadata, here):
     coords=np.empty((values.shape[1],values.shape[0],3),dtype=np.float32)
     coords[:,:,0]=x[:,None];coords[:,:,1]=tokens[None,:];coords[:,:,2]=values.T
     segments=np.stack([coords[:,:-1],coords[:,1:]],axis=2).reshape(-1,2,3)
-    cmap=RANGE_MAP if ranges else LinearSegmentedColormap.from_list('magnitude',['#F5F7F9',RAW] if letter=='a' else ['#FFF8EF',HAD])
+    cmap=LinearSegmentedColormap.from_list('magnitude',['#F5F7F9',RAW]) if letter=='a' else RANGE_MAP
     mark=Line3DCollection(segments,cmap=cmap,norm=Normalize(0,zmax),linewidths=.9 if ranges else .7)
     mark.set_array(segments[:,:,2].max(1));mark.set_rasterized(True);ax.add_collection3d(mark)
     ax.set(xlim=(int(x[0]),int(x[-1])),ylim=(int(tokens[0]),int(tokens[-1])),zlim=(0,zmax))
@@ -95,12 +97,12 @@ def matrix_icon(ax,x,y):
     for i in range(4):
         for j in range(4):
             ax.add_patch(Rectangle((x+j*size,y+i*size),size*.82,size*.82,
-                                  facecolor=HAD if pattern[i,j]>0 else '#FCEBD7',edgecolor='none'))
+                                  facecolor=HAD if pattern[i,j]>0 else PALETTE['zero'],edgecolor='none'))
     ax.text(x+.082,y+.21,'H',color=HAD,fontsize=7,ha='center')
 
 def alignment_icon(ax,x,y):
     # Unscaled conceptual glyph, not an empirical ellipse or energy measurement.
-    ax.add_patch(Ellipse((x,y),.35,.12,angle=32,facecolor='#EDF7FC',edgecolor=CYAN,lw=.6))
+    ax.add_patch(Ellipse((x,y),.35,.12,angle=32,facecolor=PALETTE['zero'],edgecolor=CYAN,lw=.6))
     arrow(ax,(x-.13,y-.08),(x+.15,y+.09),PRISM,lw=.75)
     ax.text(x-.04,y+.16,'v₁ … vₖ',fontsize=6,color=PRISM,ha='center')
     arrow(ax,(x+.25,y),(x+.51,y),PRISM)

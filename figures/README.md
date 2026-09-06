@@ -36,8 +36,11 @@ a group alone cannot change its max-minus-min range.
 All scientific samples remain plotted. Dense 3D marks are rasterized at
 300 dpi, while axes, text, arrows, and conceptual icons stay vector. The
 canvas height drops from 7.0 to 4.25 inches at the same 6.6-inch width.
-Method identity uses slate/orange/blue, with teal for affine metadata;
-c/d share the same sequential height map. The sparse coordinate ticks
+Raw panels a/e keep slate gray. Hadamard uses Figure 2's light cyan
+(#A8DADC), and PrismQuant uses its deep blue (#1D3557). Affine annotations
+use the original deep-blue reference color;
+b/c/d restore the original shared sequential palette
+(#F1FAEE → #A8DADC → #457B9D → #1D3557), with unchanged normalizations. The sparse coordinate ticks
 replace the previous diagnostic grid without changing numerical limits.
 
 ## Figure 2 DuQuant addendum
