@@ -1,0 +1,246 @@
+{
+  "array_sha256": {
+    "raw_magnitude": "5a1a36c947c4b77493eaff40c191d50291dfe2466b974e90936d8f8fc1d6b892",
+    "hadamard_magnitude": "7c7902141706257a7b47449b15c24f522925ce1718972577c49c5644e3776d46",
+    "hadamard_range": "359932dda51078a816d33ec755f86a43e73c3da48e97e2f568d9f5de6fb32fce",
+    "nar_kmax_range": "15035943cc8aab98508fdd5675e769d737000556a95992465d60f28b6101c7fb",
+    "token_axis": "d810c3baba6c2e0486452d09fe030ec1b04f667cb385fea2881ecd388e387a27",
+    "trace_raw": "98132120b3f5ef0639eda2c9f52c3305f3dd30412402d68090191cc27b2a3f53",
+    "trace_hadamard": "4cb4161e9c48df316eebea9ab346ab30c7c936f1f80adb32c5afeb0c1f59568a",
+    "trace_nar_kmax": "8203423ab3970845006a27dcd1f5ed25b22bd1d1079eb18f6088f6c29312c982",
+    "all_channel_median_magnitudes": "6a2f28ff920727a0c371f4df7a17a53e49459444183b39835f2418b485e8e7c9",
+    "peak_density_window_counts": "50f69266786618a3b2271e16f10ecf5b8f11c7aec7500ffea9767235d2483eb2",
+    "geometry_scores": "a67600439e8d228558efec5ce64460e0dd0cde93054a87602518a009aebf65b7",
+    "geometry_covariance_eigenvalues": "2354e246b8912e78daf6ad370da939cdc25995ead14453b5aad7ac477264b1b2"
+  },
+  "source_file_sha256": {
+    "fig1_source_arrays.npz": "649eb675952d9ec24e231488019e9799f2d56abee6b2db5e7aa1de98d06812f8",
+    "fig1_ranges.csv": "fa362e1c5fb5ef1951e4c580d24fb2d45f0c5c6ad59fbb4563fd2bfa70f649d8",
+    "fig1_landscape_channels.csv": "8fe591f4b9854b81fb433989eb48c59d8c630dde50cf515836a53fe5c5d37911"
+  },
+  "scientific_metadata": {
+    "model": "llama32_3b",
+    "site": "down_input",
+    "layer": 27,
+    "site_layer_selection_rule": "largest absolute measured mean-group-range reduction of nar_kmax versus hadamard_full across both E1c sites",
+    "e1c_selected_case": {
+      "hadamard_mean_group_range": 1.91482412815094,
+      "prismquant_mean_group_range": 0.8850160241127014,
+      "absolute_reduction": 1.0298081040382385,
+      "relative_reduction_percent": 53.78081928770545
+    },
+    "top_five_e1c_cases_by_absolute_reduction": [
+      {
+        "site": "down_input",
+        "layer": 27,
+        "absolute_reduction": 1.0298081040382385,
+        "relative_reduction_percent": 53.78081928770545
+      },
+      {
+        "site": "q_input",
+        "layer": 13,
+        "absolute_reduction": 0.5808343887329102,
+        "relative_reduction_percent": 24.455369730221555
+      },
+      {
+        "site": "q_input",
+        "layer": 18,
+        "absolute_reduction": 0.575101971626282,
+        "relative_reduction_percent": 22.51125865070149
+      },
+      {
+        "site": "q_input",
+        "layer": 24,
+        "absolute_reduction": 0.5738263130187988,
+        "relative_reduction_percent": 21.53897012879878
+      },
+      {
+        "site": "q_input",
+        "layer": 12,
+        "absolute_reduction": 0.563899040222168,
+        "relative_reduction_percent": 24.135984032372836
+      }
+    ],
+    "group_size": 128,
+    "groups": 64,
+    "hero": {
+      "evaluation_rows": 8064,
+      "selection_rule": "non-BOS stride-32 row nearest the 95th percentile of |projection on v1|",
+      "top_decile_threshold_abs_projection": 24.094221115112305,
+      "target_percentile_abs_projection": 25.574243545532227,
+      "evaluation_row": 7446,
+      "sequence_index": 118,
+      "token_position": 416,
+      "projection_on_v1": 25.575366973876953,
+      "absolute_projection_on_v1": 25.575366973876953
+    },
+    "token_window": {
+      "sequence_index": 118,
+      "position_start": 160,
+      "position_stop_exclusive": 672,
+      "rows": 512,
+      "bos_excluded": true
+    },
+    "channel_windows": {
+      "raw": [
+        1254,
+        3301
+      ],
+      "hadamard_and_prismquant": [
+        1254,
+        3301
+      ],
+      "width": 2048,
+      "raw_window_rule": "maximize count of channels with median absolute activation > 1.0 over the plotted tokens; all stride-1 2048-wide windows; earliest start breaks ties",
+      "rotated_window_rule": "same numerical channel interval as raw; coordinates are in the rotated basis"
+    },
+    "group_window": [
+      0,
+      63
+    ],
+    "v1_peak_channel": 3286,
+    "raw_trace_group": 25,
+    "prismquant_receiving_group": 0,
+    "receiving_group_fraction_of_mapped_v1_energy": 1.0,
+    "plotted_mean_ranges": {
+      "hadamard": 1.764014204069099,
+      "prismquant_kmax": 0.8404273132182425,
+      "reduction_percent": 52.35711190535732,
+      "p90_reduction_percent": 49.27603385273945
+    },
+    "trace_ranges": {
+      "raw": 11.65625,
+      "hadamard": 1.7078814506530762,
+      "nar_kmax": 0.7634278535842896
+    },
+    "trace_zero_points": {
+      "raw": -4.625,
+      "hadamard": -0.87060546875,
+      "nar_kmax": -2.611328125
+    },
+    "trace_group_means": {
+      "raw": 0.03076837956905365,
+      "hadamard": 0.04235752299427986,
+      "nar_kmax": -2.260563373565674
+    },
+    "transform_seed": 20260902,
+    "row1_z_limits": {
+      "raw": [
+        0.0,
+        40.0
+      ],
+      "hadamard": [
+        0.0,
+        4.0
+      ]
+    },
+    "row2_shared_z_limits": [
+      0.0,
+      10.0
+    ],
+    "source": "frozen E1c dump, eigenspace, factor, and per-layer results; no model rerun",
+    "peak_density_selection": {
+      "start_channel": 1254,
+      "stop_channel_exclusive": 3302,
+      "qualifying_channel_count": 21,
+      "median_threshold_strictly_greater_than": 1.0,
+      "candidate_windows": 6145,
+      "stride": 1,
+      "tied_best_windows": 183,
+      "tie_break": "smallest start channel",
+      "tokens": {
+        "sequence_index": 118,
+        "position_start": 160,
+        "position_stop_exclusive": 672,
+        "rows": 512,
+        "bos_excluded": true
+      }
+    },
+    "range_averaging": {
+      "c_d": {
+        "statistic": "arithmetic mean of every plotted max-minus-min value",
+        "sequence": 118,
+        "tokens_inclusive": [
+          160,
+          671
+        ],
+        "groups_inclusive": [
+          0,
+          63
+        ],
+        "count": 32768
+      },
+      "e": {
+        "statistic": "single raw token/group max-minus-min",
+        "token": 416,
+        "group": 25
+      },
+      "f_g": {
+        "statistic": "single rotated token/group max-minus-min",
+        "token": 416,
+        "group": 0,
+        "landscape_row": 256,
+        "cell_identity_verified": true
+      },
+      "reconciliation": "c/d average 512 tokens \u00d7 64 groups; f/g select one cell (token 416, group 0) of those SAME arrays, so their values need not equal the means."
+    },
+    "geometry_covariance": {
+      "definition": "centered sample covariance, divisor n-1; all 8192 channels of the same 512-token window",
+      "top_two_eigenvalues": [
+        97.52831250027364,
+        57.37043599625988
+      ],
+      "rows": 512,
+      "centered_pc1_cosine_with_prism_receiving_dc": 0.10168235749006271,
+      "frozen_second_moment_v1_dc_energy_fraction": 1.0,
+      "raw_pc1_cosine_with_group_dc": 0.013828529768916017
+    },
+    "range_statistics": {
+      "hadamard": {
+        "median": 1.6807422637939453,
+        "mean": 1.764014204069099,
+        "percentile_95": 2.5171279907226562,
+        "maximum": 6.389837265014648,
+        "count": 32768
+      },
+      "prismquant_kmax": {
+        "median": 0.7972100973129272,
+        "mean": 0.8404273132182425,
+        "percentile_95": 1.2450511455535889,
+        "maximum": 8.919330596923828,
+        "count": 32768
+      }
+    },
+    "zero_point_definition": "Actual quantizer offset: fp16(min(values)), not the arithmetic group mean; dynamic_asym_int4 in nar/experiment.py.",
+    "row1_data_maxima": {
+      "raw": 18.125,
+      "hadamard": 3.047273874282837
+    },
+    "rendered_panel_statistics": {
+      "c": {
+        "method": "Hadamard",
+        "median": 1.6807422637939453,
+        "mean": 1.764014204069099,
+        "percentile_95": 2.5171279907226562,
+        "maximum": 6.389837265014648,
+        "count": 32768,
+        "shape": [
+          512,
+          64
+        ]
+      },
+      "d": {
+        "method": "PrismQuant",
+        "median": 0.7972100973129272,
+        "mean": 0.8404273132182425,
+        "percentile_95": 1.2450511455535889,
+        "maximum": 8.919330596923828,
+        "count": 32768,
+        "shape": [
+          512,
+          64
+        ]
+      }
+    }
+  }
+}

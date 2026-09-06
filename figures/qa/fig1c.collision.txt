@@ -1,16 +1,12 @@
 Nature Figure Rendered Collision Audit
 pdf: /home/yanlongc/nar-offline-validation/figures/fig1c.pdf
 pages: 1
-visible text boxes: 14
-stroke paths: 48
+visible text boxes: 10
+stroke paths: 22
 
-[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'group'
-  text bbox: (81.63818359375, 130.64085388183594, 103.58527374267578, 141.3218231201172)
-[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '40'
-  text bbox: (112.8897933959961, 127.39588928222656, 120.52317810058594, 133.39588928222656)
-[WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — '400'
-  text bbox: (189.06312561035156, 126.572021484375, 200.51251220703125, 132.572021484375)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0'
+  text bbox: (30.745820999145508, 62.42686080932617, 34.563201904296875, 68.42686462402344)
 
-summary: 0 fail, 3 warn, 1 contained fill overlays, 0 contained image overlays
+summary: 0 fail, 1 warn, 0 contained fill overlays, 0 contained image overlays
 verdict: REVIEW REQUIRED
 note: contained overlays can be intentional; WARN findings need final-size visual review

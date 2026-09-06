@@ -1,12 +1,12 @@
 {
-  "source": "make_fig1.py + figure_style.py",
+  "source": "make_fig1.py + figure_style.py + fig1_layout.py",
   "backend": "python",
   "summary": {
     "ready": false,
     "strict": false,
     "counts": {
-      "PASS": 16,
-      "WARN": 4,
+      "PASS": 15,
+      "WARN": 5,
       "FAIL": 1
     }
   },
@@ -31,9 +31,11 @@
     },
     {
       "check_id": "FONT-GLYPH-FLOOR",
-      "level": "PASS",
-      "message": "No mathtext superscript/subscript expression detected",
-      "evidence": []
+      "level": "WARN",
+      "message": "Mathtext may shrink script glyphs below 5 pt (about 4.20 pt from a 6 pt parent); use a Unicode glyph or audit PDF Tf operators",
+      "evidence": [
+        "$\\mathbf{1}_g$"
+      ]
     },
     {
       "check_id": "LEGEND-LABEL-CASE",
@@ -76,7 +78,7 @@
     {
       "check_id": "FINAL-WIDTH",
       "level": "WARN",
-      "message": "Detected width 81.3 mm is not near the common 89/183 mm defaults; verify the target journal",
+      "message": "No static final width detected; verify the target journal's current specification",
       "evidence": []
     },
     {
@@ -137,7 +139,8 @@
       "level": "PASS",
       "message": "Render-time panel-alignment gate is wired into the plotting source",
       "evidence": [
-        "require_matplotlib_panel_alignment("
+        "require_matplotlib_panel_alignment(",
+        "audit_layout_manifest("
       ]
     },
     {

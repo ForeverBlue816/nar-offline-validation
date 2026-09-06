@@ -7,12 +7,38 @@ editable; dense scientific marks are embedded rasters.
 ## Current exports
 
 - Figure 1: fig1a through fig1g, each in SVG/PDF/transparent 300-dpi PNG.
-  fig1_preview.png and fig1.pdf/svg compose the seven bare panels.
+  fig1_preview.png and fig1.pdf/svg form a compact 6.6 × 4.25-inch mechanism
+  teaser with a raw-activation fork, two rotation paths, matched range outcomes,
+  and a shared strip of the original three signed traces. Vector arrows and
+  unscaled icons annotate the mechanism; no error/energy results are invented.
 - Figure 2: fig2a/b/c and assembly; Hadamard, DuQuant, and PrismQuant in all three panels.
 - Figure 3: fig3a (cloud), fig3b (energy), and fig3c (two-part range law).
   fig3c1 and fig3c2 are also exported independently in SVG/PDF/PNG.
   fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
   the side-by-side range-law comparison. No in-panel titles or footer captions.
+
+## Figure 1 mechanism redesign
+
+Reproduce with `python figures/make_fig1.py --reuse-data`. The data builder
+remains available with `--workdir` for the original frozen activation dumps.
+`fig1_layout.py` defines the final layout, semantic vector icons, and native-size
+PDF/SVG composition. The original NPZ and source CSVs remain unchanged.
+
+Raw activations fork into the Hadamard and PrismQuant paths. Matched panels
+c/d retain identical token/group windows, panel size, camera, 0–10 z limits,
+and color normalization. The a/b magnitude scales remain 0–40 and 0–4.
+The bottom strip keeps the actual raw/Hadamard/PrismQuant signed traces,
+measured range brackets, common y limits, and g's fp16(min x) offset. It is
+not relabelled as NMSE or captured-energy evidence. The caption distinguishes
+alignment-induced range reduction from offset representation: translating
+a group alone cannot change its max-minus-min range.
+
+All scientific samples remain plotted. Dense 3D marks are rasterized at
+300 dpi, while axes, text, arrows, and conceptual icons stay vector. The
+canvas height drops from 7.0 to 4.25 inches at the same 6.6-inch width.
+Method identity uses slate/orange/blue, with teal for affine metadata;
+c/d share the same sequential height map. The sparse coordinate ticks
+replace the previous diagnostic grid without changing numerical limits.
 
 ## Figure 2 DuQuant addendum
 
@@ -170,19 +196,21 @@ illustration, not an average-case estimate.
 Panel a uses z/color limits 0–40; the selected window's maximum is 18.125.
 Panel b uses its own 0–4 z/color scale. Both use elev=22, azim=-60 and identical
 channel/token ticks. Panels c/d use the same 0–10 height/color scale, elev=18,
-azim=-62, and 0.9-pt lines. The aspect ratio is 2.6:1.2:0.85. Grids are denser
-than the labeled ticks. No values are clipped, subsampled, or smoothed.
+azim=-62, and 0.9-pt lines. The aspect ratio is 2.6:1.2:0.85. Sparse grid lines
+and coordinate ticks replace the dense diagnostic grid. No values are clipped,
+subsampled, or smoothed.
 
 Panels a–d contain only axes, tick labels, axis labels, and data. Median, mean,
 and 95th-percentile ranges are recorded in fig1_metadata.json. The 32768 range
 cells and all three signed traces remain numerically identical to revision 4.
 The f/g traces are exact token-416, group-0 cells of c/d; e is raw group 25.
 
-Panels e/f/g have equal 2.1-by-1.75-inch canvases, common y limits, y ticks
-−5/0/5, and x ticks 0/32/64/96/127. Every trace has both “signed value” and
-“channel in group” labels. Range brackets remain; g retains the actual affine
-INT4 offset fp16(min x) as its dashed zero-point line. Panels a–d remain
-3.2 by 2.45 inches.
+Panels e/f/g have equal 2.04-by-1.10-inch canvases, common y limits, y ticks
+−5/0/5, and x ticks 0/64/127. They share the signed-value label, and each
+retains its channel-in-group label and measured range bracket. The g trace
+keeps the fp16(min x) affine offset. Standalone a/b panels are 1.88 × 1.53
+and 1.82 × 1.35 inches; c/d are identically 2.16 × 1.35 inches. The annotated
+assembly, rather than the bare panels alone, carries the causal story.
 
 ## Figure 3
 

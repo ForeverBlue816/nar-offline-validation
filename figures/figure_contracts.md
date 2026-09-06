@@ -3,14 +3,18 @@
 User-requested bare panels; upright serif, 6-pt ticks, 7-pt axis labels,
 6.5-pt legends. Editable SVG/PDF text. No in-panel titles or footer captions.
 
-1. Figure 1: density-selected activation illustration. Rank every contiguous
-2048-wide window by count(median |x| > 1), earliest start breaks ties. Both a/b
-use the same window and camera, with independent z/color scales 0–40 and 0–4.
-Panels c/d share 0–10 limits and normalization, camera 18/−62, and 0.9-pt lines.
-No sample removal or clipping. Report range statistics in metadata only.
-The e/f/g signed traces each carry both axes, ticks and labels; equal sizes,
-common y limits, measured brackets, actual zero-point line in g. Transparent
-300-dpi PNGs accompany all seven PDF/SVG panels.
+1. Figure 1: compact mechanism teaser. The same raw activation forks into
+Hadamard mixing and PrismQuant eigendirection alignment, each feeding the
+same grouped asymmetric INT4 quantizer. Matched c/d outcomes are not a chain.
+Keep all original arrays and all scientific metadata: the selected layer,
+token/channel windows, independent a/b scales 0–40/0–4, matched c/d scale
+0–10, and every original trace value and measured bracket. Icons are unscaled
+vector explanations only. The lower strip remains three signed traces, not
+invented error or energy panels. Zero-point representation does not itself
+reduce max-minus-min range. The user-requested compact annotated assembly
+supersedes the former annotation-free review sheet. New colors apply only to
+Figure 1; figures 2–4 keep their existing styles. Serif type, sparse readable
+coordinates, editable text, and a 6.6 × 4.25-inch canvas.
 
 2. Figure 2: preserve all 28 paired Hadamard/PrismQuant layer measurements and
 existing mean reductions. Add the E16 DuQuant-style rotation on frozen E1c

@@ -1,3 +1,27 @@
+# Current Figure 1 redesign QA
+
+`fig1.integrity.json` verifies every original array hash, source CSV hash,
+scientific metadata field, full range bounds, and trace/cell correspondence.
+`fig1.alignment.json` verifies the matched c/d column and equal evidence-strip
+panels. `fig1.visual-review.json` records the causal-structure and visual audit.
+All Figure 1 exports have zero clipping, text-text, or text-stroke failures.
+The remaining image-edge warnings are transparent raster rectangle bounds,
+reviewed against the actual visible marks; no masking or tolerance changes.
+`fig1.paperwidth.json` records a reduced 5.5-inch-wide check: all text remains
+inside the page, with a minimum glyph size of 5 pt (floating-point tolerance).
+The PDF/PNG beside it are QA previews only. The complete source arrays and
+numeric values are unchanged. `fig1.data-baseline.json` preserves their
+pre-redesign hashes and scientific metadata for reproducible verification.
+
+Run `python figures/verify_fig1.py` and
+`python figures/audit_exports.py --figure 1` for the current Figure 1 bundle.
+The shared `verify_figures.py` also exercises the new Figure 1 verifier.
+
+The notes below describe the earlier bare-panel review and remain historical;
+its old Figure 1 label and dimension assumptions are superseded above.
+
+---
+
 # Final rendered QA — revision 5
 
 Independent scientific/export verification: PASS (numerical-verification.json).

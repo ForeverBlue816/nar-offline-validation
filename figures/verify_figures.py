@@ -15,16 +15,8 @@ def main():
     assert m['channel_windows']['raw']==m['channel_windows']['hadamard_and_prismquant']
     assert m["row1_z_limits"] == {"raw": [0.0, 40.0], "hadamard": [0.0, 4.0]}
     assert m["row2_shared_z_limits"] == [0.0, 10.0]
-    assert m["rendering_contract"]["row1"]["normalization"] == m["row1_z_limits"]
-    assert m["rendering_contract"]["row2"]["normalization"] == [0.0, 10.0]
-    assert m["rendering_contract"]["row2"]["view"] == {"elevation": 18, "azimuth": -62}
-    assert m["rendering_contract"]["dense_grid"] == {
-        "channel_interval": 250,
-        "token_interval": 100,
-        "group_interval": 10,
-        "row1_z_interval": 5,
-        "row2_z_interval": 1.25,
-    }
+    from verify_fig1 import main as verify_figure1
+    verify_figure1()
     qualifying = arrays["all_channel_median_magnitudes"] > 1.0
     cs = np.r_[0, np.cumsum(qualifying)]
     counts = cs[2048:] - cs[:-2048]
@@ -37,14 +29,14 @@ def main():
     for letter in "efg":
         from PIL import Image
         with Image.open(HERE / f"fig1{letter}.png") as panel_image:
-            assert panel_image.mode == "RGBA" and panel_image.size == (630,525)
+            assert panel_image.mode == "RGBA" and panel_image.size == (612,330)
             assert panel_image.getpixel((0,0))[3] == 0
         with pymupdf.open(HERE / f"fig1{letter}.pdf") as doc:
             text = doc[0].get_text()
-            for label in ("signed value", "channel in group", "32", "64", "96", "127"):
+            for label in ("channel in group", "64", "127"):
                 assert label in text, (letter, label, text)
             assert "5" in text
-    assert m["trace_rendering"]["x_ticks"] == [0,32,64,96,127]
+    assert m["trace_rendering"]["x_ticks"] == [0,64,127]
     assert m["trace_rendering"]["y_ticks"] == [-5,0,5]
     forbidden = ("local height scale", "shared height scale", "mean range", "Hadamard", "PrismQuant")
     for letter in "abcd":
@@ -56,7 +48,8 @@ def main():
         from PIL import Image
         with Image.open(HERE / f"fig1{letter}.png") as image:
             assert image.mode == "RGBA", (letter, image.mode)
-            assert image.size == (960, 735), (letter, image.size)
+            expected=m['rendering_contract']['scientific_panels'][letter]['size_inches']
+            assert image.size == tuple(int(v*300) for v in expected), (letter, image.size)
             assert image.getpixel((0, 0))[3] == 0, letter
     for letter, trace_method, statistics_method, key in (
         ("c", "hadamard", "hadamard", "hadamard_range"),
@@ -138,15 +131,15 @@ def main():
             sizes[name]=[doc[0].rect.width/72,doc[0].rect.height/72]
             assert doc[0].get_fonts()
     for name in ['fig1a','fig1b','fig1c','fig1d']:
-        np.testing.assert_allclose(sizes[name],[3.2,2.45],atol=1e-6)
+        np.testing.assert_allclose(sizes[name],m['rendering_contract']['scientific_panels'][name[-1]]['size_inches'],atol=1e-6)
     result={'status':'PASS','checks':['bare a–d panels contain axes/ticks/labels only',
         'transparent 300-dpi a–g PNG exports','independent raw 0–40 and Hadamard 0–4 height/color scales',
-        'shared 0–10 row-2 height/color scale','dense grid contract recorded',
+        'shared 0–10 row-2 height/color scale','compact causal fork and sparse coordinates recorded',
         'median/mean/95th-percentile independently recomputed in metadata',
         'full c/d extrema inside common normalization','identical numerical channel windows',
         'trace ranges equal selected landscape cells','zero point equals fp16 minimum',
         'peak-density selection independently recovered over all candidate windows',
-        'standalone trace tick numbers and both axis labels',
+        'trace tick numbers and shared signed-value label',
         'all 8064 layer-27 non-BOS cloud rows inside the frame',
         'unit PrismQuant direction aligned with frozen v1',
         'all 2912 range-law points included; pooled R-squared independently reproduced','28 unchanged paired Figure 2 measurements',

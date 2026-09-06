@@ -1,0 +1,195 @@
+{
+  "verdict": "PASS after visual review",
+  "reviewed_panels": [
+    "fig1",
+    "fig1a",
+    "fig1b",
+    "fig1c",
+    "fig1d",
+    "fig1e",
+    "fig1f",
+    "fig1g"
+  ],
+  "layout_changes": [
+    "Raw activation explicitly forks into Hadamard and PrismQuant; c/d are parallel outcomes",
+    "Matched c/d sizes, camera, token/group coordinates and 0\u201310 normalization",
+    "Vector mixing, alignment, affine-scale/offset and shift glyphs annotate the existing mechanism",
+    "Three original signed traces become a shared evidence strip with common y limits and measured brackets",
+    "Canvas reduced from 6.6 \u00d7 7.0 to 6.6 \u00d7 4.25 inches; outer method colors and shared range colormap",
+    "Sparse 3D coordinates replace the dense grid; all source samples are retained"
+  ],
+  "scientific_review": [
+    "No arrays, source CSV values, scales, selections, summary statistics or trace measurements changed",
+    "No NMSE or captured-energy plot substituted for the original signed traces",
+    "Offset representation is distinguished from alignment-induced range reduction",
+    "All icons are unscaled conceptual annotations, not extra empirical results"
+  ],
+  "paper_width_review": {
+    "verdict": "PASS",
+    "native_size_inches": [
+      6.6,
+      4.25
+    ],
+    "review_width_inches": 5.5,
+    "minimum_rendered_font_pt": 4.9999799728393555,
+    "text_inside_page": true,
+    "text_spans": 86
+  },
+  "collision_resolution": "No FAILs. Image-edge WARNs concern rectangular bounds of transparent rasterized 3D marks; visible marks do not obscure the coordinate labels. Reviewed every panel and the combined figure at native and 5.5-inch width.",
+  "reviewed_warnings": {
+    "fig1": [
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "1500",
+        "text_bbox": [
+          21.353673934936523,
+          104.78181457519531,
+          36.619056701660156,
+          110.78181457519531
+        ],
+        "other_text": null,
+        "other_bbox": [
+          21.84000015258789,
+          81.12000274658203,
+          117.1199951171875,
+          117.84000396728516
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "1500",
+        "text_bbox": [
+          181.9270782470703,
+          65.94249725341797,
+          197.1924591064453,
+          71.94249725341797
+        ],
+        "other_text": null,
+        "other_bbox": [
+          183.3599853515625,
+          39.360015869140625,
+          267.8399963378906,
+          77.0400161743164
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          1
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0",
+        "text_bbox": [
+          347.5458068847656,
+          66.02688598632812,
+          351.3631896972656,
+          72.02688598632812
+        ],
+        "other_text": null,
+        "other_bbox": [
+          350.6399841308594,
+          43.920021057128906,
+          441.3599853515625,
+          72.96002197265625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          2
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0",
+        "text_bbox": [
+          347.5458068847656,
+          163.94686889648438,
+          351.3631896972656,
+          169.94686889648438
+        ],
+        "other_text": null,
+        "other_bbox": [
+          350.8800048828125,
+          138.24000549316406,
+          441.3600158691406,
+          172.8000030517578
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          3
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "32",
+        "text_bbox": [
+          381.7241516113281,
+          170.7116241455078,
+          389.3575439453125,
+          176.7116241455078
+        ],
+        "other_text": null,
+        "other_bbox": [
+          350.8800048828125,
+          138.24000549316406,
+          441.3600158691406,
+          172.8000030517578
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          3
+        ]
+      }
+    ],
+    "fig1a": [],
+    "fig1b": [],
+    "fig1c": [
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0",
+        "text_bbox": [
+          30.745820999145508,
+          62.42686080932617,
+          34.563201904296875,
+          68.42686462402344
+        ],
+        "other_text": null,
+        "other_bbox": [
+          33.84000015258789,
+          40.31999969482422,
+          124.55999755859375,
+          69.36000061035156
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      }
+    ],
+    "fig1d": [],
+    "fig1e": [],
+    "fig1f": [],
+    "fig1g": []
+  }
+}

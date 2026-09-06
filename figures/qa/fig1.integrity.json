@@ -1,0 +1,118 @@
+{
+  "verdict": "PASS",
+  "arrays_unchanged": [
+    "raw_magnitude",
+    "hadamard_magnitude",
+    "hadamard_range",
+    "nar_kmax_range",
+    "token_axis",
+    "trace_raw",
+    "trace_hadamard",
+    "trace_nar_kmax",
+    "all_channel_median_magnitudes",
+    "peak_density_window_counts",
+    "geometry_scores",
+    "geometry_covariance_eigenvalues"
+  ],
+  "scientific_metadata_unchanged": [
+    "model",
+    "site",
+    "layer",
+    "site_layer_selection_rule",
+    "e1c_selected_case",
+    "top_five_e1c_cases_by_absolute_reduction",
+    "group_size",
+    "groups",
+    "hero",
+    "token_window",
+    "channel_windows",
+    "group_window",
+    "v1_peak_channel",
+    "raw_trace_group",
+    "prismquant_receiving_group",
+    "receiving_group_fraction_of_mapped_v1_energy",
+    "plotted_mean_ranges",
+    "trace_ranges",
+    "trace_zero_points",
+    "trace_group_means",
+    "transform_seed",
+    "row1_z_limits",
+    "row2_shared_z_limits",
+    "source",
+    "peak_density_selection",
+    "range_averaging",
+    "geometry_covariance",
+    "range_statistics",
+    "zero_point_definition",
+    "row1_data_maxima",
+    "rendered_panel_statistics"
+  ],
+  "all_samples_preserved": true,
+  "matched_range_panels": true,
+  "exports": {
+    "fig1": {
+      "size_inches": [
+        6.600000169542101,
+        4.25
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 86
+    },
+    "fig1a": {
+      "size_inches": [
+        1.8800000084771051,
+        1.5300000508626301
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 9
+    },
+    "fig1b": {
+      "size_inches": [
+        1.8199999067518446,
+        1.3499999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 9
+    },
+    "fig1c": {
+      "size_inches": [
+        2.160000059339735,
+        1.3499999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 10
+    },
+    "fig1d": {
+      "size_inches": [
+        2.160000059339735,
+        1.3499999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 10
+    },
+    "fig1e": {
+      "size_inches": [
+        2.04000006781684,
+        1.0999999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 9
+    },
+    "fig1f": {
+      "size_inches": [
+        2.04000006781684,
+        1.0999999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 8
+    },
+    "fig1g": {
+      "size_inches": [
+        2.04000006781684,
+        1.0999999576144748
+      ],
+      "minimum_font_pt": 6.0,
+      "vector_text_spans": 9
+    }
+  }
+}

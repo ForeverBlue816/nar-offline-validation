@@ -206,70 +206,183 @@
     "hadamard": 3.047273874282837
   },
   "rendering_contract": {
-    "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
-    "background": "transparent SVG/PDF/PNG",
+    "layout": "raw activation forks into Hadamard and PrismQuant; matched c/d outcomes; shared bottom trace strip",
+    "size_inches": [
+      6.6,
+      4.25
+    ],
+    "previous_size_inches": [
+      6.6,
+      7.0
+    ],
     "png_dpi": 300,
-    "row1": {
-      "z_limits": {
-        "raw": [
-          0.0,
-          40.0
+    "scientific_panels": {
+      "a": {
+        "array": "raw_magnitude",
+        "shape": [
+          512,
+          2048
         ],
-        "hadamard": [
-          0.0,
-          4.0
-        ]
-      },
-      "normalization": {
-        "raw": [
-          0.0,
-          40.0
+        "segments": 1046528,
+        "z_limits": [
+          0,
+          40
         ],
-        "hadamard": [
-          0.0,
-          4.0
-        ]
+        "color_normalization": [
+          0,
+          40
+        ],
+        "view": [
+          22,
+          -60
+        ],
+        "size_inches": [
+          1.88,
+          1.53
+        ],
+        "sample_removal": false,
+        "clipping": false
       },
-      "view": {
-        "elevation": 22,
-        "azimuth": -60
+      "b": {
+        "array": "hadamard_magnitude",
+        "shape": [
+          512,
+          2048
+        ],
+        "segments": 1046528,
+        "z_limits": [
+          0,
+          4
+        ],
+        "color_normalization": [
+          0,
+          4
+        ],
+        "view": [
+          22,
+          -60
+        ],
+        "size_inches": [
+          1.82,
+          1.35
+        ],
+        "sample_removal": false,
+        "clipping": false
       },
-      "linewidth_pt": 0.7
+      "c": {
+        "array": "hadamard_range",
+        "shape": [
+          512,
+          64
+        ],
+        "segments": 32704,
+        "z_limits": [
+          0,
+          10
+        ],
+        "color_normalization": [
+          0,
+          10
+        ],
+        "view": [
+          18,
+          -62
+        ],
+        "size_inches": [
+          2.16,
+          1.35
+        ],
+        "sample_removal": false,
+        "clipping": false
+      },
+      "d": {
+        "array": "nar_kmax_range",
+        "shape": [
+          512,
+          64
+        ],
+        "segments": 32704,
+        "z_limits": [
+          0,
+          10
+        ],
+        "color_normalization": [
+          0,
+          10
+        ],
+        "view": [
+          18,
+          -62
+        ],
+        "size_inches": [
+          2.16,
+          1.35
+        ],
+        "sample_removal": false,
+        "clipping": false
+      }
     },
-    "row2": {
-      "z_limits": [
-        0.0,
-        10.0
-      ],
-      "normalization": [
-        0.0,
-        10.0
-      ],
-      "view": {
-        "elevation": 18,
-        "azimuth": -62
-      },
-      "linewidth_pt": 0.9
+    "icons": "unscaled vector schematics only; no new experimental measurements",
+    "preserved_content": "all original arrays, windows, numeric scales, traces, brackets and affine offset",
+    "range_semantics": "Rotations change within-group range. Subtracting an affine offset alone does not change max-minus-min.",
+    "palette": {
+      "raw": "#64748B",
+      "hadamard": "#E88932",
+      "prismquant": "#177DDC",
+      "range_map_shared": true,
+      "zero_point": "#2A9D8F"
     },
-    "dense_grid": {
-      "channel_interval": 250,
-      "token_interval": 100,
-      "group_interval": 10,
-      "row1_z_interval": 5,
-      "row2_z_interval": 1.25
+    "panel_placements_inches": {
+      "a": [
+        0.0,
+        2.24,
+        1.88,
+        1.53
+      ],
+      "b": [
+        2.2,
+        2.85,
+        1.82,
+        1.35
+      ],
+      "c": [
+        4.4,
+        2.85,
+        2.16,
+        1.35
+      ],
+      "d": [
+        4.4,
+        1.49,
+        2.16,
+        1.35
+      ],
+      "e": [
+        0.1,
+        0.08,
+        2.04,
+        1.1
+      ],
+      "f": [
+        2.28,
+        0.08,
+        2.04,
+        1.1
+      ],
+      "g": [
+        4.46,
+        0.08,
+        2.04,
+        1.1
+      ]
     }
   },
   "palette": {
-    "prismquant": "#1D3557",
-    "prismquant_light": "#457B9D",
-    "hadamard": "#A8DADC",
-    "duquant": "#E63946",
-    "identity": "#457B9D",
-    "reference": "#1D3557",
-    "text": "#1D3557",
-    "zero": "#F1FAEE",
-    "pane_edge": "#C9D6DF",
-    "grid": "#DCE4EA"
+    "raw": "#64748B",
+    "hadamard": "#E88932",
+    "prismquant": "#177DDC",
+    "range_map_shared": true,
+    "zero_point": "#2A9D8F"
   },
   "trace_rendering": {
     "y_limits": [
@@ -283,16 +396,16 @@
     ],
     "x_ticks": [
       0,
-      32,
       64,
-      96,
       127
     ],
     "size_inches": [
-      2.1,
-      1.75
+      2.04,
+      1.1
     ],
-    "all_axes_labeled": true
+    "all_axes_labeled": false,
+    "shared_y_label": "signed value",
+    "y_tick_labels_on_all_panels": true
   },
   "rendered_panel_statistics": {
     "c": {
@@ -319,5 +432,19 @@
         64
       ]
     }
+  },
+  "source_array_sha256": {
+    "raw_magnitude": "5a1a36c947c4b77493eaff40c191d50291dfe2466b974e90936d8f8fc1d6b892",
+    "hadamard_magnitude": "7c7902141706257a7b47449b15c24f522925ce1718972577c49c5644e3776d46",
+    "hadamard_range": "359932dda51078a816d33ec755f86a43e73c3da48e97e2f568d9f5de6fb32fce",
+    "nar_kmax_range": "15035943cc8aab98508fdd5675e769d737000556a95992465d60f28b6101c7fb",
+    "token_axis": "d810c3baba6c2e0486452d09fe030ec1b04f667cb385fea2881ecd388e387a27",
+    "trace_raw": "98132120b3f5ef0639eda2c9f52c3305f3dd30412402d68090191cc27b2a3f53",
+    "trace_hadamard": "4cb4161e9c48df316eebea9ab346ab30c7c936f1f80adb32c5afeb0c1f59568a",
+    "trace_nar_kmax": "8203423ab3970845006a27dcd1f5ed25b22bd1d1079eb18f6088f6c29312c982",
+    "all_channel_median_magnitudes": "6a2f28ff920727a0c371f4df7a17a53e49459444183b39835f2418b485e8e7c9",
+    "peak_density_window_counts": "50f69266786618a3b2271e16f10ecf5b8f11c7aec7500ffea9767235d2483eb2",
+    "geometry_scores": "a67600439e8d228558efec5ce64460e0dd0cde93054a87602518a009aebf65b7",
+    "geometry_covariance_eigenvalues": "2354e246b8912e78daf6ad370da939cdc25995ead14453b5aad7ac477264b1b2"
   }
 }

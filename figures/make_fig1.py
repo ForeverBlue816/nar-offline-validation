@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build revised Figure 1 as seven final-size standalone matplotlib panels."""
+"""Reproduce Figure 1 from frozen data and render its compact mechanism layout."""
 
 from __future__ import annotations
 
@@ -9,21 +9,11 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
-from matplotlib.colors import Normalize
-from mpl_toolkits.mplot3d.art3d import Line3DCollection
 
-from figure_style import (
-    PALETTE,
-    SEQUENTIAL_CMAP,
-    clean_2d_axis,
-    configure_style,
-    resolved_serif_family,
-    save_panel,
-)
+from figure_style import resolved_serif_family
 
 MODEL = "llama32_3b"
 GROUP = 128
@@ -323,194 +313,6 @@ def build_data(repo: Path, workdir: Path) -> tuple[dict[str, np.ndarray], dict[s
     return arrays, metadata
 
 
-def style_3d(
-    ax,
-    x_limits,
-    token_limits,
-    z_limits,
-    xlabel,
-    x_ticks,
-    x_tick_labels,
-    token_ticks,
-    token_tick_labels,
-    z_ticks,
-    z_tick_labels,
-    view,
-):
-    ax.set_xlim(*x_limits)
-    ax.set_ylim(*token_limits)
-    ax.set_zlim(*z_limits)
-    ax.set_xticks(x_ticks)
-    ax.set_xticklabels(x_tick_labels)
-    ax.set_yticks(token_ticks)
-    ax.set_yticklabels(token_tick_labels)
-    ax.set_zticks(z_ticks)
-    ax.set_zticklabels(z_tick_labels)
-    ax.set_xlabel(xlabel, fontsize=7, labelpad=5 if xlabel == "channel" else 2, fontstyle="normal")
-    ax.set_ylabel("token", fontsize=7, labelpad=0, fontstyle="normal")
-    ax.set_zlabel("")
-    ax.tick_params(labelsize=6, pad=-1, length=1.8, width=0.45)
-    ax.view_init(elev=view[0], azim=view[1])
-    ax.set_box_aspect((2.6, 1.2, 0.85), zoom=0.94)
-    ax.patch.set_alpha(0.0)
-    ax.grid(True)
-    for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
-        axis.pane.fill = True
-        axis.pane.set_facecolor((1, 1, 1, 0))
-        axis.pane.set_edgecolor(PALETTE["pane_edge"])
-        axis.pane.set_linewidth(0.6)
-        axis._axinfo["grid"].update(color=PALETTE["grid"], linewidth=0.5)
-        axis.line.set_color(PALETTE["pane_edge"])
-        axis.line.set_linewidth(0.6)
-
-
-def draw_landscape(
-    ax,
-    values,
-    x_values,
-    token_values,
-    z_limits,
-    xlabel,
-    x_ticks,
-    x_tick_labels,
-    token_ticks,
-    token_tick_labels,
-    z_ticks,
-    z_tick_labels,
-    view,
-    linewidth,
-):
-    if (
-        not np.isfinite(values).all()
-        or values.min() < z_limits[0] - 1e-6
-        or values.max() > z_limits[1] + 1e-6
-    ):
-        raise AssertionError("Invalid or clipped landscape")
-    # All samples remain present. Each segment receives its local-height color
-    # under the row's fixed normalization.
-    coords = np.empty((values.shape[1], values.shape[0], 3), dtype=np.float32)
-    coords[:, :, 0] = x_values[:, None]
-    coords[:, :, 1] = token_values[None, :]
-    coords[:, :, 2] = values.T
-    segments = np.stack([coords[:, :-1], coords[:, 1:]], axis=2).reshape(-1, 2, 3)
-    height = segments[:, :, 2].max(1)
-    collection = Line3DCollection(
-        segments,
-        cmap=SEQUENTIAL_CMAP,
-        norm=Normalize(*z_limits),
-        linewidths=linewidth,
-    )
-    collection.set_array(height)
-    collection.set_rasterized(True)
-    ax.add_collection3d(collection)
-    style_3d(
-        ax,
-        (int(x_values[0]), int(x_values[-1])),
-        (int(token_values[0]), int(token_values[-1])),
-        z_limits,
-        xlabel,
-        x_ticks,
-        x_tick_labels,
-        token_ticks,
-        token_tick_labels,
-        z_ticks,
-        z_tick_labels,
-        view,
-    )
-
-
-def render_landscape(
-    values,
-    x_values,
-    token_values,
-    z_limits,
-    xlabel,
-    x_ticks,
-    x_tick_labels,
-    token_ticks,
-    token_tick_labels,
-    z_ticks,
-    z_tick_labels,
-    view,
-    linewidth,
-    outbase,
-):
-    configure_style()
-    fig = plt.figure(figsize=(3.2, 2.45))
-    fig.patch.set_alpha(0.0)
-    ax = fig.add_axes([0, 0, 1, 1], projection="3d", label=outbase.name)
-    draw_landscape(
-        ax,
-        values,
-        x_values,
-        token_values,
-        z_limits,
-        xlabel,
-        x_ticks,
-        x_tick_labels,
-        token_ticks,
-        token_tick_labels,
-        z_ticks,
-        z_tick_labels,
-        view,
-        linewidth,
-    )
-    save_panel(fig, outbase, dpi=300, transparent=True)
-
-
-def add_range_bracket(ax: plt.Axes, values: np.ndarray, color: str) -> None:
-    low, high = float(values.min()), float(values.max())
-    x = 134.0
-    ax.vlines(x, low, high, color=color, lw=0.75)
-    ax.hlines([low, high], 131.5, 136.5, color=color, lw=0.75)
-    ax.text(
-        139.0,
-        0.5 * (low + high),
-        f"{high - low:.3f}",
-        color=PALETTE["text"],
-        fontsize=7.0,
-        ha="left",
-        va="center",
-    )
-
-
-def render_trace(
-    values: np.ndarray,
-    method: str,
-    y_limits: tuple[float, float],
-    outbase: Path,
-    ylabel: bool,
-    xlabel: bool,
-    zero_point: bool,
-) -> None:
-    configure_style()
-    colors = {
-        "raw": PALETTE["identity"],
-        "hadamard": PALETTE["hadamard"],
-        "nar_kmax": PALETTE["prismquant"],
-    }
-    fig, ax = plt.subplots(figsize=(2.1, 1.75))
-    fig.subplots_adjust(left=0.25, right=0.82, bottom=0.27, top=0.95)
-    x = np.arange(GROUP)
-    color = colors[method]
-    ax.hlines(0.0, 0, 127, color=PALETTE["pane_edge"], lw=0.5, zorder=0)
-    ax.plot(x, values, color=color, lw=1.0)
-    if zero_point:
-        mean = float(np.float16(values.min()))
-        ax.hlines(mean, 0, 127, color=PALETTE["reference"], lw=0.8, ls=(0, (3, 2)))
-        pad = 0.035 * (y_limits[1] - y_limits[0])
-        ax.text(3, mean - pad, "zero-point", fontsize=7.0, color=PALETTE["text"], ha="left", va="top")
-    add_range_bracket(ax, values, color)
-    ax.set_xlim(0, 154)
-    ax.set_ylim(*y_limits)
-    ax.set_xticks([0, 32, 64, 96, 127])
-    ax.set_yticks([-5, 0, 5])
-    ax.set_ylabel("signed value", fontsize=7.0)
-    ax.set_xlabel("channel in group", fontsize=7.0)
-    clean_2d_axis(ax)
-    save_panel(fig, outbase, dpi=300, transparent=True)
-
-
 def write_summary_csvs(arrays: dict[str, np.ndarray], metadata: dict[str, Any], here: Path) -> None:
     trace_rows: list[dict[str, Any]] = []
     for method in ("raw", "hadamard", "nar_kmax"):
@@ -548,97 +350,12 @@ def write_summary_csvs(arrays: dict[str, np.ndarray], metadata: dict[str, Any], 
     pd.DataFrame(summary_rows).to_csv(here / "fig1_landscape_channels.csv", index=False)
 
 
-def make_preview(here: Path) -> None:
-    """Assemble an annotation-free 300-dpi review sheet at 1:1 panel scale."""
-    from audit_panel_alignment import require_matplotlib_panel_alignment
-    import pymupdf
-    import xml.etree.ElementTree as ET
-
-    configure_style()
-    width, height = 6.6, 7.0
-    places = {
-        "a": (0, 4.55, 3.2, 2.45), "b": (3.4, 4.55, 3.2, 2.45),
-        "c": (0, 1.95, 3.2, 2.45), "d": (3.4, 1.95, 3.2, 2.45),
-        "e": (0.0, 0.08, 2.1, 1.75), "f": (2.25, 0.08, 2.1, 1.75),
-        "g": (4.5, 0.08, 2.1, 1.75),
-    }
-    fig = plt.figure(figsize=(width, height), facecolor="white")
-    plot_axes = []
-    for letter, (x, y, w, h) in places.items():
-        ax = fig.add_axes([x / width, y / height, w / width, h / height])
-        ax.imshow(plt.imread(here / f"fig1{letter}.png"), aspect="auto")
-        ax.axis("off")
-        report = json.loads((here / "qa" / f"fig1{letter}.alignment.json").read_text())
-        x0, y0, x1, y1 = report["layout"]["panels"][0]["bbox_pt"]
-        measured = fig.add_axes(
-            [
-                (x + x0 / 72) / width,
-                (y + y0 / 72) / height,
-                (x1 - x0) / 72 / width,
-                (y1 - y0) / 72 / height,
-            ],
-            label=letter,
-        )
-        measured.axis("off")
-        plot_axes.append(measured)
-    require_matplotlib_panel_alignment(
-        fig,
-        json_out=here / "qa" / "fig1.alignment.json",
-        axes=plot_axes,
-        panel_ids=list("abcdefg"),
-        row_groups=[["a", "b"], ["c", "d"], ["e", "f", "g"]],
-        column_groups=[["a", "c"], ["b", "d"]],
-        strict=True,
-    )
-    fig.savefig(here / "fig1_preview.png", dpi=300, facecolor="white")
-    plt.close(fig)
-
-    # Keep the historical combined vectors synchronized with the bare panels.
-    doc = pymupdf.open()
-    page = doc.new_page(width=72 * width, height=72 * height)
-    for letter, (x, y, w, h) in places.items():
-        panel = pymupdf.open(here / f"fig1{letter}.pdf")
-        rect = pymupdf.Rect(x * 72, (height - y - h) * 72, (x + w) * 72, (height - y) * 72)
-        page.show_pdf_page(rect, panel, 0)
-        panel.close()
-    doc.save(here / "fig1.pdf", deflate=True)
-    doc.close()
-
-    ns = "http://www.w3.org/2000/svg"
-    ET.register_namespace("", ns)
-    root = ET.Element(
-        f"{{{ns}}}svg",
-        width=f"{72 * width}pt",
-        height=f"{72 * height}pt",
-        viewBox=f"0 0 {72 * width} {72 * height}",
-    )
-    for letter, (x, y, _w, h) in places.items():
-        node = ET.parse(here / f"fig1{letter}.svg").getroot()
-        old_ids = [element.attrib["id"] for element in node.iter() if "id" in element.attrib]
-        raw = ET.tostring(node, encoding="unicode")
-        for key in sorted(old_ids, key=len, reverse=True):
-            raw = raw.replace(f'id="{key}"', f'id="{letter}_{key}"')
-            raw = raw.replace(f"#{key})", f"#{letter}_{key})")
-            raw = raw.replace(f'"#{key}"', f'"#{letter}_{key}"')
-        node = ET.fromstring(raw)
-        node.set("x", str(x * 72))
-        node.set("y", str((height - y - h) * 72))
-        root.append(node)
-    ET.ElementTree(root).write(here / "fig1.svg", encoding="unicode", xml_declaration=True)
-    svg_path = here / "fig1.svg"
-    svg_path.write_text("\n".join(line.rstrip() for line in svg_path.read_text().splitlines()) + "\n")
-
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--workdir", type=Path)
     parser.add_argument("--reuse-data", action="store_true")
-    parser.add_argument(
-        "--reuse-traces",
-        action="store_true",
-        help="Keep the existing, unchanged Figure 1e/f/g exports.",
-    )
     args = parser.parse_args()
     here = Path(__file__).resolve().parent
     torch.set_num_threads(4)
@@ -690,30 +407,6 @@ def main() -> None:
     metadata["row1_z_limits"] = {"raw": [0.0, 40.0], "hadamard": [0.0, 4.0]}
     metadata.pop("row1_shared_z_limits", None)
     metadata["row2_shared_z_limits"] = [0.0, 10.0]
-    metadata["rendering_contract"] = {
-        "panels_a_to_d": "bare 3D axes only; no title, subcaption, scale text, mean text, or inset",
-        "background": "transparent SVG/PDF/PNG",
-        "png_dpi": 300,
-        "row1": {
-            "z_limits": metadata["row1_z_limits"],
-            "normalization": metadata["row1_z_limits"],
-            "view": {"elevation": 22, "azimuth": -60},
-            "linewidth_pt": 0.7,
-        },
-        "row2": {
-            "z_limits": [0.0, 10.0],
-            "normalization": [0.0, 10.0],
-            "view": {"elevation": 18, "azimuth": -62},
-            "linewidth_pt": 0.9,
-        },
-        "dense_grid": {
-            "channel_interval": 250,
-            "token_interval": 100,
-            "group_interval": 10,
-            "row1_z_interval": 5,
-            "row2_z_interval": 1.25,
-        },
-    }
     metadata["correctness_resolution"]["fix"] = (
         "Color every segment by local height with a fixed row-wise normalization; "
         "put range summaries in metadata only."
@@ -722,109 +415,25 @@ def main() -> None:
         "PrismQuant maximum 8.9193306 exceeded the older 6.3898373 limit; "
         "the shared 0–10 scale covers both arrays."
     )
-    metadata["palette"] = PALETTE
     if not args.reuse_data:
         np.savez_compressed(here / "fig1_source_arrays.npz", **arrays)
-
-    token_axis = arrays["token_axis"]
-    token_ticks = [200, 300, 400, 500, 600]
-    token_tick_labels = ["200", "", "400", "", "600"]
-    window_start = metadata["channel_windows"]["raw"][0]
-    channel_ticks = list(range(250 * int(np.ceil(window_start / 250)), window_start + LANDSCAPE_CHANNELS, 250))
-    channel_tick_labels = [str(value) if value % 500 == 0 else "" for value in channel_ticks]
-    group_ticks = list(range(0, 61, 10))
-    group_tick_labels = [str(value) if value % 20 == 0 else "" for value in group_ticks]
-    row1_z_ticks = list(range(0, 41, 5))
-    row1_z_tick_labels = [str(value) if value % 10 == 0 else "" for value in row1_z_ticks]
-    row2_z_ticks = np.arange(0, 10.01, 1.25)
-    row2_z_tick_labels = [f"{v:g}" if i % 2 == 0 else "" for i, v in enumerate(row2_z_ticks)]
-    raw_start = int(metadata["channel_windows"]["raw"][0])
-    rotated_start = int(metadata["channel_windows"]["hadamard_and_prismquant"][0])
-
-    row1 = (
-        (arrays["raw_magnitude"], raw_start, here / "fig1a", 40.0),
-        (arrays["hadamard_magnitude"], rotated_start, here / "fig1b", 4.0),
-    )
-    for values, start, outbase, zmax in row1:
-        render_landscape(
-            values,
-            np.arange(start, start + LANDSCAPE_CHANNELS),
-            token_axis,
-            (0.0, zmax),
-            "channel",
-            channel_ticks,
-            channel_tick_labels,
-            token_ticks,
-            token_tick_labels,
-            row1_z_ticks if zmax == 40 else np.arange(0, 4.01, 0.5),
-            row1_z_tick_labels if zmax == 40 else [str(i // 2) if i % 2 == 0 else "" for i in range(9)],
-            (22, -60),
-            0.7,
-            outbase,
-        )
-
-    row2 = (
-        (hadamard_ranges, here / "fig1c"),
-        (prismquant_ranges, here / "fig1d"),
-    )
-    for values, outbase in row2:
-        render_landscape(
-            values,
-            np.arange(values.shape[1]),
-            token_axis,
-            (0.0, 10.0),
-            "group",
-            group_ticks,
-            group_tick_labels,
-            token_ticks,
-            token_tick_labels,
-            row2_z_ticks,
-            row2_z_tick_labels,
-            (18, -62),
-            0.9,
-            outbase,
-        )
 
     trace_values = [arrays[f"trace_{name}"] for name in ("raw", "hadamard", "nar_kmax")]
     trace_low = min(float(v.min()) for v in trace_values)
     trace_high = max(float(v.max()) for v in trace_values)
-    margin = max(0.08 * (trace_high - trace_low), 1e-3)
+    margin = max(.08 * (trace_high - trace_low), 1e-3)
     y_limits = (trace_low - margin, trace_high + margin)
-    if args.reuse_traces:
-        missing = [
-            str(here / f"fig1{letter}.{suffix}")
-            for letter in "efg"
-            for suffix in ("svg", "pdf", "png")
-            if not (here / f"fig1{letter}.{suffix}").exists()
-        ]
-        if missing:
-            raise FileNotFoundError(f"Cannot reuse missing trace exports: {missing}")
-    else:
-        trace_values = [arrays["trace_raw"], arrays["trace_hadamard"], arrays["trace_nar_kmax"]]
-        trace_low = min(float(values.min()) for values in trace_values)
-        trace_high = max(float(values.max()) for values in trace_values)
-        margin = max(0.08 * (trace_high - trace_low), 1e-3)
-        y_limits = (trace_low - margin, trace_high + margin)
-        render_trace(arrays["trace_raw"], "raw", y_limits, here / "fig1e", True, False, False)
-        render_trace(arrays["trace_hadamard"], "hadamard", y_limits, here / "fig1f", False, True, False)
-        render_trace(arrays["trace_nar_kmax"], "nar_kmax", y_limits, here / "fig1g", False, False, True)
-
-    metadata["trace_rendering"] = {"y_limits": list(y_limits), "y_ticks": [-5, 0, 5], "x_ticks": [0, 32, 64, 96, 127], "size_inches": [2.1, 1.75], "all_axes_labeled": True}
+    metadata.setdefault("trace_rendering", {})["y_limits"] = list(y_limits)
     metadata["rendered_panel_statistics"] = {
-        letter: {
-            "method": method,
-            **metadata["range_statistics"][key],
-            "shape": list(arrays[array_key].shape),
-        }
+        letter: {"method": method, **metadata["range_statistics"][key], "shape": list(arrays[array_key].shape)}
         for letter, method, key, array_key in (
             ("c", "Hadamard", "hadamard", "hadamard_range"),
-            ("d", "PrismQuant", "prismquant_kmax", "nar_kmax_range"),
-        )
-    }
+            ("d", "PrismQuant", "prismquant_kmax", "nar_kmax_range"))}
     write_summary_csvs(arrays, metadata, here)
+    from fig1_layout import render_figure
+    render_figure(arrays, metadata, here)
     (here / "fig1_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
-    make_preview(here)
-    print(json.dumps(metadata, indent=2))
+    print(json.dumps(metadata["rendering_contract"], indent=2))
 
 
 if __name__ == "__main__":

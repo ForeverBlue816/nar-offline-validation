@@ -10,12 +10,13 @@ import tempfile
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--qa-tools',type=Path,default=Path.home()/'.codex/skills/nature-figure/scripts')
-    parser.add_argument('--figure',choices=['all','2','4'],default='all')
+    parser.add_argument('--figure',choices=['all','1','2','4'],default='all')
     args=parser.parse_args();tools=args.qa_tools
     root=Path(__file__).resolve().parent; qa=root/'qa';qa.mkdir(exist_ok=True)
     summary={}
     panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]
     targets=panels+['fig1','fig2','fig3']+['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
+    if args.figure=='1': targets=[f'fig1{x}' for x in 'abcdefg']+['fig1']
     if args.figure=='4': targets=['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
     if args.figure=='2': targets=['fig2a','fig2b','fig2c','fig2']
     for stem in targets:
@@ -38,9 +39,10 @@ def main():
         sources=[f'make_fig{args.figure}.py'] if args.figure!='all' else ['make_fig1.py','make_fig2.py','make_fig3.py','make_fig4.py']
         for name in sources:
             combined=Path(temp)/name
-            combined.write_text(shared+'\n'+(root/name).read_text().replace('from __future__ import annotations',''))
+            extra=(root/'fig1_layout.py').read_text().replace('from __future__ import annotations','') if name=='make_fig1.py' else ''
+            combined.write_text(shared+'\n'+extra+'\n'+(root/name).read_text().replace('from __future__ import annotations',''))
             r=subprocess.run([sys.executable,str(tools/'validate_figure.py'),str(combined),'--json'],capture_output=True,text=True)
-            raw=json.loads(r.stdout); raw['source']=name+' + figure_style.py'
+            raw=json.loads(r.stdout); raw['source']=name+' + figure_style.py'+(' + fig1_layout.py' if name=='make_fig1.py' else '')
             (qa/(name+'.source-closure.json')).write_text(json.dumps(raw,indent=2)+'\n')
             resolved=[]
             for finding in raw['findings']:
