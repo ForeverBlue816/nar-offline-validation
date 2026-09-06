@@ -492,6 +492,7 @@ FOLD_DEVICE: torch.device | None = None
 # GPTQ Hessian accumulator width. fp32 for every E14/E19 row; E21 sets fp64 for
 # the 70B, where fp32 accumulation left the damped Hessian indefinite.
 HESSIAN_DTYPE: torch.dtype = torch.float32
+HESSIAN_PRODUCT_DTYPE: torch.dtype = torch.float32
 
 
 def _transform_weight_rows(module: torch.nn.Linear, transform: Callable[[torch.Tensor], torch.Tensor],
@@ -895,7 +896,8 @@ def gptq_quantize(args: argparse.Namespace) -> None:
 
         layer.cuda()
         for group_index, group in enumerate(_linear_groups(layer)):
-            engines = {name: GPTQ(module, sym=weight_sym, hessian_dtype=HESSIAN_DTYPE)
+            engines = {name: GPTQ(module, sym=weight_sym, hessian_dtype=HESSIAN_DTYPE,
+                                  product_dtype=HESSIAN_PRODUCT_DTYPE)
                        for name, module in group}
             handles = []
             for name, module in group:
@@ -952,6 +954,7 @@ def gptq_quantize(args: argparse.Namespace) -> None:
             "mse_clipping": True, "norm": 2.4, "grid": 100, "maxshrink": 0.8,
             "blocksize": 128, "percdamp": 0.01, "act_order": act_order,
             "protocol": protocol or "default", "hessian_dtype": str(HESSIAN_DTYPE),
+            "hessian_product_dtype": str(HESSIAN_PRODUCT_DTYPE),
             "static_groups": False, "calibration_sequences": args.calibration_sequences,
             "calibration_seed": args.calibration_seed,
             "calibration_dataset": "WikiText-2 train", "sequence_length": args.seq_len,

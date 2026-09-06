@@ -196,9 +196,10 @@ def install_extension_hooks(for_gptq: bool = False) -> None:
     # The fold streams each weight chunk to the rotation's device; on the CPU
     # path that is the one GPU GPTQ uses, on the sharded path it is cuda:0.
     e14.FOLD_DEVICE = torch.device("cuda:0")
-    # The layer-3 down_proj Hessian was not positive-definite after fp32
-    # accumulation (leading minor 6927 of 28672); see quarot_gptq.GPTQ.
+    # The layer-3 down_proj Hessian had one negative eigenvalue (-2.1e-4)
+    # after fp32 products, damping being only 0.029 there; see quarot_gptq.GPTQ.
     e14.HESSIAN_DTYPE = torch.float64
+    e14.HESSIAN_PRODUCT_DTYPE = torch.float64
 
 
 # -------------------------------------------------------------------- audit ---

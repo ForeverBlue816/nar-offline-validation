@@ -158,6 +158,7 @@ class GPTQAudit:
     # matrix was factored in fp64 instead (see _inverse_cholesky_upper).
     cholesky_float64: bool = False
     hessian_dtype: str = "torch.float32"
+    product_dtype: str = "torch.float32"
     # Conditioning of the Hessian GPTQ inverts. A rotation that concentrates
     # activation energy onto a few input coordinates makes diag(H) spiky, and
     # because the damping is a fixed fraction of the *mean* diagonal, the same
@@ -252,16 +253,20 @@ class GPTQ:
     """The official QuaRot GPTQ update, separated from model traversal."""
 
     def __init__(self, layer: torch.nn.Linear, sym: bool = True,
-                 hessian_dtype: torch.dtype = torch.float32) -> None:
+                 hessian_dtype: torch.dtype = torch.float32,
+                 product_dtype: torch.dtype = torch.float32) -> None:
         self.layer = layer
         self.rows, self.columns = layer.weight.shape
-        # fp32 is QuaRot's accumulator and every E14/E19 row's. fp64 exists for
-        # Llama-3.1-70B, whose early down_proj inputs carry massive activations
-        # that put Hessian entries near 1e8: there, 128 rescale-and-add steps
-        # in fp32 round by about as much as GPTQ's damping adds, and the stored
-        # matrix stops being positive-definite. The per-sequence product stays
-        # fp32 either way; only the running sum changes width.
+        # fp32 is QuaRot's accumulator and product width and every E14/E19
+        # row's. fp64 exists for Llama-3.1-70B. Its layer-3 down_proj Hessian
+        # (28672 columns) has diagonal mean 2.9 and maximum 645, so GPTQ's
+        # damping is 0.029 while an fp32 dot product over 2048 tokens on the
+        # large entries rounds by about that much; the damped matrix ended up
+        # with exactly one negative eigenvalue, -2.1e-4, and every Cholesky
+        # backend rejected it at the same column. An fp64 running sum alone did
+        # not cure it (the error is in the products), fp64 products do.
         self.hessian_dtype = hessian_dtype
+        self.product_dtype = product_dtype
         self.hessian = torch.zeros((self.columns, self.columns), device=layer.weight.device,
                                    dtype=hessian_dtype)
         self.nsamples = 0
@@ -279,7 +284,7 @@ class GPTQ:
         matrix = inp.T
         self.hessian *= self.nsamples / (self.nsamples + count)
         self.nsamples += count
-        matrix = math.sqrt(2 / self.nsamples) * matrix.float()
+        matrix = math.sqrt(2 / self.nsamples) * matrix.to(self.product_dtype)
         self.hessian += (matrix @ matrix.T).to(self.hessian_dtype)
 
     @torch.no_grad()
@@ -338,7 +343,8 @@ class GPTQ:
             columns=self.columns, rows=self.rows, hessian_sequences=self.nsamples,
             dead_columns=dead_count, damp=damp, groupsize=groupsize, blocksize=blocksize,
             act_order=act_order, symmetric=bool(self.quantizer.sym),
-            cholesky_float64=cholesky_float64, hessian_dtype=str(self.hessian_dtype), **stats,
+            cholesky_float64=cholesky_float64, hessian_dtype=str(self.hessian_dtype),
+            product_dtype=str(self.product_dtype), **stats,
         )
 
     @torch.no_grad()
