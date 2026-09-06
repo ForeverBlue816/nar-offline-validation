@@ -50,7 +50,13 @@ changing numerical limits.
 
 ## Figure 2 DuQuant addendum
 
-Panels b/c now include the measured DuQuant-style diagnostic in #E63946.
+All three panels and the shared legend use muted slate blue #52647A for
+DuQuant. Hadamard remains light cyan and PrismQuant remains deep blue; all
+line weights, markers, measurements, and layout are unchanged. Use
+`python figures/make_fig2.py --reuse-data` for presentation-only revisions
+of the frozen plotted CSVs. The default path still refreshes and checks the
+experimental DuQuant addendum before updating source tables. Panels b/c
+include the measured DuQuant-style diagnostic.
 The 3B down-input main figure retains the existing Hadamard/PrismQuant
 measurements, capture values, sizes, axes, palette, and shared three-method
 legend. `fig2b.csv` and `fig2c.csv` each contain 84 plotted values with exact

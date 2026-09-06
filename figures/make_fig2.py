@@ -9,7 +9,10 @@ import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
-from figure_style import PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
+from figure_style import PALETTE as SHARED_PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
+
+# Figure 2 uses a muted comparison color without changing other figures.
+PALETTE = {**SHARED_PALETTE, "duquant": "#52647A"}
 MODEL, SITE, LAYERS, GROUP = 'llama32_3b', 'down', 28, 128
 
 def add_duquant_diagnostics(data, here):
@@ -110,10 +113,28 @@ def shared_legend(fig):
 
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--csv',type=Path,default=Path(__file__).with_name('fig2_capture.csv'))
+    parser.add_argument('--reuse-data',action='store_true',help='Restyle the frozen plotted CSVs without refreshing experimental results.')
     args=parser.parse_args(); here=Path(__file__).resolve().parent
-    configure_style(); complete,addendum=add_duquant_diagnostics(pd.read_csv(args.csv),here)
-    data=validate_data(complete);write_metric_csv(data,here);reductions={}
-    complete.to_csv(args.csv,index=False)
+    configure_style()
+    if args.reuse_data:
+        complete=pd.read_csv(args.csv)
+        addendum=json.loads((here/'fig2_metadata.json').read_text())['duquant_offline_addendum']
+        if MODEL not in addendum['completed_models']:
+            raise RuntimeError('Frozen Figure 2 has no recorded completed DuQuant addendum')
+    else:
+        complete,addendum=add_duquant_diagnostics(pd.read_csv(args.csv),here)
+    data=validate_data(complete);reductions={}
+    if args.reuse_data:
+        names={'hadamard':'hadamard_full','duquant_style':'duquant','nar':'nar_kmax'}
+        for letter,column in [('b','mean_group_range'),('c','nmse')]:
+            frozen=pd.read_csv(here/f'fig2{letter}.csv')
+            for point in data.itertuples():
+                match=frozen[frozen.layer.eq(point.layer)&frozen.method.eq(names[point.method])]
+                assert len(match)==1
+                np.testing.assert_allclose(getattr(point,column),match[column].iloc[0],rtol=1e-12,atol=1e-12)
+    else:
+        write_metric_csv(data,here)
+        complete.to_csv(args.csv,index=False)
     for letter,column in zip('abc',['f','mean_group_range','nmse']):
         fig,ax=plt.subplots(figsize=(1.85,1.72)); fig.subplots_adjust(left=.28,right=.96,bottom=.25,top=.80)
         reductions[column]=draw(ax,data,column); save_panel(fig,here/f'fig2{letter}')

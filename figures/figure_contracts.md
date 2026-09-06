@@ -25,7 +25,8 @@ existing mean reductions. Add the E16 DuQuant-style rotation on frozen E1c
 rows, seed 20260902, group 128. All measured layer/site ranges must pass the
 paired bracket gate before plotting. Append original per-layer CSV rows
 without modifying its existing byte prefix. Three series in b/c share the
-existing palette and legend; each point has a source-CSV line. No invented
+legend; DuQuant uses muted #52647A in all panels, while Hadamard and
+PrismQuant retain their existing colors; each point has a source-CSV line. No invented
 uncertainty intervals or new data exclusions. The 8B addendum requires its
 currently missing frozen E1c dump; do not substitute a model rerun.
 

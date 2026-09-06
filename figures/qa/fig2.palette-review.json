@@ -1,0 +1,44 @@
+{
+  "verdict": "PASS",
+  "duquant_color": "#52647A",
+  "reason": "User-selected candidate: muted slate blue for a less prominent comparison series",
+  "hadamard_color": "#A8DADC",
+  "prismquant_color": "#1D3557",
+  "other_figures_unchanged": true,
+  "scientific_csv_sha256_unchanged": {
+    "fig2b.csv": "5d3998b565cf17c68658136bdaa83259bdefb97b77e80b1d922e847e8cbca242",
+    "fig2_capture.csv": "ca6965b86bc0c7bd7d9264934857805ff5b272168ead5c2ac86633d97421f489",
+    "fig2c.csv": "dfda207222392d977da967b2cb876e0c027bb6a402f1eb641f518dad0805ff8b"
+  },
+  "metadata_change": "DuQuant color only",
+  "geometry_unchanged": true,
+  "line_widths_and_markers": "unchanged",
+  "data_mode": "reuse existing plotted CSVs; cross-check range/NMSE against per-panel source tables",
+  "visual_review": "All three panels and shared legend inspected; the comparison is distinguishable while PrismQuant keeps its thicker line.",
+  "rendered_collision_reports": {
+    "fig2": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 3,
+      "contained_image_overlays": 0
+    },
+    "fig2a": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig2b": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig2c": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    }
+  }
+}
