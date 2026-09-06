@@ -147,6 +147,10 @@ class GPTQAudit:
     blocksize: int
     act_order: bool = False
     symmetric: bool = True
+    # True when the fp32 Cholesky of the damped Hessian failed and the same
+    # matrix was factored in fp64 instead (see _inverse_cholesky_upper).
+    cholesky_float64: bool = False
+    hessian_dtype: str = "torch.float32"
     # Conditioning of the Hessian GPTQ inverts. A rotation that concentrates
     # activation energy onto a few input coordinates makes diag(H) spiky, and
     # because the damping is a fixed fraction of the *mean* diagonal, the same
@@ -182,13 +186,48 @@ class GPTQAudit:
     unclipped_row_null_slot_mass_share: float = 0.0
 
 
+def _inverse_cholesky_upper(hessian: torch.Tensor) -> tuple[torch.Tensor, bool]:
+    """QuaRot's ``chol(H^-1)^T`` in fp32, falling back to fp64 only if fp32 cannot factor.
+
+    The fp32 path is exactly the upstream sequence and is unchanged.  On
+    Llama-3.1-70B the down_proj Hessian of an early layer carries
+    massive-activation energy of order 1e8 in a few directions, and fp32
+    Cholesky accumulates enough rounding across thousands of columns to report
+    a non-positive leading minor although the damped matrix is
+    positive-definite.  The fallback factors the *same* damped fp32 Hessian in
+    fp64 and returns the fp32 result, so the damping, and with it the protocol,
+    is unchanged; the audit records that it happened.
+    """
+    if hessian.dtype == torch.float32:
+        try:
+            chol = torch.linalg.cholesky(hessian)
+            inverse = torch.cholesky_inverse(chol)
+            return torch.linalg.cholesky(inverse, upper=True), False
+        except RuntimeError as error:  # torch.linalg.LinAlgError is a RuntimeError
+            if "positive-definite" not in str(error):
+                raise
+    chol = torch.linalg.cholesky(hessian.double())
+    inverse = torch.cholesky_inverse(chol)
+    del chol
+    return torch.linalg.cholesky(inverse, upper=True).float(), True
+
+
 class GPTQ:
     """The official QuaRot GPTQ update, separated from model traversal."""
 
-    def __init__(self, layer: torch.nn.Linear, sym: bool = True) -> None:
+    def __init__(self, layer: torch.nn.Linear, sym: bool = True,
+                 hessian_dtype: torch.dtype = torch.float32) -> None:
         self.layer = layer
         self.rows, self.columns = layer.weight.shape
-        self.hessian = torch.zeros((self.columns, self.columns), device=layer.weight.device)
+        # fp32 is QuaRot's accumulator and every E14/E19 row's. fp64 exists for
+        # Llama-3.1-70B, whose early down_proj inputs carry massive activations
+        # that put Hessian entries near 1e8: there, 128 rescale-and-add steps
+        # in fp32 round by about as much as GPTQ's damping adds, and the stored
+        # matrix stops being positive-definite. The per-sequence product stays
+        # fp32 either way; only the running sum changes width.
+        self.hessian_dtype = hessian_dtype
+        self.hessian = torch.zeros((self.columns, self.columns), device=layer.weight.device,
+                                   dtype=hessian_dtype)
         self.nsamples = 0
         self.quantizer = WeightQuantizer()
         self.quantizer.configure(4, perchannel=True, sym=sym, mse=True)
@@ -205,7 +244,7 @@ class GPTQ:
         self.hessian *= self.nsamples / (self.nsamples + count)
         self.nsamples += count
         matrix = math.sqrt(2 / self.nsamples) * matrix.float()
-        self.hessian += matrix @ matrix.T
+        self.hessian += (matrix @ matrix.T).to(self.hessian_dtype)
 
     @torch.no_grad()
     def fasterquant(self, blocksize: int = 128, percdamp: float = 0.01,
@@ -231,9 +270,8 @@ class GPTQ:
         damp = float(percdamp * torch.mean(torch.diag(hessian)))
         diagonal = torch.arange(self.columns, device=weight.device)
         hessian[diagonal, diagonal] += damp
-        hessian = torch.linalg.cholesky(hessian)
-        hessian = torch.cholesky_inverse(hessian)
-        hinv = torch.linalg.cholesky(hessian, upper=True)
+        hinv, cholesky_float64 = _inverse_cholesky_upper(hessian)
+        del hessian
         output = torch.zeros_like(weight)
         for block_start in range(0, self.columns, blocksize):
             block_stop = min(block_start + blocksize, self.columns)
@@ -263,7 +301,8 @@ class GPTQ:
         return GPTQAudit(
             columns=self.columns, rows=self.rows, hessian_sequences=self.nsamples,
             dead_columns=dead_count, damp=damp, groupsize=groupsize, blocksize=blocksize,
-            act_order=act_order, symmetric=bool(self.quantizer.sym), **stats,
+            act_order=act_order, symmetric=bool(self.quantizer.sym),
+            cholesky_float64=cholesky_float64, hessian_dtype=str(self.hessian_dtype), **stats,
         )
 
     @torch.no_grad()
