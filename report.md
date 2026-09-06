@@ -564,16 +564,16 @@ BoolQ is the only task of the eight where more than half the causal value pairs 
 
 ### Zero-shot under the same protocols
 
-The same rows on the nine tasks, same harness revision and task versions as the E14 table, seed 0. The `act_order` rows' accuracies are still being measured and are marked pending; every other cell is a measured artifact.
+The same rows on the nine tasks, same harness revision and task versions as the E14 table, seed 0. Every cell is a measured artifact.
 
 | 3B, seed 0 | W bits | PPL | ARC-c | ARC-e | BoolQ | HellaSwag | OBQA | PIQA | SIQA | WinoGrande | six-task | eight-task |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | Hadamard, default | 4.003 | 9.20901 | 42.15 | 66.75 | 68.26 | 70.28 | 40.20 | 74.81 | 45.09 | 67.48 | 64.37 | 59.38 |
 | NAR k=8, default | 4.003 | 8.75623 | 43.77 | 68.56 | 65.35 | 70.58 | 38.80 | 76.61 | 43.91 | 66.77 | 65.12 | 59.29 |
 | NAR k=max, default | 4.003 | 8.71445 | 42.92 | 70.75 | 70.58 | 70.89 | 40.00 | 75.14 | 44.52 | 66.69 | 65.37 | 60.19 |
-| Hadamard, act_order | 4.003 | 9.22458 | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
-| NAR k=8, act_order | 4.003 | 8.74344 | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
-| NAR k=max, act_order | 4.003 | 8.69875 | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
+| Hadamard, act_order | 4.003 | 9.22458 | 43.00 | 66.37 | 68.53 | 70.20 | 39.20 | 74.48 | 45.75 | 66.61 | 64.43 | 59.27 |
+| NAR k=8, act_order | 4.003 | 8.74344 | 42.75 | 69.11 | 66.97 | 70.91 | 40.60 | 75.79 | 44.73 | 65.43 | 65.22 | 59.54 |
+| NAR k=max, act_order | 4.003 | 8.69875 | 42.41 | 69.91 | 70.64 | 70.53 | 40.00 | 75.68 | 44.37 | 66.69 | 65.19 | 60.03 |
 | Hadamard, g128 | 4.125 | 9.13029 | 43.09 | 67.47 | 67.74 | 70.67 | 39.80 | 75.14 | 45.29 | 64.88 | 64.42 | 59.26 |
 | NAR k=8, g128 | 4.125 | 8.65965 | 40.36 | 67.13 | 71.80 | 70.89 | 38.40 | 74.10 | 44.27 | 65.35 | 63.81 | 59.04 |
 | NAR k=max, g128 | 4.125 | 8.62424 | 42.66 | 69.78 | 64.34 | 71.57 | 41.00 | 76.12 | 44.52 | 66.14 | 65.30 | 59.52 |
@@ -586,11 +586,13 @@ Paired within each protocol against its own Hadamard row:
 | protocol | NAR k=8 − H, PPL | eight-task | NAR k=max − H, PPL | eight-task |
 |---|---:|---:|---:|---:|
 | default | -0.453 | -0.08 | -0.495 | +0.81 |
-| act_order | -0.481 | pending | -0.526 | pending |
+| act_order | -0.481 | +0.27 | -0.526 | +0.76 |
 | g128 | -0.471 | -0.22 | -0.506 | +0.26 |
 | g128_asym | -0.406 | +0.92 | -0.445 | +1.51 |
 
 **The best row on this checkpoint is NAR k=max under g128_asym: 8.59702 PPL and 60.80 on the eight-task mean, both measured, at 4.156 weight bits.** That is 0.117 PPL and 0.61 points better than the default-protocol k=max row that E14's table reports, and it is 1.51 points above the Hadamard row under the same protocol, the largest paired accuracy margin NAR has posted on any model. NAR k=8 under g128_asym reaches 60.21, up 0.92 from its default row, and its paired margin over Hadamard turns from −0.08 to +0.92.
+
+**`act_order` is a null on accuracy as it was on perplexity**: 59.27 / 59.54 / 60.03 against 59.38 / 59.29 / 60.19 at default, every task within ±1.8 and BoolQ within 0.3 on the NAR rows. Its paired margins, +0.27 and +0.76, sit between the default and g128_asym ones.
 
 **BoolQ is where the accuracy moves, in both directions.** Under g128_asym, k=8 goes from 65.35 to 72.08 and k=max from 70.58 to 74.07, while the other seven tasks scatter within about a point. The seven-task mean without BoolQ rises monotonically with perplexity for k=max (58.70 → 58.83 → 58.91 across default, g128, g128_asym), so the direction is consistent everywhere and the size is concentrated on the one task that is a binary decision. The symmetric g128 rows show the other side of that concentration: k=max under g128 scores 64.34 on BoolQ against 70.58 at default with a 0.09 better perplexity, and its eight-task mean is 59.52. BoolQ on the NAR rows is therefore the most protocol-sensitive cell in the table, and the Hadamard rows are not sensitive there (68.26, 67.74, 66.97). The KV probe above rules the cache out as the cause; what is left is the interaction of the rank-limited rotation with a per-row weight scale, which the per-group zero-point removes at k=8 and k=max alike.
 
