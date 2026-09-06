@@ -185,7 +185,9 @@ def calibrate_command(args: argparse.Namespace) -> None:
     if not (r4_root / "DONE.json").exists():
         model = e19.load_model_fp32(WORKDIR)
         layers = int(model.config.num_hidden_layers)
-        dimensions = {"down": int(model.config.intermediate_size)}
+        # E18's sketch collector hooks both sites unconditionally, so both
+        # need bases; only the down factors are read (R1 comes from E14).
+        dimensions = {"qkv": int(model.config.hidden_size), "down": int(model.config.intermediate_size)}
         e18_args = argparse.Namespace(
             workdir=str(WORKDIR), seed=args.seed, calibration_sequences=args.calibration_sequences,
             seq_len=args.seq_len, batch_size=1, oversample=16, permutation_stride=32,
