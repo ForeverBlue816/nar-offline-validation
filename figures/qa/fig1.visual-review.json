@@ -33,7 +33,7 @@
     "review_width_inches": 5.5,
     "minimum_rendered_font_pt": 4.9999799728393555,
     "text_inside_page": true,
-    "text_spans": 86
+    "text_spans": 84
   },
   "collision_resolution": "No FAILs. Image-edge WARNs concern rectangular bounds of transparent rasterized 3D marks; visible marks do not obscure the coordinate labels. Reviewed every panel and the combined figure at native and 5.5-inch width.",
   "reviewed_warnings": {
@@ -193,16 +193,20 @@
     "fig1g": []
   },
   "palette_revision": {
-    "panel_a": "#EA9D9D / #BD5579 / #601D49 with pale floor",
-    "panel_g": "#601D49 trace, bracket and title",
-    "zero_point_and_affine_offset": "#73CC80 text, dashed references and glyphs",
-    "other_panels": "b/c/d/e/f PNGs byte-identical",
-    "data_and_layout": "unchanged",
+    "panels_a_e": "burgundy family, #601D49 labels and trace e",
+    "panel_g": "restored #1D3557",
+    "zero_point_and_affine_offset": "retained #73CC80",
+    "upward_branch": "#A8DADC, matching Hadamard",
+    "removed_annotation_lines": [
+      "same grouped asymmetric INT4",
+      "residual within-group range"
+    ],
+    "plot_geometry_and_data": "unchanged",
     "unchanged_file_sha256": {
+      "fig1a.png": "5c111c10abd6540d06ed02afb5f831fa3957554783bbcb9a0b9ae0e0dcfb7eb6",
       "fig1b.png": "efa5059579d7e633dacae0008cb92434700742e8b02ac4e1e174da2fdfc8a1a8",
       "fig1c.png": "9a55b123b0cf44a0e03f98e8b83755758733902ff517630a57ebe62bb0f5966b",
       "fig1d.png": "c1910fcaa302a95a00e9c6c48d5e5a774049c0fb9c9408778e5d6c624bf4e14b",
-      "fig1e.png": "da484f94637bb9c648e629db98c7eac9a7e26edf47e27505f46ce2aa19ffc529",
       "fig1f.png": "843b66a6b67ff0d3ffc44b60861e34d294876ff69aa9dc80d61f5eb6b3b661d9",
       "fig1_source_arrays.npz": "649eb675952d9ec24e231488019e9799f2d56abee6b2db5e7aa1de98d06812f8",
       "fig1_ranges.csv": "fa362e1c5fb5ef1951e4c580d24fb2d45f0c5c6ad59fbb4563fd2bfa70f649d8",

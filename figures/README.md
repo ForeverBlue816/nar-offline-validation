@@ -37,10 +37,12 @@ All scientific samples remain plotted. Dense 3D marks are rasterized at
 300 dpi, while axes, text, arrows, and conceptual icons stay vector. The
 canvas height drops from 7.0 to 4.25 inches at the same 6.6-inch width.
 Panel a uses the burgundy/rose family (#601D49, #BD5579, #EA9D9D)
-with a pale floor, and panel g uses #601D49 for its trace, bracket and title.
-Panel e remains slate gray. Hadamard retains Figure 2's light cyan
+with a pale floor, and panel e uses #601D49 for its trace, bracket and title.
+Panel g returns to PrismQuant deep blue (#1D3557). Hadamard retains Figure 2's light cyan
 (#A8DADC); the upper PrismQuant path retains its deep blue (#1D3557).
 Zero-point and affine-offset annotations use green #73CC80 throughout.
+The upward branch is Hadamard light cyan. The two shared explanatory lines
+below d are omitted from the graphic; the caption retains their definitions.
 Panels b/c/d retain the original shared sequential palette
 (#F1FAEE → #A8DADC → #457B9D → #1D3557), with unchanged normalizations.
 The sparse coordinate ticks replace the previous diagnostic grid without

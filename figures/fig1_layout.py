@@ -22,9 +22,9 @@ PLACES={'a':(.00,2.24,1.88,1.53),'b':(2.20,2.85,1.82,1.35),
         'e':(.10,.08,2.04,1.10),'f':(2.28,.08,2.04,1.10),'g':(4.46,.08,2.04,1.10)}
 RANGE_MAP=SEQUENTIAL_CMAP
 RAW_SURFACE_COLORS=['#FFF5F5',BLUSH,ROSE,BURGUNDY]
-FIG1_PALETTE={'raw':RAW,'hadamard':HAD,'prismquant':PRISM,
+FIG1_PALETTE={'raw':BURGUNDY,'hadamard':HAD,'prismquant':PRISM,
     'range_map_shared':True,'zero_point':ZERO,'panel_a':BURGUNDY,
-    'panel_g':BURGUNDY,'surface_a_colormap':RAW_SURFACE_COLORS}
+    'panel_e':BURGUNDY,'panel_g':PRISM,'surface_a_colormap':RAW_SURFACE_COLORS}
 
 def style():
     configure_style()
@@ -74,7 +74,7 @@ def landscape(values, letter, arrays, metadata, here):
 
 def trace(values,letter,metadata,here):
     style();_,_,w,h=PLACES[letter];fig=plt.figure(figsize=(w,h))
-    ax=fig.add_axes([.16,.25,.81,.62]);color={'e':RAW,'f':HAD,'g':BURGUNDY}[letter]
+    ax=fig.add_axes([.16,.25,.81,.62]);color={'e':BURGUNDY,'f':HAD,'g':PRISM}[letter]
     ax.hlines(0,0,127,color=GRID,lw=.5,zorder=0)
     ax.plot(np.arange(128),values,color=color,lw=.8)
     low,high=map(float,[values.min(),values.max()])
@@ -128,7 +128,8 @@ def compose(here,metadata):
     style();fig=plt.figure(figsize=(WIDTH,HEIGHT));ax=fig.add_axes([0,0,1,1]);ax.set(xlim=(0,WIDTH),ylim=(0,HEIGHT));ax.axis('off')
     def text(x,y,t,size=7,color=INK,**kw):ax.text(x,y,t,fontsize=size,color=color,**kw)
     # An explicit fork: both branches start at the same raw activation.
-    ax.plot([1.88,1.98,1.98],[2.98,2.98,3.53],color=BURGUNDY,lw=.8)
+    ax.plot([1.88,1.98],[2.98,2.98],color=BURGUNDY,lw=.8)
+    ax.plot([1.98,1.98],[2.98,3.53],color=HAD,lw=.8)
     arrow(ax,(1.98,3.53),(2.22,3.53),HAD)
     ax.plot([1.98,1.98],[2.98,2.12],color=PRISM,lw=.8)
     arrow(ax,(1.98,2.12),(2.28,2.12),PRISM)
@@ -149,13 +150,13 @@ def compose(here,metadata):
     text(2.28,4.07,'(b)  Hadamard: spread energy',size=7.5,color=HAD,weight='bold')
     text(4.52,4.07,'(c)  Hadamard: spread',size=8,color=HAD,weight='bold')
     text(4.52,2.71,'(d)  PrismQuant: align',size=8,color=PRISM,weight='bold')
-    text(5.46,1.41,'same grouped asymmetric INT4',size=6.5,color=ZERO,ha='center')
-    text(5.46,1.29,'residual within-group range',size=6,color=INK,ha='center')
     ax.plot([.12,6.49],[1.22,1.22],color=GRID,lw=.6)
     text(.13,1.31,'One token · measured group traces',size=7,color=INK)
-    for letter,title,color in [('e','Raw: concentrated',RAW),('f','Hadamard: spread',HAD),('g','PrismQuant: shared offset',BURGUNDY)]:
+    for letter,title,color in [('e','Raw: concentrated',BURGUNDY),('f','Hadamard: spread',HAD),('g','PrismQuant: shared offset',PRISM)]:
         x,y,w,h=PLACES[letter];text(x+.33,1.10,f'({letter})  {title}',size=7,color=color,weight='bold')
     fig.savefig(here/'qa/fig1_annotations.pdf',transparent=True);fig.savefig(here/'qa/fig1_annotations.svg',transparent=True);plt.close(fig)
+    annotation_svg=here/'qa/fig1_annotations.svg'
+    annotation_svg.write_text('\n'.join(line.rstrip() for line in annotation_svg.read_text().splitlines())+'\n')
     # Compose vectors at their native size; only scientific 3D marks are raster.
     doc=pymupdf.open();page=doc.new_page(width=WIDTH*72,height=HEIGHT*72)
     ns='http://www.w3.org/2000/svg';ET.register_namespace('',ns)

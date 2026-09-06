@@ -12,10 +12,11 @@ token/channel windows, independent a/b scales 0–40/0–4, matched c/d scale
 vector explanations only. The lower strip remains three signed traces, not
 invented error or energy panels. Zero-point representation does not itself
 reduce max-minus-min range. The user-requested compact annotated assembly
-supersedes the former annotation-free review sheet. Panels a/g use the requested
-burgundy family, e remains gray, and offset/zero-point annotations use
+supersedes the former annotation-free review sheet. Panels a/e use the requested
+burgundy family, g returns to PrismQuant deep blue, and offset/zero-point annotations use
 #73CC80. Hadamard and the upper PrismQuant path retain Figure 2's light cyan
-and deep blue; b/c/d keep their original shared height palette.
+and deep blue; b/c/d keep their original shared height palette. The upward
+branch is Hadamard light cyan, and the two shared text lines beneath d are removed.
 Figures 2–4 keep their existing styles. Serif type, sparse readable
 coordinates, editable text, and a 6.6 × 4.25-inch canvas.
 
