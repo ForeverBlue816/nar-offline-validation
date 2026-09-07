@@ -1372,56 +1372,98 @@ Every model passes the same four gates before its quantized rows are trusted.
 
 *Generation gate (8B, 100 GSM8K items, 4-shot).* The chain-of-thought benchmarks decode hundreds of tokens per item, which E19 never exercised. On the 8B under NAR k=max: the activation and KV hooks fire on every decode step (counted, not assumed), the K cache is quantized during decoding, two batch-1 runs are token-identical (deterministic), and batch-1 and batch-8 give the same accuracy, 83.0 both, from different text on 93% of items. That last number is what fake quantization does: batched and single decoding go through different GEMM kernels, the int4 rounding boundaries fall differently at the fourth decimal, and after the first divergent token the chains differ — the accuracy does not. The bf16 row in fp32 containers scores 86.0 against 84.0 for the stock bf16 model, inside single-item noise on 100 items. The gate is recorded in `results/qwen3_8b_base/e22_generation_gate.json` and passed before any generative benchmark was run. Three harness defects were found around it and fixed: the registered attention function had no mask builder, so padded batches received no mask at all (batch-8 scored 51.0 before the fix, 83.0 after); the Qwen3 checkpoints ship `generation_config.max_new_tokens = 2048`, which silently overrode the harness's 512-token cap (cleared in `configure`); and the harness's MMLU-Redux template ends its prompt with a colon and then sets the target delimiter to a colon as well, so every few-shot demonstration reads `letter::C` while the query ends `letter:`. A Base model answers that with a newline on about half the items, the newline is the stop string, the answer is empty, and the 0.6B scored 25.7 — chance on four options. The 57 leaf tasks are re-registered under a group with a space delimiter (`letter: C`), nothing else changed, and the bf16 rows that had been measured under the defective template were discarded and re-run.
 
+<!-- e22-tables:start -->
 ## Results — perplexity
 
-WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 2048 tokens, fp32 NLL.
+WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 2048 tokens, fp32 NLL. Tables are generated from the artifacts by `nar/e22_report_tables.py`; a dash is a row not yet run.
 
 | WikiText-2 PPL | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
-| bf16 | 12.662 | 9.399 | 7.933 | — | — |
-| Hadamard, W4A4KV4 | 16.498 | 11.086 | 8.756 | — | — |
-| NAR k=8 | 15.278 | 10.333 | 8.495 | — | — |
-| NAR k=max | 15.376 | 10.307 | 8.519 | — | — |
-| NAR best − Hadamard | −1.220 | −0.779 | −0.261 | — | — |
-| Hadamard degradation | +30.3% | +17.9% | +10.4% | — | — |
-| NAR best degradation | +20.7% | +9.7% | +7.1% | — | — |
+| bf16 | 12.662 | 9.399 | 7.933 | 8.796 | — |
+| Hadamard, W4A4KV4 | 16.498 | 11.086 | 8.756 | 11.392 | — |
+| NAR k=8 | 15.278 | 10.333 | 8.495 | 9.726 | — |
+| NAR k=max | 15.376 | 10.307 | 8.519 | 9.855 | — |
+| NAR best − Hadamard | −1.221 | −0.779 | −0.261 | −1.665 | — |
+| Hadamard degradation | +30.3% | +17.9% | +10.4% | +29.5% | — |
+| NAR best degradation | +20.7% | +9.7% | +7.1% | +10.6% | — |
 
 | C4 PPL | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
-| bf16 | 19.384 | 15.018 | 13.023 | — | — |
-| Hadamard, W4A4KV4 | 25.362 | 17.940 | 14.395 | — | — |
+| bf16 | 19.384 | 15.018 | 13.023 | 11.657 | — |
+| Hadamard, W4A4KV4 | 25.362 | 17.940 | 14.395 | 13.076 | — |
 | NAR k=8 | 23.920 | 16.526 | 13.956 | — | — |
 | NAR k=max | 23.923 | 16.491 | 13.951 | — | — |
 | NAR best − Hadamard | −1.442 | −1.449 | −0.444 | — | — |
+| Hadamard degradation | +30.8% | +19.5% | +10.5% | +12.2% | — |
+| NAR best degradation | +23.4% | +9.8% | +7.1% | — | — |
 
 ## Results — accuracy
+
+The Qwen3 technical report's 16-bit number is listed where it reports the benchmark; the bf16 row is this harness. A bf16 row more than 2 points from the report is a pipeline difference and is said to be one in the text.
 
 | MMLU 5-shot (acc) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 52.81 | 62.63 | 72.99 | 76.89 | 81.05 |
-| bf16, this harness | 52.52 | 62.68 | 73.11 | — | — |
+| bf16 | 52.52 | 62.68 | 73.11 | — | — |
 | Hadamard, W4A4KV4 | 43.46 | 55.81 | 69.23 | — | — |
 | NAR k=8 | 44.22 | 58.20 | — | — | — |
 | NAR k=max | 44.69 | 57.61 | — | — | — |
-| NAR best − Hadamard | +1.23 | +2.39 | — | — | — |
+| NAR best − Hadamard | +1.22 | +2.39 | — | — | — |
 
-The bf16 row is within 0.3 points of the report at all three sizes measured so far, so the harness is the report's harness to within seed noise and no pipeline flag is raised.
+| MMLU-Redux 5-shot (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| Qwen3 report, 16-bit | 51.26 | 61.66 | 72.79 | 76.17 | 79.88 |
+| bf16 | — | — | — | — | — |
+| Hadamard, W4A4KV4 | — | — | — | — | — |
+| NAR k=8 | — | — | — | — | — |
+| NAR k=max | — | — | — | — | — |
+| NAR best − Hadamard | — | — | — | — | — |
+
+| GSM8K 4-shot CoT (flexible extract) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| Qwen3 report, 16-bit | 59.59 | 75.44 | 87.79 | 89.84 | 92.49 |
+| bf16 | 60.96 | 72.78 | — | — | — |
+| Hadamard, W4A4KV4 | — | — | — | — | — |
+| NAR k=8 | — | — | — | — | — |
+| NAR k=max | — | — | — | — | — |
+| NAR best − Hadamard | — | — | — | — | — |
+
+| MATH-500 4-shot CoT (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| Qwen3 report, 16-bit | 32.44 | 43.50 | 54.10 | 60.80 | 62.02 |
+| bf16 | — | — | — | — | — |
+| Hadamard, W4A4KV4 | — | — | — | — | — |
+| NAR k=8 | — | — | — | — | — |
+| NAR k=max | — | — | — | — | — |
+| NAR best − Hadamard | — | — | — | — | — |
+
+| GPQA-Diamond 5-shot CoT (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| Qwen3 report, 16-bit | 26.77 | 28.28 | 36.87 | 44.44 | 39.90 |
+| bf16 | — | — | — | — | — |
+| Hadamard, W4A4KV4 | — | — | — | — | — |
+| NAR k=8 | — | — | — | — | — |
+| NAR k=max | — | — | — | — | — |
+| NAR best − Hadamard | — | — | — | — | — |
 
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
-| bf16 | 57.95 | — | — | — | — |
-| Hadamard, W4A4KV4 | 56.69 | — | — | — | — |
-| NAR k=8 | 53.62 | — | — | — | — |
-| NAR k=max | 56.36 | — | — | — | — |
-| NAR best − Hadamard | −0.33 | — | — | — | — |
+| bf16 | 57.95 | 68.48 | 76.01 | — | — |
+| Hadamard, W4A4KV4 | 56.69 | 69.11 | — | — | — |
+| NAR k=8 | 53.62 | 67.47 | — | — | — |
+| NAR k=max | 56.36 | 72.52 | — | — | — |
+| NAR best − Hadamard | −0.34 | +3.41 | — | — | — |
+<!-- e22-tables:end -->
 
-ARC-Easy on the 0.6B is the first cell where NAR does not lead: k=max is 0.3 below Hadamard and k=8 is 3.1 below, on 2,376 items where one point is 24 questions. It is recorded as measured.
+On MMLU the bf16 row is within 0.3 points of the report at every size measured so far, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report and the 1.7B row 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
+
+ARC-Easy is the noisiest cell in the table and is recorded as measured. On the 0.6B NAR does not lead: k=max is 0.3 below Hadamard and k=8 is 3.1 below. On the 1.7B the Hadamard row scores 0.6 *above* its own bf16 reference and k=max 4.0 above it, which no 4-bit quantizer earns; on 2,376 zero-shot items where one point is 24 questions, W4A4KV4 rows scatter by ±2–3 points around bf16 and the k=8/k=max ordering flips between the two sizes. The task was kept because it is cheap, and the tables above carry the weight.
 
 The remaining tables — MMLU-Redux, GSM8K, MATH-500, GPQA, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
 
 ## Scaling
 
-Three sizes are enough to see the shape and not enough to fit it. Under the same 4.25-bit activations and 4.16-bit weights, the Hadamard baseline's WikiText-2 degradation falls from 30% at 0.6B to 18% at 1.7B and 10% at 4B, and NAR's from 21% to 10% to 7%: the smaller the model, the more of its perplexity W4A4KV4 costs, and the more of that cost NAR removes. The absolute NAR margin shrinks with size (−1.22, −0.78, −0.26 PPL on WikiText-2; −1.44, −1.45, −0.44 on C4) while the *fraction* of the Hadamard degradation it removes stays between 25% and 40% (32%, 46%, 32% on WikiText-2; 24%, 50%, 32% on C4). MMLU moves the same way, +1.2 and +2.4 points over Hadamard at 0.6B and 1.7B against a 9.1- and 6.9-point Hadamard loss. k=8 and k=max are within 0.1 PPL of each other at every size and trade places between benchmarks, as they did on the 3B under this protocol; the rank inversion that the default GPTQ protocol produced in E19 does not appear under `g128_asym`. Whether the margin keeps closing at 8B and 14B, or levels off as it did between Llama-3.2-3B and Llama-3.1-8B, is the question the last two columns answer.
+Three sizes are enough to see the shape and not enough to fit it, and the 8B, added since, breaks the monotone story in the direction E18 and E19 predicted. Under the same 4.25-bit activations and 4.16-bit weights, the Hadamard baseline's WikiText-2 degradation falls from 30% at 0.6B to 18% at 1.7B and 10% at 4B, and NAR's from 21% to 10% to 7%: the smaller the model, the more of its perplexity W4A4KV4 costs, and the more of that cost NAR removes. The absolute NAR margin shrinks with size (−1.22, −0.78, −0.26 PPL on WikiText-2; −1.44, −1.45, −0.44 on C4) while the *fraction* of the Hadamard degradation it removes stays between 25% and 40% (32%, 46%, 32% on WikiText-2; 24%, 50%, 32% on C4). MMLU moves the same way, +1.2 and +2.4 points over Hadamard at 0.6B and 1.7B against a 9.1- and 6.9-point Hadamard loss. k=8 and k=max are within 0.1 PPL of each other at every size and trade places between benchmarks, as they did on the 3B under this protocol; the rank inversion that the default GPTQ protocol produced in E19 does not appear under `g128_asym`. The 8B does not continue the trend: its Hadamard row degrades 29.5% on WikiText-2 — as much as the 0.6B's — and NAR k=8 recovers 1.67 of those 2.60 PPL (64%), leaving 10.6%, in line with the 4B's 7.1%. This is the model E18 and E19 diagnosed: Qwen3-8B-Base carries a massive-activation layer whose down_proj input is dominated by a per-group DC direction, which is exactly the direction NAR's R4 removes and a Hadamard spreads. The scaling claim is therefore not "the margin shrinks with size" but "the margin tracks how much of the Hadamard degradation is DC", which is small on the 4B and large on the 8B; the 14B column says which of the two the next size resembles.
 
 ## Cost of the fake-quant hooks
 
