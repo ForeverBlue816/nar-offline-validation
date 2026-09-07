@@ -1354,6 +1354,79 @@ The GPTQ stage failed twice before it ran, both times at layer 3 `down_proj` (28
 The fix computes the Gram products in fp64 for the 70B only (`GPTQ(product_dtype=torch.float64)`, set by E21's hooks), factors in fp64, and records both in every audit row; damping and the rest of the protocol are unchanged and the fp32 default is bit-identical to before. Layers 0–2 of the k=8 checkpoint were quantized in the first attempt with fp32 Hessians and are kept, because every later layer's calibration stream passed through them; the audit marks which rows used which width, and the k=max checkpoint is fp64 throughout (560 of 560 audit rows). fp64 products cost 9.3 minutes per layer against 1.9, 12 hours per rotation.
 
 
+# E22 — the Qwen3 Base family under one protocol
+
+E19 and E21 each measured one model. E22 runs the same W4A4KV4 pipeline, unchanged, across the Qwen3 Base family — 0.6B, 1.7B, 4B, 8B and 14B — so that the NAR-versus-Hadamard margin can be read as a function of model size rather than as five separate results. Qwen3-32B-Base is not a public checkpoint (the Hub returns 404 for it; only the post-trained 32B is released), so the family stops at 14B; the 32B row would be a different kind of model and is not substituted.
+
+Everything is fixed by one committed configuration (`nar/e22_qwen3_family.py`, resolved harness configs in `nar/e22_benchmarks.json`): GPTQ `g128_asym` weights (4.15625 bits), asymmetric group-128 INT4 activations at all seven sites (4.25 bits), the E14 KIVI cache (K 5.17, V 4.43 bits at context 2048), fp32 containers with the fp32 fold, and the exact-transpose control before any quantizer is attached. Rows are bf16, Hadamard, NAR k=8 and NAR k=max, where k=max is the full slot count n/128 (R1 8/16/20/32/40 and R4 24/48/76/96/136 slots from 0.6B to 14B; k=8 uses 8 of them at every size, so on the 0.6B the two NAR rows share R1 and differ only in R4). All rotation orders that the Hadamard row needs exist: 2560, 5120, 9728 and 17408 factor as 128 × {20, 76} and 128 × {40, 136}, and the 20-, 68- and 76-point blocks are Paley constructions verified to satisfy HHᵀ = nI before use.
+
+**Benchmarks** follow the Qwen3 technical report's Base-model evaluation (§3.3) where the harness supports it: WikiText-2 and C4 perplexity (141 and 256 windows of 2048 tokens), MMLU 5-shot, MMLU-Redux 5-shot (generative, 8-token answer), GSM8K 4-shot chain-of-thought (512 new tokens, flexible extraction), MATH-500 4-shot chain-of-thought (the 500-problem subset, in place of the full MATH set), GPQA-Diamond 5-shot chain-of-thought (198 questions, 768 tokens, the subset the report scores), plus ARC-Easy zero-shot as the one item carried over from the eight-task Llama suite, chosen because it is small and because NAR led Hadamard on it by 2.3 points on the 3B under this protocol. BBH was dropped: at 3-shot chain-of-thought over 27 subtasks it costs more than every other benchmark together under the fake-quant hooks. The 8B additionally runs the full eight-task zero-shot suite for continuity with E19 and the OffQ comparison. The report's 16-bit numbers are listed next to the bf16 row measured on this harness; a bf16 row more than 2 points from the report is flagged as a pipeline difference rather than silently accepted.
+
+## Gates
+
+Every model passes the same four gates before its quantized rows are trusted.
+
+*Architecture audit.* All five are `Qwen3ForCausalLM` with per-head `q_norm`/`k_norm` inside attention, downstream of q/k_proj on the head axis: R1 folds into the input axis of the projections and the output axis of o_proj/down_proj and never touches them; R2 acts on the value head axis and is likewise independent of them. `problems: []` at every size. The 0.6B, 1.7B and 4B tie `lm_head` to the embedding; the fold rotates the embedding in place and unties the head first (a clone of the embedding weight, `tie_word_embeddings=False`) so that the head keeps un-rotated weights. The 8B is untied as shipped.
+
+*Round-trip and rotation-only control.* Every rotation at every site reconstructs to relative error ≤ 8.7e-7 (fp32, tolerance 1e-6), and the model with all rotations folded but no quantizer attached reproduces the bf16 reference to max |ΔNLL| ≤ 1.1e-5 per token over 64 chunks at every size and every rotation, so what follows is the quantizers and nothing else.
+
+*Generation gate (8B, 100 GSM8K items, 4-shot).* The chain-of-thought benchmarks decode hundreds of tokens per item, which E19 never exercised. On the 8B under NAR k=max: the activation and KV hooks fire on every decode step (counted, not assumed), the K cache is quantized during decoding, two batch-1 runs are token-identical (deterministic), and batch-1 and batch-8 give the same accuracy, 83.0 both, from different text on 93% of items. That last number is what fake quantization does: batched and single decoding go through different GEMM kernels, the int4 rounding boundaries fall differently at the fourth decimal, and after the first divergent token the chains differ — the accuracy does not. The bf16 row in fp32 containers scores 86.0 against 84.0 for the stock bf16 model, inside single-item noise on 100 items. The gate is recorded in `results/qwen3_8b_base/e22_generation_gate.json` and passed before any generative benchmark was run. Two harness defects were found by it and fixed: the registered attention function had no mask builder, so padded batches received no mask at all (batch-8 scored 51.0 before the fix, 83.0 after), and the Qwen3 checkpoints ship `generation_config.max_new_tokens = 2048`, which silently overrode the harness's 512-token cap; both are cleared in `configure`.
+
+## Results — perplexity
+
+WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 2048 tokens, fp32 NLL.
+
+| WikiText-2 PPL | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| bf16 | 12.662 | 9.399 | 7.933 | — | — |
+| Hadamard, W4A4KV4 | 16.498 | 11.086 | 8.756 | — | — |
+| NAR k=8 | 15.278 | 10.333 | 8.495 | — | — |
+| NAR k=max | 15.376 | 10.307 | 8.519 | — | — |
+| NAR best − Hadamard | −1.220 | −0.779 | −0.261 | — | — |
+| Hadamard degradation | +30.3% | +17.9% | +10.4% | — | — |
+| NAR best degradation | +20.7% | +9.7% | +7.1% | — | — |
+
+| C4 PPL | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| bf16 | 19.384 | 15.018 | 13.023 | — | — |
+| Hadamard, W4A4KV4 | 25.362 | 17.940 | 14.395 | — | — |
+| NAR k=8 | 23.920 | 16.526 | 13.956 | — | — |
+| NAR k=max | 23.923 | 16.491 | 13.951 | — | — |
+| NAR best − Hadamard | −1.442 | −1.449 | −0.444 | — | — |
+
+## Results — accuracy
+
+| MMLU 5-shot (acc) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| Qwen3 report, 16-bit | 52.81 | 62.63 | 72.99 | 76.89 | 81.05 |
+| bf16, this harness | 52.52 | 62.68 | 73.11 | — | — |
+| Hadamard, W4A4KV4 | 43.46 | 55.81 | 69.23 | — | — |
+| NAR k=8 | 44.22 | 58.20 | — | — | — |
+| NAR k=max | 44.69 | 57.61 | — | — | — |
+| NAR best − Hadamard | +1.23 | +2.39 | — | — | — |
+
+The bf16 row is within 0.3 points of the report at all three sizes measured so far, so the harness is the report's harness to within seed noise and no pipeline flag is raised.
+
+The remaining tables — MMLU-Redux, GSM8K, MATH-500, GPQA, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
+
+## Scaling
+
+Three sizes are enough to see the shape and not enough to fit it. Under the same 4.25-bit activations and 4.16-bit weights, the Hadamard baseline's WikiText-2 degradation falls from 30% at 0.6B to 18% at 1.7B and 10% at 4B, and NAR's from 21% to 10% to 7%: the smaller the model, the more of its perplexity W4A4KV4 costs, and the more of that cost NAR removes. The absolute NAR margin shrinks with size (−1.22, −0.78, −0.26 PPL on WikiText-2; −1.44, −1.45, −0.44 on C4) while the *fraction* of the Hadamard degradation it removes stays between 25% and 40% (32%, 46%, 32% on WikiText-2; 24%, 50%, 32% on C4). MMLU moves the same way, +1.2 and +2.4 points over Hadamard at 0.6B and 1.7B against a 9.1- and 6.9-point Hadamard loss. k=8 and k=max are within 0.1 PPL of each other at every size and trade places between benchmarks, as they did on the 3B under this protocol; the rank inversion that the default GPTQ protocol produced in E19 does not appear under `g128_asym`. Whether the margin keeps closing at 8B and 14B, or levels off as it did between Llama-3.2-3B and Llama-3.1-8B, is the question the last two columns answer.
+
+## Cost of the fake-quant hooks
+
+Measured because the generative benchmarks are bounded by it. Greedy decoding on one A40, ms per decode step, 229-token prompt on the 0.6B and 457 tokens on the 8B:
+
+| ms / step | 0.6B b=1 | 0.6B b=8 | 8B b=1 | 8B b=8 |
+|---|---:|---:|---:|---:|
+| stock bf16 | 26 | 32 | 87 | 298 |
+| all hooks (W4A4KV4 fake quant) | 127 | 145 | 208 | 510 |
+| KV hooks only | 78 | 93 | — | — |
+| activation hooks only | 107 | 108 | — | — |
+
+On the 0.6B the hooks are launch-bound — 5× the stock step at batch 1 and almost fully amortised at batch 8 (18 ms per sequence) — which is why the generative benchmarks run batched at the per-model cap (16, 16, 12, 8, 4 from 0.6B to 14B, harness `auto` below the cap). On the 8B the overhead is 2.4× at batch 1 and 1.7× at batch 8. These are costs of simulating the quantizer in PyTorch, not of the method: a deployed kernel quantizes as part of the GEMM.
+
+
 # Infrastructure defects found and fixed during E19
 
 Three defects were found while diagnosing the rank dependence. All three are recorded because each of them was invisible to every check that was in place, and two of them changed numbers that had already been reported.

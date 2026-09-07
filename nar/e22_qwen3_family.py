@@ -95,9 +95,9 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
     "math500": {"kind": "harness", "tasks": ["minerva_math500"], "num_fewshot": None,
                 "gen_kwargs": {"max_gen_toks": 512},
                 "headline": ("minerva_math500", "exact_match,none")},
-    "gpqa": {"kind": "harness", "tasks": ["gpqa_main_cot_n_shot"], "num_fewshot": 5,
+    "gpqa": {"kind": "harness", "tasks": ["gpqa_diamond_cot_n_shot"], "num_fewshot": 5,
              "gen_kwargs": {"max_gen_toks": 768},
-             "headline": ("gpqa_main_cot_n_shot", "exact_match,strict-match")},
+             "headline": ("gpqa_diamond_cot_n_shot", "exact_match,strict-match")},
     "eight_task": {"kind": "harness", "tasks": list(e14.EIGHT_TASKS), "num_fewshot": 0,
                    "headline": ("__mean__", "eight-task mean")},
     # The supplementary zero-shot task that replaces BBH across the family:
@@ -606,7 +606,7 @@ def benchmark_config_command(args: argparse.Namespace) -> None:
         "math": "minerva_math500 (4 fixed CoT exemplars) at every size; exact_match is the headline, math_verify is recorded",
         "bbh": "defined but not run: dropped on 2026-09-07 in favour of the arc_easy supplementary task",
         "arc_easy": "zero-shot acc_norm, the small supplementary task replacing BBH; the eight-task zero-shot set is run on the 8B only",
-        "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",
+        "gpqa": "gpqa_diamond_cot_n_shot at 5 shots (GPQA-Diamond, 198 items, the subset the Qwen3 report uses); gated dataset, needs a Hub token with access",
         "generation": "greedy (do_sample false) throughout; the KV cache is quantized on every decode step by the E14 attention hook",
         "padding": "batched decoding pads on the left; padded keys are replaced by their nearest valid neighbour before chunk statistics, and the chunk phase of padded sequences shifts by the pad length; measured by the generation gate",
     }
