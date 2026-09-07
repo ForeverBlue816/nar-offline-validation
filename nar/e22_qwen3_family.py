@@ -250,6 +250,21 @@ def c4_tokens(model_id: str, seq_len: int, windows: int) -> torch.Tensor:
     return chunks
 
 
+def _clear_generation_limits(model: torch.nn.Module) -> torch.nn.Module:
+    """Let the harness's max_gen_toks govern generation length.
+
+    The Qwen3 checkpoints ship generation_config.max_new_tokens = 2048, and
+    transformers lets that override the max_length the harness derives from
+    max_gen_toks ("max_new_tokens will take precedence"). The gate's batch-8
+    run therefore averaged 1,909 decode steps per batch against a 512 cap.
+    """
+    cfg = getattr(model, "generation_config", None)
+    if cfg is not None:
+        cfg.max_new_tokens = None
+        cfg.max_length = None
+    return model
+
+
 def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any, dict[str, Any]]:
     """The model for one row with its hooks installed, and its provenance."""
     rotation = ROWS[row]
@@ -265,9 +280,10 @@ def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any,
     if rotation:
         provenance["effective_bits"]["weight"] = e14.weight_effective_bits(PROTOCOL)
     if rotation is None:
-        return e19.load_model_fp32(WORKDIR), None, provenance
+        return _clear_generation_limits(e19.load_model_fp32(WORKDIR)), None, provenance
     model, rotations = e14.load_quantized_model(
         WORKDIR, artifact_root(), args.model, rotation, args.seed, args.weight_row_batch, protocol=PROTOCOL)
+    _clear_generation_limits(model)
     done = json.loads((e14.checkpoint_dir(artifact_root(), args.model, rotation, args.seed, PROTOCOL) / "DONE.json").read_text())
     provenance["weight_fold_audit"] = done["fold"]
     provenance["gptq"] = done["gptq"]
@@ -520,6 +536,7 @@ def gate_command(args: argparse.Namespace) -> None:
     stock = AutoModelForCausalLM.from_pretrained(
         e19.MODEL_ID, cache_dir=str(WORKDIR / "cache" / "huggingface"), dtype=torch.bfloat16,
         low_cpu_mem_usage=True, attn_implementation="sdpa").eval().cuda()
+    _clear_generation_limits(stock)
     try:
         result = run_harness(stock, args, spec, limit=limit, log_samples=True)
         stock_acc = headline(spec, result["results"])[1]
