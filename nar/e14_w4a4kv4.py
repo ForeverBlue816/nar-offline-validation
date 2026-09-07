@@ -736,6 +736,19 @@ class RuntimeHooks:
         from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
         if self.quantize_kv:
             ALL_ATTENTION_FUNCTIONS.register(self.attention_key, self.attention)
+            # transformers builds the attention mask per implementation name.
+            # An unregistered name receives no mask at all, so a left-padded
+            # generation batch reached this hook with its padding unmasked
+            # (batch-8 GSM8K 51.0 against batch-1 83.0 on Qwen3-8B). The
+            # eager mask is the additive 4-D form this hook adds; for an
+            # unpadded batch it is the causal mask this hook already applies,
+            # and min + min = -inf rounds to the same zero weight.
+            try:
+                from transformers.masking_utils import ALL_MASK_ATTENTION_FUNCTIONS
+                ALL_MASK_ATTENTION_FUNCTIONS.register(
+                    self.attention_key, ALL_MASK_ATTENTION_FUNCTIONS["eager"])
+            except (ImportError, KeyError):
+                pass
             self.model.config._attn_implementation = self.attention_key
         for layer, block in enumerate(self.model.model.layers):
             self.handles.append(block.self_attn.v_proj.register_forward_hook(self.rotate_v(layer)))

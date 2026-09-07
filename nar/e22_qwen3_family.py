@@ -489,7 +489,8 @@ def gate_command(args: argparse.Namespace) -> None:
             LOG.info("gate %s: %s = %.2f, hooks %s", label, metric, value, runs[-1]["hook_activity"])
     finally:
         hooks.close()
-        del model
+        counter.inner = None  # the counter held the hooks, the hooks held the model
+        del counter, hooks, model
         gc.collect()
         torch.cuda.empty_cache()
     r1, r2, rb = runs
