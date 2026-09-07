@@ -1835,6 +1835,33 @@ OffQ's Llama column is **Llama-3-8B**, not 3.1, and the paper does not state the
 
 **The quantizer is confounded in OffQ's own table and is not confounded here.** Their implementation section states that OffQ uses per-group asymmetric quantization at group 128 while the baselines "follow their official implementations using per-token asymmetric quantization". Part of the reported QuaRot → OffQ margin is therefore the quantizer rather than the offsetting. E14's `hadamard_asym_g128` row is precisely the control that separates them — plain Hadamard under OffQ's own quantizer — and it degrades 15.5%, already below their quoted ResQ at 16.4% and close to OffQ at 14.4%.
 
+## Llama-3.1-70B against the published 70B rows
+
+E21's 70B rows sit next to every published W4A4KV4 number for a Llama-3-family 70B that could be found. None is the same checkpoint (theirs is Llama-3-70B, this is Llama-3.1-70B; the 16-bit perplexities are 2.9, 2.86, 2.85 and 2.81 across the four harnesses), none shares the KV policy (this work's KIVI cache is 5.17/4.43 effective bits against their nominal 4), and the zero-shot suites differ, so every column is given against its own paper's 16-bit row.
+
+| Llama-3-70B family, W4A4KV4 | source | PPL | rel. | 0-shot mean | Δ vs own 16-bit | tasks |
+|---|---|---:|---:|---:|---:|---|
+| OffQ | OffQ Table 1 | 3.88 | +33.8% | 70.63 | −2.46 | 8 |
+| OSTQuant | OffQ Table 1 | 4.01 | +38.3% | 71.16 | −1.93 | 8 |
+| ResQ | OffQ Table 1 | 4.10 | +41.4% | 71.14 | −1.95 | 8 |
+| KurTail | OffQ Table 1 | 4.20 | +44.8% | 70.69 | −2.40 | 8 |
+| DFRot | OffQ Table 1 | 5.03 | +73% | 68.98 | −4.11 | 8 |
+| QuaRot | OffQ Table 1 | 5.70 | +97% | 67.56 | −5.53 | 8 |
+| SpinQuant | OffQ Table 1 | 6.20 | +114% | 65.68 | −7.41 | 8 |
+| FlatQuant (GPTQ) | FlatQuant Tables 1–2 | 3.77 | +31.8% | 78.58 | −1.37 | 6 |
+| FlatQuant (RTN) | FlatQuant Tables 1–2 | 3.78 | +32.2% | 79.01 | −0.94 | 6 |
+| PrefixQuant-O1 | PrefixQuant Table 2 | 4.16 | +46% | 77.08 | −2.95 | 5 |
+| SingleQuant | arXiv 2511.22316 | 4.71 | +65% | 76.30 | −3.65 | 6 |
+| DuQuant | as quoted in 2511.22316 | 6.06 | +112% | 72.97 | −6.98 | 6 |
+| **NAR k=8 (this work, Llama-3.1-70B)** | E21 | **3.849** | **+37.0%** | **72.46** / 78.76 | **−0.22** / −0.35 | 8 / 6 |
+| NAR k=max (this work) | E21 | 3.890 | +38.5% | pending | — | |
+
+Sources: OffQ arXiv 2606.07116 Table 1 (16-bit 2.9 / 73.09; eight tasks ARC-e, ARC-c, BoolQ, HellaSwag, OBQA, PIQA, SIQA, WinoGrande); FlatQuant arXiv 2410.09426 (16-bit 2.86 / 79.95; six tasks ARC-c, ARC-e, HellaSwag, LAMBADA, PIQA, WinoGrande — the same six as this repository's frozen E13 set; KV group-128 asymmetric); PrefixQuant arXiv 2410.05265 Table 2 (16-bit 2.85 / 80.03; five tasks); SingleQuant arXiv 2511.22316 (16-bit 2.86 / 79.95, six tasks; quotes SpinQuant 6.21 / 71.33 and DuQuant 6.06 / 72.97 on the same six). OSTQuant's own paper reports no W4A4KV4 70B row; its entry is OffQ's re-run.
+
+**Perplexity: NAR k=8 is second to FlatQuant.** FlatQuant's 3.77 at +31.8% is below this row's 3.849 at +37.0%; OffQ's 3.88 at +33.8% is above it in absolute terms and below it in relative terms, because this row's 16-bit reference is the lowest of the four. FlatQuant learns per-layer affine transforms on calibration data; OffQ and NAR are rotation-only. Everything else published is at 4.0 or above.
+
+**Accuracy: NAR k=8 gives up less than anything in the table.** −0.22 on the eight tasks (72.46 against a 72.68 reference) where OffQ gives up 2.46, OSTQuant 1.93 and ResQ 1.95; −0.35 on the six tasks where FlatQuant gives up 1.37 (GPTQ) or 0.94 (RTN). In absolute eight-task terms the row is 1.3 above OSTQuant and 1.8 above OffQ despite a 16-bit reference 0.4 below theirs. The reading is the one E14 gave for the 3B and 8B: at 4.25-bit activations the perplexity cost does not transfer to zero-shot accuracy, and on the 70B the transfer is smaller than any published method shows. The KV caveat cuts the other way — this row's cache is wider than the others' — but E19 measured that the zero-shot suite barely touches the KV quantizer, so the cache is not where the 0.22 is being saved.
+
 ## Llama-3.2-3B: the same checkpoint
 
 OffQ's Table 1 also reports Llama-3.2-3B, which is the checkpoint E14 uses, so on this row alone the comparison is like for like: same weights, same eight tasks, same harness family. Their 16-bit row is 7.8 and 62.73; this repository measures 7.819581 on its own 141-window stream, 0.25% away, so even the perplexity protocols are close. Their denominators are used below so that nothing on this side is chosen. Two calibration checks first. **QuaRot, which both sides evaluate, lands at 56.21 here against their quoted 56.06** — 0.15 points on the eight-task mean, 0.23 PPL — so the two evaluation pipelines agree on a shared method. But the per-task scatter on that same shared method is ±2–3 points (ARC-e 62.37 here against 59.0 there, PIQA 72.36 against 74.4), so only the mean is comparable and per-task differences of a point or two are not.
