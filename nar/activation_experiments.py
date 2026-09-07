@@ -46,6 +46,11 @@ MODEL_IDS = {
     "qwen3_1.7b_base": "Qwen/Qwen3-1.7B-Base",
     "qwen3_4b_base": "Qwen/Qwen3-4B-Base",
     "qwen3_14b_base": "Qwen/Qwen3-14B-Base",
+    # E23: the post-trained Qwen3 checkpoints, the family TwinQuant (arXiv
+    # 2606.01556) most plausibly evaluated; Qwen3-32B exists only in this form.
+    "qwen3_8b": "Qwen/Qwen3-8B",
+    "qwen3_14b": "Qwen/Qwen3-14B",
+    "qwen3_32b": "Qwen/Qwen3-32B",
 }
 SITES = ("qkv", "down")
 EVAL_SITES = ("qkv_only", "both", "down_only")
@@ -128,7 +133,7 @@ def paley_hadamard(order: int, device: torch.device, dtype: torch.dtype) -> torc
     Paley I gives order q+1 for a prime q = 3 (mod 4); Paley II gives order
     2(q+1) for a prime q = 1 (mod 4). The Qwen3 family needs 20 (hidden 2560
     and 5120 are 20 x 2^k, and the 14B has 40 heads), 68 (17408 = 68 x 256) and
-    76 (9728 = 76 x 128); the 12 and 28 the Llama models need keep their own
+    76 (9728 = 76 x 128) and 200 (the 32B's 25600 = 200 x 128, Paley I with q = 199); the 12 and 28 the Llama models need keep their own
     constructions. Every matrix is verified as H H^T = n I before use.
     """
     key = (order, str(device), dtype)
@@ -185,7 +190,7 @@ def full_hadamard_rows(x: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
         return (factored.transpose(1, 2) @ h12.T).transpose(1, 2).reshape_as(x)
     if n & (n - 1):
         # Qwen3 widths that are neither a power of two nor 12 or 28 times one.
-        for order in (20, 68, 76):
+        for order in (20, 68, 76, 200):
             quotient, remainder = divmod(n, order)
             if not remainder and quotient >= 1 and not quotient & (quotient - 1):
                 signed = x * signs

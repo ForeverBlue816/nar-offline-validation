@@ -44,6 +44,8 @@ LOG = logging.getLogger("nar")
 PREFIX = "e22"
 PROTOCOL = "g128_asym"
 ACTIVATION_KIND = "asymmetric_g128"
+QUANTIZE_KV = True          # E23 turns the cache off (TwinQuant quantizes no KV)
+ARTIFACT_SUBDIR = "e22"     # artifacts/<subdir>/<model>/gptq_...
 FAMILY = ("qwen3_0.6b_base", "qwen3_1.7b_base", "qwen3_4b_base", "qwen3_8b_base", "qwen3_14b_base")
 ROWS = {
     "bf16": None,
@@ -105,6 +107,10 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
     "gpqa": {"kind": "harness", "tasks": ["gpqa_diamond_cot_n_shot"], "num_fewshot": 5,
              "gen_kwargs": {"max_gen_toks": 768},
              "headline": ("gpqa_diamond_cot_n_shot", "exact_match,strict-match")},
+    # E23: TwinQuant's six zero-shot tasks (its Table 4/5 columns), zero-shot,
+    # acc_norm where the harness defines it (E13's frozen six-task convention).
+    "six_task": {"kind": "harness", "tasks": ["arc_challenge", "arc_easy", "hellaswag", "lambada_openai", "piqa", "winogrande"],
+                 "num_fewshot": 0, "headline": ("__mean__", "six_task_mean")},
     "eight_task": {"kind": "harness", "tasks": list(e14.EIGHT_TASKS), "num_fewshot": 0,
                    "headline": ("__mean__", "eight-task mean")},
     # The supplementary zero-shot task that replaces BBH across the family:
@@ -163,7 +169,7 @@ def result_dir(model_key: str) -> Path:
 
 
 def artifact_root() -> Path:
-    return WORKDIR / "artifacts" / "e22"
+    return WORKDIR / "artifacts" / ARTIFACT_SUBDIR
 
 
 def batch_size_for(args: argparse.Namespace) -> int | str:
@@ -287,10 +293,11 @@ def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any,
         "model": args.model, "model_id": e19.MODEL_ID, "row": row, "rotation_checkpoint": rotation,
         "seed": args.seed, "compute_dtype": "float32", "fold_dtype": "float32",
         "gptq_protocol": PROTOCOL if rotation else None, "activation_kind": ACTIVATION_KIND if rotation else None,
-        "kv_policy": "E14 KIVI" if rotation else None,
+        "kv_policy": ("E14 KIVI" if QUANTIZE_KV else "16-bit (not quantized)") if rotation else None,
         "git_commit": e19.git_commit(), "hardware": base.hardware_info(),
         "effective_bits": e19.effective_bits(ACTIVATION_KIND if rotation else None, quantize_weights=bool(rotation),
-                                             quantize_kv=bool(rotation), shapes=e19.EXPECTED, context=args.seq_len),
+                                             quantize_kv=bool(rotation) and QUANTIZE_KV, shapes=e19.EXPECTED,
+                                             context=args.seq_len),
     }
     if rotation:
         provenance["effective_bits"]["weight"] = e14.weight_effective_bits(PROTOCOL)
@@ -305,7 +312,7 @@ def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any,
     trip = e19.round_trip_audit(rotations, rotations.layers, tolerance=args.round_trip_tolerance)
     provenance["round_trip_max_relative_error"] = max(e["round_trip_relative_error"] for e in trip)
     provenance["ranks"] = rotations.ranks()
-    hooks = e14.RuntimeHooks(model, rotations, activation_kind=ACTIVATION_KIND, quantize_kv=True)
+    hooks = e14.RuntimeHooks(model, rotations, activation_kind=ACTIVATION_KIND, quantize_kv=QUANTIZE_KV)
     hooks.install()
     return model, hooks, provenance
 

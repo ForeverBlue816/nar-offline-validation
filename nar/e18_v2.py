@@ -243,7 +243,7 @@ def full_hadamard_rows_transpose(x: torch.Tensor, signs: torch.Tensor) -> torch.
         h12 = act.ext._paley_hadamard_12(x.device, x.dtype)
         return (factored.transpose(1, 2) @ h12).transpose(1, 2).reshape_as(x) * signs
     # The Qwen3-family orders act.full_hadamard_rows dispatches after 28 and 12.
-    for order in (20, 68, 76):
+    for order in (20, 68, 76, 200):
         quotient, remainder = divmod(n, order)
         if not remainder and quotient >= 1 and not quotient & (quotient - 1):
             factored = act.ext._fast_walsh_hadamard(x.reshape(-1, order, quotient))

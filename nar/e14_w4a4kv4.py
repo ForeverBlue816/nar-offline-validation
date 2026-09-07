@@ -583,6 +583,16 @@ def fuse_norms_and_rotate(model: torch.nn.Module, rotations: RotationSet,
     }
 
 
+def _symmetric_per_group_int4(value: torch.Tensor, group: int) -> torch.Tensor:
+    """TwinQuant's activation quantizer (arXiv 2606.01556 Eq. 1 at group 128):
+    one fp16 scale max|x|/7 per contiguous group, symmetric int4 [-8, 7]."""
+    original_dtype = value.dtype
+    groups = base.group_view(value.float(), group)
+    scale = (groups.abs().amax(-1, keepdim=True) / 7).clamp_min(torch.finfo(torch.float16).tiny).to(torch.float16)
+    dequant = torch.round(groups / scale.float()).clamp_(-8, 7) * scale.float()
+    return dequant.reshape_as(value).to(original_dtype)
+
+
 def _symmetric_per_token_int4(value: torch.Tensor) -> torch.Tensor:
     original_dtype = value.dtype
     rows = value.float().reshape(-1, value.shape[-1])
@@ -689,6 +699,8 @@ class RuntimeHooks:
             quantized = _symmetric_per_token_int4(value)
         elif self.activation_kind == "asymmetric_g128":
             quantized, _, _, _ = base.dynamic_asym_int4(value, GROUP)
+        elif self.activation_kind == "symmetric_g128":
+            quantized = _symmetric_per_group_int4(value, GROUP)
         else:
             return inputs
         return (quantized.to(value.dtype),) + inputs[1:]

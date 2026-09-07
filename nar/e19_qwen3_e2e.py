@@ -627,7 +627,8 @@ def effective_bits(activation_kind: str | None, quantize_weights: bool,
     weight_values = 2 * hidden * hidden + 2 * kv_dim * hidden + 3 * inter * hidden
     weight_scales = 3 * hidden + 2 * kv_dim + 2 * inter
     return {
-        "activation": (4 + 32 / GROUP) if activation_kind else 16.0,
+        "activation": ((4 + (16 if activation_kind == "symmetric_g128" else 32) / GROUP)
+                       if activation_kind else 16.0),
         "weight": (4 + 16 * weight_scales / weight_values) if quantize_weights else 16.0,
         "key": ((quantized * (4 + 32 / e14.K_TOKEN_GROUP) + residual * 16) / context
                 if quantize_kv else 16.0),

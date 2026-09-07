@@ -1,271 +1,177 @@
-"""E23 — bridge to the published Qwen3 W4A4 tables (MosaicQuant, TwinQuant).
+"""E23 — our rows under TwinQuant's protocol (arXiv 2606.01556).
 
-MosaicQuant (arXiv 2606.15652) and TwinQuant (arXiv 2606.01556) report the
-same 16-bit rows (Llama-3.2-3B 10.7, Llama-3-8B 8.6, Qwen3-8B 9.71, 14B 8.6,
-32B 7.6 on WikiText-2; identical six-task per-task accuracies), so they share
-one evaluation protocol.  Neither paper states the checkpoints, the
-perplexity context length or chunking, or the harness version, and neither
-has released code.  This module therefore
+One table where our rows and TwinQuant's published Qwen3 W4A4 rows share a
+protocol. The protocol is theirs; this module re-points the E22 pipeline at
+it and changes nothing else:
 
-  gate      evaluates candidate checkpoints under candidate perplexity
-            conventions and the six tasks, and reports which combination
-            reproduces the published 16-bit row within 0.1 PPL;
-  (later)   runs our rows under the identified protocol.
+  weights      GPTQ, group-128 symmetric (E14 protocol ``g128``, 4.125 bits)
+               -- "each contiguous group of 128 elements shares one
+               quantization scale" (TwinQuant 5.1), symmetric per their Eq. 1
+  activations  group-128 symmetric int4, dynamic, every linear input
+               (``symmetric_g128``, 4.125 bits) -- same sentence
+  KV cache     not quantized (the paper never mentions the cache): W4A4KV16
+  calibration  128 x 2048 WikiText-2 sequences (stated; E14's default)
+  context      2048 (unstated in the paper; the convention their calibration
+               uses and the one every other W4A4 table uses)
+  checkpoints  the post-trained Qwen/Qwen3-8B, -14B, -32B (unstated in the
+               paper; Qwen3-32B exists only post-trained, and the printed
+               Qwen3-8B per-task row is the post-trained profile: PIQA 76.4,
+               WinoGrande 68.0, LAMBADA 67.4 against the Base model's
+               79.3 / 72.8 / 72.2 measured in E19)
+  zero-shot    their six tasks (ARC-c, ARC-e, HellaSwag, LAMBADA, PIQA,
+               WinoGrande), zero-shot, this repository's pinned harness
+               (their version is unstated); acc_norm where defined
+  perplexity   WikiText-2 test, 2048-token windows, fp32 NLL (E14/E19/E22
+               convention; their chunking and BOS handling are unstated,
+               and their 16-bit row is listed next to ours to show the gap)
 
-Published rows are held in PUBLISHED verbatim from the papers' appendix
-tables (Table 3/4 in MosaicQuant, Table 4/5 in TwinQuant).
+Everything that is an assumption is recorded in results/e23_protocol.json and
+in every artifact's provenance. Artifacts: results/<model>/e23_<row>_<bench>.json,
+checkpoints under artifacts/e23/. ``bridge`` writes results/e23_bridge_summary.csv
+with TwinQuant's rows beside ours.
 """
 from __future__ import annotations
 
 import argparse
+import csv
 import json
-import logging
-import math
 import sys
-import time
 from pathlib import Path
 from typing import Any
 
-import numpy as np
-import torch
-
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from nar import e14_w4a4kv4 as e14  # noqa: E402
-from nar import experiment as base  # noqa: E402
+from nar import e22_qwen3_family as e22  # noqa: E402
 
-LOG = logging.getLogger("nar.e23")
-WORKDIR = Path(".")
+E23_FAMILY = ("qwen3_8b", "qwen3_14b", "qwen3_32b")
+BENCHMARKS = ("wikitext", "six_task")
 
-SIX_TASKS = ("arc_challenge", "arc_easy", "hellaswag", "lambada_openai", "piqa", "winogrande")
-TASK_COLUMNS = ("ARC-C", "ARC-E", "HellaSwag", "PIQA", "Winogrande", "LAMBADA")
-
-# 16-bit rows as printed (MosaicQuant Tables 3–4, TwinQuant Tables 4–5; the
-# two papers agree on every entry below except the Qwen3-4B row, which is
-# 10.04 / 69.4 in MosaicQuant and 13.7 / 66.8 in TwinQuant).
-PUBLISHED_16BIT = {
-    "llama3_3b": {"wiki2": 10.7, "avg": 66.2, "ARC-C": 47.6, "ARC-E": 69.9, "HellaSwag": 71.0, "PIQA": 76.0, "Winogrande": 66.6, "LAMBADA": 65.9},
-    "llama3_8b": {"wiki2": 8.64, "avg": 73.5, "ARC-C": 54.86, "ARC-E": 79.55, "HellaSwag": 79.13, "PIQA": 80.74, "Winogrande": 73.72, "LAMBADA": 72.93},
-    "qwen3_4b_mosaic": {"wiki2": 10.04, "avg": 69.4, "ARC-C": 58.6, "ARC-E": 81.1, "HellaSwag": 69.09, "PIQA": 76.0, "Winogrande": 68.11, "LAMBADA": 63.56},
-    "qwen3_4b_twin": {"wiki2": 13.7, "avg": 66.8, "ARC-C": 50.6, "ARC-E": 80.5, "HellaSwag": 69.5, "PIQA": 75.0, "Winogrande": 65.8, "LAMBADA": 59.4},
-    "qwen3_8b": {"wiki2": 9.71, "avg": 71.6, "ARC-C": 55.5, "ARC-E": 83.5, "HellaSwag": 78.8, "PIQA": 76.4, "Winogrande": 68.0, "LAMBADA": 67.4},
-    "qwen3_14b": {"wiki2": 8.6, "avg": 74.2, "ARC-C": 59.0, "ARC-E": 84.3, "HellaSwag": 80.5, "PIQA": 80.0, "Winogrande": 72.9, "LAMBADA": 68.4},
-    "qwen3_32b": {"wiki2": 7.6, "avg": 75.2, "ARC-C": 57.8, "ARC-E": 84.4, "HellaSwag": 84.2, "PIQA": 80.9, "Winogrande": 73.6, "LAMBADA": 70.3},
+# TwinQuant Table 5 (appendix), Qwen3 rows, verbatim: per task ARC-C ARC-E
+# HellaSwag PIQA Winogrande LAMBADA, then the six-task mean and WikiText-2 PPL.
+TASKS = ("ARC-C", "ARC-E", "HellaSwag", "PIQA", "Winogrande", "LAMBADA")
+TWINQUANT = {
+    "qwen3_8b": {
+        "W16A16": (55.5, 83.5, 78.8, 76.4, 68.0, 67.4, 71.6, 9.71),
+        "RTN": (22.6, 24.9, 45.6, 48.9, 51.8, 46.9, 40.1, 4392),
+        "SpinQuant": (53.6, 78.5, 71.4, 76.5, 67.3, 62.4, 68.3, 14.8),
+        "QuaRot": (49.8, 74.8, 69.8, 68.3, 60.7, 57.1, 63.4, 24.5),
+        "SmoothQuant": (25.7, 25.5, 41.7, 50.5, 52.2, 44.9, 40.1, 3360.1),
+        "FlatQuant": (54.4, 79.4, 73.1, 77.0, 68.8, 63.4, 69.3, 13.4),
+        "SVDQuant": (52.8, 78.9, 74.4, 75.8, 66.6, 64.1, 68.8, 14.9),
+        "TwinQuant": (53.6, 80.8, 77.1, 75.7, 67.9, 65.8, 70.2, 13.2),
+    },
+    "qwen3_14b": {
+        "W16A16": (59.0, 84.3, 80.5, 80.0, 72.9, 68.4, 74.2, 8.6),
+        "RTN": (24.8, 23.9, 50.6, 55.7, 46.8, 50.7, 42.1, 18749),
+        "SpinQuant": (56.3, 81.0, 75.8, 76.9, 71.4, 65.7, 71.2, 13.0),
+        "QuaRot": (52.8, 76.4, 72.4, 73.6, 65.0, 62.8, 67.2, 18.2),
+        "SmoothQuant": (26.5, 25.8, 48.7, 51.2, 50.2, 45.3, 41.3, 21675),
+        "FlatQuant": (60.4, 81.6, 77.6, 79.6, 72.6, 66.9, 73.1, 11.4),
+        "SVDQuant": (56.8, 80.4, 76.7, 78.4, 71.4, 64.9, 71.4, 12.8),
+        "TwinQuant": (58.0, 82.1, 78.6, 79.0, 72.8, 66.1, 72.8, 11.8),
+    },
+    "qwen3_32b": {
+        "W16A16": (57.8, 84.4, 84.2, 80.9, 73.6, 70.3, 75.2, 7.6),
+        "RTN": (28.5, 27.6, 60.8, 52.5, 50.7, 52.0, 45.4, 1796),
+        "SpinQuant": (56.7, 80.6, 79.2, 78.9, 71.8, 64.8, 72.0, 12.1),
+        "QuaRot": (49.8, 72.2, 75.6, 73.4, 67.9, 65.3, 67.4, 15.6),
+        "SmoothQuant": (26.0, 28.9, 56.7, 51.9, 54.1, 48.6, 44.4, 1806),
+        "FlatQuant": (57.5, 81.2, 80.6, 80.2, 71.5, 65.9, 72.8, 11.0),
+        "SVDQuant": (56.1, 80.9, 81.1, 78.6, 70.8, 65.6, 72.2, 11.6),
+        "TwinQuant": (57.3, 82.4, 82.6, 79.8, 72.5, 65.2, 73.3, 10.4),
+    },
 }
-
-# Candidate checkpoints for each published row.
-CANDIDATES = {
-    "llama3_3b": ["unsloth/Llama-3.2-3B", "unsloth/Llama-3.2-3B-Instruct"],
-    "llama3_8b": ["unsloth/llama-3-8b", "unsloth/Meta-Llama-3.1-8B"],
-    "qwen3_4b": ["Qwen/Qwen3-4B-Base", "Qwen/Qwen3-4B"],
-    "qwen3_8b": ["Qwen/Qwen3-8B-Base", "Qwen/Qwen3-8B"],
-    "qwen3_14b": ["Qwen/Qwen3-14B-Base", "Qwen/Qwen3-14B"],
-    "qwen3_32b": ["Qwen/Qwen3-32B"],
-}
-
-CONTEXTS = (2048, 4096)
+TWINQUANT_METHODS = ("W16A16", "QuaRot", "SpinQuant", "FlatQuant", "SVDQuant", "TwinQuant")
+OUR_ROWS = {"bf16": "bf16 (ours)", "hadamard_asym_g128": "Hadamard (ours)",
+            "nar_k8_asym_g128": "PrismQuant k=8", "nar_kmax_asym_g128": "PrismQuant k=max"}
+HARNESS_TASK = {"ARC-C": "arc_challenge", "ARC-E": "arc_easy", "HellaSwag": "hellaswag",
+                "PIQA": "piqa", "Winogrande": "winogrande", "LAMBADA": "lambada_openai"}
+ASSUMED = ("checkpoint (post-trained)", "context 2048 and BOS-per-window perplexity", "harness version",
+           "acc_norm where defined", "KV cache unquantized", "all linear inputs quantized, attention matmuls not")
 
 
-def result_dir() -> Path:
-    d = WORKDIR / "results" / "e23"
-    d.mkdir(parents=True, exist_ok=True)
-    return d
+def configure_e23() -> None:
+    """Re-point E22 at TwinQuant's protocol before its parser runs."""
+    e22.PREFIX = "e23"
+    e22.PROTOCOL = "g128"
+    e22.ACTIVATION_KIND = "symmetric_g128"
+    e22.QUANTIZE_KV = False
+    e22.ARTIFACT_SUBDIR = "e23"
+    e22.FAMILY = E23_FAMILY
+    e22.DEFAULT_BATCH = {"qwen3_8b": 8, "qwen3_14b": 4, "qwen3_32b": 2}
+    e22.DEFAULT_BENCHMARKS = BENCHMARKS
+    e22.MATH_BENCHMARK = {}
 
 
-def load_bf16(model_id: str) -> tuple[torch.nn.Module, Any]:
-    from transformers import AutoModelForCausalLM, AutoTokenizer
-    cache = str(WORKDIR / "cache" / "huggingface")
-    tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=cache, use_fast=True)
-    model = AutoModelForCausalLM.from_pretrained(model_id, cache_dir=cache, dtype=torch.bfloat16,
-                                                 device_map="auto", attn_implementation="sdpa")
-    model.eval()
-    model.generation_config.max_new_tokens = None
-    model.generation_config.max_length = None
-    return model, tokenizer
-
-
-def wikitext_stream(model_id: str, tokenizer: Any, bos: str) -> torch.Tensor:
-    """The WikiText-2 raw test set as one token stream.
-
-    bos="start": one BOS token at the start of the stream (QuaRot / GPTQ
-    convention: tokenizer("\\n\\n".join(test)) with special tokens);
-    bos="none": no BOS anywhere.
-    """
-    from datasets import load_dataset
-    dataset = load_dataset("Salesforce/wikitext", "wikitext-2-raw-v1", split="test",
-                           cache_dir=str(WORKDIR / "cache" / "datasets"))
-    text = "\n\n".join(row["text"] for row in dataset)
-    ids = tokenizer(text, add_special_tokens=False, return_attention_mask=False)["input_ids"]
-    if bos == "start":
-        bos_id = tokenizer.bos_token_id
-        if bos_id is None:
-            from transformers import AutoConfig
-            bos_id = getattr(AutoConfig.from_pretrained(model_id, cache_dir=str(WORKDIR / "cache" / "huggingface")),
-                             "bos_token_id", None)
-        if bos_id is not None:
-            ids = [bos_id] + ids
-    return torch.tensor(ids, dtype=torch.long)
-
-
-@torch.inference_mode()
-def windowed_ppl(model: torch.nn.Module, stream: torch.Tensor, seq_len: int, limit: int | None,
-                 label: str) -> dict[str, Any]:
-    """Non-overlapping windows of seq_len over the stream, token-level PPL
-    (weighted by scored tokens), fp32 NLL.  This is the QuaRot/GPTQ
-    `eval_ppl` convention when the stream carries one leading BOS."""
-    n = stream.numel() // seq_len
-    if limit is not None:
-        n = min(n, limit)
-    device = next(model.parameters()).device
-    nll_sum, count = 0.0, 0
-    for i in range(n):
-        batch = stream[i * seq_len:(i + 1) * seq_len].unsqueeze(0).to(device)
-        logits = model(input_ids=batch, use_cache=False).logits
-        loss = torch.nn.functional.cross_entropy(
-            logits[:, :-1, :].float().reshape(-1, logits.shape[-1]), batch[:, 1:].reshape(-1), reduction="sum")
-        nll_sum += float(loss); count += int(batch.shape[1] - 1)
-        if i % 32 == 0:
-            LOG.info("%s L=%d window %d/%d running ppl=%.4f", label, seq_len, i + 1, n, math.exp(nll_sum / count))
-        del logits, loss
-    return {"seq_len": seq_len, "windows": n, "tokens_scored": count, "ppl": math.exp(nll_sum / count)}
-
-
-def our_windows_ppl(model: torch.nn.Module, model_id: str, tokenizer: Any, seq_len: int,
-                    limit: int | None) -> dict[str, Any]:
-    """This repository's convention: every window is BOS + (seq_len-1) content
-    tokens, contiguous content, all windows (E14 uses the first 141/146)."""
-    content = wikitext_stream(model_id, tokenizer, "none")
-    bos_id = tokenizer.bos_token_id
-    if bos_id is None:
-        from transformers import AutoConfig
-        bos_id = getattr(AutoConfig.from_pretrained(model_id, cache_dir=str(WORKDIR / "cache" / "huggingface")), "bos_token_id", None)
-    content_len = seq_len - 1
-    n = content.numel() // content_len
-    if limit is not None:
-        n = min(n, limit)
-    device = next(model.parameters()).device
-    nll_sum, count = 0.0, 0
-    with torch.inference_mode():
-        for i in range(n):
-            window = content[i * content_len:(i + 1) * content_len]
-            if bos_id is not None:
-                window = torch.cat([torch.tensor([bos_id]), window])
-            batch = window.unsqueeze(0).to(device)
-            logits = model(input_ids=batch, use_cache=False).logits
-            loss = torch.nn.functional.cross_entropy(
-                logits[:, :-1, :].float().reshape(-1, logits.shape[-1]), batch[:, 1:].reshape(-1), reduction="sum")
-            nll_sum += float(loss); count += int(batch.shape[1] - 1)
-            del logits, loss
-    return {"seq_len": seq_len, "windows": n, "tokens_scored": count, "ppl": math.exp(nll_sum / count),
-            "convention": "BOS per window (E14/E19/E22), all windows"}
-
-
-def git_commit() -> str | None:
-    import subprocess
-    try:
-        return subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True,
-                              cwd=Path(__file__).resolve().parents[1], check=True).stdout.strip()
-    except Exception:  # noqa: BLE001
-        return None
-
-
-def run_harness(model: torch.nn.Module, tokenizer: Any, tasks: list[str], max_length: int,
-                limit: int | None, batch: str | int = "auto") -> dict[str, Any]:
-    import lm_eval
-    from lm_eval.models.huggingface import HFLM
-    from lm_eval.tasks import TaskManager
-    lm = HFLM(pretrained=model, tokenizer=tokenizer, batch_size=batch, max_batch_size=32, max_length=max_length)
-    kwargs: dict[str, Any] = {}
-    if limit is not None:
-        kwargs["limit"] = limit
-    out = lm_eval.simple_evaluate(model=lm, tasks=tasks, batch_size=batch, max_batch_size=32,
-                                  task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
-                                  apply_chat_template=False, **kwargs)
-    del lm
-    return out["results"]
-
-
-def six_task_table(results: dict[str, Any]) -> dict[str, Any]:
-    table: dict[str, Any] = {}
-    for task in SIX_TASKS:
-        r = results[task]
-        table[task] = {k: 100.0 * float(v) for k, v in r.items()
-                       if k.split(",")[0] in ("acc", "acc_norm") and "stderr" not in k and isinstance(v, (int, float))}
-    acc = [table[t]["acc,none"] for t in SIX_TASKS]
-    norm = [table[t].get("acc_norm,none", table[t]["acc,none"]) for t in SIX_TASKS]
-    return {"per_task": table, "mean_acc": float(np.mean(acc)), "mean_acc_norm_where_defined": float(np.mean(norm))}
-
-
-def gate_command(args: argparse.Namespace) -> None:
-    model_id = args.model_id
-    key = model_id.replace("/", "--")
-    path = result_dir() / f"{key}_bf16_gate.json"
-    if path.exists() and not args.force:
-        LOG.info("E23 gate exists: %s", path)
-        return
-    base.setup_logging(WORKDIR, f"e23-gate-{key}")
-    started = time.time()
-    model, tokenizer = load_bf16(model_id)
-    out: dict[str, Any] = {"model_id": model_id, "key": key, "compute_dtype": "bfloat16",
-                           "hardware": base.hardware_info(), "git_commit": git_commit(),
-                           "perplexity": {}, "harness": {}}
-    limit = args.limit_windows
-    for seq_len in CONTEXTS:
-        stream = wikitext_stream(model_id, tokenizer, "start")
-        out["perplexity"][f"windows_bos_start_L{seq_len}"] = windowed_ppl(model, stream, seq_len, limit, "bos_start")
-        out["perplexity"][f"windows_bos_each_L{seq_len}"] = our_windows_ppl(model, model_id, tokenizer, seq_len, limit)
-        base.atomic_json(path.with_suffix(".partial.json"), out)
-    for max_length in args.harness_lengths:
-        res = run_harness(model, tokenizer, ["wikitext"], max_length, args.limit_docs)
-        r = res["wikitext"]
-        out["harness"][f"wikitext_rolling_L{max_length}"] = {k: float(v) for k, v in r.items()
-                                                             if isinstance(v, (int, float))}
-        base.atomic_json(path.with_suffix(".partial.json"), out)
-    res = run_harness(model, tokenizer, list(SIX_TASKS), 4096, args.limit_docs)
-    out["harness"]["six_task"] = six_task_table(res)
-    out["elapsed_seconds"] = time.time() - started
-    out["published_rows"] = PUBLISHED_16BIT
-    base.atomic_json(path, out)
-    path.with_suffix(".partial.json").unlink(missing_ok=True)
-    LOG.info("E23 gate %s: %s", key, json.dumps({k: round(v["ppl"], 3) for k, v in out["perplexity"].items()}))
-    LOG.info("E23 gate %s harness: %s", key, json.dumps(out["harness"]))
-
-
-def compare_command(args: argparse.Namespace) -> None:
-    """Print every gate artifact against the published rows."""
-    rows = []
-    for path in sorted(result_dir().glob("*_bf16_gate.json")):
-        d = json.loads(path.read_text())
-        ppl = {k: round(v["ppl"], 3) for k, v in d["perplexity"].items()}
-        wiki = {k: round(v.get("word_perplexity,none", float("nan")), 3) for k, v in d["harness"].items() if k.startswith("wikitext")}
-        six = d["harness"]["six_task"]
-        print(f"== {d['model_id']}")
-        print("   token ppl:", ppl)
-        print("   harness word ppl:", wiki)
-        print("   six-task acc:", {t: round(v['acc,none'], 1) for t, v in six['per_task'].items()}, "mean", round(six["mean_acc"], 2))
-        print("   six-task acc_norm:", {t: round(v.get('acc_norm,none', float('nan')), 1) for t, v in six['per_task'].items()},
-              "mean", round(six["mean_acc_norm_where_defined"], 2))
-    print("published:", json.dumps(PUBLISHED_16BIT, indent=1))
-
-
-def parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--workdir", required=True)
-    sub = p.add_subparsers(dest="command", required=True)
-    g = sub.add_parser("gate")
-    g.add_argument("--model-id", required=True)
-    g.add_argument("--limit-windows", type=int, default=None)
-    g.add_argument("--limit-docs", type=int, default=None)
-    g.add_argument("--harness-lengths", type=int, nargs="+", default=[2048, 4096])
-    g.add_argument("--force", action="store_true")
-    sub.add_parser("compare")
-    return p
+def bridge_command(args: argparse.Namespace) -> None:
+    """results/e23_bridge_summary.csv: TwinQuant's rows and ours, one line each."""
+    rows: list[dict[str, Any]] = []
+    for model in E23_FAMILY:
+        published = TWINQUANT[model]
+        for method in TWINQUANT_METHODS:
+            v = published[method]
+            rows.append({"model": model, "checkpoint": "unstated (Qwen3 " + model.split("_")[1].upper() + ")",
+                         "source": "TwinQuant Table 5", "row": method, "context": "unstated",
+                         "W/A/KV": "16/16/16" if method == "W16A16" else "4/4/16",
+                         **{t: v[i] for i, t in enumerate(TASKS)}, "six_task_mean": v[6], "wikitext2_ppl": v[7],
+                         "ppl_rel_degradation_pct": None if method == "W16A16" else round(100 * (v[7] / published["W16A16"][7] - 1), 1),
+                         "acc_delta_vs_16bit": None if method == "W16A16" else round(v[6] - published["W16A16"][6], 2),
+                         "assumed_settings": ""})
+        directory = e22.WORKDIR / "results" / model
+        ours: dict[str, dict[str, Any]] = {}
+        for row in OUR_ROWS:
+            ppl = directory / f"e23_{row}_wikitext.json"
+            six = directory / f"e23_{row}_six_task.json"
+            entry: dict[str, Any] = {}
+            if ppl.exists():
+                entry["ppl"] = json.loads(ppl.read_text())["headline"]
+            if six.exists():
+                payload = json.loads(six.read_text())
+                results = payload["results"]
+                for col, task in HARNESS_TASK.items():
+                    metric = "acc_norm,none" if "acc_norm,none" in results[task] else "acc,none"
+                    entry[col] = round(100 * float(results[task][metric]), 2)
+                entry["mean"] = payload["headline"]
+            if entry:
+                ours[row] = entry
+        ref = ours.get("bf16", {})
+        for row, label in OUR_ROWS.items():
+            if row not in ours:
+                continue
+            e = ours[row]
+            rows.append({"model": model, "checkpoint": e22.act.MODEL_IDS[model], "source": "this work (E23)",
+                         "row": label, "context": 2048, "W/A/KV": "16/16/16" if row == "bf16" else "4.125/4.125/16",
+                         **{t: e.get(t) for t in TASKS}, "six_task_mean": e.get("mean"), "wikitext2_ppl": e.get("ppl"),
+                         "ppl_rel_degradation_pct": (round(100 * (e["ppl"] / ref["ppl"] - 1), 1)
+                                                     if row != "bf16" and "ppl" in e and "ppl" in ref else None),
+                         "acc_delta_vs_16bit": (round(e["mean"] - ref["mean"], 2)
+                                                if row != "bf16" and "mean" in e and "mean" in ref else None),
+                         "assumed_settings": "; ".join(ASSUMED)})
+    out = e22.WORKDIR / "results" / "e23_bridge_summary.csv"
+    with out.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer.writeheader(); writer.writerows(rows)
+    for r in rows:
+        print(f"{r['model']:10s} {r['row']:18s} ppl={r['wikitext2_ppl']!s:>8} mean={r['six_task_mean']!s:>6} "
+              f"rel={r['ppl_rel_degradation_pct']!s:>6} dacc={r['acc_delta_vs_16bit']!s:>6}")
+    print(f"wrote {out} ({len(rows)} rows)")
 
 
 def main() -> None:
-    global WORKDIR
-    args = parser().parse_args()
-    WORKDIR = Path(args.workdir)
-    {"gate": gate_command, "compare": compare_command}[args.command](args)
+    configure_e23()
+    parser = e22.parser()
+    parser.description = __doc__
+    parser._subparsers._group_actions[0].add_parser("bridge")  # type: ignore[union-attr]
+    args = parser.parse_args()
+    e22.WORKDIR = Path(args.workdir).resolve()
+    args.artifact_root = str(e22.artifact_root())
+    if args.command == "bridge":
+        bridge_command(args)
+        return
+    {
+        "audit": e22.audit_command, "calibrate": e22.calibrate_command, "control": e22.control_command,
+        "gptq": e22.gptq_command, "evaluate": e22.evaluate_command, "gate": e22.gate_command,
+        "benchmark-config": e22.benchmark_config_command, "finalize": e22.finalize_command,
+    }[args.command](args)
 
 
 if __name__ == "__main__":
