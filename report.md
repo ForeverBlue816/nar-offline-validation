@@ -1425,11 +1425,11 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | MMLU-Redux 5-shot (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 51.26 | 61.66 | 72.79 | 76.17 | 79.88 |
-| bf16 | — | — | — | — | — |
-| Hadamard, W4A4KV4 | — | — | — | — | — |
-| NAR k=8 | — | — | — | — | — |
-| NAR k=max | — | — | — | — | — |
-| NAR best − Hadamard | — | — | — | — | — |
+| bf16 | 55.83 | — | — | — | — |
+| Hadamard, W4A4KV4 | 43.49 | — | — | — | — |
+| NAR k=8 | 46.23 | — | — | — | — |
+| NAR k=max | 45.27 | — | — | — | — |
+| NAR best − Hadamard | +2.74 | — | — | — | — |
 
 | GSM8K 4-shot CoT (flexible extract) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
@@ -1465,6 +1465,14 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | NAR k=8 | 53.62 | 67.47 | — | 80.68 | — |
 | NAR k=max | 56.36 | 72.52 | — | 81.06 | — |
 | NAR best − Hadamard | −0.34 | +3.41 | — | +5.05 | — |
+
+| Eight-task 0-shot mean | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| bf16 | — | — | — | 68.46 | — |
+| Hadamard, W4A4KV4 | — | — | — | — | — |
+| NAR k=8 | — | — | — | — | — |
+| NAR k=max | — | — | — | — | — |
+| NAR best − Hadamard | — | — | — | — | — |
 <!-- e22-tables:end -->
 
 On MMLU the bf16 row is within 0.3 points of the report at every size measured so far, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report and the 1.7B row 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
