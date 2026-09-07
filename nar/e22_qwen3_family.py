@@ -101,7 +101,7 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
     "eight_task": {"kind": "harness", "tasks": list(e14.EIGHT_TASKS), "num_fewshot": 0,
                    "headline": ("__mean__", "eight-task mean")},
 }
-DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "bbh", "math")
+DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "gpqa", "bbh", "math")
 # Full MATH for <= 8B, MATH-500 for the larger models, as the spec states.
 MATH_BENCHMARK = {"qwen3_14b_base": "math500", "qwen3_32b_base": "math500"}
 DEFAULT_BATCH = {"qwen3_0.6b_base": 16, "qwen3_1.7b_base": 16, "qwen3_4b_base": 12,

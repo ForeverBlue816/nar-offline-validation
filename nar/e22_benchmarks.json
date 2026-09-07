@@ -366,10 +366,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x7d2012e44040>",
+            "process_docs": "<function process_docs at 0x74fd643e68e0>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x7d2011e5c5e0>",
-            "doc_to_text": "<function doc_to_text at 0x7d201232ab60>",
+            "samples": "<function list_fewshot_samples at 0x74fd5f2b1ee0>",
+            "doc_to_text": "<function doc_to_text at 0x74fd643e6840>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -423,10 +423,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x7d2012e44040>",
+            "process_docs": "<function process_docs at 0x74fd643e68e0>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x7d2011e5c5e0>",
-            "doc_to_text": "<function doc_to_text at 0x7d201232ab60>",
+            "samples": "<function list_fewshot_samples at 0x74fd5f2b1ee0>",
+            "doc_to_text": "<function doc_to_text at 0x74fd643e6840>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -452,7 +452,70 @@
       ],
       "task_configs": {
         "gpqa_main_cot_n_shot": {
-          "error": "Couldn't reach 'Idavidrein/gpqa' on the Hub (OfflineModeIsEnabled)"
+          "task": "gpqa_main_cot_n_shot",
+          "dataset_path": "Idavidrein/gpqa",
+          "dataset_name": "gpqa_main",
+          "output_type": "generate_until",
+          "generation_kwargs": {
+            "until": [
+              "</s>"
+            ],
+            "do_sample": false,
+            "temperature": 0.0
+          },
+          "filter_list": [
+            {
+              "name": "strict-match",
+              "filter": [
+                {
+                  "function": "regex",
+                  "regex_pattern": "(?<=The answer is )(.*)(?=.)"
+                },
+                {
+                  "function": "take_first"
+                }
+              ]
+            },
+            {
+              "name": "flexible-extract",
+              "filter": [
+                {
+                  "function": "multi_choice_regex",
+                  "group_select": -1,
+                  "ignore_case": true,
+                  "ignore_punctuation": true,
+                  "regex_pattern": "(\\([A-Z]\\))"
+                },
+                {
+                  "function": "take_first"
+                }
+              ]
+            }
+          ],
+          "metric_list": [
+            {
+              "metric": "exact_match",
+              "aggregation": "mean",
+              "higher_is_better": true,
+              "ignore_case": true,
+              "ignore_punctuation": true
+            }
+          ],
+          "doc_to_text": "Question: {{Question}}\nChoices:\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}\nLet's think step by step: ",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": "<function process_docs at 0x74fd5f31dee0>",
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "Question: {{Question}}\nChoices:\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}\nLet's think step by step: ",
+            "doc_to_choice": null,
+            "doc_to_target": "answer",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "gpqa_main_cot_n_shot"
         }
       }
     },
@@ -589,7 +652,7 @@
           "fewshot_config": {
             "sampler": "default",
             "split": null,
-            "process_docs": "<function process_docs at 0x7d2011eab1a0>",
+            "process_docs": "<function process_docs at 0x74fd5f2e7ba0>",
             "fewshot_indices": null,
             "samples": null,
             "doc_to_text": "{{query}}",
@@ -712,9 +775,9 @@
             "process_docs": null,
             "fewshot_indices": null,
             "samples": null,
-            "doc_to_text": "<function doc_to_text at 0x7d2012168d60>",
-            "doc_to_choice": "<function doc_to_choice at 0x7d201216a480>",
-            "doc_to_target": "<function doc_to_target at 0x7d2012168ae0>",
+            "doc_to_text": "<function doc_to_text at 0x74fd6455c2c0>",
+            "doc_to_choice": "<function doc_to_choice at 0x74fd6455ff60>",
+            "doc_to_target": "<function doc_to_target at 0x74fd6455e8e0>",
             "gen_prefix": null,
             "fewshot_delimiter": "\n\n",
             "target_delimiter": " "
