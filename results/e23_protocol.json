@@ -1,0 +1,382 @@
+{
+  "sources": {
+    "mosaicquant": "arXiv 2606.15652 (v1), Sections 5.1, B.1, C.1; Tables 1, 3, 4",
+    "twinquant": "arXiv 2606.01556 (v1), Sections 5.1, A; Tables 1, 4, 5",
+    "code_release": "none found for either paper (arXiv page, GitHub, Hugging Face searched 2026-09-07)"
+  },
+  "shared_16bit_rows": "identical in both papers for Llama-3.2-3B (10.7 / 66.2), Llama-3-8B (8.64 / 73.5), Qwen3-8B (9.71 / 71.6), Qwen3-14B (8.6 / 74.2), Qwen3-32B (7.6 / 75.2), including every per-task accuracy; they differ on Qwen3-4B (MosaicQuant 10.04 / 69.4, TwinQuant 13.7 / 66.8)",
+  "checkpoints": {
+    "stated": "'LLaMA3 models (3B/8B) and Qwen3 models (4B/8B/14B/32B)'; no Hugging Face ids, no Base/post-trained statement in either paper",
+    "status": "unstated",
+    "resolution": "E23 gate evaluates Base and post-trained candidates and keeps the one whose 16-bit row reproduces"
+  },
+  "wikitext2_perplexity": {
+    "stated": "'we also report the perplexity score on WikiText2'; nothing about split, context length, chunking or BOS",
+    "status": "unstated",
+    "note": "Llama-3-8B at 8.64 is not the 2048-token non-overlapping convention (6.14 there, as BWLA arXiv 2605.00422 and TWLA arXiv 2606.13054 print), so the convention differs from QuaRot/GPTQ-style evaluation; candidates measured by the gate: non-overlapping 2048/4096 windows with one leading BOS, BOS-per-window (this repository), and lm-eval 'wikitext' word_perplexity (rolling, max_length 2048/4096)"
+  },
+  "calibration": {
+    "stated": "'we randomly sample the 128 prompts from WikiText-2 dataset for calibration, each sentence with 2048 tokens' (both papers, following FlatQuant / SpinQuant)",
+    "status": "stated"
+  },
+  "weight_quantizer": {
+    "mosaicquant": "'For the 4-bit setting, we adopt per-group and per-channel symmetric quantization for activations and weights, respectively' (C.1); RTN base plus sparse residual; GPTQ settings for the GPTQ/QuaRot/SpinQuant baselines unstated",
+    "twinquant": "'We apply group-wise quantization to both weights and activations, where each contiguous group of 128 elements shares one quantization scale' (5.1); symmetric per Eq. 1",
+    "status": "stated (differs between the two papers: per-channel vs group-128 weights)"
+  },
+  "activation_quantizer": {
+    "mosaicquant": "per-group symmetric, group size not printed for W4A4 (W4A8 uses per-token dynamic)",
+    "twinquant": "group-128 symmetric",
+    "sites": "unstated; assumed all linear-layer inputs",
+    "dynamic_or_static": "unstated; assumed dynamic",
+    "clipping": "unstated",
+    "status": "partly stated; group size 128 assumed for MosaicQuant"
+  },
+  "kv_cache": {
+    "stated": "not mentioned in either paper (only QServe/COMET are cited as W4A8KV4/W4A4KV4 systems)",
+    "status": "unstated; assumed 16-bit, so their W4A4 is W4A4KV16"
+  },
+  "attention_matmuls": {
+    "status": "unstated; assumed unquantized"
+  },
+  "zero_shot": {
+    "tasks": [
+      "arc_challenge",
+      "arc_easy",
+      "hellaswag",
+      "lambada_openai",
+      "piqa",
+      "winogrande"
+    ],
+    "stated": "'All accuracy metrics are tested on lm-eval'; version unstated; acc vs acc_norm unstated",
+    "status": "tasks stated; version and metric unstated; the gate reports both acc and acc_norm per task and matches against the printed per-task rows"
+  },
+  "baseline_provenance": {
+    "mosaicquant": "'For AWQ, FlatQuant, and QuaRot, we adopt the official PyTorch-based code and recommended W4A4/W4A8 configurations for each model' (C.1, speed section); accuracy provenance of the other baselines unstated",
+    "twinquant": "unstated"
+  },
+  "published_w4a4_rows": {
+    "qwen3_8b": {
+      "bf16": [
+        9.71,
+        71.6
+      ],
+      "QuaRot": {
+        "mosaic": [
+          15.6,
+          66.3
+        ],
+        "twin": [
+          24.5,
+          63.4
+        ]
+      },
+      "SpinQuant": {
+        "mosaic": [
+          11.4,
+          68.3
+        ],
+        "twin": [
+          14.8,
+          68.3
+        ]
+      },
+      "ResQ": [
+        14.2,
+        66.8
+      ],
+      "Atom": [
+        14.5,
+        66.1
+      ],
+      "FlatQuant": [
+        13.4,
+        69.3
+      ],
+      "SVDQuant": [
+        14.9,
+        68.8
+      ],
+      "MosaicQuant": [
+        11.2,
+        68.6
+      ],
+      "TwinQuant": [
+        13.2,
+        70.2
+      ]
+    },
+    "qwen3_14b": {
+      "bf16": [
+        8.6,
+        74.2
+      ],
+      "QuaRot": [
+        18.2,
+        67.2
+      ],
+      "SpinQuant": {
+        "mosaic": [
+          12.0,
+          71.7
+        ],
+        "twin": [
+          13.0,
+          71.2
+        ]
+      },
+      "ResQ": [
+        12.8,
+        71.0
+      ],
+      "Atom": [
+        14.5,
+        70.5
+      ],
+      "FlatQuant": [
+        11.4,
+        73.1
+      ],
+      "SVDQuant": [
+        12.8,
+        71.4
+      ],
+      "MosaicQuant": [
+        11.8,
+        72.9
+      ],
+      "TwinQuant": [
+        11.8,
+        72.8
+      ]
+    },
+    "qwen3_32b": {
+      "bf16": [
+        7.6,
+        75.2
+      ],
+      "QuaRot": [
+        15.6,
+        67.4
+      ],
+      "SpinQuant": {
+        "mosaic": [
+          10.3,
+          72.7
+        ],
+        "twin": [
+          12.1,
+          72.0
+        ]
+      },
+      "ResQ": [
+        10.9,
+        72.0
+      ],
+      "Atom": [
+        10.5,
+        72.2
+      ],
+      "FlatQuant": [
+        11.0,
+        72.8
+      ],
+      "SVDQuant": [
+        11.6,
+        72.2
+      ],
+      "MosaicQuant": [
+        8.8,
+        73.3
+      ],
+      "TwinQuant": [
+        10.4,
+        73.3
+      ]
+    },
+    "qwen3_4b": {
+      "bf16": {
+        "mosaic": [
+          10.04,
+          69.4
+        ],
+        "twin": [
+          13.7,
+          66.8
+        ]
+      },
+      "QuaRot": {
+        "mosaic": [
+          12.5,
+          61.7
+        ],
+        "twin": [
+          21.5,
+          56.6
+        ]
+      },
+      "SpinQuant": {
+        "mosaic": [
+          11.5,
+          65.6
+        ],
+        "twin": [
+          21.7,
+          64.0
+        ]
+      },
+      "ResQ": [
+        12.0,
+        65.1
+      ],
+      "Atom": [
+        12.3,
+        64.8
+      ],
+      "FlatQuant": [
+        20.0,
+        64.1
+      ],
+      "SVDQuant": [
+        20.5,
+        63.9
+      ],
+      "MosaicQuant": [
+        10.96,
+        66.3
+      ],
+      "TwinQuant": [
+        18.6,
+        65.0
+      ]
+    },
+    "llama3_3b": {
+      "bf16": [
+        10.7,
+        66.2
+      ],
+      "QuaRot": {
+        "mosaic": [
+          16.9,
+          61.4
+        ],
+        "twin": [
+          26.9,
+          53.4
+        ]
+      },
+      "SpinQuant": {
+        "mosaic": [
+          11.9,
+          64.1
+        ],
+        "twin": [
+          11.9,
+          63.6
+        ]
+      },
+      "ResQ": [
+        12.2,
+        63.0
+      ],
+      "Atom": [
+        12.5,
+        62.6
+      ],
+      "FlatQuant": [
+        11.3,
+        65.5
+      ],
+      "SVDQuant": [
+        11.7,
+        64.7
+      ],
+      "MosaicQuant": [
+        11.8,
+        64.9
+      ],
+      "TwinQuant": [
+        11.1,
+        65.6
+      ]
+    },
+    "llama3_8b": {
+      "bf16": [
+        8.64,
+        73.5
+      ],
+      "QuaRot": [
+        13.1,
+        68.0
+      ],
+      "SpinQuant": {
+        "mosaic": [
+          11.4,
+          70.0
+        ],
+        "twin": [
+          9.5,
+          69.4
+        ]
+      },
+      "ResQ": [
+        11.6,
+        69.9
+      ],
+      "Atom": [
+        12.5,
+        67.4
+      ],
+      "FlatQuant": [
+        11.0,
+        70.1
+      ],
+      "SVDQuant": [
+        12.5,
+        68.2
+      ],
+      "MosaicQuant": [
+        10.8,
+        71.2
+      ],
+      "TwinQuant": [
+        9.4,
+        70.9
+      ]
+    },
+    "format": "[WikiText-2 PPL, six-task mean]; per-task rows are in nar/e23_bridge.py PUBLISHED_16BIT and results/e23/published_per_task.json",
+    "note": "QuaRot and SpinQuant differ between the two papers for the same model (re-runs, not copies), so each paper's W4A4 protocol differs even though the 16-bit rows are shared"
+  },
+  "decision_2026-09-07": {
+    "target": "TwinQuant only (user decision); MosaicQuant rows are recorded above for reference but not bridged",
+    "gate": "the 16-bit reproduction gate (Step 2) was dropped at the user's request; our bf16 row is measured under our conventions and printed next to TwinQuant's 16-bit row",
+    "protocol_run": {
+      "weights": "GPTQ group-128 symmetric (E14 'g128', 4.125 bits)",
+      "activations": "group-128 symmetric int4, dynamic, all linear inputs ('symmetric_g128', 4.125 bits)",
+      "kv": "16-bit",
+      "calibration": "128 x 2048 WikiText-2, seed 0",
+      "context": 2048,
+      "checkpoints": {
+        "qwen3_8b": "Qwen/Qwen3-8B",
+        "qwen3_14b": "Qwen/Qwen3-14B",
+        "qwen3_32b": "Qwen/Qwen3-32B"
+      },
+      "zero_shot": "six tasks, zero-shot, pinned harness b954108c, acc_norm where defined",
+      "perplexity": "WikiText-2 test, 146 windows of 2048 with BOS per window, fp32 NLL (E19/E22 convention)"
+    },
+    "assumed": [
+      "post-trained checkpoints",
+      "context 2048 and window/BOS convention",
+      "harness version",
+      "acc_norm where defined",
+      "KV cache unquantized",
+      "attention matmuls unquantized",
+      "group size 128 for activations"
+    ],
+    "jobs": {
+      "qwen3_8b": 144259,
+      "qwen3_14b": 144260,
+      "qwen3_32b": 144262
+    }
+  }
+}
