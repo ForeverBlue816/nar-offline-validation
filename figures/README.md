@@ -327,3 +327,19 @@ historical provenance and is not used by the current renderer.
 
 Scientific linkage, data-integrity comparisons, and rendered export audits are
 in qa/. Figure 2's measurements and files are preserved.
+
+## Dominant eigendirections micro-diagram
+
+`fig1_principal_directions.svg/pdf/png` is a standalone, editable vector
+concept glyph for Figure 1: 72 seeded anisotropic Gaussian samples, their
+empirical two-standard-deviation covariance contour, and orthogonal v1/v2
+arrows. Both arrows are thin (0.4/0.3 pt); labels use Times New Roman Bold.
+The white-background PNG is 300 × 200 px; vectors are 1 × 2/3 in.
+
+Reproduce with `python figures/principal_direction_icon.py`, using the same
+font installation as Figure 1. These are **simulated conceptual samples,
+not measured model activations**. Every generated point is retained in
+`fig1_principal_directions.csv`; seed, covariance, PCA eigenpairs, and
+rendering parameters are in `fig1_principal_directions_metadata.json`.
+The icon is delivered separately for placement; the Figure 1 assembly and
+its measured panels are unchanged in this revision.

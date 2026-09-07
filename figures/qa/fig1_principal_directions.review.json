@@ -1,0 +1,22 @@
+{
+  "verdict": "PASS",
+  "all_72_samples_preserved": true,
+  "empirical_PCA_verified": true,
+  "eigenvectors_orthogonal": true,
+  "svg_and_pdf_fully_vector": true,
+  "svg_text_editable": true,
+  "all_text_Times_New_Roman_bold": true,
+  "all_pdf_fonts_embedded": true,
+  "no_text_clipping": true,
+  "png_size_pixels": [
+    300,
+    200
+  ],
+  "collision_audit": {
+    "fail": 0,
+    "warn": 0,
+    "contained_fill_overlays": 0,
+    "contained_image_overlays": 0
+  },
+  "visual_review": "Compact tilted cloud with an empirical covariance contour. Both v1 and v2 are present. Thin arrows, minimal labels, white background; no axes or grid."
+}

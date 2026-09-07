@@ -1,0 +1,153 @@
+{
+  "source": "principal_direction_icon.py + figure_style.py + figure_typography.py",
+  "backend": "python",
+  "summary": {
+    "ready": false,
+    "strict": false,
+    "counts": {
+      "PASS": 15,
+      "WARN": 5,
+      "FAIL": 1
+    }
+  },
+  "findings": [
+    {
+      "check_id": "SOURCE-SYNTAX",
+      "level": "PASS",
+      "message": "Python source parses successfully",
+      "evidence": []
+    },
+    {
+      "check_id": "FONT-FAMILY",
+      "level": "FAIL",
+      "message": "No explicit publication-safe font family found in matplotlib rcParams",
+      "evidence": []
+    },
+    {
+      "check_id": "FONT-SIZE",
+      "level": "PASS",
+      "message": "All detected text sizes are at least 5 pt (minimum 6 pt)",
+      "evidence": []
+    },
+    {
+      "check_id": "FONT-GLYPH-FLOOR",
+      "level": "WARN",
+      "message": "Mathtext may shrink script glyphs below 5 pt (about 4.20 pt from a 6 pt parent); use a Unicode glyph or audit PDF Tf operators",
+      "evidence": [
+        "$v_1$"
+      ]
+    },
+    {
+      "check_id": "LEGEND-LABEL-CASE",
+      "level": "PASS",
+      "message": "No auditable literal legend labels detected",
+      "evidence": []
+    },
+    {
+      "check_id": "COLOR-MAP",
+      "level": "PASS",
+      "message": "No rainbow/jet/hsv color mapping detected",
+      "evidence": []
+    },
+    {
+      "check_id": "EDITABLE-TEXT",
+      "level": "PASS",
+      "message": "SVG and PDF editable-text settings are configured",
+      "evidence": []
+    },
+    {
+      "check_id": "EXPORT-VECTOR",
+      "level": "PASS",
+      "message": "Both SVG and PDF exports are present",
+      "evidence": []
+    },
+    {
+      "check_id": "EXPORT-RASTER",
+      "level": "WARN",
+      "message": "PNG preview is present but no TIFF submission raster was found",
+      "evidence": []
+    },
+    {
+      "check_id": "RASTER-DPI",
+      "level": "PASS",
+      "message": "A raster export of at least 600 dpi is configured",
+      "evidence": [
+        "600"
+      ]
+    },
+    {
+      "check_id": "FINAL-WIDTH",
+      "level": "WARN",
+      "message": "Detected width 25.4 mm is not near the common 89/183 mm defaults; verify the target journal",
+      "evidence": []
+    },
+    {
+      "check_id": "DATA-SAMPLING",
+      "level": "PASS",
+      "message": "No high-confidence row-sampling operation detected",
+      "evidence": []
+    },
+    {
+      "check_id": "DATA-EXCLUSION",
+      "level": "PASS",
+      "message": "No high-confidence missing-data exclusion detected",
+      "evidence": []
+    },
+    {
+      "check_id": "DEMO-DATA",
+      "level": "WARN",
+      "message": "Simulated data appears in the plotting source without an explicit demo boundary",
+      "evidence": [
+        "np.random.default_rng("
+      ]
+    },
+    {
+      "check_id": "LOG-GUARD",
+      "level": "PASS",
+      "message": "No logarithmic transform or axis detected",
+      "evidence": []
+    },
+    {
+      "check_id": "INTERP-MONOTONIC",
+      "level": "PASS",
+      "message": "No NumPy interpolation requiring an increasing x-grid detected",
+      "evidence": []
+    },
+    {
+      "check_id": "UNCERTAINTY-ENCODING",
+      "level": "WARN",
+      "message": "Seed/fold/split aggregates are present without an obvious error bar or uncertainty band",
+      "evidence": [
+        "SEED",
+        "mean"
+      ]
+    },
+    {
+      "check_id": "ROTATION-ANCHOR",
+      "level": "PASS",
+      "message": "No rotated Matplotlib text detected",
+      "evidence": []
+    },
+    {
+      "check_id": "ANNOTATION-WORKAROUND",
+      "level": "PASS",
+      "message": "No high-risk hard-coded label height or opaque white text mask detected",
+      "evidence": []
+    },
+    {
+      "check_id": "PANEL-ALIGNMENT-GATE",
+      "level": "PASS",
+      "message": "Render-time panel-alignment gate is wired into the plotting source",
+      "evidence": [
+        "require_matplotlib_panel_alignment("
+      ]
+    },
+    {
+      "check_id": "BACKEND-EXCLUSIVE",
+      "level": "PASS",
+      "message": "No obvious cross-backend plotting reference found for python",
+      "evidence": []
+    }
+  ],
+  "font_resolution": "User explicitly requests Times New Roman Bold; every rendered glyph is verified as embedded TimesNewRomanPS-BoldMT. Sans-serif-only static rule is superseded."
+}

@@ -1,0 +1,63 @@
+{
+  "kind": "synthetic conceptual illustration, not measured activations",
+  "seed": 20260907,
+  "samples_generated": 72,
+  "samples_plotted": 72,
+  "sampling": "NumPy default_rng; 2D Gaussian standard deviations [1.0, 0.24], rotated 28 degrees; sample centered",
+  "empirical_covariance": [
+    [
+      0.7207386909332671,
+      0.4021702036088287
+    ],
+    [
+      0.4021702036088287,
+      0.2936396860590124
+    ]
+  ],
+  "empirical_eigenvalues": [
+    0.9625398914295067,
+    0.05183848556277282
+  ],
+  "empirical_eigenvectors_columns": [
+    [
+      0.8570233628354534,
+      -0.5152775519603108
+    ],
+    [
+      0.5152775519603108,
+      0.8570233628354534
+    ]
+  ],
+  "principal_energy_fraction": 0.9488963026632347,
+  "sample_array_sha256": "3f4744f09a7ff39a76fc55ab1d38c37714ba7a392e8af8233e1ecf99af45d73a",
+  "palette": {
+    "principal_direction": "#1D3557",
+    "samples": "#457B9D",
+    "contour": "#A8DADC"
+  },
+  "font": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "geometry": {
+    "sample_count": 72,
+    "covariance_contour_mahalanobis_radius": 2.0,
+    "scale": 0.16605571245196082,
+    "center": [
+      0,
+      -0.075
+    ],
+    "width": 0.74,
+    "secondary_direction": true
+  },
+  "arrow_linewidth_pt": {
+    "v1": 0.4,
+    "v2": 0.3
+  },
+  "output": "1 in by 2/3 in, white background; editable vector SVG and PDF; 300 x 200 PNG"
+}
