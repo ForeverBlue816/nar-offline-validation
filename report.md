@@ -1404,10 +1404,10 @@ WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 204
 | bf16 | 19.384 | 15.018 | 13.023 | 11.657 | — |
 | Hadamard, W4A4KV4 | 25.362 | 17.940 | 14.395 | 13.076 | — |
 | NAR k=8 | 23.920 | 16.526 | 13.956 | 12.306 | — |
-| NAR k=max | 23.923 | 16.491 | 13.951 | — | — |
-| NAR best − Hadamard | −1.442 | −1.449 | −0.444 | −0.770 | — |
+| NAR k=max | 23.923 | 16.491 | 13.951 | 12.285 | — |
+| NAR best − Hadamard | −1.442 | −1.449 | −0.444 | −0.791 | — |
 | Hadamard degradation | +30.8% | +19.5% | +10.5% | +12.2% | — |
-| NAR best degradation | +23.4% | +9.8% | +7.1% | +5.6% | — |
+| NAR best degradation | +23.4% | +9.8% | +7.1% | +5.4% | — |
 
 ## Results — accuracy
 
@@ -1460,11 +1460,11 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
-| bf16 | 57.95 | 68.48 | 76.01 | — | — |
-| Hadamard, W4A4KV4 | 56.69 | 69.11 | 74.75 | — | — |
-| NAR k=8 | 53.62 | 67.47 | — | — | — |
-| NAR k=max | 56.36 | 72.52 | — | — | — |
-| NAR best − Hadamard | −0.34 | +3.41 | — | — | — |
+| bf16 | 57.95 | 68.48 | 76.01 | 80.01 | — |
+| Hadamard, W4A4KV4 | 56.69 | 69.11 | 74.75 | 76.01 | — |
+| NAR k=8 | 53.62 | 67.47 | — | 80.68 | — |
+| NAR k=max | 56.36 | 72.52 | — | 81.06 | — |
+| NAR best − Hadamard | −0.34 | +3.41 | — | +5.05 | — |
 <!-- e22-tables:end -->
 
 On MMLU the bf16 row is within 0.3 points of the report at every size measured so far, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report and the 1.7B row 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
