@@ -31,7 +31,7 @@ for stage in ${NAR_E22_STAGES:-audit calibrate control gptq eval finalize}; do
         gptq)      for rotation in ${NAR_E22_ROTATIONS:-hadamard nar_k8 nar_kmax}; do
                        echo "===== gptq $rotation ====="; run gptq --rotation "$rotation"; done ;;
         gate)      run gate --items "${NAR_E22_GATE_ITEMS:-100}" --gate-batch "${NAR_E22_GATE_BATCH:-8}" ;;
-        eval)      for benchmark in ${NAR_E22_BENCHMARKS:-wikitext c4 mmlu gsm8k mmlu_redux gpqa bbh math}; do
+        eval)      for benchmark in ${NAR_E22_BENCHMARKS:-wikitext c4 mmlu gsm8k mmlu_redux gpqa hellaswag math}; do
                        for row in ${NAR_E22_ROWS:-bf16 hadamard_asym_g128 nar_k8_asym_g128 nar_kmax_asym_g128}; do
                            echo "===== evaluate $row $benchmark ====="
                            run evaluate --row "$row" --benchmark "$benchmark"

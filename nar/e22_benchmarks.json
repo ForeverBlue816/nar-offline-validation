@@ -366,10 +366,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x74fd643e68e0>",
+            "process_docs": "<function process_docs at 0x7723e5ab9620>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x74fd5f2b1ee0>",
-            "doc_to_text": "<function doc_to_text at 0x74fd643e6840>",
+            "samples": "<function list_fewshot_samples at 0x7723e4998900>",
+            "doc_to_text": "<function doc_to_text at 0x7723e4c62e80>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -423,10 +423,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x74fd643e68e0>",
+            "process_docs": "<function process_docs at 0x7723e5ab9620>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x74fd5f2b1ee0>",
-            "doc_to_text": "<function doc_to_text at 0x74fd643e6840>",
+            "samples": "<function list_fewshot_samples at 0x7723e4998900>",
+            "doc_to_text": "<function doc_to_text at 0x7723e4c62e80>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -505,7 +505,7 @@
           "fewshot_config": {
             "sampler": "default",
             "split": null,
-            "process_docs": "<function process_docs at 0x74fd5f31dee0>",
+            "process_docs": "<function process_docs at 0x7723e49e5e40>",
             "fewshot_indices": null,
             "samples": null,
             "doc_to_text": "Question: {{Question}}\nChoices:\n(A) {{choice1}}\n(B) {{choice2}}\n(C) {{choice3}}\n(D) {{choice4}}\nLet's think step by step: ",
@@ -652,7 +652,7 @@
           "fewshot_config": {
             "sampler": "default",
             "split": null,
-            "process_docs": "<function process_docs at 0x74fd5f2e7ba0>",
+            "process_docs": "<function process_docs at 0x7723e5ab84a0>",
             "fewshot_indices": null,
             "samples": null,
             "doc_to_text": "{{query}}",
@@ -775,9 +775,9 @@
             "process_docs": null,
             "fewshot_indices": null,
             "samples": null,
-            "doc_to_text": "<function doc_to_text at 0x74fd6455c2c0>",
-            "doc_to_choice": "<function doc_to_choice at 0x74fd6455ff60>",
-            "doc_to_target": "<function doc_to_target at 0x74fd6455e8e0>",
+            "doc_to_text": "<function doc_to_text at 0x7723e49e60c0>",
+            "doc_to_choice": "<function doc_to_choice at 0x7723e49e4680>",
+            "doc_to_target": "<function doc_to_target at 0x7723e49e62a0>",
             "gen_prefix": null,
             "fewshot_delimiter": "\n\n",
             "target_delimiter": " "
@@ -785,13 +785,59 @@
           "representative_leaf": "winogrande"
         }
       }
+    },
+    "hellaswag": {
+      "kind": "harness",
+      "tasks": [
+        "hellaswag"
+      ],
+      "num_fewshot": 0,
+      "headline": [
+        "hellaswag",
+        "acc_norm,none"
+      ],
+      "task_configs": {
+        "hellaswag": {
+          "task": "hellaswag",
+          "dataset_path": "Rowan/hellaswag",
+          "output_type": "multiple_choice",
+          "metric_list": [
+            {
+              "metric": "acc",
+              "aggregation": "mean",
+              "higher_is_better": true
+            },
+            {
+              "metric": "acc_norm",
+              "aggregation": "mean",
+              "higher_is_better": true
+            }
+          ],
+          "doc_to_text": "{{query}}",
+          "fewshot_config": {
+            "sampler": "default",
+            "split": null,
+            "process_docs": "<function process_docs at 0x7723e5ab84a0>",
+            "fewshot_indices": null,
+            "samples": null,
+            "doc_to_text": "{{query}}",
+            "doc_to_choice": "choices",
+            "doc_to_target": "{{label}}",
+            "gen_prefix": null,
+            "fewshot_delimiter": "\n\n",
+            "target_delimiter": " "
+          },
+          "representative_leaf": "hellaswag"
+        }
+      }
     }
   },
   "notes": {
     "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted",
     "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded; max_gen_toks 512 against the harness default of 2048",
-    "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
-    "math": "minerva_math (full test set, 4 fixed CoT exemplars) below 14B; minerva_math500 at 14B; exact_match is the headline, math_verify is recorded",
+    "bbh": "defined but not run: dropped on 2026-09-07 in favour of the hellaswag supplementary task",
+    "math": "minerva_math500 (4 fixed CoT exemplars) at every size; exact_match is the headline, math_verify is recorded",
+    "hellaswag": "zero-shot acc_norm, the supplementary task replacing BBH; the eight-task zero-shot set is run on the 8B only",
     "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",
     "generation": "greedy (do_sample false) throughout; the KV cache is quantized on every decode step by the E14 attention hook",
     "padding": "batched decoding pads on the left; padded keys are replaced by their nearest valid neighbour before chunk statistics, and the chunk phase of padded sequences shifts by the pad length; measured by the generation gate"
