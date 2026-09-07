@@ -145,7 +145,17 @@ def artifact_root() -> Path:
     return WORKDIR / "artifacts" / "e22"
 
 
-def batch_size_for(args: argparse.Namespace) -> int:
+def batch_size_for(args: argparse.Namespace) -> int | str:
+    """An explicit batch size, or the harness's own probe capped per model.
+
+    Log-likelihood batches carry full-vocabulary fp32 logits, so sixteen of
+    the longest 5-shot MMLU prompts need 28 GB on top of the model; "auto"
+    probes the longest request first and picks what fits.
+    """
+    return int(args.batch_size) if args.batch_size else "auto"
+
+
+def max_batch_for(args: argparse.Namespace) -> int:
     return int(args.batch_size) if args.batch_size else DEFAULT_BATCH.get(args.model, 4)
 
 
@@ -278,7 +288,8 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(e19.MODEL_ID, cache_dir=str(WORKDIR / "cache" / "huggingface"), use_fast=True)
     batch = batch_size_for(args)
-    lm = HFLM(pretrained=model, tokenizer=tokenizer, batch_size=batch, max_batch_size=batch,
+    cap = max_batch_for(args)
+    lm = HFLM(pretrained=model, tokenizer=tokenizer, batch_size=batch, max_batch_size=cap,
               max_length=args.max_length)
     kwargs: dict[str, Any] = {}
     if spec.get("num_fewshot") is not None:
@@ -288,7 +299,7 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
     if limit is not None:
         kwargs["limit"] = limit
     result = lm_eval.simple_evaluate(
-        model=lm, tasks=list(spec["tasks"]), batch_size=batch, max_batch_size=batch,
+        model=lm, tasks=list(spec["tasks"]), batch_size=batch, max_batch_size=cap,
         task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
         log_samples=log_samples, random_seed=args.seed, numpy_random_seed=args.seed,
         torch_random_seed=args.seed, fewshot_random_seed=args.seed,
@@ -354,7 +365,8 @@ def evaluate_command(args: argparse.Namespace) -> None:
             metric_name, value = headline(spec, result["results"])
             payload = {**provenance, "benchmark": benchmark, "tasks": spec["tasks"],
                        "num_fewshot": spec.get("num_fewshot"), "gen_kwargs": spec.get("gen_kwargs"),
-                       "batch_size": batch_size_for(args), "max_length": args.max_length,
+                       "batch_size": batch_size_for(args), "max_batch_size": max_batch_for(args),
+                       "max_length": args.max_length,
                        "harness_commit": e14.HARNESS_COMMIT,
                        "results": e14._serializable(result["results"]),
                        "versions": e14._serializable(result.get("versions", {})),
