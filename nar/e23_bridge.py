@@ -39,7 +39,12 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import torch
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from nar import e14_w4a4kv4 as e14  # noqa: E402
+from nar import e19_qwen3_e2e as e19  # noqa: E402
+from nar import e21_llama70b_e2e as e21  # noqa: E402
 from nar import e22_qwen3_family as e22  # noqa: E402
 
 E23_FAMILY = ("qwen3_8b", "qwen3_14b", "qwen3_32b")
@@ -89,8 +94,47 @@ ASSUMED = ("checkpoint (post-trained)", "context 2048 and BOS-per-window perplex
            "acc_norm where defined", "KV cache unquantized", "all linear inputs quantized, attention matmuls not")
 
 
+# Qwen3-32B in fp32 containers is 128 GB, so it is sharded across every
+# visible GPU for calibration, control and evaluation (E21's loader and its
+# per-device rotation factors, here combined with E19's Qwen3 R4 loading) and
+# held on the CPU for the GPTQ layer loop, exactly as the 70B was.
+SHARDED = {"qwen3_32b"}
+CURRENT_COMMAND = ""
+
+
+class ShardedQwen3RotationSet(e21.ShardedRotationSet, e19.Qwen3RotationSet):
+    """E21's per-device factor routing over E19's Qwen3 rotation set."""
+
+
+_load_model_fp32_single = e19.load_model_fp32
+
+
+def _configure_sharded(model_key: str) -> None:
+    e19.load_model_fp32 = _load_model_fp32_single
+    if model_key not in SHARDED:
+        return
+    # E22 and E19 load the bf16 row and the control through e19.load_model_fp32
+    # by name, so the sharded loader is installed there as well.
+    e19.load_model_fp32 = lambda workdir: e21.load_model_sharded(e19.MODEL_ID, Path(workdir))
+    if CURRENT_COMMAND == "gptq":
+        e14.LOAD_MODEL = lambda model_id, workdir: e21.load_model_cpu(model_id, Path(workdir))
+    else:
+        e14.LOAD_MODEL = lambda model_id, workdir: e21.load_model_sharded(model_id, Path(workdir))
+    e14.ROTATION_SET = ShardedQwen3RotationSet
+    e14.FOLD_DEVICE = torch.device("cuda:0")
+
+
+_configure_e22 = e22.configure
+
+
+def _configure(model_key: str) -> None:
+    _configure_e22(model_key)
+    _configure_sharded(model_key)
+
+
 def configure_e23() -> None:
     """Re-point E22 at TwinQuant's protocol before its parser runs."""
+    e22.configure = _configure
     e22.PREFIX = "e23"
     e22.PROTOCOL = "g128"
     e22.ACTIVATION_KIND = "symmetric_g128"
@@ -162,6 +206,8 @@ def main() -> None:
     parser.description = __doc__
     parser._subparsers._group_actions[0].add_parser("bridge")  # type: ignore[union-attr]
     args = parser.parse_args()
+    global CURRENT_COMMAND
+    CURRENT_COMMAND = args.command
     e22.WORKDIR = Path(args.workdir).resolve()
     args.artifact_root = str(e22.artifact_root())
     if args.command == "bridge":
