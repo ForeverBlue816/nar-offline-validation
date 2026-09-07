@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="475.2pt" height="220.64pt" viewBox="0 0 475.2 220.64" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-07T05:45:20.534450</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.5, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 220.64
+L 475.2 220.64
+L 475.2 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 16.9425)">PrismQuant aligns activation geometry with the affine degrees of freedom of grouped asymmetric INT4. The fork starts from the</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 25.718)">same raw activations (a): Hadamard spreads energy (b), whereas PrismQuant aligns dominant eigendirections with</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 34.4935)">quantizer-induced group-constant directions. Panels c and d are matched outcomes of these two rotations, not sequential</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 43.269)">transformations: they show the within-group max-minus-min ranges that determine quantizer scale, using identical token/group</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 52.0445)">coordinates, camera, and 0–10 height/color normalization. Both branches use the same grouped asymmetric INT4 quantizer (group</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 60.82)">size 128). Panels c/d use one shared height colormap. The matrix, alignment, and quantizer glyphs are unscaled conceptual</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 69.5955)">annotations, not additional measurements. The quantizer's affine offset represents a common group shift; subtracting an offset by</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 78.371)">itself does not change max-minus-min range.</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 86.984)"/>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 95.7445)">The lower evidence strip retains the three measured signed activation traces: raw (e), Hadamard (f), and PrismQuant (g). Their</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 104.52)">range brackets are 11.656, 1.708, and 0.763, respectively, on a common signed-value scale. The dashed green line in g is the actual</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 113.2955)">affine INT4 offset fp16(min x), not the group mean. These are trace measurements, not quantization-error or captured-energy plots.</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 121.9085)"/>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 130.669)">All data are unchanged: Llama-3.2-3B, layer 27 down-projection inputs, non-BOS tokens 160–671 from sequence 118. Panels a/b</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 139.4445)">retain channels 1254–3301 and independent magnitude scales 0–40 and 0–4. The channel window maximizes the number of channels</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 148.22)">with median |x| &gt; 1.0 among all 6145 stride-1 windows of width 2048 (21 qualifying channels; earliest start breaks 183 tied maxima).</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 156.9955)">Panels c/d retain every one of the 512 × 64 token/group ranges, including all peaks. Panels e/f/g show token 416 in raw group 25 and</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 165.771)">rotated group 0; f/g are exact cells of c/d. The layer and token were selected for illustration, not as an average across layers. Full</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #24354b" transform="translate(11.52 174.5465)">selection rules and range statistics remain in fig1_metadata.json.</text>
+   </g>
+  </g>
+ </g>
+</svg>

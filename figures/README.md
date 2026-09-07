@@ -48,6 +48,22 @@ Panels b/c/d retain the original shared sequential palette
 The sparse coordinate ticks replace the previous diagnostic grid without
 changing numerical limits.
 
+## Figure 1 typography
+
+All seven Figure 1 panels and the composed figure use **Times New Roman
+Bold**, including ticks, axes, range values, zero-point labels, panel
+headings, and schematic symbols. Mathematical subscripts use the same
+upright font; the direction annotation is 7.5 pt so its subscripts remain
+above 5 pt. The existing layout, palette, scales, samples, and statistics
+are preserved. `fig1_caption.txt` remains the exact source text and is also
+exported as `fig1_caption.svg/pdf/png`, with 8 pt bold text at 6.6 in width.
+
+Run `python figures/make_fig1.py --reuse-data`. Font installation follows
+the Figure 2 instructions below, using `FIGURE1_FONT_DIR` for a custom
+font directory. `figure_typography.py` provides the common font lock and
+caption exporter. Font provenance is in `fig1_metadata.json`, and the
+rendered audit is in `qa/fig1.typography-review.json`.
+
 ## Figure 2 DuQuant addendum
 
 Figure 2 now uses **Times New Roman Bold** throughout: tick numbers, axis
@@ -59,7 +75,7 @@ SVG text stays editable and requires Times New Roman on the viewing system.
 
 For reproduction, install Times New Roman Bold or set `FIGURE2_FONT_DIR`
 to a directory containing its TTF files. The local default is
-`~/.local/share/figure-fonts/times-new-roman`; only Figure 2 registers these
+`~/.local/share/figure-fonts/times-new-roman`; Figures 1 and 2 register these
 fonts. This environment uses Microsoft core fonts `times32.exe` from
 <https://downloads.sourceforge.net/corefonts/times32.exe>. Font binaries
 are not redistributed in the repository. The script validates the exact

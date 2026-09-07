@@ -15,8 +15,8 @@ def main():
     root=Path(__file__).resolve().parent; qa=root/'qa';qa.mkdir(exist_ok=True)
     summary={}
     panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]
-    targets=panels+['fig1','fig2','fig2_caption','fig3']+['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
-    if args.figure=='1': targets=[f'fig1{x}' for x in 'abcdefg']+['fig1']
+    targets=panels+['fig1','fig1_caption','fig2','fig2_caption','fig3']+['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
+    if args.figure=='1': targets=[f'fig1{x}' for x in 'abcdefg']+['fig1','fig1_caption']
     if args.figure=='4': targets=['fig4a','fig4a_8b','fig4b','fig4b1','fig4b2','fig4']
     if args.figure=='2': targets=['fig2a','fig2b','fig2c','fig2','fig2_caption']
     for stem in targets:
@@ -40,16 +40,16 @@ def main():
         for name in sources:
             combined=Path(temp)/name
             extra=(root/'fig1_layout.py').read_text().replace('from __future__ import annotations','') if name=='make_fig1.py' else ''
-            if name=='make_fig2.py': extra=(root/'fig2_typography.py').read_text().replace('from __future__ import annotations','')
+            if name in ['make_fig1.py','make_fig2.py']: extra+='\n'+(root/'figure_typography.py').read_text().replace('from __future__ import annotations','')
             combined.write_text(shared+'\n'+extra+'\n'+(root/name).read_text().replace('from __future__ import annotations',''))
             r=subprocess.run([sys.executable,str(tools/'validate_figure.py'),str(combined),'--json'],capture_output=True,text=True)
-            raw=json.loads(r.stdout); raw['source']=name+' + figure_style.py'+(' + fig1_layout.py' if name=='make_fig1.py' else ' + fig2_typography.py' if name=='make_fig2.py' else '')
+            raw=json.loads(r.stdout); raw['source']=name+' + figure_style.py'+(' + fig1_layout.py + figure_typography.py' if name=='make_fig1.py' else ' + figure_typography.py' if name=='make_fig2.py' else '')
             (qa/(name+'.source-closure.json')).write_text(json.dumps(raw,indent=2)+'\n')
             resolved=[]
             for finding in raw['findings']:
                 if finding['level']=='FAIL':
                     if finding['check_id']=='FONT-FAMILY':
-                        resolved.append({'check_id':'FONT-FAMILY','resolution':'User explicitly requests serif; Figure 2 additionally requires Times New Roman Bold. The static checker only accepts sans-serif names. Rendered PDF font and size audits establish the actual typography.'})
+                        resolved.append({'check_id':'FONT-FAMILY','resolution':'User explicitly requests serif; Figures 1 and 2 additionally require Times New Roman Bold. The static checker only accepts sans-serif names. Rendered PDF font and size audits establish the actual typography.'})
                     else:
                         raise RuntimeError(f'Unresolved source failure: {name}: {finding}')
             summary[name+'.source']={'raw_exit_code':r.returncode,'resolutions':resolved,'unresolved_failures':0}

@@ -34,7 +34,7 @@
     "resolutions": [
       {
         "check_id": "FONT-FAMILY",
-        "resolution": "User explicitly requests serif; Figure 2 additionally requires Times New Roman Bold. The static checker only accepts sans-serif names. Rendered PDF font and size audits establish the actual typography."
+        "resolution": "User explicitly requests serif; Figures 1 and 2 additionally require Times New Roman Bold. The static checker only accepts sans-serif names. Rendered PDF font and size audits establish the actual typography."
       }
     ],
     "unresolved_failures": 0

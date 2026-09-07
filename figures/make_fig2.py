@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
 from figure_style import PALETTE as SHARED_PALETTE, clean_2d_axis, save_panel
 
-from fig2_typography import configure_fig2_style, export_caption
+from figure_typography import configure_times_bold, export_caption
 
 # Figure 2 uses a muted comparison color without changing other figures.
 PALETTE = {**SHARED_PALETTE, "duquant": "#F5CBCB"}
@@ -117,7 +117,7 @@ def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--csv',type=Path,default=Path(__file__).with_name('fig2_capture.csv'))
     parser.add_argument('--reuse-data',action='store_true',help='Restyle the frozen plotted CSVs without refreshing experimental results.')
     args=parser.parse_args(); here=Path(__file__).resolve().parent
-    typography = configure_fig2_style()
+    typography = configure_times_bold(2)
     if args.reuse_data:
         complete=pd.read_csv(args.csv)
         addendum=json.loads((here/'fig2_metadata.json').read_text())['duquant_offline_addendum']

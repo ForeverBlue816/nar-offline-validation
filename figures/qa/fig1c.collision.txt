@@ -5,8 +5,10 @@ visible text boxes: 10
 stroke paths: 22
 
 [WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0'
-  text bbox: (30.745820999145508, 62.42686080932617, 34.563201904296875, 68.42686462402344)
+  text bbox: (31.152070999145508, 61.791690826416016, 34.152069091796875, 67.79169464111328)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '32'
+  text bbox: (65.7366714477539, 68.55644226074219, 71.7366714477539, 74.55644226074219)
 
-summary: 0 fail, 1 warn, 0 contained fill overlays, 0 contained image overlays
+summary: 0 fail, 2 warn, 0 contained fill overlays, 0 contained image overlays
 verdict: REVIEW REQUIRED
 note: contained overlays can be intentional; WARN findings need final-size visual review

@@ -1,12 +1,12 @@
 {
-  "source": "make_fig1.py + figure_style.py + fig1_layout.py",
+  "source": "make_fig1.py + figure_style.py + fig1_layout.py + figure_typography.py",
   "backend": "python",
   "summary": {
     "ready": false,
     "strict": false,
     "counts": {
-      "PASS": 15,
-      "WARN": 5,
+      "PASS": 16,
+      "WARN": 4,
       "FAIL": 1
     }
   },
@@ -34,7 +34,7 @@
       "level": "WARN",
       "message": "Mathtext may shrink script glyphs below 5 pt (about 4.20 pt from a 6 pt parent); use a Unicode glyph or audit PDF Tf operators",
       "evidence": [
-        "$\\mathbf{1}_g$"
+        "$v_1$"
       ]
     },
     {
@@ -69,10 +69,10 @@
     },
     {
       "check_id": "RASTER-DPI",
-      "level": "WARN",
-      "message": "Raster export meets the 300 dpi floor but not the 600 dpi default",
+      "level": "PASS",
+      "message": "A raster export of at least 600 dpi is configured",
       "evidence": [
-        "300"
+        "600"
       ]
     },
     {

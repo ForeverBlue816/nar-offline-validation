@@ -99,7 +99,7 @@
     "nar_kmax": -2.611328125
   },
   "transform_seed": 20260902,
-  "font_family_resolved": "DejaVu Serif",
+  "font_family_resolved": "Times New Roman",
   "row1_series": 2048,
   "row2_series": 64,
   "row1_z_limits": {
@@ -464,5 +464,14 @@
     "peak_density_window_counts": "50f69266786618a3b2271e16f10ecf5b8f11c7aec7500ffea9767235d2483eb2",
     "geometry_scores": "a67600439e8d228558efec5ce64460e0dd0cde93054a87602518a009aebf65b7",
     "geometry_covariance_eigenvalues": "2354e246b8912e78daf6ad370da939cdc25995ead14453b5aad7ac477264b1b2"
+  },
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
   }
 }

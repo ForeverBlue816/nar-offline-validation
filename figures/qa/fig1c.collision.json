@@ -10,7 +10,7 @@
   "image_region_count": 1,
   "summary": {
     "fail": 0,
-    "warn": 1,
+    "warn": 2,
     "contained_fill_overlays": 0,
     "contained_image_overlays": 0
   },
@@ -27,10 +27,34 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "0",
       "text_bbox": [
-        30.745820999145508,
-        62.42686080932617,
-        34.563201904296875,
-        68.42686462402344
+        31.152070999145508,
+        61.791690826416016,
+        34.152069091796875,
+        67.79169464111328
+      ],
+      "other_text": null,
+      "other_bbox": [
+        33.84000015258789,
+        40.31999969482422,
+        124.55999755859375,
+        69.36000061035156
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        0
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "32",
+      "text_bbox": [
+        65.7366714477539,
+        68.55644226074219,
+        71.7366714477539,
+        74.55644226074219
       ],
       "other_text": null,
       "other_bbox": [

@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize, LinearSegmentedColormap
 from matplotlib.patches import FancyArrowPatch, Ellipse, Rectangle
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
-from figure_style import PALETTE, SEQUENTIAL_CMAP, configure_style, save_panel
+from figure_style import PALETTE, SEQUENTIAL_CMAP, save_panel
+
+from figure_typography import configure_times_bold, export_caption
 
 INK='#24354B'; RAW='#64748B'
 HAD=PALETTE['hadamard']; PRISM=PALETTE['prismquant']
@@ -27,8 +29,15 @@ FIG1_PALETTE={'raw':BURGUNDY,'hadamard':HAD,'prismquant':PRISM,
     'panel_e':BURGUNDY,'panel_g':PRISM,'surface_a_colormap':RAW_SURFACE_COLORS}
 
 def style():
-    configure_style()
+    typography=configure_times_bold(1)
+    # Render scientific subscripts with the same upright bold face.
+    plt.rcParams.update({"mathtext.fontset":"custom", "mathtext.default":"regular",
+                         "mathtext.rm":"Times New Roman:bold", "mathtext.it":"Times New Roman:bold",
+                         "mathtext.bf":"Times New Roman:bold", "mathtext.bfit":"Times New Roman:bold",
+                         "mathtext.cal":"Times New Roman:bold", "mathtext.sf":"Times New Roman:bold",
+                         "mathtext.tt":"Times New Roman:bold", "mathtext.fallback":None})
     plt.rcParams.update({'text.color':INK,'axes.labelcolor':INK,'axes.edgecolor':RAW,'xtick.color':RAW,'ytick.color':RAW})
+    return typography
 
 def landscape(values, letter, arrays, metadata, here):
     style();_,_,w,h=PLACES[letter];fig=plt.figure(figsize=(w,h))
@@ -109,7 +118,7 @@ def alignment_icon(ax,x,y):
     # Unscaled conceptual glyph, not an empirical ellipse or energy measurement.
     ax.add_patch(Ellipse((x,y),.35,.12,angle=32,facecolor=PALETTE['zero'],edgecolor=CYAN,lw=.6))
     arrow(ax,(x-.13,y-.08),(x+.15,y+.09),PRISM,lw=.75)
-    ax.text(x-.04,y+.16,'v₁ … vₖ',fontsize=6,color=PRISM,ha='center')
+    ax.text(x-.04,y+.16,r'$v_1$ … $v_k$',fontsize=7.5,color=PRISM,ha='center')
     arrow(ax,(x+.25,y),(x+.51,y),PRISM)
     for i in range(4):ax.plot([x+.61+i*.045]*2,[y-.075,y+.075],color=PRISM,lw=.8)
     ax.text(x+.68,y+.16,r'$\mathbf{1}_g$',fontsize=9,color=PRISM,ha='center')
@@ -119,7 +128,7 @@ def quantizer_icon(ax,x,y):
         ax.plot([x+i*.042]*2,[y,y+level],color=ZERO,lw=.8)
     ax.plot([x-.02,x+.15],[y,y],color=ZERO,lw=.6,ls=(0,(2,1)))
     ax.text(x+.18,y-.01,'z',fontsize=6,color=ZERO,va='center')
-    ax.text(x-.10,y+.07,'s',fontsize=6,color=ZERO,ha='center',va='center')
+    ax.text(x-.17,y+.07,'s',fontsize=6,color=ZERO,ha='center',va='center')
     ax.annotate('',(x-.05,y+.14),(x-.05,y),arrowprops={'arrowstyle':'|-|','color':ZERO,'lw':.5})
 
 def compose(here,metadata):
@@ -186,6 +195,8 @@ def compose(here,metadata):
     metadata['rendering_contract']['panel_placements_inches']=PLACES
 
 def render_figure(arrays,metadata,here):
+    metadata['typography']=style()
+    metadata['font_family_resolved']=metadata['typography']['family']
     rendered={}
     for letter,key in [('a','raw_magnitude'),('b','hadamard_magnitude'),('c','hadamard_range'),('d','nar_kmax_range')]:
         rendered[letter]=landscape(arrays[key],letter,arrays,metadata,here)
@@ -201,3 +212,4 @@ def render_figure(arrays,metadata,here):
     metadata['palette']=metadata['rendering_contract']['palette']
     metadata['source_array_sha256']={key:hashlib.sha256(value.tobytes()).hexdigest() for key,value in arrays.items()}
     compose(here,metadata)
+    export_caption(here,figure=1,width=WIDTH)

@@ -47,12 +47,18 @@
   "fig1.collision": {
     "exit_code": 0
   },
+  "fig1_caption.text": {
+    "exit_code": 0
+  },
+  "fig1_caption.collision": {
+    "exit_code": 0
+  },
   "make_fig1.py.source": {
     "raw_exit_code": 1,
     "resolutions": [
       {
         "check_id": "FONT-FAMILY",
-        "resolution": "User explicitly requests serif. The static checker only accepts sans-serif names; actual PDFs use embedded DejaVu Serif and all glyph sizes pass."
+        "resolution": "User explicitly requests serif; Figures 1 and 2 additionally require Times New Roman Bold. The static checker only accepts sans-serif names. Rendered PDF font and size audits establish the actual typography."
       }
     ],
     "unresolved_failures": 0

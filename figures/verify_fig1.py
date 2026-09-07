@@ -44,14 +44,19 @@ def main():
         values=arrays[panel['array']]
         assert panel['segments']==values.shape[1]*(values.shape[0]-1)
     exports={}
-    for stem in ['fig1']+['fig1'+x for x in 'abcdefg']:
+    for stem in ['fig1','fig1_caption']+['fig1'+x for x in 'abcdefg']:
         with pymupdf.open(HERE/(stem+'.pdf')) as doc:
             page=doc[0];spans=[s for b in page.get_text('dict')['blocks'] if 'lines' in b for l in b['lines'] for s in l['spans']]
             assert spans and min(s['size'] for s in spans)>=5.0
+            assert all('TimesNewRomanPS-BoldMT' in s['font'] and s['flags'] & 16 for s in spans),(stem,'font substitution or nonbold text')
+            for font in page.get_fonts(full=True):
+                assert 'TimesNewRomanPS-BoldMT' in font[3] and doc.extract_font(font[0])[3],(stem,'font not embedded')
+            if stem=='fig1_caption':
+                assert ''.join(''.join(s['text'] for s in spans).split())==''.join((HERE/'fig1_caption.txt').read_text().split())
             assert all(page.rect.contains(pymupdf.Rect(s['bbox'])) for s in spans),(stem,'page clipping')
             assert '<text' in (HERE/(stem+'.svg')).read_text()
             exports[stem]={'size_inches':[page.rect.width/72,page.rect.height/72],
-                           'minimum_font_pt':min(s['size'] for s in spans),'vector_text_spans':len(spans)}
+                           'minimum_font_pt':min(s['size'] for s in spans),'vector_text_spans':len(spans),'font':'TimesNewRomanPS-BoldMT','all_text_bold':True,'fonts_embedded':True}
     report={'verdict':'PASS','arrays_unchanged':list(arrays),'scientific_metadata_unchanged':list(baseline['scientific_metadata']),
             'all_samples_preserved':True,'matched_range_panels':True,'exports':exports}
     (HERE/'qa/fig1.integrity.json').write_text(json.dumps(report,indent=2)+'\n')

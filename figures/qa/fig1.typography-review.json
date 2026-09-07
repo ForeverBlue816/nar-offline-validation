@@ -1,0 +1,192 @@
+{
+  "status": "PASS",
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "pdfs": {
+    "fig1a": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1b": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1c": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1d": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1e": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0,
+        6.5
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1f": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0,
+        6.5
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1g": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        6.0,
+        6.5
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        5.25,
+        6.0,
+        6.3,
+        6.5,
+        7.0,
+        7.5,
+        8.0,
+        9.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    },
+    "fig1_caption": {
+      "fonts": [
+        "TimesNewRomanPS-BoldMT"
+      ],
+      "point_sizes": [
+        8.0
+      ],
+      "all_text_bold": true,
+      "all_fonts_embedded": true,
+      "no_clipped_text": true
+    }
+  },
+  "unchanged_source_sha256": {
+    "figures/fig1_landscape_channels.csv": "8fe591f4b9854b81fb433989eb48c59d8c630dde50cf515836a53fe5c5d37911",
+    "figures/fig1_ranges.csv": "fa362e1c5fb5ef1951e4c580d24fb2d45f0c5c6ad59fbb4563fd2bfa70f649d8",
+    "figures/fig1_source_arrays.npz": "649eb675952d9ec24e231488019e9799f2d56abee6b2db5e7aa1de98d06812f8",
+    "figures/fig1_caption.txt": "0992133fd90f11d3eae4f1c2f68e734f0d5839253393f8f5260599440085b678"
+  },
+  "scientific_metadata_and_layout_unchanged": true,
+  "palette_unchanged": true,
+  "figure2_exports_unchanged": true,
+  "visual_review": "Seven panels and the assembly retain their original arrangement and palette. Tick labels, headings, range values, and zero-point annotations are clear in bold. Scientific subscripts retain the same meaning and use the same font.",
+  "rendered_collision_audits": {
+    "fig1a": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1b": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1c": {
+      "fail": 0,
+      "warn": 2,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1d": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1e": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1f": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1g": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    },
+    "fig1": {
+      "fail": 0,
+      "warn": 4,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 2
+    },
+    "fig1_caption": {
+      "fail": 0,
+      "warn": 0,
+      "contained_fill_overlays": 0,
+      "contained_image_overlays": 0
+    }
+  },
+  "reviewed_raster_edge_warnings": "3D tick-label boxes touch rectangular raster extents in panels a/c/d. Visual inspection confirms the tick text is clear of visible surface marks; transparent raster corners account for these warnings.",
+  "annotation_clearance": "Both quantizer s labels moved 0.07 in left to clear the bracket caps after font replacement.",
+  "caption_review": "Exact caption wording, paragraph breaks, upright 8 pt Times New Roman Bold; no clipped text or collisions."
+}

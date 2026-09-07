@@ -4,17 +4,15 @@ pages: 1
 visible text boxes: 83
 stroke paths: 167
 
-[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '1500'
-  text bbox: (21.353673934936523, 104.78181457519531, 36.619056701660156, 110.78181457519531)
-[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '1500'
-  text bbox: (181.9270782470703, 65.94249725341797, 197.1924591064453, 71.94249725341797)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '3000'
+  text bbox: (78.65946197509766, 117.51585388183594, 90.65946197509766, 123.51585388183594)
 [WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0'
-  text bbox: (347.5458068847656, 66.02688598632812, 351.3631896972656, 72.02688598632812)
-[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '0'
-  text bbox: (347.5458068847656, 163.94686889648438, 351.3631896972656, 169.94686889648438)
+  text bbox: (347.9520568847656, 65.39171600341797, 350.9520568847656, 71.39171600341797)
 [WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '32'
-  text bbox: (381.7241516113281, 170.7116241455078, 389.3575439453125, 176.7116241455078)
+  text bbox: (382.5366516113281, 72.15646362304688, 388.5366516113281, 78.15646362304688)
+[WARN] page 1 text-image-edge: Text partially overlaps the edge of 1 raster image(s) — '32'
+  text bbox: (382.5366516113281, 170.07644653320312, 388.5366516113281, 176.07644653320312)
 
-summary: 0 fail, 5 warn, 0 contained fill overlays, 0 contained image overlays
+summary: 0 fail, 4 warn, 0 contained fill overlays, 2 contained image overlays
 verdict: REVIEW REQUIRED
 note: contained overlays can be intentional; WARN findings need final-size visual review

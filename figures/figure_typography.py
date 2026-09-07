@@ -1,4 +1,4 @@
-"""Figure 2's explicit Times New Roman Bold typography; no font fallback."""
+"""Shared explicit Times New Roman Bold typography; no font fallback."""
 from __future__ import annotations
 
 import hashlib
@@ -13,10 +13,10 @@ from fontTools.ttLib import TTFont
 from figure_style import configure_style, save_panel
 
 
-def configure_fig2_style():
+def configure_times_bold(figure=2):
     configure_style()
     font_dir = Path(os.environ.get(
-        'FIGURE2_FONT_DIR', Path.home() / '.local/share/figure-fonts/times-new-roman'))
+        f'FIGURE{figure}_FONT_DIR', Path.home() / '.local/share/figure-fonts/times-new-roman'))
     if font_dir.is_dir():
         for path in sorted(font_dir.iterdir()):
             if path.suffix.lower() == '.ttf':
@@ -25,7 +25,7 @@ def configure_fig2_style():
     try:
         path = Path(font_manager.findfont(prop, fallback_to_default=False))
     except ValueError as exc:
-        raise RuntimeError('Install Times New Roman Bold or set FIGURE2_FONT_DIR; Figure 2 forbids font substitution.') from exc
+        raise RuntimeError(f'Install Times New Roman Bold or set FIGURE{figure}_FONT_DIR; Figure {figure} forbids font substitution.') from exc
     with TTFont(path) as font:
         family = font['name'].getDebugName(1)
         weight = font['OS/2'].usWeightClass
@@ -41,10 +41,10 @@ def configure_fig2_style():
     return provenance
 
 
-def export_caption(here):
+def export_caption(here, figure=2, width=6.4):
     """Typeset the unchanged caption separately from the bare scientific panels."""
-    caption = (here / 'fig2_caption.txt').read_text().strip()
-    width, margin, size, spacing = 6.4, .16, 8, 1.3
+    caption = (here / f'fig{figure}_caption.txt').read_text().strip()
+    margin, size, spacing = .16, 8, 1.3
     prop = font_manager.FontProperties(family='Times New Roman', weight='bold', size=size)
     fig = plt.figure(figsize=(width, 2), dpi=600)
     renderer = fig.canvas.get_renderer()
@@ -67,4 +67,4 @@ def export_caption(here):
     ax.set_axis_off()
     ax.text(0, 1, '\n'.join(lines), transform=ax.transAxes, va='top', ha='left',
             fontproperties=prop, linespacing=spacing)
-    save_panel(fig, here / 'fig2_caption')
+    save_panel(fig, here / f'fig{figure}_caption')
