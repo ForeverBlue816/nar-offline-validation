@@ -43,7 +43,14 @@ def generate(model, texts):
     enc = tok(texts, return_tensors="pt", padding=True).to("cuda")
     with torch.inference_mode():
         out = model.generate(**enc, max_new_tokens=args.new_tokens, do_sample=False, pad_token_id=tok.pad_token_id)
-    return [tok.decode(o[enc["input_ids"].shape[1]:], skip_special_tokens=True) for o in out]
+    return [o[enc["input_ids"].shape[1]:].tolist() for o in out]
+
+
+def first_divergence(a, b):
+    for i, (x, y) in enumerate(zip(a, b)):
+        if x != y:
+            return i
+    return None
 
 report = {"model": args.model, "row": args.row}
 for label in ("stock", args.row):
@@ -56,8 +63,16 @@ for label in ("stock", args.row):
         single = [generate(model, [p])[0] for p in prompts]
         seen_single = list(seen); seen.clear()
         batched = generate(model, prompts)
-        report[label] = {"single": single, "batched": batched, "agree": [a == b for a, b in zip(single, batched)],
-                         "masks_single": seen_single, "masks_batched": list(seen)}
+        masks_batched = list(seen); seen.clear()
+        duplicate = generate(model, [prompts[0], prompts[0]])  # no padding: pure batch numerics
+        right = None
+        report[label] = {
+            "single": [tok.decode(t) for t in single], "batched": [tok.decode(t) for t in batched],
+            "agree": [a == b for a, b in zip(single, batched)],
+            "first_divergence_batched": [first_divergence(a, b) for a, b in zip(single, batched)],
+            "duplicate_batch_agrees_with_single": duplicate[0] == single[0] and duplicate[1] == single[0],
+            "first_divergence_duplicate": [first_divergence(single[0], d) for d in duplicate],
+            "masks_single": seen_single, "masks_batched": masks_batched}
         print(label, json.dumps(report[label], indent=1)[:3000], flush=True)
     finally:
         if hooks is not None: hooks.close()
