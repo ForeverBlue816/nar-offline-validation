@@ -77,9 +77,16 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
     "wikitext": {"kind": "ppl"},
     "c4": {"kind": "ppl"},
     "mmlu": {"kind": "harness", "tasks": ["mmlu"], "num_fewshot": 5, "headline": ("mmlu", "acc,none")},
+    # The harness template ends doc_to_text with ":" and sets target_delimiter
+    # ":" as well, so few-shot demonstrations read "letter::C" while the query
+    # ends "letter:". A Base model then emits a newline (empty answer) on about
+    # half the items and scores at chance (0.6B: 25.7). Every leaf task is
+    # therefore re-registered under a group with target_delimiter " ", so the
+    # demonstrations read "letter: C"; nothing else in the task changes.
     "mmlu_redux": {"kind": "harness", "tasks": ["mmlu_redux_generative"], "num_fewshot": 5,
                    "gen_kwargs": {"max_gen_toks": 8, "until": ["</s>", "\n"]},
-                   "headline": ("mmlu_redux_generative", "exact_match,default")},
+                   "task_overrides": {"target_delimiter": " "}, "group_name": "mmlu_redux_e22",
+                   "headline": ("__micro__", "exact_match,default")},
     "bbh": {"kind": "harness", "tasks": ["bbh_cot_fewshot"], "num_fewshot": None,
             "headline": ("bbh_cot_fewshot", "exact_match,get-answer")},
     # This harness revision's default max_gen_toks is 2048; a sequence that
@@ -329,7 +336,7 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
     if limit is not None:
         kwargs["limit"] = limit
     result = lm_eval.simple_evaluate(
-        model=lm, tasks=list(spec["tasks"]), batch_size=batch, max_batch_size=cap,
+        model=lm, tasks=harness_tasks(spec), batch_size=batch, max_batch_size=cap,
         task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
         log_samples=log_samples, random_seed=args.seed, numpy_random_seed=args.seed,
         torch_random_seed=args.seed, fewshot_random_seed=args.seed,
@@ -341,11 +348,40 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
     return result
 
 
+def leaf_tasks(spec: dict[str, Any]) -> list[str]:
+    """Every leaf task under the spec's harness groups, in sorted order."""
+    from lm_eval.tasks import TaskManager
+    tm = TaskManager()
+    leaves: list[str] = []
+    for name in spec["tasks"]:
+        leaves.extend(sorted(tm.load(name)["tasks"]))
+    return leaves
+
+
+def harness_tasks(spec: dict[str, Any]) -> list[Any]:
+    """Task list handed to lm-eval: the spec's names, or one group of leaf
+    tasks with the spec's per-task overrides applied."""
+    if not spec.get("task_overrides"):
+        return list(spec["tasks"])
+    return [{"group": spec["group_name"],
+             "task": [{"task": name, **spec["task_overrides"]} for name in leaf_tasks(spec)]}]
+
+
 def headline(spec: dict[str, Any], results: dict[str, Any]) -> tuple[str, float]:
     name, metric = spec["headline"]
     if name == "__mean__":
         values = [float(results[t][e14.ALL_METRICS[t]]) for t in spec["tasks"]]
         return metric, 100.0 * float(np.mean(values))
+    if name == "__micro__":
+        # Sample-weighted mean over the leaf tasks (what the harness group
+        # reports with weight_by_size), computed here because the leaves are
+        # re-registered under a fresh group that carries no aggregation.
+        leaves = [t for t in results if metric in results[t] and "sample_len" in results[t]]
+        weights = np.array([float(results[t]["sample_len"]) for t in leaves])
+        values = np.array([float(results[t][metric]) for t in leaves])
+        if not leaves or weights.sum() == 0:
+            raise KeyError(f"no leaf tasks with {metric} in {list(results)[:5]}")
+        return f"{spec['group_name']}:{metric}", 100.0 * float((weights * values).sum() / weights.sum())
     table = results.get(name) or {}
     if metric in table:
         return f"{name}:{metric}", 100.0 * float(table[metric])
@@ -394,6 +430,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
             result = run_harness(model, args, spec)
             metric_name, value = headline(spec, result["results"])
             payload = {**provenance, "benchmark": benchmark, "tasks": spec["tasks"],
+                       "task_overrides": spec.get("task_overrides"), "group_name": spec.get("group_name"),
                        "num_fewshot": spec.get("num_fewshot"), "gen_kwargs": spec.get("gen_kwargs"),
                        "batch_size": batch_size_for(args), "max_batch_size": max_batch_for(args),
                        "max_length": args.max_length,
@@ -598,9 +635,12 @@ def benchmark_config_command(args: argparse.Namespace) -> None:
                                             "generation_kwargs", "filter_list", "metric_list", "doc_to_text",
                                             "fewshot_config") if k in cfg})
                 entry["task_configs"][task_name]["representative_leaf"] = getattr(leaf.config, "task", task_name)
+            if spec.get("task_overrides"):
+                entry["leaf_tasks"] = leaf_tasks(spec)
+                entry["harness_task_argument"] = "one group dict: {group: group_name, task: [{task: leaf, **task_overrides}, ...]}"
         out["benchmarks"][name] = entry
     out["notes"] = {
-        "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted",
+        "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted. The template's target_delimiter ':' (demonstrations 'letter::C') makes a Base model answer with a newline on about half the items; the 57 leaf tasks are re-registered under group mmlu_redux_e22 with target_delimiter ' ' and the headline is the sample-weighted mean over them",
         "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded; max_gen_toks 512 against the harness default of 2048",
         "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
         "math": "minerva_math500 (4 fixed CoT exemplars) at every size; exact_match is the headline, math_verify is recorded",

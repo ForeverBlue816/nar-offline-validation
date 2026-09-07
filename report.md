@@ -1370,7 +1370,7 @@ Every model passes the same four gates before its quantized rows are trusted.
 
 *Round-trip and rotation-only control.* Every rotation at every site reconstructs to relative error ≤ 8.7e-7 (fp32, tolerance 1e-6), and the model with all rotations folded but no quantizer attached reproduces the bf16 reference to max |ΔNLL| ≤ 1.1e-5 per token over 64 chunks at every size and every rotation, so what follows is the quantizers and nothing else.
 
-*Generation gate (8B, 100 GSM8K items, 4-shot).* The chain-of-thought benchmarks decode hundreds of tokens per item, which E19 never exercised. On the 8B under NAR k=max: the activation and KV hooks fire on every decode step (counted, not assumed), the K cache is quantized during decoding, two batch-1 runs are token-identical (deterministic), and batch-1 and batch-8 give the same accuracy, 83.0 both, from different text on 93% of items. That last number is what fake quantization does: batched and single decoding go through different GEMM kernels, the int4 rounding boundaries fall differently at the fourth decimal, and after the first divergent token the chains differ — the accuracy does not. The bf16 row in fp32 containers scores 86.0 against 84.0 for the stock bf16 model, inside single-item noise on 100 items. The gate is recorded in `results/qwen3_8b_base/e22_generation_gate.json` and passed before any generative benchmark was run. Two harness defects were found by it and fixed: the registered attention function had no mask builder, so padded batches received no mask at all (batch-8 scored 51.0 before the fix, 83.0 after), and the Qwen3 checkpoints ship `generation_config.max_new_tokens = 2048`, which silently overrode the harness's 512-token cap; both are cleared in `configure`.
+*Generation gate (8B, 100 GSM8K items, 4-shot).* The chain-of-thought benchmarks decode hundreds of tokens per item, which E19 never exercised. On the 8B under NAR k=max: the activation and KV hooks fire on every decode step (counted, not assumed), the K cache is quantized during decoding, two batch-1 runs are token-identical (deterministic), and batch-1 and batch-8 give the same accuracy, 83.0 both, from different text on 93% of items. That last number is what fake quantization does: batched and single decoding go through different GEMM kernels, the int4 rounding boundaries fall differently at the fourth decimal, and after the first divergent token the chains differ — the accuracy does not. The bf16 row in fp32 containers scores 86.0 against 84.0 for the stock bf16 model, inside single-item noise on 100 items. The gate is recorded in `results/qwen3_8b_base/e22_generation_gate.json` and passed before any generative benchmark was run. Three harness defects were found around it and fixed: the registered attention function had no mask builder, so padded batches received no mask at all (batch-8 scored 51.0 before the fix, 83.0 after); the Qwen3 checkpoints ship `generation_config.max_new_tokens = 2048`, which silently overrode the harness's 512-token cap (cleared in `configure`); and the harness's MMLU-Redux template ends its prompt with a colon and then sets the target delimiter to a colon as well, so every few-shot demonstration reads `letter::C` while the query ends `letter:`. A Base model answers that with a newline on about half the items, the newline is the stop string, the answer is empty, and the 0.6B scored 25.7 — chance on four options. The 57 leaf tasks are re-registered under a group with a space delimiter (`letter: C`), nothing else changed, and the bf16 rows that had been measured under the defective template were discarded and re-run.
 
 ## Results — perplexity
 
@@ -1406,6 +1406,16 @@ WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 204
 | NAR best − Hadamard | +1.23 | +2.39 | — | — | — |
 
 The bf16 row is within 0.3 points of the report at all three sizes measured so far, so the harness is the report's harness to within seed noise and no pipeline flag is raised.
+
+| ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
+|---|---:|---:|---:|---:|---:|
+| bf16 | 57.95 | — | — | — | — |
+| Hadamard, W4A4KV4 | 56.69 | — | — | — | — |
+| NAR k=8 | 53.62 | — | — | — | — |
+| NAR k=max | 56.36 | — | — | — | — |
+| NAR best − Hadamard | −0.33 | — | — | — | — |
+
+ARC-Easy on the 0.6B is the first cell where NAR does not lead: k=max is 0.3 below Hadamard and k=8 is 3.1 below, on 2,376 items where one point is 24 questions. It is recorded as measured.
 
 The remaining tables — MMLU-Redux, GSM8K, MATH-500, GPQA, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
 
