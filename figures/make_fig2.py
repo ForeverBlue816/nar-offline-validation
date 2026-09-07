@@ -9,7 +9,9 @@ import numpy as np
 import pandas as pd
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
-from figure_style import PALETTE as SHARED_PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
+from figure_style import PALETTE as SHARED_PALETTE, clean_2d_axis, save_panel
+
+from fig2_typography import configure_fig2_style, export_caption
 
 # Figure 2 uses a muted comparison color without changing other figures.
 PALETTE = {**SHARED_PALETTE, "duquant": "#F5CBCB"}
@@ -115,7 +117,7 @@ def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--csv',type=Path,default=Path(__file__).with_name('fig2_capture.csv'))
     parser.add_argument('--reuse-data',action='store_true',help='Restyle the frozen plotted CSVs without refreshing experimental results.')
     args=parser.parse_args(); here=Path(__file__).resolve().parent
-    configure_style()
+    typography = configure_fig2_style()
     if args.reuse_data:
         complete=pd.read_csv(args.csv)
         addendum=json.loads((here/'fig2_metadata.json').read_text())['duquant_offline_addendum']
@@ -144,12 +146,13 @@ def main():
         fig.text(ax.get_position().x0,.835,f'({letter})',fontsize=7,fontweight='bold')
     shared_legend(fig)
     save_panel(fig,here/'fig2')
+    export_caption(here)
     # Same physical size and geometry as the manuscript assembly.
     (here/'fig2_preview.png').write_bytes((here/'fig2.png').read_bytes())
     metadata={'duquant_offline_addendum':addendum,'model':MODEL,'site':SITE,'layers':LAYERS,'group_size':GROUP,
               'mean_range_reduction_percent':reductions['mean_group_range'],
               'mean_nmse_reduction_percent':reductions['nmse'],
-              'font_family_resolved':resolved_serif_family(), 'palette':PALETTE,
+              'font_family_resolved':typography['family'], 'typography':typography, 'palette':PALETTE,
               'legend':'figure upper-right, dedicated top strip, 6.5 pt, boxed; PrismQuant / Hadamard / DuQuant',
               'duquant_display_label':'DuQuant','duquant_implementation':'DuQuant-style diagnostic, not official full DuQuant; source method duquant_style',
               'statistics':'same 28 measured layers; arithmetic mean of paired per-layer percentage decreases; no seed CI inferred',

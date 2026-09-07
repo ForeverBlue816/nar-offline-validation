@@ -50,6 +50,24 @@ changing numerical limits.
 
 ## Figure 2 DuQuant addendum
 
+Figure 2 now uses **Times New Roman Bold** throughout: tick numbers, axis
+labels, annotations, panel letters, and legend. The unchanged caption text
+is also typeset separately as `fig2_caption.svg/pdf/png` at 8 pt bold;
+the scientific panels remain bare. Tick labels remain 6 pt, axis labels
+and annotations 7 pt, and the legend 6.5 pt. PDFs embed the actual font;
+SVG text stays editable and requires Times New Roman on the viewing system.
+
+For reproduction, install Times New Roman Bold or set `FIGURE2_FONT_DIR`
+to a directory containing its TTF files. The local default is
+`~/.local/share/figure-fonts/times-new-roman`; only Figure 2 registers these
+fonts. This environment uses Microsoft core fonts `times32.exe` from
+<https://downloads.sourceforge.net/corefonts/times32.exe>. Font binaries
+are not redistributed in the repository. The script validates the exact
+family and upright 700 weight and fails if unavailable. Font version and
+SHA-256 are recorded in `fig2_metadata.json`; rendered font verification
+and unchanged-data checks are recorded in `qa/fig2.typography-review.json`.
+
+
 All three panels and the shared legend use soft pink #F5CBCB for
 DuQuant. Hadamard remains light cyan and PrismQuant remains deep blue; all
 line weights, markers, measurements, and layout are unchanged. Use
