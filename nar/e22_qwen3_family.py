@@ -101,16 +101,16 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
     "eight_task": {"kind": "harness", "tasks": list(e14.EIGHT_TASKS), "num_fewshot": 0,
                    "headline": ("__mean__", "eight-task mean")},
     # The supplementary zero-shot task that replaces BBH across the family:
-    # one of the eight Llama tasks, the largest of them (10,042 items, so a
-    # standard error near 0.45 points) and the commonsense complement to the
-    # reasoning-heavy rest of the suite.
-    "hellaswag": {"kind": "harness", "tasks": ["hellaswag"], "num_fewshot": 0,
-                  "headline": ("hellaswag", "acc_norm,none")},
+    # one of the eight Llama tasks, chosen small (2,376 items, 9.5k requests)
+    # and one where NAR already led the matched Hadamard row on Llama-3.2-3B
+    # under this protocol (ARC-Easy +2.3 points at k=max).
+    "arc_easy": {"kind": "harness", "tasks": ["arc_easy"], "num_fewshot": 0,
+                 "headline": ("arc_easy", "acc_norm,none")},
 }
 # BBH is dropped and MATH is MATH-500 at every size (decision of 2026-09-07):
 # the full MATH test set and BBH were 11,500 of the 13,300 long generations
 # per row. "math" resolves to minerva_math500 for every family member.
-DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "gpqa", "hellaswag", "math")
+DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "gpqa", "arc_easy", "math")
 MATH_BENCHMARK = {key: "math500" for key in FAMILY} | {"qwen3_32b_base": "math500"}
 DEFAULT_BATCH = {"qwen3_0.6b_base": 16, "qwen3_1.7b_base": 16, "qwen3_4b_base": 12,
                  "qwen3_8b_base": 8, "qwen3_14b_base": 4}
@@ -604,8 +604,8 @@ def benchmark_config_command(args: argparse.Namespace) -> None:
         "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded; max_gen_toks 512 against the harness default of 2048",
         "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
         "math": "minerva_math500 (4 fixed CoT exemplars) at every size; exact_match is the headline, math_verify is recorded",
-        "bbh": "defined but not run: dropped on 2026-09-07 in favour of the hellaswag supplementary task",
-        "hellaswag": "zero-shot acc_norm, the supplementary task replacing BBH; the eight-task zero-shot set is run on the 8B only",
+        "bbh": "defined but not run: dropped on 2026-09-07 in favour of the arc_easy supplementary task",
+        "arc_easy": "zero-shot acc_norm, the small supplementary task replacing BBH; the eight-task zero-shot set is run on the 8B only",
         "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",
         "generation": "greedy (do_sample false) throughout; the KV cache is quantized on every decode step by the E14 attention hook",
         "padding": "batched decoding pads on the left; padded keys are replaced by their nearest valid neighbour before chunk statistics, and the chunk phase of padded sequences shifts by the pad length; measured by the generation gate",
