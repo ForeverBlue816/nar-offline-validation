@@ -326,11 +326,15 @@ def evaluate_command(args: argparse.Namespace) -> None:
     workdir = Path(args.workdir).resolve()
     artifact_root = Path(args.artifact_root).resolve()
     result_dir = workdir / "results" / MODEL_KEY
+    metrics = getattr(args, "metrics", "ppl")
+    tasks, task_metrics, task_suffix = e14.task_set(getattr(args, "task_set", "frozen"))
     ppl_path = result_dir / f"e21_{args.row}_seed{args.seed}_ppl.json"
-    if ppl_path.exists():
-        LOG.info("E21 row already complete: %s", args.row)
+    zero_path = result_dir / f"e21_{args.row}_seed{args.seed}_zero_shot{task_suffix}.json"
+    target = ppl_path if metrics == "ppl" else zero_path
+    if target.exists():
+        LOG.info("E21 row already complete: %s", target)
         return
-    base.setup_logging(workdir, f"e21-evaluate-{args.row}")
+    base.setup_logging(workdir, f"e21-evaluate-{args.row}-{metrics}")
     base.seed_everything(args.seed)
     install_extension_hooks()
     rotation, activation_kind = ROWS[args.row]
@@ -363,15 +367,51 @@ def evaluate_command(args: argparse.Namespace) -> None:
                                  quantize_kv=True)
         hooks.install()
     try:
-        tokens = eval_tokens(workdir, args.seq_len)
-        ppl, chunk_rows = evaluate_ppl_fp32(model, tokens, f"{MODEL_KEY} {args.row}")
-        base.atomic_json(ppl_path, {
-            **provenance, "ppl": ppl, "chunks": chunk_rows,
-            "chunks_evaluated": len(chunk_rows), "nll_dtype": "float32",
-            "dataset": "WikiText-2 raw test full contiguous token stream",
-            "sequence_length": args.seq_len,
-        })
-        LOG.info("E21 %s ppl=%.6f over %d windows", args.row, ppl, len(chunk_rows))
+        if metrics == "ppl":
+            tokens = eval_tokens(workdir, args.seq_len)
+            ppl, chunk_rows = evaluate_ppl_fp32(model, tokens, f"{MODEL_KEY} {args.row}")
+            base.atomic_json(ppl_path, {
+                **provenance, "ppl": ppl, "chunks": chunk_rows,
+                "chunks_evaluated": len(chunk_rows), "nll_dtype": "float32",
+                "dataset": "WikiText-2 raw test full contiguous token stream",
+                "sequence_length": args.seq_len,
+            })
+            LOG.info("E21 %s ppl=%.6f over %d windows", args.row, ppl, len(chunk_rows))
+        else:
+            # The same harness call as E14's rows, on the sharded fp32 model.
+            # Batch size is probed by the harness (log-likelihood batches carry
+            # full-vocabulary fp32 logits) and capped.
+            import lm_eval
+            from lm_eval.models.huggingface import HFLM
+            from lm_eval.tasks import TaskManager
+            from transformers import AutoTokenizer
+            tokenizer = AutoTokenizer.from_pretrained(
+                MODEL_ID, cache_dir=str(workdir / "cache" / "huggingface"), use_fast=True)
+            cap = int(getattr(args, "batch_size", 0) or 16)
+            lm = HFLM(pretrained=model, tokenizer=tokenizer, batch_size="auto",
+                      max_batch_size=cap, max_length=args.seq_len)
+            result = lm_eval.simple_evaluate(
+                model=lm, tasks=list(tasks), num_fewshot=0, batch_size="auto", max_batch_size=cap,
+                task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
+                log_samples=False, random_seed=args.seed, numpy_random_seed=args.seed,
+                torch_random_seed=args.seed, fewshot_random_seed=args.seed,
+                apply_chat_template=False, fewshot_as_multiturn=False)
+            if result is None:
+                raise RuntimeError("lm-eval returned no result")
+            task_rows = [{"task": task, "metric": task_metrics[task],
+                          "accuracy": float(result["results"][task][task_metrics[task]])}
+                         for task in tasks]
+            base.atomic_json(zero_path, {
+                **provenance, "tasks": task_rows,
+                "mean_accuracy": float(np.mean([row["accuracy"] for row in task_rows])),
+                "task_set": getattr(args, "task_set", "frozen"), "num_fewshot": 0,
+                "harness_commit": e14.HARNESS_COMMIT, "batch_size": "auto", "max_batch_size": cap,
+                "task_versions": e14._serializable(result.get("versions", {})),
+                "sample_counts": e14._serializable(result.get("n-samples", {})),
+            })
+            LOG.info("E21 %s zero-shot %s: %s", args.row, getattr(args, "task_set", "frozen"),
+                     " ".join(f"{r['task']}={100 * r['accuracy']:.2f}" for r in task_rows))
+            del lm
     finally:
         if hooks is not None:
             hooks.close()
@@ -441,6 +481,9 @@ def parser() -> argparse.ArgumentParser:
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
     evaluate = sub.add_parser("evaluate")
     evaluate.add_argument("--row", choices=tuple(ROWS), required=True)
+    evaluate.add_argument("--metrics", choices=("ppl", "zero_shot"), default="ppl")
+    evaluate.add_argument("--task-set", choices=("frozen", "extra"), default="frozen")
+    evaluate.add_argument("--batch-size", type=int, default=0, help="harness batch cap; 0 = 16")
     sub.add_parser("finalize")
     return result
 

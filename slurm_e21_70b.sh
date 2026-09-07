@@ -24,9 +24,14 @@ for stage in ${NAR_E21_STAGES:-audit calibrate}; do
     case "$stage" in
         audit)     run audit ;;
         calibrate) run calibrate ;;
+        gptq_k8)   run gptq --rotation nar_k8 ;;
+        gptq_kmax) run gptq --rotation nar_kmax ;;
         bf16)      run evaluate --row bf16 ;;
         eval_k8)   run evaluate --row nar_k8_asym_g128 ;;
         eval_kmax) run evaluate --row nar_kmax_asym_g128 ;;
+        zs_bf16)   for s in frozen extra; do run evaluate --row bf16 --metrics zero_shot --task-set $s; done ;;
+        zs_k8)     for s in frozen extra; do run evaluate --row nar_k8_asym_g128 --metrics zero_shot --task-set $s; done ;;
+        zs_kmax)   for s in frozen extra; do run evaluate --row nar_kmax_asym_g128 --metrics zero_shot --task-set $s; done ;;
         finalize)  run finalize ;;
         *) echo "unknown stage $stage" >&2; exit 2 ;;
     esac
