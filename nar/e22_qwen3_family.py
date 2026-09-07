@@ -82,7 +82,12 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
                    "headline": ("mmlu_redux_generative", "exact_match,default")},
     "bbh": {"kind": "harness", "tasks": ["bbh_cot_fewshot"], "num_fewshot": None,
             "headline": ("bbh_cot_fewshot", "exact_match,get-answer")},
+    # This harness revision's default max_gen_toks is 2048; a sequence that
+    # never emits a stop string then runs to 2048 tokens and, in a batch,
+    # holds the whole batch there. CoT answers on these tasks are a few
+    # hundred tokens, so each generative benchmark carries an explicit cap.
     "gsm8k": {"kind": "harness", "tasks": ["gsm8k_cot"], "num_fewshot": 4,
+              "gen_kwargs": {"max_gen_toks": 512},
               "headline": ("gsm8k_cot", "exact_match,flexible-extract")},
     "math": {"kind": "harness", "tasks": ["minerva_math"], "num_fewshot": None,
              "gen_kwargs": {"max_gen_toks": 512},
@@ -91,6 +96,7 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
                 "gen_kwargs": {"max_gen_toks": 512},
                 "headline": ("minerva_math500", "exact_match,none")},
     "gpqa": {"kind": "harness", "tasks": ["gpqa_main_cot_n_shot"], "num_fewshot": 5,
+             "gen_kwargs": {"max_gen_toks": 768},
              "headline": ("gpqa_main_cot_n_shot", "exact_match,strict-match")},
     "eight_task": {"kind": "harness", "tasks": list(e14.EIGHT_TASKS), "num_fewshot": 0,
                    "headline": ("__mean__", "eight-task mean")},
@@ -569,7 +575,7 @@ def benchmark_config_command(args: argparse.Namespace) -> None:
         out["benchmarks"][name] = entry
     out["notes"] = {
         "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted",
-        "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded",
+        "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded; max_gen_toks 512 against the harness default of 2048",
         "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
         "math": "minerva_math (full test set, 4 fixed CoT exemplars) below 14B; minerva_math500 at 14B; exact_match is the headline, math_verify is recorded",
         "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",

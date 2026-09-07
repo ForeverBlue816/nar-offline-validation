@@ -208,6 +208,9 @@
         "gsm8k_cot"
       ],
       "num_fewshot": 4,
+      "gen_kwargs": {
+        "max_gen_toks": 512
+      },
       "headline": [
         "gsm8k_cot",
         "exact_match,flexible-extract"
@@ -363,10 +366,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x78db2f194cc0>",
+            "process_docs": "<function process_docs at 0x7d2012e44040>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x78db2e094400>",
-            "doc_to_text": "<function doc_to_text at 0x78db2e35e980>",
+            "samples": "<function list_fewshot_samples at 0x7d2011e5c5e0>",
+            "doc_to_text": "<function doc_to_text at 0x7d201232ab60>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -420,10 +423,10 @@
           "fewshot_config": {
             "sampler": "first_n",
             "split": null,
-            "process_docs": "<function process_docs at 0x78db2f194cc0>",
+            "process_docs": "<function process_docs at 0x7d2012e44040>",
             "fewshot_indices": null,
-            "samples": "<function list_fewshot_samples at 0x78db2e094400>",
-            "doc_to_text": "<function doc_to_text at 0x78db2e35e980>",
+            "samples": "<function list_fewshot_samples at 0x7d2011e5c5e0>",
+            "doc_to_text": "<function doc_to_text at 0x7d201232ab60>",
             "doc_to_choice": null,
             "doc_to_target": "{{answer if few_shot is undefined else solution}}",
             "gen_prefix": null,
@@ -440,6 +443,9 @@
         "gpqa_main_cot_n_shot"
       ],
       "num_fewshot": 5,
+      "gen_kwargs": {
+        "max_gen_toks": 768
+      },
       "headline": [
         "gpqa_main_cot_n_shot",
         "exact_match,strict-match"
@@ -583,7 +589,7 @@
           "fewshot_config": {
             "sampler": "default",
             "split": null,
-            "process_docs": "<function process_docs at 0x78db2f196ac0>",
+            "process_docs": "<function process_docs at 0x7d2011eab1a0>",
             "fewshot_indices": null,
             "samples": null,
             "doc_to_text": "{{query}}",
@@ -706,9 +712,9 @@
             "process_docs": null,
             "fewshot_indices": null,
             "samples": null,
-            "doc_to_text": "<function doc_to_text at 0x78db2e3a8b80>",
-            "doc_to_choice": "<function doc_to_choice at 0x78db2e3aa2a0>",
-            "doc_to_target": "<function doc_to_target at 0x78db2e3a8900>",
+            "doc_to_text": "<function doc_to_text at 0x7d2012168d60>",
+            "doc_to_choice": "<function doc_to_choice at 0x7d201216a480>",
+            "doc_to_target": "<function doc_to_target at 0x7d2012168ae0>",
             "gen_prefix": null,
             "fewshot_delimiter": "\n\n",
             "target_delimiter": " "
@@ -720,7 +726,7 @@
   },
   "notes": {
     "mmlu_redux": "the pinned harness has MMLU-Redux only in its generative form; max_gen_toks 8 and a newline stop, first letter extracted",
-    "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded",
+    "gsm8k": "gsm8k_cot carries eight fixed CoT exemplars with a first_n sampler; num_fewshot=4 takes the first four; flexible-extract is the headline, strict-match is recorded; max_gen_toks 512 against the harness default of 2048",
     "bbh": "bbh_cot_fewshot is 3-shot CoT by construction; the task's own max_gen_toks 1024 and stop strings are kept",
     "math": "minerva_math (full test set, 4 fixed CoT exemplars) below 14B; minerva_math500 at 14B; exact_match is the headline, math_verify is recorded",
     "gpqa": "gpqa_main_cot_n_shot at 5 shots; gated dataset, needs a Hub token with access",
