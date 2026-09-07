@@ -1347,6 +1347,18 @@ Same 141 contiguous 2048-token WikiText-2 windows as E14, fp32 containers and fp
 
 **At 4.25-bit activations NAR k=8 costs the 70B 37.0% of its perplexity**, against 12.0% on the 3B and 8B under the same protocol. Larger Llama models degrade more under W4A4KV4 in every published table as well: OffQ's Llama-3-70B column (16-bit 2.9) has OffQ at 3.88 (+33.8%), OSTQuant 4.01 (+38.3%), ResQ 4.1 (+41.4%), KurTail 4.2 (+44.8%), DFRot 5.03, QuaRot 5.7 and SpinQuant 6.2. The NAR row's absolute perplexity is below every one of those; its relative degradation sits between OffQ's and OSTQuant's. The usual caveats are stronger here than anywhere else in this report: different checkpoint (3.1 against 3), unstated chunking on their side, one seed, and no Hadamard row on this side, so the number says what NAR costs and not what it saves.
 
+## Zero-shot accuracy
+
+The eight-task suite of the published W4A4KV4 tables, zero-shot, same harness revision and metric conventions as E14 (`acc_norm` on ARC-e, ARC-c, HellaSwag, OBQA, PIQA; `acc` on BoolQ, SIQA, WinoGrande), batched under the padded-key mask fix from E22. Each row is one 4-GPU pass of roughly seven hours.
+
+| Llama-3.1-70B, seed 0 | ARC-e | ARC-c | BoolQ | HellaS | OBQA | PIQA | SIQA | WinoG | **mean** |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 16-bit (this work) | 81.69 | 61.09 | 87.16 | 85.66 | 47.80 | 84.22 | 51.79 | 82.00 | **72.68** |
+| **NAR k=8, W4A4KV4** | 83.59 | 61.86 | 86.73 | 84.64 | 47.60 | 83.79 | 51.02 | 80.43 | **72.46** |
+| NAR k=max, W4A4KV4 | — | — | — | — | — | — | — | — | — |
+
+**NAR k=8 loses 0.22 points of eight-task accuracy against a 37% perplexity increase.** Six tasks move by less than a point, WinoGrande loses 1.6 and ARC-e gains 1.9; the LAMBADA row of the frozen six-task set (not in the mean) loses 1.7. For scale, OffQ's Table 1 has Llama-3-70B at 73.09 in 16-bit and 70.63 under their method, a 2.46-point loss on the same eight tasks; this row's 16-bit reference is 0.4 below theirs (3.1 against 3, one harness against another) and its quantized row is 1.8 above theirs. The caveats of the perplexity comparison apply unchanged — different checkpoint, single seed, no Hadamard row on this side — and the zero-shot suite barely exercises the KV quantizer (E19), so this is a statement about the weight and activation quantizers on a 70B, and it is the same statement E14 made on the 3B and 8B: what W4A4KV4 costs in perplexity, it mostly does not cost in zero-shot accuracy.
+
 ## What GPTQ needed at this scale
 
 The GPTQ stage failed twice before it ran, both times at layer 3 `down_proj` (28672 columns), with the damped Hessian reported not positive-definite at leading minor 6927–6928. The matrix was dumped and examined (`nar/e21_cholesky_probe.py`, `results/llama31_70b/e21_cholesky_probe.json`): no NaN or inf, exactly symmetric, diagonal in [0.039, 645] with mean 2.9, so GPTQ's damping was 0.029. Its leading 6928-column block has exactly **one negative eigenvalue, −2.1e-4**, and CPU LAPACK, cuSOLVER and MAGMA reject it at that column in fp32 and fp64 alike. The matrix is genuinely indefinite by about the size of the damping, which is the size of fp32 rounding in a 2048-term dot product on the large entries: an fp64 running sum could not repair it, because the error was already in the per-sequence products. This layer is the massive-activation layer — its Hessian diagonal max/median is 51,641 and **99.0% of its trace sits on the per-group DC direction** (median 6.3% across the other down_proj layers) — and 28672 columns dilute the mean diagonal, and with it the damping, to almost nothing.
@@ -1391,11 +1403,11 @@ WikiText-2 (141 windows) and C4 (256 windows of the first validation shard), 204
 |---|---:|---:|---:|---:|---:|
 | bf16 | 19.384 | 15.018 | 13.023 | 11.657 | — |
 | Hadamard, W4A4KV4 | 25.362 | 17.940 | 14.395 | 13.076 | — |
-| NAR k=8 | 23.920 | 16.526 | 13.956 | — | — |
+| NAR k=8 | 23.920 | 16.526 | 13.956 | 12.306 | — |
 | NAR k=max | 23.923 | 16.491 | 13.951 | — | — |
-| NAR best − Hadamard | −1.442 | −1.449 | −0.444 | — | — |
+| NAR best − Hadamard | −1.442 | −1.449 | −0.444 | −0.770 | — |
 | Hadamard degradation | +30.8% | +19.5% | +10.5% | +12.2% | — |
-| NAR best degradation | +23.4% | +9.8% | +7.1% | — | — |
+| NAR best degradation | +23.4% | +9.8% | +7.1% | +5.6% | — |
 
 ## Results — accuracy
 
@@ -1449,7 +1461,7 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | bf16 | 57.95 | 68.48 | 76.01 | — | — |
-| Hadamard, W4A4KV4 | 56.69 | 69.11 | — | — | — |
+| Hadamard, W4A4KV4 | 56.69 | 69.11 | 74.75 | — | — |
 | NAR k=8 | 53.62 | 67.47 | — | — | — |
 | NAR k=max | 56.36 | 72.52 | — | — | — |
 | NAR best − Hadamard | −0.34 | +3.41 | — | — | — |
