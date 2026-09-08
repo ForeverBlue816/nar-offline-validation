@@ -132,12 +132,24 @@ def _configure(model_key: str) -> None:
     _configure_sharded(model_key)
 
 
-def configure_e23() -> None:
-    """Re-point E22 at TwinQuant's protocol before its parser runs."""
+# Two quantizer settings share TwinQuant's task set, checkpoint, context and
+# 16-bit KV cache. "asym" is this repository's own quantizer (the one the
+# Llama and E22 rows use: GPTQ g128_asym weights, asymmetric group-128
+# activations) and is the bridge's headline; "sym" is TwinQuant's symmetric
+# group-128 quantizer for both, kept as a diagnostic (its rows are e23sym_*).
+QUANTIZERS = {
+    "asym": {"prefix": "e23", "protocol": "g128_asym", "activation": "asymmetric_g128"},
+    "sym": {"prefix": "e23sym", "protocol": "g128", "activation": "symmetric_g128"},
+}
+
+
+def configure_e23(quantizer: str = "asym") -> None:
+    """Re-point E22 at TwinQuant's task protocol before its parser runs."""
+    q = QUANTIZERS[quantizer]
     e22.configure = _configure
-    e22.PREFIX = "e23"
-    e22.PROTOCOL = "g128"
-    e22.ACTIVATION_KIND = "symmetric_g128"
+    e22.PREFIX = q["prefix"]
+    e22.PROTOCOL = q["protocol"]
+    e22.ACTIVATION_KIND = q["activation"]
     e22.QUANTIZE_KV = False
     e22.ARTIFACT_SUBDIR = "e23"
     e22.FAMILY = E23_FAMILY
@@ -161,10 +173,12 @@ def bridge_command(args: argparse.Namespace) -> None:
                          "acc_delta_vs_16bit": None if method == "W16A16" else round(v[6] - published["W16A16"][6], 2),
                          "assumed_settings": ""})
         directory = e22.WORKDIR / "results" / model
-        ours: dict[str, dict[str, Any]] = {}
-        for row in OUR_ROWS:
-            ppl = directory / f"e23_{row}_wikitext.json"
-            six = directory / f"e23_{row}_six_task.json"
+        for quantizer, q in QUANTIZERS.items():
+          ours: dict[str, dict[str, Any]] = {}
+          for row in OUR_ROWS:
+            prefix = "e23" if row == "bf16" else q["prefix"]
+            ppl = directory / f"{prefix}_{row}_wikitext.json"
+            six = directory / f"{prefix}_{row}_six_task.json"
             entry: dict[str, Any] = {}
             if ppl.exists():
                 entry["ppl"] = json.loads(ppl.read_text())["headline"]
@@ -177,13 +191,15 @@ def bridge_command(args: argparse.Namespace) -> None:
                 entry["mean"] = payload["headline"]
             if entry:
                 ours[row] = entry
-        ref = ours.get("bf16", {})
-        for row, label in OUR_ROWS.items():
-            if row not in ours:
+          ref = ours.get("bf16", {})
+          for row, label in OUR_ROWS.items():
+            if row not in ours or (row == "bf16" and quantizer != "asym"):
                 continue
             e = ours[row]
-            rows.append({"model": model, "checkpoint": e22.act.MODEL_IDS[model], "source": "this work (E23)",
-                         "row": label, "context": 2048, "W/A/KV": "16/16/16" if row == "bf16" else "4.125/4.125/16",
+            wbits = "16/16/16" if row == "bf16" else ("4.156/4.25/16" if quantizer == "asym" else "4.125/4.125/16")
+            rows.append({"model": model, "checkpoint": e22.act.MODEL_IDS[model],
+                         "source": "this work (E23)" if quantizer == "asym" else "this work (E23, TwinQuant's symmetric quantizer)",
+                         "row": label if quantizer == "asym" else f"{label}, sym", "context": 2048, "W/A/KV": wbits,
                          **{t: e.get(t) for t in TASKS}, "six_task_mean": e.get("mean"), "wikitext2_ppl": e.get("ppl"),
                          "ppl_rel_degradation_pct": (round(100 * (e["ppl"] / ref["ppl"] - 1), 1)
                                                      if row != "bf16" and "ppl" in e and "ppl" in ref else None),
@@ -201,7 +217,9 @@ def bridge_command(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    configure_e23()
+    quantizer = "sym" if "--quantizer=sym" in sys.argv else "asym"
+    sys.argv = [a for a in sys.argv if not a.startswith("--quantizer=")]
+    configure_e23(quantizer)
     parser = e22.parser()
     parser.description = __doc__
     parser._subparsers._group_actions[0].add_parser("bridge")  # type: ignore[union-attr]

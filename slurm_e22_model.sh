@@ -19,7 +19,7 @@ export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True TMPDIR="$NAR_WORKDIR/tmp
 mkdir -p "$TMPDIR" "$code_dir/runs"
 model="$NAR_E22_MODEL"
 run() { "$python_bin" "$code_dir/${NAR_E22_SCRIPT:-nar/e22_qwen3_family.py}" --workdir "$NAR_WORKDIR" --model "$model" \
-        ${NAR_E22_BATCH:+--batch-size "$NAR_E22_BATCH"} "$@"; }
+        ${NAR_E22_BATCH:+--batch-size "$NAR_E22_BATCH"} ${NAR_E22_EXTRA:-} "$@"; }
 
 # Every step skips its own completed artifact, so a requeue resumes.
 for stage in ${NAR_E22_STAGES:-audit calibrate control gptq eval finalize}; do
