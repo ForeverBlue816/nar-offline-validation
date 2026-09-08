@@ -52,6 +52,12 @@ ROWS = {
     "hadamard_asym_g128": "hadamard",
     "nar_k8_asym_g128": "nar_k8",
     "nar_kmax_asym_g128": "nar_kmax",
+    # Diagnostic rows: the GPTQ checkpoint with no activation or KV quantizer
+    # (E19's W-only arm), so a k-dependence can be attributed to the weight
+    # quantizer or to the activation quantizer.
+    "w_only_hadamard": "hadamard",
+    "w_only_nar_k8": "nar_k8",
+    "w_only_nar_kmax": "nar_kmax",
 }
 ROTATIONS = ("hadamard", "nar_k8", "nar_kmax")
 C4_WINDOWS = 256
@@ -289,14 +295,18 @@ def _clear_generation_limits(model: torch.nn.Module) -> torch.nn.Module:
 def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any, dict[str, Any]]:
     """The model for one row with its hooks installed, and its provenance."""
     rotation = ROWS[row]
+    weights_only = row.startswith("w_only_")
+    activation_kind = None if weights_only else ACTIVATION_KIND
+    quantize_kv = QUANTIZE_KV and not weights_only
     provenance: dict[str, Any] = {
         "model": args.model, "model_id": e19.MODEL_ID, "row": row, "rotation_checkpoint": rotation,
         "seed": args.seed, "compute_dtype": "float32", "fold_dtype": "float32",
-        "gptq_protocol": PROTOCOL if rotation else None, "activation_kind": ACTIVATION_KIND if rotation else None,
-        "kv_policy": ("E14 KIVI" if QUANTIZE_KV else "16-bit (not quantized)") if rotation else None,
+        "gptq_protocol": PROTOCOL if rotation else None, "activation_kind": activation_kind if rotation else None,
+        "kv_policy": ("E14 KIVI" if quantize_kv else "16-bit (not quantized)") if rotation else None,
+        "component": "weights only" if weights_only else "all quantizers",
         "git_commit": e19.git_commit(), "hardware": base.hardware_info(),
-        "effective_bits": e19.effective_bits(ACTIVATION_KIND if rotation else None, quantize_weights=bool(rotation),
-                                             quantize_kv=bool(rotation) and QUANTIZE_KV, shapes=e19.EXPECTED,
+        "effective_bits": e19.effective_bits(activation_kind if rotation else None, quantize_weights=bool(rotation),
+                                             quantize_kv=bool(rotation) and quantize_kv, shapes=e19.EXPECTED,
                                              context=args.seq_len),
     }
     if rotation:
@@ -312,7 +322,7 @@ def build_row(args: argparse.Namespace, row: str) -> tuple[torch.nn.Module, Any,
     trip = e19.round_trip_audit(rotations, rotations.layers, tolerance=args.round_trip_tolerance)
     provenance["round_trip_max_relative_error"] = max(e["round_trip_relative_error"] for e in trip)
     provenance["ranks"] = rotations.ranks()
-    hooks = e14.RuntimeHooks(model, rotations, activation_kind=ACTIVATION_KIND, quantize_kv=QUANTIZE_KV)
+    hooks = e14.RuntimeHooks(model, rotations, activation_kind=activation_kind, quantize_kv=quantize_kv)
     hooks.install()
     return model, hooks, provenance
 
