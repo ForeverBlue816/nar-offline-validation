@@ -1425,11 +1425,11 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | MMLU-Redux 5-shot (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 51.26 | 61.66 | 72.79 | 76.17 | 79.88 |
-| bf16 | 55.83 | — | — | — | — |
-| Hadamard, W4A4KV4 | 43.49 | — | — | — | — |
-| NAR k=8 | 46.23 | — | — | — | — |
-| NAR k=max | 45.27 | — | — | — | — |
-| NAR best − Hadamard | +2.74 | — | — | — | — |
+| bf16 | 55.83 | 66.98 | 77.09 | 81.35 | — |
+| Hadamard, W4A4KV4 | 43.49 | 59.66 | 73.55 | 77.17 | — |
+| NAR k=8 | 46.23 | 62.05 | 74.03 | — | — |
+| NAR k=max | 45.27 | 61.74 | 75.33 | — | — |
+| NAR best − Hadamard | +2.74 | +2.38 | +1.78 | — | — |
 
 | GSM8K 4-shot CoT (flexible extract) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
@@ -1469,10 +1469,10 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | Eight-task 0-shot mean | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | bf16 | — | — | — | 68.46 | — |
-| Hadamard, W4A4KV4 | — | — | — | — | — |
-| NAR k=8 | — | — | — | — | — |
-| NAR k=max | — | — | — | — | — |
-| NAR best − Hadamard | — | — | — | — | — |
+| Hadamard, W4A4KV4 | — | — | — | 64.84 | — |
+| NAR k=8 | — | — | — | 67.61 | — |
+| NAR k=max | — | — | — | 67.50 | — |
+| NAR best − Hadamard | — | — | — | +2.77 | — |
 <!-- e22-tables:end -->
 
 On MMLU the bf16 row is within 0.3 points of the report at every size measured so far, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report and the 1.7B row 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
@@ -1498,6 +1498,37 @@ Measured because the generative benchmarks are bounded by it. Greedy decoding on
 
 On the 0.6B the hooks are launch-bound — 5× the stock step at batch 1 and almost fully amortised at batch 8 (18 ms per sequence) — which is why the generative benchmarks run batched at the per-model cap (16, 16, 12, 8, 4 from 0.6B to 14B, harness `auto` below the cap). On the 8B the overhead is 2.4× at batch 1 and 1.7× at batch 8. These are costs of simulating the quantizer in PyTorch, not of the method: a deployed kernel quantizes as part of the GEMM.
 
+
+# E23 — under TwinQuant's protocol (Qwen3-8B only)
+
+TwinQuant (arXiv 2606.01556) and MosaicQuant (arXiv 2606.15652) publish W4A4 tables on Qwen3 4B–32B with identical 16-bit rows, so they share one evaluation protocol. E23 was to place our rows under that protocol. What the papers state: calibration on 128 random WikiText-2 sequences of 2048 tokens; group-128 **symmetric** quantization of both weights and activations ("each contiguous group of 128 elements shares one quantization scale"); six zero-shot tasks (ARC-c, ARC-e, HellaSwag, LAMBADA, PIQA, WinoGrande) on lm-eval. What they do not state: the checkpoints (Base or post-trained; no Hugging Face ids), the perplexity context, chunking and BOS convention, the harness version, whether `acc` or `acc_norm`, and whether the KV cache is quantized (it is never mentioned, so W4A4KV16). Neither paper has released code. Everything unstated was resolved to the nearest convention and flagged (`results/e23_protocol.json`): post-trained `Qwen/Qwen3-8B` (their printed Qwen3-8B per-task row is the post-trained profile — PIQA 76.4, WinoGrande 68.0, LAMBADA 67.4 against the Base model's 79.3 / 72.8 / 72.2 in E19), context 2048 with this repository's windows, pinned harness with `acc_norm`, KV in 16 bits. Our rows use GPTQ `g128` (symmetric per-group weights, 4.125 bits) and a symmetric group-128 activation quantizer written for this experiment (`symmetric_g128`, 4.125 bits); rotations, calibration and fold are E22's. The 14B and 32B were set up (order-200 Paley Hadamard for the 32B's 25600-wide MLP, sharded fp32 loading) and then cancelled once the 8B showed what follows.
+
+## Results
+
+The rotation-only control passes on the post-trained checkpoint (max |ΔNLL| ≤ 3.8e-5 over 64 chunks for all three rotations), so every difference below is the quantizers'.
+
+| Qwen3-8B, W4A4KV16, group-128 symmetric | source | WikiText-2 | rel. | six-task | Δ vs own 16-bit |
+|---|---|---:|---:|---:|---:|
+| 16-bit (TwinQuant's row) | TwinQuant Table 5 | 9.71 | — | 71.6 | — |
+| QuaRot | TwinQuant Table 5 | 24.5 | +152% | 63.4 | −8.2 |
+| SpinQuant | TwinQuant Table 5 | 14.8 | +52% | 68.3 | −3.3 |
+| FlatQuant | TwinQuant Table 5 | 13.4 | +38% | 69.3 | −2.3 |
+| SVDQuant | TwinQuant Table 5 | 14.9 | +54% | 68.8 | −2.8 |
+| TwinQuant | TwinQuant Table 5 | 13.2 | +36% | 70.2 | −1.4 |
+| bf16 (this work, same checkpoint) | E23 | 13.337 | — | 70.35 | — |
+| Hadamard (this work) | E23 | 14.309 | +7.3% | 67.40 | −2.95 |
+| NAR k=8 (this work) | E23 | 11.114 | −16.7% | 68.20 | −2.15 |
+| NAR k=max (this work) | E23 | 16.003 | +20.0% | pending | — |
+
+**The perplexity column cannot be bridged.** The same checkpoint scores 13.34 on this harness and 9.71 on theirs (E18 measured 12.92 on the first 64 windows a week earlier, so the number is stable on this side). Their Llama-3-8B row shows the same thing: 8.64 where the 2048-token non-overlapping convention gives 6.14, as BWLA (arXiv 2605.00422) and TWLA (arXiv 2606.13054) print in the same month. Their perplexity is measured under a convention their paper does not describe, and without their code it cannot be reproduced; the relative degradations are not comparable across conventions either, because a longer context or a rolling window compresses them. **The accuracy column is closer**: 70.35 against 71.6 on the same six tasks, each task within 1–4 points (ARC-c 56.4 / 55.5, ARC-e 80.9 / 83.5, HellaSwag 74.9 / 78.8, PIQA 77.7 / 76.4, WinoGrande 67.6 / 68.0, LAMBADA 64.6 / 67.4), the scatter two harness versions and an `acc`/`acc_norm` choice produce. On it, Hadamard gives up 2.95 points, NAR k=8 2.15; TwinQuant reports 1.4 for itself, 2.3 for FlatQuant and 3.3 for SpinQuant. NAR k=8 under their symmetric quantizer therefore sits between FlatQuant and SpinQuant, 0.75 behind TwinQuant, on a checkpoint and harness that are not theirs.
+
+## Two anomalies, and where each one comes from
+
+**NAR k=8 scores below the unquantized model — on 144 of 146 windows, mean ΔNLL −0.18.** An orthogonal rotation followed by a quantizer cannot do that by itself (E18 v1 learned this the hard way), so the function changed elsewhere. It is GPTQ. The weight-only rows — the GPTQ checkpoint with no activation quantizer — are 13.02 (Hadamard), **10.39** (k=8) and 11.82 (k=max) against bf16 13.34: every GPTQ checkpoint of this post-trained model is *below* bf16 on WikiText-2, by 0.3 to 2.9. GPTQ's error compensation is fitted on 128 WikiText-2 training sequences; on a Base model whose bf16 already sits at 8.8 on this text there is nothing to gain and E19/E22 never saw a weight-only row below bf16. On a post-trained chat model at 13.3, the compensation step partly re-fits the weights toward the calibration distribution, and the more of the residual stream the rotation exposes to GPTQ's per-group scales (k=8 concentrates the DC directions that dominate this model's massive-activation layer into few coordinates), the larger the pull. This is the calibration set showing through, not quantization quality, and it is why a post-trained checkpoint makes a poor perplexity benchmark for W4A4: the perplexity column of every published table on this checkpoint carries the same confound. The six-task column does not: k=8 is 2.15 *below* bf16 there.
+
+**NAR k=max is 1.7 above Hadamard, where under this repository's asymmetric quantizer it is 1.5 to 1.7 below (E22).** The weight-only rows put k=max at 11.82, below Hadamard's 13.02; adding the symmetric activation quantizer costs Hadamard +1.29, k=8 +0.72 and **k=max +4.18**. The reversal is the activation quantizer, and it is the mismatch NAR's design predicts: NAR concentrates each group's DC component into one slot coordinate so that an *asymmetric* group quantizer's zero-point absorbs it at no cost in levels. A symmetric group scale has no zero-point; the concentrated coordinate becomes the largest magnitude in its group, sets the scale, and the other 127 coordinates lose resolution. k=max does this in all 32 R1 slots and all 96 R4 slots, k=8 in 8 of each, a Hadamard in none — which is the observed order. Under asymmetric quantization (E22, same checkpoint family) the order is the usual one. The right reading is not that k=max is fragile but that NAR is a rotation for the asymmetric quantizer the OffQ/ResQ line of work uses, and it should be paired with it; a symmetric-only deployment should use k=8 or a smaller rank.
+
+Both results are single-seed on one checkpoint; the bridge stops here at the user's decision, with the 14B and 32B not run.
 
 # Infrastructure defects found and fixed during E19
 

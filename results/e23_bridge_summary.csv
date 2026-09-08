@@ -1,0 +1,23 @@
+model,checkpoint,source,row,context,W/A/KV,ARC-C,ARC-E,HellaSwag,PIQA,Winogrande,LAMBADA,six_task_mean,wikitext2_ppl,ppl_rel_degradation_pct,acc_delta_vs_16bit,assumed_settings
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,W16A16,unstated,16/16/16,55.5,83.5,78.8,76.4,68.0,67.4,71.6,9.71,,,
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,QuaRot,unstated,4/4/16,49.8,74.8,69.8,68.3,60.7,57.1,63.4,24.5,152.3,-8.2,
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,SpinQuant,unstated,4/4/16,53.6,78.5,71.4,76.5,67.3,62.4,68.3,14.8,52.4,-3.3,
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,FlatQuant,unstated,4/4/16,54.4,79.4,73.1,77.0,68.8,63.4,69.3,13.4,38.0,-2.3,
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,SVDQuant,unstated,4/4/16,52.8,78.9,74.4,75.8,66.6,64.1,68.8,14.9,53.5,-2.8,
+qwen3_8b,unstated (Qwen3 8B),TwinQuant Table 5,TwinQuant,unstated,4/4/16,53.6,80.8,77.1,75.7,67.9,65.8,70.2,13.2,35.9,-1.4,
+qwen3_8b,Qwen/Qwen3-8B,this work (E23),bf16 (ours),2048,16/16/16,56.4,80.93,74.92,77.69,67.56,64.6,70.35107883054418,13.337273020597351,,,"checkpoint (post-trained); context 2048 and BOS-per-window perplexity; harness version; acc_norm where defined; KV cache unquantized; all linear inputs quantized, attention matmuls not"
+qwen3_8b,Qwen/Qwen3-8B,this work (E23),Hadamard (ours),2048,4.125/4.125/16,53.67,78.32,71.21,74.97,65.19,61.01,67.39732346389046,14.308557902722034,7.3,-2.95,"checkpoint (post-trained); context 2048 and BOS-per-window perplexity; harness version; acc_norm where defined; KV cache unquantized; all linear inputs quantized, attention matmuls not"
+qwen3_8b,Qwen/Qwen3-8B,this work (E23),PrismQuant k=8,2048,4.125/4.125/16,52.9,77.65,71.41,76.44,65.98,64.82,68.20060818256492,11.114473900113598,-16.7,-2.15,"checkpoint (post-trained); context 2048 and BOS-per-window perplexity; harness version; acc_norm where defined; KV cache unquantized; all linear inputs quantized, attention matmuls not"
+qwen3_8b,Qwen/Qwen3-8B,this work (E23),PrismQuant k=max,2048,4.125/4.125/16,,,,,,,,16.00272923491226,20.0,,"checkpoint (post-trained); context 2048 and BOS-per-window perplexity; harness version; acc_norm where defined; KV cache unquantized; all linear inputs quantized, attention matmuls not"
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,W16A16,unstated,16/16/16,59.0,84.3,80.5,80.0,72.9,68.4,74.2,8.6,,,
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,QuaRot,unstated,4/4/16,52.8,76.4,72.4,73.6,65.0,62.8,67.2,18.2,111.6,-7.0,
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,SpinQuant,unstated,4/4/16,56.3,81.0,75.8,76.9,71.4,65.7,71.2,13.0,51.2,-3.0,
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,FlatQuant,unstated,4/4/16,60.4,81.6,77.6,79.6,72.6,66.9,73.1,11.4,32.6,-1.1,
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,SVDQuant,unstated,4/4/16,56.8,80.4,76.7,78.4,71.4,64.9,71.4,12.8,48.8,-2.8,
+qwen3_14b,unstated (Qwen3 14B),TwinQuant Table 5,TwinQuant,unstated,4/4/16,58.0,82.1,78.6,79.0,72.8,66.1,72.8,11.8,37.2,-1.4,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,W16A16,unstated,16/16/16,57.8,84.4,84.2,80.9,73.6,70.3,75.2,7.6,,,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,QuaRot,unstated,4/4/16,49.8,72.2,75.6,73.4,67.9,65.3,67.4,15.6,105.3,-7.8,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,SpinQuant,unstated,4/4/16,56.7,80.6,79.2,78.9,71.8,64.8,72.0,12.1,59.2,-3.2,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,FlatQuant,unstated,4/4/16,57.5,81.2,80.6,80.2,71.5,65.9,72.8,11.0,44.7,-2.4,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,SVDQuant,unstated,4/4/16,56.1,80.9,81.1,78.6,70.8,65.6,72.2,11.6,52.6,-3.0,
+qwen3_32b,unstated (Qwen3 32B),TwinQuant Table 5,TwinQuant,unstated,4/4/16,57.3,82.4,82.6,79.8,72.5,65.2,73.3,10.4,36.8,-1.9,
