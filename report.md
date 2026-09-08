@@ -1949,4 +1949,15 @@ If either B variant has lower seed-mean PPL than A in any condition, run D for t
 
 The large original 3B E1c activation dumps have been cleared, and 8B never had those dumps. Frozen token caches and A factors are still present and hashed. E27 therefore captures only the required selection/evaluation rows under its own storage using the same token IDs, without changing E1c assets. Capture provenance, hardware, selection indices, source hashes, and replay checks will be retained. One GPU runs the two models sequentially alongside E22.
 
-**Execution status:** preregistered; implementation and validation in progress. No E27 result or H-A/H-B conclusion is available yet.
+**Execution status:** see the completion-gated E27 tables below. Pending stages are not results.
+
+
+<!-- E27_RESULTS_BEGIN -->
+
+### E27 execution and results
+
+**llama32_3b:** pending completion; no conclusion yet.
+
+**llama31_8b:** pending completion; no conclusion yet.
+
+<!-- E27_RESULTS_END -->

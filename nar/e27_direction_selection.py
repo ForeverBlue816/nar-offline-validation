@@ -83,6 +83,7 @@ def audit_inputs(args, model):
     test = torch.load(args.workdir / assets['tokens']['test']['file'], weights_only=True)
     assert train.shape == (NCAL, LENGTH) and test.shape == (NEVAL, LENGTH)
     assert bool((train[:, 0] == train[0, 0]).all())
+    assert not bool((train[:, 1:] == train[0, 0]).any()), 'BOS exists beyond position zero; revisit candidate mask before running'
     return train, test, signature
 
 
@@ -490,6 +491,8 @@ def evaluate(args, model_key, methods=(*VARIANTS, 'hadamard')):
     _, results = roots(args, model_key)
     output = results / 'e27_per_sequence.partial.csv'
     rows = csv_rows(output)
+    # A requeue can arrive during D evaluation; finish every checkpointed method.
+    methods = tuple(dict.fromkeys([*methods, *(r['method'] for r in rows if r['method'] != 'bf16')]))
     done = {(r['site'], r['method'], int(r['seed']), int(r['sequence'])) for r in rows}
     model = base.load_model(act.MODEL_IDS[model_key], args.workdir)
     def measure(site, method, seed, fold_error):
@@ -594,6 +597,22 @@ def finalize(args, model):
     actual = {(r['site'], int(r['layer']), r['method'], int(r['seed'])) for r in diagnostics_rows}
     if actual != expected or len(actual) != len(diagnostics_rows):
         raise RuntimeError('Incomplete or duplicate per-layer diagnostics')
+    factor_audit = []
+    for site, layer, n in layer_keys(args, model):
+        for method in methods:
+            if method in ('A_full', 'hadamard'):
+                continue
+            path = factor_path(args, model, method, site, layer)
+            payload = torch.load(path, map_location='cpu', weights_only=True)
+            original = torch.load(factor_path(args, model, 'A_full', site, layer), map_location='cpu', weights_only=True)
+            assert torch.equal(payload['source_order'], original['source_order'])
+            assert torch.equal(payload['target_order'], original['target_order'])
+            factor_audit.append({'model': model, 'method': method, 'site': site, 'layer': layer,
+                                 'k': n // GROUP, 'anchor_error': payload['anchor_error'],
+                                 'selected_numerical_rank': payload.get('selected_numerical_rank', -1),
+                                 'null_completion_directions': payload.get('null_completion_directions', 0),
+                                 'permutation_identical_to_A': True, 'factor_sha256': digest(path)})
+    write_csv(results / 'e27_factor_audit.csv', factor_audit)
     write_csv(results / 'e27_summary.csv', summary)
     write_csv(results / 'e27_law_fit.csv', law_fits(diagnostics_rows))
     old = csv_rows(args.repo / 'results' / model / 'e5_per_sequence.csv')
@@ -655,6 +674,8 @@ def update_report(args):
     text = path.read_text()
     begin, end = '<!-- E27_RESULTS_BEGIN -->', '<!-- E27_RESULTS_END -->'
     replacement = '\n'.join(lines)
+    standalone = args.repo / 'results/e27_report.md'
+    standalone.write_text('# E27 — which tokens define the subspace\n\n' + replacement + '\n')
     if begin in text:
         lo, hi = text.index(begin), text.index(end) + len(end)
         text = text[:lo] + replacement + text[hi:]

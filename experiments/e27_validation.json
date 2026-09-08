@@ -1,0 +1,11 @@
+{
+  "experiment": "E27",
+  "validated_at_utc": "2026-09-08T13:19:40.389224+00:00",
+  "cpu_numerical_tests": "PASS",
+  "test_count": 7,
+  "test_output": "test_degenerate_bos_completion_is_deterministic (test_e27_direction_selection.E27Tests.test_degenerate_bos_completion_is_deterministic) ... ok\ntest_eight_angles (test_e27_direction_selection.E27Tests.test_eight_angles) ... ok\ntest_householder_capture_and_transpose_fold (test_e27_direction_selection.E27Tests.test_householder_capture_and_transpose_fold) ... ok\ntest_nonfinite_selection_rejected (test_e27_direction_selection.E27Tests.test_nonfinite_selection_rejected) ... ok\ntest_paired_seed_ci_and_D_trigger (test_e27_direction_selection.E27Tests.test_paired_seed_ci_and_D_trigger) ... ok\ntest_selection_global_percent_and_bos_ties (test_e27_direction_selection.E27Tests.test_selection_global_percent_and_bos_ties) ... ok\ntest_streaming_pool_matches_all_rows (test_e27_direction_selection.E27Tests.test_streaming_pool_matches_all_rows) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.129s\n\nOK\n",
+  "frozen_asset_hash_audit": "PASS for both models",
+  "bos_position_audit": "PASS; all BOS IDs are at sequence position zero",
+  "gpu_smoke": "PENDING allocated GPU",
+  "formal_measurements": "NOT STARTED; Slurm submission slots currently full"
+}
