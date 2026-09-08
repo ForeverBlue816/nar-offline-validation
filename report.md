@@ -1355,9 +1355,9 @@ The eight-task suite of the published W4A4KV4 tables, zero-shot, same harness re
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 16-bit (this work) | 81.69 | 61.09 | 87.16 | 85.66 | 47.80 | 84.22 | 51.79 | 82.00 | **72.68** |
 | **NAR k=8, W4A4KV4** | 83.59 | 61.86 | 86.73 | 84.64 | 47.60 | 83.79 | 51.02 | 80.43 | **72.46** |
-| NAR k=max, W4A4KV4 | — | — | — | — | — | — | — | — | — |
+| NAR k=max, W4A4KV4 | 83.63 | 61.52 | 86.42 | 84.59 | 46.60 | 83.57 | 49.08 | 80.35 | **71.97** |
 
-**NAR k=8 loses 0.22 points of eight-task accuracy against a 37% perplexity increase.** Six tasks move by less than a point, WinoGrande loses 1.6 and ARC-e gains 1.9; the LAMBADA row of the frozen six-task set (not in the mean) loses 1.7. For scale, OffQ's Table 1 has Llama-3-70B at 73.09 in 16-bit and 70.63 under their method, a 2.46-point loss on the same eight tasks; this row's 16-bit reference is 0.4 below theirs (3.1 against 3, one harness against another) and its quantized row is 1.8 above theirs. The caveats of the perplexity comparison apply unchanged — different checkpoint, single seed, no Hadamard row on this side — and the zero-shot suite barely exercises the KV quantizer (E19), so this is a statement about the weight and activation quantizers on a 70B, and it is the same statement E14 made on the 3B and 8B: what W4A4KV4 costs in perplexity, it mostly does not cost in zero-shot accuracy.
+**NAR k=8 loses 0.22 points of eight-task accuracy against a 37% perplexity increase, and k=max loses 0.71** (SIQA −2.7 and OBQA −1.2 account for the difference between the two NAR rows; the other six tasks agree within 0.4). Six tasks move by less than a point, WinoGrande loses 1.6 and ARC-e gains 1.9; the LAMBADA row of the frozen six-task set (not in the mean) loses 1.7. For scale, OffQ's Table 1 has Llama-3-70B at 73.09 in 16-bit and 70.63 under their method, a 2.46-point loss on the same eight tasks; this row's 16-bit reference is 0.4 below theirs (3.1 against 3, one harness against another) and its quantized row is 1.8 above theirs. The caveats of the perplexity comparison apply unchanged — different checkpoint, single seed, no Hadamard row on this side — and the zero-shot suite barely exercises the KV quantizer (E19), so this is a statement about the weight and activation quantizers on a 70B, and it is the same statement E14 made on the 3B and 8B: what W4A4KV4 costs in perplexity, it mostly does not cost in zero-shot accuracy.
 
 ## What GPTQ needed at this scale
 
@@ -1862,7 +1862,7 @@ E21's 70B rows sit next to every published W4A4KV4 number for a Llama-3-family 7
 | SingleQuant | arXiv 2511.22316 | 4.71 | +65% | 76.30 | −3.65 | 6 |
 | DuQuant | as quoted in 2511.22316 | 6.06 | +112% | 72.97 | −6.98 | 6 |
 | **NAR k=8 (this work, Llama-3.1-70B)** | E21 | **3.849** | **+37.0%** | **72.46** / 78.76 | **−0.22** / −0.35 | 8 / 6 |
-| NAR k=max (this work) | E21 | 3.890 | +38.5% | pending | — | |
+| NAR k=max (this work) | E21 | 3.890 | +38.5% | 71.97 / 78.76 | −0.71 / −0.35 | 8 / 6 |
 
 Sources: OffQ arXiv 2606.07116 Table 1 (16-bit 2.9 / 73.09; eight tasks ARC-e, ARC-c, BoolQ, HellaSwag, OBQA, PIQA, SIQA, WinoGrande); FlatQuant arXiv 2410.09426 (16-bit 2.86 / 79.95; six tasks ARC-c, ARC-e, HellaSwag, LAMBADA, PIQA, WinoGrande — the same six as this repository's frozen E13 set; KV group-128 asymmetric); PrefixQuant arXiv 2410.05265 Table 2 (16-bit 2.85 / 80.03; five tasks); SingleQuant arXiv 2511.22316 (16-bit 2.86 / 79.95, six tasks; quotes SpinQuant 6.21 / 71.33 and DuQuant 6.06 / 72.97 on the same six). OSTQuant's own paper reports no W4A4KV4 70B row; its entry is OffQ's re-run.
 
