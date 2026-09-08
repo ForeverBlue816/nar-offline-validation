@@ -121,6 +121,12 @@ def configure_e25(protocol: str) -> None:
     e22.TECH_REPORT = {}
     e19.EXPECTED = dict(EXPECTED)
     e19.architecture_audit = mistral_architecture_audit
+    # E19's probe hooks Qwen3's k_norm; Mistral has none, and K is quantized
+    # post-RoPE inside the registered attention function as on Llama (E14).
+    e19.kv_site_probe = lambda model: {
+        "note": "no q_norm/k_norm on Mistral; K and V are taken inside the registered attention "
+                "function after RoPE (E14 Llama path), so the KV quantizer sees the same tensors "
+                "as on Llama-3.x"}
     # The rotation-only control is protocol-independent; both prefixes read
     # the one written under e25.
     e19.control_path = lambda workdir: Path(workdir) / "results" / e19.MODEL_KEY / "e25_rotation_only_control.csv"
