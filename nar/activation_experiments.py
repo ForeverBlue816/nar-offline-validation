@@ -51,6 +51,11 @@ MODEL_IDS = {
     "qwen3_8b": "Qwen/Qwen3-8B",
     "qwen3_14b": "Qwen/Qwen3-14B",
     "qwen3_32b": "Qwen/Qwen3-32B",
+    # E25: the third architecture family. v0.3, not v0.1: no sliding window,
+    # 32768-token vocabulary, a different bf16 perplexity from v0.1.
+    "mistral_7b_v03": "mistralai/Mistral-7B-v0.3",
+    # E26: the largest Qwen3 Base checkpoint, a 128-expert top-8 MoE.
+    "qwen3_30b_a3b_base": "Qwen/Qwen3-30B-A3B-Base",
 }
 SITES = ("qkv", "down")
 EVAL_SITES = ("qkv_only", "both", "down_only")
