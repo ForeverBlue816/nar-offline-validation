@@ -54,6 +54,9 @@ MODEL_IDS = {
     # E25: the third architecture family. v0.3, not v0.1: no sliding window,
     # 32768-token vocabulary, a different bf16 perplexity from v0.1.
     "mistral_7b_v03": "mistralai/Mistral-7B-v0.3",
+    # E25 anchor check only: the version DuQuant's Table D6 (FP16 5.25 / 7.75)
+    # and, if its 5.4 reproduces, SpinQuant's Table 1 evaluated.
+    "mistral_7b_v01": "mistralai/Mistral-7B-v0.1",
     # E26: the largest Qwen3 Base checkpoint, a 128-expert top-8 MoE.
     "qwen3_30b_a3b_base": "Qwen/Qwen3-30B-A3B-Base",
 }

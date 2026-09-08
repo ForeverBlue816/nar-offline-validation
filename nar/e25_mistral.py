@@ -36,7 +36,7 @@ from nar import e19_qwen3_e2e as e19  # noqa: E402
 from nar import e22_qwen3_family as e22  # noqa: E402
 from nar import experiment as base  # noqa: E402
 
-FAMILY = ("mistral_7b_v03",)
+FAMILY = ("mistral_7b_v03", "mistral_7b_v01")
 BENCHMARKS = ("wikitext", "c4", "eight_task", "six_task")
 PROTOCOLS = {"g128_asym": "e25", "default": "e25pc"}
 EXPECTED = {"num_attention_heads": 32, "num_key_value_heads": 8, "head_dim": 128,
@@ -88,6 +88,8 @@ def mistral_architecture_audit(model: torch.nn.Module) -> dict[str, Any]:
     qk_norms = [name for name, _ in model.named_modules() if name.endswith(("q_norm", "k_norm"))]
     if qk_norms:
         problems.append(f"unexpected q_norm/k_norm modules: {qk_norms[:3]}")
+    if e19.MODEL_KEY == "mistral_7b_v01":
+        problems = [f"(anchor model, not asserted) {p}" for p in problems]
     audit = {
         "model_id": e19.MODEL_ID, "architecture": architecture, "shapes": shapes,
         "vocab_size": int(config.vocab_size), "sliding_window": sliding,
@@ -103,7 +105,7 @@ def mistral_architecture_audit(model: torch.nn.Module) -> dict[str, Any]:
         "hadamard_orders": {"hidden 4096": "2^12", "intermediate 14336": "28 x 512 (Paley 28, as Llama-3.1-8B)", "heads 32": "2^5"},
         "problems": problems,
     }
-    if problems:
+    if problems and e19.MODEL_KEY != "mistral_7b_v01":
         raise AssertionError("Mistral architecture audit failed:\n  " + "\n  ".join(problems))
     return audit
 
@@ -115,7 +117,7 @@ def configure_e25(protocol: str) -> None:
     e22.QUANTIZE_KV = True
     e22.ARTIFACT_SUBDIR = "e25"
     e22.FAMILY = FAMILY
-    e22.DEFAULT_BATCH = {"mistral_7b_v03": 8}
+    e22.DEFAULT_BATCH = {"mistral_7b_v03": 8, "mistral_7b_v01": 8}
     e22.DEFAULT_BENCHMARKS = BENCHMARKS
     e22.MATH_BENCHMARK = {}
     e22.TECH_REPORT = {}
