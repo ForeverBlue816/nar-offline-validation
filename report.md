@@ -1416,7 +1416,7 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | MMLU 5-shot (acc) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 52.81 | 62.63 | 72.99 | 76.89 | 81.05 |
-| bf16 | 52.52 | 62.68 | 73.11 | — | — |
+| bf16 | 52.52 | 62.68 | 73.11 | 76.83 | — |
 | Hadamard, W4A4KV4 | 43.46 | 55.81 | 69.23 | — | — |
 | NAR k=8 | 44.22 | 58.20 | — | — | — |
 | NAR k=max | 44.69 | 57.61 | — | — | — |
@@ -1427,9 +1427,9 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | Qwen3 report, 16-bit | 51.26 | 61.66 | 72.79 | 76.17 | 79.88 |
 | bf16 | 55.83 | 66.98 | 77.09 | 81.35 | — |
 | Hadamard, W4A4KV4 | 43.49 | 59.66 | 73.55 | 77.17 | — |
-| NAR k=8 | 46.23 | 62.05 | 74.03 | — | — |
-| NAR k=max | 45.27 | 61.74 | 75.33 | — | — |
-| NAR best − Hadamard | +2.74 | +2.38 | +1.78 | — | — |
+| NAR k=8 | 46.23 | 62.05 | 74.03 | 78.52 | — |
+| NAR k=max | 45.27 | 61.74 | 75.33 | 79.51 | — |
+| NAR best − Hadamard | +2.74 | +2.38 | +1.78 | +2.35 | — |
 
 | GSM8K 4-shot CoT (flexible extract) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
