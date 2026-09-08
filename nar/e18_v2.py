@@ -247,8 +247,9 @@ def full_hadamard_rows_transpose(x: torch.Tensor, signs: torch.Tensor) -> torch.
         quotient, remainder = divmod(n, order)
         if not remainder and quotient >= 1 and not quotient & (quotient - 1):
             factored = act.ext._fast_walsh_hadamard(x.reshape(-1, order, quotient))
-            h = act.paley_hadamard(order, x.device, x.dtype)
-            return (factored.transpose(1, 2) @ h).transpose(1, 2).reshape_as(x) * signs
+            dtype = torch.float64 if order in act.PALEY_FP64_ORDERS else x.dtype
+            h = act.paley_hadamard(order, x.device, dtype)
+            return (factored.transpose(1, 2).to(dtype) @ h).to(x.dtype).transpose(1, 2).reshape_as(x) * signs
     raise ValueError(f"no transpose for full-Hadamard n={n}")
 
 

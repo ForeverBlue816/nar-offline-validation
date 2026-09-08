@@ -127,6 +127,9 @@ def _is_prime(q: int) -> bool:
 _PALEY_CACHE: dict[tuple[int, str, torch.dtype], torch.Tensor] = {}
 
 
+PALEY_FP64_ORDERS = (68, 200)
+
+
 def paley_hadamard(order: int, device: torch.device, dtype: torch.dtype) -> torch.Tensor:
     """A normalized Hadamard matrix of the given order by Paley's constructions.
 
@@ -195,8 +198,14 @@ def full_hadamard_rows(x: torch.Tensor, signs: torch.Tensor) -> torch.Tensor:
             if not remainder and quotient >= 1 and not quotient & (quotient - 1):
                 signed = x * signs
                 factored = ext._fast_walsh_hadamard(signed.reshape(-1, order, quotient))
-                h = paley_hadamard(order, x.device, x.dtype)
-                return (factored.transpose(1, 2) @ h.T).transpose(1, 2).reshape_as(x)
+                # The dense Paley factor is accumulated in fp64 for the two
+                # largest orders (the 14B's 17408 = 68 x 256 and the 32B's
+                # 25600 = 200 x 128): in fp32 its round trip lands at 1.3e-6,
+                # over the fold contract's 1e-6. Orders 20 and 76 stay fp32,
+                # which every finished row used.
+                dtype = torch.float64 if order in PALEY_FP64_ORDERS else x.dtype
+                h = paley_hadamard(order, x.device, dtype)
+                return (factored.transpose(1, 2).to(dtype) @ h.T).to(x.dtype).transpose(1, 2).reshape_as(x)
     return ext._full_hadamard_rows(x, signs)
 
 
