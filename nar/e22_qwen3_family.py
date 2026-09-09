@@ -382,6 +382,11 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
     if limit is not None:
         kwargs["limit"] = limit
     if cache_key is not None:
+        # One cache per (model, row), shared across harness benchmarks: lm-eval
+        # keys each entry by the request itself (the prompt and continuation),
+        # so two benchmarks that ask the same question reuse one answer and two
+        # that differ never collide.  The six-task suite therefore only pays for
+        # LAMBADA once the eight-task suite has run.
         name = cache_key + (f"-limit{limit}" if limit is not None else "")
         kwargs["use_cache"] = str(WORKDIR / "cache" / "harness" / name)
         LOG.info("harness request cache: %s", kwargs["use_cache"])
@@ -477,7 +482,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
                                    f"first {C4_WINDOWS} windows at context {args.seq_len}"),
                        "nll_dtype": "float32", "headline_metric": "ppl", "headline": ppl}
         else:
-            result = run_harness(model, args, spec, cache_key=f"{PREFIX}-{args.model}-{args.row}-{benchmark}")
+            result = run_harness(model, args, spec, cache_key=f"{PREFIX}-{args.model}-{args.row}")
             metric_name, value = headline(spec, result["results"])
             payload = {**provenance, "benchmark": benchmark, "tasks": spec["tasks"],
                        "task_overrides": spec.get("task_overrides"), "group_name": spec.get("group_name"),

@@ -1067,7 +1067,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
             e19.MODEL_ID = MODEL_ID
             args.model = MODEL_KEY
             e22.DEFAULT_BATCH[MODEL_KEY] = 4
-            result = e22.run_harness(model, args, spec, cache_key=f"{PREFIX}-{MODEL_KEY}-{args.row}{suffix}-{args.benchmark}")
+            result = e22.run_harness(model, args, spec, cache_key=f"{PREFIX}-{MODEL_KEY}-{args.row}{suffix}")
             metric_name, value = e22.headline(spec, result["results"])
             payload = {**provenance, "benchmark": args.benchmark, "tasks": spec["tasks"], "num_fewshot": spec.get("num_fewshot"),
                        "harness_commit": e14.HARNESS_COMMIT, "results": e14._serializable(result["results"]),
