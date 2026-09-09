@@ -21,13 +21,14 @@ from __future__ import annotations
 
 import argparse
 import gc
+import gzip
 import json
 import logging
 import math
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 import numpy as np
 import torch
@@ -254,19 +255,40 @@ def calibrate_command(args: argparse.Namespace) -> None:
 
 # -------------------------------------------------------------- benchmarks ---
 
+def c4_validation_rows() -> Iterator[dict[str, Any]]:
+    """Rows of the first C4 validation shard, in file order.
+
+    The shard is read straight from the hub cache (one gzipped JSON-lines
+    file) when it is there: the `datasets` cache keys its configs by a hash
+    that changed with the library version, so `load_dataset` in offline mode
+    stopped finding the shard it had already downloaded.  The document order
+    is the file order either way, so the token stream is unchanged.
+    """
+    shard_name = Path(C4_SHARD).name
+    candidates = sorted((WORKDIR / "cache" / "huggingface" / "hub" / "datasets--allenai--c4" / "snapshots").glob(f"*/en/{shard_name}"))
+    if candidates:
+        LOG.info("reading C4 shard %s", candidates[-1])
+        with gzip.open(candidates[-1], "rt", encoding="utf-8") as handle:
+            for line in handle:
+                if line.strip():
+                    yield json.loads(line)
+        return
+    from datasets import load_dataset
+    dataset = load_dataset("allenai/c4", data_files={"validation": C4_SHARD}, split="validation",
+                           cache_dir=str(WORKDIR / "cache" / "datasets"))
+    yield from dataset
+
+
 def c4_tokens(model_id: str, seq_len: int, windows: int) -> torch.Tensor:
     """A contiguous token stream from the first C4 validation shard, E14 chunking."""
     path = WORKDIR / "cache" / "tokenized" / f"{base.model_key_from_id(model_id)}-c4-validation0-w{windows}-l{seq_len}.pt"
     if path.exists():
         return torch.load(path, map_location="cpu", weights_only=True)
-    from datasets import load_dataset
     from transformers import AutoTokenizer
-    dataset = load_dataset("allenai/c4", data_files={"validation": C4_SHARD}, split="validation",
-                           cache_dir=str(WORKDIR / "cache" / "datasets"))
     tokenizer = AutoTokenizer.from_pretrained(model_id, cache_dir=str(WORKDIR / "cache" / "huggingface"), use_fast=True)
     ids: list[int] = []
     needed = windows * seq_len
-    for row in dataset:
+    for row in c4_validation_rows():
         ids.extend(tokenizer(row["text"] + "\n\n", add_special_tokens=False)["input_ids"])
         if len(ids) >= needed:
             break

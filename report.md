@@ -1418,9 +1418,9 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | Qwen3 report, 16-bit | 52.81 | 62.63 | 72.99 | 76.89 | 81.05 |
 | bf16 | 52.52 | 62.68 | 73.11 | 76.83 | — |
 | Hadamard, W4A4KV4 | 43.46 | 55.81 | 69.23 | 73.55 | — |
-| NAR k=8 | 44.22 | 58.20 | — | 74.39 | — |
-| NAR k=max | 44.69 | 57.61 | — | — | — |
-| NAR best − Hadamard | +1.22 | +2.39 | — | +0.84 | — |
+| NAR k=8 | 44.22 | 58.20 | 69.97 | 74.39 | — |
+| NAR k=max | 44.69 | 57.61 | 68.75 | 74.58 | — |
+| NAR best − Hadamard | +1.22 | +2.39 | +0.74 | +1.03 | — |
 
 | MMLU-Redux 5-shot (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
@@ -1435,7 +1435,7 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 |---|---:|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 59.59 | 75.44 | 87.79 | 89.84 | 92.49 |
 | bf16 | 60.96 | 72.78 | — | 87.11 | — |
-| Hadamard, W4A4KV4 | — | — | — | — | — |
+| Hadamard, W4A4KV4 | — | 58.07 | — | 81.73 | — |
 | NAR k=8 | — | — | — | — | — |
 | NAR k=max | — | — | — | — | — |
 | NAR best − Hadamard | — | — | — | — | — |

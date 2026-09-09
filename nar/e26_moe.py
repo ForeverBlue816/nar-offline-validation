@@ -658,12 +658,18 @@ class RoutingRecorder:
     def __init__(self, model: torch.nn.Module):
         self.model = model
         self.indices: dict[int, list[torch.Tensor]] = {}
+        self.gaps: dict[int, list[torch.Tensor]] = {}
         self.handles: list[Any] = []
 
     def install(self) -> None:
         for layer, block in enumerate(self.model.model.layers):
             def hook(_m: torch.nn.Module, _i: tuple, output: tuple, layer: int = layer) -> None:
                 self.indices.setdefault(layer, []).append(output[2].detach().to(torch.int16).cpu())
+                # Margin between the 8th and 9th router logit: a flip whose
+                # reference margin sits at the fp32 noise floor is a tie, not
+                # a routing change (softmax and top-k are monotone in the logit).
+                top9 = output[0].detach().float().reshape(-1, output[0].shape[-1]).topk(9, dim=-1).values
+                self.gaps.setdefault(layer, []).append((top9[:, 7] - top9[:, 8]).cpu())
             self.handles.append(block.mlp.gate.register_forward_hook(hook))
 
     def close(self) -> None:
@@ -673,7 +679,8 @@ class RoutingRecorder:
 
 
 @torch.inference_mode()
-def _nll_and_routing(model: torch.nn.Module, tokens: torch.Tensor, label: str) -> tuple[list[float], dict[int, torch.Tensor]]:
+def _nll_and_routing(model: torch.nn.Module, tokens: torch.Tensor, label: str
+                     ) -> tuple[list[float], dict[int, torch.Tensor], dict[int, torch.Tensor]]:
     recorder = RoutingRecorder(model)
     recorder.install()
     nll: list[float] = []
@@ -688,19 +695,43 @@ def _nll_and_routing(model: torch.nn.Module, tokens: torch.Tensor, label: str) -
                 LOG.info("%s chunk %d/%d nll=%.6f", label, index + 1, tokens.shape[0], float(loss))
     finally:
         recorder.close()
-    return nll, {layer: torch.cat(v) for layer, v in recorder.indices.items()}
+    return (nll, {layer: torch.cat(v) for layer, v in recorder.indices.items()},
+            {layer: torch.cat(v) for layer, v in recorder.gaps.items()})
 
 
-def routing_agreement(reference: dict[int, torch.Tensor], candidate: dict[int, torch.Tensor]) -> list[dict[str, Any]]:
+def routing_agreement(reference: dict[int, torch.Tensor], candidate: dict[int, torch.Tensor],
+                      reference_gaps: dict[int, torch.Tensor] | None = None, tie_gap: float = 1e-3) -> list[dict[str, Any]]:
+    """Per-layer top-8 / argmax agreement, raw and with reference ties set aside.
+
+    A token whose reference 8th-vs-9th logit margin is below `tie_gap` has no
+    well-defined routing at fp32 precision: any reordering of the arithmetic
+    (the fold is exact only in exact arithmetic) can flip it.  The raw
+    agreement is reported as measured; the non-tie agreement is the fraction
+    of tokens with a real margin whose routing survived the fold, and the
+    largest reference margin among the flipped tokens says how far from a
+    tie any flip was.
+    """
     rows = []
     for layer in sorted(reference):
         a, b = reference[layer].long(), candidate[layer].long()
         set_same = (torch.sort(a, dim=-1).values == torch.sort(b, dim=-1).values).all(-1)
         argmax_same = a[:, 0] == b[:, 0]
         flips = (~set_same).nonzero().flatten().tolist()
-        rows.append({"layer": layer, "tokens": int(a.shape[0]), "top8_set_agreement": float(set_same.float().mean()),
-                     "argmax_agreement": float(argmax_same.float().mean()), "set_flips": len(flips),
-                     "flip_positions": flips[:20]})
+        row = {"layer": layer, "tokens": int(a.shape[0]), "top8_set_agreement": float(set_same.float().mean()),
+               "argmax_agreement": float(argmax_same.float().mean()), "set_flips": len(flips),
+               "flip_positions": flips[:20]}
+        if reference_gaps is not None and layer in reference_gaps:
+            gap = reference_gaps[layer].float()
+            real = gap > tie_gap
+            row.update({
+                "tie_gap": tie_gap, "tie_share": float((~real).float().mean()),
+                "median_gap": float(gap.median()),
+                "nontie_top8_agreement": float(set_same[real].float().mean()) if bool(real.any()) else 1.0,
+                "nontie_argmax_agreement": float(argmax_same[real].float().mean()) if bool(real.any()) else 1.0,
+                "max_flip_gap": float(gap[~set_same].max()) if flips else 0.0,
+                "flips_above_tie_gap": int((~set_same & real).sum()),
+            })
+        rows.append(row)
     return rows
 
 
@@ -709,13 +740,13 @@ def control_command(args: argparse.Namespace) -> None:
     base.setup_logging(WORKDIR, "e26-control")
     tokens = base.prepare_token_chunks(MODEL_ID, "test", 0, args.control_chunks, args.seq_len, WORKDIR)
     ref_path = result_dir() / f"{PREFIX}_control_reference.pt"
-    if ref_path.exists():
-        payload = torch.load(ref_path, weights_only=True)
-        ref_nll, ref_routing = payload["nll"], payload["routing"]
+    payload = torch.load(ref_path, weights_only=True) if ref_path.exists() else None
+    if payload is not None and "gaps" in payload:
+        ref_nll, ref_routing, ref_gaps = payload["nll"], payload["routing"], payload["gaps"]
     else:
         model = load_sharded()
-        ref_nll, ref_routing = _nll_and_routing(model, tokens, "E26 bf16 reference")
-        base.atomic_torch_save(ref_path, {"nll": ref_nll, "routing": ref_routing})
+        ref_nll, ref_routing, ref_gaps = _nll_and_routing(model, tokens, "E26 fp32 reference")
+        base.atomic_torch_save(ref_path, {"nll": ref_nll, "routing": ref_routing, "gaps": ref_gaps})
         del model; gc.collect(); torch.cuda.empty_cache()
     out_rows: list[dict[str, Any]] = []
     routing_rows: list[dict[str, Any]] = []
@@ -727,21 +758,28 @@ def control_command(args: argparse.Namespace) -> None:
         hooks = MoERuntimeHooks(model, rotations, activation_kind=None, quantize_kv=False)
         hooks.install()
         try:
-            nll, routing = _nll_and_routing(model, tokens, f"E26 rotation-only {rotation}")
+            nll, routing, _ = _nll_and_routing(model, tokens, f"E26 rotation-only {rotation}")
         finally:
             hooks.close()
         deltas = np.array(nll) - np.array(ref_nll)
-        agreement = routing_agreement(ref_routing, routing)
+        agreement = routing_agreement(ref_routing, routing, ref_gaps, args.routing_tie_gap)
         for r in agreement:
             routing_rows.append({"rotation": rotation, **r})
         worst = min(r["top8_set_agreement"] for r in agreement)
+        worst_nontie = min(r["nontie_top8_agreement"] for r in agreement)
+        ppl_diff = abs(math.exp(float(np.mean(nll))) - math.exp(float(np.mean(ref_nll))))
         row = {"rotation": rotation, "chunks": len(nll), "reference_ppl": math.exp(float(np.mean(ref_nll))),
                "rotation_only_ppl": math.exp(float(np.mean(nll))), "mean_nll_delta": float(deltas.mean()),
-               "max_abs_nll_delta": float(np.abs(deltas).max()),
-               "ppl_abs_difference": abs(math.exp(float(np.mean(nll))) - math.exp(float(np.mean(ref_nll)))),
+               "max_abs_nll_delta": float(np.abs(deltas).max()), "ppl_abs_difference": ppl_diff,
                "min_layer_top8_agreement": worst, "min_layer_argmax_agreement": min(r["argmax_agreement"] for r in agreement),
-               "passed": bool(abs(math.exp(float(np.mean(nll))) - math.exp(float(np.mean(ref_nll)))) <= args.control_ppl_tolerance
-                              and worst >= 0.999)}
+               "mean_layer_top8_agreement": float(np.mean([r["top8_set_agreement"] for r in agreement])),
+               "tie_gap": args.routing_tie_gap, "max_tie_share": max(r["tie_share"] for r in agreement),
+               "min_layer_nontie_top8_agreement": worst_nontie,
+               "min_layer_nontie_argmax_agreement": min(r["nontie_argmax_agreement"] for r in agreement),
+               "max_flip_gap": max(r["max_flip_gap"] for r in agreement),
+               "flips_above_tie_gap": sum(r["flips_above_tie_gap"] for r in agreement),
+               "raw_gate_passed": bool(ppl_diff <= args.control_ppl_tolerance and worst >= args.routing_tolerance),
+               "passed": bool(ppl_diff <= args.control_ppl_tolerance and worst_nontie >= args.routing_tolerance)}
         out_rows.append(row)
         LOG.info("E26 control %s: %s", rotation, json.dumps(row))
         del model, hooks, rotations; gc.collect(); torch.cuda.empty_cache()
@@ -749,7 +787,10 @@ def control_command(args: argparse.Namespace) -> None:
     base.write_csv(result_dir() / f"{PREFIX}_routing_agreement.csv", routing_rows)
     base.atomic_json(result_dir() / f"{PREFIX}_control.json", {
         "model": MODEL_KEY, "chunks": args.control_chunks, "rows": out_rows, "ppl_tolerance": args.control_ppl_tolerance,
-        "routing_tolerance": 0.999, "git_commit": e19.git_commit(), "hardware": base.hardware_info()})
+        "routing_tolerance": args.routing_tolerance, "routing_tie_gap": args.routing_tie_gap,
+        "gate": "ppl within tolerance and every layer's top-8 agreement among non-tie tokens (reference margin > tie gap) "
+                "at or above routing_tolerance; raw agreement recorded as measured",
+        "git_commit": e19.git_commit(), "hardware": base.hardware_info()})
     failed = [r["rotation"] for r in out_rows if not r["passed"]]
     if failed:
         raise AssertionError(f"E26 rotation-only control failed for {failed}")
@@ -1072,6 +1113,8 @@ def parser() -> argparse.ArgumentParser:
     control.add_argument("--rotations", nargs="+", choices=ROTATIONS)
     control.add_argument("--control-chunks", type=int, default=64)
     control.add_argument("--control-ppl-tolerance", type=float, default=0.01)
+    control.add_argument("--routing-tolerance", type=float, default=0.999)
+    control.add_argument("--routing-tie-gap", type=float, default=1e-3)
     gptq = sub.add_parser("gptq")
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
     evaluate = sub.add_parser("evaluate")
