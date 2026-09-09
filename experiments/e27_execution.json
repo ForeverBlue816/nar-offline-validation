@@ -1,7 +1,7 @@
 {
   "experiment": "E27",
-  "updated_at_utc": "2026-09-08T13:19:33.454840+00:00",
-  "attempts": 6,
+  "updated_at_utc": "2026-09-09T02:42:43.204792+00:00",
+  "attempts": 1,
   "requested_gpu": "rtx5090:1",
   "models_sequential": [
     "llama32_3b",
@@ -9,6 +9,7 @@
   ],
   "qos": "override-limits-but-killable",
   "preregistration": "experiments/e27_preregistration.json",
-  "status": "waiting_for_submission_slot",
-  "last_error": "sbatch: error: QOSMaxSubmitJobPerUserLimit\nsbatch: error: Batch job submission failed: Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)"
+  "status": "running",
+  "job_id": "145857",
+  "scheduler_state": "RUNNING"
 }

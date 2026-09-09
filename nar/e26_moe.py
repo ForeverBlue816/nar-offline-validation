@@ -845,13 +845,12 @@ def gptq_command(args: argparse.Namespace) -> None:
     base.seed_everything(args.seed)
     settings = e14.WEIGHT_PROTOCOLS[PROTOCOL]
     tokens = e14._quarot_calibration_tokens(MODEL_ID, WORKDIR, args.calibration_sequences, args.seq_len, args.calibration_seed)
-    # Fold drift probe (bf16 gate) as E14.
-    original = load_cpu()
+    # Fold drift probe as E14: reference logits from the same fp32 model
+    # before it is folded in place (one 122 GB CPU model, not two).
+    model = load_cpu()
     probe = tokens[:1, :args.verify_tokens]
     with torch.inference_mode():
-        reference = original(input_ids=probe, use_cache=False).logits.float()
-    del original; gc.collect()
-    model = load_cpu()
+        reference = model(input_ids=probe, use_cache=False).logits.float().clone()
     rotations = MoERotationSet(WORKDIR, MODEL_KEY, args.rotation, args.seed, model.config, torch.device("cuda:0"), variant)
     e14.FOLD_DEVICE = torch.device("cuda:0")
     fold = fuse_norms_and_rotate_moe(model, rotations, args.weight_row_batch)
