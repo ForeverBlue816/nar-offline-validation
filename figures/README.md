@@ -17,6 +17,26 @@ editable; dense scientific marks are embedded rasters.
   fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
   the side-by-side range-law comparison. No in-panel titles or footer captions.
 
+## Figures 3 and 4 typography and print strokes
+
+Figures 3 and 4 now use the same verified, upright **Times New Roman Bold**
+as Figures 1 and 2, including all tick numbers, axes, direct labels, insets,
+and legends. `FIGURE3_FONT_DIR` and `FIGURE4_FONT_DIR` support a custom
+font directory; rendering fails if the actual bold font is unavailable.
+Font identity and SHA-256 are recorded in each figure metadata file.
+Axes are 0.9 pt and major ticks 0.8 pt. Figure 3 energy curves are
+1.5–1.8 pt, with a 1.1 pt identity line and 0.95 pt pooled fit.
+Figure 4 series are 1.6–2.0 pt, kernel curves 1.1 pt, and brackets 0.9 pt.
+Point labels use extra clearance for the wider bold glyphs.
+
+All plotted CSVs, palette, statistics, panel sizes, and the Figure 4
+62:38 recovery/cost split are preserved. Standalone SVG/PDF/PNG panels,
+appendix panel, and combined previews are refreshed. Figure 3's existing
+caption text is also exported separately in Times New Roman Bold as
+`fig3_caption.svg/pdf/png`; it is not added inside the bare panels.
+The typography and rendered checks are recorded in
+`qa/fig3.typography-review.json` and `qa/fig4.typography-review.json`.
+
 ## Figure 1 mechanism redesign
 
 Reproduce with `python figures/make_fig1.py --reuse-data`. The data builder

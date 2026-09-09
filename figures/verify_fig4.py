@@ -94,7 +94,7 @@ def main():
         doc=pymupdf.open(FIG/f'{stem}.pdf');page=doc[0]
         np.testing.assert_allclose([page.rect.width,page.rect.height],[2.7*72,height*72],rtol=0,atol=1e-4)
         spans=[s for b in page.get_text('dict')['blocks'] if 'lines' in b for l in b['lines'] for s in l['spans']]
-        assert all(5.99<=s['size']<=7.01 and 'Serif' in s['font'] for s in spans)
+        assert all(5.99<=s['size']<=7.01 and s['font']=='TimesNewRomanPS-BoldMT' for s in spans)
         for span in spans: assert page.rect.contains(pymupdf.Rect(span['bbox']))
         with Image.open(FIG/f'{stem}.png') as png: assert png.size==(810,int(height*300))
         svg=(FIG/f'{stem}.svg').read_text();assert '<text' in svg

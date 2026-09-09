@@ -1,0 +1,348 @@
+{
+  "verdict": "PASS after review of intentional background-band overlays",
+  "panels": {
+    "fig3a": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 14,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3b": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 15,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3c1": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 18,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3c2": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 19,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3c": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 37,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 66,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig3_caption": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 11,
+        "min_size_pt": 8.0,
+        "max_size_pt": 8.0,
+        "within_page": true
+      }
+    }
+  },
+  "data_sha256_unchanged_vs_HEAD": {
+    "fig3_eigenspace_r256.csv": "4ff929d5bc7366cc8fa205fdbc16598e697d7076cb6ffa82aba076cc28b8d578",
+    "fig3_range_law.csv": "f88a2b46a819b030fe445c0fee9ad8808ac938174c153cc20e2271918c2961d7",
+    "fig3_token_projections.csv": "88d1afce4c985f54d3066cdbdc3932a089c5a59ce3218859a2558d7f0c4e41ef"
+  },
+  "collision_findings": {
+    "fig3a": [],
+    "fig3b": [],
+    "fig3c1": [],
+    "fig3c2": [],
+    "fig3c": [
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "Pooled R\u00b2 = 0.86",
+        "text_bbox": [
+          61.513919830322266,
+          13.307721138000488,
+          110.38092041015625,
+          20.307722091674805
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          15.599990844726562,
+          178.32000732421875,
+          104.03999328613281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "1.00",
+        "text_bbox": [
+          65.22016143798828,
+          23.89200210571289,
+          75.72016143798828,
+          29.89200210571289
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          15.599990844726562,
+          178.32000732421875,
+          104.03999328613281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0.85",
+        "text_bbox": [
+          65.22016143798828,
+          51.13320541381836,
+          75.72016143798828,
+          57.13320541381836
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          15.599990844726562,
+          178.32000732421875,
+          104.03999328613281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      }
+    ],
+    "fig3": [
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "Pooled R\u00b2 = 0.86",
+        "text_bbox": [
+          61.513919830322266,
+          182.50772094726562,
+          110.38092041015625,
+          189.50772094726562
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          184.79998779296875,
+          178.32000732421875,
+          273.239990234375
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          1
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "Hadamard",
+        "text_bbox": [
+          62.124481201171875,
+          13.899945259094238,
+          94.79454803466797,
+          20.899946212768555
+        ],
+        "other_text": null,
+        "other_bbox": [
+          64.68000030517578,
+          17.400009155273438,
+          171.95999145507812,
+          121.56001281738281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0.015",
+        "text_bbox": [
+          62.124481201171875,
+          20.968687057495117,
+          77.87448120117188,
+          27.968687057495117
+        ],
+        "other_text": null,
+        "other_bbox": [
+          64.68000030517578,
+          17.400009155273438,
+          171.95999145507812,
+          121.56001281738281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "1.00",
+        "text_bbox": [
+          65.22016143798828,
+          193.0919952392578,
+          75.72016143798828,
+          199.0919952392578
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          184.79998779296875,
+          178.32000732421875,
+          273.239990234375
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          1
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "0.85",
+        "text_bbox": [
+          65.22016143798828,
+          220.3332061767578,
+          75.72016143798828,
+          226.3332061767578
+        ],
+        "other_text": null,
+        "other_bbox": [
+          69.5999984741211,
+          184.79998779296875,
+          178.32000732421875,
+          273.239990234375
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          1
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-image-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 raster image(s)",
+        "text": "PrismQuant",
+        "text_bbox": [
+          132.94943237304688,
+          13.899945259094238,
+          169.89549255371094,
+          20.899946212768555
+        ],
+        "other_text": null,
+        "other_bbox": [
+          64.68000030517578,
+          17.400009155273438,
+          171.95999145507812,
+          121.56001281738281
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          0
+        ]
+      }
+    ],
+    "fig3_caption": []
+  },
+  "review": "Bold labels, ticks, insets, line strokes and legends inspected. Figure 4 note intentionally extends across the pale deployed background band; the band has no stroke and text remains legible. Point-label clearance increased.",
+  "user_override": {
+    "check_id": "FONT-FAMILY",
+    "reason": "User explicitly requires Times New Roman Bold; the generic source checker only permits sans-serif. Every exported text span is verified as TimesNewRomanPS-BoldMT."
+  },
+  "source_warnings_reviewed": "User-approved existing canvas sizes, PNG previews and mean-only displays retained. Figure 3 log-x ranks are 1 through 256. Figure 4 tick rotation is zero."
+}

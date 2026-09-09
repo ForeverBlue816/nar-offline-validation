@@ -11,7 +11,14 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.transforms import Bbox
 from matplotlib.path import Path as MplPath
-from figure_style import PALETTE, configure_style, save_panel
+from figure_style import PALETTE, save_panel
+
+from figure_typography import configure_times_bold
+
+def configure_style():
+    typography = configure_times_bold(4)
+    plt.rcParams.update({"axes.linewidth": .9, "xtick.major.width": .8, "ytick.major.width": .8})
+    return typography
 
 MODELS = ['llama32_3b', 'llama31_8b', 'qwen3_8b_base']
 WIDTH, HEIGHT = 2.7, 4.2
@@ -135,7 +142,7 @@ def point_labels(fig, ax, data):
     point_boxes=[Bbox.from_bounds(x-3,y-3,6,6) for x,y in points]
     plot=ax.get_window_extent(renderer)
     allowed=Bbox.from_extents(plot.x0-6,plot.y0+2,plot.x1+2,plot.y1+15)
-    hints={('hadamard',256,1):(-1,-9),('hadamard',256,2):(-2,9),('hadamard',256,3):(15,10),
+    hints={('hadamard',256,1):(-1,-9),('hadamard',256,2):(14,2),('hadamard',256,3):(15,10),
            ('hadamard',128,1):(-10,-11),('hadamard',64,1):(-10,9),
            ('nar',256,1):(0,-13),('nar',256,2):(-10,11),('nar',256,3):(22,1),
            ('nar',128,1):(-5,-13),('nar',128,2):(0,-10),('nar',64,1):(-14,-9)}
@@ -151,7 +158,7 @@ def point_labels(fig, ax, data):
         for dx,dy in candidates:
             t=ax.annotate(label,(row.effective_bits,row.ppl),xytext=(dx,dy),textcoords='offset points',
                 ha='center',va='center',fontsize=6,color=color,annotation_clip=False)
-            box=t.get_window_extent(renderer).expanded(1.03,1.08)
+            box=t.get_window_extent(renderer).expanded(1.15,1.45)
             penalty=sum(box.overlaps(b) for b in occupied)*1000+sum(box.overlaps(b) for b in point_boxes)*300
             penalty+=500*sum(path.intersects_bbox(box,filled=False) for path in paths)
             if abs(dx)+abs(dy)>25:
@@ -167,7 +174,7 @@ def point_labels(fig, ax, data):
         _,dx,dy,box=best
         annotation=ax.annotate(label,(row.effective_bits,row.ppl),xytext=(dx,dy),textcoords='offset points',
             ha='center',va='center',fontsize=6,color=color,annotation_clip=False,
-            arrowprops={'arrowstyle':'-','color':color,'lw':.35,'shrinkA':2,'shrinkB':3} if abs(dx)+abs(dy)>25 else None)
+            arrowprops={'arrowstyle':'-','color':color,'lw':.55,'shrinkA':2,'shrinkB':3} if abs(dx)+abs(dy)>25 else None)
         occupied.append(box)
         if annotation.arrow_patch is not None:
             annotation.update_positions(renderer)
@@ -177,7 +184,7 @@ def bottom_legend(fig, handles, outbase):
     # Fixed outer frame keeps three- and four-entry legends aligned.
     frame=(.17,.045,.78,.13)
     fig.add_artist(plt.Rectangle(frame[:2],frame[2],frame[3],transform=fig.transFigure,
-        facecolor='white',edgecolor=PALETTE['pane_edge'],lw=.65,zorder=2))
+        facecolor='white',edgecolor=PALETTE['pane_edge'],lw=.9,zorder=2))
     fig.legend(handles=handles,loc='center',bbox_to_anchor=frame,
         mode='expand',ncol=1,fontsize=6.5,frameon=False,
         handlelength=1.6,labelspacing=.3,borderpad=.55,borderaxespad=0)
@@ -190,17 +197,17 @@ def bottom_legend(fig, handles, outbase):
 def render_budget(data, outbase):
     configure_style(); fig=plt.figure(figsize=(WIDTH,HEIGHT)); ax=fig.add_axes([.19,.30,.77,.65]);ax.set_facecolor('none')
     pts=data[data.kind.eq('point')]; bf=float(data[data.kind.eq('bf16_reference')].ppl.iloc[0])
-    for method,color,lw,marker in [('hadamard',LIGHT,1.2,'o'),('nar',BLUE,1.6,'s')]:
+    for method,color,lw,marker in [('hadamard',LIGHT,1.6,'o'),('nar',BLUE,2.0,'s')]:
         part=pts[pts.method.eq(method)&pts.m.eq(1)].sort_values('effective_bits')
         ax.plot(part.effective_bits,part.ppl,color=color,lw=lw,marker=marker,ms=3.6,mec=color,mew=.6,zorder=4)
     extra_had=pts[pts.method.eq('hadamard')&pts.m.gt(1)]
-    ax.plot(extra_had.effective_bits,extra_had.ppl,ls='none',marker='o',ms=3.8,mfc='white',mec=LIGHT,mew=.9,zorder=5)
+    ax.plot(extra_had.effective_bits,extra_had.ppl,ls='none',marker='o',ms=3.8,mfc='white',mec=LIGHT,mew=1.1,zorder=5)
     extra=pts[pts.method.eq('nar')&pts.m.gt(1)]
     for row in extra.itertuples():
         origin=pts[pts.method.eq('nar')&pts.g.eq(row.g)&pts.m.eq(1)].iloc[0]
-        ax.plot([origin.effective_bits,row.effective_bits],[origin.ppl,row.ppl],color=BLUE,lw=.65,ls=(0,(1,2)),zorder=2)
+        ax.plot([origin.effective_bits,row.effective_bits],[origin.ppl,row.ppl],color=BLUE,lw=.9,ls=(0,(1,2)),zorder=2)
     ax.plot(extra.effective_bits,extra.ppl,ls='none',marker='^',ms=4,mfc=BLUE,mec=BLUE,mew=.4,zorder=5)
-    ax.axhline(bf,color=BLUE,lw=.7,ls=(0,(3,2)))
+    ax.axhline(bf,color=BLUE,lw=1.1,ls=(0,(3,2)))
     ax.annotate('bf16',xy=(1,bf),xycoords=('axes fraction','data'),xytext=(-1,3),textcoords='offset points',ha='right',fontsize=6.5)
     ymin=min(bf,float(pts.ppl.min())); ymax=max(bf,float(pts.ppl.max())); pad=.06*(ymax-ymin)
     lower=7.60 if bf>7 else 6.19
@@ -209,7 +216,7 @@ def render_budget(data, outbase):
     ax.set_xticks([4.125,4.1875,4.25,4.375,4.5]); ax.set_xticklabels(['4.125','','4.25','4.375','4.5'],rotation=0,ha='center')
     ax.set_xlabel('effective bits per value',fontsize=7); ax.set_ylabel('WikiText-2 PPL (64 chunks)',fontsize=7)
     ax.tick_params(labelsize=6); ax.spines[['top','right']].set_visible(False)
-    ax.plot([4.25,4.25],[lower,ymax+.008],color=STEEL,lw=.45,alpha=.65,zorder=0)
+    ax.plot([4.25,4.25],[lower,ymax+.008],color=STEEL,lw=.7,alpha=.65,zorder=0)
     ax.annotate('4.25 b',xy=(4.25,1),xycoords=('data','axes fraction'),xytext=(0,3),textcoords='offset points',ha='center',fontsize=6.5,color=STEEL)
     def pick(method,g,m): return pts[pts.method.eq(method)&pts.g.eq(g)&pts.m.eq(m)].iloc[0]
     had128=pick('hadamard',128,1); prism128=pick('nar',128,1); had256=pick('hadamard',256,1)
@@ -218,21 +225,21 @@ def render_budget(data, outbase):
     gap_x=4.25
     scale_per_pt=(upper-lower)/(HEIGHT*72*.65)
     interior=float(pick('nar',256,3).ppl);gap=3.6*scale_per_pt
-    ax.plot([gap_x,gap_x],[prism128.ppl,interior-gap],color=STEEL,lw=.65,zorder=2)
-    ax.plot([gap_x,gap_x],[interior+gap,had128.ppl],color=STEEL,lw=.65,zorder=2)
+    ax.plot([gap_x,gap_x],[prism128.ppl,interior-gap],color=STEEL,lw=.9,zorder=2)
+    ax.plot([gap_x,gap_x],[interior+gap,had128.ppl],color=STEEL,lw=.9,zorder=2)
     for y in [prism128.ppl,had128.ppl]:
-        ax.plot([gap_x,gap_x+.013],[y,y],color=STEEL,lw=.65,zorder=2)
+        ax.plot([gap_x,gap_x+.013],[y,y],color=STEEL,lw=.9,zorder=2)
     ax.text(gap_x+.040,(prism128.ppl+had128.ppl)/2,'null-space\nterm',fontsize=6.5,color=STEEL,ha='left',va='center',linespacing=1.2)
     bracket_y=float(pts[pts.method.eq('hadamard')].ppl.max())+.012
     cap=2.5*scale_per_pt
     ax.plot([had256.effective_bits,had256.effective_bits,had128.effective_bits,had128.effective_bits],
-            [bracket_y-cap,bracket_y,bracket_y,bracket_y-cap],color=STEEL,lw=.65)
+            [bracket_y-cap,bracket_y,bracket_y,bracket_y-cap],color=STEEL,lw=.9)
     ax.annotate('scale-resolution term',xy=((had256.effective_bits+had128.effective_bits)/2,bracket_y),
         xytext=(4,4),textcoords='offset points',fontsize=6.5,color=STEEL,ha='center',va='bottom')
-    handles=[Line2D([],[],color=LIGHT,lw=1.2,marker='o',ms=3.5,label='Hadamard'),
+    handles=[Line2D([],[],color=LIGHT,lw=1.6,marker='o',ms=3.5,label='Hadamard'),
         Line2D([],[],color=LIGHT,lw=0,marker='o',mfc='white',mec=LIGHT,ms=3.5,label='Hadamard + extra directions'),
-        Line2D([],[],color=BLUE,lw=1.6,marker='s',ms=3.5,label='PrismQuant'),
-        Line2D([],[],color=BLUE,lw=.65,ls=':',marker='^',ms=3.5,label='PrismQuant + extra directions')]
+        Line2D([],[],color=BLUE,lw=2.0,marker='s',ms=3.5,label='PrismQuant'),
+        Line2D([],[],color=BLUE,lw=.9,ls=':',marker='^',ms=3.5,label='PrismQuant + extra directions')]
     legend_bounds=bottom_legend(fig,handles,outbase)
     point_labels(fig,ax,pts)
     save_panel(fig,outbase,dpi=300,axes=[ax])
@@ -267,7 +274,7 @@ def render_knobs(data,outbase):
         axis.set_xlim(-.95,4.4);axis.set_xticks(range(5),CATEGORIES)
         axis.tick_params(labelsize=6)
     ax.text(-.95,1.085,'k = 8 (deployed)',ha='left',va='bottom',fontsize=6.5,clip_on=False)
-    specs=[('llama32_3b',LIGHT,'Llama-3.2-3B',1.2),('llama31_8b',STEEL,'Llama-3.1-8B',1.2),('qwen3_8b_base',BLUE,'Qwen3-8B-Base',1.6)]
+    specs=[('llama32_3b',LIGHT,'Llama-3.2-3B',1.6),('llama31_8b',STEEL,'Llama-3.1-8B',1.6),('qwen3_8b_base',BLUE,'Qwen3-8B-Base',2.0)]
     handles=[]
     for model,color,label,lw in specs:
         part=data[data.kind.eq('recovery')&data.model.eq(model)].copy()
@@ -284,7 +291,7 @@ def render_knobs(data,outbase):
     for model,label,offset in [('llama32_3b','3B',6),('llama31_8b','8B',-6)]:
         part=data[data.kind.eq('kernel_share')&data.model.eq(model)].sort_values('k')
         x=[CATEGORIES.index(str(int(k))) for k in part.k]
-        cost.plot(x,part.share_percent,color=RED,lw=.7,ls='-',marker='D',ms=3.5,mfc='white',mec=RED,mew=.8,zorder=3)
+        cost.plot(x,part.share_percent,color=RED,lw=1.1,ls='-',marker='D',ms=3.5,mfc='white',mec=RED,mew=1.1,zorder=3)
         for xpos,share in zip(x,part.share_percent):
             offsets={('3B',0):(-5,5),('3B',2):(-4,7),('8B',0):(11,-1),('8B',2):(-5,-12)}
             cost.annotate(f'{share:.1f}%',(xpos,share),xytext=offsets[(label,xpos)],textcoords='offset points',fontsize=6,color=RED,
@@ -292,7 +299,7 @@ def render_knobs(data,outbase):
         cost.annotate(label,(x[-1],part.share_percent.iloc[-1]),xytext=(6,2 if label=='3B' else -2),
             textcoords='offset points',fontsize=6,color=RED,ha='left',va='center')
         base=float(data[data.kind.eq('hadamard_kernel_share')&data.model.eq(model)].share_percent.iloc[0])
-        cost.axhline(base,color=RED,lw=.6,ls=(0,(3,2)),alpha=.85)
+        cost.axhline(base,color=RED,lw=.95,ls=(0,(3,2)),alpha=.85)
         cost.annotate(f'Hadamard, {label}',xy=(4.35,base),xytext=(0,offset),textcoords='offset points',
             ha='right',va='center',fontsize=6,color=RED)
     cost.set_ylim(0,10);cost.set_yticks([0,5,10],['0%','5%','10%'])
@@ -352,7 +359,8 @@ def compose(here):
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--repo',type=Path,default=Path(__file__).resolve().parents[1]);args=parser.parse_args()
-    root=args.repo.resolve();here=root/'figures';metadata={'panels':{},'backend':'plain matplotlib'}
+    root=args.repo.resolve();here=root/'figures';metadata={'panels':{},'backend':'plain matplotlib','typography':configure_style(),
+        'stroke_widths_pt':{'axes':.9,'ticks':.8,'baseline_series':1.6,'hero_series':2.0,'kernel':1.1,'bf16_reference':1.1,'hadamard_references':.95,'brackets':.9}}
     for model,stem in [('llama32_3b','fig4a'),('llama31_8b','fig4a_8b')]:
         data,missing=budget_data(root,model);data.to_csv(here/f'{stem}.csv',index=False)
         metadata['panels'][stem]={'model':model,'missing_configurations':missing,**render_budget(data,here/stem)}

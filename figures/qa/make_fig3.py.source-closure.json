@@ -1,12 +1,12 @@
 {
-  "source": "make_fig3.py + figure_style.py",
+  "source": "make_fig3.py + figure_style.py + figure_typography.py",
   "backend": "python",
   "summary": {
     "ready": false,
     "strict": false,
     "counts": {
-      "PASS": 16,
-      "WARN": 4,
+      "PASS": 17,
+      "WARN": 3,
       "FAIL": 1
     }
   },
@@ -67,10 +67,10 @@
     },
     {
       "check_id": "RASTER-DPI",
-      "level": "WARN",
-      "message": "Raster export meets the 300 dpi floor but not the 600 dpi default",
+      "level": "PASS",
+      "message": "A raster export of at least 600 dpi is configured",
       "evidence": [
-        "300"
+        "600"
       ]
     },
     {
@@ -143,5 +143,9 @@
       "message": "No obvious cross-backend plotting reference found for python",
       "evidence": []
     }
-  ]
+  ],
+  "user_override": {
+    "check_id": "FONT-FAMILY",
+    "reason": "User explicitly requires Times New Roman Bold; the generic source checker only permits sans-serif. Every exported text span is verified as TimesNewRomanPS-BoldMT."
+  }
 }

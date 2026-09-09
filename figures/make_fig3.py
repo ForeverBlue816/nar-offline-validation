@@ -12,7 +12,15 @@ import numpy as np
 import pandas as pd
 from matplotlib.ticker import FormatStrFormatter, MaxNLocator
 
-from figure_style import PALETTE, clean_2d_axis, configure_style, resolved_serif_family, save_panel
+from figure_style import PALETTE, clean_2d_axis, resolved_serif_family, save_panel
+
+from figure_typography import configure_times_bold, export_caption
+
+
+def configure_style():
+    typography = configure_times_bold(3)
+    plt.rcParams.update({"axes.linewidth": 0.9, "xtick.major.width": 0.8, "ytick.major.width": 0.8})
+    return typography
 
 
 def new_panel(left: float = 0.28) -> tuple[plt.Figure, plt.Axes]:
@@ -39,7 +47,7 @@ def render_a(projections: pd.DataFrame, geometry: dict, outbase: Path) -> None:
     had_y = scale * float(had["projection_v2"])
     ax.annotate(
         "", xy=(had_x, had_y), xytext=(0, 0),
-        arrowprops={"arrowstyle": "-|>", "color": PALETTE["hadamard"], "lw": 1.0, "mutation_scale": 3.5, "shrinkA": 0, "shrinkB": 0},
+        arrowprops={"arrowstyle": "-|>", "color": PALETTE["hadamard"], "lw": 1.3, "mutation_scale": 3.5, "shrinkA": 0, "shrinkB": 0},
     )
     ax.text(0.04, 0.96, f"Hadamard\n{had['in_plane_length']:.3f}", color=PALETTE["hadamard"],
             fontsize=7.0, ha="left", va="top", linespacing=1.2, transform=ax.transAxes)
@@ -50,7 +58,7 @@ def render_a(projections: pd.DataFrame, geometry: dict, outbase: Path) -> None:
         prism_x, prism_y = -prism_x, -prism_y
     ax.annotate(
         "", xy=(prism_x, prism_y), xytext=(0, 0),
-        arrowprops={"arrowstyle": "-|>", "color": PALETTE["prismquant"], "lw": 1.8, "mutation_scale": 7.0, "shrinkA": 0, "shrinkB": 0},
+        arrowprops={"arrowstyle": "-|>", "color": PALETTE["prismquant"], "lw": 2.0, "mutation_scale": 7.0, "shrinkA": 0, "shrinkB": 0},
     )
     ax.text(0.62, 0.96, f"PrismQuant\n{prism['in_plane_length']:.2f}", color=PALETTE["prismquant"],
             fontsize=7.0, ha="left", va="top", linespacing=1.2, transform=ax.transAxes)
@@ -69,8 +77,8 @@ def render_a(projections: pd.DataFrame, geometry: dict, outbase: Path) -> None:
         "bounds_rule": "0.5-99.5 percentiles expanded to all observations, plus 8% padding",
         "arrow_scale": 1.0,
     }
-    ax.axhline(0, color=PALETTE["pane_edge"], lw=0.45, zorder=0)
-    ax.axvline(0, color=PALETTE["pane_edge"], lw=0.45, zorder=0)
+    ax.axhline(0, color=PALETTE["pane_edge"], lw=0.7, zorder=0)
+    ax.axvline(0, color=PALETTE["pane_edge"], lw=0.7, zorder=0)
     ax.set_xlabel("projection on v1 (s.d.)", fontsize=7.0)
     ax.set_ylabel("projection on v2 (s.d.)", fontsize=7.0)
     save_panel(fig, outbase)
@@ -80,9 +88,9 @@ def render_b(eigenspace: pd.DataFrame, outbase: Path) -> None:
     fig, ax = new_panel(left=0.29)
     fig.subplots_adjust(right=0.76)
     specs = (
-        (1, PALETTE["hadamard"], "-", 1.0, "layer 1"),
-        (13, PALETTE["hadamard"], (0, (3, 2)), 1.0, "layer 13"),
-        (27, PALETTE["prismquant"], "-", 1.2, "layer 27"),
+        (1, PALETTE["hadamard"], "-", 1.5, "layer 1"),
+        (13, PALETTE["hadamard"], (0, (3, 2)), 1.5, "layer 13"),
+        (27, PALETTE["prismquant"], "-", 1.8, "layer 27"),
     )
     endpoints: dict[int, float] = {}
     for layer, color, linestyle, width, _label in specs:
@@ -146,8 +154,8 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
     scatter_sources(ax, law)
     intercept, slope, r_squared = fit_law(law if pooled is None else pooled)
     grid = np.linspace(0, 1.02, 150)
-    ax.plot([0, 1], [0, 1], color=PALETTE["reference"], lw=0.8, ls=(0, (3, 2)))
-    ax.plot(grid, intercept + slope * grid, color=PALETTE["reference"], lw=0.6)
+    ax.plot([0, 1], [0, 1], color=PALETTE["reference"], lw=1.1, ls=(0, (3, 2)))
+    ax.plot(grid, intercept + slope * grid, color=PALETTE["reference"], lw=0.95)
     ax.text(0.035, 0.965, f"Pooled R² = {r_squared:.2f}", transform=ax.transAxes,
             color=PALETTE["text"], fontsize=7.0, ha="left", va="top")
     ax.set_xlim(0, 1.02)
@@ -159,9 +167,9 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
         inset = ax.inset_axes([0.18, 0.63, 0.28, 0.23])
         inset.set_facecolor("#FAFCFD")
         scatter_sources(inset, law, inset=True)
-        inset.plot([0.85, 1.0], [0.85, 1.0], color=PALETTE["reference"], lw=0.55, ls=(0, (3, 2)))
+        inset.plot([0.85, 1.0], [0.85, 1.0], color=PALETTE["reference"], lw=0.85, ls=(0, (3, 2)))
         visible = (grid >= 0.85) & (grid <= 1.0) & (intercept + slope * grid >= 0.85)
-        inset.plot(grid[visible], intercept + slope * grid[visible], color=PALETTE["reference"], lw=0.6)
+        inset.plot(grid[visible], intercept + slope * grid[visible], color=PALETTE["reference"], lw=0.95)
         inset.set_xlim(0.85, 1.0)
         inset.set_ylim(0.85, 1.0)
         inset.set_xticks([0.85, 1.00])
@@ -169,15 +177,15 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
         inset.tick_params(labelsize=6.0, length=1.5, pad=2)
         inset.get_xticklabels()[0].set_ha("left")
         for spine in inset.spines.values():
-            spine.set_linewidth(0.45)
+            spine.set_linewidth(0.7)
             spine.set_color(PALETTE["pane_edge"])
         from matplotlib.patches import Rectangle, ConnectionPatch
         corner = Rectangle((0.85, 0.85), 0.15, 0.15, facecolor="none",
-                           edgecolor=PALETTE["pane_edge"], linewidth=0.65, zorder=5)
+                           edgecolor=PALETTE["pane_edge"], linewidth=0.85, zorder=5)
         ax.add_patch(corner)
         connector = ConnectionPatch(xyA=(0.85, 1.0), coordsA=ax.transData,
                                     xyB=(1, 1), coordsB=inset.transAxes,
-                                    color=PALETTE["pane_edge"], linewidth=0.55, zorder=1)
+                                    color=PALETTE["pane_edge"], linewidth=0.75, zorder=1)
         fig.add_artist(connector)
     ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
     ax.set_yticks([0, 0.25, 0.5, 0.75, 1.0])
@@ -253,6 +261,8 @@ def main() -> None:
     fit = render_c(activation, here / "fig3c1", pooled=law)
     other_fit = render_c(cache_and_multislot, here / "fig3c2", pooled=law)
     make_preview(here)
+    typography = configure_style()
+    export_caption(here, figure=3, width=5.3)
     metadata = {
         "model": "llama32_3b",
         "site": "down_input",
@@ -265,6 +275,8 @@ def main() -> None:
         "range_law_points": int(len(law)),
         "point_counts": {str(k): int(v) for k, v in law.source_family.value_counts().items()},
         "font_family_resolved": resolved_serif_family(),
+        "typography": typography,
+        "stroke_widths_pt": {"axes": 0.9, "ticks": 0.8, "energy_curves": [1.5, 1.5, 1.8], "identity": 1.1, "pooled_fit": 0.95},
         **fit,
         "range_law_subpanels": {"fig3c1": {"families": ["E1c activations"], "points": len(activation), "inset": fit["corner_inset"]}, "fig3c2": {"families": ["E7 V cache", "E20 multi-slot"], "points": len(cache_and_multislot), "inset": other_fit["corner_inset"]}},
         "fit_display": "same pooled fit in both views; not a per-family fit",

@@ -1,13 +1,13 @@
 Nature Figure Rendered Collision Audit
-pdf: /home/yanlongc/nar-offline-validation/figures/fig4b.pdf
+pdf: figures/fig4b.pdf
 pages: 1
 visible text boxes: 35
 stroke paths: 55
 
 [WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'Llama: little gain past 8;'
-  text bbox: (40.678199768066406, 16.908504486083984, 121.36215209960938, 23.408504486083984)
+  text bbox: (40.678199768066406, 16.301132202148438, 108.9282455444336, 22.801132202148438)
 [WARN] page 1 text-fill-edge: Text partially overlaps the edge of 1 filled region(s) — 'Qwen3: more at a cost.'
-  text bbox: (40.678199768066406, 24.846004486083984, 117.1563720703125, 31.346004486083984)
+  text bbox: (40.678199768066406, 23.385513305664062, 104.288330078125, 29.885513305664062)
 
 summary: 0 fail, 2 warn, 15 contained fill overlays, 0 contained image overlays
 verdict: REVIEW REQUIRED

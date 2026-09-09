@@ -1,11 +1,11 @@
 {
-  "pdf": "/home/yanlongc/nar-offline-validation/figures/fig4.pdf",
+  "pdf": "figures/fig4.pdf",
   "auditable": true,
   "verdict": "REVIEW REQUIRED",
   "page_count": 1,
   "visible_text_box_count": 66,
   "text_trace_count": 66,
-  "stroke_path_count": 100,
+  "stroke_path_count": 98,
   "filled_region_count": 73,
   "image_region_count": 0,
   "summary": {
@@ -28,9 +28,9 @@
       "text": "Llama: little gain past 8;",
       "text_bbox": [
         235.07818603515625,
-        16.908504486083984,
-        315.76214599609375,
-        23.408504486083984
+        16.301132202148438,
+        303.3282470703125,
+        22.801132202148438
       ],
       "other_text": null,
       "other_bbox": [
@@ -41,7 +41,7 @@
       ],
       "object_count": 1,
       "object_indexes": [
-        68000
+        66000
       ]
     },
     {
@@ -52,9 +52,9 @@
       "text": "Qwen3: more at a cost.",
       "text_bbox": [
         235.07818603515625,
-        24.846004486083984,
-        311.5563659667969,
-        31.346004486083984
+        23.385513305664062,
+        298.6883239746094,
+        29.885513305664062
       ],
       "other_text": null,
       "other_bbox": [
@@ -65,7 +65,7 @@
       ],
       "object_count": 1,
       "object_indexes": [
-        68000
+        66000
       ]
     }
   ]

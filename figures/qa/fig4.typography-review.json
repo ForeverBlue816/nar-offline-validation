@@ -1,0 +1,263 @@
+{
+  "verdict": "PASS after review of intentional background-band overlays",
+  "panels": {
+    "fig4a": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 31,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig4a_8b": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 35,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig4b": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 35,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig4b1": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 13,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig4b2": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 19,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    },
+    "fig4": {
+      "text": {
+        "exit_code": 0
+      },
+      "collision": {
+        "exit_code": 0
+      },
+      "typography": {
+        "font": "TimesNewRomanPS-BoldMT",
+        "text_spans": 66,
+        "min_size_pt": 6.0,
+        "max_size_pt": 7.0,
+        "within_page": true
+      }
+    }
+  },
+  "data_sha256_unchanged_vs_HEAD": {
+    "fig4a_8b.csv": "b945440f230a01bb9ec79eb53ba90682e0e8dc85878a852cc1a7fefb538bd074",
+    "fig4b1.csv": "61b2e4027b2648399e496744d25ca7ecacf095d8ada0e8fc2598ed8461bc3c29",
+    "fig4b2.csv": "e9cb433f3231739ae64dfd8a58db9c0ee189e3e33570386f00cb829e3ff370b7",
+    "fig4b.csv": "c775446485ed7f7bbc0f3e5ac0426ffeb4aca9300030b53e5ec3d72abedf5cc3",
+    "fig4a.csv": "dfab3fd4786ab80c20c8ab77f871b7c91f1cea189af511859aa7f268dcf475b6"
+  },
+  "collision_findings": {
+    "fig4a": [],
+    "fig4a_8b": [],
+    "fig4b": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          40.678199768066406,
+          16.301132202148438,
+          108.9282455444336,
+          22.801132202148438
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          15.1199951171875,
+          71.0704574584961,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          22000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          40.678199768066406,
+          23.385513305664062,
+          104.288330078125,
+          29.885513305664062
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          15.1199951171875,
+          71.0704574584961,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          22000
+        ]
+      }
+    ],
+    "fig4b1": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          40.678199768066406,
+          20.379913330078125,
+          108.9282455444336,
+          26.879913330078125
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          18.748809814453125,
+          71.0704574584961,
+          159.36480712890625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          2000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          40.678199768066406,
+          27.46429443359375,
+          104.288330078125,
+          33.96429443359375
+        ],
+        "other_text": null,
+        "other_bbox": [
+          36.93600082397461,
+          18.748809814453125,
+          71.0704574584961,
+          159.36480712890625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          2000
+        ]
+      }
+    ],
+    "fig4b2": [],
+    "fig4": [
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Llama: little gain past 8;",
+        "text_bbox": [
+          235.07818603515625,
+          16.301132202148438,
+          303.3282470703125,
+          22.801132202148438
+        ],
+        "other_text": null,
+        "other_bbox": [
+          231.3359832763672,
+          15.1199951171875,
+          265.4704284667969,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          66000
+        ]
+      },
+      {
+        "severity": "WARN",
+        "kind": "text-fill-edge",
+        "page": 1,
+        "message": "Text partially overlaps the edge of 1 filled region(s)",
+        "text": "Qwen3: more at a cost.",
+        "text_bbox": [
+          235.07818603515625,
+          23.385513305664062,
+          298.6883239746094,
+          29.885513305664062
+        ],
+        "other_text": null,
+        "other_bbox": [
+          231.3359832763672,
+          15.1199951171875,
+          265.4704284667969,
+          125.7379150390625
+        ],
+        "object_count": 1,
+        "object_indexes": [
+          66000
+        ]
+      }
+    ]
+  },
+  "review": "Bold labels, ticks, insets, line strokes and legends inspected. Figure 4 note intentionally extends across the pale deployed background band; the band has no stroke and text remains legible. Point-label clearance increased.",
+  "user_override": {
+    "check_id": "FONT-FAMILY",
+    "reason": "User explicitly requires Times New Roman Bold; the generic source checker only permits sans-serif. Every exported text span is verified as TimesNewRomanPS-BoldMT."
+  },
+  "source_warnings_reviewed": "User-approved existing canvas sizes, PNG previews and mean-only displays retained. Figure 3 log-x ranks are 1 through 256. Figure 4 tick rotation is zero."
+}
