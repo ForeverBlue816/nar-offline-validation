@@ -1,0 +1,13 @@
+model,site,method,layer_method_points,aggregation,intercept,slope,r_squared,identity_rmse
+llama32_3b,qkv,A_full,28,average three paired rotation seeds per layer/method before descriptive OLS,-0.32870440927018385,1.4036764982989207,0.9618511161097248,0.02452055753424525
+llama32_3b,qkv,B_top1,28,average three paired rotation seeds per layer/method before descriptive OLS,0.18711064220044393,0.7636735965696044,0.6780649424262987,0.032508820090932415
+llama32_3b,qkv,B_top1_no_bos,28,average three paired rotation seeds per layer/method before descriptive OLS,0.1309246584260364,0.8273562422026418,0.695817964235748,0.031114661881288384
+llama32_3b,qkv,C_top1pct,28,average three paired rotation seeds per layer/method before descriptive OLS,-0.22042846509671413,1.2447541925487673,0.8503356968513323,0.02132968067154995
+llama32_3b,qkv,C_top1pct_no_bos,28,average three paired rotation seeds per layer/method before descriptive OLS,-0.2118591766046251,1.2344103793850072,0.8427102735638005,0.02146663481005285
+llama32_3b,qkv,pooled,140,average three paired rotation seeds per layer/method before descriptive OLS,-0.0003924993335673531,0.9790505292415612,0.8747496450043142,0.02661569084994867
+llama32_3b,down,A_full,28,average three paired rotation seeds per layer/method before descriptive OLS,0.20828393723787678,0.6772567151297514,0.9347483465590121,0.08408119085398635
+llama32_3b,down,B_top1,28,average three paired rotation seeds per layer/method before descriptive OLS,0.27090216789170407,0.6374461253654516,0.9272139132816651,0.09377500231084901
+llama32_3b,down,B_top1_no_bos,28,average three paired rotation seeds per layer/method before descriptive OLS,-0.2159125175454867,1.1379138322984723,0.41199748331844666,0.09632593564252388
+llama32_3b,down,C_top1pct,28,average three paired rotation seeds per layer/method before descriptive OLS,0.25611456900360186,0.64661678209089,0.9238836169081269,0.08896600727096521
+llama32_3b,down,C_top1pct_no_bos,28,average three paired rotation seeds per layer/method before descriptive OLS,0.44302612871000696,0.4361311875710896,0.07907386105553216,0.10253663271335438
+llama32_3b,down,pooled,140,average three paired rotation seeds per layer/method before descriptive OLS,0.23293839747722378,0.6662260562553839,0.8317574967111189,0.09334965997705898

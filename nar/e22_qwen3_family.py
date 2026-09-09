@@ -130,7 +130,7 @@ BENCHMARKS: dict[str, dict[str, Any]] = {
 # BBH is dropped and MATH is MATH-500 at every size (decision of 2026-09-07):
 # the full MATH test set and BBH were 11,500 of the 13,300 long generations
 # per row. "math" resolves to minerva_math500 for every family member.
-DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "gpqa", "arc_easy", "math")
+DEFAULT_BENCHMARKS = ("wikitext", "c4", "mmlu", "gsm8k", "mmlu_redux", "arc_easy")  # GPQA and MATH-500 dropped 2026-09-09
 MATH_BENCHMARK = {key: "math500" for key in FAMILY} | {"qwen3_32b_base": "math500"}
 DEFAULT_BATCH = {"qwen3_0.6b_base": 16, "qwen3_1.7b_base": 16, "qwen3_4b_base": 12,
                  "qwen3_8b_base": 8, "qwen3_14b_base": 4}

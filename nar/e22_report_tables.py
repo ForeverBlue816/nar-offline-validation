@@ -18,8 +18,7 @@ ROWS = [("bf16", "bf16"), ("hadamard_asym_g128", "Hadamard, W4A4KV4"),
         ("nar_k8_asym_g128", "NAR k=8"), ("nar_kmax_asym_g128", "NAR k=max")]
 PPL = [("wikitext", "WikiText-2 PPL"), ("c4", "C4 PPL")]
 ACC = [("mmlu", "MMLU 5-shot (acc)"), ("mmlu_redux", "MMLU-Redux 5-shot (exact match)"),
-       ("gsm8k", "GSM8K 4-shot CoT (flexible extract)"), ("math", "MATH-500 4-shot CoT (exact match)"),
-       ("gpqa", "GPQA-Diamond 5-shot CoT (exact match)"), ("arc_easy", "ARC-Easy 0-shot (acc_norm)"),
+       ("gsm8k", "GSM8K 4-shot CoT (flexible extract)"), ("arc_easy", "ARC-Easy 0-shot (acc_norm)"),
        ("eight_task", "Eight-task 0-shot mean")]
 START, END = "<!-- e22-tables:start -->", "<!-- e22-tables:end -->"
 # Qwen3 technical report, Table (Base models), 16-bit; same dict as e22_qwen3_family.TECH_REPORT.

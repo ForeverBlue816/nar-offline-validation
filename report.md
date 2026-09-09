@@ -1372,7 +1372,7 @@ E19 and E21 each measured one model. E22 runs the same W4A4KV4 pipeline, unchang
 
 Everything is fixed by one committed configuration (`nar/e22_qwen3_family.py`, resolved harness configs in `nar/e22_benchmarks.json`): GPTQ `g128_asym` weights (4.15625 bits), asymmetric group-128 INT4 activations at all seven sites (4.25 bits), the E14 KIVI cache (K 5.17, V 4.43 bits at context 2048), fp32 containers with the fp32 fold, and the exact-transpose control before any quantizer is attached. Rows are bf16, Hadamard, NAR k=8 and NAR k=max, where k=max is the full slot count n/128 (R1 8/16/20/32/40 and R4 24/48/76/96/136 slots from 0.6B to 14B; k=8 uses 8 of them at every size, so on the 0.6B the two NAR rows share R1 and differ only in R4). All rotation orders that the Hadamard row needs exist: 2560, 5120, 9728 and 17408 factor as 128 × {20, 76} and 128 × {40, 136}, and the 20-, 68- and 76-point blocks are Paley constructions verified to satisfy HHᵀ = nI before use.
 
-**Benchmarks** follow the Qwen3 technical report's Base-model evaluation (§3.3) where the harness supports it: WikiText-2 and C4 perplexity (141 and 256 windows of 2048 tokens), MMLU 5-shot, MMLU-Redux 5-shot (generative, 8-token answer), GSM8K 4-shot chain-of-thought (512 new tokens, flexible extraction), MATH-500 4-shot chain-of-thought (the 500-problem subset, in place of the full MATH set), GPQA-Diamond 5-shot chain-of-thought (198 questions, 768 tokens, the subset the report scores), plus ARC-Easy zero-shot as the one item carried over from the eight-task Llama suite, chosen because it is small and because NAR led Hadamard on it by 2.3 points on the 3B under this protocol. BBH was dropped: at 3-shot chain-of-thought over 27 subtasks it costs more than every other benchmark together under the fake-quant hooks. The 8B additionally runs the full eight-task zero-shot suite for continuity with E19 and the OffQ comparison. The report's 16-bit numbers are listed next to the bf16 row measured on this harness; a bf16 row more than 2 points from the report is flagged as a pipeline difference rather than silently accepted.
+**Benchmarks** follow the Qwen3 technical report's Base-model evaluation (§3.3) where the harness supports it: WikiText-2 and C4 perplexity (141 and 256 windows of 2048 tokens), MMLU 5-shot, MMLU-Redux 5-shot (generative, 8-token answer), GSM8K 4-shot chain-of-thought (512 new tokens, flexible extraction), plus ARC-Easy zero-shot as the one item carried over from the eight-task Llama suite, chosen because it is small and because NAR led Hadamard on it by 2.3 points on the 3B under this protocol. BBH was dropped: at 3-shot chain-of-thought over 27 subtasks it costs more than every other benchmark together under the fake-quant hooks. MATH-500 and GPQA-Diamond were dropped on 2026-09-09 to keep the family at six benchmarks per model; the bf16 GSM8K rows already measured stand, and no quantized MATH or GPQA row is reported. The 8B additionally runs the full eight-task zero-shot suite for continuity with E19 and the OffQ comparison. The report's 16-bit numbers are listed next to the bf16 row measured on this harness; a bf16 row more than 2 points from the report is flagged as a pipeline difference rather than silently accepted.
 
 ## Gates
 
@@ -1440,24 +1440,6 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | NAR k=max | — | — | — | — | — |
 | NAR best − Hadamard | — | — | — | — | — |
 
-| MATH-500 4-shot CoT (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
-|---|---:|---:|---:|---:|---:|
-| Qwen3 report, 16-bit | 32.44 | 43.50 | 54.10 | 60.80 | 62.02 |
-| bf16 | — | — | — | — | — |
-| Hadamard, W4A4KV4 | — | — | — | — | — |
-| NAR k=8 | — | — | — | — | — |
-| NAR k=max | — | — | — | — | — |
-| NAR best − Hadamard | — | — | — | — | — |
-
-| GPQA-Diamond 5-shot CoT (exact match) | 0.6B | 1.7B | 4B | 8B | 14B |
-|---|---:|---:|---:|---:|---:|
-| Qwen3 report, 16-bit | 26.77 | 28.28 | 36.87 | 44.44 | 39.90 |
-| bf16 | — | — | — | — | — |
-| Hadamard, W4A4KV4 | — | — | — | — | — |
-| NAR k=8 | — | — | — | — | — |
-| NAR k=max | — | — | — | — | — |
-| NAR best − Hadamard | — | — | — | — | — |
-
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
 | bf16 | 57.95 | 68.48 | 76.01 | 80.01 | — |
@@ -1479,7 +1461,7 @@ On MMLU the bf16 row is within 0.3 points of the report at every size measured s
 
 ARC-Easy is the noisiest cell in the table and is recorded as measured. On the 0.6B NAR does not lead: k=max is 0.3 below Hadamard and k=8 is 3.1 below. On the 1.7B the Hadamard row scores 0.6 *above* its own bf16 reference and k=max 4.0 above it, which no 4-bit quantizer earns; on 2,376 zero-shot items where one point is 24 questions, W4A4KV4 rows scatter by ±2–3 points around bf16 and the k=8/k=max ordering flips between the two sizes. The task was kept because it is cheap, and the tables above carry the weight.
 
-The remaining tables — MMLU-Redux, GSM8K, MATH-500, GPQA, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
+The remaining tables — MMLU-Redux, GSM8K, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
 
 ## Scaling
 
@@ -1956,7 +1938,51 @@ The large original 3B E1c activation dumps have been cleared, and 8B never had t
 
 ### E27 execution and results
 
-**llama32_3b:** pending completion; no conclusion yet.
+**llama32_3b: complete.** D triggered: False.
+
+| Site | Variant | Mean PPL | Paired delta vs A [90% CI] |
+|---|---|---:|---:|
+| qkv_only | A_full | 7.64166 | +0.00000 [+0.00000, +0.00000] |
+| qkv_only | B_top1 | 7.64382 | +0.00216 [-0.00689, +0.01120] |
+| qkv_only | B_top1_no_bos | 7.64595 | +0.00428 [-0.00001, +0.00858] |
+| qkv_only | C_top1pct | 7.64339 | +0.00173 [-0.00858, +0.01203] |
+| qkv_only | C_top1pct_no_bos | 7.64346 | +0.00179 [-0.00040, +0.00399] |
+| qkv_only | hadamard | 7.65860 | +0.01694 [+0.01056, +0.02332] |
+| both | A_full | 7.70528 | +0.00000 [+0.00000, +0.00000] |
+| both | B_top1 | 7.72271 | +0.01743 [-0.00156, +0.03641] |
+| both | B_top1_no_bos | 7.80025 | +0.09497 [+0.09182, +0.09812] |
+| both | C_top1pct | 7.71123 | +0.00595 [-0.01174, +0.02364] |
+| both | C_top1pct_no_bos | 7.80603 | +0.10075 [+0.07228, +0.12923] |
+| both | hadamard | 7.77113 | +0.06585 [+0.03907, +0.09263] |
+| down_only | A_full | 7.67539 | +0.00000 [+0.00000, +0.00000] |
+| down_only | B_top1 | 7.68765 | +0.01226 [+0.00301, +0.02151] |
+| down_only | B_top1_no_bos | 7.76575 | +0.09036 [+0.07366, +0.10707] |
+| down_only | C_top1pct | 7.68838 | +0.01299 [+0.00693, +0.01905] |
+| down_only | C_top1pct_no_bos | 7.77222 | +0.09683 [+0.08343, +0.11022] |
+| down_only | hadamard | 7.71257 | +0.03719 [+0.03314, +0.04123] |
+
+| Site | Variant | Mean f | Mean range/Hadamard | Mean NMSE | Mean top-8 angle vs A (deg) |
+|---|---|---:|---:|---:|---:|
+| qkv | A_full | 0.39417 | 0.76243 | 0.0059072 | 1.3931e-06 |
+| qkv | B_top1 | 0.2151 | 0.86294 | 0.0074857 | 59.752 |
+| qkv | B_top1_no_bos | 0.21726 | 0.8622 | 0.0074728 | 59.283 |
+| qkv | C_top1pct | 0.30064 | 0.82007 | 0.0067668 | 50.524 |
+| qkv | C_top1pct_no_bos | 0.30042 | 0.82016 | 0.0067668 | 50.507 |
+| qkv | hadamard | 0.0050043 | 1 | 0.0099183 | nan |
+| down | A_full | 0.33278 | 0.74691 | 0.0057303 | 1.6141e-06 |
+| down | B_top1 | 0.15391 | 0.84503 | 0.0071797 | 77.004 |
+| down | B_top1_no_bos | 0.10332 | 0.86097 | 0.0071852 | 76.146 |
+| down | C_top1pct | 0.22587 | 0.81186 | 0.006647 | 66.187 |
+| down | C_top1pct_no_bos | 0.16405 | 0.84128 | 0.0067922 | 67.032 |
+| down | hadamard | 0.0073489 | 1 | 0.0092203 | nan |
+
+B_top1, both sites: paired interval overlaps zero; inconclusive ordering.
+
+B_top1_no_bos, both sites: A lower than B with a paired interval above zero.
+
+7 B layer/site estimates have fewer than eight identified directions. Their required top-8 angle rows include the preregistered null-space completion and must not be interpreted as eight data-identified directions.
+
+Layer/seed rows and all eight angles are retained in the CSV. Repeated seeds are not independent layer replicates.
 
 **llama31_8b:** pending completion; no conclusion yet.
 
