@@ -357,7 +357,14 @@ def harness_config(benchmark: str, model_key: str) -> dict[str, Any]:
 
 
 def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str, Any],
-                limit: int | None = None, log_samples: bool = False) -> dict[str, Any]:
+                limit: int | None = None, log_samples: bool = False,
+                cache_key: str | None = None) -> dict[str, Any]:
+    """One harness run.  `cache_key` names a per-(model, row, benchmark)
+    sqlite cache of per-request results (lm-eval's CachingLM): the harness
+    writes each finished request as it goes, so a preempted and requeued job
+    resumes the row instead of regenerating it.  Greedy decoding and
+    loglikelihoods are deterministic, and the key isolates rows, so a cached
+    answer is exactly what the same row would produce again."""
     import lm_eval
     from lm_eval.models.huggingface import HFLM
     from lm_eval.tasks import TaskManager
@@ -374,6 +381,10 @@ def run_harness(model: torch.nn.Module, args: argparse.Namespace, spec: dict[str
         kwargs["gen_kwargs"] = spec["gen_kwargs"]
     if limit is not None:
         kwargs["limit"] = limit
+    if cache_key is not None:
+        name = cache_key + (f"-limit{limit}" if limit is not None else "")
+        kwargs["use_cache"] = str(WORKDIR / "cache" / "harness" / name)
+        LOG.info("harness request cache: %s", kwargs["use_cache"])
     result = lm_eval.simple_evaluate(
         model=lm, tasks=harness_tasks(spec), batch_size=batch, max_batch_size=cap,
         task_manager=TaskManager(), cache_requests=False, bootstrap_iters=0,
@@ -466,7 +477,7 @@ def evaluate_command(args: argparse.Namespace) -> None:
                                    f"first {C4_WINDOWS} windows at context {args.seq_len}"),
                        "nll_dtype": "float32", "headline_metric": "ppl", "headline": ppl}
         else:
-            result = run_harness(model, args, spec)
+            result = run_harness(model, args, spec, cache_key=f"{PREFIX}-{args.model}-{args.row}-{benchmark}")
             metric_name, value = headline(spec, result["results"])
             payload = {**provenance, "benchmark": benchmark, "tasks": spec["tasks"],
                        "task_overrides": spec.get("task_overrides"), "group_name": spec.get("group_name"),
