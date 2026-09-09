@@ -1984,6 +1984,50 @@ B_top1_no_bos, both sites: A lower than B with a paired interval above zero.
 
 Layer/seed rows and all eight angles are retained in the CSV. Repeated seeds are not independent layer replicates.
 
-**llama31_8b:** pending completion; no conclusion yet.
+**llama31_8b: complete.** D triggered: False.
+
+| Site | Variant | Mean PPL | Paired delta vs A [90% CI] |
+|---|---|---:|---:|
+| qkv_only | A_full | 6.22450 | +0.00000 [+0.00000, +0.00000] |
+| qkv_only | B_top1 | 6.22752 | +0.00302 [+0.00080, +0.00524] |
+| qkv_only | B_top1_no_bos | 6.22637 | +0.00187 [-0.00189, +0.00562] |
+| qkv_only | C_top1pct | 6.22754 | +0.00304 [+0.00171, +0.00436] |
+| qkv_only | C_top1pct_no_bos | 6.22393 | -0.00058 [-0.00625, +0.00510] |
+| qkv_only | hadamard | 6.24293 | +0.01843 [+0.00692, +0.02994] |
+| both | A_full | 6.28493 | +0.00000 [+0.00000, +0.00000] |
+| both | B_top1 | 6.30094 | +0.01602 [+0.01175, +0.02028] |
+| both | B_top1_no_bos | 6.34178 | +0.05686 [+0.04863, +0.06509] |
+| both | C_top1pct | 6.29289 | +0.00796 [+0.00177, +0.01414] |
+| both | C_top1pct_no_bos | 6.32933 | +0.04440 [+0.03652, +0.05228] |
+| both | hadamard | 6.34626 | +0.06133 [+0.05641, +0.06626] |
+| down_only | A_full | 6.26217 | +0.00000 [+0.00000, +0.00000] |
+| down_only | B_top1 | 6.27918 | +0.01701 [+0.01288, +0.02113] |
+| down_only | B_top1_no_bos | 6.31585 | +0.05368 [+0.04803, +0.05934] |
+| down_only | C_top1pct | 6.27127 | +0.00910 [+0.00261, +0.01560] |
+| down_only | C_top1pct_no_bos | 6.30564 | +0.04347 [+0.03716, +0.04978] |
+| down_only | hadamard | 6.31542 | +0.05325 [+0.04954, +0.05695] |
+
+| Site | Variant | Mean f | Mean range/Hadamard | Mean NMSE | Mean top-8 angle vs A (deg) |
+|---|---|---:|---:|---:|---:|
+| qkv | A_full | 0.43575 | 0.73485 | 0.0054938 | 1.2996e-06 |
+| qkv | B_top1 | 0.27043 | 0.82986 | 0.006936 | 55.951 |
+| qkv | B_top1_no_bos | 0.27226 | 0.82934 | 0.0069304 | 55.763 |
+| qkv | C_top1pct | 0.34507 | 0.79044 | 0.0062969 | 47.989 |
+| qkv | C_top1pct_no_bos | 0.34664 | 0.78991 | 0.0062901 | 47.918 |
+| qkv | hadamard | 0.0064948 | 1 | 0.00988 | nan |
+| down | A_full | 0.32433 | 0.74597 | 0.0058055 | 1.8022e-06 |
+| down | B_top1 | 0.15167 | 0.83907 | 0.0071962 | 77.029 |
+| down | B_top1_no_bos | 0.10775 | 0.85695 | 0.0072389 | 76.467 |
+| down | C_top1pct | 0.21493 | 0.81063 | 0.0067322 | 66.373 |
+| down | C_top1pct_no_bos | 0.16703 | 0.8323 | 0.0068155 | 66.964 |
+| down | hadamard | 0.0071581 | 1 | 0.0093655 | nan |
+
+B_top1, both sites: A lower than B with a paired interval above zero.
+
+B_top1_no_bos, both sites: A lower than B with a paired interval above zero.
+
+5 B layer/site estimates have fewer than eight identified directions. Their required top-8 angle rows include the preregistered null-space completion and must not be interpreted as eight data-identified directions.
+
+Layer/seed rows and all eight angles are retained in the CSV. Repeated seeds are not independent layer replicates.
 
 <!-- E27_RESULTS_END -->

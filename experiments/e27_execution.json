@@ -1,6 +1,6 @@
 {
   "experiment": "E27",
-  "updated_at_utc": "2026-09-09T04:19:52.122721+00:00",
+  "updated_at_utc": "2026-09-09T05:01:33.449198+00:00",
   "attempts": 1,
   "requested_gpu": "rtx5090:1",
   "models_sequential": [
@@ -9,7 +9,9 @@
   ],
   "qos": "override-limits-but-killable",
   "preregistration": "experiments/e27_preregistration.json",
-  "status": "running",
+  "status": "complete",
   "job_id": "145857",
-  "scheduler_state": "RUNNING"
+  "scheduler_state": "COMPLETED",
+  "artifact_hashes_verified": true,
+  "main_report_included": true
 }
