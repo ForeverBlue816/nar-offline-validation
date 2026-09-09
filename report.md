@@ -1436,9 +1436,9 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | Qwen3 report, 16-bit | 59.59 | 75.44 | 87.79 | 89.84 | 92.49 |
 | bf16 | 60.96 | 72.78 | — | 87.11 | — |
 | Hadamard, W4A4KV4 | — | 58.07 | — | 81.73 | — |
-| NAR k=8 | — | — | — | — | — |
-| NAR k=max | — | — | — | — | — |
-| NAR best − Hadamard | — | — | — | — | — |
+| NAR k=8 | — | 62.47 | — | 84.31 | — |
+| NAR k=max | — | — | — | 83.55 | — |
+| NAR best − Hadamard | — | +4.40 | — | +2.58 | — |
 
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B | 14B |
 |---|---:|---:|---:|---:|---:|
