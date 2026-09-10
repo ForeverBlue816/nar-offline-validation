@@ -55,6 +55,7 @@ from nar import activation_experiments as act  # noqa: E402
 from nar import e12_wy  # noqa: E402
 from nar import e14_w4a4kv4 as e14  # noqa: E402
 from nar import e19_qwen3_e2e as e19  # noqa: E402
+from nar import e18_v2 as e18v2
 from nar import e21_llama70b_e2e as e21  # noqa: E402
 from nar import e22_qwen3_family as e22  # noqa: E402
 from nar import experiment as base  # noqa: E402
@@ -345,6 +346,27 @@ class MoERotationSet(e14.RotationSet):
             return self._dev_r2[key].apply(value, signs)
         raise KeyError(f"E26 has no dense R4; use apply_expert for label {label}")
 
+    def apply_expert_transpose(self, layer: int, expert: int, value: torch.Tensor) -> torch.Tensor:
+        """R4_e^T, so apply_expert_transpose(apply_expert(x)) == x in exact arithmetic."""
+        device = value.device
+        signs = torch.ones(value.shape[-1], device=device, dtype=torch.float32)
+        if self.method == "hadamard":
+            return e18v2.full_hadamard_rows_transpose(value.float(), signs)
+        factor = self.expert_r4[(layer, expert)]
+        n = factor.n
+        shape = value.shape
+        rows = value.float().reshape(-1, n)
+        rows = act.ext._fast_walsh_hadamard(rows.reshape(-1, n // factor.b, factor.b)).reshape(-1, n)
+        rows = rows * signs.to(rows.device)
+        source = factor.source_order.to(rows.device)
+        target = factor.target_order.to(rows.device)
+        unpermuted = torch.empty_like(rows)
+        unpermuted[:, source] = rows[:, target]
+        if not bool(factor.active.any()):
+            return unpermuted.reshape(shape)
+        w, y = e12_wy.compact_wy(factor.reflectors.to(rows.device), factor.active.to(rows.device))
+        return (unpermuted - (unpermuted @ y) @ w.T).reshape(shape)
+
     def apply_expert(self, layer: int, expert: int, value: torch.Tensor) -> torch.Tensor:
         """R4 of one expert on its 768-dim down input (rows of value)."""
         device = value.device
@@ -436,9 +458,14 @@ class MoERuntimeHooks(e14.RuntimeHooks):
     """E14's hooks with the expert contexts in place of the dense MLP hooks."""
 
     def __init__(self, model: torch.nn.Module, rotations: MoERotationSet, activation_kind: str | None,
-                 quantize_kv: bool = True):
+                 quantize_kv: bool = True, round_trip: bool = False):
         super().__init__(model, rotations, activation_kind, quantize_kv)
         self.rotations: MoERotationSet = rotations
+        # round_trip installs R4_e followed by its transpose at the expert
+        # input and leaves every weight untouched: mathematically the
+        # identity, numerically the same reordering the fold introduces.  It
+        # measures the fp32 noise floor of the routing-agreement audit.
+        self.round_trip = round_trip
 
     def _quantize(self, value: torch.Tensor) -> torch.Tensor:
         if self.activation_kind == "asymmetric_g128":
@@ -469,6 +496,10 @@ class MoERuntimeHooks(e14.RuntimeHooks):
 
             def down_fn(e: int, h: torch.Tensor, layer: int = layer) -> torch.Tensor:
                 rotated = self.rotations.apply_expert(layer, e, h).to(h.dtype)
+                if self.round_trip:
+                    # Null probe: undo the rotation immediately, so the weights
+                    # stay unfolded and the arithmetic is an exact identity.
+                    return self.rotations.apply_expert_transpose(layer, e, rotated).to(h.dtype)
                 return self._quantize(rotated) if quantize else rotated
 
             block.mlp.experts._nar_ctx = ExpertContext(
@@ -751,11 +782,18 @@ def control_command(args: argparse.Namespace) -> None:
     out_rows: list[dict[str, Any]] = []
     routing_rows: list[dict[str, Any]] = []
     for rotation in args.rotations or ROTATIONS:
+        # "null" is not a rotation: it applies R4_e and its transpose at the
+        # expert input with the weights left alone.  In exact arithmetic it
+        # changes nothing, so whatever routing it moves is the fp32 floor the
+        # real rotations cannot beat.
+        null = rotation == "null"
         model = load_sharded()
-        rotations = MoERotationSet(WORKDIR, MODEL_KEY, rotation, args.seed, model.config, torch.device("cuda:0"), MAIN_VARIANT)
+        rotations = MoERotationSet(WORKDIR, MODEL_KEY, "nar_kmax" if null else rotation, args.seed,
+                                   model.config, torch.device("cuda:0"), MAIN_VARIANT)
         e14.FOLD_DEVICE = torch.device("cuda:0")
-        fuse_norms_and_rotate_moe(model, rotations, args.weight_row_batch)
-        hooks = MoERuntimeHooks(model, rotations, activation_kind=None, quantize_kv=False)
+        if not null:
+            fuse_norms_and_rotate_moe(model, rotations, args.weight_row_batch)
+        hooks = MoERuntimeHooks(model, rotations, activation_kind=None, quantize_kv=False, round_trip=null)
         hooks.install()
         try:
             nll, routing, _ = _nll_and_routing(model, tokens, f"E26 rotation-only {rotation}")
@@ -1109,7 +1147,7 @@ def parser() -> argparse.ArgumentParser:
     sub.add_parser("audit")
     sub.add_parser("calibrate")
     control = sub.add_parser("control")
-    control.add_argument("--rotations", nargs="+", choices=ROTATIONS)
+    control.add_argument("--rotations", nargs="+", choices=tuple(ROTATIONS) + ("null",))
     control.add_argument("--control-chunks", type=int, default=64)
     control.add_argument("--control-ppl-tolerance", type=float, default=0.01)
     control.add_argument("--routing-tolerance", type=float, default=0.999)
