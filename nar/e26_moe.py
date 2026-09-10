@@ -953,10 +953,14 @@ def gptq_command(args: argparse.Namespace) -> None:
     base.seed_everything(args.seed)
     settings = e14.WEIGHT_PROTOCOLS[PROTOCOL]
     tokens = e14._quarot_calibration_tokens(MODEL_ID, WORKDIR, args.calibration_sequences, args.seq_len, args.calibration_seed)
-    # Fold drift probe as E14: reference logits from the same fp32 model
-    # before it is folded in place (one 122 GB CPU model, not two).
-    model = load_cpu()
-    probe = tokens[:1, :args.verify_tokens]
+    # The fp32 model lives sharded across the GPUs, not on the host: 122 GB of
+    # weights plus the checkpoint's own pages does not fit in the host memory
+    # a GPU allocation carries here, and every step below already runs on the
+    # GPU.  Each layer is pulled to cuda:0 for its GPTQ pass and returned to
+    # the device it came from.
+    model = load_sharded()
+    embed_device = model.get_input_embeddings().weight.device
+    probe = tokens[:1, :args.verify_tokens].to(embed_device)
     with torch.inference_mode():
         reference = model(input_ids=probe, use_cache=False).logits.float().clone()
     rotations = MoERotationSet(WORKDIR, MODEL_KEY, args.rotation, args.seed, model.config, torch.device("cuda:0"), variant)
@@ -978,7 +982,7 @@ def gptq_command(args: argparse.Namespace) -> None:
     hidden = torch.empty((tokens.shape[0], args.seq_len, model.config.hidden_size), dtype=stream_dtype)
     with torch.inference_mode():
         for index in range(tokens.shape[0]):
-            hidden[index] = model.model.embed_tokens(tokens[index:index + 1]).squeeze(0)
+            hidden[index] = model.model.embed_tokens(tokens[index:index + 1].to(embed_device)).squeeze(0).cpu()
     scratch = torch.empty_like(hidden)
     position_ids = torch.arange(args.seq_len, device="cuda").unsqueeze(0)
     dummy = torch.zeros((1, args.seq_len, model.config.hidden_size), device="cuda", dtype=stream_dtype)
@@ -996,6 +1000,7 @@ def gptq_command(args: argparse.Namespace) -> None:
 
     for layer_index, layer in enumerate(layers):
         layer_path = output / f"layer_{layer_index:02d}.pt"
+        origin = next(layer.parameters()).device
         layer.cuda()
         if layer_path.exists():
             _load_layer_state(layer, layer_path)
@@ -1079,7 +1084,7 @@ def gptq_command(args: argparse.Namespace) -> None:
             for sequence in range(tokens.shape[0]):
                 value = e14._layer_forward(layer, hidden[sequence:sequence + 1].cuda(), position_ids, position_embeddings)
                 scratch[sequence].copy_(value.squeeze(0).cpu())
-        layer.cpu()
+        layer.to(origin)
         if not layer_path.exists():
             base.atomic_torch_save(layer_path, _layer_state(layer))
             base.write_csv(output / "gptq_audit.partial.csv", audit_rows)
