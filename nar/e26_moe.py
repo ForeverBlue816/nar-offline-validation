@@ -975,6 +975,13 @@ def gptq_command(args: argparse.Namespace) -> None:
                   "probe_tokens": int(probe.numel())}
     del observed, reference
     LOG.info("E26 fold relative logit error %.3g", invariance["relative_l2_logit_error"])
+    # device_map leaves accelerate's dispatch hooks on every module, and they
+    # move a layer's inputs back to the device the map assigned it.  The loop
+    # below pulls each layer to cuda:0 and drives it directly, so the hooks
+    # would fight it the moment a layer lives anywhere else.  The whole-model
+    # forward is finished by this point; from here every device is explicit.
+    from accelerate.hooks import remove_hook_from_module
+    remove_hook_from_module(model, recurse=True)
 
     rotary = model.model.rotary_emb.cuda()
     layers = model.model.layers
