@@ -1,8 +1,29 @@
-# PrismQuant manuscript figures — revision 6
+# PrismQuant manuscript figures — revision 7
 
 Scientific plots are generated with Python/matplotlib. User-specified presentation
 choices take precedence over journal-style defaults. SVG/PDF axes and text remain
 editable; dense scientific marks are embedded rasters.
+
+## PrismQuant method framework — 2026-09-10
+
+The refined framework preserves the Transformer backbone, Construct / Represent /
+Deploy cards, Attention and FFN expansions, and a compact legend on a 2:1 canvas.
+It corrects residual bypasses, attention scores versus weighted values, gate-only
+SiLU, signed-permutation folding, rotation sharing, and online/offline notation.
+The diagram contains no performance claims or measured-data substitutes.
+
+- [Editable PPTX](prismquant_method/PrismQuant_method_refined.pptx)
+- [Vector PDF](prismquant_method/PrismQuant_method_refined.pdf)
+- [600-dpi PNG](prismquant_method/PrismQuant_method_refined.png)
+- [Generator and reproduction instructions](prismquant_method/)
+- [Complete package, including QA](prismquant_method/PrismQuant_refined_bundle.zip)
+
+The PPTX contains 342 native shapes and connectors in 7 module groups, with no
+picture objects. Actual PPT rendering, embedded Times New Roman typography,
+measured panel alignment, and glyph-outline collision checks passed. Conceptual
+scatter/bar marks are explicitly identified as schematic illustrations.
+
+![Refined PrismQuant method framework](prismquant_method/PrismQuant_method_refined.png)
 
 ## Current exports
 

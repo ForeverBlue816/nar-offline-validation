@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "applicable": true,
+  "auditable": true,
+  "verdict": "PASS",
+  "backend": "Python native PowerPoint; geometry measured from actual LibreOffice PDF",
+  "summary": {
+    "fail": 0,
+    "warn": 0,
+    "comparisons": 2,
+    "exemptions": 1
+  },
+  "tolerances": {
+    "alignment_pt": 1.5,
+    "gutter_pt": 1.5
+  },
+  "layout": {
+    "schema_version": 1,
+    "backend": "Python native PowerPoint; geometry measured from actual LibreOffice PDF",
+    "figure": {
+      "width_pt": 518.7401733398438,
+      "height_pt": 259.3700866699219
+    },
+    "panels": [
+      {
+        "id": "construct",
+        "bbox_pt": [
+          7.760921001434326,
+          146.56094360351562,
+          126.43163299560547,
+          216.59925842285156
+        ],
+        "panel_label_anchor_pt": [
+          13.606715202331543,
+          207.2686004638672
+        ]
+      },
+      {
+        "id": "represent",
+        "bbox_pt": [
+          130.96299743652344,
+          146.56094360351562,
+          259.3601989746094,
+          216.59925842285156
+        ],
+        "panel_label_anchor_pt": [
+          136.8087921142578,
+          207.2686004638672
+        ]
+      },
+      {
+        "id": "deploy",
+        "bbox_pt": [
+          263.9041748046875,
+          146.56094360351562,
+          510.97210693359375,
+          216.59925842285156
+        ],
+        "panel_label_anchor_pt": [
+          269.73736572265625,
+          207.2686004638672
+        ]
+      },
+      {
+        "id": "attention",
+        "bbox_pt": [
+          7.773529052734375,
+          25.299209594726562,
+          247.3871612548828,
+          142.0295867919922
+        ],
+        "panel_label_anchor_pt": [
+          13.606715202331543,
+          129.20143127441406
+        ]
+      },
+      {
+        "id": "ffn",
+        "bbox_pt": [
+          252.5440216064453,
+          25.299209594726562,
+          510.95947265625,
+          142.0295867919922
+        ],
+        "panel_label_anchor_pt": [
+          258.4028625488281,
+          129.20143127441406
+        ]
+      }
+    ],
+    "row_groups": [
+      {
+        "id": "row-1",
+        "panels": [
+          "construct",
+          "represent",
+          "deploy"
+        ]
+      },
+      {
+        "id": "row-2",
+        "panels": [
+          "attention",
+          "ffn"
+        ]
+      }
+    ],
+    "column_groups": [],
+    "boundary_groups": [],
+    "exemptions": [
+      {
+        "panels": [
+          "construct",
+          "represent",
+          "deploy"
+        ],
+        "checks": [
+          "panel-width"
+        ],
+        "reason": "The user requests a 24% / 26% / 50% card-width ratio."
+      }
+    ]
+  },
+  "findings": []
+}

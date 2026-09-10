@@ -1,0 +1,40 @@
+{
+  "review_status": "PASS",
+  "rendering": "Actual editable PPT rendered through LibreOffice, followed by vector scaling to 183 mm width and 600 dpi PNG export.",
+  "visual_checks": [
+    {
+      "panel": "Transformer",
+      "result": "Two complete residual bypasses; folded R1 labels; final RMSNorm shown; no standalone online R1 matrix boxes."
+    },
+    {
+      "panel": "Construct",
+      "result": "Ordered factorization R = H_g D Pi G; native scatter dots and principal axes; generic R rather than R1."
+    },
+    {
+      "panel": "Represent",
+      "result": "Equal vertical units and equal range brackets; affine offset kept in decomposition; conceptual values not experiment results."
+    },
+    {
+      "panel": "Deploy",
+      "result": "One shared R2 per layer across heads; R1 across layers; local per-layer R4 path."
+    },
+    {
+      "panel": "Attention",
+      "result": "Q and K feed scores; causal mask and softmax precede a separate weighted-V operator; post-RoPE K cache and post-R2 V cache have different axes."
+    },
+    {
+      "panel": "FFN",
+      "result": "SiLU only on gate; gate Pi and up D Pi folds; native circled-dot node; conjugated G4 prime, H128, A4; two-stage caption without speed claims."
+    },
+    {
+      "panel": "Legend",
+      "result": "Compact one-row key; no oversized frame or duplicate decorative concepts."
+    }
+  ],
+  "font_checks": "Only Times New Roman regular, italic and bold in final PDF, embedded as TrueType. Main labels approximately 8-9 pt; auxiliary text approximately 7-8 pt; minimum script glyph 5.4 pt at 183 mm width.",
+  "editability": "All text and marks are native editable PPT elements. No p:pic entries and no ppt/media parts.",
+  "collision_check": "0 FAIL and 0 WARN with unchanged geometric thresholds using actual embedded-font glyph bounds. Default paragraph grouping is unsuitable for native stacked math and boxed legend labels.",
+  "alignment_check": "PASS, final PDF frames and text baselines measured. Unequal card widths are the requested 24/26/50 design.",
+  "physical_view": "Inspected entire figure and every panel at 1600 px and at 183 mm / 150 dpi reading preview.",
+  "source_preflight": "Native PPT assembly is not a matplotlib plot. Checked Python syntax, explicit Times New Roman, actual font embedding, vector PDF, PNG dpi, native object types and measured layout; SVG/TIFF are outside requested deliverables."
+}

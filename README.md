@@ -5,6 +5,8 @@ asymmetric INT4 quantization. It covers post-RoPE Llama K tensors, wide
 `q_proj`/`down_proj` inputs, activation-only perplexity, factorized online
 cost, per-token V-cache quantization, and a KIVI-style per-channel K baseline.
 
+The refined **PrismQuant method framework** is available as an [editable PowerPoint](figures/prismquant_method/PrismQuant_method_refined.pptx), [vector PDF](figures/prismquant_method/PrismQuant_method_refined.pdf), and [high-resolution preview](figures/prismquant_method/PrismQuant_method_refined.png). [Source, reproduction instructions, and QA records](figures/prismquant_method/) are included.
+
 > **Corrected result:** the valid pre-registered K gates at `b=32/64` pass, as
 > do all frozen E2 NAR rows. The original `b=128` K gate is invalid because a
 > 128-dimensional head contains only one group and therefore one DC slot. In
