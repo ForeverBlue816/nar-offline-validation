@@ -136,6 +136,7 @@ def configure_e25(protocol: str) -> None:
 
 def summary_command(args: argparse.Namespace) -> None:
     """results/mistral_7b_v03/e25_summary.csv and E25_DONE.json."""
+    e22.configure("mistral_7b_v03")  # sets e19.MODEL_ID; the marker records it
     directory = e22.WORKDIR / "results" / "mistral_7b_v03"
     rows: list[dict[str, Any]] = []
     for protocol, prefix in PROTOCOLS.items():

@@ -1481,36 +1481,53 @@ Measured because the generative benchmarks are bounded by it. Greedy decoding on
 On the 0.6B the hooks are launch-bound — 5× the stock step at batch 1 and almost fully amortised at batch 8 (18 ms per sequence) — which is why the generative benchmarks run batched at the per-model cap (16, 16, 12, 8, 4 from 0.6B to 14B, harness `auto` below the cap). On the 8B the overhead is 2.4× at batch 1 and 1.7× at batch 8. These are costs of simulating the quantizer in PyTorch, not of the method: a deployed kernel quantizes as part of the GEMM.
 
 
-# E23 — under TwinQuant's protocol (Qwen3-8B only)
+# E23 — cancelled
 
-TwinQuant (arXiv 2606.01556) and MosaicQuant (arXiv 2606.15652) publish W4A4 tables on Qwen3 4B–32B with identical 16-bit rows, so they share one evaluation protocol. E23 was to place our rows under that protocol. What the papers state: calibration on 128 random WikiText-2 sequences of 2048 tokens; group-128 **symmetric** quantization of both weights and activations ("each contiguous group of 128 elements shares one quantization scale"); six zero-shot tasks (ARC-c, ARC-e, HellaSwag, LAMBADA, PIQA, WinoGrande) on lm-eval. What they do not state: the checkpoints (Base or post-trained; no Hugging Face ids), the perplexity context, chunking and BOS convention, the harness version, whether `acc` or `acc_norm`, and whether the KV cache is quantized (it is never mentioned, so W4A4KV16). Neither paper has released code. Everything unstated was resolved to the nearest convention and flagged (`results/e23_protocol.json`): post-trained `Qwen/Qwen3-8B` (their printed Qwen3-8B per-task row is the post-trained profile — PIQA 76.4, WinoGrande 68.0, LAMBADA 67.4 against the Base model's 79.3 / 72.8 / 72.2 in E19), context 2048 with this repository's windows, pinned harness with `acc_norm`, KV in 16 bits. Our rows use GPTQ `g128` (symmetric per-group weights, 4.125 bits) and a symmetric group-128 activation quantizer written for this experiment (`symmetric_g128`, 4.125 bits); rotations, calibration and fold are E22's. The 14B and 32B were set up (order-200 Paley Hadamard for the 32B's 25600-wide MLP, sharded fp32 loading) and then cancelled once the 8B showed what follows.
+E23 was to place our rows under TwinQuant's Qwen3 protocol. It was cancelled on 2026-09-08 at the user's decision; no E23 number is reported anywhere in this document.
+
+# E25 — Mistral-7B-v0.3
+
+E25 runs `mistralai/Mistral-7B-v0.3` through the E22 pipeline with no change to it: the same calibration, fp32 fold, GPTQ, activation quantizer and KIVI cache, seed 0. Mistral has no `q_norm`/`k_norm`, so K and V are quantized after RoPE inside the registered attention function, which is the Llama path of E14. The main rows use GPTQ `g128_asym` weights (4.156 bits) and the asymmetric group-128 activation quantizer (4.25 bits); K takes 5.17 bits and V 4.43 bits at context 2048. One extra pair, Hadamard and NAR k=max, repeats the run with GPTQ's default per-channel symmetric weights (4.0 bits) and everything else unchanged. Only our own rows are reported. The published Mistral W4A4 rows we found (DuQuant Table D6, SpinQuant Table 1) are on Mistral-7B-v0.1 or leave the version unstated, and use other weight and KV settings, so none is placed next to these.
+
+## Gates
+
+*Architecture.* `MistralForCausalLM`, 32 layers, hidden 4096, GQA with 32 query and 8 KV heads, head dimension 128, MLP width 14336, vocabulary 32768, no biases, RMSNorm, untied embedding and head, `sliding_window` None. The audit reports `problems: []`. The MLP width factors as 28 × 512, so R4's Hadamard uses the Paley order 28, as on Llama-3.1-8B.
+
+*Round trip and rotation-only control.* Every rotation reconstructs to relative error ≤ 3.8e-7 (tolerance 1e-6). With all rotations folded and no quantizer attached, the model reproduces the reference to |ΔPPL| ≤ 8.8e-7 and max |ΔNLL| ≤ 9.5e-7 per token over 64 chunks, for all three rotations.
 
 ## Results
 
-The rotation-only control passes on the post-trained checkpoint (max |ΔNLL| ≤ 3.8e-5 over 64 chunks for all three rotations), so every difference below is the quantizers'.
+| Mistral-7B-v0.3, W4A4KV4, g128_asym | WikiText-2 | C4 | eight-task | six-task |
+|---|---:|---:|---:|---:|
+| bf16 | 5.452 | 8.318 | 68.77 | 74.43 |
+| Hadamard | 5.642 | 8.655 | 67.29 | 73.20 |
+| NAR k=8 | 5.616 | 8.614 | 67.67 | 73.34 |
+| NAR k=max | 5.627 | 8.589 | 67.18 | 73.09 |
+| NAR best − Hadamard | −0.026 | −0.066 | +0.38 | +0.14 |
 
-| Qwen3-8B, W4A4KV16, group-128 symmetric | source | WikiText-2 | rel. | six-task | Δ vs own 16-bit |
-|---|---|---:|---:|---:|---:|
-| 16-bit (TwinQuant's row) | TwinQuant Table 5 | 9.71 | — | 71.6 | — |
-| QuaRot | TwinQuant Table 5 | 24.5 | +152% | 63.4 | −8.2 |
-| SpinQuant | TwinQuant Table 5 | 14.8 | +52% | 68.3 | −3.3 |
-| FlatQuant | TwinQuant Table 5 | 13.4 | +38% | 69.3 | −2.3 |
-| SVDQuant | TwinQuant Table 5 | 14.9 | +54% | 68.8 | −2.8 |
-| TwinQuant | TwinQuant Table 5 | 13.2 | +36% | 70.2 | −1.4 |
-| bf16 (this work, same checkpoint) | E23 | 13.337 | — | 70.35 | — |
-| Hadamard (this work) | E23 | 14.309 | +7.3% | 67.40 | −2.95 |
-| NAR k=8 (this work) | E23 | 11.114 | −16.7% | 68.20 | −2.15 |
-| NAR k=max (this work) | E23 | 16.003 | +20.0% | pending | — |
+| Same, per-channel GPTQ weights (4.0 bits) | WikiText-2 | C4 | eight-task | six-task |
+|---|---:|---:|---:|---:|
+| Hadamard | 5.659 | 8.708 | 67.16 | 73.01 |
+| NAR k=max | 5.640 | 8.647 | 67.26 | 73.03 |
 
-**The perplexity column cannot be bridged.** The same checkpoint scores 13.34 on this harness and 9.71 on theirs (E18 measured 12.92 on the first 64 windows a week earlier, so the number is stable on this side). Their Llama-3-8B row shows the same thing: 8.64 where the 2048-token non-overlapping convention gives 6.14, as BWLA (arXiv 2605.00422) and TWLA (arXiv 2606.13054) print in the same month. Their perplexity is measured under a convention their paper does not describe, and without their code it cannot be reproduced; the relative degradations are not comparable across conventions either, because a longer context or a rolling window compresses them. **The accuracy column is closer**: 70.35 against 71.6 on the same six tasks, each task within 1–4 points (ARC-c 56.4 / 55.5, ARC-e 80.9 / 83.5, HellaSwag 74.9 / 78.8, PIQA 77.7 / 76.4, WinoGrande 67.6 / 68.0, LAMBADA 64.6 / 67.4), the scatter two harness versions and an `acc`/`acc_norm` choice produce. On it, Hadamard gives up 2.95 points, NAR k=8 2.15; TwinQuant reports 1.4 for itself, 2.3 for FlatQuant and 3.3 for SpinQuant. NAR k=8 under their symmetric quantizer therefore sits between FlatQuant and SpinQuant, 0.75 behind TwinQuant, on a checkpoint and harness that are not theirs.
+| Eight-task detail | ARC-e | ARC-c | BoolQ | HellaSwag | OBQA | PIQA | SIQA | WinoGrande |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| bf16 | 80.13 | 54.35 | 83.64 | 80.67 | 47.40 | 81.99 | 47.75 | 74.19 |
+| Hadamard | 79.00 | 52.82 | 81.96 | 79.84 | 45.00 | 80.96 | 46.32 | 72.45 |
+| NAR k=8 | 78.83 | 52.73 | 82.32 | 79.39 | 46.40 | 81.94 | 47.24 | 72.53 |
+| NAR k=max | 78.96 | 52.47 | 81.87 | 79.27 | 45.20 | 81.01 | 46.57 | 72.06 |
 
-## Two anomalies, and where each one comes from
+The six-task suite adds LAMBADA (accuracy 75.24 bf16, 74.15 Hadamard, 74.64 k=8, 74.77 k=max) to five of the eight tasks above.
 
-**NAR k=8 scores below the unquantized model — on 144 of 146 windows, mean ΔNLL −0.18.** An orthogonal rotation followed by a quantizer cannot do that by itself (E18 v1 learned this the hard way), so the function changed elsewhere. It is GPTQ. The weight-only rows — the GPTQ checkpoint with no activation quantizer — are 13.02 (Hadamard), **10.39** (k=8) and 11.82 (k=max) against bf16 13.34: every GPTQ checkpoint of this post-trained model is *below* bf16 on WikiText-2, by 0.3 to 2.9. GPTQ's error compensation is fitted on 128 WikiText-2 training sequences; on a Base model whose bf16 already sits at 8.8 on this text there is nothing to gain and E19/E22 never saw a weight-only row below bf16. On a post-trained chat model at 13.3, the compensation step partly re-fits the weights toward the calibration distribution, and the more of the residual stream the rotation exposes to GPTQ's per-group scales (k=8 concentrates the DC directions that dominate this model's massive-activation layer into few coordinates), the larger the pull. This is the calibration set showing through, not quantization quality, and it is why a post-trained checkpoint makes a poor perplexity benchmark for W4A4: the perplexity column of every published table on this checkpoint carries the same confound. The six-task column does not: k=8 is 2.15 *below* bf16 there.
+## Reading
 
-**NAR k=max is 1.7 above Hadamard, where under this repository's asymmetric quantizer it is 1.5 to 1.7 below (E22).** The weight-only rows put k=max at 11.82, below Hadamard's 13.02; adding the symmetric activation quantizer costs Hadamard +1.29, k=8 +0.72 and **k=max +4.18**. The reversal is the activation quantizer, and it is the mismatch NAR's design predicts: NAR concentrates each group's DC component into one slot coordinate so that an *asymmetric* group quantizer's zero-point absorbs it at no cost in levels. A symmetric group scale has no zero-point; the concentrated coordinate becomes the largest magnitude in its group, sets the scale, and the other 127 coordinates lose resolution. k=max does this in all 32 R1 slots and all 96 R4 slots, k=8 in 8 of each, a Hadamard in none — which is the observed order. Under asymmetric quantization (E22, same checkpoint family) the order is the usual one. The right reading is not that k=max is fragile but that NAR is a rotation for the asymmetric quantizer the OffQ/ResQ line of work uses, and it should be paired with it; a symmetric-only deployment should use k=8 or a smaller rank.
+**Perplexity.** NAR sits below Hadamard on both corpora under both weight protocols, in every one of the six comparisons. The margin is small because Hadamard already leaves little to recover on this model: it costs 3.5% on WikiText-2 and 4.1% on C4. NAR k=8 recovers 14% of the WikiText-2 gap and k=max 20% of the C4 gap. On Qwen3-8B-Base under the same pipeline (E22), Hadamard costs 29.5% on WikiText-2 and k=8 recovers 64% of it.
 
-Both results are single-seed on one checkpoint; the bridge stops here at the user's decision, with the 14B and 32B not run.
+**Zero-shot.** The rotations differ by 0.1 to 0.5 points on both suites. That is about one unpaired standard error of each mean, which is 0.43 points for the eight-task mean and 0.40 for the six-task mean. Per-item outputs were not logged, so a paired test is not available. NAR k=8 leads Hadamard by 0.38 on the eight-task mean and k=max trails it by 0.12. These zero-shot rows do not separate the rotations.
+
+**Weight protocol.** Per-group asymmetric weights beat per-channel weights for Hadamard on all four benchmarks. For NAR k=max they win on both perplexities and the six-task mean, and trail by 0.08 on the eight-task mean. Under per-channel weights NAR k=max still leads Hadamard on all four.
+
+Single seed, one checkpoint. Summary: `results/mistral_7b_v03/e25_summary.csv`; completion marker `E25_DONE.json`.
 
 # Infrastructure defects found and fixed during E19
 

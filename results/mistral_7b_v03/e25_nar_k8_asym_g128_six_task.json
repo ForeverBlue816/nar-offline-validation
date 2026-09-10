@@ -1,0 +1,193 @@
+{
+  "activation_kind": "asymmetric_g128",
+  "batch_size": "auto",
+  "benchmark": "six_task",
+  "component": "all quantizers",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "context": 2048,
+    "key": 5.171875,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 4.43359375,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 4.15625
+  },
+  "elapsed_seconds": 710.0215029716492,
+  "fold_dtype": "float32",
+  "gen_kwargs": null,
+  "git_commit": "9040075cee056f127300b638993ef676d51f1d37",
+  "gptq": {
+    "act_order": false,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_dataset": "WikiText-2 train",
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head"
+    ],
+    "grid": 100,
+    "groupsize": 128,
+    "hessian_dtype": "torch.float32",
+    "hessian_product_dtype": "torch.float32",
+    "maxshrink": 0.8,
+    "mse_clipping": true,
+    "norm": 2.4,
+    "percdamp": 0.01,
+    "perchannel": true,
+    "protocol": "g128_asym",
+    "sequence_length": 2048,
+    "static_groups": false,
+    "symmetric": false
+  },
+  "gptq_protocol": "g128_asym",
+  "group_name": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5,6",
+    "slurm_job_id": "147085",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 73.34224735873588,
+  "headline_metric": "six_task_mean",
+  "kv_policy": "E14 KIVI",
+  "max_batch_size": 8,
+  "max_length": 4096,
+  "model": "mistral_7b_v03",
+  "model_id": "mistralai/Mistral-7B-v0.3",
+  "num_fewshot": 0,
+  "ranks": {
+    "r1_rank": 8,
+    "r1_slots": 32,
+    "r2_rank": 1,
+    "r4_rank": 8,
+    "r4_slots": 112
+  },
+  "results": {
+    "arc_challenge": {
+      "acc,none": 0.48890784982935154,
+      "acc_norm,none": 0.5273037542662116,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_challenge",
+      "name": "arc_challenge",
+      "sample_len": 1172
+    },
+    "arc_easy": {
+      "acc,none": 0.7937710437710438,
+      "acc_norm,none": 0.7882996632996633,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    },
+    "hellaswag": {
+      "acc,none": 0.6000796654052978,
+      "acc_norm,none": 0.7938657637920733,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "hellaswag",
+      "name": "hellaswag",
+      "sample_len": 10042
+    },
+    "lambada_openai": {
+      "acc,none": 0.7463613429070445,
+      "acc_stderr,none": "N/A",
+      "alias": "lambada_openai",
+      "name": "lambada_openai",
+      "perplexity,none": 3.296227328762715,
+      "perplexity_stderr,none": "N/A",
+      "sample_len": 5153
+    },
+    "piqa": {
+      "acc,none": 0.794885745375408,
+      "acc_norm,none": 0.8193688792165397,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "piqa",
+      "name": "piqa",
+      "sample_len": 1838
+    },
+    "winogrande": {
+      "acc,none": 0.7253354380426204,
+      "acc_stderr,none": "N/A",
+      "alias": "winogrande",
+      "name": "winogrande",
+      "sample_len": 1267
+    }
+  },
+  "rotation_checkpoint": "nar_k8",
+  "round_trip_max_relative_error": 3.043841445560247e-07,
+  "row": "nar_k8_asym_g128",
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "lambada_openai": {
+      "effective": 5153,
+      "original": 5153
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 0,
+  "task_overrides": null,
+  "tasks": [
+    "arc_challenge",
+    "arc_easy",
+    "hellaswag",
+    "lambada_openai",
+    "piqa",
+    "winogrande"
+  ],
+  "tech_report_16bit": null,
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "hellaswag": 1.0,
+    "lambada_openai": 1.0,
+    "piqa": 1.0,
+    "winogrande": 1.0
+  },
+  "weight_fold_audit": {
+    "embedding_centering": false,
+    "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+    "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+    "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+    "r4": "per-layer down-input rotation folded into down_proj rows",
+    "tied_embeddings_materialized_before_final_norm_fusion": false
+  }
+}
