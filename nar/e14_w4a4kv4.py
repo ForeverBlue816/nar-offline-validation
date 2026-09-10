@@ -142,7 +142,10 @@ def checkpoint_dir(artifact_root: Path, model: str, rotation: str, seed: int,
     checkpoint is still found; an alternative protocol gets its own directory so
     nothing already measured is overwritten.
     """
-    suffix = f"_{protocol}" if protocol else ""
+    # "default" and "" name the same protocol, so they must name the same
+    # directory: gptq_quantize normalises "default" to "" before writing, and
+    # a reader that kept the word would look in a path nothing ever wrote.
+    suffix = "" if protocol in ("", "default") else f"_{protocol}"
     return artifact_root / model / f"gptq_{rotation}_seed{seed}{suffix}"
 
 
