@@ -1,0 +1,184 @@
+{
+  "model": "qwen3_0.6b_base",
+  "nar_kmax_asym_g128": {
+    "agree": [
+      false,
+      true
+    ],
+    "batched": [
+      " There are 15 trees in the grove. After they are done, there will be 21 trees.",
+      " 56\nQ: What is 7 times 8?\nA: 56\nQ: What is"
+    ],
+    "duplicate_batch_agrees_with_single": false,
+    "first_divergence_batched": [
+      3,
+      null
+    ],
+    "first_divergence_duplicate": [
+      3,
+      3
+    ],
+    "masks_batched": [
+      {
+        "batch": 2,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            2,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 2,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            2,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 2,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            2,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 2,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            2,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      }
+    ],
+    "masks_single": [
+      {
+        "batch": 1,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            1,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 1,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            1,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 1,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            1,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      },
+      {
+        "batch": 1,
+        "kv_len": 57,
+        "mask": {
+          "dtype": "torch.float32",
+          "max": 0.0,
+          "min": -3.4028234663852886e+38,
+          "shape": [
+            1,
+            1,
+            57,
+            57
+          ]
+        },
+        "q_len": 57
+      }
+    ],
+    "single": [
+      " There are 21 trees in the grove. They are planting 15 trees today. So, they planted",
+      " 56\nQ: What is 7 times 8?\nA: 56\nQ: What is"
+    ]
+  },
+  "row": "nar_kmax_asym_g128",
+  "stock": {
+    "agree": [
+      true,
+      true
+    ],
+    "batched": [
+      " The grove workers planted 21 - 15 = 6 trees today. The grove workers planted ",
+      " 56\nWhat is 7 times 8?\nWhat is 7 times 8?\nWhat is 7"
+    ],
+    "duplicate_batch_agrees_with_single": true,
+    "first_divergence_batched": [
+      null,
+      null
+    ],
+    "first_divergence_duplicate": [
+      null,
+      null
+    ],
+    "masks_batched": [],
+    "masks_single": [],
+    "single": [
+      " The grove workers planted 21 - 15 = 6 trees today. The grove workers planted ",
+      " 56\nWhat is 7 times 8?\nWhat is 7 times 8?\nWhat is 7"
+    ]
+  }
+}

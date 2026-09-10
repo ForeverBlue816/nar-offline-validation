@@ -1,0 +1,75 @@
+{
+  "activation_kind": null,
+  "batch_size": "auto",
+  "benchmark": "arc_easy",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0
+  },
+  "elapsed_seconds": 115.79003667831421,
+  "fold_dtype": "float32",
+  "gen_kwargs": null,
+  "git_commit": "5cf6c5a7fd1809708e643ecb6ce5e673601ceee6",
+  "gptq_protocol": null,
+  "group_name": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5",
+    "slurm_job_id": "143967",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 68.47643097643098,
+  "headline_metric": "arc_easy:acc_norm,none",
+  "kv_policy": null,
+  "max_batch_size": 16,
+  "max_length": 4096,
+  "model": "qwen3_1.7b_base",
+  "model_id": "Qwen/Qwen3-1.7B-Base",
+  "num_fewshot": 0,
+  "results": {
+    "arc_easy": {
+      "acc,none": 0.7365319865319865,
+      "acc_norm,none": 0.6847643097643098,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    }
+  },
+  "rotation_checkpoint": null,
+  "row": "bf16",
+  "sample_counts": {
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    }
+  },
+  "seed": 0,
+  "task_overrides": null,
+  "tasks": [
+    "arc_easy"
+  ],
+  "tech_report_16bit": null,
+  "versions": {
+    "arc_easy": 1.0
+  }
+}

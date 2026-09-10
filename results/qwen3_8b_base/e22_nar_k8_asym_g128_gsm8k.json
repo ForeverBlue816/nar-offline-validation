@@ -1,0 +1,122 @@
+{
+  "activation_kind": "asymmetric_g128",
+  "batch_size": "auto",
+  "benchmark": "gsm8k",
+  "component": "all quantizers",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "context": 2048,
+    "key": 5.171875,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 4.43359375,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 4.15625
+  },
+  "elapsed_seconds": 32461.984585523605,
+  "fold_dtype": "float32",
+  "gen_kwargs": {
+    "max_gen_toks": 512
+  },
+  "git_commit": "618ac3a93e962caf441c572836c82d9db4f1c2cf",
+  "gptq": {
+    "act_order": false,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_dataset": "WikiText-2 train",
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head"
+    ],
+    "grid": 100,
+    "groupsize": 128,
+    "hessian_dtype": "torch.float32",
+    "hessian_product_dtype": "torch.float32",
+    "maxshrink": 0.8,
+    "mse_clipping": true,
+    "norm": 2.4,
+    "percdamp": 0.01,
+    "perchannel": true,
+    "protocol": "g128_asym",
+    "sequence_length": 2048,
+    "static_groups": false,
+    "symmetric": false
+  },
+  "gptq_protocol": "g128_asym",
+  "group_name": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02",
+      "1, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "3,7",
+    "slurm_job_id": "143938",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 84.3062926459439,
+  "headline_metric": "gsm8k_cot:exact_match,flexible-extract",
+  "kv_policy": "E14 KIVI",
+  "max_batch_size": 8,
+  "max_length": 4096,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "num_fewshot": 4,
+  "ranks": {
+    "r1_rank": 8,
+    "r1_slots": 32,
+    "r2_rank": 1,
+    "r4_rank": 8,
+    "r4_slots": 96
+  },
+  "results": {
+    "gsm8k_cot": {
+      "alias": "gsm8k_cot",
+      "exact_match,flexible-extract": 0.8430629264594389,
+      "exact_match,strict-match": 0.6398786959818044,
+      "exact_match_stderr,flexible-extract": "N/A",
+      "exact_match_stderr,strict-match": "N/A",
+      "name": "gsm8k_cot",
+      "sample_len": 1319
+    }
+  },
+  "rotation_checkpoint": "nar_k8",
+  "round_trip_max_relative_error": 4.6602988845734217e-07,
+  "row": "nar_k8_asym_g128",
+  "sample_counts": {
+    "gsm8k_cot": {
+      "effective": 1319,
+      "original": 1319
+    }
+  },
+  "seed": 0,
+  "task_overrides": null,
+  "tasks": [
+    "gsm8k_cot"
+  ],
+  "tech_report_16bit": 89.84,
+  "versions": {
+    "gsm8k_cot": 3.0
+  },
+  "weight_fold_audit": {
+    "embedding_centering": false,
+    "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+    "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+    "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+    "r4": "per-layer down-input rotation folded into down_proj rows",
+    "tied_embeddings_materialized_before_final_norm_fusion": false
+  }
+}

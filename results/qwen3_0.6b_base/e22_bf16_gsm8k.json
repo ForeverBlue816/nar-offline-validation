@@ -1,0 +1,75 @@
+{
+  "activation_kind": null,
+  "batch_size": "auto",
+  "benchmark": "gsm8k",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0
+  },
+  "elapsed_seconds": 1655.7419304847717,
+  "fold_dtype": "float32",
+  "gen_kwargs": {
+    "max_gen_toks": 512
+  },
+  "git_commit": "9eb45e52a0fff7353e814ffaaa4979fc34c95c41",
+  "gptq_protocol": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 49140 MiB, 48539 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "5",
+    "slurm_job_id": "143966",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 60.955269143290366,
+  "headline_metric": "gsm8k_cot:exact_match,flexible-extract",
+  "kv_policy": null,
+  "max_batch_size": 16,
+  "max_length": 4096,
+  "model": "qwen3_0.6b_base",
+  "model_id": "Qwen/Qwen3-0.6B-Base",
+  "num_fewshot": 4,
+  "results": {
+    "gsm8k_cot": {
+      "alias": "gsm8k_cot",
+      "exact_match,flexible-extract": 0.6095526914329037,
+      "exact_match,strict-match": 0.510235026535254,
+      "exact_match_stderr,flexible-extract": "N/A",
+      "exact_match_stderr,strict-match": "N/A",
+      "name": "gsm8k_cot",
+      "sample_len": 1319
+    }
+  },
+  "rotation_checkpoint": null,
+  "row": "bf16",
+  "sample_counts": {
+    "gsm8k_cot": {
+      "effective": 1319,
+      "original": 1319
+    }
+  },
+  "seed": 0,
+  "tasks": [
+    "gsm8k_cot"
+  ],
+  "tech_report_16bit": 59.59,
+  "versions": {
+    "gsm8k_cot": 3.0
+  }
+}

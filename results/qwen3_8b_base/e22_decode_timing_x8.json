@@ -1,0 +1,18 @@
+{
+  "stock": {
+    "1": {
+      "batch": 1,
+      "ms_per_step": 86.62809431552887,
+      "ms_per_step_per_seq": 86.62809431552887,
+      "prompt_tokens": 457,
+      "seconds": 1.386049509048462
+    },
+    "8": {
+      "batch": 8,
+      "ms_per_step": 294.0773218870163,
+      "ms_per_step_per_seq": 36.75966523587704,
+      "prompt_tokens": 457,
+      "seconds": 4.705237150192261
+    }
+  }
+}

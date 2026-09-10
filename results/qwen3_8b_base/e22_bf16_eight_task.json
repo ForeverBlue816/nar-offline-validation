@@ -1,0 +1,175 @@
+{
+  "activation_kind": null,
+  "batch_size": "auto",
+  "benchmark": "eight_task",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0
+  },
+  "elapsed_seconds": 5142.729053497314,
+  "fold_dtype": "float32",
+  "gen_kwargs": null,
+  "git_commit": "7106f2bcec59441962ed4888b22472e6f1b6c6b2",
+  "gptq_protocol": null,
+  "group_name": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02",
+      "1, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1,2",
+    "slurm_job_id": "143937",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 68.46387873409226,
+  "headline_metric": "eight-task mean",
+  "kv_policy": null,
+  "max_batch_size": 8,
+  "max_length": 4096,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "num_fewshot": 0,
+  "results": {
+    "arc_challenge": {
+      "acc,none": 0.5307167235494881,
+      "acc_norm,none": 0.5691126279863481,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_challenge",
+      "name": "arc_challenge",
+      "sample_len": 1172
+    },
+    "arc_easy": {
+      "acc,none": 0.8177609427609428,
+      "acc_norm,none": 0.8000841750841751,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    },
+    "boolq": {
+      "acc,none": 0.8302752293577982,
+      "acc_stderr,none": "N/A",
+      "alias": "boolq",
+      "name": "boolq",
+      "sample_len": 3270
+    },
+    "hellaswag": {
+      "acc,none": 0.5889265086636128,
+      "acc_norm,none": 0.7862975502887871,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "hellaswag",
+      "name": "hellaswag",
+      "sample_len": 10042
+    },
+    "openbookqa": {
+      "acc,none": 0.33,
+      "acc_norm,none": 0.422,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "openbookqa",
+      "name": "openbookqa",
+      "sample_len": 500
+    },
+    "piqa": {
+      "acc,none": 0.7905331882480957,
+      "acc_norm,none": 0.7932535364526659,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "piqa",
+      "name": "piqa",
+      "sample_len": 1838
+    },
+    "social_iqa": {
+      "acc,none": 0.5475946775844421,
+      "acc_stderr,none": "N/A",
+      "alias": "social_iqa",
+      "name": "social_iqa",
+      "sample_len": 1954
+    },
+    "winogrande": {
+      "acc,none": 0.728492501973165,
+      "acc_stderr,none": "N/A",
+      "alias": "winogrande",
+      "name": "winogrande",
+      "sample_len": 1267
+    }
+  },
+  "rotation_checkpoint": null,
+  "row": "bf16",
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "boolq": {
+      "effective": 3270,
+      "original": 3270
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "openbookqa": {
+      "effective": 500,
+      "original": 500
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "social_iqa": {
+      "effective": 1954,
+      "original": 1954
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 0,
+  "task_overrides": null,
+  "tasks": [
+    "arc_easy",
+    "arc_challenge",
+    "boolq",
+    "hellaswag",
+    "openbookqa",
+    "piqa",
+    "social_iqa",
+    "winogrande"
+  ],
+  "tech_report_16bit": null,
+  "versions": {
+    "arc_challenge": 1.0,
+    "arc_easy": 1.0,
+    "boolq": 2.0,
+    "hellaswag": 1.0,
+    "openbookqa": 1.0,
+    "piqa": 1.0,
+    "social_iqa": 0.0,
+    "winogrande": 1.0
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "activation_kind": null,
+  "batch_size": "auto",
+  "benchmark": "arc_easy",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0
+  },
+  "elapsed_seconds": 347.87991642951965,
+  "fold_dtype": "float32",
+  "gen_kwargs": null,
+  "git_commit": "7106f2bcec59441962ed4888b22472e6f1b6c6b2",
+  "gptq_protocol": null,
+  "group_name": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02",
+      "1, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45486 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1,2",
+    "slurm_job_id": "143937",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 80.00841750841751,
+  "headline_metric": "arc_easy:acc_norm,none",
+  "kv_policy": null,
+  "max_batch_size": 8,
+  "max_length": 4096,
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "num_fewshot": 0,
+  "results": {
+    "arc_easy": {
+      "acc,none": 0.8177609427609428,
+      "acc_norm,none": 0.8000841750841751,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    }
+  },
+  "rotation_checkpoint": null,
+  "row": "bf16",
+  "sample_counts": {
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    }
+  },
+  "seed": 0,
+  "task_overrides": null,
+  "tasks": [
+    "arc_easy"
+  ],
+  "tech_report_16bit": null,
+  "versions": {
+    "arc_easy": 1.0
+  }
+}

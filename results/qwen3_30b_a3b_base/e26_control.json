@@ -1,0 +1,65 @@
+{
+  "chunks": 64,
+  "git_commit": "618ac3a93e962caf441c572836c82d9db4f1c2cf",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      8,
+      6
+    ],
+    "gpu_name": "NVIDIA A40",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45138 MiB, 580.173.02",
+      "1, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45138 MiB, 580.173.02",
+      "2, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45138 MiB, 580.173.02",
+      "3, NVIDIA A40, GPU-REDACTED, 46068 MiB, 45140 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1,2,5,6",
+    "slurm_job_id": "145359",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "qwen3_30b_a3b_base",
+  "ppl_tolerance": 0.01,
+  "routing_tolerance": 0.999,
+  "rows": [
+    {
+      "chunks": 64,
+      "max_abs_nll_delta": 0.0005208253860473633,
+      "mean_nll_delta": 7.953494787216187e-07,
+      "min_layer_argmax_agreement": 0.99951171875,
+      "min_layer_top8_agreement": 0.9978256225585938,
+      "passed": false,
+      "ppl_abs_difference": 4.746659317156343e-06,
+      "reference_ppl": 5.968014761935995,
+      "rotation": "hadamard",
+      "rotation_only_ppl": 5.9680195085953125
+    },
+    {
+      "chunks": 64,
+      "max_abs_nll_delta": 0.0004911422729492188,
+      "mean_nll_delta": -1.8980354070663452e-06,
+      "min_layer_argmax_agreement": 0.9994583129882812,
+      "min_layer_top8_agreement": 0.9973602294921875,
+      "passed": false,
+      "ppl_abs_difference": 1.1327492578594445e-05,
+      "reference_ppl": 5.968014761935995,
+      "rotation": "nar_k8",
+      "rotation_only_ppl": 5.968003434443417
+    },
+    {
+      "chunks": 64,
+      "max_abs_nll_delta": 0.0009639263153076172,
+      "mean_nll_delta": -1.1472031474113464e-05,
+      "min_layer_argmax_agreement": 0.9992904663085938,
+      "min_layer_top8_agreement": 0.9967880249023438,
+      "passed": false,
+      "ppl_abs_difference": 6.846486047074052e-05,
+      "reference_ppl": 5.968014761935995,
+      "rotation": "nar_kmax",
+      "rotation_only_ppl": 5.967946297075525
+    }
+  ]
+}
