@@ -486,9 +486,14 @@ class MoERuntimeHooks(e14.RuntimeHooks):
             self.model.config._attn_implementation = self.attention_key
         quantize = self.activation_kind is not None
         for layer, block in enumerate(self.model.model.layers):
-            self.handles.append(block.self_attn.v_proj.register_forward_hook(self.rotate_v(layer)))
-            if self.rotations.method == "hadamard":
-                self.handles.append(block.self_attn.o_proj.register_forward_pre_hook(self.rotate_o()))
+            # The attention rotations are only correct against folded weights:
+            # rotate_v feeds o_proj a rotated V, which the fold has undone in
+            # o_proj's rows.  The null probe leaves every weight alone, so it
+            # installs the expert round trip and nothing else.
+            if not self.round_trip:
+                self.handles.append(block.self_attn.v_proj.register_forward_hook(self.rotate_v(layer)))
+                if self.rotations.method == "hadamard":
+                    self.handles.append(block.self_attn.o_proj.register_forward_pre_hook(self.rotate_o()))
             if quantize:
                 for module in (block.self_attn.q_proj, block.self_attn.k_proj, block.self_attn.v_proj,
                                block.self_attn.o_proj):
