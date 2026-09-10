@@ -821,15 +821,18 @@ def control_command(args: argparse.Namespace) -> None:
         out_rows.append(row)
         LOG.info("E26 control %s: %s", rotation, json.dumps(row))
         del model, hooks, rotations; gc.collect(); torch.cuda.empty_cache()
-    base.write_csv(result_dir() / f"{PREFIX}_rotation_only_control.csv", out_rows)
-    base.write_csv(result_dir() / f"{PREFIX}_routing_agreement.csv", routing_rows)
-    base.atomic_json(result_dir() / f"{PREFIX}_control.json", {
+    # The null probe is a measurement of the floor, not a gate: it keeps its
+    # own files so the real control's evidence is never overwritten.
+    stem = f"{PREFIX}_null" if list(args.rotations or ROTATIONS) == ["null"] else PREFIX
+    base.write_csv(result_dir() / f"{stem}_rotation_only_control.csv", out_rows)
+    base.write_csv(result_dir() / f"{stem}_routing_agreement.csv", routing_rows)
+    base.atomic_json(result_dir() / f"{stem}_control.json", {
         "model": MODEL_KEY, "chunks": args.control_chunks, "rows": out_rows, "ppl_tolerance": args.control_ppl_tolerance,
         "routing_tolerance": args.routing_tolerance, "routing_tie_gap": args.routing_tie_gap,
         "gate": "ppl within tolerance and every layer's top-8 agreement among non-tie tokens (reference margin > tie gap) "
                 "at or above routing_tolerance; raw agreement recorded as measured",
         "git_commit": e19.git_commit(), "hardware": base.hardware_info()})
-    failed = [r["rotation"] for r in out_rows if not r["passed"]]
+    failed = [r["rotation"] for r in out_rows if not r["passed"] and r["rotation"] != "null"]
     if failed:
         raise AssertionError(f"E26 rotation-only control failed for {failed}")
 

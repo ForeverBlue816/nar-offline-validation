@@ -26,7 +26,7 @@ for stage in ${NAR_E26_STAGES:-audit calibrate control gptq eval finalize}; do
     case "$stage" in
         audit)     run audit ;;
         calibrate) run calibrate ;;
-        control)   run control ;;
+        control)   run control ${NAR_E26_ROTATIONS:+--rotations ${NAR_E26_ROTATIONS}} ;;
         gptq)      for rotation in ${NAR_E26_ROTATIONS:-hadamard nar_k8 nar_kmax}; do
                        echo "===== gptq $rotation ====="; run gptq --rotation "$rotation"; done ;;
         eval)      for benchmark in ${NAR_E26_BENCHMARKS:-wikitext c4 eight_task}; do
