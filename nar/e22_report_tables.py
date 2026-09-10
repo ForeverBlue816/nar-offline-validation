@@ -13,7 +13,7 @@ import json
 from pathlib import Path
 
 SIZES = [("qwen3_0.6b_base", "0.6B"), ("qwen3_1.7b_base", "1.7B"), ("qwen3_4b_base", "4B"),
-         ("qwen3_8b_base", "8B"), ("qwen3_14b_base", "14B")]
+         ("qwen3_8b_base", "8B")]  # 14B cancelled 2026-09-10
 ROWS = [("bf16", "bf16"), ("hadamard_asym_g128", "Hadamard, W4A4KV4"),
         ("nar_k8_asym_g128", "NAR k=8"), ("nar_kmax_asym_g128", "NAR k=max")]
 PPL = [("wikitext", "WikiText-2 PPL"), ("c4", "C4 PPL")]
