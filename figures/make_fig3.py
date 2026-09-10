@@ -145,8 +145,36 @@ def scatter_sources(ax: plt.Axes, law: pd.DataFrame, inset: bool = False) -> Non
         ax.scatter(
             part.sqrt_one_minus_f, part.range_ratio_vs_hadamard,
             color=color, marker=marker, s=size, alpha=0.35,
-            edgecolors="none", rasterized=True, label=None if inset else label,
+            edgecolors="none", rasterized=False, label=None if inset else label,
         )
+
+
+def range_law_xlabel(ax: plt.Axes) -> None:
+    """Complete radical with a vector overbar; radicand stays editable Times Bold."""
+    from matplotlib.font_manager import FontProperties
+    from matplotlib.lines import Line2D
+    from matplotlib.offsetbox import AnnotationBbox, DrawingArea
+    from matplotlib.text import Text
+    from matplotlib.textpath import TextPath
+    prop = FontProperties(family="Times New Roman", weight="bold", size=7)
+    radicand = "1 − f"
+    text_width = TextPath((0, 0), radicand, prop=prop).get_extents().width
+    width = 6.0 + text_width + 0.8
+    drawing = DrawingArea(width, 9.5, 0, 0)
+    drawing.add_artist(Text(6.0, 1.2, radicand, fontproperties=prop,
+                            color=PALETTE["text"]))
+    radical = Line2D([0, 1.3, 2.8, 4.8, width], [3.7, 4.5, 1.0, 8.5, 8.5],
+                     color=PALETTE["text"], linewidth=0.65,
+                     solid_capstyle="butt", solid_joinstyle="miter")
+    radical.set_gid("radical_with_full_overbar")
+    drawing.add_artist(radical)
+    label = AnnotationBbox(drawing, (.5, 0), xycoords=ax.transAxes,
+                           xybox=(0, -20.5), boxcoords="offset points",
+                           box_alignment=(.5, .5), frameon=False,
+                           annotation_clip=False, pad=0)
+    label.set_gid("sqrt_one_minus_f")
+    ax.set_xlabel("")
+    ax.add_artist(label)
 
 
 def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = None) -> dict[str, float | bool]:
@@ -160,7 +188,7 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
             color=PALETTE["text"], fontsize=7.0, ha="left", va="top")
     ax.set_xlim(0, 1.02)
     ax.set_ylim(0, max(1.02, float((law if pooled is None else pooled).range_ratio_vs_hadamard.max()) * 1.04))
-    ax.set_xlabel("√(1 − f)", fontsize=7.0)
+    range_law_xlabel(ax)
     ax.set_ylabel("range / paired Hadamard range", fontsize=7.0)
     crowded = int(((law.sqrt_one_minus_f > 0.85) & (law.range_ratio_vs_hadamard > 0.85)).sum()) >= 100
     if crowded:
@@ -212,6 +240,7 @@ def compose_panels(here: Path, stems: list[str], outbase: str, columns: int) -> 
     fig = plt.figure(figsize=(width, height))
     doc = pymupdf.open(); page = doc.new_page(width=72*width, height=72*height)
     ns = "http://www.w3.org/2000/svg"; ET.register_namespace("", ns)
+    ET.register_namespace("xlink", "http://www.w3.org/1999/xlink")
     root = ET.Element(f"{{{ns}}}svg", width=f"{width*72}pt", height=f"{height*72}pt", viewBox=f"0 0 {width*72} {height*72}")
     measured = []
     for i, stem in enumerate(stems):
@@ -230,7 +259,14 @@ def compose_panels(here: Path, stems: list[str], outbase: str, columns: int) -> 
         ids = [element.attrib["id"] for element in node.iter() if "id" in element.attrib]
         for key in sorted(ids, key=len, reverse=True):
             raw = raw.replace(f'id="{key}"', f'id="{stem}_{key}"').replace(f"#{key})", f"#{stem}_{key})").replace(f'"#{key}"', f'"#{stem}_{key}"')
-        node = ET.fromstring(raw); node.set("x", str(x*72)); node.set("y", str((height-y-2.35)*72)); root.append(node)
+        node = ET.fromstring(raw)
+        # A group shares the outer point-coordinate system. Nested SVG elements
+        # introduce another viewport and pt-to-user-unit conversion on import.
+        group = ET.SubElement(root, f"{{{ns}}}g", id=f"panel_{stem}",
+                              transform=f"translate({x*72:g} {(height-y-2.35)*72:g})")
+        for child in node:
+            if child.tag != f"{{{ns}}}metadata":
+                group.append(child)
     require_matplotlib_panel_alignment(fig, json_out=here/"qa"/f"{outbase}.alignment.json",
         axes=measured, panel_ids=stems, row_groups=[["fig3c1", "fig3c2"]], column_groups=[], strict=True)
     fig.savefig(here / f"{outbase}_preview.png", dpi=300)
@@ -280,6 +316,7 @@ def main() -> None:
         **fit,
         "range_law_subpanels": {"fig3c1": {"families": ["E1c activations"], "points": len(activation), "inset": fit["corner_inset"]}, "fig3c2": {"families": ["E7 V cache", "E20 multi-slot"], "points": len(cache_and_multislot), "inset": other_fit["corner_inset"]}},
         "fit_display": "same pooled fit in both views; not a per-family fit",
+        "svg_export": {"range_law_marks": "native vector markers in main axes and insets", "composition": "single viewport with translated groups and unique IDs", "x_formula": "complete vector radical and overbar; editable Times New Roman Bold radicand"},
     }
     (here / "fig3_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(json.dumps(metadata, indent=2))

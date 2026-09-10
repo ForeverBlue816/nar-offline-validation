@@ -1,96 +1,23 @@
 {
   "pdf": "figures/fig3c.pdf",
   "auditable": true,
-  "verdict": "REVIEW REQUIRED",
+  "verdict": "PASS",
   "page_count": 1,
   "visible_text_box_count": 37,
   "text_trace_count": 37,
-  "stroke_path_count": 52,
-  "filled_region_count": 37,
-  "image_region_count": 4,
+  "stroke_path_count": 54,
+  "filled_region_count": 3816,
+  "image_region_count": 0,
   "summary": {
     "fail": 0,
-    "warn": 3,
+    "warn": 0,
     "contained_fill_overlays": 0,
-    "contained_image_overlays": 2
+    "contained_image_overlays": 0
   },
   "thresholds": {
     "text_inset_pt": 0.6,
     "min_overlap_ratio": 0.05,
     "clipping_tolerance_pt": 0.5
   },
-  "findings": [
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "Pooled R² = 0.86",
-      "text_bbox": [
-        61.513919830322266,
-        13.307721138000488,
-        110.38092041015625,
-        20.307722091674805
-      ],
-      "other_text": null,
-      "other_bbox": [
-        69.5999984741211,
-        15.599990844726562,
-        178.32000732421875,
-        104.03999328613281
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        0
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "1.00",
-      "text_bbox": [
-        65.22016143798828,
-        23.89200210571289,
-        75.72016143798828,
-        29.89200210571289
-      ],
-      "other_text": null,
-      "other_bbox": [
-        69.5999984741211,
-        15.599990844726562,
-        178.32000732421875,
-        104.03999328613281
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        0
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "0.85",
-      "text_bbox": [
-        65.22016143798828,
-        51.13320541381836,
-        75.72016143798828,
-        57.13320541381836
-      ],
-      "other_text": null,
-      "other_bbox": [
-        69.5999984741211,
-        15.599990844726562,
-        178.32000732421875,
-        104.03999328613281
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        0
-      ]
-    }
-  ]
+  "findings": []
 }

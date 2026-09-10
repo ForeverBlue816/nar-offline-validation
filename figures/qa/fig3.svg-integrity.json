@@ -1,0 +1,45 @@
+{
+  "panels": {
+    "fig3c1": {
+      "plotted_points": [
+        2520
+      ],
+      "expected_points": [
+        2520
+      ],
+      "embedded_images": 0,
+      "complete_vector_radical": true
+    },
+    "fig3c2": {
+      "plotted_points": [
+        280,
+        112
+      ],
+      "expected_points": [
+        280,
+        112
+      ],
+      "embedded_images": 0,
+      "complete_vector_radical": true
+    }
+  },
+  "compositions": {
+    "fig3c": {
+      "svg_renderer": "PyMuPDF",
+      "ink_ratio_vs_standalone": {
+        "fig3c1": 1.0,
+        "fig3c2": 1.0198460036872357
+      }
+    },
+    "fig3": {
+      "svg_renderer": "PyMuPDF",
+      "ink_ratio_vs_standalone": {
+        "fig3a": 1.0,
+        "fig3b": 0.9729751998022576,
+        "fig3c1": 1.0008661758336943,
+        "fig3c2": 1.0223403101615878
+      }
+    }
+  },
+  "verdict": "PASS"
+}

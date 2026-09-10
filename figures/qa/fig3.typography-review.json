@@ -117,105 +117,8 @@
     "fig3b": [],
     "fig3c1": [],
     "fig3c2": [],
-    "fig3c": [
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "Pooled R\u00b2 = 0.86",
-        "text_bbox": [
-          61.513919830322266,
-          13.307721138000488,
-          110.38092041015625,
-          20.307722091674805
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          15.599990844726562,
-          178.32000732421875,
-          104.03999328613281
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          0
-        ]
-      },
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "1.00",
-        "text_bbox": [
-          65.22016143798828,
-          23.89200210571289,
-          75.72016143798828,
-          29.89200210571289
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          15.599990844726562,
-          178.32000732421875,
-          104.03999328613281
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          0
-        ]
-      },
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "0.85",
-        "text_bbox": [
-          65.22016143798828,
-          51.13320541381836,
-          75.72016143798828,
-          57.13320541381836
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          15.599990844726562,
-          178.32000732421875,
-          104.03999328613281
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          0
-        ]
-      }
-    ],
+    "fig3c": [],
     "fig3": [
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "Pooled R\u00b2 = 0.86",
-        "text_bbox": [
-          61.513919830322266,
-          182.50772094726562,
-          110.38092041015625,
-          189.50772094726562
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          184.79998779296875,
-          178.32000732421875,
-          273.239990234375
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          1
-        ]
-      },
       {
         "severity": "WARN",
         "kind": "text-image-edge",
@@ -269,54 +172,6 @@
         "kind": "text-image-edge",
         "page": 1,
         "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "1.00",
-        "text_bbox": [
-          65.22016143798828,
-          193.0919952392578,
-          75.72016143798828,
-          199.0919952392578
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          184.79998779296875,
-          178.32000732421875,
-          273.239990234375
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          1
-        ]
-      },
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
-        "text": "0.85",
-        "text_bbox": [
-          65.22016143798828,
-          220.3332061767578,
-          75.72016143798828,
-          226.3332061767578
-        ],
-        "other_text": null,
-        "other_bbox": [
-          69.5999984741211,
-          184.79998779296875,
-          178.32000732421875,
-          273.239990234375
-        ],
-        "object_count": 1,
-        "object_indexes": [
-          1
-        ]
-      },
-      {
-        "severity": "WARN",
-        "kind": "text-image-edge",
-        "page": 1,
-        "message": "Text partially overlaps the edge of 1 raster image(s)",
         "text": "PrismQuant",
         "text_bbox": [
           132.94943237304688,
@@ -339,10 +194,12 @@
     ],
     "fig3_caption": []
   },
-  "review": "Bold labels, ticks, insets, line strokes and legends inspected. Figure 4 note intentionally extends across the pale deployed background band; the band has no stroke and text remains legible. Point-label clearance increased.",
+  "review": "All panels retain Times New Roman Bold and all original observations. Range-law SVGs use native vector marks and a full radical overbar. Both columns were rendered directly from the SVG and checked against standalone SVGs. Formula and axis bounds inspected; no text/stroke collision failures.",
   "user_override": {
     "check_id": "FONT-FAMILY",
     "reason": "User explicitly requires Times New Roman Bold; the generic source checker only permits sans-serif. Every exported text span is verified as TimesNewRomanPS-BoldMT."
   },
-  "source_warnings_reviewed": "User-approved existing canvas sizes, PNG previews and mean-only displays retained. Figure 3 log-x ranks are 1 through 256. Figure 4 tick rotation is zero."
+  "source_warnings_reviewed": "User-approved existing canvas sizes, PNG previews and mean-only displays retained. Figure 3 log-x ranks are 1 through 256. Figure 4 tick rotation is zero.",
+  "svg_integrity": "fig3.svg-integrity.json",
+  "warnings_reviewed": "The three whole-figure warnings concern existing Figure 3a labels inside the rectangular extent of the sparse transparent token-cloud raster. Visual inspection confirms readable text with no point occlusion; neither range-law panel has any collision warning."
 }

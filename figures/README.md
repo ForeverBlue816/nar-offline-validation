@@ -37,6 +37,22 @@ caption text is also exported separately in Times New Roman Bold as
 The typography and rendered checks are recorded in
 `qa/fig3.typography-review.json` and `qa/fig4.typography-review.json`.
 
+## Figure 3 SVG import correction
+
+The two range-law views (`fig3c1.svg` and `fig3c2.svg`) now contain native
+vector marks for all 2520 activation, 280 V-cache, and 112 multi-slot
+observations, including vector copies in the insets. SVG assemblies use one
+viewport and translated groups with unique IDs, avoiding nested viewport
+placement that lost the right half in an independent SVG renderer.
+The x-axis formula now has a complete vector radical and overbar spanning
+`1 − f`; the radicand remains editable Times New Roman Bold text.
+
+Run `python figures/verify_fig3_svg.py` after rendering. It checks actual
+SVG marker counts, references, formula geometry, and independently rendered
+content in every half of `fig3c.svg` and `fig3.svg`, against the standalone
+panels. Results are in `qa/fig3.svg-integrity.json`. PDF/PNG companions and
+previews are regenerated from the same matplotlib source.
+
 ## Figure 1 mechanism redesign
 
 Reproduce with `python figures/make_fig1.py --reuse-data`. The data builder

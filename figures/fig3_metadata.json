@@ -151,5 +151,10 @@
       "inset": true
     }
   },
-  "fit_display": "same pooled fit in both views; not a per-family fit"
+  "fit_display": "same pooled fit in both views; not a per-family fit",
+  "svg_export": {
+    "range_law_marks": "native vector markers in main axes and insets",
+    "composition": "single viewport with translated groups and unique IDs",
+    "x_formula": "complete vector radical and overbar; editable Times New Roman Bold radicand"
+  }
 }
