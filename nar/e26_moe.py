@@ -771,6 +771,68 @@ def routing_agreement(reference: dict[int, torch.Tensor], candidate: dict[int, t
     return rows
 
 
+def routing_verdict(max_ratio: float = 2.0, min_floor_flips: int = 20) -> dict[str, Any]:
+    """Judge the routing audit against the fp32 floor the null probe measured.
+
+    A 48-layer top-8 router cannot be reproduced token for token in fp32.  The
+    null probe applies R4_e and its transpose at the expert input and leaves
+    every weight alone, so it changes nothing mathematically, and it still
+    moves the top-8 set for 2,040 of 6.29M token-layer decisions, all of them
+    deep, where the 8th-vs-9th logit margin has a median of 0.07.  An absolute
+    per-layer threshold therefore measures fp32, not the fold.
+
+    The verdict is the aggregate: how much routing the fold moves relative to
+    how much that identity moves.  Per-layer ratios are reported only for
+    layers where the floor itself has enough flips to make a ratio meaningful
+    (a layer where the floor flips one token and the fold flips seven is two
+    ten-thousandths of a percent either way).
+    """
+    directory = result_dir()
+    floor_rows = {int(r["layer"]): r for r in base.read_csv(directory / f"{PREFIX}_null_routing_agreement.csv")}
+    rows = base.read_csv(directory / f"{PREFIX}_routing_agreement.csv")
+    control = json.loads((directory / f"{PREFIX}_control.json").read_text())
+    floor_total = sum(int(r["set_flips"]) for r in floor_rows.values())
+    decisions = sum(int(r["tokens"]) for r in floor_rows.values())
+    verdicts: list[dict[str, Any]] = []
+    for row in control["rows"]:
+        rotation = row["rotation"]
+        layers = [r for r in rows if r["rotation"] == rotation]
+        total = sum(int(r["set_flips"]) for r in layers)
+        ratios = [(int(r["layer"]), int(r["set_flips"]) / int(floor_rows[int(r["layer"])]["set_flips"]))
+                  for r in layers
+                  if int(floor_rows.get(int(r["layer"]), {"set_flips": 0})["set_flips"]) >= min_floor_flips]
+        worst_layer, worst_ratio = max(ratios, key=lambda item: item[1], default=(None, 0.0))
+        ratio = total / floor_total if floor_total else float("inf")
+        verdicts.append({
+            "rotation": rotation, "ppl_abs_difference": row["ppl_abs_difference"],
+            "top8_flips": total, "floor_top8_flips": floor_total, "token_layer_decisions": decisions,
+            "flip_rate": total / decisions, "floor_flip_rate": floor_total / decisions,
+            "disagreement_ratio_to_floor": ratio,
+            "worst_deep_layer_ratio": worst_ratio, "worst_deep_layer": worst_layer,
+            "min_layer_top8_agreement": row["min_layer_top8_agreement"],
+            "floor_min_layer_top8_agreement": min(float(r["top8_set_agreement"]) for r in floor_rows.values()),
+            "max_ratio": max_ratio,
+            "passed": bool(row["ppl_abs_difference"] <= control["ppl_tolerance"] and ratio <= max_ratio)})
+    payload = {"model": MODEL_KEY, "criterion":
+               "PPL within tolerance and aggregate top-8 routing disagreement at most "
+               f"{max_ratio}x what an exact identity reordering produces (the null probe). "
+               "The absolute 0.999 per-layer threshold is below the fp32 floor and is reported, not applied.",
+               "floor_source": f"{PREFIX}_null_control.json", "rows": verdicts,
+               "git_commit": e19.git_commit()}
+    base.atomic_json(directory / f"{PREFIX}_control_verdict.json", payload)
+    return payload
+
+
+def verdict_command(args: argparse.Namespace) -> None:
+    payload = routing_verdict(args.max_ratio)
+    for row in payload["rows"]:
+        print(f"{row['rotation']:10s} ppl_diff={row['ppl_abs_difference']:.2e} "
+              f"flips={row['top8_flips']} vs floor {row['floor_top8_flips']} "
+              f"({row['disagreement_ratio_to_floor']:.2f}x) worst deep layer {row['worst_deep_layer']} "
+              f"{row['worst_deep_layer_ratio']:.2f}x  min_agree={row['min_layer_top8_agreement']:.6f} "
+              f"(floor {row['floor_min_layer_top8_agreement']:.6f})  passed={row['passed']}")
+
+
 def control_command(args: argparse.Namespace) -> None:
     """Rotation-only control (fold, no quantizer) and the routing-agreement audit."""
     base.setup_logging(WORKDIR, "e26-control")
@@ -1160,6 +1222,8 @@ def parser() -> argparse.ArgumentParser:
     control.add_argument("--control-ppl-tolerance", type=float, default=0.01)
     control.add_argument("--routing-tolerance", type=float, default=0.999)
     control.add_argument("--routing-tie-gap", type=float, default=1e-3)
+    verdict = sub.add_parser("verdict")
+    verdict.add_argument("--max-ratio", type=float, default=2.0)
     gptq = sub.add_parser("gptq")
     gptq.add_argument("--rotation", choices=ROTATIONS, required=True)
     evaluate = sub.add_parser("evaluate")
@@ -1177,7 +1241,7 @@ def main() -> None:
     e19.MODEL_KEY = MODEL_KEY; e19.MODEL_ID = MODEL_ID; e19.PREFIX = PREFIX
     install_experts_patch()
     {"audit": audit_command, "calibrate": calibrate_command, "control": control_command, "gptq": gptq_command,
-     "evaluate": evaluate_command, "finalize": finalize_command}[args.command](args)
+     "evaluate": evaluate_command, "finalize": finalize_command, "verdict": verdict_command}[args.command](args)
 
 
 if __name__ == "__main__":

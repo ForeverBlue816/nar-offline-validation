@@ -1,0 +1,56 @@
+{
+  "criterion": "PPL within tolerance and aggregate top-8 routing disagreement at most 2.0x what an exact identity reordering produces (the null probe). The absolute 0.999 per-layer threshold is below the fp32 floor and is reported, not applied.",
+  "floor_source": "e26_null_control.json",
+  "git_commit": "34fd1804528ab170855175e34d33b3c0c0d5a01b",
+  "model": "qwen3_30b_a3b_base",
+  "rows": [
+    {
+      "disagreement_ratio_to_floor": 1.780392156862745,
+      "flip_rate": 0.0005772908528645834,
+      "floor_flip_rate": 0.000324249267578125,
+      "floor_min_layer_top8_agreement": 0.998931884765625,
+      "floor_top8_flips": 2040,
+      "max_ratio": 2.0,
+      "min_layer_top8_agreement": 0.9982757568359375,
+      "passed": true,
+      "ppl_abs_difference": 6.0015965843263075e-05,
+      "rotation": "hadamard",
+      "token_layer_decisions": 6291456,
+      "top8_flips": 3632,
+      "worst_deep_layer": 25,
+      "worst_deep_layer_ratio": 2.3
+    },
+    {
+      "disagreement_ratio_to_floor": 1.1455882352941176,
+      "flip_rate": 0.0003714561462402344,
+      "floor_flip_rate": 0.000324249267578125,
+      "floor_min_layer_top8_agreement": 0.998931884765625,
+      "floor_top8_flips": 2040,
+      "max_ratio": 2.0,
+      "min_layer_top8_agreement": 0.9987945556640625,
+      "passed": true,
+      "ppl_abs_difference": 5.730419427951716e-05,
+      "rotation": "nar_k8",
+      "token_layer_decisions": 6291456,
+      "top8_flips": 2337,
+      "worst_deep_layer": 24,
+      "worst_deep_layer_ratio": 1.6896551724137931
+    },
+    {
+      "disagreement_ratio_to_floor": 1.2583333333333333,
+      "flip_rate": 0.00040801366170247394,
+      "floor_flip_rate": 0.000324249267578125,
+      "floor_min_layer_top8_agreement": 0.998931884765625,
+      "floor_top8_flips": 2040,
+      "max_ratio": 2.0,
+      "min_layer_top8_agreement": 0.9986724853515625,
+      "passed": true,
+      "ppl_abs_difference": 7.891429906958791e-05,
+      "rotation": "nar_kmax",
+      "token_layer_decisions": 6291456,
+      "top8_flips": 2567,
+      "worst_deep_layer": 22,
+      "worst_deep_layer_ratio": 1.5416666666666667
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "chunks": 64,
+  "gate": "ppl within tolerance and every layer's top-8 agreement among non-tie tokens (reference margin > tie gap) at or above routing_tolerance; raw agreement recorded as measured",
+  "git_commit": "34fd1804528ab170855175e34d33b3c0c0d5a01b",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 96561 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 96561 MiB, 580.173.02",
+      "2, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 96561 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "0,1,6",
+    "slurm_job_id": "147170",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "qwen3_30b_a3b_base",
+  "ppl_tolerance": 0.01,
+  "routing_tie_gap": 0.001,
+  "routing_tolerance": 0.999,
+  "rows": [
+    {
+      "chunks": 64,
+      "flips_above_tie_gap": 1455,
+      "max_abs_nll_delta": 0.00031054019927978516,
+      "max_flip_gap": 0.378070592880249,
+      "max_tie_share": 0.0129852294921875,
+      "mean_layer_top8_agreement": 0.9996757507324219,
+      "mean_nll_delta": 5.718320608139038e-07,
+      "min_layer_argmax_agreement": 0.9997711181640625,
+      "min_layer_nontie_argmax_agreement": 0.9997690916061401,
+      "min_layer_nontie_top8_agreement": 0.999221682548523,
+      "min_layer_top8_agreement": 0.998931884765625,
+      "passed": true,
+      "ppl_abs_difference": 3.4126689065772098e-06,
+      "raw_gate_passed": false,
+      "reference_ppl": 5.967954867645835,
+      "rotation": "null",
+      "rotation_only_ppl": 5.9679582803147415,
+      "tie_gap": 0.001
+    }
+  ]
+}
