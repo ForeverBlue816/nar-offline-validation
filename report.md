@@ -1442,9 +1442,9 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | Qwen3 report, 16-bit | 59.59 | 75.44 | 87.79 | 89.84 |
 | bf16 | 60.96 | 72.78 | 85.14 | 87.11 |
 | Hadamard, W4A4KV4 | 28.96 | 58.07 | 74.83 | 81.73 |
-| NAR k=8 | 31.54 | 62.47 | — | 84.31 |
-| NAR k=max | 28.66 | 61.71 | — | 83.55 |
-| NAR best − Hadamard | +2.58 | +4.40 | — | +2.58 |
+| NAR k=8 | 31.54 | 62.47 | 78.92 | 84.31 |
+| NAR k=max | 28.66 | 61.71 | 78.70 | 83.55 |
+| NAR best − Hadamard | +2.58 | +4.40 | +4.09 | +2.58 |
 
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B |
 |---|---:|---:|---:|---:|
@@ -1463,11 +1463,11 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 | NAR best − Hadamard | — | — | — | +2.77 |
 <!-- e22-tables:end -->
 
-On MMLU the bf16 row is within 0.3 points of the report at every size measured so far, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report and the 1.7B row 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
+On MMLU the bf16 row is within 0.3 points of the report at every size, so the harness is the report's harness to within seed noise. GSM8K is looser: the 0.6B bf16 row is 1.4 above the report, and the 1.7B, 4B and 8B rows are 2.7, 2.7 and 2.7 below it, which crosses the 2-point line and is a pipeline difference — the harness's `gsm8k_cot` exemplars, 4-shot, and flexible extraction against whatever the report used — not a defect; the quantized rows are compared against this bf16 row, not the report's.
 
 ARC-Easy is the noisiest cell in the table and is recorded as measured. On the 0.6B NAR does not lead: k=max is 0.3 below Hadamard and k=8 is 3.1 below. On the 1.7B the Hadamard row scores 0.6 *above* its own bf16 reference and k=max 4.0 above it, which no 4-bit quantizer earns; on 2,376 zero-shot items where one point is 24 questions, W4A4KV4 rows scatter by ±2–3 points around bf16 and the k=8/k=max ordering flips between the two sizes. The task was kept because it is cheap, and the tables above carry the weight.
 
-The remaining tables — MMLU-Redux, GSM8K, ARC-Easy, and the eight-task suite on the 8B — are filled in as the rows complete; the running summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
+All six benchmarks are complete for all four sizes (24 cells each, finished 2026-09-11). MMLU-Redux's bf16 rows sit 4.3 to 5.3 points above the report at every size, which is the generative template with the space delimiter (the harness's own `:` delimiter scores chance, see above) against whatever the report used; like GSM8K, the quantized rows are compared against this harness's bf16 row. The summary is `results/e22_family_summary.csv` (`finalize`), one line per model, row and benchmark with the report anchor and the flag.
 
 ## Scaling
 
