@@ -1,0 +1,19 @@
+{
+  "figure_sets": 308,
+  "pdfs_audited": 308,
+  "blocking_font_or_collision_failures": 0,
+  "minimum_rendered_font_pt": 5.0,
+  "alignment_verdict_counts": {
+    "PASS": 84,
+    "NOT APPLICABLE": 224
+  },
+  "pdfs_with_reviewed_collision_warnings": 304,
+  "visual_review": "visual_review.json",
+  "static_checker_exceptions": {
+    "FONT-FAMILY": "Explicit user-requested Times New Roman overrides the static checker sans-serif whitelist. Embedded font and rendered glyph-size checks still apply.",
+    "EXPORT-RASTER": "User requested 600-dpi PNG plus PDF/SVG, not TIFF."
+  },
+  "numerical_required_checks_passed": true,
+  "numerical_all_checks_passed": false,
+  "numerical_supplementary_failures": 3
+}

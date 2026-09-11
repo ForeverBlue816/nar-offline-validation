@@ -5,8 +5,8 @@
     "ready": false,
     "strict": false,
     "counts": {
-      "PASS": 19,
-      "WARN": 1,
+      "PASS": 18,
+      "WARN": 2,
       "FAIL": 1
     }
   },
@@ -99,9 +99,12 @@
     },
     {
       "check_id": "LOG-GUARD",
-      "level": "PASS",
-      "message": "No logarithmic transform or axis detected",
-      "evidence": []
+      "level": "WARN",
+      "message": "Logarithmic operation found without an obvious positivity/pseudocount guard",
+      "evidence": [
+        "np.log10(",
+        "log10("
+      ]
     },
     {
       "check_id": "INTERP-MONOTONIC",
@@ -120,7 +123,7 @@
       "level": "PASS",
       "message": "Every detected rotated text call uses anchor-based placement",
       "evidence": [
-        "line 80: rotation=..."
+        "line 82: rotation=..."
       ]
     },
     {

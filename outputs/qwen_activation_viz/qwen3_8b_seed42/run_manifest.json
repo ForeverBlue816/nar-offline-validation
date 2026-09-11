@@ -1,0 +1,1815 @@
+{
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "model_key": "qwen3_8b_base",
+  "base_revision": "49e3418fbbbca6ecbdf9608b4d22e5a407081db4",
+  "cached_snapshot_revisions": [
+    "49e3418fbbbca6ecbdf9608b4d22e5a407081db4"
+  ],
+  "base_checkpoint": "/projects/nar/nar-validation/cache/huggingface/models--Qwen--Qwen3-8B-Base/snapshots",
+  "architecture": {
+    "model_id": "Qwen/Qwen3-8B-Base",
+    "architecture": "Qwen3ForCausalLM",
+    "shapes": {
+      "num_attention_heads": 32,
+      "num_key_value_heads": 8,
+      "head_dim": 128,
+      "hidden_size": 4096,
+      "intermediate_size": 12288,
+      "num_hidden_layers": 36
+    },
+    "slot_counts": {
+      "qkv": 32,
+      "down": 96
+    },
+    "kv_group_counts": {
+      "k_per_channel_groups": 4,
+      "v_per_token_group_size": 128,
+      "kv_heads": 8,
+      "num_key_value_groups": 4
+    },
+    "tie_word_embeddings": false,
+    "embedding_and_lm_head_share_storage": false,
+    "linear_modules_with_bias": [],
+    "rmsnorm_kinds_fused_into_consumers": [
+      "input_layernorm",
+      "norm",
+      "post_attention_layernorm"
+    ],
+    "per_head_qk_norm_modules": 72,
+    "per_head_qk_norm_fused": false,
+    "per_head_qk_norm_note": "q_norm/k_norm are applied inside Qwen3Attention after q_proj/k_proj and before RoPE. fuse_norms_and_rotate folds only input_layernorm, post_attention_layernorm and the final norm, so they are untouched.",
+    "r1_note": "R1 folds into the input axis of q/k/v_proj and gate/up_proj and the output axis of o_proj and down_proj. q_norm/k_norm live downstream of q_proj/k_proj on the head_dim axis and are therefore unaffected by R1.",
+    "r2_note": "R2 acts on the head_dim axis (v_proj output / o_proj input), independent of q_norm/k_norm.",
+    "problems": []
+  },
+  "layers_zero_based": [
+    0,
+    12,
+    23,
+    35
+  ],
+  "sites": {
+    "down_proj": "mlp.down_proj",
+    "q_proj": "self_attn.q_proj"
+  },
+  "methods": [
+    "unrotated",
+    "hadamard",
+    "nar_k8",
+    "nar_kmax"
+  ],
+  "sample_seed": 42,
+  "rotation_seed": 0,
+  "samples": 8,
+  "seq_len": 2048,
+  "reference": "BF16 checkpoint values loaded and norm-fused in FP32; q_norm/k_norm remain affine",
+  "git_commit": "8470f3f41aa813f2f524b1d0e8bc501955013153",
+  "command": "/home/yanlongc/qwen-activation-viz-work/nar/activation_viz/capture.py --workdir /projects/nar/nar-validation --output /projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42",
+  "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.16.0.dev0",
+  "numpy": "2.4.6",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+  "slurm_job_id": "149675",
+  "quantizer": {
+    "implementation": "nar.experiment.dynamic_asym_int4",
+    "bits": 4,
+    "group_size": 128,
+    "group_axis": -1,
+    "scale": "fp16((max-min)/15), nonpositive or fp16-underflow scale replaced by 1",
+    "offset": "fp16(group minimum), real-valued offset; not group mean and not integer zero point",
+    "codes": "uint8 container, round-to-nearest-even, clamp [0,15]",
+    "clipping": "observed min/max; no activation MSE search",
+    "weight_protocol": "g128_asym GPTQ",
+    "KV": "E14 KIVI: K token-axis g32; V channel-axis g128; residual length 32",
+    "compute_dtype": "float32",
+    "source_sha256": "199e3a5e674a9098ff0f67f28d503afaf415271293d7d6d093928179a2c66f6f"
+  },
+  "rotation_factors": {
+    "hadamard": {
+      "ranks": {
+        "r1_rank": null,
+        "r1_slots": 32,
+        "r4_rank": null,
+        "r4_slots": 96,
+        "r2_rank": null
+      },
+      "files": [],
+      "r4_actual_k": {
+        "0": null,
+        "12": null,
+        "23": null,
+        "35": null
+      },
+      "sign_hashes": {
+        "down_proj:0": "42bd22a7ff7abb6fc4b3a3acd20c9a5d7900742b1fc8b229c19b22af9e0fde3e",
+        "down_proj:12": "42bd22a7ff7abb6fc4b3a3acd20c9a5d7900742b1fc8b229c19b22af9e0fde3e",
+        "down_proj:23": "42bd22a7ff7abb6fc4b3a3acd20c9a5d7900742b1fc8b229c19b22af9e0fde3e",
+        "down_proj:35": "42bd22a7ff7abb6fc4b3a3acd20c9a5d7900742b1fc8b229c19b22af9e0fde3e",
+        "q_proj:0": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:12": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:23": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:35": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd"
+      }
+    },
+    "nar_k8": {
+      "ranks": {
+        "r1_rank": 8,
+        "r1_slots": 32,
+        "r4_rank": 8,
+        "r4_slots": 96,
+        "r2_rank": 1
+      },
+      "files": [
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r1_k8.pt",
+          "sha256": "81f3f3dcdcc64f97f4341e1af5ceb31b4260f74743f8c00dc7d0d1f8aaca625e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_00.pt",
+          "sha256": "30d0c727cddeeaa319a66c375c71bb61ccfe016102645a78914d64e42bff6c57"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_01.pt",
+          "sha256": "c5966a702d4b2deb6c5545180da3c224316ee27de5502e7c2dc7d24eb273d26b"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_02.pt",
+          "sha256": "71829a4f48e0af45e6b8f46c0b81417226b2cbb197d1049493fd11f82499fd60"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_03.pt",
+          "sha256": "b784f74a895f196edd74a8e491061db19e046f6fd81743a03a7424e9e4aa0c2e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_04.pt",
+          "sha256": "571e44ac6f9349d32794c8a45aee59da6e5a86e03a996d42ea934177b271fc0b"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_05.pt",
+          "sha256": "5088ce0011c98ef68446075abc8aa8b04ac6fe7d799495d0e705d5971c51185e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_06.pt",
+          "sha256": "bed681e6279dc62b5d9bb1a5598ae15e71db6e50a40d81b3fd1191e67e5b4829"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_07.pt",
+          "sha256": "bb46bbffe2beef241da98c8b7691feff1ee2741dbc8c253197d3ebfad134497f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_08.pt",
+          "sha256": "9c25ccba215d05a9d05260627563496c058c6bc27851b69851ac03f4618d5f0e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_09.pt",
+          "sha256": "e3ff33acc522cc4204c8a2de1370025898bb3b950928a3c185f156522d5e1bdb"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_10.pt",
+          "sha256": "fd209d642ad986e4a1b804daabad073abbf85f05c7321821875bce92a54c0c22"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_11.pt",
+          "sha256": "546c39f73b09630c110dc693572559fbf65ccff1986134631684eca646e903e2"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_12.pt",
+          "sha256": "ad3f0ad49d2d2f5c9a54c6aae5d85da81b056402859e599fb085da1f9e2212c8"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_13.pt",
+          "sha256": "1e68a3b69aae96df9eac65d034f7c37a2d2cbc54f7e645a6cc47b1c543640266"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_14.pt",
+          "sha256": "1a1919975d15333175777d750fffb5a00927d8b11f3a2036a3846ebe6176278a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_15.pt",
+          "sha256": "7682ec199ef9c89bffed2df525faf25f61b3632f0a48893dccd5c4ea8c59f634"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_16.pt",
+          "sha256": "074ccfab2400d4b159b92e8e75c039cdd9090e5b88a7eba718828038a474f5b3"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_17.pt",
+          "sha256": "0843c3929224d4d7c4c5493f653db395837ccd56cad011d3ecd9a2a6a6eacf91"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_18.pt",
+          "sha256": "be9aa4b7150ac9ef008bffbb56be82e883696489636952405794af05210ff8a4"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_19.pt",
+          "sha256": "86e20602b2c794853705809c52bb58596681965084d7e79ea82cb38711bd914f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_20.pt",
+          "sha256": "0b5aa4d7f530d1caab3d547e0efa916bd90d53414c12ec8909f1320d8561e69a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_21.pt",
+          "sha256": "1913329c26240ac7614add00c91cc4cb483d2d882c99f87ed9e0310fd94360a9"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_22.pt",
+          "sha256": "34e27e0a72e62bbd1fc0e2bcef5c179a2c1214dd299affd92d1d296bbf3d9968"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_23.pt",
+          "sha256": "77b3766a6789c8a4d4afb1cf4cc4dd4bb339b68c3f6e0291b32fe21fd92b5f7a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_24.pt",
+          "sha256": "b6f7c608fc80eba298e19a55e66d0205b8099594b3ea8ea8586e664cd9cf4c96"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_25.pt",
+          "sha256": "cd778c143a33a762215ce8d2c6f3d9d36866e03c9f8cba57dfe78669007dc60d"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_26.pt",
+          "sha256": "151fb62c4b7592e997da7f8819bdcbfc03a9f7b3a48d769dedbefec28321208f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_27.pt",
+          "sha256": "40c2e13295be14b727ddd020529691a67657732d3f1c22e4e98eddc8909e2a31"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_28.pt",
+          "sha256": "b522006c87bc9d9777a27fcaad9c43a292bf16654adee61b553f15185283767e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_29.pt",
+          "sha256": "48d0d854b2cdee3bf6e87c19d641823819da77ce3f0840bc7fead022bcecf6f0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_30.pt",
+          "sha256": "0eb84ef3969e3291bb5a89726dc4541d16b23ff38df4d554811cb77834b73e5c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_31.pt",
+          "sha256": "a1f04d8388595456caeec9317ebb43a01692800907a11d38c5103444d013e9d3"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_32.pt",
+          "sha256": "35de8431d046ba64da84795996ff480b802ce628aeac767c492688fda05615b9"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_33.pt",
+          "sha256": "b46b86634e2823b187c37d81f161b3e468a306dc45aa96028ccfc95bfeec091c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_34.pt",
+          "sha256": "0a41559afc7fcf0ea116dd2dadec6e5b4b4c31b86d71042b01ea1fe465ded922"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_35.pt",
+          "sha256": "26159a2de141e41b84382882de3a5f2e4383bbc1ebf5af0cb48bd092203c1210"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_00.pt",
+          "sha256": "b41cfaabe465876bac5e2c75facba1de24177db12f40f08250f9f02215690084"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_01.pt",
+          "sha256": "f80f0c0f85f420af67a1397cd2e951e1c671a5a3f487ea3d55d0bdd07a021cd6"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_02.pt",
+          "sha256": "53b91844d5ecda3cd6fd50d42baefda47ccac00d81791bf36517d751b89473a8"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_03.pt",
+          "sha256": "aebd022779e44607904d7f1a6a72fe7f503d328fdb78509d959939c996c0e97f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_04.pt",
+          "sha256": "6333a23de7d9263a3c13b7c45ebd068e50274ac1678b9ffb0a5747e9153fe7dc"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_05.pt",
+          "sha256": "3d2d850c6e2dcbd92abc49427fe7b20bf29395318dea0b1befd027d7718f8465"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_06.pt",
+          "sha256": "30b9742c1b4e5f10e07329c08768e2676761c03ece4792fa9c70136c40d88ce2"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_07.pt",
+          "sha256": "77d98afb685475b0ee1a549ee2537f8464ca2c0729eb71214264bc3759e64660"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_08.pt",
+          "sha256": "f956bd5bf11ea66de4475c8bd76f88002c8c344c995009b271b07d633a958303"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_09.pt",
+          "sha256": "65393fff8358e4c736033543af3b532c9147971d1b53f6db3e0d788e823eeb7d"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_10.pt",
+          "sha256": "e53e2a2e2f275b08fbf52159a87085ca35df1a90747fb642ccf62e10200663f0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_11.pt",
+          "sha256": "d0fa19529c9008904af2dbae175f689c1d1e25c1b27d37f2f8255f7c9270f4cd"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_12.pt",
+          "sha256": "6ad9f41dae5fbf965dbe21a8d83a9907fd644e28035acb1d3666ef31c93babfd"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_13.pt",
+          "sha256": "2e61f3a6cad6e96f4d6908d37297d885836683aa67552fd1db7121db4fbbd7c1"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_14.pt",
+          "sha256": "83f4bcc9bdacd0221a9bcf986aabaed85218828526ca987278ed8ecf8bf440ae"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_15.pt",
+          "sha256": "4e78b859d97ff8aac2d81eb1876b384972c1c830cc8f50b39ced55b58eabda99"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_16.pt",
+          "sha256": "720e168b1f51edf64ac9ea02b830d9fa17ef7a7e69161a0617d8a4dbda6102b0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_17.pt",
+          "sha256": "71634a938971aa45bc7c7c61917d51c082befc9013716414beffc1721b99b8b6"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_18.pt",
+          "sha256": "9ca81af8978aaacc3886b65840fd96efa2f55a43c975db7cd5da79bccd46cd22"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_19.pt",
+          "sha256": "06647259fe0ec3e7fe3ca69b0f64e42ae62b94e5618945e6c913cc81b7776818"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_20.pt",
+          "sha256": "a6c190c7863012d2a91b1f7c777b6bac3e2e077f93412bc226c4658149a0cfde"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_21.pt",
+          "sha256": "0e57a4476a0a1865d6959392fdc464c7c62958f375ad7c27488982e1e9720da5"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_22.pt",
+          "sha256": "1ffe5300e8a3f00cb58557b7f38c55d72bfaa86b478ee62510334aad453b7a0c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_23.pt",
+          "sha256": "3cebe7894446bcb86522affcba8c17d42739bca2ae109e3d83b8132f776562f1"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_24.pt",
+          "sha256": "fdc42faa683241d84b49b29ad83a1c36ae13d16e342f17fc7aabce2edee85df4"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_25.pt",
+          "sha256": "ff9db79208740a727612bc51ef1d4b17b10a6601fcad43118044cdd1698cd1f7"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_26.pt",
+          "sha256": "a0247b7331347e1f6f6a243b93e85f18a81dc5721e1d8484534847540cd37ae7"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_27.pt",
+          "sha256": "ca8bb2494587243a73568d26f24e16ee15ae32a1e33b88f44a079389a58f0ac0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_28.pt",
+          "sha256": "8d9be308a070a9a6b1c059c7126f6fe7a8587b13cd12aace294b560324c5bcbc"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_29.pt",
+          "sha256": "14a6c4502fa41b689289cb1957131f212050e4b666ea7cf68b382448f6b20d86"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_30.pt",
+          "sha256": "e937473c9337fa68e85d068b07da09eede4f6b9e286e1bf1d87dadabe035bd06"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_31.pt",
+          "sha256": "d8dc92e65af9c265b8964dc770b7963b4a81c4465b5df88948138e576e52d632"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_32.pt",
+          "sha256": "5c0f684b866f81c69614b5f08d74fdef2f58f0eb7ec1506e4769b1bcc84457b1"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_33.pt",
+          "sha256": "111928bbca8ba78a88a27a133a5858b1c180f0cdb4cb13b72c589b555d86398c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_34.pt",
+          "sha256": "6a047190615ef5d928147efab290118aa7747adbe501f989f7e1436d6c35960c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_k8/down_layer_35.pt",
+          "sha256": "0b15d6b55ab399f9a65934a6bfd635f4a641fe05c05be9db6a46098b72cb304c"
+        }
+      ],
+      "r4_actual_k": {
+        "0": 8,
+        "12": 8,
+        "23": 8,
+        "35": 8
+      },
+      "sign_hashes": {
+        "down_proj:0": "4cfb47050cd0df681a61f60e9c368dfb6e8e77670c240325bebfcfa1a36fd974",
+        "down_proj:12": "716258538ff18d83050dfbb8898935828afab760590544370cade377160e81b1",
+        "down_proj:23": "a826ec3f88815ffc126ce0fcf20836408b1c5a006a3711f3089141d10180c401",
+        "down_proj:35": "bc179319d4ad69dc81f131c6d8d97988d58727e41dff04a2f81077ff3c0b4502",
+        "q_proj:0": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:12": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:23": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:35": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd"
+      }
+    },
+    "nar_kmax": {
+      "ranks": {
+        "r1_rank": 32,
+        "r1_slots": 32,
+        "r4_rank": 96,
+        "r4_slots": 96,
+        "r2_rank": 1
+      },
+      "files": [
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r1_kmax.pt",
+          "sha256": "d6f469fc5549ce8dbc7f5259d0d1080141ad62d4fb70cb8e2da50a355e0777bd"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_00.pt",
+          "sha256": "30d0c727cddeeaa319a66c375c71bb61ccfe016102645a78914d64e42bff6c57"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_01.pt",
+          "sha256": "c5966a702d4b2deb6c5545180da3c224316ee27de5502e7c2dc7d24eb273d26b"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_02.pt",
+          "sha256": "71829a4f48e0af45e6b8f46c0b81417226b2cbb197d1049493fd11f82499fd60"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_03.pt",
+          "sha256": "b784f74a895f196edd74a8e491061db19e046f6fd81743a03a7424e9e4aa0c2e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_04.pt",
+          "sha256": "571e44ac6f9349d32794c8a45aee59da6e5a86e03a996d42ea934177b271fc0b"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_05.pt",
+          "sha256": "5088ce0011c98ef68446075abc8aa8b04ac6fe7d799495d0e705d5971c51185e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_06.pt",
+          "sha256": "bed681e6279dc62b5d9bb1a5598ae15e71db6e50a40d81b3fd1191e67e5b4829"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_07.pt",
+          "sha256": "bb46bbffe2beef241da98c8b7691feff1ee2741dbc8c253197d3ebfad134497f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_08.pt",
+          "sha256": "9c25ccba215d05a9d05260627563496c058c6bc27851b69851ac03f4618d5f0e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_09.pt",
+          "sha256": "e3ff33acc522cc4204c8a2de1370025898bb3b950928a3c185f156522d5e1bdb"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_10.pt",
+          "sha256": "fd209d642ad986e4a1b804daabad073abbf85f05c7321821875bce92a54c0c22"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_11.pt",
+          "sha256": "546c39f73b09630c110dc693572559fbf65ccff1986134631684eca646e903e2"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_12.pt",
+          "sha256": "ad3f0ad49d2d2f5c9a54c6aae5d85da81b056402859e599fb085da1f9e2212c8"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_13.pt",
+          "sha256": "1e68a3b69aae96df9eac65d034f7c37a2d2cbc54f7e645a6cc47b1c543640266"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_14.pt",
+          "sha256": "1a1919975d15333175777d750fffb5a00927d8b11f3a2036a3846ebe6176278a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_15.pt",
+          "sha256": "7682ec199ef9c89bffed2df525faf25f61b3632f0a48893dccd5c4ea8c59f634"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_16.pt",
+          "sha256": "074ccfab2400d4b159b92e8e75c039cdd9090e5b88a7eba718828038a474f5b3"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_17.pt",
+          "sha256": "0843c3929224d4d7c4c5493f653db395837ccd56cad011d3ecd9a2a6a6eacf91"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_18.pt",
+          "sha256": "be9aa4b7150ac9ef008bffbb56be82e883696489636952405794af05210ff8a4"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_19.pt",
+          "sha256": "86e20602b2c794853705809c52bb58596681965084d7e79ea82cb38711bd914f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_20.pt",
+          "sha256": "0b5aa4d7f530d1caab3d547e0efa916bd90d53414c12ec8909f1320d8561e69a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_21.pt",
+          "sha256": "1913329c26240ac7614add00c91cc4cb483d2d882c99f87ed9e0310fd94360a9"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_22.pt",
+          "sha256": "34e27e0a72e62bbd1fc0e2bcef5c179a2c1214dd299affd92d1d296bbf3d9968"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_23.pt",
+          "sha256": "77b3766a6789c8a4d4afb1cf4cc4dd4bb339b68c3f6e0291b32fe21fd92b5f7a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_24.pt",
+          "sha256": "b6f7c608fc80eba298e19a55e66d0205b8099594b3ea8ea8586e664cd9cf4c96"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_25.pt",
+          "sha256": "cd778c143a33a762215ce8d2c6f3d9d36866e03c9f8cba57dfe78669007dc60d"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_26.pt",
+          "sha256": "151fb62c4b7592e997da7f8819bdcbfc03a9f7b3a48d769dedbefec28321208f"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_27.pt",
+          "sha256": "40c2e13295be14b727ddd020529691a67657732d3f1c22e4e98eddc8909e2a31"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_28.pt",
+          "sha256": "b522006c87bc9d9777a27fcaad9c43a292bf16654adee61b553f15185283767e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_29.pt",
+          "sha256": "48d0d854b2cdee3bf6e87c19d641823819da77ce3f0840bc7fead022bcecf6f0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_30.pt",
+          "sha256": "0eb84ef3969e3291bb5a89726dc4541d16b23ff38df4d554811cb77834b73e5c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_31.pt",
+          "sha256": "a1f04d8388595456caeec9317ebb43a01692800907a11d38c5103444d013e9d3"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_32.pt",
+          "sha256": "35de8431d046ba64da84795996ff480b802ce628aeac767c492688fda05615b9"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_33.pt",
+          "sha256": "b46b86634e2823b187c37d81f161b3e468a306dc45aa96028ccfc95bfeec091c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_34.pt",
+          "sha256": "0a41559afc7fcf0ea116dd2dadec6e5b4b4c31b86d71042b01ea1fe465ded922"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e14_rotations/r2_v_layer_35.pt",
+          "sha256": "26159a2de141e41b84382882de3a5f2e4383bbc1ebf5af0cb48bd092203c1210"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_00.pt",
+          "sha256": "984405281d986167b42f9cce9d96b747de8087835fbc8494804ff1f7551e5eb6"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_01.pt",
+          "sha256": "2e99d5ffa76e61dba8c5db5916b6c2d6ddcd6a7cdde3a1fb504ee7d79586496a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_02.pt",
+          "sha256": "e333f137a88a0936f78d8f60c272d36b3ca5361457d87d7943755d72e17d3ef0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_03.pt",
+          "sha256": "e85af46aea074f97e6be930f3045efa43bec0fd6c8ed407bbfa3ae5367ebd3c8"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_04.pt",
+          "sha256": "3f38b634180448798e5b5794bbe8a3cd5d7735471cdeac304c42e136b270e593"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_05.pt",
+          "sha256": "e642a496089ded469abcb4ae75bc725d313d7f412f3e82077b3ea92ec892477c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_06.pt",
+          "sha256": "549b4976069d56e4f1fd2d54bb536bb42d872a626373f4fc7b822aa5111101a4"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_07.pt",
+          "sha256": "ebb3f8e3a1d314169381fe387fddcc9836d9e1f525559f66364d3b44ce14bc2a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_08.pt",
+          "sha256": "8a70c8aea0234f739afc7534cab73ed17be0d1aaddc1707a13673c2fde79d354"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_09.pt",
+          "sha256": "1e0d075e116f5437f6e8a4202a1cedbf137ec2afa4c0896a00f7a9c2b1af1e6a"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_10.pt",
+          "sha256": "95b29a288d23b3bcf521ab5ca2c3554a8c28afb5518b2cfdda3297a57ef94564"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_11.pt",
+          "sha256": "4d476e4989f1f298f9f6ec7f0abed63746f1c1708c1523c6ee3db9e110493e42"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_12.pt",
+          "sha256": "43afb3c7e04aa5882a8a62737dbd93e9febe3e12182e4083fe8cf1eef1df0db3"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_13.pt",
+          "sha256": "e2817e65faaeaf0c09a8d1b4f20777155d9d70d4aa10574a4917f2ca1d0da9be"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_14.pt",
+          "sha256": "d90f141c12f9cf70aebb137d012fb598a17fc0b0914a05837ce6984847e8c5a7"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_15.pt",
+          "sha256": "f1fe744183de539a590c5fd0d803a9c44ca69dad353e28870af0140a1c8b17da"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_16.pt",
+          "sha256": "7d873849a6ed9a68a21d37e9152fe4e0786b11fd03e21929ed7aae519b813f6e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_17.pt",
+          "sha256": "304bd9cf5cc56b17873046fdece9eac3d375be5729c63fb02893849f71a8af6e"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_18.pt",
+          "sha256": "d26d3823d95ed550455589514e04fb7afe72604d50a7cce421c0ac4fcd32edd4"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_19.pt",
+          "sha256": "d850e2bb24c376934625b70f048c979f9751a4d028c0051f2cdb746add14bd2b"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_20.pt",
+          "sha256": "41f1a908aae0a31aa8aeb2883bf4a46f3f693e32c9f645ccde9caab1dd76787c"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_21.pt",
+          "sha256": "7cd45bad9a83fef3f569b92ebf131b7b826bd983fbeacba456e534cf0f3a71b8"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_22.pt",
+          "sha256": "4296b42d1ec078e2297bd393291417deea1a00c04fbcbf5955f6e7392f290313"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_23.pt",
+          "sha256": "d2ed8519a465ea9032e4841919adeb664fc909201a17e9c49cfc06107f3466be"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_24.pt",
+          "sha256": "ed10a3ce59b22fb49338304c93bfe0a5579a6aa15fe5e33098d245b7f4c92447"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_25.pt",
+          "sha256": "c615124f3932b4480d900156e68a6f506e6baa7040fbc5f9dbcab6e7369f8d45"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_26.pt",
+          "sha256": "dc516fded5cd19a44f239de8b382e6730c2e5b48b459c6d57970bd47752bd0b1"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_27.pt",
+          "sha256": "ff59a2dbf40ebbeab370c7df3c7a3b1a4bb568359abb5efc83ee2e1a549a4c79"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_28.pt",
+          "sha256": "940f274f8a59c9b3a46ca1a5d35bd88bdc1c3a35fec1dfcd432c492aff078af1"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_29.pt",
+          "sha256": "ce69facc2ae17fbbb1a87e86dcb9159f82cb345480a9d8bdbfc845bbafceabbd"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_30.pt",
+          "sha256": "566c934261f4b730f42ace208a2d7c79d550169cca7db33a328dd037a5d5e02d"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_31.pt",
+          "sha256": "f0140186755c63e31f0f8dfbe33ae83adda4b8725fb0d3143bd5de7e26265de0"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_32.pt",
+          "sha256": "5ecf32a5c75585af9150d45872bb6c18cda77aa4b497d84727ecca15ecc580d9"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_33.pt",
+          "sha256": "9eebc4da0fbd30c698e359856759f61ff434c76ac1659ee1c5b1c4e17ee1fddb"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_34.pt",
+          "sha256": "70ebee2ba0f0c6aef04d94633b06eefb2573a50316d22749e0c242b9249e3cf6"
+        },
+        {
+          "path": "activations/qwen3_8b_base/e18v2_factors/nar_kmax/down_layer_35.pt",
+          "sha256": "39006adeacba54bf67af5d2cc86a9ef3f671b2548a518c3e8a124535d0024b70"
+        }
+      ],
+      "r4_actual_k": {
+        "0": 96,
+        "12": 96,
+        "23": 96,
+        "35": 96
+      },
+      "sign_hashes": {
+        "down_proj:0": "4cfb47050cd0df681a61f60e9c368dfb6e8e77670c240325bebfcfa1a36fd974",
+        "down_proj:12": "716258538ff18d83050dfbb8898935828afab760590544370cade377160e81b1",
+        "down_proj:23": "a826ec3f88815ffc126ce0fcf20836408b1c5a006a3711f3089141d10180c401",
+        "down_proj:35": "bc179319d4ad69dc81f131c6d8d97988d58727e41dff04a2f81077ff3c0b4502",
+        "q_proj:0": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:12": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:23": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd",
+        "q_proj:35": "e07acfbc7acb3e926a2619f8c2f14579dec26002dec6d570cb03ff79fe5caedd"
+      }
+    }
+  },
+  "checkpoints": {
+    "hadamard": {
+      "path": "/projects/nar/nar-validation/artifacts/e22/qwen3_8b_base/gptq_hadamard_seed0_g128_asym",
+      "done": {
+        "bf16_reparameterization_drift": {
+          "exceeds_previous_bf16_gate": false,
+          "max_abs_logit_error": 0.000118255615234375,
+          "previous_bf16_gate": 0.01,
+          "probe_tokens": 128,
+          "relative_l2_logit_error": 1.2140543503846857e-06
+        },
+        "checkpoint": "one bf16 fake-quantized state file per decoder layer",
+        "elapsed_seconds": 3108.650872707367,
+        "fold": {
+          "embedding_centering": false,
+          "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+          "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+          "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+          "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+          "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+          "r4": "per-layer down-input rotation folded into down_proj rows",
+          "tied_embeddings_materialized_before_final_norm_fusion": false
+        },
+        "fp32_algebra_control": {
+          "row": {
+            "below_reference_share": "0.203125",
+            "chunks": "64",
+            "chunks_below_reference": "13",
+            "fold_dtype": "float32",
+            "max_abs_logit_difference": "0.0001277923583984375",
+            "max_abs_nll_delta": "3.5762786865234375e-06",
+            "max_round_trip_relative_error": "1.574283174932134e-07",
+            "mean_nll_delta": "8.028000593185425e-07",
+            "model": "qwen3_8b_base",
+            "model_id": "Qwen/Qwen3-8B-Base",
+            "passed": "True",
+            "ppl_abs_difference": "6.805421527644739e-06",
+            "quantizer": "identity",
+            "r1_rank": "",
+            "r1_slots": "32",
+            "r2_rank": "",
+            "r4_rank": "",
+            "r4_slots": "96",
+            "reference_ppl": "8.477103005517801",
+            "relative_l2_logit_difference": "1.2071707260474795e-06",
+            "required_max_abs_nll_delta": "0.001",
+            "required_ppl_abs_difference": "0.01",
+            "rotation": "hadamard",
+            "rotation_only_ppl": "8.477109810939329",
+            "round_trip_tolerance": "1e-06",
+            "seed": "0",
+            "sign_balanced": "False",
+            "sign_test_applicable": "False"
+          },
+          "source": "/projects/_hdd/nar/nar-validation/results/qwen3_8b_base/e22_rotation_only_control.csv"
+        },
+        "gptq": {
+          "act_order": false,
+          "bits": 4,
+          "blocksize": 128,
+          "calibration_dataset": "WikiText-2 train",
+          "calibration_seed": 0,
+          "calibration_sequences": 128,
+          "excluded": [
+            "embed_tokens",
+            "lm_head"
+          ],
+          "grid": 100,
+          "groupsize": 128,
+          "hessian_dtype": "torch.float32",
+          "hessian_product_dtype": "torch.float32",
+          "maxshrink": 0.8,
+          "mse_clipping": true,
+          "norm": 2.4,
+          "percdamp": 0.01,
+          "perchannel": true,
+          "protocol": "g128_asym",
+          "sequence_length": 2048,
+          "static_groups": false,
+          "symmetric": false
+        },
+        "hardware": {
+          "cuda_available": true,
+          "cuda_runtime": "12.8",
+          "gpu_capability": [
+            8,
+            6
+          ],
+          "gpu_name": "NVIDIA A40",
+          "hostname": "gpu-a40-2.cluster02.eee.ntu.edu.sg",
+          "nvidia_smi": [
+            "0, NVIDIA A40, GPU-fc7b1128-f804-96a1-e8bb-c785ef4b2ee5, 46068 MiB, 45058 MiB, 580.173.02",
+            "1, NVIDIA A40, GPU-f03b66e4-519e-4943-1b87-0d35642cf0ba, 46068 MiB, 45486 MiB, 580.173.02"
+          ],
+          "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+          "slurm_job_gpus": "1,2",
+          "slurm_job_id": "143936",
+          "torch": "2.11.0+cu128"
+        },
+        "model": "qwen3_8b_base",
+        "model_id": "Qwen/Qwen3-8B-Base",
+        "quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+        "rotation": "hadamard"
+      },
+      "actual_saved_weight_dtype": "torch.float32",
+      "layer_files": [
+        {
+          "name": "layer_00.pt",
+          "size_bytes": 771755205,
+          "sha256": "d7658ec09faabe96edaeb9167e2a947af27e978316b80288052d449d71bdfc13"
+        },
+        {
+          "name": "layer_01.pt",
+          "size_bytes": 771755205,
+          "sha256": "5474e9740221c5225475f094a2ba08278024bec76219c11d301e185a46cfcb62"
+        },
+        {
+          "name": "layer_02.pt",
+          "size_bytes": 771755205,
+          "sha256": "759f64b9742b93d66c2936667121b4004715a4ae6d9d70416d8ac85e85f695f3"
+        },
+        {
+          "name": "layer_03.pt",
+          "size_bytes": 771755205,
+          "sha256": "b37ed566fb27108acdff25e65067d90de2eace7a337b96beb7169851ea84b66e"
+        },
+        {
+          "name": "layer_04.pt",
+          "size_bytes": 771755205,
+          "sha256": "4e6689b6708dbe28765f6df6a0d64c8887aea0ccb425f631c00bb3345b73e7e1"
+        },
+        {
+          "name": "layer_05.pt",
+          "size_bytes": 771755205,
+          "sha256": "6d3c39b2ee1be92ca0d5e7e07591298d1b4f17c7141519be85d85de8b9f86663"
+        },
+        {
+          "name": "layer_06.pt",
+          "size_bytes": 771755205,
+          "sha256": "2d1ab7dc9450695976b8961d161caaffb0b55cab25afd48243a5920d6219db07"
+        },
+        {
+          "name": "layer_07.pt",
+          "size_bytes": 771755205,
+          "sha256": "d0c23a228202cdb2866ab9e1ae53d3de799dad5261b3e502c67a636175eda9d1"
+        },
+        {
+          "name": "layer_08.pt",
+          "size_bytes": 771755205,
+          "sha256": "cacbfc39c2fd81918677c9e828c2f76eecf1ba7324af02f5f89f4cac25d91fa7"
+        },
+        {
+          "name": "layer_09.pt",
+          "size_bytes": 771755205,
+          "sha256": "0999eaa53ef4f297113f6ad735d72e44efa81697ac5d481b12519a3a1db7aed5"
+        },
+        {
+          "name": "layer_10.pt",
+          "size_bytes": 771755205,
+          "sha256": "3fe61c7aa5ae7248c0b271310a8cd952139ad8354050c2cc99e4a48b48afe6ed"
+        },
+        {
+          "name": "layer_11.pt",
+          "size_bytes": 771755205,
+          "sha256": "db233e05fa65cd615098f1b3c48ca1c0dce1d5e8a1045266f6c725e24d951cce"
+        },
+        {
+          "name": "layer_12.pt",
+          "size_bytes": 771755205,
+          "sha256": "0004a83f650ba860171a94945a21ce8d95eb3345dba3b7fac79881b82209bbf4"
+        },
+        {
+          "name": "layer_13.pt",
+          "size_bytes": 771755205,
+          "sha256": "51afe06ccaeeb3699b8cdf0a91568c27d897d2ff7326410f931cb9ce0dee3cd8"
+        },
+        {
+          "name": "layer_14.pt",
+          "size_bytes": 771755205,
+          "sha256": "c510e6f5c1ca57a2eb63a8d0a0fe45c247236d7176c18d90f326a1159b74d746"
+        },
+        {
+          "name": "layer_15.pt",
+          "size_bytes": 771755205,
+          "sha256": "5c5e0c746dc78d379a694fee62908461d79fdb491789f3519a420d4ccb4525b9"
+        },
+        {
+          "name": "layer_16.pt",
+          "size_bytes": 771755205,
+          "sha256": "9278be4126605a6b4506fa9cdabbcfbd678a047502f3ff1d0ebe223b94d7005b"
+        },
+        {
+          "name": "layer_17.pt",
+          "size_bytes": 771755205,
+          "sha256": "90ae46900b7691e41dce11c6d9f5c3f519c5eef05db665fdc48bc87145b4bf68"
+        },
+        {
+          "name": "layer_18.pt",
+          "size_bytes": 771755205,
+          "sha256": "cbe364e4411e85ee82979099e626711bbd41adb2807b1c9822dc01f93f79c925"
+        },
+        {
+          "name": "layer_19.pt",
+          "size_bytes": 771755205,
+          "sha256": "f87f5ecf612318b64f42fa4f2d755bdfb1b683755ba2a3cd6e27d15f94d55d70"
+        },
+        {
+          "name": "layer_20.pt",
+          "size_bytes": 771755205,
+          "sha256": "08b3c7187f824f5b929f0f0c49de13ccd71558126933f039282e03ebbe324130"
+        },
+        {
+          "name": "layer_21.pt",
+          "size_bytes": 771755205,
+          "sha256": "102d16c22173ef6b77d4432f05b3ecb28f620e3d6af4456071f480c1fa553c1b"
+        },
+        {
+          "name": "layer_22.pt",
+          "size_bytes": 771755205,
+          "sha256": "5388e953d693f4585af61240e15b16e64492c21c324dea0218b785cd1af1d907"
+        },
+        {
+          "name": "layer_23.pt",
+          "size_bytes": 771755205,
+          "sha256": "74a33f1cc2e410fa476fe90680ce6a7809a6c7c86d049dab320f56a077299178"
+        },
+        {
+          "name": "layer_24.pt",
+          "size_bytes": 771755205,
+          "sha256": "323177b43a6f273d763e0bdd42431ce97214602ea0f55159d182e09868ec6be1"
+        },
+        {
+          "name": "layer_25.pt",
+          "size_bytes": 771755205,
+          "sha256": "999686698efaee16ee053b11982a7b4c46b13f1918917f307be3e38b8c22ff5b"
+        },
+        {
+          "name": "layer_26.pt",
+          "size_bytes": 771755205,
+          "sha256": "b05a17cd05daa3dfe22ce7d27e0e11486acb44b9d27bb0ec3ebe0e2d5364c644"
+        },
+        {
+          "name": "layer_27.pt",
+          "size_bytes": 771755205,
+          "sha256": "369ac31292987e98f6dd4febc9c58bb10e7078a73270f7c7f36d37ce3d82baea"
+        },
+        {
+          "name": "layer_28.pt",
+          "size_bytes": 771755205,
+          "sha256": "af2c9bea722f1354d2514cff0f552fdc97d63de3011264d3008c3799b63964e0"
+        },
+        {
+          "name": "layer_29.pt",
+          "size_bytes": 771755205,
+          "sha256": "02bb2c562715407a4a6d0c901b7f8ef029664b72b30200dd264b8d7f4902c9c2"
+        },
+        {
+          "name": "layer_30.pt",
+          "size_bytes": 771755205,
+          "sha256": "a8f0f0cca4125030f8d4275c5854778c33f3819b102b1bf6fd32fd33bb3b2bee"
+        },
+        {
+          "name": "layer_31.pt",
+          "size_bytes": 771755205,
+          "sha256": "fdc596cd5be66cdae96420e1233a0eef53f5a447efaee9ca57a4fb94020c18f9"
+        },
+        {
+          "name": "layer_32.pt",
+          "size_bytes": 771755205,
+          "sha256": "7fae7ce6d9e94609b9a6737538f2ae9e6a946d67a4d1628bcfb530cffead4f6e"
+        },
+        {
+          "name": "layer_33.pt",
+          "size_bytes": 771755205,
+          "sha256": "18a314484773c91f08f502bd70bcb45ff2124bc9d1c0c65acffcda2c9d1d14c4"
+        },
+        {
+          "name": "layer_34.pt",
+          "size_bytes": 771755205,
+          "sha256": "e2ec015165b5ebf5eef7fb3cd9573abcb37cdf5a3128f2d3bd484a1248109edd"
+        },
+        {
+          "name": "layer_35.pt",
+          "size_bytes": 771755205,
+          "sha256": "67d94f598b36ce8a2fa667ee9f3f1905a3654e070df205fc1efbf63c191f3048"
+        }
+      ],
+      "observed_prefill_kv_calls": {
+        "attention": 288,
+        "key_qdq": 288,
+        "value_qdq": 288
+      }
+    },
+    "nar_k8": {
+      "path": "/projects/nar/nar-validation/artifacts/e22/qwen3_8b_base/gptq_nar_k8_seed0_g128_asym",
+      "done": {
+        "bf16_reparameterization_drift": {
+          "exceeds_previous_bf16_gate": false,
+          "max_abs_logit_error": 0.0019702911376953125,
+          "previous_bf16_gate": 0.01,
+          "probe_tokens": 128,
+          "relative_l2_logit_error": 1.2055023944412824e-05
+        },
+        "checkpoint": "one bf16 fake-quantized state file per decoder layer",
+        "elapsed_seconds": 2985.137012243271,
+        "fold": {
+          "embedding_centering": false,
+          "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+          "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+          "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+          "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+          "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+          "r4": "per-layer down-input rotation folded into down_proj rows",
+          "tied_embeddings_materialized_before_final_norm_fusion": false
+        },
+        "fp32_algebra_control": {
+          "row": {
+            "below_reference_share": "0.890625",
+            "chunks": "64",
+            "chunks_below_reference": "57",
+            "fold_dtype": "float32",
+            "max_abs_logit_difference": "0.004116058349609375",
+            "max_abs_nll_delta": "1.0371208190917969e-05",
+            "max_round_trip_relative_error": "4.0655285715729406e-07",
+            "mean_nll_delta": "-2.7548521757125854e-06",
+            "model": "qwen3_8b_base",
+            "model_id": "Qwen/Qwen3-8B-Base",
+            "passed": "True",
+            "ppl_abs_difference": "2.3353133490999767e-05",
+            "quantizer": "identity",
+            "r1_rank": "8",
+            "r1_slots": "32",
+            "r2_rank": "1",
+            "r4_rank": "8",
+            "r4_slots": "96",
+            "reference_ppl": "8.477103005517801",
+            "relative_l2_logit_difference": "1.7195325199281797e-05",
+            "required_max_abs_nll_delta": "0.001",
+            "required_ppl_abs_difference": "0.01",
+            "rotation": "nar_k8",
+            "rotation_only_ppl": "8.47707965238431",
+            "round_trip_tolerance": "1e-06",
+            "seed": "0",
+            "sign_balanced": "False",
+            "sign_test_applicable": "False"
+          },
+          "source": "/projects/_hdd/nar/nar-validation/results/qwen3_8b_base/e22_rotation_only_control.csv"
+        },
+        "gptq": {
+          "act_order": false,
+          "bits": 4,
+          "blocksize": 128,
+          "calibration_dataset": "WikiText-2 train",
+          "calibration_seed": 0,
+          "calibration_sequences": 128,
+          "excluded": [
+            "embed_tokens",
+            "lm_head"
+          ],
+          "grid": 100,
+          "groupsize": 128,
+          "hessian_dtype": "torch.float32",
+          "hessian_product_dtype": "torch.float32",
+          "maxshrink": 0.8,
+          "mse_clipping": true,
+          "norm": 2.4,
+          "percdamp": 0.01,
+          "perchannel": true,
+          "protocol": "g128_asym",
+          "sequence_length": 2048,
+          "static_groups": false,
+          "symmetric": false
+        },
+        "hardware": {
+          "cuda_available": true,
+          "cuda_runtime": "12.8",
+          "gpu_capability": [
+            8,
+            6
+          ],
+          "gpu_name": "NVIDIA A40",
+          "hostname": "gpu-a40-2.cluster02.eee.ntu.edu.sg",
+          "nvidia_smi": [
+            "0, NVIDIA A40, GPU-fc7b1128-f804-96a1-e8bb-c785ef4b2ee5, 46068 MiB, 44990 MiB, 580.173.02",
+            "1, NVIDIA A40, GPU-f03b66e4-519e-4943-1b87-0d35642cf0ba, 46068 MiB, 45486 MiB, 580.173.02"
+          ],
+          "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+          "slurm_job_gpus": "1,2",
+          "slurm_job_id": "143936",
+          "torch": "2.11.0+cu128"
+        },
+        "model": "qwen3_8b_base",
+        "model_id": "Qwen/Qwen3-8B-Base",
+        "quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+        "rotation": "nar_k8"
+      },
+      "actual_saved_weight_dtype": "torch.float32",
+      "layer_files": [
+        {
+          "name": "layer_00.pt",
+          "size_bytes": 771755205,
+          "sha256": "71e2ab525d65f74bf0d32b7de7342412bfe03955521b5656e3474b3ac0673f29"
+        },
+        {
+          "name": "layer_01.pt",
+          "size_bytes": 771755205,
+          "sha256": "57c66d597694157106b52d575d010fc5cd0104e159fbbc3e53e8238c3bf1b60e"
+        },
+        {
+          "name": "layer_02.pt",
+          "size_bytes": 771755205,
+          "sha256": "dfc76340cdf6f9903488ff19c08504efad81ba0013082aebb35398c1b7480a25"
+        },
+        {
+          "name": "layer_03.pt",
+          "size_bytes": 771755205,
+          "sha256": "3b429ee925fe26e72bf16609acfdd6f05b4508199f97d6e6664cd0b5aff877cd"
+        },
+        {
+          "name": "layer_04.pt",
+          "size_bytes": 771755205,
+          "sha256": "47d5e90900971e58e332c0451bc10862fc1ce1f49bd4998e9e7607ac9ac20fcb"
+        },
+        {
+          "name": "layer_05.pt",
+          "size_bytes": 771755205,
+          "sha256": "f57c61c14909fdf044b34dbe61970ccbe0363f774239bde4e4ea02573344c19a"
+        },
+        {
+          "name": "layer_06.pt",
+          "size_bytes": 771755205,
+          "sha256": "ca5518970835220adeeb67ea3fbc42f401fbadb4e332afa380b7343c40568d48"
+        },
+        {
+          "name": "layer_07.pt",
+          "size_bytes": 771755205,
+          "sha256": "33ac38e8d9869cbf97a9040751a002241d4fdf482771265000cec06699f2947c"
+        },
+        {
+          "name": "layer_08.pt",
+          "size_bytes": 771755205,
+          "sha256": "9368b793eacd31507343ed5d2ca32295a59ad665546a3cdc7ac11546f38959c2"
+        },
+        {
+          "name": "layer_09.pt",
+          "size_bytes": 771755205,
+          "sha256": "6c747d43076d4ba855d0447b6bea0540f85b8a3ac7f9d6067548da3f959ca184"
+        },
+        {
+          "name": "layer_10.pt",
+          "size_bytes": 771755205,
+          "sha256": "fe8e74ae45577d815a9a181b3036a0ae333362d48f6032b06518c26eca2fbf7c"
+        },
+        {
+          "name": "layer_11.pt",
+          "size_bytes": 771755205,
+          "sha256": "882e5b72ee05eb51ea5bceb72e55ce409d0592a275b015e3b892b4a9c60b7847"
+        },
+        {
+          "name": "layer_12.pt",
+          "size_bytes": 771755205,
+          "sha256": "ef80cda34a0ba918e687f87be7fcd0c043a7995442af73ab14c64fa7d9c367fd"
+        },
+        {
+          "name": "layer_13.pt",
+          "size_bytes": 771755205,
+          "sha256": "4bc814f91cd9e5b5b6f4a330a28f4337f6edaad78195c9ce63bd027083d2e9e5"
+        },
+        {
+          "name": "layer_14.pt",
+          "size_bytes": 771755205,
+          "sha256": "ada2165de50861f97f3c1516bef330c1a63266cb6e3662c17fcdb41051c0cb69"
+        },
+        {
+          "name": "layer_15.pt",
+          "size_bytes": 771755205,
+          "sha256": "375540c10b94e0b8a5caf128e0f2de3f17b492385b1eb6fb9d45b6b68a8b88e8"
+        },
+        {
+          "name": "layer_16.pt",
+          "size_bytes": 771755205,
+          "sha256": "54bdf3fa044ff59f030227ce8cc390450576ded759b79c18c48b46bb16219d50"
+        },
+        {
+          "name": "layer_17.pt",
+          "size_bytes": 771755205,
+          "sha256": "4a8b4932291ae00dbc28d04d5a9c6617592b82b55e763ad7b4d9946263d4859e"
+        },
+        {
+          "name": "layer_18.pt",
+          "size_bytes": 771755205,
+          "sha256": "e4015c240f81acf0b4b6655d5dac75b74598dc7b4ede165b3f629ced99ff3623"
+        },
+        {
+          "name": "layer_19.pt",
+          "size_bytes": 771755205,
+          "sha256": "6a4b167b39a972cbe537cb4983d73a6e74a9530658a1972453a46685d914fb5b"
+        },
+        {
+          "name": "layer_20.pt",
+          "size_bytes": 771755205,
+          "sha256": "76c96b89dfa9329aaea078e0421b295af8448b73ea31df40343e586668b81ee0"
+        },
+        {
+          "name": "layer_21.pt",
+          "size_bytes": 771755205,
+          "sha256": "e8fa91d6f35cf852c8a2595858e840198a086e4fc53463e0d8f2a3fbaf9f7032"
+        },
+        {
+          "name": "layer_22.pt",
+          "size_bytes": 771755205,
+          "sha256": "007e25aeb99e1269e2e678e5283a60d4e312cba398e101e3cec61690cd665187"
+        },
+        {
+          "name": "layer_23.pt",
+          "size_bytes": 771755205,
+          "sha256": "8c03313000280b8224cda677173ba3e6bbdbd467d22ce733b4b27207d4a83772"
+        },
+        {
+          "name": "layer_24.pt",
+          "size_bytes": 771755205,
+          "sha256": "56a7f99a439449c25ef87334d69864b86881cb0b49fb84d6b44b5e00f3f9a107"
+        },
+        {
+          "name": "layer_25.pt",
+          "size_bytes": 771755205,
+          "sha256": "53ef6b1de42f34351b9c7b957e02d6d339801bc8472c2eab7030e7fb995d9cf5"
+        },
+        {
+          "name": "layer_26.pt",
+          "size_bytes": 771755205,
+          "sha256": "9c42820ce501c856b65af38ca3e36afd553ee9d17f40f6ad1442762a338b23f6"
+        },
+        {
+          "name": "layer_27.pt",
+          "size_bytes": 771755205,
+          "sha256": "8479f3499606bbd41c19f876e1faed8c6f61af42357845fc153aed56edd27597"
+        },
+        {
+          "name": "layer_28.pt",
+          "size_bytes": 771755205,
+          "sha256": "855aa15e95fa80d411249f31a0cf5c1278e139e1d896f1cc5596e95baac8f768"
+        },
+        {
+          "name": "layer_29.pt",
+          "size_bytes": 771755205,
+          "sha256": "c3a0f1c240605345e7aff2c4992eb1556837f5aeddd3e8f83168a7d1cd2e153d"
+        },
+        {
+          "name": "layer_30.pt",
+          "size_bytes": 771755205,
+          "sha256": "a20e41d78b717a6f0a307f51db123ef847e6dba29bf486b725fa9d3cc6648734"
+        },
+        {
+          "name": "layer_31.pt",
+          "size_bytes": 771755205,
+          "sha256": "0de5eef471182bc211f5cb757448bad65ff26e9487c94568664399f570d24552"
+        },
+        {
+          "name": "layer_32.pt",
+          "size_bytes": 771755205,
+          "sha256": "f53222e302a387b01e10252419b4aa20807667c487659d500ff17f7f817d7e4f"
+        },
+        {
+          "name": "layer_33.pt",
+          "size_bytes": 771755205,
+          "sha256": "dccfda429a2a794531fa72860f0c5828a24ce03c9061bdf7678f19787ca2b603"
+        },
+        {
+          "name": "layer_34.pt",
+          "size_bytes": 771755205,
+          "sha256": "d4f3b661bcace162eee1a3d2a341c5855ef4187dd3b842c12156424cb0ee62b0"
+        },
+        {
+          "name": "layer_35.pt",
+          "size_bytes": 771755205,
+          "sha256": "5f7da38224c9c499808cff0b6f75bf9335b0ee476ae9231c73618031f3c396b0"
+        }
+      ],
+      "observed_prefill_kv_calls": {
+        "attention": 288,
+        "key_qdq": 288,
+        "value_qdq": 288
+      }
+    },
+    "nar_kmax": {
+      "path": "/projects/nar/nar-validation/artifacts/e22/qwen3_8b_base/gptq_nar_kmax_seed0_g128_asym",
+      "done": {
+        "bf16_reparameterization_drift": {
+          "exceeds_previous_bf16_gate": false,
+          "max_abs_logit_error": 0.002048492431640625,
+          "previous_bf16_gate": 0.01,
+          "probe_tokens": 128,
+          "relative_l2_logit_error": 1.2122193766117562e-05
+        },
+        "checkpoint": "one bf16 fake-quantized state file per decoder layer",
+        "elapsed_seconds": 2966.794268846512,
+        "fold": {
+          "embedding_centering": false,
+          "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+          "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+          "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+          "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+          "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+          "r4": "per-layer down-input rotation folded into down_proj rows",
+          "tied_embeddings_materialized_before_final_norm_fusion": false
+        },
+        "fp32_algebra_control": {
+          "row": {
+            "below_reference_share": "0.46875",
+            "chunks": "64",
+            "chunks_below_reference": "30",
+            "fold_dtype": "float32",
+            "max_abs_logit_difference": "0.004390716552734375",
+            "max_abs_nll_delta": "5.7220458984375e-06",
+            "max_round_trip_relative_error": "7.617460369147011e-07",
+            "mean_nll_delta": "2.0675361156463623e-07",
+            "model": "qwen3_8b_base",
+            "model_id": "Qwen/Qwen3-8B-Base",
+            "passed": "True",
+            "ppl_abs_difference": "1.752671842325526e-06",
+            "quantizer": "identity",
+            "r1_rank": "32",
+            "r1_slots": "32",
+            "r2_rank": "1",
+            "r4_rank": "96",
+            "r4_slots": "96",
+            "reference_ppl": "8.477103005517801",
+            "relative_l2_logit_difference": "1.8404170987196267e-05",
+            "required_max_abs_nll_delta": "0.001",
+            "required_ppl_abs_difference": "0.01",
+            "rotation": "nar_kmax",
+            "rotation_only_ppl": "8.477104758189643",
+            "round_trip_tolerance": "1e-06",
+            "seed": "0",
+            "sign_balanced": "True",
+            "sign_test_applicable": "False"
+          },
+          "source": "/projects/_hdd/nar/nar-validation/results/qwen3_8b_base/e22_rotation_only_control.csv"
+        },
+        "gptq": {
+          "act_order": false,
+          "bits": 4,
+          "blocksize": 128,
+          "calibration_dataset": "WikiText-2 train",
+          "calibration_seed": 0,
+          "calibration_sequences": 128,
+          "excluded": [
+            "embed_tokens",
+            "lm_head"
+          ],
+          "grid": 100,
+          "groupsize": 128,
+          "hessian_dtype": "torch.float32",
+          "hessian_product_dtype": "torch.float32",
+          "maxshrink": 0.8,
+          "mse_clipping": true,
+          "norm": 2.4,
+          "percdamp": 0.01,
+          "perchannel": true,
+          "protocol": "g128_asym",
+          "sequence_length": 2048,
+          "static_groups": false,
+          "symmetric": false
+        },
+        "hardware": {
+          "cuda_available": true,
+          "cuda_runtime": "12.8",
+          "gpu_capability": [
+            8,
+            6
+          ],
+          "gpu_name": "NVIDIA A40",
+          "hostname": "gpu-a40-2.cluster02.eee.ntu.edu.sg",
+          "nvidia_smi": [
+            "0, NVIDIA A40, GPU-a8b6f577-c762-5980-b62b-4e730b00bb48, 46068 MiB, 44350 MiB, 580.173.02",
+            "1, NVIDIA A40, GPU-a4a3d734-4644-f8ef-d126-bb3230e38bd4, 46068 MiB, 45486 MiB, 580.173.02"
+          ],
+          "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+          "slurm_job_gpus": "3,5",
+          "slurm_job_id": "143325",
+          "torch": "2.11.0+cu128"
+        },
+        "model": "qwen3_8b_base",
+        "model_id": "Qwen/Qwen3-8B-Base",
+        "quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+        "rotation": "nar_kmax"
+      },
+      "actual_saved_weight_dtype": "torch.float32",
+      "layer_files": [
+        {
+          "name": "layer_00.pt",
+          "size_bytes": 771755205,
+          "sha256": "b26973b7aca6a74b5b253f41df51a24e5f781c80f128cba6e4651ae7a5ed9025"
+        },
+        {
+          "name": "layer_01.pt",
+          "size_bytes": 771755205,
+          "sha256": "db3ccbacb701a413e6bcf2f53489f038a3dea66736514a79b170ed69d128db99"
+        },
+        {
+          "name": "layer_02.pt",
+          "size_bytes": 771755205,
+          "sha256": "49914c034f496c5628bbb20b133b8bcdba3d11cb0f2dc17375b89e45f4a21e72"
+        },
+        {
+          "name": "layer_03.pt",
+          "size_bytes": 771755205,
+          "sha256": "71a3ec95a8f61410328ef5f541955c3b15ef29d3ce32702f090d0f141a0b1c99"
+        },
+        {
+          "name": "layer_04.pt",
+          "size_bytes": 771755205,
+          "sha256": "c79309666d2c9711a2f343b6433dd7b5769fd67a667d5371d7433b39d4bf0f46"
+        },
+        {
+          "name": "layer_05.pt",
+          "size_bytes": 771755205,
+          "sha256": "8ca53edf046d3609530cf553a4a8952a82af6fa86c74776d81c7355a1d8f4680"
+        },
+        {
+          "name": "layer_06.pt",
+          "size_bytes": 771755205,
+          "sha256": "3689e0ca316930c9d3b703f739ae435e4fb8466c91830f52bd31ac72d76e0046"
+        },
+        {
+          "name": "layer_07.pt",
+          "size_bytes": 771755205,
+          "sha256": "2eb070e75eb9967a101749dddb965a592d3c4b64b1f87546686c975e2cacaf03"
+        },
+        {
+          "name": "layer_08.pt",
+          "size_bytes": 771755205,
+          "sha256": "adeb93c2afca6e8610faa47d9e0a9b387e37be799b1a411bf9b110df20d2342c"
+        },
+        {
+          "name": "layer_09.pt",
+          "size_bytes": 771755205,
+          "sha256": "5946b137ad518f81cf1946ef9f099903052a3579180021783307863afd49c020"
+        },
+        {
+          "name": "layer_10.pt",
+          "size_bytes": 771755205,
+          "sha256": "7ef020aab598f8d3bfb64d0e207c2233a0b20fc59138831abd5dffb62816534f"
+        },
+        {
+          "name": "layer_11.pt",
+          "size_bytes": 771755205,
+          "sha256": "5e8b67a2efe05e3580c004f8ed0e178a2c0f79bc237c22b58c77606f5be44060"
+        },
+        {
+          "name": "layer_12.pt",
+          "size_bytes": 771755205,
+          "sha256": "1067efe1303c59a1705e1c235b2900ab2fbc5e21771de1496f709735cc69ea85"
+        },
+        {
+          "name": "layer_13.pt",
+          "size_bytes": 771755205,
+          "sha256": "cbb4090d1981a2207cd2d7cc7515cad111e084f082a114547a4b29a10bf25f9a"
+        },
+        {
+          "name": "layer_14.pt",
+          "size_bytes": 771755205,
+          "sha256": "502b7f9e3ff723f9f27e6837c03758b65bdc3bbf7a5fa99e883b1ac6e39e3c42"
+        },
+        {
+          "name": "layer_15.pt",
+          "size_bytes": 771755205,
+          "sha256": "6dea81600ad5c51c6da9d92b2a1cfef0a4b250b371be93abdf9e884bd66c77b8"
+        },
+        {
+          "name": "layer_16.pt",
+          "size_bytes": 771755205,
+          "sha256": "f598c72cae91087c44c639d9890a81ee84e675a23df1ff2d7d2a5a7ed116c681"
+        },
+        {
+          "name": "layer_17.pt",
+          "size_bytes": 771755205,
+          "sha256": "3a4e27f87d28f58762c1fd73667b45c7d2ddd56f0d103526ec78481e0b4feaf6"
+        },
+        {
+          "name": "layer_18.pt",
+          "size_bytes": 771755205,
+          "sha256": "973dff8ab8467254c2e5ac1484e508cb7e39709fc1376e9cb6ddf4a69c2e482e"
+        },
+        {
+          "name": "layer_19.pt",
+          "size_bytes": 771755205,
+          "sha256": "5a35d7695ca3f90e820ca36ec5709725f96af2d694206f0b1129661164c08420"
+        },
+        {
+          "name": "layer_20.pt",
+          "size_bytes": 771755205,
+          "sha256": "a1e5e53c6ae0dbee79f25a84af06a0910e1a06731d1bde5a653f2a19981aaa59"
+        },
+        {
+          "name": "layer_21.pt",
+          "size_bytes": 771755205,
+          "sha256": "cdc573e188477401550b10a4430f7fadb7d9674864094975b53c72f2b0e738de"
+        },
+        {
+          "name": "layer_22.pt",
+          "size_bytes": 771755205,
+          "sha256": "44cc5a2c1f3e7ccc69e5fe9dbd0eb658e96107911ef0cded5996763b33bbc807"
+        },
+        {
+          "name": "layer_23.pt",
+          "size_bytes": 771755205,
+          "sha256": "13bee7e3a8ea38b5d69ba9ee0d4d2e092fdaf51cb84f603ba13455e15ffd5326"
+        },
+        {
+          "name": "layer_24.pt",
+          "size_bytes": 771755205,
+          "sha256": "7421649817a2b88cd48a99c76cfaeb3043e32bc9ccdddf261b255134c94c6ce8"
+        },
+        {
+          "name": "layer_25.pt",
+          "size_bytes": 771755205,
+          "sha256": "d206cd17996bf84bd6748b27c71393b276345f014635867cf5255a2ad64439b1"
+        },
+        {
+          "name": "layer_26.pt",
+          "size_bytes": 771755205,
+          "sha256": "d2c0582621dca51fe78965b51242a221d5fc8ab0c1c96bffdc6b30ee5f034f5a"
+        },
+        {
+          "name": "layer_27.pt",
+          "size_bytes": 771755205,
+          "sha256": "bbf65b6cd79a19318d258e68f4d2ae96e8c5559bc723b6a0967dc637107cc4c6"
+        },
+        {
+          "name": "layer_28.pt",
+          "size_bytes": 771755205,
+          "sha256": "33aa0aa74a5a854b8c9fadedfaa0292463595ecd7533edc70b63a858721171af"
+        },
+        {
+          "name": "layer_29.pt",
+          "size_bytes": 771755205,
+          "sha256": "9d32f96c1b9de946dd3935b67244410d10ced9a33acdd2271ccff4e6bd658074"
+        },
+        {
+          "name": "layer_30.pt",
+          "size_bytes": 771755205,
+          "sha256": "8b7ac1f803f7df9bf9670cbf43fc89fec78e6f3e905ccb085387efbf836c0279"
+        },
+        {
+          "name": "layer_31.pt",
+          "size_bytes": 771755205,
+          "sha256": "b16572abac99c2101dac53aaec5200f9483be8eb3de42fe0cbd22b423613f437"
+        },
+        {
+          "name": "layer_32.pt",
+          "size_bytes": 771755205,
+          "sha256": "f433ab36080d507ee1712964ed31d50f4a607f90a7328fac5c16e0d74f71aeb7"
+        },
+        {
+          "name": "layer_33.pt",
+          "size_bytes": 771755205,
+          "sha256": "d1b7f19015b9f6f34115c6c6d283b94ebae434a2d8a2cf99742cc618a2cd5e5c"
+        },
+        {
+          "name": "layer_34.pt",
+          "size_bytes": 771755205,
+          "sha256": "97753025d547b2e7bf9293bf156241dc2958465e4ee777f8809e5def50ecfe32"
+        },
+        {
+          "name": "layer_35.pt",
+          "size_bytes": 771755205,
+          "sha256": "9369436e1d17755d852f375557f8250f244567a6d2eb283e1f916c43bb571fea"
+        }
+      ],
+      "observed_prefill_kv_calls": {
+        "attention": 288,
+        "key_qdq": 288,
+        "value_qdq": 288
+      }
+    }
+  },
+  "raw_activation_root": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42/activations",
+  "display": {
+    "overview_token_bins": 128,
+    "overview_channel_bins": 256,
+    "token0_separate": true,
+    "detail_token_slice": [
+      0,
+      128
+    ],
+    "detail_channel_slice": [
+      0,
+      512
+    ],
+    "pooling": "max absolute; residual before pooling",
+    "elev": 25,
+    "azim": -60
+  },
+  "source_files": {
+    "e14_w4a4kv4.py": "c7ab1b96621084d43d3dae4f694eb4e6bc534d753cd7ef6c5d620cd000559ab3",
+    "e19_qwen3_e2e.py": "771cda182a48f7c9c1019822670f0480aaec99cf6b4469fefe7c40985444ce9b",
+    "experiment.py": "199e3a5e674a9098ff0f67f28d503afaf415271293d7d6d093928179a2c66f6f",
+    "capture.py": "c60cd7db78fbe262941a60889d71060e4ce5232c9c66ad076278c5d291e69a8f"
+  },
+  "qwen_forward_source": "    def forward(\n        self,\n        hidden_states: torch.Tensor,\n        attention_mask: torch.Tensor | None = None,\n        position_ids: torch.LongTensor | None = None,\n        past_key_values: Cache | None = None,\n        use_cache: bool | None = False,\n        position_embeddings: tuple[torch.Tensor, torch.Tensor] | None = None,\n        **kwargs: Unpack[TransformersKwargs],\n    ) -> torch.Tensor:\n        residual = hidden_states\n        hidden_states = self.input_layernorm(hidden_states)\n        # Self Attention\n        hidden_states, _ = self.self_attn(\n            hidden_states=hidden_states,\n            attention_mask=attention_mask,\n            position_ids=position_ids,\n            past_key_values=past_key_values,\n            use_cache=use_cache,\n            position_embeddings=position_embeddings,\n            **kwargs,\n        )\n        hidden_states = residual + hidden_states\n\n        # Fully Connected\n        residual = hidden_states\n        hidden_states = self.post_attention_layernorm(hidden_states)\n        hidden_states = self.mlp(hidden_states)\n        hidden_states = residual + hidden_states\n        return hidden_states\n",
+  "mlp_forward_source": "    def forward(self, x):\n        down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))\n        return down_proj\n",
+  "attention_forward_source": "    def forward(\n        self,\n        hidden_states: torch.Tensor,\n        position_embeddings: tuple[torch.Tensor, torch.Tensor],\n        attention_mask: torch.Tensor | None,\n        past_key_values: Cache | None = None,\n        **kwargs: Unpack[FlashAttentionKwargs],\n    ) -> tuple[torch.Tensor, torch.Tensor | None]:\n        input_shape = hidden_states.shape[:-1]\n        hidden_shape = (*input_shape, -1, self.head_dim)\n\n        query_states = self.q_norm(self.q_proj(hidden_states).view(hidden_shape)).transpose(1, 2)\n        key_states = self.k_norm(self.k_proj(hidden_states).view(hidden_shape)).transpose(1, 2)\n        value_states = self.v_proj(hidden_states).view(hidden_shape).transpose(1, 2)\n\n        cos, sin = position_embeddings\n        query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin)\n\n        if past_key_values is not None:\n            key_states, value_states = past_key_values.update(key_states, value_states, self.layer_idx)\n\n        attention_interface: Callable = ALL_ATTENTION_FUNCTIONS.get_interface(\n            self.config._attn_implementation, eager_attention_forward\n        )\n\n        attn_output, attn_weights = attention_interface(\n            self,\n            query_states,\n            key_states,\n            value_states,\n            attention_mask,\n            dropout=0.0 if not self.training else self.attention_dropout,\n            scaling=self.scaling,\n            sliding_window=self.sliding_window,  # diff with Llama\n            **kwargs,\n        )\n\n        attn_output = attn_output.reshape(*input_shape, -1).contiguous()\n        attn_output = self.o_proj(attn_output)\n        return attn_output, attn_weights\n",
+  "calibration": {
+    "activations/qwen3_8b_base/e14_rotations/DONE.json": {
+      "calibration_sequences": 128,
+      "covariance_passes": 3,
+      "hardware": {
+        "cuda_available": true,
+        "cuda_runtime": "12.8",
+        "gpu_capability": [
+          12,
+          0
+        ],
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+        "hostname": "gpu-pro6000-7.cluster02.eee.ntu.edu.sg",
+        "nvidia_smi": [
+          "0, NVIDIA RTX PRO 6000 Blackwell Server Edition, GPU-aef07636-a42d-5efe-5775-61e1828fe740, 97887 MiB, 80702 MiB, 580.173.02"
+        ],
+        "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+        "slurm_job_gpus": "5",
+        "slurm_job_id": "138063",
+        "torch": "2.11.0+cu128"
+      },
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "r1": "single global pooled post-RMSNorm NAR, group-128, separately frozen k=8 and k=n/128",
+      "r1_rows": [
+        {
+          "active_reflectors": 8,
+          "anchor_error": 2.384185791015625e-07,
+          "k": 8
+        },
+        {
+          "active_reflectors": 32,
+          "anchor_error": 2.980232238769531e-07,
+          "k": 32
+        }
+      ],
+      "r2": "per-layer, per-head V NAR, head_dim=128, group-128, k=1",
+      "r4": "reuse frozen E5 per-layer down-input NAR factors",
+      "seed": 0,
+      "sequence_length": 2048
+    },
+    "activations/qwen3_8b_base/e18v2_factors/DONE.json": {
+      "calibration_offset": 0,
+      "calibration_sequences": 128,
+      "calibration_split": "train",
+      "covariance_passes": 3,
+      "group_size": 128,
+      "hardware": {
+        "cuda_available": true,
+        "cuda_runtime": "12.8",
+        "gpu_capability": [
+          12,
+          0
+        ],
+        "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+        "hostname": "gpu-pro6000-3.cluster02.eee.ntu.edu.sg",
+        "nvidia_smi": [
+          "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-01028339-4041-385f-06f0-f6db221b7491, 97887 MiB, 79897 MiB, 580.173.02"
+        ],
+        "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+        "slurm_job_gpus": "3",
+        "slurm_job_id": "137951",
+        "torch": "2.11.0+cu128"
+      },
+      "hidden_size": 4096,
+      "intermediate_size": 12288,
+      "max_anchor_error": 3.159046173095703e-05,
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "num_layers": 36,
+      "permutation_energy_passes": 1,
+      "permutation_token_stride": 32,
+      "ranks": [
+        8,
+        16,
+        32,
+        64,
+        "max"
+      ],
+      "sequence_length": 2048,
+      "slot_counts": {
+        "down": 96,
+        "qkv": 32
+      },
+      "subspace_oversample": 16
+    }
+  },
+  "status": "capture_complete",
+  "input_ids_sha256": "8cea7e68c399b7a11e8eb1badcb87861c36d928f9b71ee46a8311c9390716501",
+  "bit_widths": {
+    "linear_weights": 4,
+    "activation_inputs": 4,
+    "keys": 4,
+    "values": 4,
+    "exceptions": "embeddings, lm_head, norms and recent KV residual are floating; evaluation containers are FP32"
+  },
+  "weight_quantizer": {
+    "implementation": "nar.quarot_gptq.WeightQuantizer",
+    "group_size": 128,
+    "group_axis": "input-channel groups within each output row",
+    "clipping": "per-output-row/per-group MSE search; norm=2.4, grid=100, maxshrink=0.8; detailed checkpoint settings retained",
+    "scale_definition": "clipped span / 15, span floor 1e-5; FP32 builder arithmetic",
+    "zero_point": "round(-clipped_min/scale), integer-valued zero point in FP32 builder container",
+    "saved_form": "only dequantized floating weights, not packed codes or separately serialized scale/zero arrays",
+    "nominal_packed_bit_budget": 4.15625,
+    "budget_assumption": "4-bit codes + 16-bit scale + 4-bit zero per 128 weights; not actual checkpoint file storage"
+  },
+  "module_paths": [
+    "model.layers.0.mlp.down_proj",
+    "model.layers.0.self_attn.q_proj",
+    "model.layers.12.mlp.down_proj",
+    "model.layers.12.self_attn.q_proj",
+    "model.layers.23.mlp.down_proj",
+    "model.layers.23.self_attn.q_proj",
+    "model.layers.35.mlp.down_proj",
+    "model.layers.35.self_attn.q_proj"
+  ],
+  "mathematical_audit_status": {
+    "all_checks_passed": false,
+    "required_checks_passed": true,
+    "failed_supplementary_checks": [
+      {
+        "check": "rotation_inverse_relative",
+        "value": 1.015363977785455e-05,
+        "limit": 1e-05,
+        "passed": false,
+        "required": false,
+        "method": "nar_k8",
+        "layer": 35,
+        "site": "down_proj"
+      },
+      {
+        "check": "narrow_eight_output_compensated_linear_relative",
+        "value": 5.357405825634487e-05,
+        "limit": 2e-05,
+        "passed": false,
+        "required": false,
+        "method": "nar_k8",
+        "layer": 35,
+        "site": "down_proj"
+      },
+      {
+        "check": "narrow_eight_output_compensated_linear_relative",
+        "value": 5.118826811667532e-05,
+        "limit": 2e-05,
+        "passed": false,
+        "required": false,
+        "method": "nar_kmax",
+        "layer": 35,
+        "site": "down_proj"
+      }
+    ]
+  },
+  "render_commands": [
+    "python -m nar.activation_viz.render_batch $RUN --workers 8",
+    "python -m nar.activation_viz.report $RUN"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "pdf": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/overview/panel_hadamard_block36.pdf",
+  "auditable": true,
+  "verdict": "REVIEW REQUIRED",
+  "page_count": 1,
+  "visible_text_box_count": 13,
+  "text_trace_count": 13,
+  "stroke_path_count": 20,
+  "filled_region_count": 4,
+  "image_region_count": 1,
+  "summary": {
+    "fail": 0,
+    "warn": 2,
+    "contained_fill_overlays": 0,
+    "contained_image_overlays": 0
+  },
+  "thresholds": {
+    "text_inset_pt": 0.6,
+    "min_overlap_ratio": 0.05,
+    "clipping_tolerance_pt": 0.5
+  },
+  "findings": [
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "Channel bin",
+      "text_bbox": [
+        51.062808990478516,
+        119.18276977539062,
+        78.30265808105469,
+        131.533935546875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        40.400848388671875,
+        85.7743911743164,
+        127.4942855834961,
+        122.62545776367188
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        3
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Channel bin",
+      "text_bbox": [
+        51.062808990478516,
+        119.18276977539062,
+        78.30265808105469,
+        131.533935546875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        40.31999969482422,
+        84.0,
+        127.55999755859375,
+        121.80000305175781
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        0
+      ]
+    }
+  ]
+}
