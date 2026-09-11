@@ -19,3 +19,9 @@ The current final visual decision is [detail_delivery_review.json](detail_delive
 Initial zoom spacing failures and the passing repair with unchanged data are
 recorded in [zoom_spacing_repair.json](zoom_spacing_repair.json). PDF audit
 WARN records remain visible; their final-size visual resolution is documented.
+
+The latest height-axis follow-up applies only to the three priority raw
+matrices. [height_axis_revision/audit.json](height_axis_revision/audit.json)
+and their updated entries in detail_pdf_render_index.json describe the final
+pages. Existing reviews remain historical for those three pages; other figure
+files and experimental records are unchanged.

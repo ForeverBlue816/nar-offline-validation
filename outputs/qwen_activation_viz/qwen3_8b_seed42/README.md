@@ -25,6 +25,8 @@ Full-domain overviews remain available, unchanged from the preceding publication
 
 Four-column matrices use 11.75 pt text at 12.05-inch export width, retaining 7.02 pt text when inserted at 7.2 inches (183 mm). Individual panels use 8.5 pt native text and remain readable at 3.5-inch insertion width. Channel ticks 0, 256 and 511 and token ticks 0, 64 and 127 avoid crowding. All vertices are still drawn. Floor guides and short front-edge ticks mark the three g128 boundaries; per-column colorbars give the shared height/color limits. PDF/SVG axes and text are vector; only surface marks are rasterized.
 
+The three priority raw matrices (end_to_end q_proj/down_proj and paired_local q_proj) also label linear height ticks and identify the pale floor as z=0. These axis annotations clarify real nonzero surface heights; their linear-color controls and zoom companions retain their previous layout.
+
 ## Numerical results and limitations
 
 [Per-sample metrics](metrics_per_sample.csv) · [Full-data summary](metrics_summary.csv) · [Original measured interpretation](measured_summary.md) · [Validation](validation_report.json)

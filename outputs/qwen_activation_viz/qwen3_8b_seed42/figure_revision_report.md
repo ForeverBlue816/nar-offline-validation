@@ -53,3 +53,27 @@ Evidence: [integrity](qa/detail_integrity.json), [final PDF rerenders](qa/detail
 Renderer implementation: `f7d1795`; paper-size typography: `503f442`; final zoom spacing: `4ba901a`. Slurm job 150482 rendered all local assets with `503f442`; job 150516 regenerated eight zoom sets with `4ba901a`. Full commit IDs, source hashes, runtime/font versions and output paths are recorded in [render_provenance.json](render_provenance.json), [detail_render_config.json](detail_render_config.json) and adjacent geometry files. The final Git artifact commit contains this report and publication inventory; it is distinct from the rendering commits.
 
 The [README](README.md) gives reproduction commands. Raw tensors stay at the external activation root; this publication includes hashes rather than copied tensors. Original preflight previews and superseded layout checks remain under `qa/` with their historical scope identified.
+
+## Priority height-axis follow-up
+
+At the user's request, only the three priority raw `matrix` sets linked above
+receive this further layout change. Each panel now labels the linear height
+axis at zero, half the shared maximum and the shared maximum, in measured
+activation units. The figure identifies the pale floor as z=0 and uses lighter
+floor borders. Real positive surfaces still remain above zero; no base is
+filled beneath them. Wider numeric labels receive additional tick padding.
+
+All 48 source surfaces, their native projection, shared z/color limits and
+complete meshes are unchanged. The footer has 0.25 inches of additional space;
+plot-area dimensions and 7.02 pt text at 183 mm remain the same. All other 337
+figure sets, including the remaining matrices, linear-color controls, zooms,
+rows, individual panels, overviews and ECDFs, remain byte-identical.
+
+The scoped [revision audit](qa/height_axis_revision/audit.json) records the
+three new PDF audits, source/geometry equivalence, final-size visual review
+and hashes of the protected figures. [PDF render records](qa/detail_pdf_render_index.json)
+point to the new pages. The earlier revision report and reviews remain as
+history; this scoped record supersedes them only for these three matrices.
+
+Renderer commit: `e2a31a8`; Slurm render job: `150582`. Reproduce with
+`python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"`.

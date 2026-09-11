@@ -34,5 +34,14 @@
     "detail_control_preflight/zoom_pair_3.jpg",
     "detail_control_preflight/derivative_spot_review.jpg",
     "zoom_spacing_repair.json"
-  ]
+  ],
+  "height_axis_followup": {
+    "scope": [
+      "end_to_end/q_proj/raw",
+      "end_to_end/down_proj/raw",
+      "paired_local/q_proj/raw"
+    ],
+    "authoritative_review": "height_axis_revision/audit.json",
+    "note": "The earlier layout review is historical for these three matrices only."
+  }
 }

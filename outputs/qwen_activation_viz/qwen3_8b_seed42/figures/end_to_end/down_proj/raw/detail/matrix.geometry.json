@@ -2353,8 +2353,19 @@
     "view": "four_method_scale",
     "scale_differs_from_matrix": false
   },
-  "git_commit": "503f442955a017ca7b931fe471853f105648104f",
-  "plot_source_sha256": "65601bf47723ed8d21611f9b814182d69b7e500db26c140a40360fd631cb0398",
+  "height_axis_style": {
+    "revision": "priority-height-axis-v1",
+    "height_ticks": "0, half shared maximum, shared maximum; measured units",
+    "zero_plane": "light neutral-gray floor, explicitly identified as z=0",
+    "floor_border": {
+      "color": "#d0d0d0",
+      "linewidth": 0.3
+    },
+    "tick_padding_pt": "3; 5 for shared limits >=100 to clear longer labels",
+    "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+  },
+  "git_commit": "e2a31a876f19837c5169075b021b8e6ac9a46090",
+  "plot_source_sha256": "f597fdf14877cc3c36e74e373bc028d250c8d0c785fcfe26bc22326b257c4c76",
   "output_paths": [
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/down_proj/raw/detail/matrix.pdf",
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/down_proj/raw/detail/matrix.png",
@@ -2362,7 +2373,7 @@
   ],
   "figure_inches": [
     12.05,
-    11.75
+    12.0
   ],
   "intended_insertion_width_inches": 7.2,
   "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged"

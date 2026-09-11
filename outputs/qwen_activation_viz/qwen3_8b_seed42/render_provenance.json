@@ -2,7 +2,8 @@
   "name": "local-upper-surface-v1",
   "rendering_git_commits": [
     "4ba901aa5ca94dc48881c273ed5b9402f147f86d",
-    "503f442955a017ca7b931fe471853f105648104f"
+    "503f442955a017ca7b931fe471853f105648104f",
+    "e2a31a876f19837c5169075b021b8e6ac9a46090"
   ],
   "source_hashes": {
     "full_surface_checks.py": "f12cb20aa80949db499c558141056dacbd7b48ce5f819bdf15d12efcd8dbf1d3",
@@ -188,5 +189,30 @@
       "scope": "eight zoom headers; geometry and scales unchanged",
       "commit": "4ba901a"
     }
-  ]
+  ],
+  "height_axis_followup": {
+    "revision": "priority-height-axis-v1",
+    "targets": [
+      "figures/end_to_end/q_proj/raw/detail/matrix",
+      "figures/end_to_end/down_proj/raw/detail/matrix",
+      "figures/paired_local/q_proj/raw/detail/matrix"
+    ],
+    "rendering_commit": "e2a31a876f19837c5169075b021b8e6ac9a46090",
+    "slurm_job_id": "150582",
+    "style": {
+      "revision": "priority-height-axis-v1",
+      "height_ticks": "0, half shared maximum, shared maximum; measured units",
+      "zero_plane": "light neutral-gray floor, explicitly identified as z=0",
+      "floor_border": {
+        "color": "#d0d0d0",
+        "linewidth": 0.3
+      },
+      "tick_padding_pt": "3; 5 for shared limits >=100 to clear longer labels",
+      "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+    },
+    "geometry_unchanged": "source arrays, camera, complete mesh, vertex heights, shared z and color limits",
+    "exports": "PDF/PNG/SVG; 600 dpi surface marks and PNGs; vector PDF/SVG text and axes",
+    "audit": "qa/height_axis_revision/audit.json",
+    "plot_source_sha256": "f597fdf14877cc3c36e74e373bc028d250c8d0c785fcfe26bc22326b257c4c76"
+  }
 }
