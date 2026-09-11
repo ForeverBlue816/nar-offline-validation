@@ -2,7 +2,7 @@
 import argparse
 import json
 from pathlib import Path
-from .detail_plot import CONFIG, write_json
+from .detail_plot import CONFIG, HEIGHT_AXIS_TARGETS, write_json
 
 
 def run(root):
@@ -41,12 +41,15 @@ def run(root):
                     'Group centering is diagnostic, not QDQ reconstruction error or the quantizer offset. '
                     'The full-domain overview provides global context; this fixed local window need not include global outliers. Full-data metrics and ECDFs still use all eight 2048-token samples. '
                     'Surface marks are rasterized at 600 dpi; text and axes remain vector. Supplementary validation failures remain unchanged.')
+                if (mode, site, quantity) in HEIGHT_AXIS_TARGETS:
+                    captions[-1] += ' The main matrix labels linear height ticks; the pale floor denotes z=0, and space below a positive surface is unfilled.'
     text += ['',
         'Every detail directory contains `matrix`, `matrix_linear`, `rotated_only_zoom`, method rows and individual panels in PDF, PNG and SVG. Each column has its own measured-unit colorbar. Raw magnitudes may remain similar between methods; no visual separation is imposed.', '',
         'Detail uses exactly tokens [0,128), channels [0,512), sample 0 and four g128 groups. Raw heights are abs(Y). Residual heights are abs(Y − mean_group(Y)), with the signed mean computed on full Y before slicing. Heights are linear; only color uses fixed square-root mapping. All methods use the same window and camera. The separate rotated-only view has a different, explicitly shared scale.', '',
         'The unrotated row is an unquantized norm-fused FP32 reference. In end-to-end matrices it comes from the matching paired_local/unrotated cache. Its input IDs, sample, layer, site and norm-fusion metadata are checked; the three quantized forwards include upstream QDQ and are not claimed to share identical intermediate inputs.', '',
         'Full-domain overviews remain available, unchanged from the preceding publication. Their historical solid geometry is documented in the archived full-resolution contract; it is not used for current local detail. Overview and detail are independent assets. Metrics and exact ECDF values/counts retain all eight full samples. The local window is not an exhaustive model-outlier survey.', '',
         'Four-column matrices use 11.75 pt text at 12.05-inch export width, retaining 7.02 pt text when inserted at 7.2 inches (183 mm). Individual panels use 8.5 pt native text and remain readable at 3.5-inch insertion width. Channel ticks 0, 256 and 511 and token ticks 0, 64 and 127 avoid crowding. All vertices are still drawn. Floor guides and short front-edge ticks mark the three g128 boundaries; per-column colorbars give the shared height/color limits. PDF/SVG axes and text are vector; only surface marks are rasterized.', '',
+        'The three priority raw matrices (end_to_end q_proj/down_proj and paired_local q_proj) also label linear height ticks and identify the pale floor as z=0. These axis annotations clarify real nonzero surface heights; their linear-color controls and zoom companions retain their previous layout.', '',
         '## Numerical results and limitations', '',
         '[Per-sample metrics](metrics_per_sample.csv) · [Full-data summary](metrics_summary.csv) · [Original measured interpretation](measured_summary.md) · [Validation](validation_report.json)', '',
         f'Required-check status: {validation.get("required_checks_passed")}. Overall all-checks status: {validation["passed"]}. The {len(failures)} supplementary failures below are retained at their original thresholds:', '']

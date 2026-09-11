@@ -51,6 +51,21 @@ CONFIG = {
 }
 
 
+HEIGHT_AXIS_TARGETS = {
+    ('end_to_end', 'q_proj', 'raw'),
+    ('end_to_end', 'down_proj', 'raw'),
+    ('paired_local', 'q_proj', 'raw'),
+}
+HEIGHT_AXIS_STYLE = {
+    'revision': 'priority-height-axis-v1',
+    'height_ticks': '0, half shared maximum, shared maximum; measured units',
+    'zero_plane': 'light neutral-gray floor, explicitly identified as z=0',
+    'floor_border': {'color': '#d0d0d0', 'linewidth': 0.3},
+    'tick_padding_pt': '3; 5 for shared limits >=100 to clear longer labels',
+    'scope': 'only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw',
+}
+
+
 def write_json(path, data):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -156,7 +171,7 @@ def load_local(source, destination, mode, method, layer, site, quantity):
     return z, record
 
 
-def setup_axes(ax, limit, labels=True, font_size=11.5):
+def setup_axes(ax, limit, labels=True, font_size=11.5, height_axis=False):
     ax.set_proj_type('ortho')
     ax.view_init(elev=28, azim=-55)
     ax.set_box_aspect((2.0, 1.2, 1.0), zoom=1.0)
@@ -181,6 +196,19 @@ def setup_axes(ax, limit, labels=True, font_size=11.5):
         axis.line.set_color('#a0a0a0'); axis.line.set_linewidth(.4)
         axis._axinfo['grid']['linewidth'] = .25
         axis._axinfo['grid']['color'] = (.86, .86, .86, 1)
+    if height_axis:
+        ax.zaxis.set_major_formatter(ticker.FuncFormatter(number))
+        ax.tick_params(axis='z', labelsize=font_size,
+                       pad=5 if limit >= 100 else 3, colors='#454545')
+        for label in ax.get_zticklabels():
+            label.set_horizontalalignment('center')
+        for axis in (ax.xaxis, ax.yaxis):
+            axis.line.set_color('#d0d0d0')
+            axis.line.set_linewidth(.3)
+            axis.pane.set_edgecolor('#e6e6e6')
+        ax.zaxis.pane.set_facecolor((.965, .965, .965, 1))
+        ax.zaxis.pane.set_edgecolor('#d0d0d0')
+        ax.zaxis.pane.set_linewidth(.3)
     for boundary in CONFIG['group_boundaries']:
         ax.plot([boundary, boundary], [-6, 0], [0, 0], color='.45', linewidth=.6, clip_on=False)
         ax.plot([boundary, boundary], [0, 127], [0, 0], color='.45',
@@ -218,6 +246,7 @@ def export(fig, path, records, scales, colorbars):
         document[0].get_pixmap(dpi=600, alpha=False).save(str(path) + '.png')
     write_json(path.with_suffix('.geometry.json'), {
         'config': CONFIG, 'panels': records, 'scales': scales,
+        **({'height_axis_style': HEIGHT_AXIS_STYLE} if getattr(fig, '_height_axis_revision', False) else {}),
         'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'plot_source_sha256': digest(__file__),
         'output_paths': [str(path.with_suffix('.' + ext)) for ext in ('pdf', 'png', 'svg')],
@@ -239,17 +268,21 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     candidates = list(scale_methods or methods)
     rows, cols = len(methods), len(layers)
     zoom = name == 'rotated_only_zoom'
+    height_axis = name == 'matrix' and (mode, site, quantity) in HEIGHT_AXIS_TARGETS
+    footer_extra = .25 if height_axis else 0
     font_size = 11.75 if cols == 4 else 8.5
-    width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0)
+    width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0) + footer_extra
     fig = plt.figure(figsize=(width, height), dpi=600)
+    fig._height_axis_revision = height_axis
     grid = fig.add_gridspec(rows, cols, left=1.15 / width, right=1 - (.7 + (1.6 if debug else 0)) / width,
-                           bottom=1.8 / height, top=1 - (.97 if zoom else .72) / height,
+                           bottom=(1.8 + footer_extra) / height, top=1 - (.97 if zoom else .72) / height,
                            hspace=.14, wspace=.16)
     title = 'Pre-quantization activation magnitude' if quantity == 'raw' else 'Group-centered residual magnitude'
     fig.text(.5, 1 - .1 / height, title, fontsize=font_size+2, ha='center', va='top')
     mapping = 'Linear heights; linear color mapping.' if linear else 'Linear heights; square-root color mapping.'
     zoom = name == 'rotated_only_zoom'
-    fig.text(.5, .06 / height, 'Sample 0 · tokens 0–127 · channels 0–511 · g128.\n' + mapping,
+    zero_note = '\nHeight ticks: activation magnitude; pale floor: z=0.' if height_axis else ''
+    fig.text(.5, .06 / height, 'Sample 0 · tokens 0–127 · channels 0–511 · g128.\n' + mapping + zero_note,
              ha='center', va='bottom', fontsize=font_size)
     if zoom:
         fig.text(.5, 1 - .36 / height, 'Rotated-only zoom: shared scale differs from the four-row matrix.',
@@ -265,7 +298,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
             z, original = data[method] if method in data else load_local(str(source), str(destination), mode, method, layer, site, quantity)
             ax = fig.add_subplot(grid[row, col], projection='3d')
             axes[row, col] = ax
-            setup_axes(ax, limit, labels=False, font_size=font_size)
+            setup_axes(ax, limit, labels=False, font_size=font_size, height_axis=height_axis)
             surface(ax, z, norm)
             if row == 0:
                 ax.set_title(f'Block {layer + 1}', fontsize=font_size+1, pad=5)
@@ -297,9 +330,9 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                 'debug_points': points, 'camera': CONFIG['camera']})
         # One horizontal, data-unit colorbar per column, outside the surface grid.
         bottom_ax = axes[rows - 1, col].get_position()
-        fig.text(bottom_ax.x0 + bottom_ax.width/2, 1.15/height, 'Channel index (front)\nToken index (depth)',
+        fig.text(bottom_ax.x0 + bottom_ax.width/2, (1.15+footer_extra)/height, 'Channel index (front)\nToken index (depth)',
                  fontsize=font_size, ha='center', va='center')
-        cax = fig.add_axes([bottom_ax.x0 + .1 * bottom_ax.width, .8 / height,
+        cax = fig.add_axes([bottom_ax.x0 + .1 * bottom_ax.width, (.8 + footer_extra) / height,
                             .80 * bottom_ax.width, .07 / height])
         cb = fig.colorbar(ScalarMappable(norm=norm, cmap=colormaps['viridis']), cax=cax,
                           orientation='horizontal', ticks=[0, limit])
@@ -333,6 +366,9 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
 
 def run(source, destination, selection, parts='all'):
     mode, site, quantity = selection.split('/')
+    if parts == 'primary':
+        matrix(source, destination, mode, site, quantity)
+        return
     if parts == 'zoom':
         matrix(source, destination, mode, site, quantity, METHODS[1:], name='rotated_only_zoom')
         return
@@ -352,6 +388,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('source'); parser.add_argument('destination')
     parser.add_argument('--select', default='end_to_end/q_proj/raw')
-    parser.add_argument('--parts', choices=['all', 'matrix', 'zoom'], default='all')
+    parser.add_argument('--parts', choices=['all', 'matrix', 'zoom', 'primary'], default='all')
     args = parser.parse_args()
     run(args.source, args.destination, args.select, args.parts)

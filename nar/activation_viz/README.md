@@ -38,3 +38,17 @@ alignment, rendered PDF glyphs, collisions, exact corner/peak coordinates and
 source hashes are audited. Debug arrays may be synthetic only in independent
 unit tests, never in scientific exports. Preserve supplementary validation
 failures and previous revision records.
+
+The height-axis follow-up applies only to the raw `matrix` outputs for
+end_to_end/q_proj, end_to_end/down_proj and paired_local/q_proj. It restores
+measured-unit z ticks, identifies the pale zero plane and weakens its edges.
+Data, camera, mesh and shared limits remain identical. Reproduce only these
+three matrices and their PDF audits with:
+
+```bash
+python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"
+```
+
+`detail_plot --parts primary` renders one selected main matrix without touching
+its linear, zoom, row or panel companions. The revision audit verifies all
+48 panel arrays and the hashes of every other figure file against the baseline.
