@@ -1,0 +1,161 @@
+{
+  "activation_kind": null,
+  "benchmark": "eight_task",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 16.0,
+    "context": 2048,
+    "key": 16.0,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 16.0,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 16.0,
+    "weight_definition": "GPTQ g128_asym over attention and all 128 experts per layer (fp16 scale + int4 zero per group); router gates bf16",
+    "weight_including_bf16_router": 16.0
+  },
+  "elapsed_seconds": 3862.7896711826324,
+  "fold_dtype": "float32",
+  "git_commit": "85d0e718c2cadd6e36d9be8b80692aefff34285e",
+  "gptq_protocol": null,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "0,3",
+    "slurm_job_id": "148151",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 68.70875431862744,
+  "headline_metric": "eight-task mean",
+  "kv_policy": null,
+  "model": "qwen3_30b_a3b_base",
+  "model_id": "Qwen/Qwen3-30B-A3B-Base",
+  "num_fewshot": 0,
+  "results": {
+    "arc_challenge": {
+      "acc,none": 0.5409556313993175,
+      "acc_norm,none": 0.5767918088737202,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_challenge",
+      "name": "arc_challenge",
+      "sample_len": 1172
+    },
+    "arc_easy": {
+      "acc,none": 0.8005050505050505,
+      "acc_norm,none": 0.7954545454545454,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    },
+    "boolq": {
+      "acc,none": 0.8140672782874617,
+      "acc_stderr,none": "N/A",
+      "alias": "boolq",
+      "name": "boolq",
+      "sample_len": 3270
+    },
+    "hellaswag": {
+      "acc,none": 0.6229834694284008,
+      "acc_norm,none": 0.813981278629755,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "hellaswag",
+      "name": "hellaswag",
+      "sample_len": 10042
+    },
+    "openbookqa": {
+      "acc,none": 0.336,
+      "acc_norm,none": 0.44,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "openbookqa",
+      "name": "openbookqa",
+      "sample_len": 500
+    },
+    "piqa": {
+      "acc,none": 0.8133841131664853,
+      "acc_norm,none": 0.809575625680087,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "piqa",
+      "name": "piqa",
+      "sample_len": 1838
+    },
+    "social_iqa": {
+      "acc,none": 0.5214943705220061,
+      "acc_stderr,none": "N/A",
+      "alias": "social_iqa",
+      "name": "social_iqa",
+      "sample_len": 1954
+    },
+    "winogrande": {
+      "acc,none": 0.7253354380426204,
+      "acc_stderr,none": "N/A",
+      "alias": "winogrande",
+      "name": "winogrande",
+      "sample_len": 1267
+    }
+  },
+  "rotation_checkpoint": null,
+  "row": "bf16",
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "boolq": {
+      "effective": 3270,
+      "original": 3270
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "openbookqa": {
+      "effective": 500,
+      "original": 500
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "social_iqa": {
+      "effective": 1954,
+      "original": 1954
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 0,
+  "tasks": [
+    "arc_easy",
+    "arc_challenge",
+    "boolq",
+    "hellaswag",
+    "openbookqa",
+    "piqa",
+    "social_iqa",
+    "winogrande"
+  ],
+  "variant": "shrinkage"
+}

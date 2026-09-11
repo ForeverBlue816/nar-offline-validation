@@ -1,0 +1,814 @@
+{
+  "activation_kind": "asymmetric_g128",
+  "benchmark": "wikitext",
+  "chunks": [
+    {
+      "chunk": 0,
+      "nll": 1.58236563205719,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 1,
+      "nll": 1.8909064531326294,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 2,
+      "nll": 2.178077459335327,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 3,
+      "nll": 1.9941288232803345,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 4,
+      "nll": 1.7528566122055054,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 5,
+      "nll": 1.3080389499664307,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 6,
+      "nll": 1.1265779733657837,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 7,
+      "nll": 1.656525731086731,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 8,
+      "nll": 1.8896987438201904,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 9,
+      "nll": 1.9737491607666016,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 10,
+      "nll": 1.8962961435317993,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 11,
+      "nll": 1.967382788658142,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 12,
+      "nll": 1.9101569652557373,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 13,
+      "nll": 2.089045524597168,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 14,
+      "nll": 2.017029047012329,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 15,
+      "nll": 2.1002233028411865,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 16,
+      "nll": 2.239074945449829,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 17,
+      "nll": 2.081118106842041,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 18,
+      "nll": 1.8695645332336426,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 19,
+      "nll": 1.483435869216919,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 20,
+      "nll": 1.7934386730194092,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 21,
+      "nll": 2.0708980560302734,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 22,
+      "nll": 1.8719075918197632,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 23,
+      "nll": 1.9495774507522583,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 24,
+      "nll": 1.974331021308899,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 25,
+      "nll": 1.9976013898849487,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 26,
+      "nll": 2.1407203674316406,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 27,
+      "nll": 2.373037815093994,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 28,
+      "nll": 2.096566915512085,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 29,
+      "nll": 1.5840370655059814,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 30,
+      "nll": 1.6376802921295166,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 31,
+      "nll": 1.4614472389221191,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 32,
+      "nll": 1.302467942237854,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 33,
+      "nll": 1.8381714820861816,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 34,
+      "nll": 1.6680784225463867,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 35,
+      "nll": 1.8324105739593506,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 36,
+      "nll": 1.4901200532913208,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 37,
+      "nll": 1.2701703310012817,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 38,
+      "nll": 1.4541575908660889,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 39,
+      "nll": 1.2082310914993286,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 40,
+      "nll": 1.4096505641937256,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 41,
+      "nll": 1.7906064987182617,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 42,
+      "nll": 2.1950156688690186,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 43,
+      "nll": 2.5326406955718994,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 44,
+      "nll": 2.2483255863189697,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 45,
+      "nll": 1.8733417987823486,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 46,
+      "nll": 1.9751319885253906,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 47,
+      "nll": 2.2099292278289795,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 48,
+      "nll": 2.2078518867492676,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 49,
+      "nll": 1.8323410749435425,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 50,
+      "nll": 2.099857807159424,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 51,
+      "nll": 1.773191213607788,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 52,
+      "nll": 1.629217505455017,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 53,
+      "nll": 1.6663812398910522,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 54,
+      "nll": 1.499678373336792,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 55,
+      "nll": 1.6871321201324463,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 56,
+      "nll": 1.4467856884002686,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 57,
+      "nll": 1.3610740900039673,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 58,
+      "nll": 1.5632226467132568,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 59,
+      "nll": 1.6731667518615723,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 60,
+      "nll": 1.925666332244873,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 61,
+      "nll": 2.071396827697754,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 62,
+      "nll": 2.205828905105591,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 63,
+      "nll": 2.377495050430298,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 64,
+      "nll": 1.6614428758621216,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 65,
+      "nll": 1.6072014570236206,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 66,
+      "nll": 1.9822083711624146,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 67,
+      "nll": 1.7377922534942627,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 68,
+      "nll": 1.685436725616455,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 69,
+      "nll": 1.8095555305480957,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 70,
+      "nll": 1.4807847738265991,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 71,
+      "nll": 1.6576571464538574,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 72,
+      "nll": 2.092921733856201,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 73,
+      "nll": 2.236022710800171,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 74,
+      "nll": 1.8683339357376099,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 75,
+      "nll": 1.780350923538208,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 76,
+      "nll": 1.9154903888702393,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 77,
+      "nll": 1.87937331199646,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 78,
+      "nll": 1.7844741344451904,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 79,
+      "nll": 2.052661895751953,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 80,
+      "nll": 1.9129211902618408,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 81,
+      "nll": 2.001995325088501,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 82,
+      "nll": 1.5538151264190674,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 83,
+      "nll": 1.6659190654754639,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 84,
+      "nll": 1.7245333194732666,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 85,
+      "nll": 1.7250574827194214,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 86,
+      "nll": 1.709950566291809,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 87,
+      "nll": 1.7045137882232666,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 88,
+      "nll": 2.010289192199707,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 89,
+      "nll": 1.9475064277648926,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 90,
+      "nll": 1.8944098949432373,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 91,
+      "nll": 2.6762359142303467,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 92,
+      "nll": 2.649017095565796,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 93,
+      "nll": 2.2776691913604736,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 94,
+      "nll": 2.352626323699951,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 95,
+      "nll": 2.4150848388671875,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 96,
+      "nll": 2.10463809967041,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 97,
+      "nll": 2.3232500553131104,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 98,
+      "nll": 1.8652451038360596,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 99,
+      "nll": 2.1210567951202393,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 100,
+      "nll": 1.6502221822738647,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 101,
+      "nll": 1.46269690990448,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 102,
+      "nll": 1.8874986171722412,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 103,
+      "nll": 1.5125813484191895,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 104,
+      "nll": 1.7092092037200928,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 105,
+      "nll": 1.6754871606826782,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 106,
+      "nll": 1.8963768482208252,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 107,
+      "nll": 1.9778169393539429,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 108,
+      "nll": 1.7747931480407715,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 109,
+      "nll": 1.9012106657028198,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 110,
+      "nll": 1.7638481855392456,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 111,
+      "nll": 1.6545103788375854,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 112,
+      "nll": 1.6560999155044556,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 113,
+      "nll": 1.7446010112762451,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 114,
+      "nll": 2.1029422283172607,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 115,
+      "nll": 2.004117965698242,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 116,
+      "nll": 2.1496598720550537,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 117,
+      "nll": 1.9328030347824097,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 118,
+      "nll": 1.8205724954605103,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 119,
+      "nll": 1.811345100402832,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 120,
+      "nll": 2.0979368686676025,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 121,
+      "nll": 1.7573906183242798,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 122,
+      "nll": 1.65753972530365,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 123,
+      "nll": 1.6642121076583862,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 124,
+      "nll": 1.9043573141098022,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 125,
+      "nll": 2.0376245975494385,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 126,
+      "nll": 1.9334367513656616,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 127,
+      "nll": 1.903657078742981,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 128,
+      "nll": 1.7863105535507202,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 129,
+      "nll": 1.863556146621704,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 130,
+      "nll": 1.771224021911621,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 131,
+      "nll": 1.9543966054916382,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 132,
+      "nll": 1.7807772159576416,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 133,
+      "nll": 1.8473724126815796,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 134,
+      "nll": 2.1433351039886475,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 135,
+      "nll": 1.9410030841827393,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 136,
+      "nll": 1.5387660264968872,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 137,
+      "nll": 1.4773551225662231,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 138,
+      "nll": 1.4650311470031738,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 139,
+      "nll": 2.154554605484009,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 140,
+      "nll": 2.3346755504608154,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 141,
+      "nll": 1.7070783376693726,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 142,
+      "nll": 1.7313941717147827,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 143,
+      "nll": 1.9178744554519653,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 144,
+      "nll": 2.0242388248443604,
+      "tokens_scored": 2047
+    },
+    {
+      "chunk": 145,
+      "nll": 1.9489690065383911,
+      "tokens_scored": 2047
+    }
+  ],
+  "chunks_evaluated": 146,
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "context": 2048,
+    "key": 5.171875,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 4.43359375,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 4.014960805976431,
+    "weight_definition": "GPTQ g128_asym over attention and all 128 experts per layer (fp16 scale + int4 zero per group); router gates bf16",
+    "weight_including_bf16_router": 4.02000289230122
+  },
+  "elapsed_seconds": 1805.7533373832703,
+  "fold_dtype": "float32",
+  "git_commit": "59d01634f23af74e01e8bff5076e1a21b605c555",
+  "gptq": {
+    "act_order": false,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head",
+      "router gates (bf16)"
+    ],
+    "experts_with_pooled_hessian": 1346,
+    "per_expert_hessian": true,
+    "percdamp": 0.01,
+    "pooled_hessian_below": 512,
+    "protocol": "g128_asym",
+    "sequence_length": 2048,
+    "weight_groupsize": 128,
+    "weight_sym": false
+  },
+  "gptq_protocol": "g128_asym",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02",
+      "2, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02",
+      "3, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97247 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "6,7",
+    "slurm_job_id": "148154",
+    "torch": "2.11.0+cu128"
+  },
+  "headline": 6.424446822964173,
+  "headline_metric": "ppl",
+  "kv_policy": "E14 KIVI",
+  "model": "qwen3_30b_a3b_base",
+  "model_id": "Qwen/Qwen3-30B-A3B-Base",
+  "nll_dtype": "float32",
+  "ppl": 6.424446822964173,
+  "ranks": {
+    "r1_rank": 16,
+    "r1_slots": 16,
+    "r2_rank": 1,
+    "r4_per_expert": true,
+    "r4_rank": 6,
+    "r4_rank_min": 6,
+    "r4_slots": 6
+  },
+  "rotation_checkpoint": "nar_kmax",
+  "row": "nar_kmax_asym_g128",
+  "seed": 0,
+  "sequence_length": 2048,
+  "variant": "shrinkage"
+}

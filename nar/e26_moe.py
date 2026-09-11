@@ -995,8 +995,14 @@ def gptq_command(args: argparse.Namespace) -> None:
     dummy = torch.zeros((1, args.seq_len, model.config.hidden_size), device="cuda", dtype=stream_dtype)
     position_embeddings = rotary(dummy, position_ids)
     del dummy
-    audit_rows: list[dict[str, Any]] = []
-    expert_rows: list[dict[str, Any]] = []
+    # A resumed run skips the layers already checkpointed, so it must start
+    # from the audit rows those layers produced, or the final audit covers
+    # only the layers of the last run (which is what happened to the first
+    # Hadamard and k=8 checkpoints).
+    audit_rows: list[dict[str, Any]] = (base.read_csv(output / "gptq_audit.partial.csv")
+                                        if (output / "gptq_audit.partial.csv").exists() else [])
+    expert_rows: list[dict[str, Any]] = (base.read_csv(output / "gptq_expert_audit.partial.csv")
+                                         if (output / "gptq_expert_audit.partial.csv").exists() else [])
     started = time.time()
     n_experts = int(model.config.num_experts)
 

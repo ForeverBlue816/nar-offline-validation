@@ -1,0 +1,67 @@
+{
+  "bf16_reparameterization_drift": {
+    "max_abs_logit_error": 8.392333984375e-05,
+    "probe_tokens": 128,
+    "relative_l2_logit_error": 8.959373758443689e-07
+  },
+  "elapsed_seconds": 2144.8331077098846,
+  "fold": {
+    "norm": "input/post/final RMSNorm affine weights fused into consumers (q/k/v; gate_up and router; lm_head), then set to one",
+    "r1": "global residual rotation; folded into q/k/v, every expert's gate_up input axis, the router's input axis, and the output axes of o_proj and every expert's down_proj",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r4": "per-expert down-input rotation folded into that expert's down_proj rows",
+    "router": "R1 folded into the gate's input columns; routing logits unchanged in exact arithmetic; router kept unquantized"
+  },
+  "git_commit": "2118c9ec899c8d949e1310945fd1c32cad09b526",
+  "gptq": {
+    "act_order": false,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head",
+      "router gates (bf16)"
+    ],
+    "experts_with_pooled_hessian": 237,
+    "per_expert_hessian": true,
+    "percdamp": 0.01,
+    "pooled_hessian_below": 512,
+    "protocol": "g128_asym",
+    "sequence_length": 2048,
+    "weight_groupsize": 128,
+    "weight_sym": false
+  },
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 36827 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 37981 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "0,3",
+    "slurm_job_id": "147738",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "qwen3_30b_a3b_base",
+  "model_id": "Qwen/Qwen3-30B-A3B-Base",
+  "ranks": {
+    "r1_rank": null,
+    "r1_slots": 16,
+    "r2_rank": null,
+    "r4_per_expert": true,
+    "r4_rank": null,
+    "r4_rank_min": null,
+    "r4_slots": 6
+  },
+  "rotation": "hadamard",
+  "variant": "shrinkage"
+}
