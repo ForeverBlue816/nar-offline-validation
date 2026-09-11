@@ -40,6 +40,8 @@ def save(fig,path):
     plt.close(fig)
 
 def surface(ax,z,limit,view):
+    # Transparent axes patches cannot erase neighboring 3-D tick labels.
+    ax.patch.set_alpha(0)
     yy,xx=np.indices(z.shape)
     ax.plot_surface(xx,yy,z,cmap=CMAP,norm=colors.Normalize(0,limit),
         rcount=z.shape[0],ccount=z.shape[1],linewidth=0,antialiased=False,shade=False,rasterized=True)
