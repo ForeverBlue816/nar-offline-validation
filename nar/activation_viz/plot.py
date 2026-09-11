@@ -43,14 +43,15 @@ def surface(ax,z,limit,view):
     yy,xx=np.indices(z.shape)
     ax.plot_surface(xx,yy,z,cmap=CMAP,norm=colors.Normalize(0,limit),
         rcount=z.shape[0],ccount=z.shape[1],linewidth=0,antialiased=False,shade=False,rasterized=True)
-    ax.view_init(elev=25,azim=-60);ax.set_box_aspect((1.28,1,.72))
+    ax.view_init(elev=25,azim=-60);ax.set_box_aspect((1.28,1,.72),zoom=.88)
     ax.set_xlim(0,z.shape[1]-1);ax.set_ylim(0,z.shape[0]-1);ax.set_zlim(0,limit)
     ax.set_xticks([0,z.shape[1]-1]);ax.set_yticks([0,z.shape[0]-1]);ax.set_zticks([0,limit/2,limit])
     ax.zaxis.set_major_formatter(ticker.FuncFormatter(number))
     ax.set_xlabel('Channel bin' if view=='overview' else 'Channel',labelpad=-10)
-    ax.set_ylabel('Token bin' if view=='overview' else 'Token',labelpad=-10)
-    ax.tick_params(axis='both',pad=-4,length=1.5)
-    ax.tick_params(axis='z',pad=-2,labelsize=5)
+    ax.set_ylabel('Token bin' if view=='overview' else 'Token',labelpad=0)
+    ax.tick_params(axis='both',pad=0,length=1.5)
+    ax.tick_params(axis='z',pad=2,labelsize=5)
+    for label in ax.get_zticklabels():label.set_horizontalalignment('left')
     for axis in (ax.xaxis,ax.yaxis,ax.zaxis):
         axis.set_pane_color((.975,.979,.982,1))
         axis.line.set_color('#869099');axis.line.set_linewidth(.4)
@@ -63,7 +64,7 @@ def matrix(cache,out,mode,site,quantity,view,methods,layers=LAYERS,name='matrix'
     width=7.2 if ncol==4 else 2.35
     height=(1.63*nrow+.48) if ncol==4 else 2.12
     fig=plt.figure(figsize=(width,height),dpi=600)
-    grid=fig.add_gridspec(nrow,ncol,left=.085 if ncol==4 else .10,right=.95,bottom=.045,top=.94,
+    grid=fig.add_gridspec(nrow,ncol,left=.085 if ncol==4 else .10,right=.93 if ncol==4 else .88,bottom=12/(height*72),top=1-33/(height*72),
                          wspace=.17,hspace=.16)
     scales={}
     for col,layer in enumerate(layers):
@@ -76,10 +77,13 @@ def matrix(cache,out,mode,site,quantity,view,methods,layers=LAYERS,name='matrix'
             surface(ax,z,limit,view)
             if row==0:ax.set_title(f'Block {layer+1}',pad=1)
             if col==0:
-                fig.text(.018 if ncol==4 else .014,1-(row+.5)/nrow*.895-.05,LABELS[method],
+                fig.text(.018 if ncol==4 else .045,1-(row+.5)/nrow*.895-.05,LABELS[method],
                          rotation=90,rotation_mode='anchor',va='center',ha='center',fontsize=6.5)
     magnitude='Max magnitude within bin' if view=='overview' else 'Magnitude'
-    fig.text(.52,.995,magnitude,ha='center',va='top',fontsize=6)
+    if name=='rotated_only_zoom':magnitude+='; shared rotated scale'
+    title='Group-centered residual magnitude' if quantity=='residual' else 'Pre-quantization activation magnitude'
+    fig.text(.52,1-3/(height*72),title,ha='center',va='top',fontsize=7)
+    fig.text(.52,1-14/(height*72),magnitude,ha='center',va='top',fontsize=5.5)
     path=out/mode/site/quantity/view/name
     save(fig,path)
     path.with_suffix('.scales.json').write_text(json.dumps({'z_limits_by_layer':scales,'shared_across_methods':scale_methods or 'all methods in mode','linear':True},indent=2)+'\n')
@@ -96,6 +100,7 @@ def distributions(root,out):
                 for m in methods:
                     ax.plot(ecdf[f'{mode}__{m}__{layer}__{site}'],p,color=METHOD_COLORS[METHODS.index(m)],lw=1,label=LABELS[m])
                 ax.set_title(f'Block {layer+1}');ax.set_xlabel('Signed group range');ax.set_ylim(0,1)
+                ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
                 ax.set_xscale('symlog',linthresh=.01)
                 ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
                 ax.xaxis.set_minor_locator(ticker.NullLocator())
@@ -106,7 +111,7 @@ def distributions(root,out):
             fig.legend(handles,labels,loc='upper center',ncol=len(methods),frameon=False,fontsize=6)
             save(fig,out/mode/site/'group_range_ecdf')
 
-def run(root,selected='all'):
+def run(root,selected='all',parts='all'):
     root=Path(root);out=root/'figures';style();cache=np.load(root/'display_cache.npz')
     for mode in ('paired_local','end_to_end'):
         methods=METHODS if mode=='paired_local' else METHODS[1:]
@@ -115,7 +120,9 @@ def run(root,selected='all'):
                 for view in ('overview','detail'):
                     if selected!='all' and selected!='matrices' and selected!=f'{mode}/{site}/{quantity}/{view}':continue
                     matrix(cache,out,mode,site,quantity,view,methods)
-                    if selected=='matrices':continue
+                    if mode=='paired_local':
+                        matrix(cache,out,mode,site,quantity,view,METHODS[1:],name='rotated_only_zoom',scale_methods=METHODS[1:])
+                    if selected=='matrices' or parts=='matrix':continue
                     for m in methods:
                         matrix(cache,out,mode,site,quantity,view,[m],name=f'row_{m}')
                         for l in LAYERS:matrix(cache,out,mode,site,quantity,view,[m],[l],name=f'panel_{m}_block{l+1}')
