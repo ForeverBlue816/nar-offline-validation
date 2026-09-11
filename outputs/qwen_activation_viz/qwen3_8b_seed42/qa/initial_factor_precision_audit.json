@@ -1,0 +1,778 @@
+{
+  "checks": [
+    {
+      "check": "norm_affine_fusion_relative_logit_error",
+      "value": 3.337594307595282e-07,
+      "limit": 1e-05,
+      "passed": true
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.3950685759578185e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.3332312676084257e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.9712646803782263e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 1.523605639227168e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.4930425606962672e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.301398893678197e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 1.7531156579314089e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 2.156341025738584e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.876262499285076e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 8.814100644174009e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.5656861762636254e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.4905051532186917e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.0262986970414156e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 2.788590791169554e-06,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.6379750579508254e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 1.3167364443233964e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.2562803725814593e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 3.1983367989596445e-06,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.6675540993892355e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 2.2946444744320615e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 0,
+      "site": "down_proj"
+    },
+    {
+      "check": "smoke_capture_bitwise_logit_difference",
+      "value": 0.0,
+      "limit": 0,
+      "passed": true
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.6343738562728556e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.334585135737143e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.0283447693382186e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.685808765325346e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.9623057312401215e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.6880423459042504e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.7051333618629233e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 2.7834931870529545e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.7119141659804882e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 5.148682799529198e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.5675821884997276e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.806118004627933e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 1.2887388774174817e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 7.589524102513678e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 7.019916097306123e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 1.381688861101793e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 1.3133242435422753e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.1118879683635896e-06,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.1453671504568774e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 2.719872895795561e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 12,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 4.091238395701818e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.3116680008806725e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.3964020695311774e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.9208703832497564e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 3.5466419490148837e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.5684738602649304e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 3.73552317966474e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 3.776885648676398e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.8943139795956085e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 5.3619164833556313e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.5806666908702027e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.70565351456753e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 7.148970171194218e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 9.716599151943228e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 9.22334720598883e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 1.3073615434677777e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 1.1531026033572989e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.4385593658516882e-06,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.7782092527340865e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 2.885488754600374e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 23,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 2.9262898565800733e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.344502464917241e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 2.1564665075857192e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 4.693794713002623e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 2.832865959589981e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 5.978347985546861e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 4.967642940362251e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 35,
+      "site": "q_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 3.678370603665826e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 5.228220629760472e-07,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "WY_vs_unfused_factor_relative",
+      "value": 0.0,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "nar_kmax",
+      "layer": 35,
+      "site": "q_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 9.201285698122484e-08,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.4893809918703482e-07,
+      "limit": 1e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "down_proj"
+    },
+    {
+      "check": "compensated_linear_relative",
+      "value": 1.6790590962045826e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "hadamard",
+      "layer": 35,
+      "site": "down_proj"
+    },
+    {
+      "check": "per_token_energy_relative",
+      "value": 7.88015919737381e-06,
+      "limit": 2e-05,
+      "passed": true,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "down_proj",
+      "sample": 0
+    },
+    {
+      "check": "rotation_inverse_relative",
+      "value": 1.015363977785455e-05,
+      "limit": 1e-05,
+      "passed": false,
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "down_proj"
+    }
+  ],
+  "passed": false
+}
