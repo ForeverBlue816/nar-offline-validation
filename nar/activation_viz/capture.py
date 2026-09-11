@@ -164,9 +164,10 @@ def run(args):
                 small=x.reshape(-1,x.shape[-1])[:8]
                 recovered=e19.apply_transpose(r,label,ri,y.reshape(-1,y.shape[-1])[:8])
                 check('rotation_inverse_relative',(recovered-small).norm()/small.norm().clamp_min(1e-30),1e-5,required=False,method=m,layer=layer,site=site)
-                w=model.model.layers[layer].get_submodule(SITES[site]).weight[:8].float()
+                w=model.model.layers[layer].get_submodule(SITES[site]).weight.float()
                 left=small@w.T; right=r.apply(label,ri,small)@r.apply(label,ri,w).T
-                check('compensated_linear_relative',(left-right).norm()/left.norm().clamp_min(1e-30),2e-5,method=m,layer=layer,site=site)
+                check('narrow_eight_output_compensated_linear_relative',(left[:,:8]-right[:,:8]).norm()/left[:,:8].norm().clamp_min(1e-30),2e-5,required=False,method=m,layer=layer,site=site)
+                check('compensated_linear_relative',(left-right).norm()/left.norm().clamp_min(1e-30),2e-5,method=m,layer=layer,site=site,output_channels=w.shape[0])
                 if m.startswith('nar_'):
                     factor=r.r1 if label=='r1' else r.r4[layer]
                     direct=factor.apply(small,r.signs(label,ri,small.shape[-1]))
