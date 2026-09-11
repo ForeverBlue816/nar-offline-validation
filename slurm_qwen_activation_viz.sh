@@ -2,6 +2,8 @@
 #SBATCH --job-name=qwen8b-activation-viz
 #SBATCH --gpus=pro6000:1
 #SBATCH --constraint=highmem
+#SBATCH --qos=override-limits-but-killable
+#SBATCH --requeue
 #SBATCH --time=04:00:00
 #SBATCH --output=runs/qwen-activation-viz-%j.out
 #SBATCH --error=runs/qwen-activation-viz-%j.err

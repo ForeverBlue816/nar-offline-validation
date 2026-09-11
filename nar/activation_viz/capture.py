@@ -207,6 +207,7 @@ def run(args):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--workdir',required=True);p.add_argument('--output',required=True)
     args=p.parse_args()
-    run(args)
+    if not (Path(args.output)/'capture_complete.json').exists():
+        run(args)
     from .metrics import run as metrics_run
     metrics_run(args.output, 'cuda')
