@@ -2112,3 +2112,8 @@ B_top1_no_bos, both sites: A lower than B with a paired interval above zero.
 Layer/seed rows and all eight angles are retained in the CSV. Repeated seeds are not independent layer replicates.
 
 <!-- E27_RESULTS_END -->
+
+
+# E28 — end-to-end throughput and memory on one A40
+
+QuaRot's released INT4 pipeline (CUTLASS INT4 GEMM, INT4 KV cache) with the R4 slot holding either QuaRot's fused Hadamard or the E17 v3 NAR kernel, random INT4 weights, prompt 2048. Prefill speedup over fp16 (bs 1/16): Hadamard 1.25×/1.29× (3B), 1.44×/1.50× (8B); PrismQuant k=8 retains 86 %/94 % (3B) and 103 %/103 % (8B) of it. Decode at batch 1 is CPU-launch-bound in this pipeline and slower than fp16 for both INT4 rows (0.61 / 0.61 and 0.65 / 0.67 of fp16); PrismQuant costs +0.42 ms/token on the 3B and −2.98 ms/token on the 8B relative to Hadamard. Memory: row 3 = row 2 + 23 MB (3B) / 45 MB (8B), the compact-WY factors. E17 v3 on the A40: NAR/Hadamard 1.61× (3B), 1.59× (8B) at 2048 tokens. Full protocol, every QuaRot modification and the deviations: `report_e28.md`; data in `results/e28/`.

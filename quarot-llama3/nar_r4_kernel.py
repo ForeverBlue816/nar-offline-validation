@@ -50,6 +50,7 @@ from nar.kernels import r4_fused_v3 as k3  # noqa: E402
 from nar.kernels.r4_fused_v2 import GROUP, _fwht128, _rank_correction  # noqa: E402
 
 TERMS = 2  # fp16 hi/lo terms for Y'
+_SHARED_PARTIAL: dict[tuple[str, int, int], torch.Tensor] = {}
 
 
 @triton.jit
@@ -293,7 +294,15 @@ class NARDownTransform(torch.nn.Module):
         kp = k3.padded_rank(k)
         try:
             x = (torch.randn((tokens, n), device=device) * 0.5).to(torch.float16)
-            partial = torch.empty((tokens, proj.splits * k), dtype=torch.float32, device=device)
+            # The fp32 partial buffer is transient (written by A, consumed by B in
+            # the same forward), so one buffer per (device, shape) is shared by all
+            # layers instead of one per layer: 28 x 1 MB at 32768 tokens otherwise
+            # shows up as resident memory that is not part of the factors.
+            key = (str(device), tokens, proj.splits * k)
+            partial = _SHARED_PARTIAL.get(key)
+            if partial is None:
+                partial = torch.empty((tokens, proj.splits * k), dtype=torch.float32, device=device)
+                _SHARED_PARTIAL[key] = partial
             out = torch.empty_like(x)
             grid_a = (triton.cdiv(tokens, proj.block_t), proj.splits, 1)
             grid_b = (triton.cdiv(tokens, tile.block_t), n // GROUP, 1)

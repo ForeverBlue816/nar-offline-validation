@@ -290,6 +290,11 @@ def command_bench(args: argparse.Namespace) -> None:
                                   torch.device("cuda"))
         selection = json.loads((out_dir / "nar_kernel_selection.json").read_text())["selection"]
     model = build_model(args.row, config, factors, selection, args.seed)
+    # The fp32 source factors (Y', W''^T) are only needed to build the fp16 terms;
+    # release them so the row's memory is the model's, not the loader's.
+    del factors
+    gc.collect()
+    torch.cuda.empty_cache()
     sizes = model_bytes(model)
     log(f"{spec['key']} row={args.row}: model bytes {sizes}")
     result: dict[str, Any] = {"model": spec["key"], "hf_id": spec["hf"], "row": args.row,

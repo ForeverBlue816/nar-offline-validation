@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{End-to-end deployment on one NVIDIA A40 (sm\_86), QuaRot's INT4 pipeline (CUTLASS INT4 GEMM, INT4 KV cache), random INT4 weights, prompt length 2048. Rows 2 and 3 differ only in the online transform at the down-projection input. Speedup is decode latency relative to the FP16 row; \%~of Hadamard speedup is $(s_{\mathrm{PrismQuant}}-1)/(s_{\mathrm{Hadamard}}-1)$ for decode. Peak memory is during decode.}
+\label{tab:e28}
+\begin{tabular}{llrrrrrr}
+\toprule
+Model & Method & Prefill tok/s (bs1) & Prefill tok/s (bs16) & Decode ms/tok & Peak mem (GB) & Speedup vs FP16 & \% of Hadamard speedup \\
+\midrule
+Llama-3.2-3B & FP16 & 9,726 & 13,954 & 42.40 $\pm$ 0.43 & 8.57 & 1.00 & -- \\
+ & Hadamard (QuaRot) & 12,163 & 17,976 & 69.65 $\pm$ 1.34 & 4.17 & 0.61 & 100\% \\
+ & PrismQuant $k{=}8$ & 11,815 & 17,720 & 70.06 $\pm$ 0.89 & 4.19 & 0.61 & 101\% \\
+\midrule
+Llama-3.1-8B & FP16 & 5,092 & 6,402 & 52.73 $\pm$ 0.40 & 18.51 & 1.00 & -- \\
+ & Hadamard (QuaRot) & 7,338 & 9,631 & 81.75 $\pm$ 0.31 & 7.83 & 0.65 & 100\% \\
+ & PrismQuant $k{=}8$ & 7,414 & 9,743 & 78.77 $\pm$ 0.62 & 7.87 & 0.67 & 93\% \\
+\bottomrule
+\end{tabular}
+\end{table}

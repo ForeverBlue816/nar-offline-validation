@@ -1,0 +1,4 @@
+model,k,tokens,backend,config,splits,projection_ms
+llama31_8b,8,1,v2_triton_fp32,-,32,0.009395722596316922
+llama31_8b,8,32,v2_triton_fp32,-,32,0.010688263252224207
+llama31_8b,8,2048,v2_triton_fp32,-,2,0.20883990393345614
