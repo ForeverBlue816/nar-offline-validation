@@ -77,6 +77,13 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
              ha='center', va='top', fontsize=8.5)
     # Freeze layout before projecting measured vertices into each exact camera.
     fig.canvas.draw()
+    if ncol == 1:
+        renderer = fig.canvas.get_renderer()
+        for ax, _, _, _ in panels:
+            labels = ax.get_zticklabels()
+            if any(label.get_window_extent(renderer).x1 > fig.bbox.x1 for label in labels):
+                for label in labels: label.set_horizontalalignment('center')
+        fig.canvas.draw()
     records = []
     for ax, method, layer, limit in panels:
         z, source = load(root, mode, method, layer, site, quantity)
