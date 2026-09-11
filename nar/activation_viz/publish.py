@@ -17,6 +17,8 @@ def run(source,destination):
     assert len(audits)==308 and all(r['font_exit']==r['collision_exit']==0 for r in audits)
     provenance=json.loads((source/'render_provenance.json').read_text())
     if provenance.get('pooling') is False:
+        assert json.loads((source/'qa/full_resolution_integrity.json').read_text())['passed']
+        assert json.loads((source/'qa/exact_ecdf_checks.json').read_text())['passed']
         inventory={r['file']:r['sha256'] for r in json.loads((source/'activation_inventory.json').read_text())}
         geometry=list((source/'figures').rglob('*.geometry.json'))
         assert len(geometry)==304

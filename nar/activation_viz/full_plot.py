@@ -80,7 +80,8 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
     if ncol == 1:
         renderer = fig.canvas.get_renderer()
         rightmost = max(label.get_window_extent(renderer).x1
-                        for ax, _, _, _ in panels for label in ax.get_zticklabels())
+                        for ax, _, _, _ in panels for tick in ax.zaxis.majorTicks
+                        for label in [tick.label1] if label.get_visible() and label.get_text())
         if rightmost > fig.bbox.x1:
             old_width = fig.get_figwidth()
             new_width = old_width+(rightmost-fig.bbox.x1)/fig.dpi+6/72
