@@ -53,9 +53,11 @@ class Observer(e14.RuntimeHooks):
     def close(self):
         super().close()
         from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
-        del ALL_ATTENTION_FUNCTIONS[self.attention_key]
+        ALL_ATTENTION_FUNCTIONS._global_mapping.pop(self.attention_key, None)
+        ALL_ATTENTION_FUNCTIONS._local_mapping.pop(self.attention_key, None)
         from transformers.masking_utils import ALL_MASK_ATTENTION_FUNCTIONS
-        del ALL_MASK_ATTENTION_FUNCTIONS[self.attention_key]
+        ALL_MASK_ATTENTION_FUNCTIONS._global_mapping.pop(self.attention_key, None)
+        ALL_MASK_ATTENTION_FUNCTIONS._local_mapping.pop(self.attention_key, None)
 
     def attention(self,*args,**kwargs):
         # Count actual QDQ invocations made within the original attention body.
