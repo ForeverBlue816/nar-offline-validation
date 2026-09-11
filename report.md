@@ -1589,9 +1589,9 @@ Shrinkage is best, and the three variants differ by at most 0.023. How cold expe
 | Qwen3-30B-A3B-Base, W4A4KV4 | WikiText-2 | C4 | eight-task |
 |---|---:|---:|---:|
 | bf16 | 6.112 | 10.696 | 68.71 |
-| Hadamard | running | running | running |
-| NAR k=8 | 6.447 | 11.189 | running |
-| NAR k=max | 6.424 | 11.176 | running |
+| Hadamard | 6.678 | 11.473 | running |
+| NAR k=8 | 6.447 | 11.189 | 68.52 |
+| NAR k=max | 6.424 | 11.176 | 68.23 |
 
 # Infrastructure defects found and fixed during E19
 
