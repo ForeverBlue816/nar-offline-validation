@@ -50,6 +50,13 @@ class Observer(e14.RuntimeHooks):
         if self.enabled and id(module) in self.targets:
             self.sink(self.targets[id(module)],inputs[0])
         return super().quantize_input(module,inputs)
+    def close(self):
+        super().close()
+        from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
+        del ALL_ATTENTION_FUNCTIONS[self.attention_key]
+        from transformers.masking_utils import ALL_MASK_ATTENTION_FUNCTIONS
+        del ALL_MASK_ATTENTION_FUNCTIONS[self.attention_key]
+
     def attention(self,*args,**kwargs):
         # Count actual QDQ invocations made within the original attention body.
         original_key=e14._kivi_key_qdq; original_quant=base.dynamic_asym_int4
@@ -87,7 +94,7 @@ def run(args):
     model=e19.load_model_fp32(work)
     audit=e19.architecture_audit(model)
     snapshot=Path(work/'cache/huggingface/models--Qwen--Qwen3-8B-Base/snapshots')
-    manifest={'model_id':e19.MODEL_ID,'model_key':e19.MODEL_KEY,'base_revision':sorted(p.name for p in snapshot.iterdir()),
+    manifest={'model_id':e19.MODEL_ID,'model_key':e19.MODEL_KEY,'base_revision':getattr(model.config,'_commit_hash',None),'cached_snapshot_revisions':sorted(p.name for p in snapshot.iterdir()),
         'base_checkpoint':str(snapshot),'architecture':audit,'layers_zero_based':LAYERS,'sites':SITES,
         'methods':METHODS,'sample_seed':42,'rotation_seed':0,'samples':8,'seq_len':2048,
         'reference':'BF16 checkpoint values loaded and norm-fused in FP32; q_norm/k_norm remain affine',
@@ -125,7 +132,7 @@ def run(args):
             files=[root/f'r1_{r.R1_LABEL[m]}.pt']+list(root.glob('r2_v_layer_*.pt'))+list((work/'activations'/e19.MODEL_KEY/'e18v2_factors'/r.R4_LABEL[m]).glob('down_layer_*.pt'))
         manifest['rotation_factors'][m]={'ranks':r.ranks(),'files':[{'path':str(p.relative_to(work)),'sha256':digest(p)} for p in sorted(files)],
             'r4_actual_k':{str(l):int(r.r4[l].active.sum()) if r.r4 else None for l in LAYERS},
-            'sign_hashes':{f'{site}:{l}':tensor_hash(r.signs('r1' if site=='q_proj' else 'r4',0 if site=='q_proj' else l,4096 if site=='q_proj' else 12288).cpu()) for site in SITES for l in LAYERS}}
+            'sign_hashes':{f'{site}:{l}':tensor_hash((torch.ones(12288) if m=='hadamard' and site=='down_proj' else r.signs('r1' if site=='q_proj' else 'r4',0 if site=='q_proj' else l,4096 if site=='q_proj' else 12288).cpu())) for site in SITES for l in LAYERS}}
     for p in (work/'activations'/e19.MODEL_KEY/'e14_rotations/DONE.json',work/'activations'/e19.MODEL_KEY/'e18v2_factors/DONE.json'):
         manifest.setdefault('calibration',{})[str(p.relative_to(work))]=json.loads(p.read_text())
     write(out/'run_manifest.json',manifest)
