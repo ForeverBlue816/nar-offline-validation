@@ -96,21 +96,28 @@ def distributions(root,out):
     for mode in ('paired_local','end_to_end'):
         methods=METHODS if mode=='paired_local' else METHODS[1:]
         for site in ('down_proj','q_proj'):
-            fig,axes=plt.subplots(1,4,figsize=(7.2,2.05),sharey=True)
-            fig.subplots_adjust(left=.07,right=.98,bottom=.23,top=.77,wspace=.25)
+            fig,axes=plt.subplots(1,4,figsize=(7.2,2.3),sharey=True)
+            fig.subplots_adjust(left=.07,right=.98,bottom=.23,top=.73,wspace=.25)
             for ax,layer in zip(axes,LAYERS):
                 for m in methods:
-                    ax.plot(ecdf[f'{mode}__{m}__{layer}__{site}'],p,color=METHOD_COLORS[METHODS.index(m)],lw=1,label=LABELS[m])
-                ax.set_title(f'Block {layer+1}');ax.set_xlabel('Signed group range');ax.set_ylim(0,1)
+                    ax.step(ecdf[f'{mode}__{m}__{layer}__{site}'],p,where='post',color=METHOD_COLORS[METHODS.index(m)],lw=1,label=LABELS[m])
+                ax.set_title(f'Block {layer+1}');ax.set_xlabel('Group range');ax.set_ylim(0,1)
                 ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%.2f'))
                 ax.set_xscale('symlog',linthresh=.01)
+                maximum=max(float(ecdf[f'{mode}__{m}__{layer}__{site}'].max()) for m in methods)
+                ax.set_xlim(0,maximum*1.05 if maximum else 1)
+                powers=10.**np.arange(-2,int(np.floor(np.log10(maximum)))+1) if maximum>=.01 else np.array([])
+                chosen=powers[np.linspace(0,len(powers)-1,min(3,len(powers)),dtype=int)] if len(powers) else np.array([maximum/2,maximum])
+                ax.set_xticks(np.unique(np.r_[0,chosen]))
                 ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
                 ax.xaxis.set_minor_locator(ticker.NullLocator())
                 ax.grid(axis='y',alpha=.5)
                 ax.spines[['top','right']].set_visible(False);ax.tick_params(length=2)
             axes[0].set_ylabel('Cumulative probability')
             handles,labels=axes[0].get_legend_handles_labels()
-            fig.legend(handles,labels,loc='upper center',ncol=len(methods),frameon=False,fontsize=6)
+            fig.legend(handles,labels,loc='upper center',bbox_to_anchor=(.5,.935),ncol=len(methods),frameon=False,fontsize=6)
+            mode_label='Paired local' if mode=='paired_local' else 'End to end'
+            fig.text(.52,.99,f'{mode_label} | {site} | Group-range ECDF',ha='center',va='top',fontsize=7)
             save(fig,out/mode/site/'group_range_ecdf')
 
 def run(root,selected='all',parts='all'):
@@ -128,7 +135,7 @@ def run(root,selected='all',parts='all'):
                     for m in methods:
                         matrix(cache,out,mode,site,quantity,view,[m],name=f'row_{m}')
                         for l in LAYERS:matrix(cache,out,mode,site,quantity,view,[m],[l],name=f'panel_{m}_block{l+1}')
-    if selected in ('all','matrices'):distributions(root,out)
+    if selected in ('all','matrices','distributions'):distributions(root,out)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('root');p.add_argument('--select',default='all');a=p.parse_args();run(a.root,a.select)

@@ -12,7 +12,9 @@ def run(root):
     failures=[r for r in validation['checks'] if not r['passed']]
     text=['# Qwen3-8B activation diagnostics','',
       'Real Qwen/Qwen3-8B-Base forwards; 8 fixed WikiText-2 test windows of 2048 tokens. Rotation seed 0; sample selection seed 42. Main surfaces show sample 0; statistics use all samples at full resolution.','',
+      '[Measured findings](measured_summary.md) · [Figure audit](qa/delivery_review.json) · [Publication inventory](publication_manifest.json)','',
       '## Figures','',
+      '![Group-centered down-projection activations, rotated methods](figures/paired_local/down_proj/residual/overview/rotated_only_zoom.png)','',
       'Main mechanism figures use paired local inputs. End-to-end figures separately show the three existing E22 W4A4KV4 evaluation rows; no unquantized reference is mislabelled as an end-to-end quantized row.','',
       '| Site | Raw magnitude | Group-centered residual | Range distribution |','|---|---|---|---|']
     for site in ('down_proj','q_proj'):
@@ -37,7 +39,10 @@ def run(root):
       'python -m nar.activation_viz.capture --workdir "$NAR_WORKDIR" --output "$RUN"',
       'python -m nar.activation_viz.metrics "$RUN" --device cuda',
       'python -m nar.activation_viz.plot "$RUN"',
-      'python -m nar.activation_viz.report "$RUN"','```','']
+      'python -m nar.activation_viz.report "$RUN"',
+      'python -m nar.activation_viz.summarize "$RUN"',
+      'python -m nar.activation_viz.render_batch "$RUN" --audit-only',
+      'python -m nar.activation_viz.publish "$RUN" "$PUBLICATION_DIR"','```','']
     manifest['bit_widths']={'linear_weights':4,'activation_inputs':4,'keys':4,'values':4,'exceptions':'embeddings, lm_head, norms and recent KV residual are floating; evaluation containers are FP32'}
     manifest['weight_quantizer']={'implementation':'nar.quarot_gptq.WeightQuantizer','group_size':128,'group_axis':'input-channel groups within each output row','clipping':'per-output-row/per-group MSE search; norm=2.4, grid=100, maxshrink=0.8; detailed checkpoint settings retained','scale_definition':'clipped span / 15, span floor 1e-5; FP32 builder arithmetic','zero_point':'round(-clipped_min/scale), integer-valued zero point in FP32 builder container','saved_form':'only dequantized floating weights, not packed codes or separately serialized scale/zero arrays','nominal_packed_bit_budget':4.15625,'budget_assumption':'4-bit codes + 16-bit scale + 4-bit zero per 128 weights; not actual checkpoint file storage'}
     manifest['module_paths']=[f'model.layers.{layer}.{site}' for layer in manifest['layers_zero_based'] for site in manifest['sites'].values()]
@@ -54,7 +59,10 @@ def run(root):
                 site_tex=site.replace('_',chr(92)+'_')
                 cap=f"\\paragraph{{{mode.replace('_',' ')}; {site_tex}; {quantity}.}} Qwen3-8B-Base activations at {location}. Panels show {desc}. {rowsdesc} Columns are Blocks 1, 13, 24, and 36 (zero-based layers 0, 12, 23, and 35). Surfaces show sample 0 of eight WikiText-2 test windows, each 2048 tokens, selected with seed 42; no calibration uses these windows. Rotation seed is 0. Actual ranks are 8/32 for R1 and 8/96 for R4. Overview uses maximum-absolute pooling into 128 token bins and 256 channel bins with token 0 separate. Detail shows the predetermined first 128 tokens and 512 channels (four groups), without pooling. All peaks are retained. Linear z/color scales are shared across methods within each block/site/quantity/view but may differ across blocks. View: elevation 25 degrees, azimuth -60 degrees. Rotated channel coordinates denote a new basis. Quantizer groups contain 128 contiguous channels; scale and real offset are rounded to FP16 before QDQ. Full-resolution statistics use all eight windows. Group centering is diagnostic only and preserves signed group ranges; it is not the stored offset or a deployed operation. A separate rotated-only zoom uses a shared scale across the three rotated methods and a different scale from the main matrix. Supplementary inverse/narrow-output probes detect small frozen-factor deviations and are reported as failures; no factor is renormalized. Surface marks are rasterized at 600 dpi with vector text/axes."
                 captions.append(cap)
-    captions.append(r'\paragraph{Group-range ECDF.} Full-resolution signed group ranges over all eight test windows, displayed at 1001 fixed empirical quantiles including the extrema. The x axis is symmetric-log with a linear region below 0.01; the y axis is cumulative probability. No pooling is applied before calculating the empirical distribution. The four block columns use the same sampling and method definitions as the corresponding surface panels. These are descriptive activation distributions, not confidence intervals or evidence of downstream accuracy.')
+    for mode in ('paired_local','end_to_end'):
+        for site in ('down_proj','q_proj'):
+            site_tex=site.replace('_',chr(92)+'_')
+            captions.append(f"\\paragraph{{Group-range ECDF; {mode.replace('_',' ')}; {site_tex}.}} Qwen3-8B-Base, Blocks 1, 13, 24, and 36. Group ranges are computed from signed floating inputs immediately before activation QDQ at the specified projection, using contiguous channel groups of 128. All eight WikiText-2 test windows of 2048 tokens enter the full-resolution distribution; selection seed is 42 and rotation seed is 0. Paired local rows share canonical norm-fused reference inputs, whereas end-to-end rows include upstream E22 W4A4KV4 quantization. The curves display 1001 fixed empirical quantiles as steps, including both extrema. The nonnegative x axis uses a symmetric-log transform with linear threshold 0.01; the y axis is cumulative probability. Methods share each block's x scale. No activation pooling precedes the distribution calculation. These descriptive distributions do not establish downstream accuracy or exact finite-precision orthogonality; see the retained supplementary numerical failures.")
     (root/'captions.tex').write_text('\n\n'.join(captions)+'\n')
     print('REPORT COMPLETE')
 if __name__=='__main__':
