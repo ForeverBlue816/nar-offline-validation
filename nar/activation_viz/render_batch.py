@@ -2,12 +2,6 @@
 import argparse,concurrent.futures,hashlib,json,os,subprocess,sys
 from pathlib import Path
 
-def draw(task):
-    root,select,parts=task
-    from .plot import run
-    run(root,select,parts)
-    return select
-
 def audit(root):
     root=Path(root);qa=Path(__file__).parent/'qa';reports=[]
     for pdf in sorted((root/'figures').rglob('*.pdf')):
@@ -23,30 +17,17 @@ def audit(root):
     print('PDF AUDIT',len(reports),'blocking',len(bad),flush=True)
     if bad:raise RuntimeError('PDF checks require repair; see qa/rendered_audit_index.json')
 
-def run(root,workers=4,parts='all'):
-    import matplotlib,numpy
-    from matplotlib import font_manager
-    from .plot import style
-    style()
-    font=Path(font_manager.findfont(font_manager.FontProperties(family='Times New Roman'),fallback_to_default=False))
-    source=Path(__file__).parent
-    provenance={'command':sys.argv,'slurm_job_id':os.environ.get('SLURM_JOB_ID'),
-        'git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-        'matplotlib':matplotlib.__version__,'numpy':numpy.__version__,'workers':workers,
-        'font':{'file':font.name,'sha256':hashlib.sha256(font.read_bytes()).hexdigest()},
-        'source_hashes':{str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in source.rglob('*.py')},
-        'dpi':600,'formats':['pdf','svg','png'],'surface_marks':'rasterized; all displayed grid vertices retained',
-        'text_and_axes':'vector and editable','face_color':'standard Matplotlib mean-of-face-vertex z, with shared linear normalization'}
-    (Path(root)/'render_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
-    selectors=[f'{mode}/{site}/{quantity}/{view}' for mode in ('paired_local','end_to_end')
-               for site in ('down_proj','q_proj') for quantity in ('raw','residual') for view in ('overview','detail')]
-    with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as pool:
-        for select in pool.map(draw,[(root,s,parts) for s in selectors]):print('FINISHED',select,flush=True)
-    from .plot import style,distributions
-    style();distributions(Path(root),Path(root)/'figures')
-    from .report import run as report_run
-    report_run(root)
-    audit(root)
+def run(root,workers=8,parts='all'):
+    from .full_batch import run as full_run
+    root=Path(root)
+    manifest=json.loads((root/'run_manifest.json').read_text())
+    source=root if (root/'activations').exists() else Path(manifest['raw_activation_root']).parent
+    destination=root.with_name(root.name+'_full') if source==root else root
+    if parts=='matrix':
+        from .plot import run as plot_run
+        plot_run(root,selected='matrices')
+    else:full_run(source,destination,workers)
+
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('root');p.add_argument('--workers',type=int,default=4)
     p.add_argument('--parts',choices=['all','matrix'],default='all');p.add_argument('--audit-only',action='store_true');a=p.parse_args()

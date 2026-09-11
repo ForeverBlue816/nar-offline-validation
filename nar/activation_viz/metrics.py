@@ -1,4 +1,4 @@
-"""Full-resolution diagnostics and immutable display caches; no model reload."""
+"""Full-resolution diagnostics and exact group-range distributions; no model reload."""
 from __future__ import annotations
 import argparse, collections, csv, json
 from pathlib import Path
@@ -41,16 +41,6 @@ def measure(y):
           **distribution(ranges[sl],label+'_range')})
     return row,residual.reshape_as(y),ranges,scale
 
-def pool(x):
-    """Exact full-coverage max-absolute bins with token zero in its own bin."""
-    a=x.abs().cpu().numpy()
-    token_edges=np.concatenate(([0],np.linspace(1,a.shape[0],128,dtype=int)))
-    channel_edges=np.linspace(0,a.shape[1],257,dtype=int)
-    # Both requested widths are divisible by 256; no channels skipped.
-    pooled=np.maximum.reduceat(np.maximum.reduceat(a,token_edges[:-1],axis=0),channel_edges[:-1],axis=1)
-    assert pooled.shape==(128,256) and pooled.max()==a.max()
-    return pooled,token_edges,channel_edges
-
 def csv_write(path,rows):
     path.parent.mkdir(parents=True,exist_ok=True)
     with path.open('w',newline='') as f:
@@ -59,18 +49,12 @@ def csv_write(path,rows):
 def run(root,device='cpu'):
     root=Path(root);torch.set_num_threads(4)
     inventory=json.loads((root/'activation_inventory.json').read_text())
-    rows=[]; groups=collections.defaultdict(list); cache={}; ecdf={}; checks=[]
+    rows=[]; groups=collections.defaultdict(list); exact=collections.defaultdict(dict); checks=[]
     for item in inventory:
         y=torch.load(root/item['file'],map_location=device,weights_only=True)
         row,residual,ranges,scale=measure(y)
         row={**{k:item[k] for k in ('mode','method','sample','layer','site')},**row};rows.append(row)
         key=(item['mode'],item['method'],item['layer'],item['site']);groups[key].append((row,ranges.cpu().numpy(),scale.cpu().numpy()))
-        if item['sample']==0:
-            for quantity,value in [('raw',y),('residual',residual)]:
-                name='__'.join(map(str,(*key,quantity)))
-                overview,t,c=pool(value);cache[name+'__overview']=overview
-                cache[name+'__detail']=value[:128,:512].abs().cpu().numpy()
-                cache[name+'__token_edges']=t;cache[name+'__channel_edges']=c
         del y,residual,ranges,scale
     summaries=[]
     for key,items in groups.items():
@@ -93,12 +77,15 @@ def run(root,device='cpu'):
         for part in ('token0','remaining'):
             values=np.concatenate([(a[1][:1] if part=='token0' else a[1][1:]).reshape(-1) for a in items])
             row.update(distribution(torch.from_numpy(values),part+'_range'))
-        # Empirical distribution rendered using 1001 fixed quantiles including true min/max.
-        # Full data determine each quantile; CSV summaries use the complete distribution.
-        ecdf['__'.join(map(str,key))]=np.quantile(ranges,np.linspace(0,1,1001))
+        values, multiplicity = np.unique(ranges, return_counts=True)
+        mode,method,layer,site=key
+        exact[(mode,site)][f'{method}__{layer}__values']=values
+        exact[(mode,site)][f'{method}__{layer}__counts']=multiplicity.astype(np.uint32)
         summaries.append(row)
     csv_write(root/'metrics_per_sample.csv',rows);csv_write(root/'metrics_summary.csv',summaries)
-    np.savez_compressed(root/'display_cache.npz',**cache);np.savez_compressed(root/'range_ecdf.npz',**ecdf)
+    (root/'exact_ecdf').mkdir(exist_ok=True)
+    for (mode,site),arrays in exact.items():
+        np.savez_compressed(root/'exact_ecdf'/f'{mode}__{site}.npz',**arrays)
     paired=[i for i in inventory if i['mode']=='paired_local']
     identity=collections.defaultdict(set)
     for i in paired:identity[(i['sample'],i['layer'],i['site'])].add(i['canonical_tensor_sha256'])
