@@ -5,6 +5,7 @@
   "sidewalls_close_to_zero": true,
   "near_surface_wins": true,
   "subpixel_peak_vertex_retained": true,
+  "subpixel_peak_connected_to_base": true,
   "matplotlib_projection_matches": true,
   "role": "synthetic geometry checks only; never scientific figure data"
 }

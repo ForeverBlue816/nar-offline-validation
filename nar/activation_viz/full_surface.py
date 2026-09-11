@@ -25,6 +25,21 @@ def put_vertex(v, depth, height):
 
 
 @njit(cache=True)
+def height_column(base, top, depth, heights):
+    """Depth-tested vertical height segment, including subpixel-width peaks."""
+    steps = max(1, int(np.ceil(max(abs(top[0]-base[0]), abs(top[1]-base[1])))))
+    for i in range(steps+1):
+        t = i/steps
+        px = base[0]+t*(top[0]-base[0]); py = base[1]+t*(top[1]-base[1])
+        x = int(np.floor(px)); y = int(np.floor(py))
+        if 0 <= x < depth.shape[1] and 0 <= y < depth.shape[0]:
+            d = base[2]+t*(top[2]-base[2])
+            if d < depth[y, x]:
+                depth[y, x] = d
+                heights[y, x] = (base[3]+t*(top[3]-base[3]))/(base[4]+t*(top[4]-base[4]))
+
+
+@njit(cache=True)
 def triangle(a, b, c, depth, height):
     denominator = (b[1]-c[1])*(a[0]-c[0])+(c[0]-b[0])*(a[1]-c[1])
     if abs(denominator) < 1e-14:
@@ -65,6 +80,8 @@ def rasterize(z, matrix, affine, width, height_px, close_sides=True):
             current[x] = project(x, y, z[y, x], matrix, affine)
             # Preserve measured vertices even for subpixel projected triangles.
             put_vertex(current[x], depth, heights)
+            if close_sides:
+                height_column(project(x, y, 0., matrix, affine), current[x], depth, heights)
         if y:
             for x in range(cols-1):
                 triangle(previous[x], previous[x+1], current[x+1], depth, heights)
@@ -97,4 +114,4 @@ def add_height_surface(ax, z, limit, cmap):
             'surface_triangles': int(2*(z.shape[0]-1)*(z.shape[1]-1)),
             'sidewall_triangles': int(4*(z.shape[0]+z.shape[1]-2)),
             'data_stride': [1, 1], 'pooling': False, 'cropping': False,
-            'base_z': 0, 'pixel_size': [width, height], 'rasterizer': 'depth-tested full grid'}
+            'base_z': 0, 'vertical_height_segments': int(z.size), 'pixel_size': [width, height], 'rasterizer': 'depth-tested full grid'}

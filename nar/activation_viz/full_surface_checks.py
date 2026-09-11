@@ -23,6 +23,10 @@ def run():
     peak = np.zeros((3, 3), dtype=np.float32); peak[1, 1] = 9
     ph, pd = rasterize(peak, matrix, np.array([.02, 20., .02, 20.]), 40, 40)
     assert np.nanmax(ph) == 9
+    matrix[1, 2] = 100.
+    ch, cd = rasterize(peak, matrix, np.array([.02, 20., .02, 20.]), 50, 50)
+    assert np.isfinite(cd[20:39, 20]).all()
+    assert np.nanmax(ch) == 9
     # Nearer geometry wins regardless of primitive submission order.
     d = np.full((20, 20), np.inf); h = np.full_like(d, np.nan)
     a = np.array([1., 1., -2., 2., 1.]); b = a.copy(); b[0] = 15
@@ -42,7 +46,7 @@ def run():
     assert np.allclose(reference, actual, atol=1e-14)
     return {'passed': True, 'constant_height_preserved': True, 'input_unchanged': True,
             'sidewalls_close_to_zero': True, 'near_surface_wins': True,
-            'subpixel_peak_vertex_retained': True, 'matplotlib_projection_matches': True,
+            'subpixel_peak_vertex_retained': True, 'subpixel_peak_connected_to_base': True, 'matplotlib_projection_matches': True,
             'role': 'synthetic geometry checks only; never scientific figure data'}
 
 

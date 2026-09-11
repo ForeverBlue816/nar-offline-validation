@@ -54,6 +54,26 @@ def run(source, destination, workers=8):
     audit(destination)
 
 
+def redraw_surfaces(source, destination, workers=8):
+    destination=Path(destination)
+    selectors=[f'{mode}/{site}/{quantity}' for mode in ('paired_local','end_to_end')
+               for site in ('down_proj','q_proj') for quantity in ('raw','residual')]
+    with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as pool:
+        for selector in pool.map(draw,[(source,destination,s) for s in selectors]):
+            print('HEIGHT COLUMNS COMPLETE',selector,flush=True)
+    p=destination/'render_provenance.json';provenance=json.loads(p.read_text())
+    provenance['height_column_revision']={'git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+        'command':sys.argv,'slurm_job_id':os.environ.get('SLURM_JOB_ID'),
+        'source_hashes':{n:hashlib.sha256((Path(__file__).parent/n).read_bytes()).hexdigest() for n in ('full_surface.py','full_plot.py','full_batch.py')},
+        'scope':'all 304 surface exports; exact ECDFs unchanged',
+        'geometry':'one depth-tested z=0-to-value height segment per measured grid vertex, plus every original grid cell and exterior wall'}
+    p.write_text(json.dumps(provenance,indent=2)+'\n')
+    shutil.copy2(Path('outputs/qwen_activation_viz/qwen3_8b_seed42/qa/full_surface_checks.json'),destination/'qa/full_surface_checks.json')
+    from .render_batch import audit
+    audit(destination)
+
+
 if __name__ == '__main__':
     p=argparse.ArgumentParser(); p.add_argument('source'); p.add_argument('destination')
-    p.add_argument('--workers',type=int,default=8); a=p.parse_args(); run(a.source,a.destination,a.workers)
+    p.add_argument('--workers',type=int,default=8); p.add_argument('--redraw-surfaces-only',action='store_true'); a=p.parse_args()
+    (redraw_surfaces if a.redraw_surfaces_only else run)(a.source,a.destination,a.workers)

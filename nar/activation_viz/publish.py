@@ -30,6 +30,7 @@ def run(source,destination):
                 assert panel['vertices_processed']==rows*cols
                 assert panel['surface_triangles']==2*(rows-1)*(cols-1)
                 assert panel['base_z']==0
+                assert panel['vertical_height_segments']==rows*cols
                 assert panel['source_sha256']==inventory[panel['source']]
         for name in ('display_cache.npz','range_ecdf.npz'):
             (destination/name).unlink(missing_ok=True)
