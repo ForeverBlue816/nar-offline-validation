@@ -96,7 +96,10 @@ def distributions(root,out):
                 for m in methods:
                     ax.plot(ecdf[f'{mode}__{m}__{layer}__{site}'],p,color=METHOD_COLORS[METHODS.index(m)],lw=1,label=LABELS[m])
                 ax.set_title(f'Block {layer+1}');ax.set_xlabel('Signed group range');ax.set_ylim(0,1)
-                ax.set_xscale('symlog',linthresh=.01);ax.grid(axis='y',alpha=.5)
+                ax.set_xscale('symlog',linthresh=.01)
+                ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
+                ax.xaxis.set_minor_locator(ticker.NullLocator())
+                ax.grid(axis='y',alpha=.5)
                 ax.spines[['top','right']].set_visible(False);ax.tick_params(length=2)
             axes[0].set_ylabel('Cumulative probability')
             handles,labels=axes[0].get_legend_handles_labels()

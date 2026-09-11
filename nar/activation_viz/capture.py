@@ -125,7 +125,9 @@ def run(args):
     write(out/'run_manifest.json',manifest)
     reference=forward(model,ids[:1,:128]); norm_fuse(model)
     fused=forward(model,ids[:1,:128])
-    check('norm_affine_fusion_relative_hidden_and_last_logit_error',(fused-reference).norm()/reference.norm(),1e-5)
+    # Final norm fusion changes the hidden basis by design; compare compensated lm_head logits.
+    vocab=model.config.vocab_size
+    check('norm_affine_fusion_relative_logit_error',(fused[-vocab:]-reference[-vocab:]).norm()/reference[-vocab:].norm(),1e-5)
     rotations={m:e19.Qwen3RotationSet(work,e19.MODEL_KEY,m,0,model.config,torch.device('cuda')) for m in METHODS[1:]}
     for m,r in rotations.items():
         files=[]
