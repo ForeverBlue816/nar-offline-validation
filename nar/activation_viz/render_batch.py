@@ -1,5 +1,5 @@
 """Parallel CPU rendering from measured caches, followed by PDF preflight."""
-import argparse,concurrent.futures,json,os,subprocess,sys
+import argparse,concurrent.futures,hashlib,json,os,subprocess,sys
 from pathlib import Path
 
 def draw(task):
@@ -24,6 +24,20 @@ def audit(root):
     if bad:raise RuntimeError('PDF checks require repair; see qa/rendered_audit_index.json')
 
 def run(root,workers=4,parts='all'):
+    import matplotlib,numpy
+    from matplotlib import font_manager
+    from .plot import style
+    style()
+    font=Path(font_manager.findfont(font_manager.FontProperties(family='Times New Roman'),fallback_to_default=False))
+    source=Path(__file__).parent
+    provenance={'command':sys.argv,'slurm_job_id':os.environ.get('SLURM_JOB_ID'),
+        'git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+        'matplotlib':matplotlib.__version__,'numpy':numpy.__version__,'workers':workers,
+        'font':{'file':font.name,'sha256':hashlib.sha256(font.read_bytes()).hexdigest()},
+        'source_hashes':{str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in source.rglob('*.py')},
+        'dpi':600,'formats':['pdf','svg','png'],'surface_marks':'rasterized; all displayed grid vertices retained',
+        'text_and_axes':'vector and editable','face_color':'standard Matplotlib mean-of-face-vertex z, with shared linear normalization'}
+    (Path(root)/'render_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     selectors=[f'{mode}/{site}/{quantity}/{view}' for mode in ('paired_local','end_to_end')
                for site in ('down_proj','q_proj') for quantity in ('raw','residual') for view in ('overview','detail')]
     with concurrent.futures.ProcessPoolExecutor(max_workers=workers) as pool:
