@@ -1,0 +1,4050 @@
+{
+  "device": "NVIDIA A40",
+  "model": "llama31_8b",
+  "per_layer_precision": [
+    {
+      "code_match_fraction": 0.9997292160987854,
+      "layer": 0,
+      "max_abs_over_row_absmax": 0.00046585884410887957,
+      "relative_l2": 0.00020779846818186343
+    },
+    {
+      "code_match_fraction": 0.9997450113296509,
+      "layer": 1,
+      "max_abs_over_row_absmax": 0.00048050921759568155,
+      "relative_l2": 0.00020773686992470175
+    },
+    {
+      "code_match_fraction": 0.9997188448905945,
+      "layer": 2,
+      "max_abs_over_row_absmax": 0.0004808064841199666,
+      "relative_l2": 0.00020774049335159361
+    },
+    {
+      "code_match_fraction": 0.999734103679657,
+      "layer": 3,
+      "max_abs_over_row_absmax": 0.0004788994847331196,
+      "relative_l2": 0.00020758999744430184
+    },
+    {
+      "code_match_fraction": 0.9997302889823914,
+      "layer": 4,
+      "max_abs_over_row_absmax": 0.00045335941831581295,
+      "relative_l2": 0.00020768334798049182
+    },
+    {
+      "code_match_fraction": 0.9997158646583557,
+      "layer": 5,
+      "max_abs_over_row_absmax": 0.0004756489070132375,
+      "relative_l2": 0.00020759274775628
+    },
+    {
+      "code_match_fraction": 0.9997401237487793,
+      "layer": 6,
+      "max_abs_over_row_absmax": 0.0004699538112618029,
+      "relative_l2": 0.00020774660515598953
+    },
+    {
+      "code_match_fraction": 0.9997477531433105,
+      "layer": 7,
+      "max_abs_over_row_absmax": 0.0004772948450408876,
+      "relative_l2": 0.0002076568198390305
+    },
+    {
+      "code_match_fraction": 0.9997417330741882,
+      "layer": 8,
+      "max_abs_over_row_absmax": 0.00048341869842261076,
+      "relative_l2": 0.00020761211635544896
+    },
+    {
+      "code_match_fraction": 0.9997387528419495,
+      "layer": 9,
+      "max_abs_over_row_absmax": 0.0004866138333454728,
+      "relative_l2": 0.00020760847837664187
+    },
+    {
+      "code_match_fraction": 0.9997223615646362,
+      "layer": 10,
+      "max_abs_over_row_absmax": 0.00047593642375431955,
+      "relative_l2": 0.0002077041135635227
+    },
+    {
+      "code_match_fraction": 0.9997180104255676,
+      "layer": 11,
+      "max_abs_over_row_absmax": 0.00047912969603203237,
+      "relative_l2": 0.00020748372480738908
+    },
+    {
+      "code_match_fraction": 0.9996989369392395,
+      "layer": 12,
+      "max_abs_over_row_absmax": 0.0004698992124758661,
+      "relative_l2": 0.0002075832599075511
+    },
+    {
+      "code_match_fraction": 0.9997302889823914,
+      "layer": 13,
+      "max_abs_over_row_absmax": 0.0004794419219251722,
+      "relative_l2": 0.00020771705021616071
+    },
+    {
+      "code_match_fraction": 0.9997460842132568,
+      "layer": 14,
+      "max_abs_over_row_absmax": 0.000476850284030661,
+      "relative_l2": 0.00020745841902680695
+    },
+    {
+      "code_match_fraction": 0.9997289180755615,
+      "layer": 15,
+      "max_abs_over_row_absmax": 0.0004725216422230005,
+      "relative_l2": 0.00020763395878020674
+    },
+    {
+      "code_match_fraction": 0.9997275471687317,
+      "layer": 16,
+      "max_abs_over_row_absmax": 0.00047381522017531097,
+      "relative_l2": 0.00020754762226715684
+    },
+    {
+      "code_match_fraction": 0.9997223615646362,
+      "layer": 17,
+      "max_abs_over_row_absmax": 0.00047035302850417793,
+      "relative_l2": 0.00020774579024873674
+    },
+    {
+      "code_match_fraction": 0.9997363090515137,
+      "layer": 18,
+      "max_abs_over_row_absmax": 0.0004779409500770271,
+      "relative_l2": 0.0002075312950182706
+    },
+    {
+      "code_match_fraction": 0.9997267723083496,
+      "layer": 19,
+      "max_abs_over_row_absmax": 0.00047692787484265864,
+      "relative_l2": 0.000207734847208485
+    },
+    {
+      "code_match_fraction": 0.999744713306427,
+      "layer": 20,
+      "max_abs_over_row_absmax": 0.0004682445141952485,
+      "relative_l2": 0.0002077005192404613
+    },
+    {
+      "code_match_fraction": 0.9997264742851257,
+      "layer": 21,
+      "max_abs_over_row_absmax": 0.0004792078398168087,
+      "relative_l2": 0.00020766213128808886
+    },
+    {
+      "code_match_fraction": 0.9997379183769226,
+      "layer": 22,
+      "max_abs_over_row_absmax": 0.0004824996867682785,
+      "relative_l2": 0.0002077166282106191
+    },
+    {
+      "code_match_fraction": 0.9997305870056152,
+      "layer": 23,
+      "max_abs_over_row_absmax": 0.00047242111759260297,
+      "relative_l2": 0.00020745687652379274
+    },
+    {
+      "code_match_fraction": 0.9997302889823914,
+      "layer": 24,
+      "max_abs_over_row_absmax": 0.00048417181824333966,
+      "relative_l2": 0.0002075857628369704
+    },
+    {
+      "code_match_fraction": 0.9997185468673706,
+      "layer": 25,
+      "max_abs_over_row_absmax": 0.0004732501693069935,
+      "relative_l2": 0.00020764136570505798
+    },
+    {
+      "code_match_fraction": 0.9997286796569824,
+      "layer": 26,
+      "max_abs_over_row_absmax": 0.0004837653541471809,
+      "relative_l2": 0.0002076923701679334
+    },
+    {
+      "code_match_fraction": 0.9997060298919678,
+      "layer": 27,
+      "max_abs_over_row_absmax": 0.00047472058213315904,
+      "relative_l2": 0.0002076383534586057
+    },
+    {
+      "code_match_fraction": 0.9997294545173645,
+      "layer": 28,
+      "max_abs_over_row_absmax": 0.00047819659812375903,
+      "relative_l2": 0.0002077355165965855
+    },
+    {
+      "code_match_fraction": 0.9997417330741882,
+      "layer": 29,
+      "max_abs_over_row_absmax": 0.0004742566088680178,
+      "relative_l2": 0.00020774842414539307
+    },
+    {
+      "code_match_fraction": 0.9997365474700928,
+      "layer": 30,
+      "max_abs_over_row_absmax": 0.0004568423901218921,
+      "relative_l2": 0.000207546676392667
+    },
+    {
+      "code_match_fraction": 0.9997273087501526,
+      "layer": 31,
+      "max_abs_over_row_absmax": 0.0004810843674931675,
+      "relative_l2": 0.0002076313248835504
+    }
+  ],
+  "quarot_hadamard_fp16_precision": {
+    "code_match_fraction": 0.9995575547218323,
+    "max_abs_over_row_absmax": 0.0005525873275473714,
+    "relative_l2": 0.0002931299968622625
+  },
+  "rank": 8,
+  "selection": {
+    "1": {
+      "kernel_a_ms": 0.018842367455363274,
+      "pipeline_ms": 0.025451097637414932,
+      "proj": {
+        "block_d": 128,
+        "block_t": 16,
+        "num_stages": 4,
+        "num_warps": 4,
+        "splits": 4
+      },
+      "tile": {
+        "block_t": 16,
+        "num_stages": 2,
+        "num_warps": 8,
+        "use_tc": true
+      }
+    },
+    "2048": {
+      "kernel_a_ms": 0.09972784668207169,
+      "pipeline_ms": 0.2936812937259674,
+      "proj": {
+        "block_d": 128,
+        "block_t": 64,
+        "num_stages": 3,
+        "num_warps": 8,
+        "splits": 2
+      },
+      "tile": {
+        "block_t": 64,
+        "num_stages": 2,
+        "num_warps": 8,
+        "use_tc": true
+      }
+    },
+    "32768": {
+      "kernel_a_ms": 1.434544563293457,
+      "pipeline_ms": 4.512256145477295,
+      "proj": {
+        "block_d": 64,
+        "block_t": 16,
+        "num_stages": 4,
+        "num_warps": 4,
+        "splits": 1
+      },
+      "tile": {
+        "block_t": 64,
+        "num_stages": 2,
+        "num_warps": 8,
+        "use_tc": true
+      }
+    }
+  },
+  "terms": 2,
+  "token_counts": [
+    1,
+    2048,
+    32768
+  ],
+  "tolerance": {
+    "code_match_fraction_min": 0.999,
+    "relative_l2_max": 0.002
+  },
+  "verification_log": [
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D64_S1_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T16_D64_S2_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D64_S4_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D128_S1_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T16_D128_S2_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D128_S4_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D256_S1_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T16_D256_S2_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_D256_S4_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D64_S1_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T32_D64_S2_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D64_S4_w4_s4",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D128_S1_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T32_D128_S2_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D128_S4_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D256_S1_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T32_D256_S2_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_D256_S4_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_D64_S1_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T64_D64_S2_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_D64_S4_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_D128_S1_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997193813323975,
+      "config": "T64_D128_S2_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776614837814122,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_D128_S4_w8_s3",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020776517339982092,
+      "stage": "kernel_a"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_w4_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_w4_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_w4_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T16_w8_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T32_w8_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T64_w8_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "code_match_fraction": 0.9997183084487915,
+      "config": "T128_w8_s2_tc",
+      "max_abs_over_row_absmax": 0.00047000296763144433,
+      "passes": true,
+      "relative_l2": 0.00020777020836248994,
+      "stage": "kernel_b"
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.0803024023771286,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.08096392452716827,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.0831446722149849,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.07951700687408447,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.08059932291507721,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.08304029703140259,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.09079436212778091,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.04556800052523613,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.04680297151207924,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.049007587134838104,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.04524027556180954,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.04639779031276703,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.04938407242298126,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.056490764021873474,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.029095139354467392,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.029932428151369095,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.032047998160123825,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.028311997652053833,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.02928132191300392,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.031849220395088196,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.04055145010352135,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.06893353164196014,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.06964987516403198,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.07202018052339554,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.06814142316579819,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.0692465752363205,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.07175351679325104,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.07942840456962585,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.040004607290029526,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.04116678982973099,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.04518617317080498,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.040383730083703995,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.04148257523775101,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.04318413883447647,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.051623448729515076,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.02627960406243801,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.02709801495075226,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.029221203178167343,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.025451097637414932,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.026499120518565178,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.029146183282136917,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.0370885394513607,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.09794061630964279,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.09811723232269287,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.10036061704158783,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.0965866670012474,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.09761127829551697,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.10229168832302094,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.10850384831428528,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.0544079951941967,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.055643267929553986,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.05775775760412216,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.05400661751627922,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.055072832852602005,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.05754101276397705,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.06529685109853745,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.03330479934811592,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.034133072942495346,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.036181069910526276,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.03271684795618057,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.03481600433588028,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.03656453266739845,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.04473545774817467,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.09437569230794907,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.09510613977909088,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.09724923223257065,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.09357011318206787,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.09468556195497513,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.09718126803636551,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.10478415340185165,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.053129345178604126,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.05397903174161911,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.0559813529253006,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.052337102591991425,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.05389269068837166,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.05586588382720947,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.06354151666164398,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.03334880247712135,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.03335907310247421,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.035441987216472626,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.031742166727781296,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.03281824663281441,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.03530551865696907,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.04331308603286743,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.09909866005182266,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.0998898446559906,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.10207192599773407,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.09842042624950409,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.09939504414796829,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.1024787575006485,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.10952658951282501,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.05502849444746971,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.05624876171350479,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.06045164912939072,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.055553942918777466,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.05665263533592224,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.05843031778931618,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.06603445112705231,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.033773716539144516,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.03473866730928421,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.036769602447748184,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.03316310793161392,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.03413977101445198,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.03657306730747223,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.04480433836579323,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.09762339293956757,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.09776154160499573,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.1000366136431694,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.09634195268154144,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.09731689095497131,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.10214429348707199,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.10823611915111542,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.05422820523381233,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.05542956292629242,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.05764799937605858,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.05385848134756088,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.05500299111008644,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.057495374232530594,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.06523485481739044,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.03372320160269737,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.03495907410979271,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.03656533733010292,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.032809704542160034,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.03378274664282799,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.0383823998272419,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.0450814887881279,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.13323667645454407,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.1338876634836197,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.13613954186439514,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.13242939114570618,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.13347959518432617,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.13605475425720215,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.14375849068164825,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.07220207154750824,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.07350196689367294,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.07609251141548157,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.07179992645978928,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.07299920916557312,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.07540247589349747,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.08369332551956177,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.0430925115942955,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.04391077905893326,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.046028025448322296,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.041589245200157166,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.04263349249958992,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.04495945945382118,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.05312083289027214,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.10597987473011017,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.1067352294921875,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.10900424420833588,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.10513398051261902,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.10625600069761276,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.10882414877414703,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.11649952828884125,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.058623433113098145,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.05979537218809128,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.06192990392446518,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.0605684258043766,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.05992196872830391,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.06261719763278961,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.07018350064754486,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.03554413840174675,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.0364101342856884,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.03853679820895195,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.03473120182752609,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.035728804767131805,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.038204800337553024,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.04653903469443321,
+      "stage": "timing",
+      "tokens": 1
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3746894896030426,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.32342445850372314,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3168342709541321,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4198399782180786,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3241705000400543,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.30498045682907104,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.34355244040489197,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3757449984550476,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31257691979408264,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3127670884132385,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4213259220123291,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3192870020866394,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3005220890045166,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3521364629268646,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3984304666519165,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3402351140975952,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.33266788721084595,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4486698508262634,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.34346115589141846,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3186677098274231,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.39780697226524353,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.36742979288101196,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31490668654441833,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3084786832332611,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4126191735267639,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3166305422782898,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29746630787849426,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.33862125873565674,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3845843970775604,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31996437907218933,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.31993237137794495,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.430667519569397,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3294500410556793,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3090217709541321,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.361777663230896,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3877764940261841,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3302989900112152,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.32390081882476807,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.438975989818573,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.333718866109848,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.30851998925209045,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.38540804386138916,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.4301455318927765,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3787554204463959,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3703001141548157,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4776601493358612,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3810855448246002,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3614863157272339,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.40350401401519775,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.4350467920303345,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3715558648109436,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3705173134803772,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4826565384864807,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.37860265374183655,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.35986724495887756,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.41250789165496826,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.4209796190261841,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.363750159740448,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3574813902378082,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4729815125465393,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.36766085028648376,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.34179338812828064,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.4185997545719147,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.36947736144065857,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31743955612182617,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3114520311355591,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4141521155834198,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3187650740146637,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.2995401620864868,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3406687378883362,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.37064146995544434,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.30679404735565186,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3086079955101013,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4158271253108978,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3139702081680298,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29531240463256836,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3487684428691864,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.37515783309936523,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31819987297058105,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3099026381969452,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4251076281070709,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.32072970271110535,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29635244607925415,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.37253430485725403,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3671204745769501,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.314892441034317,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3086635172367096,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.41244447231292725,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.31680136919021606,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.2971087396144867,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.34112367033958435,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3726118206977844,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.30882132053375244,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.31007152795791626,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.41721397638320923,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3160121440887451,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.2972269654273987,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3499811589717865,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.39339300990104675,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.33643269538879395,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.32830899953842163,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.443204790353775,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3393261134624481,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.31481510400772095,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.39028462767601013,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.36665695905685425,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.314110666513443,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.30631956458091736,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4104771912097931,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3150075674057007,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29607176780700684,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.33774328231811523,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.38351115584373474,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3201505243778229,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3189404010772705,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.43060141801834106,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.32751908898353577,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3082088828086853,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3626340329647064,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3963180184364319,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3394620418548584,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3309412896633148,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.44632741808891296,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3412145972251892,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.3164462447166443,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.39446550607681274,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.39963623881340027,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3476804792881012,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.34006956219673157,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.444536030292511,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.348836213350296,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.32974037528038025,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.37272119522094727,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3731253445148468,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3092484474182129,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3128177523612976,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4188821315765381,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3172822892665863,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29876774549484253,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3495213985443115,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.3755447268486023,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.31839099526405334,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.30905064940452576,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.42472776770591736,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3211596608161926,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.29604822397232056,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3720402717590332,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.36851584911346436,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3192991614341736,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3107973337173462,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4149150550365448,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3191851079463959,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.2990115284919739,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.33857831358909607,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.36923056840896606,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.30523598194122314,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.30623120069503784,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4145219326019287,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.31273242831230164,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.2936812937259674,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.34304988384246826,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 0.37561893463134766,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 0.3186352550983429,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 0.3111426532268524,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 0.4274214506149292,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 0.3219974935054779,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 0.297554612159729,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 0.3730353116989136,
+      "stage": "timing",
+      "tokens": 2048
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.702911853790283,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.853759765625,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.558847904205322,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.528292655944824,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.921343803405762,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.512256145477295,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.906667232513428,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.937664031982422,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.8825459480285645,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.70344877243042,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.586660861968994,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.971179008483887,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.709944725036621,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.874467849731445,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.096749782562256,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.185194492340088,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.067434310913086,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.756059169769287,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.166762351989746,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.0850701332092285,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.161870002746582,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.750015735626221,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.91303825378418,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.613529682159424,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.617819786071777,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.010887622833252,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.558234214782715,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.953770637512207,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.920639514923096,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.899839878082275,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.722574234008789,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.681014537811279,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.0081562995910645,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.71256160736084,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.918385982513428,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.11181640625,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.199758529663086,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.053554058074951,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.820693492889404,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.216896057128906,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.076765060424805,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D128_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.182847499847412,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.376004219055176,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.598848342895508,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.2459516525268555,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 7.263743877410889,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.691775798797607,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.200639724731445,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.5525078773498535,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.572762966156006,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.581187725067139,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.362432479858398,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 7.323812961578369,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.70803165435791,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.36243200302124,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.538304328918457,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.746696949005127,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.886335849761963,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.703807830810547,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 7.490218639373779,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.923456192016602,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.7506561279296875,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T16_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.820923328399658,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.687804222106934,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.879587650299072,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.602162837982178,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.5405802726745605,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.877994537353516,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.56099796295166,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S1_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.956160068511963,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.856512069702148,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.872533798217773,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.711309432983398,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.569838523864746,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.92475700378418,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.711878776550293,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S2_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.872305870056152,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.024922847747803,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.153109073638916,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.057535648345947,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.667117595672607,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.166414260864258,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.07335090637207,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D64_S4_w4_s4",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.146623611450195,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.7493720054626465,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.91121768951416,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.590694427490234,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.539703369140625,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.947619438171387,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.544613838195801,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.979598045349121,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.894911766052246,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.887324333190918,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.699250221252441,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.5818328857421875,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.967992782592773,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.704028606414795,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.881521701812744,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.045403480529785,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.163007736206055,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.054805278778076,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.728850841522217,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.1867876052856445,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.073578834533691,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.1566081047058105,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.700864315032959,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.894606113433838,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.604620456695557,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.551844596862793,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.950584888458252,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.561612606048584,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.008725643157959,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.8653435707092285,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.888689994812012,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.7099480628967285,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.604653358459473,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.967879295349121,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.713472366333008,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.905290603637695,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 6.0377960205078125,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.162894248962402,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.062997817993164,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.728557109832764,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.19634485244751,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.079832553863525,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T32_D256_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.167104244232178,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.592447757720947,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.812572479248047,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.551680088043213,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.44915246963501,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.87116813659668,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.535808086395264,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.917930603027344,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.861767768859863,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.877084732055664,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.731562614440918,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.545115947723389,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.961507797241211,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.753407955169678,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.898137092590332,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.979866981506348,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.149582862854004,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.070734024047852,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.676479816436768,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.184171199798584,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.085411071777344,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D64_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.158912181854248,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.608575820922852,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.828725337982178,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.5712385177612305,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.456320285797119,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.861268997192383,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.55720329284668,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S1_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.930788040161133,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.760767936706543,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 4.822584629058838,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 4.699363708496094,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.4861626625061035,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 4.920320510864258,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 4.70436954498291,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S2_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 4.862300395965576,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w4_s2_tc",
+      "ms": 5.9542670249938965,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w4_s2_tc",
+      "ms": 5.119203567504883,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w4_s2_tc",
+      "ms": 5.0569634437561035,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T16_w8_s2_tc",
+      "ms": 6.607433319091797,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T32_w8_s2_tc",
+      "ms": 5.163349151611328,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T64_w8_s2_tc",
+      "ms": 5.0707268714904785,
+      "stage": "timing",
+      "tokens": 32768
+    },
+    {
+      "kernel_a": "T64_D128_S4_w8_s3",
+      "kernel_b": "T128_w8_s2_tc",
+      "ms": 5.135246276855469,
+      "stage": "timing",
+      "tokens": 32768
+    }
+  ],
+  "worst_layer_precision": {
+    "code_match_fraction": 0.9996989369392395,
+    "max_abs_over_row_absmax": 0.0004866138333454728,
+    "relative_l2": 0.00020779846818186343
+  }
+}
