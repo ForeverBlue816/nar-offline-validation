@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import pymupdf
 from matplotlib import colormaps, colors, ticker
 from matplotlib.cm import ScalarMappable
 from matplotlib.lines import Line2D
@@ -30,14 +31,18 @@ CONFIG = {
     'residual': 'abs((Y - per-token contiguous-g128 signed mean)[0:128, 0:512])',
     'residual_centering_domain': 'complete signed Y, before crop and abs',
     'camera': {'projection': 'ortho', 'elev': 28, 'azim': -55,
-               'box_aspect': [2.0, 1.2, 1.0]},
+               'box_aspect': [2.0, 1.2, 1.0], 'zoom': 1.0},
     'cmap': 'viridis', 'norm': 'PowerNorm', 'gamma': 0.5,
     'vmin': 0, 'vmax_rule': '1.03 * maximum across displayed methods per column',
     'all_zero_policy': 'record all_zero=true and use display-only vmax=1',
     'linear_control': 'Normalize with identical data, camera and z limits',
     'shade': False, 'surface_rcount': 128, 'surface_ccount': 512,
     'surface_dpi': 600, 'formats': ['pdf', 'png', 'svg'],
-    'text_axes': 'vector', 'font_size_pt': 7,
+    'text_axes': 'vector', 'matrix_font_size_pt': 11.75, 'panel_font_size_pt': 8.5,
+    'intended_matrix_width_inches': 7.2, 'matrix_text_pt_at_intended_width': 11.75*7.2/12.05,
+    'channel_ticks': [0, 256, 511], 'token_ticks': [0, 64, 127],
+    'group_boundary_guides': 'floor dashed lines plus short front-edge ticks, annotation only',
+    'axis_names': 'shared front/depth labels below each column; z values on shared column colorbar', 'token_tick_note': 'three integer ticks prevent crowding at publication width',
     'reference_source_mode': 'paired_local',
     'reference_precision': 'BF16 checkpoint loaded and norm-fused in FP32',
     'reference_label': 'Unrotated reference (norm-fused FP32)',
@@ -151,27 +156,33 @@ def load_local(source, destination, mode, method, layer, site, quantity):
     return z, record
 
 
-def setup_axes(ax, limit, labels=True):
+def setup_axes(ax, limit, labels=True, font_size=11.5):
     ax.set_proj_type('ortho')
     ax.view_init(elev=28, azim=-55)
-    ax.set_box_aspect((2.0, 1.2, 1.0))
+    ax.set_box_aspect((2.0, 1.2, 1.0), zoom=1.0)
     ax.set_xlim(0, 511); ax.set_ylim(0, 127); ax.set_zlim(0, limit)
     ax.set_xmargin(0); ax.set_ymargin(0); ax.set_zmargin(0)
-    ax.set_xticks([0, 128, 256, 384, 511])
-    ax.set_yticks([0, 32, 64, 96, 127])
-    ax.set_zticks([0, limit / 2, limit])
-    ax.zaxis.set_major_formatter(ticker.FuncFormatter(number))
-    ax.tick_params(axis='both', labelsize=7, pad=0)
-    ax.tick_params(axis='z', labelsize=7, pad=1)
+    ax.set_xticks(CONFIG['channel_ticks'])
+    ax.set_yticks(CONFIG['token_ticks'])
+    ax.set_zticks([0, limit/2, limit]); ax.set_zticklabels([])
+    ax.zaxis.set_major_formatter(ticker.NullFormatter())
+    ax.tick_params(axis='both', labelsize=font_size, pad=1)
+    ax.tick_params(axis='y', labelsize=font_size, pad=6)
+    ax.tick_params(axis='z', labelsize=font_size, pad=5)
+    ax.tick_params(axis='x', labelrotation=0)
+    for label in ax.get_xticklabels():
+        label.set_rotation_mode('anchor'); label.set_horizontalalignment('right'); label.set_verticalalignment('top')
+    for label in ax.get_zticklabels(): label.set_horizontalalignment('left')
     if labels:
-        ax.set_xlabel('Channel index', fontsize=7, labelpad=9)
-        ax.set_ylabel('Token index', fontsize=7, labelpad=9)
+        ax.set_xlabel('Channel index', fontsize=font_size, labelpad=12)
+        ax.set_ylabel('Token index', fontsize=font_size, labelpad=12)
     for axis in (ax.xaxis, ax.yaxis, ax.zaxis):
         axis.set_pane_color((.985, .985, .985, 1))
         axis.line.set_color('#a0a0a0'); axis.line.set_linewidth(.4)
         axis._axinfo['grid']['linewidth'] = .25
         axis._axinfo['grid']['color'] = (.86, .86, .86, 1)
     for boundary in CONFIG['group_boundaries']:
+        ax.plot([boundary, boundary], [-6, 0], [0, 0], color='.45', linewidth=.6, clip_on=False)
         ax.plot([boundary, boundary], [0, 127], [0, 0], color='.45',
                 linewidth=.45, linestyle=(0, (3, 3)))
 
@@ -202,13 +213,16 @@ def export(fig, path, records, scales, colorbars):
                                        strict=True, exclude_axes=colorbars)
     fig.savefig(str(path) + '.pdf', dpi=600)
     fig.savefig(str(path) + '.svg', dpi=600)
-    fig.savefig(str(path) + '.png', dpi=600)
+    # The PNG is the actual PDF rendered at 600 dpi, so both formats agree.
+    with pymupdf.open(str(path) + '.pdf') as document:
+        document[0].get_pixmap(dpi=600, alpha=False).save(str(path) + '.png')
     write_json(path.with_suffix('.geometry.json'), {
         'config': CONFIG, 'panels': records, 'scales': scales,
         'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'plot_source_sha256': digest(__file__),
         'output_paths': [str(path.with_suffix('.' + ext)) for ext in ('pdf', 'png', 'svg')],
         'figure_inches': list(fig.get_size_inches()),
+        'intended_insertion_width_inches': 7.2 if len(scales['z_limits_by_layer']) == 4 else 3.5,
         'color_semantics': 'Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged',
     })
     write_json(path.with_suffix('.scales.json'), scales)
@@ -224,20 +238,21 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                          'xtick.labelsize': 7, 'ytick.labelsize': 7})
     candidates = list(scale_methods or methods)
     rows, cols = len(methods), len(layers)
-    width, height = 1.45 + 2.6 * cols + (1.6 if debug else 0), .95 + 2.35 * rows
+    font_size = 11.75 if cols == 4 else 8.5
+    width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows
     fig = plt.figure(figsize=(width, height), dpi=600)
-    grid = fig.add_gridspec(rows, cols, left=1.15 / width, right=1 - (.5 + (1.6 if debug else 0)) / width,
-                           bottom=.85 / height, top=1 - .6 / height,
+    grid = fig.add_gridspec(rows, cols, left=1.15 / width, right=1 - (.7 + (1.6 if debug else 0)) / width,
+                           bottom=1.8 / height, top=1 - .72 / height,
                            hspace=.14, wspace=.16)
     title = 'Pre-quantization activation magnitude' if quantity == 'raw' else 'Group-centered residual magnitude'
-    fig.text(.5, 1 - .1 / height, title, fontsize=9, ha='center', va='top')
+    fig.text(.5, 1 - .1 / height, title, fontsize=font_size+2, ha='center', va='top')
     mapping = 'Linear heights; linear color mapping.' if linear else 'Linear heights; square-root color mapping.'
     zoom = name == 'rotated_only_zoom'
     fig.text(.5, .06 / height, 'Sample 0 · tokens 0–127 · channels 0–511 · g128.\n' + mapping,
-             ha='center', va='bottom', fontsize=7)
+             ha='center', va='bottom', fontsize=font_size)
     if zoom:
-        fig.text(.5, 1 - .28 / height, 'Rotated-only zoom: shared scale differs from the four-row matrix.',
-                 ha='center', va='top', fontsize=7)
+        fig.text(.5, 1 - .36 / height, 'Rotated-only zoom: shared scale differs from the four-row matrix.',
+                 ha='center', va='top', fontsize=font_size)
     records, axes, colorbars, limits, zero_flags = [], {}, [], {}, {}
     for col, layer in enumerate(layers):
         data = {m: load_local(str(source), str(destination), mode, m, layer, site, quantity) for m in candidates}
@@ -249,15 +264,15 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
             z, original = data[method] if method in data else load_local(str(source), str(destination), mode, method, layer, site, quantity)
             ax = fig.add_subplot(grid[row, col], projection='3d')
             axes[row, col] = ax
-            setup_axes(ax, limit)
+            setup_axes(ax, limit, labels=False, font_size=font_size)
             surface(ax, z, norm)
             if row == 0:
-                ax.set_title(f'Block {layer + 1}', fontsize=8, pad=5)
+                ax.set_title(f'Block {layer + 1}', fontsize=font_size+1, pad=5)
             if col == 0:
-                label = 'Unrotated reference\n(norm-fused FP32)' if method == 'unrotated' else LABELS[method].replace(' (', '\n(')
+                label = 'Unrotated\nreference\n(norm-fused\nFP32)' if method == 'unrotated' else LABELS[method].replace(' (', '\n(')
                 position = ax.get_position()
                 fig.text(.06 / width, position.y0 + position.height / 2, label,
-                         ha='left', va='center', fontsize=8)
+                         ha='left', va='center', fontsize=font_size)
             points = point_records(z)
             if debug:
                 marker_colors = ['#000000', '#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#663399']
@@ -281,12 +296,14 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                 'debug_points': points, 'camera': CONFIG['camera']})
         # One horizontal, data-unit colorbar per column, outside the surface grid.
         bottom_ax = axes[rows - 1, col].get_position()
-        cax = fig.add_axes([bottom_ax.x0 + .1 * bottom_ax.width, .51 / height,
+        fig.text(bottom_ax.x0 + bottom_ax.width/2, 1.15/height, 'Channel index (front)\nToken index (depth)',
+                 fontsize=font_size, ha='center', va='center')
+        cax = fig.add_axes([bottom_ax.x0 + .1 * bottom_ax.width, .8 / height,
                             .80 * bottom_ax.width, .07 / height])
         cb = fig.colorbar(ScalarMappable(norm=norm, cmap=colormaps['viridis']), cax=cax,
-                          orientation='horizontal', ticks=[0, limit / 2, limit])
+                          orientation='horizontal', ticks=[0, limit])
         cb.ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
-        cb.ax.tick_params(labelsize=7, pad=1, length=2)
+        cb.ax.tick_params(labelsize=font_size, pad=1, length=2)
         cb.outline.set_linewidth(.3)
         colorbars.append(cax)
     fig.canvas.draw()

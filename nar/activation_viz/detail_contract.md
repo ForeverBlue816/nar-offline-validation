@@ -24,10 +24,10 @@ the maximum of its displayed methods. All-zero columns explicitly use a
 display-only upper bound of 1. The linear-color control uses identical heights,
 camera and limits. Rotated-only zoom explicitly uses its own shared limits.
 
-PDF/SVG preserve vector text/axes and 600-dpi rasterized surfaces. A 7-point
-target applies at the supplied physical dimensions; do not shrink a dense
-four-column matrix below readable text size. Single-block panels support
-narrower placement. Every export has geometry, hashes, alignment and PDF audits.
+PDF/SVG preserve vector text/axes and 600-dpi rasterized surfaces. Four-column matrices use 11.75 pt native text at 12.05 inches and are intended
+for 7.2-inch (183 mm) paper placement, retaining 7.02 pt text. Single-block
+panels use 8.5 pt native text and support 3.5-inch placement. Three token ticks
+(0, 64, 127) avoid crowding; all 128 token coordinates remain unchanged. Every export has geometry, hashes, alignment and PDF audits.
 Debug exports mark exact corners and real maxima; PDF pages are rasterized
 again for visual inspection. Uncertainty is not drawn because each surface is
 one fixed observed sample, not an estimate across independent models.

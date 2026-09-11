@@ -68,7 +68,8 @@ def run(source, destination):
         'required_checks_passed': report['required_checks_passed'],
         'publication_bytes': sum(r['bytes'] for r in records),
         'views': {'detail': 'fixed 128 x 512 native upper surfaces', 'overview': 'independent full-domain context'},
-        'revision': 'local-upper-surface-v1'}
+        'revision': 'local-upper-surface-v1',
+        'rendering_git_commits': json.loads((source/'detail_render_config.json').read_text()).get('rendering_git_commits', [])}
     (destination/'publication_manifest.json').write_text(json.dumps(result, indent=2)+'\n')
     print('PUBLICATION INVENTORY', len(records), 'files;', count, 'figure sets')
 

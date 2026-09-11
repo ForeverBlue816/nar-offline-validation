@@ -31,9 +31,9 @@ methods. Linear heights are unchanged. Linear-color controls and rotated-only
 zooms are separate exports. Raw similarities remain similarities.
 
 Plotting uses the existing Python 3.11/Torch/Matplotlib environment and DejaVu
-Sans 7 pt or larger text at native export size. PDF/SVG text and axes are vector;
-surfaces are rasterized at 600 dpi. Use native landscape matrix dimensions or
-individual panel exports instead of reducing text below readable size. Panel
+Sans text: 11.75 pt for four-column matrices, 8.5 pt for individual panels. PDF/SVG text and axes are vector;
+surfaces are rasterized at 600 dpi. The 12.05-inch matrix export is intended for 7.2-inch (183 mm) paper
+placement, retaining 7.02 pt text; individual panels support 3.5-inch placement. Panel
 alignment, rendered PDF glyphs, collisions, exact corner/peak coordinates and
 source hashes are audited. Debug arrays may be synthetic only in independent
 unit tests, never in scientific exports. Preserve supplementary validation
