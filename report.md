@@ -1435,10 +1435,10 @@ The Qwen3 technical report's 16-bit number is listed where it reports the benchm
 |---|---:|---:|---:|---:|
 | Qwen3 report, 16-bit | 59.59 | 75.44 | 87.79 | 89.84 |
 | bf16 | 60.96 | 72.78 | 85.14 | 87.11 |
-| Hadamard, W4A4KV4 | — | 58.07 | — | 81.73 |
-| NAR k=8 | — | 62.47 | — | 84.31 |
-| NAR k=max | — | 61.71 | — | 83.55 |
-| NAR best − Hadamard | — | +4.40 | — | +2.58 |
+| Hadamard, W4A4KV4 | 28.96 | 58.07 | 74.83 | 81.73 |
+| NAR k=8 | 31.54 | 62.47 | — | 84.31 |
+| NAR k=max | 28.66 | 61.71 | — | 83.55 |
+| NAR best − Hadamard | +2.58 | +4.40 | — | +2.58 |
 
 | ARC-Easy 0-shot (acc_norm) | 0.6B | 1.7B | 4B | 8B |
 |---|---:|---:|---:|---:|
@@ -1528,6 +1528,64 @@ The six-task suite adds LAMBADA (accuracy 75.24 bf16, 74.15 Hadamard, 74.64 k=8,
 **Weight protocol.** Per-group asymmetric weights beat per-channel weights for Hadamard on all four benchmarks. For NAR k=max they win on both perplexities and the six-task mean, and trail by 0.08 on the eight-task mean. Under per-channel weights NAR k=max still leads Hadamard on all four.
 
 Single seed, one checkpoint. Summary: `results/mistral_7b_v03/e25_summary.csv`; completion marker `E25_DONE.json`.
+
+# E26 — Qwen3-30B-A3B-Base (interim)
+
+*Interim section, updated 2026-09-11. The Hadamard row and the quantized eight-task rows are still being evaluated; cells marked "running" are filled in when they land.*
+
+E26 takes the E22 pipeline to a mixture-of-experts model: `Qwen/Qwen3-30B-A3B-Base`. The attention path is E22's unchanged. Every expert is quantized, the router is not, and four things are specific to experts: the router keeps its decisions, each expert gets its own R4, cold experts are calibrated with shrinkage, and GPTQ runs per expert. Weights use GPTQ `g128_asym` over attention and all 128 experts per layer (4.156 bits), activations the asymmetric group-128 quantizer (4.25 bits), and the KV cache E14's KIVI. Containers are fp32, and the rotation-only control uses the exact transpose. Fused-kernel timing is skipped: a routed-expert GEMM with a per-expert rotation needs its own kernel, and that is outside this study.
+
+## Model and adaptations
+
+*Architecture.* `Qwen3MoeForCausalLM`, 48 layers, hidden 2048, GQA with 32 query and 4 KV heads, head dimension 128, `q_norm`/`k_norm`. Each layer has 128 experts with intermediate width 768, top-8 routing with renormalised weights, and no shared expert. The router is one bias-free 128 × 2048 linear gate on the post-norm hidden state. Embedding and head are untied and no layer has a bias. The audit reports `problems: []`.
+
+*Router-preserving fold.* R1 is folded into the router's input columns, so its logits are unchanged in exact arithmetic. The router stays in bf16 and reads the unquantized post-norm activation. The expert input is quantized once per token in the R1 basis and shared by the eight experts that token is routed to.
+
+*Per-expert R4.* Each expert's 768-wide down-projection input has 6 slots of 128, and each expert gets its own R4 at k = 6. The two NAR rows therefore share their expert rotations and differ only in R1 (8 or 16 of 16 slots).
+
+*Cold-expert calibration.* Over 128 calibration sequences of 2048 tokens, the routed-token count per expert has a median of 8,119, a 10th percentile of 34 and a minimum of 0. 1,396 of the 6,144 experts (22.7%) see fewer than 512 tokens. Each expert's covariance is shrunk toward its layer's pooled covariance as Σ_e ← (n_e Σ_e + n_0 Σ_pool)/(n_e + n_0) with n_0 = 2048, so the pooled term carries more than half the weight for the 2,002 experts below 2,048 tokens.
+
+*Per-expert GPTQ.* Each expert has its own Hessian. Experts with fewer than 512 routed tokens during GPTQ fall back to the layer's pooled Hessian, rotated into the expert's basis; that is 1,346 of 6,144 (21.9%).
+
+## Gates
+
+*Rotation-only control.* With the fold applied and no quantizer, perplexity over 64 chunks moves by 6.0e-5 (Hadamard), 5.7e-5 (k=8) and 7.9e-5 (k=max). The GPTQ runs' fold probe gives a relative logit error of 9e-7.
+
+*Routing agreement.* Routing cannot be reproduced token for token in fp32, so the audit is judged against a null probe. The null probe applies each R4 and its transpose at the expert input and leaves every weight alone. That is an exact identity mathematically, and it still moves the top-8 set for 2,040 of 6,291,456 token-layer decisions.
+
+| rotation-only | top-8 flips | vs. null | worst-layer agreement | ΔPPL |
+|---|---:|---:|---:|---:|
+| null probe (identity) | 2,040 | 1.00× | 99.89% | 3.4e-6 |
+| NAR k=8 | 2,337 | 1.15× | 99.88% | 5.7e-5 |
+| NAR k=max | 2,567 | 1.26× | 99.87% | 7.9e-5 |
+| Hadamard | 3,632 | 1.78× | 99.83% | 6.0e-5 |
+
+Layers 0–2 agree token for token under every rotation. Agreement then decays with depth, and the worst layers are the deepest, where the median margin between the 8th and 9th router logit is 0.070. A 99.9% per-layer threshold sits below the fp32 floor itself, so it is reported rather than applied. The gate is aggregate disagreement at most 2× the null probe's, and all three rotations pass.
+
+## Per-expert rotations
+
+The fraction of an expert's down-input energy that its R4 concentrates at k = 6, f, has a median of 0.096 (10th percentile 0.025, 90th 0.328). It is highest in layers 0–3 (median 0.174) and lower from layer 4 on (0.081 in layers 4–23, 0.101 in 24–47). On held-out routed rows for 5,342 experts, NAR's per-group range is below Hadamard's for every expert. The measured ratio has a median of 0.885, slightly under the √(1−f) law's 0.944. The ratio of measured to predicted has a median of 0.948 (10th–90th percentile 0.844–0.996), and measured and predicted correlate at 0.66. These are the points for Figure 3(c); `results/qwen3_30b_a3b_base/e26_expert_range_law.csv` has one row per expert.
+
+## Cold-expert ablation
+
+| k=max, cold-expert calibration | WikiText-2 |
+|---|---:|
+| shrinkage (main) | 6.424 |
+| per-expert covariance only (2,002 cold experts fall back to Hadamard R4) | 6.433 |
+| pooled covariance only (all 6,144 experts) | 6.447 |
+
+Shrinkage is best, and the three variants differ by at most 0.023. How cold experts are calibrated barely moves perplexity.
+
+*Weight error against routing.* In the k=max checkpoint, GPTQ's relative weight error per expert has a median of 0.116 (gate/up) and 0.106 (down). It does not depend on how many tokens reach the expert: the Spearman correlation with routed tokens is 0.008 and 0.159. The per-expert audit is complete for k=max only; the Hadamard and k=8 checkpoints were resumed after interruptions and their audits cover only the layers of the final run.
+
+## Results
+
+| Qwen3-30B-A3B-Base, W4A4KV4 | WikiText-2 | C4 | eight-task |
+|---|---:|---:|---:|
+| bf16 | 6.112 | 10.696 | 68.71 |
+| Hadamard | running | running | running |
+| NAR k=8 | 6.447 | 11.189 | running |
+| NAR k=max | 6.424 | 11.176 | running |
 
 # Infrastructure defects found and fixed during E19
 
