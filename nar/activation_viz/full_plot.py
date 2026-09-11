@@ -79,11 +79,16 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
     fig.canvas.draw()
     if ncol == 1:
         renderer = fig.canvas.get_renderer()
-        for ax, _, _, _ in panels:
-            labels = ax.get_zticklabels()
-            if any(label.get_window_extent(renderer).x1 > fig.bbox.x1 for label in labels):
-                for label in labels: label.set_horizontalalignment('center')
-        fig.canvas.draw()
+        rightmost = max(label.get_window_extent(renderer).x1
+                        for ax, _, _, _ in panels for label in ax.get_zticklabels())
+        if rightmost > fig.bbox.x1:
+            old_width = fig.get_figwidth()
+            new_width = old_width+(rightmost-fig.bbox.x1)/fig.dpi+6/72
+            fig.set_size_inches(new_width, height)
+            # Add canvas space without shrinking or shifting the plot area.
+            grid.update(left=grid.left*old_width/new_width,
+                        right=grid.right*old_width/new_width)
+            fig.canvas.draw()
     records = []
     for ax, method, layer, limit in panels:
         z, source = load(root, mode, method, layer, site, quantity)

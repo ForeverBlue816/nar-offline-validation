@@ -33,7 +33,7 @@ def run(source,destination):
         r.update(font_exit=text.returncode,collision_exit=collision.returncode,font_stderr=text.stderr,collision_summary=collision.stdout,collision_stderr=collision.stderr);updated.append(r['pdf'])
     (destination/'qa/rendered_audit_index.json').write_text(json.dumps(index,indent=2)+'\n')
     provenance=json.loads((destination/'render_provenance.json').read_text())
-    provenance['clipped_label_repair']={'git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'files':updated,'command':sys.argv,'plot_source_sha256':hashlib.sha256((Path(__file__).parent/'full_plot.py').read_bytes()).hexdigest(),'change':'center single-panel z tick labels only when measured PDF-canvas bounds would overflow; data and all other plots unchanged'}
+    provenance['clipped_label_repair']={'git_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'files':updated,'command':sys.argv,'plot_source_sha256':hashlib.sha256((Path(__file__).parent/'full_plot.py').read_bytes()).hexdigest(),'change':'expand only the single-panel right canvas margin when measured labels would overflow, preserving the physical plot area, label anchoring, data and other plots'}
     (destination/'render_provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
     failures=[r for r in index if r['font_exit'] or r['collision_exit']]
     print('REPAIRED',len(updated),'PDFs; blocking',len(failures),flush=True)

@@ -112,8 +112,8 @@ def run(args):
           'weight_protocol':'g128_asym GPTQ','KV':'E14 KIVI: K token-axis g32; V channel-axis g128; residual length 32',
           'compute_dtype':'float32','source_sha256':digest(Path(base.__file__))},
         'rotation_factors':{},'checkpoints':{},'raw_activation_root':str(out/'activations'),
-        'display':{'overview_token_bins':128,'overview_channel_bins':256,'token0_separate':True,
-          'detail_token_slice':[0,128],'detail_channel_slice':[0,512],'pooling':'max absolute; residual before pooling',
+        'display':{'tokens':2048,'down_proj_channels':12288,'q_proj_channels':4096,
+          'data_stride':[1,1],'pooling':False,'cropping':False,'sidewall_base_z':0,
           'elev':25,'azim':-60},'source_files':{}}
     for module in (e14,e19,base,sys.modules[__name__]): manifest['source_files'][Path(module.__file__).name]=digest(module.__file__)
     manifest['qwen_forward_source']=inspect.getsource(type(model.model.layers[0]).forward)
