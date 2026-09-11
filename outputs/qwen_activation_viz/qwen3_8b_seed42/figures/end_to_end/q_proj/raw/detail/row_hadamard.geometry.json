@@ -1,119 +1,689 @@
 {
+  "config": {
+    "revision": "local-upper-surface-v1",
+    "sample": 0,
+    "tokens": [
+      0,
+      128
+    ],
+    "channels": [
+      0,
+      512
+    ],
+    "group_size": 128,
+    "group_boundaries": [
+      127.5,
+      255.5,
+      383.5
+    ],
+    "shape": [
+      128,
+      512
+    ],
+    "data_stride": [
+      1,
+      1
+    ],
+    "pooling": false,
+    "draw_surface": true,
+    "draw_height_columns": false,
+    "draw_sidewalls": false,
+    "zero_padding": false,
+    "height_transform": "absolute value only; linear z axis",
+    "raw": "abs(signed_Y[0:128, 0:512])",
+    "residual": "abs((Y - per-token contiguous-g128 signed mean)[0:128, 0:512])",
+    "residual_centering_domain": "complete signed Y, before crop and abs",
+    "camera": {
+      "projection": "ortho",
+      "elev": 28,
+      "azim": -55,
+      "box_aspect": [
+        2.0,
+        1.2,
+        1.0
+      ],
+      "zoom": 1.0
+    },
+    "cmap": "viridis",
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "vmin": 0,
+    "vmax_rule": "1.03 * maximum across displayed methods per column",
+    "all_zero_policy": "record all_zero=true and use display-only vmax=1",
+    "linear_control": "Normalize with identical data, camera and z limits",
+    "shade": false,
+    "surface_rcount": 128,
+    "surface_ccount": 512,
+    "surface_dpi": 600,
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "text_axes": "vector",
+    "matrix_font_size_pt": 11.75,
+    "panel_font_size_pt": 8.5,
+    "intended_matrix_width_inches": 7.2,
+    "matrix_text_pt_at_intended_width": 7.020746887966805,
+    "channel_ticks": [
+      0,
+      256,
+      511
+    ],
+    "token_ticks": [
+      0,
+      64,
+      127
+    ],
+    "group_boundary_guides": "floor dashed lines plus short front-edge ticks, annotation only",
+    "axis_names": "shared front/depth labels below each column; z values on shared column colorbar",
+    "token_tick_note": "three integer ticks prevent crowding at publication width",
+    "reference_source_mode": "paired_local",
+    "reference_precision": "BF16 checkpoint loaded and norm-fused in FP32",
+    "reference_label": "Unrotated reference (norm-fused FP32)",
+    "end_to_end_rows": "reference is unquantized; other rows are existing E22 W4A4KV4 QDQ forwards",
+    "statistical_unit": "fixed sample 0; descriptive surface, no uncertainty estimate"
+  },
   "panels": [
     {
-      "shape": [
-        2048,
-        4096
-      ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
-      "data_stride": [
-        1,
-        1
-      ],
-      "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
-      ],
-      "rasterizer": "depth-tested full grid",
-      "method": "hadamard",
-      "layer": 0,
       "source": "activations/end_to_end/hadamard/s00_l00_q_proj.pt",
       "source_sha256": "30e2bdcf8068f52b3d52b0c46f0946a1bb63f9d889a5b041f1d0aa8a301eb5d3",
-      "maximum": 4.907323837280273,
-      "z_limit": 5.605647420883179
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "84905b9f2c8c030c5547fbe4cf2ac509d839bbb05d549f32e6dfce837e4c561c",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "7aee6ab89390852327874209a33251f7741f346ed24a2822234b7b1fd04c835c",
+      "method": "hadamard",
+      "layer": 0,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "end_to_end",
+      "source_mode": "end_to_end",
+      "sample": 0,
+      "minimum": 6.168051186250523e-05,
+      "maximum": 4.708047389984131,
+      "canonical_tensor_sha256": null,
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "hadamard",
-      "layer": 12,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 14.996990995407105,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 14.996990995407105,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 0.5792502164840698,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.027697489435318284
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.7010034322738647,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06760190899126425
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 0.5614451169967651,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.006878700550276501
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.07941871881484985,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03569515160565658
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 18,
+          "token": 35,
+          "z": 4.708047389984131,
+          "native_projected_xy": [
+            -0.06877944444163052,
+            -0.0013172674177685695
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 446,
+          "token": 114,
+          "z": 4.0646748542785645,
+          "native_projected_xy": [
+            0.06641742345585736,
+            -0.016478499136399264
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 82,
+          "token": 53,
+          "z": 3.9371747970581055,
+          "native_projected_xy": [
+            -0.0460451075789136,
+            -0.004878965021827375
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/end_to_end/hadamard/s00_l12_q_proj.pt",
       "source_sha256": "4ee779bf6686d24424971b37c72a239e472318acfb3d8ce06370e3212bb613a5",
-      "maximum": 5.0047383308410645,
-      "z_limit": 6.604581689834595
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "56208701492b204078ff75fbdeedf1e44a7ee8e48006e3a38ee1addfec673bb9",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "2e3c473f5f9425fd9dbc0de8dde93c6599df892ce1c27e1392b0dc79a69a5f5f",
+      "method": "hadamard",
+      "layer": 12,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "end_to_end",
+      "source_mode": "end_to_end",
+      "sample": 0,
+      "minimum": 1.5197407265077345e-05,
+      "maximum": 4.883845806121826,
+      "canonical_tensor_sha256": null,
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "hadamard",
-      "layer": 23,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 10.562105932235719,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 10.562105932235719,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 0.6864792108535767,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.025949025851436196
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.9440301656723022,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06477493747688792
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 1.2547662258148193,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.012273366667105151
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.5663781762123108,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03249077830728365
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 412,
+          "token": 52,
+          "z": 4.883845806121826,
+          "native_projected_xy": [
+            0.032998524093384066,
+            -0.01801762970514691
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 81,
+          "token": 43,
+          "z": 4.168984413146973,
+          "native_projected_xy": [
+            -0.05035571835234122,
+            0.0012356406814079124
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 362,
+          "token": 104,
+          "z": 4.004345893859863,
+          "native_projected_xy": [
+            0.042123778758709166,
+            -0.0053921597430056974
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/end_to_end/hadamard/s00_l23_q_proj.pt",
       "source_sha256": "4eda0cad7af2fe7679988e110c5a2faab632e341886147b85f62cf886860ebf4",
-      "maximum": 4.964585781097412,
-      "z_limit": 6.409994068145752
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "41d362fc40d5a5a53fb2ae182648d63ecaa46d825f5e389e9ce2a95e562306a4",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "462a651aeeba6637ff35a49f9f35d76b242b078b1f46f1f01ab0a6d02aec867c",
+      "method": "hadamard",
+      "layer": 23,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "end_to_end",
+      "source_mode": "end_to_end",
+      "sample": 0,
+      "minimum": 1.141553070738155e-06,
+      "maximum": 4.251776695251465,
+      "canonical_tensor_sha256": null,
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "hadamard",
-      "layer": 35,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 8.263445167541503,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 8.263445167541503,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 0.989784836769104,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.022316574816110844
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 1.079117774963379,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06204249488539544
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 0.5160769820213318,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.00853736829261137
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.566543698310852,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.031500409009854645
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 203,
+          "token": 7,
+          "z": 4.251776695251465,
+          "native_projected_xy": [
+            -0.03563453086174928,
+            -0.010298970617308173
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 168,
+          "token": 56,
+          "z": 4.198105335235596,
+          "native_projected_xy": [
+            -0.024118839922031687,
+            0.00541121877615236
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 93,
+          "token": 19,
+          "z": 3.9482686519622803,
+          "native_projected_xy": [
+            -0.05723424820252441,
+            -0.0007539295762048981
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/end_to_end/hadamard/s00_l35_q_proj.pt",
       "source_sha256": "24433a8f0211d25e6e4a31a78af6305a7bfbf4e90515ff4ad973d575155bcf59",
-      "maximum": 4.428213596343994,
-      "z_limit": 6.250932240486145
+      "source_tensor_sha256": "93dd1dca4fe97fc47f99ae92868a4313cea861ad2ac31cc7588e3e4aae1336db",
+      "source_shape": [
+        2048,
+        4096
+      ],
+      "local_array_sha256": "335656a0527c235404a992655fc761c391d64385c78673af734a0b98c0f63caa",
+      "method": "hadamard",
+      "layer": 35,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "end_to_end",
+      "source_mode": "end_to_end",
+      "sample": 0,
+      "minimum": 3.314068817417137e-05,
+      "maximum": 3.5420403480529785,
+      "canonical_tensor_sha256": null,
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": true,
+      "tokens": [
+        0,
+        128
+      ],
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 6.238163032531738,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 6.238163032531738,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 1.019108772277832,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.019426477237260324
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 1.271124005317688,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.05719055028430905
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 1.6499180793762207,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.02193323563946813
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.24520985782146454,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03343996925313603
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 8,
+          "token": 74,
+          "z": 3.5420403480529785,
+          "native_projected_xy": [
+            -0.055314618708873865,
+            0.026948956342365084
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 169,
+          "token": 80,
+          "z": 3.431971549987793,
+          "native_projected_xy": [
+            -0.014110437288615163,
+            0.014674061631348378
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 415,
+          "token": 54,
+          "z": 3.328523635864258,
+          "native_projected_xy": [
+            0.03453477269368908,
+            -0.012989668088547474
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
     }
   ],
-  "sample": 0,
-  "sidewalls": "geometric closure to z=0; not additional measurements",
-  "seconds": 22.30733584598056
+  "scales": {
+    "z_limits_by_layer": {
+      "0": 14.996990995407105,
+      "12": 10.562105932235719,
+      "23": 8.263445167541503,
+      "35": 6.238163032531738
+    },
+    "all_zero_by_layer": {
+      "0": false,
+      "12": false,
+      "23": false,
+      "35": false
+    },
+    "shared_across_methods": [
+      "unrotated",
+      "hadamard",
+      "nar_k8",
+      "nar_kmax"
+    ],
+    "linear_heights": true,
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "cmap": "viridis",
+    "vmin": 0,
+    "view": "four_method_scale",
+    "scale_differs_from_matrix": false
+  },
+  "git_commit": "503f442955a017ca7b931fe471853f105648104f",
+  "plot_source_sha256": "65601bf47723ed8d21611f9b814182d69b7e500db26c140a40360fd631cb0398",
+  "output_paths": [
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/row_hadamard.pdf",
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/row_hadamard.png",
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/row_hadamard.svg"
+  ],
+  "figure_inches": [
+    12.05,
+    4.4
+  ],
+  "intended_insertion_width_inches": 7.2,
+  "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged"
 }

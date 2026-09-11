@@ -1,6 +1,9 @@
 {
   "z_limits_by_layer": {
-    "0": 33.09106033325195
+    "0": 14.85033787727356
+  },
+  "all_zero_by_layer": {
+    "0": false
   },
   "shared_across_methods": [
     "unrotated",
@@ -8,5 +11,11 @@
     "nar_k8",
     "nar_kmax"
   ],
-  "linear": true
+  "linear_heights": true,
+  "norm": "PowerNorm",
+  "gamma": 0.5,
+  "cmap": "viridis",
+  "vmin": 0,
+  "view": "four_method_scale",
+  "scale_differs_from_matrix": false
 }

@@ -1,9 +1,15 @@
 {
   "z_limits_by_layer": {
-    "0": 10.0594797706604,
-    "12": 14.349851131439209,
-    "23": 53.00185020446777,
-    "35": 3225.304934082031
+    "0": 2.251824700832367,
+    "12": 3.5004900813102724,
+    "23": 10.44485357284546,
+    "35": 315.9883337402344
+  },
+  "all_zero_by_layer": {
+    "0": false,
+    "12": false,
+    "23": false,
+    "35": false
   },
   "shared_across_methods": [
     "unrotated",
@@ -11,5 +17,11 @@
     "nar_k8",
     "nar_kmax"
   ],
-  "linear": true
+  "linear_heights": true,
+  "norm": "PowerNorm",
+  "gamma": 0.5,
+  "cmap": "viridis",
+  "vmin": 0,
+  "view": "four_method_scale",
+  "scale_differs_from_matrix": false
 }

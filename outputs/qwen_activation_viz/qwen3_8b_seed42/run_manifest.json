@@ -1631,27 +1631,91 @@
   },
   "raw_activation_root": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42/activations",
   "display": {
-    "tokens": 2048,
-    "down_proj_channels": 12288,
-    "q_proj_channels": 4096,
+    "revision": "local-upper-surface-v1",
     "sample": 0,
+    "tokens": [
+      0,
+      128
+    ],
+    "channels": [
+      0,
+      512
+    ],
+    "group_size": 128,
+    "group_boundaries": [
+      127.5,
+      255.5,
+      383.5
+    ],
+    "shape": [
+      128,
+      512
+    ],
     "data_stride": [
       1,
       1
     ],
     "pooling": false,
-    "cropping": false,
-    "sidewall_base_z": 0,
-    "channel_tick_step": 2000,
+    "draw_surface": true,
+    "draw_height_columns": false,
+    "draw_sidewalls": false,
+    "zero_padding": false,
+    "height_transform": "absolute value only; linear z axis",
+    "raw": "abs(signed_Y[0:128, 0:512])",
+    "residual": "abs((Y - per-token contiguous-g128 signed mean)[0:128, 0:512])",
+    "residual_centering_domain": "complete signed Y, before crop and abs",
+    "camera": {
+      "projection": "ortho",
+      "elev": 28,
+      "azim": -55,
+      "box_aspect": [
+        2.0,
+        1.2,
+        1.0
+      ],
+      "zoom": 1.0
+    },
+    "cmap": "viridis",
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "vmin": 0,
+    "vmax_rule": "1.03 * maximum across displayed methods per column",
+    "all_zero_policy": "record all_zero=true and use display-only vmax=1",
+    "linear_control": "Normalize with identical data, camera and z limits",
+    "shade": false,
+    "surface_rcount": 128,
+    "surface_ccount": 512,
+    "surface_dpi": 600,
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "text_axes": "vector",
+    "matrix_font_size_pt": 11.75,
+    "panel_font_size_pt": 8.5,
+    "intended_matrix_width_inches": 7.2,
+    "matrix_text_pt_at_intended_width": 7.020746887966805,
+    "channel_ticks": [
+      0,
+      256,
+      511
+    ],
     "token_ticks": [
       0,
-      1000,
-      2000
+      64,
+      127
     ],
-    "elev": 25,
-    "azim": -60,
-    "overview_and_detail": "identical complete-data compatibility exports",
-    "ecdf": "exact values and multiplicities; no quantile thinning"
+    "group_boundary_guides": "floor dashed lines plus short front-edge ticks, annotation only",
+    "axis_names": "shared front/depth labels below each column; z values on shared column colorbar",
+    "token_tick_note": "three integer ticks prevent crowding at publication width",
+    "reference_source_mode": "paired_local",
+    "reference_precision": "BF16 checkpoint loaded and norm-fused in FP32",
+    "reference_label": "Unrotated reference (norm-fused FP32)",
+    "end_to_end_rows": "reference is unquantized; other rows are existing E22 W4A4KV4 QDQ forwards",
+    "statistical_unit": "fixed sample 0; descriptive surface, no uncertainty estimate",
+    "overview": "previous full-domain exports preserved independently",
+    "ecdf": "unchanged exact full-data values and multiplicities"
   },
   "source_files": {
     "e14_w4a4kv4.py": "c7ab1b96621084d43d3dae4f694eb4e6bc534d753cd7ef6c5d620cd000559ab3",
@@ -1816,8 +1880,7 @@
     ]
   },
   "render_commands": [
-    "python -m nar.activation_viz.full_batch $RAW_RUN $RUN --workers 8",
-    "python -m nar.activation_viz.report $RUN"
+    "python -m nar.activation_viz.full_batch $RAW_RUN $RUN --workers 4"
   ],
   "previous_display_settings": {
     "overview_token_bins": 128,
@@ -1834,5 +1897,30 @@
     "pooling": "max absolute; residual before pooling",
     "elev": 25,
     "azim": -60
-  }
+  },
+  "display_revision_history": [
+    {
+      "tokens": 2048,
+      "down_proj_channels": 12288,
+      "q_proj_channels": 4096,
+      "sample": 0,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "sidewall_base_z": 0,
+      "channel_tick_step": 2000,
+      "token_ticks": [
+        0,
+        1000,
+        2000
+      ],
+      "elev": 25,
+      "azim": -60,
+      "overview_and_detail": "identical complete-data compatibility exports",
+      "ecdf": "exact values and multiplicities; no quantile thinning"
+    }
+  ]
 }

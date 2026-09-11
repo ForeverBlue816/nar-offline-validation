@@ -1,0 +1,135 @@
+{
+  "revision": "local-upper-surface-v1",
+  "sample": 0,
+  "tokens": [
+    0,
+    128
+  ],
+  "channels": [
+    0,
+    512
+  ],
+  "group_size": 128,
+  "group_boundaries": [
+    127.5,
+    255.5,
+    383.5
+  ],
+  "shape": [
+    128,
+    512
+  ],
+  "data_stride": [
+    1,
+    1
+  ],
+  "pooling": false,
+  "draw_surface": true,
+  "draw_height_columns": false,
+  "draw_sidewalls": false,
+  "zero_padding": false,
+  "height_transform": "absolute value only; linear z axis",
+  "raw": "abs(signed_Y[0:128, 0:512])",
+  "residual": "abs((Y - per-token contiguous-g128 signed mean)[0:128, 0:512])",
+  "residual_centering_domain": "complete signed Y, before crop and abs",
+  "camera": {
+    "projection": "ortho",
+    "elev": 28,
+    "azim": -55,
+    "box_aspect": [
+      2.0,
+      1.2,
+      1.0
+    ],
+    "zoom": 1.0
+  },
+  "cmap": "viridis",
+  "norm": "PowerNorm",
+  "gamma": 0.5,
+  "vmin": 0,
+  "vmax_rule": "1.03 * maximum across displayed methods per column",
+  "all_zero_policy": "record all_zero=true and use display-only vmax=1",
+  "linear_control": "Normalize with identical data, camera and z limits",
+  "shade": false,
+  "surface_rcount": 128,
+  "surface_ccount": 512,
+  "surface_dpi": 600,
+  "formats": [
+    "pdf",
+    "png",
+    "svg"
+  ],
+  "text_axes": "vector",
+  "matrix_font_size_pt": 11.75,
+  "panel_font_size_pt": 8.5,
+  "intended_matrix_width_inches": 7.2,
+  "matrix_text_pt_at_intended_width": 7.020746887966805,
+  "channel_ticks": [
+    0,
+    256,
+    511
+  ],
+  "token_ticks": [
+    0,
+    64,
+    127
+  ],
+  "group_boundary_guides": "floor dashed lines plus short front-edge ticks, annotation only",
+  "axis_names": "shared front/depth labels below each column; z values on shared column colorbar",
+  "token_tick_note": "three integer ticks prevent crowding at publication width",
+  "reference_source_mode": "paired_local",
+  "reference_precision": "BF16 checkpoint loaded and norm-fused in FP32",
+  "reference_label": "Unrotated reference (norm-fused FP32)",
+  "end_to_end_rows": "reference is unquantized; other rows are existing E22 W4A4KV4 QDQ forwards",
+  "statistical_unit": "fixed sample 0; descriptive surface, no uncertainty estimate",
+  "git_commit": "4ba901aa5ca94dc48881c273ed5b9402f147f86d",
+  "rendering_git_commits": [
+    "4ba901aa5ca94dc48881c273ed5b9402f147f86d",
+    "503f442955a017ca7b931fe471853f105648104f"
+  ],
+  "source_hashes": {
+    "full_surface_checks.py": "f12cb20aa80949db499c558141056dacbd7b48ce5f819bdf15d12efcd8dbf1d3",
+    "plot.py": "4ad35fb869bdc819e560c98186d322f42e66524889ef194338b31f4216899efd",
+    "full_batch.py": "c677e6df577b18cabb8513ff92c5760ebfdd7423e7b0c78d695c96b8bb616451",
+    "render_batch.py": "7b59676c033710b5c589bee19200c407225e1d2f2d04ed1ff62214bf84e2cd39",
+    "__init__.py": "0656e5bb35a80080887abb1eba88fd39f674ee6257a0cbb637880d74c9a9e006",
+    "edge_checks.py": "a0aa8aa053e58a543453ed99e8dd547c45c36ac8ca79c53af8eafa6a49e69a53",
+    "full_surface.py": "a2861a4ac5cad5da2a5b8e7aad469656fc101ae3e0f5c414a97e4cdc2ab8296b",
+    "detail_checks.py": "5155588d7675802b4e8d400eb67fa443142a7a1dc8060060a7d453d378c75d79",
+    "report.py": "4350a13dadb498eed4a20ab988874393c22c8726ce2d8dca8f920fe99cfcd135",
+    "full_plot.py": "a9184b5851285c008c043e6c72b4d568e7e5485725938713bc6281d26142438d",
+    "repair_exports.py": "21654ca5e31103a7f186f8a42e23d51be13f5f6c11f77764d24963d4c501f803",
+    "metrics.py": "eb75dcb9284c9aa871a6cc4eb5ae111f3c2c90a53cc6adaf613a036d7ffb8682",
+    "detail_delivery.py": "06b095a46bc00b6c5b8b9e670048ce36221133d4023fb3346ddc05cfef2db273",
+    "summarize.py": "222d929dc0df5f710c90c24ae9eea3ed443abd47650b633110ff571b7930bcb5",
+    "full_ecdf.py": "f1a0a9b6e8e89d3f2c86d19703bde2c08af171ef952cefb260dd0f1bd1614700",
+    "detail_plot.py": "1676fad3f8192d8ef63b61bed4b786e1702f4ccb4e4820c2cd38d4067353f7fe",
+    "capture.py": "655d005940cf706f137055ad9a03e2f6246b360cff3ea3a8fce491cb65b4ff39",
+    "publish.py": "ca27b8f443287a749326c924db3bdbca56e0ae28d578be83dc79dd62e000ca1c",
+    "factor_audit.py": "2fe8ca1ec6e2e113c64bfdf50c96c9b77378a9ad0a762514992d376945aface3"
+  },
+  "runtime": {
+    "python": "3.11.16",
+    "matplotlib": "3.10.5",
+    "numpy": "2.4.6",
+    "torch": "2.11.0+cu128",
+    "pymupdf": "1.28.2",
+    "font_family": "DejaVu Sans",
+    "font_file": "/projects/_hdd/nar/nar-validation/venv/lib/python3.11/site-packages/matplotlib/mpl-data/fonts/ttf/DejaVuSans.ttf",
+    "font_sha256": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+    "pdf_fonttype": 42,
+    "svg_fonttype": "none"
+  },
+  "render_jobs": [
+    {
+      "job_id": "150482",
+      "scope": "all 184 local exports",
+      "commit": "503f442"
+    },
+    {
+      "job_id": "150516",
+      "scope": "eight zoom headers; geometry and scales unchanged",
+      "commit": "4ba901a"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "review_scope": "Current local revision only; historical experiment failures remain unchanged.",
+  "reviewer": "Codex visual inspection of actual PDF page renders",
+  "main_matrices_reviewed": 8,
+  "main_panels_reviewed": 128,
+  "linear_controls_reviewed": 8,
+  "rotated_zoom_matrices_reviewed": 8,
+  "derivative_layout_spot_checks": 4,
+  "derivative_data_coverage": "All 608 repeated panel records checked against real source arrays; all 184 local PDF layouts audited.",
+  "all_publication_pdf_audits": 340,
+  "blocking_font_or_collision_audits": 0,
+  "final_local_pdf_rerenders": 184,
+  "minimum_paper_text_pt": 7.0,
+  "warning_resolution": {
+    "pdf_collision": "Native 3D pane filled bounding rectangles and raster image bounding boxes overlap some tick bounding boxes. Final PDF renders show readable, separated glyphs. These bounding-box warnings do not represent filled data bases or text collisions. Original warning records remain available.",
+    "source_preflight": "PNG was requested alongside PDF/SVG; no TIFF required. Dynamic canvas width is explicit, with per-figure target insertion width and measured paper font size."
+  },
+  "observations": [
+    "No added base, sidewall or vertex-to-zero columns. Steep true surface changes and group steps remain.",
+    "Axes, measured corners/peaks and group-boundary guides share the native Matplotlib projection.",
+    "Common color mapping improves magnitude readability; similar raw data remain similar.",
+    "Reference identity and quantized-forward separation remain explicit.",
+    "Zoom scale subtitle and block headings have clear separation."
+  ],
+  "evidence": [
+    "detail_integrity.json",
+    "detail_main_panel_review.json",
+    "detail_pdf_render_index.json",
+    "detail_control_preflight/linear_controls.json",
+    "detail_control_preflight/zoom_pair_0.jpg",
+    "detail_control_preflight/zoom_pair_1.jpg",
+    "detail_control_preflight/zoom_pair_2.jpg",
+    "detail_control_preflight/zoom_pair_3.jpg",
+    "detail_control_preflight/derivative_spot_review.jpg",
+    "zoom_spacing_repair.json"
+  ]
+}

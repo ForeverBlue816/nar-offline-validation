@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "sample": 0,
+  "sample_index": 52,
+  "input_ids_sha256": "8cea7e68c399b7a11e8eb1badcb87861c36d928f9b71ee46a8311c9390716501",
+  "sample0_input_ids_sha256": "99ca496e3e4cdcd0cc7763c4f236728061a484e69e8d2a8cd37ed14aa968acfd",
+  "decoded_text_sha256": [
+    "29e875c9ce6783054ab79bd3af98095ca03f8d3c8dbafbcb435f2bd3a357d099",
+    "c49b6d7d015a317170dda00aad682653956e1d8e3cb172c897f79d3bed6ff2fc",
+    "4e6a3e3b262542997cc8714deec965aa71a7c9b1ce1eb31395c92dcbc62c594d",
+    "0056b2dedd2b766e6f910ef1b41eb32308535ed906aeeda515d3e0433f1d8e3a",
+    "c02fcc3cd5f2371c3cea7395226145b89476e2fe4c3ee85f3f985b7b2de04439",
+    "d75e79fb1bfb20f96a72311ae779fc25c3bbb00a7d3cd77c7b10a35ab4138ff1",
+    "cc7794992cb2bdb9c7bbe0f08ff32aecd20ab0737a717ff5af7ba805e5825fa7",
+    "e1791ebf83a8d213231aa4dd01d48974742023f2b47144f25cfcef3976a13046"
+  ],
+  "reference": "BF16 checkpoint values loaded and norm-fused in FP32; q_norm/k_norm remain affine",
+  "capture_site_report_sha256": "a3cfd1a0c55a62bf1a656701ed61811c489ea9566955d3b426d47ef0a5c4da89",
+  "evidence": "same saved inputs.pt and sample-index loop in capture.py for both modes; inventory matches capture run",
+  "end_to_end_canonical_identity_claimed": false,
+  "pairs": [
+    {
+      "layer": 0,
+      "site": "q_proj",
+      "reference": "activations/paired_local/unrotated/s00_l00_q_proj.pt",
+      "canonical_tensor_sha256": "d991e8157c60883032103598c74930160b4a2f89bb4f6a19619f43b01c293336"
+    },
+    {
+      "layer": 0,
+      "site": "down_proj",
+      "reference": "activations/paired_local/unrotated/s00_l00_down_proj.pt",
+      "canonical_tensor_sha256": "f977ae9e73ee8f1fc4b935f1b9c411f0c6184d184135d823cb8e3ec43f1de4f2"
+    },
+    {
+      "layer": 12,
+      "site": "q_proj",
+      "reference": "activations/paired_local/unrotated/s00_l12_q_proj.pt",
+      "canonical_tensor_sha256": "f65aeeebbf6e897b0b6b9d5a38efde0fe24847251a0b33ea1faf2b409fbb5151"
+    },
+    {
+      "layer": 12,
+      "site": "down_proj",
+      "reference": "activations/paired_local/unrotated/s00_l12_down_proj.pt",
+      "canonical_tensor_sha256": "ff860778ba71c7b6c113aa622c70ed8cce505658426656fff83e98db83ede107"
+    },
+    {
+      "layer": 23,
+      "site": "q_proj",
+      "reference": "activations/paired_local/unrotated/s00_l23_q_proj.pt",
+      "canonical_tensor_sha256": "9904cc4ad01321395b8494dc5843dd163d94c1dce9ee525e66ca17fad71b72ef"
+    },
+    {
+      "layer": 23,
+      "site": "down_proj",
+      "reference": "activations/paired_local/unrotated/s00_l23_down_proj.pt",
+      "canonical_tensor_sha256": "2e92d4d0f124f65d9e9362f0740df6041deefa7cec659929152fdd58911d4e35"
+    },
+    {
+      "layer": 35,
+      "site": "q_proj",
+      "reference": "activations/paired_local/unrotated/s00_l35_q_proj.pt",
+      "canonical_tensor_sha256": "9fc3640b92a2acd7033b66efccbaa67826add0bde4b3f6e8369759640b1bf5a3"
+    },
+    {
+      "layer": 35,
+      "site": "down_proj",
+      "reference": "activations/paired_local/unrotated/s00_l35_down_proj.pt",
+      "canonical_tensor_sha256": "c83361d51aa44eaa359d24beb39e7b38febdb0578143f7a2020dce0f96a6caaf"
+    }
+  ]
+}

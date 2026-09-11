@@ -1,119 +1,689 @@
 {
+  "config": {
+    "revision": "local-upper-surface-v1",
+    "sample": 0,
+    "tokens": [
+      0,
+      128
+    ],
+    "channels": [
+      0,
+      512
+    ],
+    "group_size": 128,
+    "group_boundaries": [
+      127.5,
+      255.5,
+      383.5
+    ],
+    "shape": [
+      128,
+      512
+    ],
+    "data_stride": [
+      1,
+      1
+    ],
+    "pooling": false,
+    "draw_surface": true,
+    "draw_height_columns": false,
+    "draw_sidewalls": false,
+    "zero_padding": false,
+    "height_transform": "absolute value only; linear z axis",
+    "raw": "abs(signed_Y[0:128, 0:512])",
+    "residual": "abs((Y - per-token contiguous-g128 signed mean)[0:128, 0:512])",
+    "residual_centering_domain": "complete signed Y, before crop and abs",
+    "camera": {
+      "projection": "ortho",
+      "elev": 28,
+      "azim": -55,
+      "box_aspect": [
+        2.0,
+        1.2,
+        1.0
+      ],
+      "zoom": 1.0
+    },
+    "cmap": "viridis",
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "vmin": 0,
+    "vmax_rule": "1.03 * maximum across displayed methods per column",
+    "all_zero_policy": "record all_zero=true and use display-only vmax=1",
+    "linear_control": "Normalize with identical data, camera and z limits",
+    "shade": false,
+    "surface_rcount": 128,
+    "surface_ccount": 512,
+    "surface_dpi": 600,
+    "formats": [
+      "pdf",
+      "png",
+      "svg"
+    ],
+    "text_axes": "vector",
+    "matrix_font_size_pt": 11.75,
+    "panel_font_size_pt": 8.5,
+    "intended_matrix_width_inches": 7.2,
+    "matrix_text_pt_at_intended_width": 7.020746887966805,
+    "channel_ticks": [
+      0,
+      256,
+      511
+    ],
+    "token_ticks": [
+      0,
+      64,
+      127
+    ],
+    "group_boundary_guides": "floor dashed lines plus short front-edge ticks, annotation only",
+    "axis_names": "shared front/depth labels below each column; z values on shared column colorbar",
+    "token_tick_note": "three integer ticks prevent crowding at publication width",
+    "reference_source_mode": "paired_local",
+    "reference_precision": "BF16 checkpoint loaded and norm-fused in FP32",
+    "reference_label": "Unrotated reference (norm-fused FP32)",
+    "end_to_end_rows": "reference is unquantized; other rows are existing E22 W4A4KV4 QDQ forwards",
+    "statistical_unit": "fixed sample 0; descriptive surface, no uncertainty estimate"
+  },
   "panels": [
     {
-      "shape": [
-        2048,
-        4096
-      ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
-      "data_stride": [
-        1,
-        1
-      ],
-      "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
-      ],
-      "rasterizer": "depth-tested full grid",
-      "method": "nar_k8",
-      "layer": 0,
       "source": "activations/paired_local/nar_k8/s00_l00_q_proj.pt",
       "source_sha256": "a2b0f9b478eaea25c725dcd41a8e4247c8da6f03963784b384c59093836eae10",
-      "maximum": 5.10770845413208,
-      "z_limit": 33.2936584854126
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "a51455ff8fcf556f1259101e146132b8b64efb4ae86c19c1c8cec952c7180a40",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "344fb90c7ab51c6a974ef725b93de798dc72d374d5063b6e75c12dbdd3e4de46",
+      "method": "nar_k8",
+      "layer": 0,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "paired_local",
+      "source_mode": "paired_local",
+      "sample": 0,
+      "minimum": 3.491866300464608e-05,
+      "maximum": 4.130789756774902,
+      "canonical_tensor_sha256": "d991e8157c60883032103598c74930160b4a2f89bb4f6a19619f43b01c293336",
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "nar_k8",
-      "layer": 12,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 14.996990995407105,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 14.996990995407105,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 0.42927053570747375,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.028360580139171466
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.4084290564060211,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06889543987370823
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 1.4735077619552612,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.010911115195194849
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.10063052922487259,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03560136987321155
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 65,
+          "token": 75,
+          "z": 4.130789756774902,
+          "native_projected_xy": [
+            -0.04118434521876363,
+            0.0033257112508212174
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 478,
+          "token": 116,
+          "z": 4.031314849853516,
+          "native_projected_xy": [
+            0.07493569595722134,
+            -0.01861286011744474
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 478,
+          "token": 76,
+          "z": 4.031314849853516,
+          "native_projected_xy": [
+            0.05865629064296729,
+            -0.029527792386881135
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/paired_local/nar_k8/s00_l12_q_proj.pt",
       "source_sha256": "60b68fa457f5ac22ba52602ad96f327a69f3142462a025091bc4447b9fab9706",
-      "maximum": 6.238579750061035,
-      "z_limit": 48.32254524230957
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "2cf289752007b5d725db7408cedb81fb9bfdffc7c738d809a20166bfc46aec84",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "65b74db8963b9c186f776bcdb5efa9928c92aae8a4034d74055fce6ca3ad8b1d",
+      "method": "nar_k8",
+      "layer": 12,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "paired_local",
+      "source_mode": "paired_local",
+      "sample": 0,
+      "minimum": 1.7975629816646688e-05,
+      "maximum": 5.627120018005371,
+      "canonical_tensor_sha256": "f65aeeebbf6e897b0b6b9d5a38efde0fe24847251a0b33ea1faf2b409fbb5151",
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "nar_k8",
-      "layer": 23,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 10.562105932235719,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 10.562105932235719,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 1.6500129699707031,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.019900339546639206
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.23461854457855225,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06922834486025288
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 2.0546875,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.01729495808546198
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.2804132103919983,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03428595398851144
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 53,
+          "token": 116,
+          "z": 5.627120018005371,
+          "native_projected_xy": [
+            -0.02738706811002247,
+            0.0325250335994696
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 27,
+          "token": 53,
+          "z": 5.517727851867676,
+          "native_projected_xy": [
+            -0.05928687704643927,
+            0.01670504492457787
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 29,
+          "token": 9,
+          "z": 5.413436412811279,
+          "native_projected_xy": [
+            -0.07671270400239052,
+            0.003885630242737309
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/paired_local/nar_k8/s00_l23_q_proj.pt",
       "source_sha256": "487d492228f9b782291702720b791f9d8d52afe260502942af2cfc15f8fac029",
-      "maximum": 6.51035213470459,
-      "z_limit": 65.65749820709229
-    },
-    {
-      "shape": [
+      "source_tensor_sha256": "dbb3dd826b4a8c299c4accecda44eba1ccbf495f9ce3b54060808b0273c6047e",
+      "source_shape": [
         2048,
         4096
       ],
-      "vertices_processed": 8388608,
-      "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "local_array_sha256": "f6f50a2430edbac289e52e160df11f242394301b698de8512ae502c78505ae1a",
+      "method": "nar_k8",
+      "layer": 23,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "paired_local",
+      "source_mode": "paired_local",
+      "sample": 0,
+      "minimum": 1.8123145082427072e-06,
+      "maximum": 5.543246269226074,
+      "canonical_tensor_sha256": "9904cc4ad01321395b8494dc5843dd163d94c1dce9ee525e66ca17fad71b72ef",
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
       "data_stride": [
         1,
         1
       ],
       "pooling": false,
-      "cropping": false,
-      "base_z": 0,
-      "vertical_height_segments": 8388608,
-      "pixel_size": [
-        1356,
-        1356
+      "cropping": true,
+      "tokens": [
+        0,
+        128
       ],
-      "rasterizer": "depth-tested full grid",
-      "method": "nar_k8",
-      "layer": 35,
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 8.263445167541503,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 8.263445167541503,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 1.583980679512024,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.017548828881355026
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.14774130284786224,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06951573193827935
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 3.422560691833496,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.03185859489009597
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.6859768629074097,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.03054209368009455
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 67,
+          "token": 53,
+          "z": 5.543246269226074,
+          "native_projected_xy": [
+            -0.04965649925187515,
+            0.023379395147649897
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 56,
+          "token": 103,
+          "z": 5.497678756713867,
+          "native_projected_xy": [
+            -0.03195559650256273,
+            0.03752801984132598
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 120,
+          "token": 95,
+          "z": 5.426634788513184,
+          "native_projected_xy": [
+            -0.01980287309411095,
+            0.02970975388584899
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
+    },
+    {
       "source": "activations/paired_local/nar_k8/s00_l35_q_proj.pt",
       "source_sha256": "b8d77182a5c854d2d649c56922fb7e9a1f093a846fd49f93f50cd0ef65b74523",
-      "maximum": 5.615169048309326,
-      "z_limit": 62.78048107147217
+      "source_tensor_sha256": "cbc1b5c4a2e15d95b9af2a17df7c2f9d3b5cf775b8135c8657cbd216b3b601c0",
+      "source_shape": [
+        2048,
+        4096
+      ],
+      "local_array_sha256": "9c01fb82b04ef09244121064cf5efab2d7706178a418dc8a48e38198049ed340",
+      "method": "nar_k8",
+      "layer": 35,
+      "site": "q_proj",
+      "quantity": "raw",
+      "display_mode": "paired_local",
+      "source_mode": "paired_local",
+      "sample": 0,
+      "minimum": 3.6246290164854145e-06,
+      "maximum": 5.546337127685547,
+      "canonical_tensor_sha256": "9fc3640b92a2acd7033b66efccbaa67826add0bde4b3f6e8369759640b1bf5a3",
+      "shape": [
+        128,
+        512
+      ],
+      "vertices_processed": 65536,
+      "surface_cells": 64897,
+      "surface_rcount": 128,
+      "surface_ccount": 512,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": true,
+      "tokens": [
+        0,
+        128
+      ],
+      "channels": [
+        0,
+        512
+      ],
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "vertical_height_segments": 0,
+      "sidewall_triangles": 0,
+      "zero_padding": false,
+      "z_limit": 6.238163032531738,
+      "all_zero_column": false,
+      "norm": {
+        "name": "PowerNorm",
+        "gamma": 0.5,
+        "vmin": 0,
+        "vmax": 6.238163032531738,
+        "cmap": "viridis"
+      },
+      "debug_points": [
+        {
+          "id": "P0",
+          "channel": 0,
+          "token": 0,
+          "z": 1.5112009048461914,
+          "native_projected_xy": [
+            -0.08735759409915667,
+            -0.014196083945896484
+          ]
+        },
+        {
+          "id": "P1",
+          "channel": 511,
+          "token": 0,
+          "z": 0.3610878884792328,
+          "native_projected_xy": [
+            0.03567048222640001,
+            -0.06686322433330827
+          ]
+        },
+        {
+          "id": "P2",
+          "channel": 0,
+          "token": 127,
+          "z": 3.557163715362549,
+          "native_projected_xy": [
+            -0.03567048222640008,
+            0.04220514026712456
+          ]
+        },
+        {
+          "id": "P3",
+          "channel": 511,
+          "token": 127,
+          "z": 0.7916754484176636,
+          "native_projected_xy": [
+            0.0873575940991566,
+            -0.02763164644151602
+          ]
+        },
+        {
+          "id": "P4",
+          "channel": 107,
+          "token": 72,
+          "z": 5.546337127685547,
+          "native_projected_xy": [
+            -0.032293403933040365,
+            0.0398713788752621
+          ]
+        },
+        {
+          "id": "P5",
+          "channel": 53,
+          "token": 34,
+          "z": 5.324811935424805,
+          "native_projected_xy": [
+            -0.06075984900424327,
+            0.03142141612985452
+          ]
+        },
+        {
+          "id": "P6",
+          "channel": 109,
+          "token": 73,
+          "z": 5.198511600494385,
+          "native_projected_xy": [
+            -0.03140489991045581,
+            0.0362889642982655
+          ]
+        }
+      ],
+      "camera": {
+        "projection": "ortho",
+        "elev": 28,
+        "azim": -55,
+        "box_aspect": [
+          2.0,
+          1.2,
+          1.0
+        ],
+        "zoom": 1.0
+      }
     }
   ],
-  "sample": 0,
-  "sidewalls": "geometric closure to z=0; not additional measurements",
-  "seconds": 7.812059997988399
+  "scales": {
+    "z_limits_by_layer": {
+      "0": 14.996990995407105,
+      "12": 10.562105932235719,
+      "23": 8.263445167541503,
+      "35": 6.238163032531738
+    },
+    "all_zero_by_layer": {
+      "0": false,
+      "12": false,
+      "23": false,
+      "35": false
+    },
+    "shared_across_methods": [
+      "unrotated",
+      "hadamard",
+      "nar_k8",
+      "nar_kmax"
+    ],
+    "linear_heights": true,
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "cmap": "viridis",
+    "vmin": 0,
+    "view": "four_method_scale",
+    "scale_differs_from_matrix": false
+  },
+  "git_commit": "503f442955a017ca7b931fe471853f105648104f",
+  "plot_source_sha256": "65601bf47723ed8d21611f9b814182d69b7e500db26c140a40360fd631cb0398",
+  "output_paths": [
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/row_nar_k8.pdf",
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/row_nar_k8.png",
+    "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/row_nar_k8.svg"
+  ],
+  "figure_inches": [
+    12.05,
+    4.4
+  ],
+  "intended_insertion_width_inches": 7.2,
+  "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged"
 }

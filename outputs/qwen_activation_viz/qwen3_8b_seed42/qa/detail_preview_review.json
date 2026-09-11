@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "reviewed": [
+    "paired_local/down_proj Block 24 raw",
+    "paired_local/down_proj Block 24 residual",
+    "end_to_end/q_proj Block 13 raw",
+    "paired_local/down_proj Block 24 Unrotated corner/peak diagnostic",
+    "end_to_end/q_proj raw complete 4x4 matrix"
+  ],
+  "reference_verified": true,
+  "corner_and_peak_coordinates_verified": true,
+  "linear_height_and_fixed_color_norm_verified": true,
+  "blocking_collisions": 0,
+  "warnings_review": "Native 3D pane polygons and transparent raster rectangular extents contain empty projected regions. WARN edge intersections were checked visually: axis labels are outside the actual colored surface, with no text/line clipping. Colored debug markers and the corresponding external coordinate table are intentional.",
+  "source_preflight_warnings": "PNG/PDF/SVG are the requested export formats (no TIFF requested); explicit dimensions are recorded per geometry, and 7 pt text applies at native size.",
+  "role": "real-data preflight before batch; preserved diagnostic artifacts, not replacement scientific inputs"
+}

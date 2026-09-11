@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "original_blocking_layouts": 8,
+  "final_blocking_layouts": 0,
+  "repair": "increase top canvas and top margin by 0.25 inches, preserving physical plot-area dimensions",
+  "records": [
+    {
+      "geometry": "figures/end_to_end/q_proj/raw/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "b6aca0982b1f815a2af34ff2f35bd13b3d2bd912ebe0ec59a5bb7fb8bacd3ada",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/end_to_end/q_proj/residual/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "9412b240e98e959f13df7aba4ca8beccaf1cc8e70cfcc1070b54f27cf1d1b73c",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/end_to_end/down_proj/raw/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "cf04153ddb33e30e44fab06dd545a558f7d4fad04fa5b16e7cb2e9d7f3db8b96",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/end_to_end/down_proj/residual/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "c402d61d2b832a8b52e8ebd84af6f340f6220749264fdc90bda80f8de733e0e1",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/paired_local/q_proj/raw/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "b4a2e506f11ba7304e1388c553e8864bbe825c4b4bf0a390608baa54516b011a",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/paired_local/q_proj/residual/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "fdf2367060e893c59941f08fae916e8d55142e6d37d7eb869218e5ca770ed5a5",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/paired_local/down_proj/raw/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "9b3a907bd391c99403c0b701e23bf949e5f9dedcd654077a982b9223a736e15c",
+      "same_data_camera_projection_and_limits": true
+    },
+    {
+      "geometry": "figures/paired_local/down_proj/residual/detail/rotated_only_zoom.geometry.json",
+      "pdf_sha256": "cd5183f2022714a01d6bbb588319d5726fa28a83d37453f72f33c4f913027e1a",
+      "same_data_camera_projection_and_limits": true
+    }
+  ],
+  "note": "Initial layout failures remain archived; only subtitle-to-heading clearance changed."
+}

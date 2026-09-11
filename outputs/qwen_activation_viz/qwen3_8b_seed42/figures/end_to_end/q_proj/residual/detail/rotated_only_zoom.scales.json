@@ -1,0 +1,26 @@
+{
+  "z_limits_by_layer": {
+    "0": 4.786281642913819,
+    "12": 5.394661049842835,
+    "23": 5.684758653640747,
+    "35": 5.7180890417099
+  },
+  "all_zero_by_layer": {
+    "0": false,
+    "12": false,
+    "23": false,
+    "35": false
+  },
+  "shared_across_methods": [
+    "hadamard",
+    "nar_k8",
+    "nar_kmax"
+  ],
+  "linear_heights": true,
+  "norm": "PowerNorm",
+  "gamma": 0.5,
+  "cmap": "viridis",
+  "vmin": 0,
+  "view": "rotated_only_zoom",
+  "scale_differs_from_matrix": true
+}
