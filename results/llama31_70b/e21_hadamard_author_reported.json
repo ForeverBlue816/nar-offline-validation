@@ -1,0 +1,9 @@
+{
+  "experiment": "E21",
+  "model": "llama31_70b",
+  "row": "hadamard, W4A4KV4",
+  "provenance": "Reported by the author (2026-09-11): measured on a separate server under the same protocol as the E21 NAR rows (default per-channel GPTQ weights, 4.25-bit asymmetric group-128 activations, E14 KIVI cache, 141 WikiText-2 windows of 2048 tokens, same lm-eval harness and metric conventions). Not run or reproduced in this pipeline; raw harness output and checkpoint are not in this repository.",
+  "as_reported": {"wikitext2_ppl": "4.22", "arc_challenge": "60.90", "arc_easy": "83.30", "boolq": "85.00", "hellaswag": "83.80", "openbookqa": "47.20", "piqa": "83.20", "social_iqa": "48.60", "winogrande": "78.90", "eight_task_mean": "71.36"},
+  "precision_note": "At two decimals, ARC-c, ARC-e, BoolQ, PIQA, SIQA and WinoGrande are not attainable as correct/total for their test sets (1172, 2376, 3270, 1838, 1954, 1267 items); all are attainable at one decimal. The values are therefore treated as 0.1-point precision. The mean is the mean of the rounded values.",
+  "tabulated": {"wikitext2_ppl": 4.22, "arc_challenge": 60.9, "arc_easy": 83.3, "boolq": 85.0, "hellaswag": 83.8, "openbookqa": 47.2, "piqa": 83.2, "social_iqa": 48.6, "winogrande": 78.9, "eight_task_mean": 71.36}
+}
