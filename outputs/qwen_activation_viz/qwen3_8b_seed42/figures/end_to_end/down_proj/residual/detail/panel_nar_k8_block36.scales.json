@@ -1,7 +1,11 @@
 {
   "z_limits_by_layer": {
-    "35": 77.139740524292
+    "35": 79.02744781494141
   },
-  "shared_across_methods": "all methods in mode",
+  "shared_across_methods": [
+    "hadamard",
+    "nar_k8",
+    "nar_kmax"
+  ],
   "linear": true
 }

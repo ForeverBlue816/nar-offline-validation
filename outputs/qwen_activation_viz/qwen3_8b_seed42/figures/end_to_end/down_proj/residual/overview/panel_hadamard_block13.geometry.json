@@ -1,0 +1,35 @@
+{
+  "panels": [
+    {
+      "shape": [
+        2048,
+        12288
+      ],
+      "vertices_processed": 25165824,
+      "surface_triangles": 50302978,
+      "sidewall_triangles": 57336,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 25165824,
+      "pixel_size": [
+        1442,
+        1442
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "hadamard",
+      "layer": 12,
+      "source": "activations/end_to_end/hadamard/s00_l12_down_proj.pt",
+      "source_sha256": "09259587ff8c650bb3c436e5855c555eea35ea825e2a69bcb4a7525094320bbc",
+      "maximum": 0.8530238270759583,
+      "z_limit": 1.5350585436820985
+    }
+  ],
+  "sample": 0,
+  "sidewalls": "geometric closure to z=0; not additional measurements",
+  "seconds": 7.793969721999019
+}

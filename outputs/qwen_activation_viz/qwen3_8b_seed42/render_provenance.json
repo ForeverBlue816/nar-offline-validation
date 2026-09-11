@@ -1,47 +1,104 @@
 {
   "command": [
-    "/home/yanlongc/qwen-activation-viz-work/nar/activation_viz/render_batch.py",
+    "/home/yanlongc/qwen-full-resolution-work/nar/activation_viz/full_batch.py",
     "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42",
+    "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42_full",
     "--workers",
     "8"
   ],
-  "slurm_job_id": "149760",
-  "git_commit": "5e5c1f0b5af3e8981a021b0089a3f06a95dbf2ee",
+  "git_commit": "db949a3e920be7e9a50928ff6fc5ecd4b03a075a",
+  "slurm_job_id": "149876",
   "matplotlib": "3.10.5",
   "numpy": "2.4.6",
+  "numba": "0.67.0",
   "workers": 8,
-  "font": {
-    "file": "Times.TTF",
-    "sha256": "4e98adeff8ccc8ef4e3ece8d4547e288ff85fdc9c7ca711a4599c234874bbe86"
-  },
   "source_hashes": {
-    "plot.py": "1082bd57fc0c7237d342e1933b326065c0f6fb1ac10aa3469bc42d8857c1a1c1",
-    "render_batch.py": "785d7237cf2533ae78a8d5e28dd23095be97ad8493a95b0a2069667142d67912",
+    "full_surface_checks.py": "e33bb54fa100b4f824a31e308e668e676d580b53bd4eaf1ba53a17ab58fcfb05",
+    "plot.py": "3ec4e9be5c54eec23bd119a4346ed58bbc60a16840445267dc0eb27ade9874ed",
+    "full_batch.py": "d8eb75aa7dc450e17065da3638dfce16fdc93e997055e92a4d10c8c9c8895028",
+    "render_batch.py": "400e8b6fa70975fcec011dc6bd78da188ef8c43065fe1becc9ad54c1e7db52ed",
     "__init__.py": "0656e5bb35a80080887abb1eba88fd39f674ee6257a0cbb637880d74c9a9e006",
-    "edge_checks.py": "5fa13bdef43271855c46b92ea0dfd63201e46fa6d8019d8ab17ccd7c54ff23b7",
-    "report.py": "5d48f1c5f2b741e35bcd19956d8ad7cb939b712b78fd3332c594508728107c36",
-    "metrics.py": "e776db90261c8eda8a79ab514cbb3abf627e89cf9342e1fda141745292f5fb41",
+    "edge_checks.py": "a0aa8aa053e58a543453ed99e8dd547c45c36ac8ca79c53af8eafa6a49e69a53",
+    "full_surface.py": "78d43cb5a3d416bca5e9a8bd4cd84507bd4d7b06dc6dbe415f100881e373f559",
+    "report.py": "068e6060b49c6ee10ca9a25d3470918a4b61de675a090bfbfe59048a280e6b6f",
+    "full_plot.py": "3db71d1c41e86406cb9685c9fdf40deab2df63ed2cc623111173cbbd1600e9e7",
+    "metrics.py": "eb75dcb9284c9aa871a6cc4eb5ae111f3c2c90a53cc6adaf613a036d7ffb8682",
+    "summarize.py": "222d929dc0df5f710c90c24ae9eea3ed443abd47650b633110ff571b7930bcb5",
+    "full_ecdf.py": "f1a0a9b6e8e89d3f2c86d19703bde2c08af171ef952cefb260dd0f1bd1614700",
     "capture.py": "c60cd7db78fbe262941a60889d71060e4ce5232c9c66ad076278c5d291e69a8f",
+    "publish.py": "40d352313be2e07d7e82087c7276196ce84b229ab46b8930e72024c6c6505c62",
     "factor_audit.py": "2fe8ca1ec6e2e113c64bfdf50c96c9b77378a9ad0a762514992d376945aface3",
     "qa/__init__.py": "fc4041f8261bbb8d8fcf43c3700bce46fdfd21ecc6d9d2dbd47677388c2b111f",
     "qa/collisions.py": "841ede7dcaefa3ab11576b5ba52375d1678a71f77d39f553d5464e81b0699283",
     "qa/panel_alignment.py": "43958e6b49d897f326ff64e73cbed0bf057e17c06533b5b57d3dededf8111e76",
     "qa/pdf_text.py": "11b8f3ec50bc13e2bd8561eeb7cd204307f4ce5a70ac57fa24c809ce1b9c252c"
   },
+  "font": {
+    "file": "Times.TTF",
+    "sha256": "4e98adeff8ccc8ef4e3ece8d4547e288ff85fdc9c7ca711a4599c234874bbe86"
+  },
   "dpi": 600,
   "formats": [
+    "png",
     "pdf",
-    "svg",
-    "png"
+    "svg"
   ],
-  "surface_marks": "rasterized; all displayed grid vertices retained",
+  "surface": "all measured vertices and grid cells, depth-tested",
+  "data_stride": [
+    1,
+    1
+  ],
+  "pooling": false,
+  "cropping": false,
+  "sidewall_base_z": 0,
   "text_and_axes": "vector and editable",
-  "face_color": "standard Matplotlib mean-of-face-vertex z, with shared linear normalization",
-  "ecdf_finalization": {
-    "git_commit": "41d6186ae8bd10232ac631857f54d812f8b764f3",
-    "command": "python -m nar.activation_viz.plot \"$RUN\" --select distributions",
-    "plot_source_sha256": "b69380e29cc9528bf54bc298c667cda2843292023dabd585c96e479aac019186",
-    "scope": "four ECDF sets only; all 304 surface exports retain the original render provenance",
-    "audit": "four updated PDF glyph and collision audits pass; merged into full 308-file audit index"
+  "compatibility": "overview and detail URLs both show identical complete data",
+  "ecdf": "exact unique values and multiplicities; no quantile thinning or path simplification",
+  "clipped_label_repair": {
+    "git_commit": "cc00cdf46ab08af7c7f1c6c09fc914ee4bf925f7",
+    "files": [
+      "figures/paired_local/down_proj/raw/detail/panel_hadamard_block36.pdf",
+      "figures/paired_local/down_proj/raw/detail/panel_nar_k8_block36.pdf",
+      "figures/paired_local/down_proj/raw/detail/panel_nar_kmax_block36.pdf",
+      "figures/paired_local/down_proj/raw/detail/panel_unrotated_block36.pdf",
+      "figures/paired_local/down_proj/raw/overview/panel_hadamard_block36.pdf",
+      "figures/paired_local/down_proj/raw/overview/panel_nar_k8_block36.pdf",
+      "figures/paired_local/down_proj/raw/overview/panel_nar_kmax_block36.pdf",
+      "figures/paired_local/down_proj/raw/overview/panel_unrotated_block36.pdf",
+      "figures/paired_local/down_proj/residual/detail/panel_hadamard_block36.pdf",
+      "figures/paired_local/down_proj/residual/detail/panel_nar_k8_block36.pdf",
+      "figures/paired_local/down_proj/residual/detail/panel_nar_kmax_block36.pdf",
+      "figures/paired_local/down_proj/residual/detail/panel_unrotated_block36.pdf",
+      "figures/paired_local/down_proj/residual/overview/panel_hadamard_block36.pdf",
+      "figures/paired_local/down_proj/residual/overview/panel_nar_k8_block36.pdf",
+      "figures/paired_local/down_proj/residual/overview/panel_nar_kmax_block36.pdf",
+      "figures/paired_local/down_proj/residual/overview/panel_unrotated_block36.pdf"
+    ],
+    "command": [
+      "/home/yanlongc/qwen-full-resolution-work/nar/activation_viz/repair_exports.py",
+      "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42",
+      "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42_full"
+    ],
+    "plot_source_sha256": "03585f6fd5660fe29e05889c6cb13c4b797e3d90ef5d79bb40f504981b791ccc",
+    "change": "expand only the single-panel right canvas margin when measured labels would overflow, preserving the physical plot area, label anchoring, data and other plots"
+  },
+  "height_column_revision": {
+    "git_commit": "e06c21fb5afb94b4dd8763cf2b9c20d2f44d5954",
+    "command": [
+      "/home/yanlongc/qwen-full-resolution-work/nar/activation_viz/full_batch.py",
+      "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42",
+      "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42_full",
+      "--workers",
+      "8",
+      "--redraw-surfaces-only"
+    ],
+    "slurm_job_id": "149902",
+    "source_hashes": {
+      "full_surface.py": "89bdf4f325004ce280de4e1cb875be03d6987c6a0c56d3177af7327ccd62f5a5",
+      "full_plot.py": "03585f6fd5660fe29e05889c6cb13c4b797e3d90ef5d79bb40f504981b791ccc",
+      "full_batch.py": "5002579c67b028b4119829a1c19a10523425582c01a02ad73052b680dd8f021d"
+    },
+    "scope": "all 304 surface exports; exact ECDFs unchanged",
+    "geometry": "one depth-tested z=0-to-value height segment per measured grid vertex, plus every original grid cell and exterior wall"
   }
 }

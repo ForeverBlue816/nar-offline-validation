@@ -1,3 +1,5 @@
+> Current display revision: the user superseded the original pooled/cropped display specification with complete-data, zero-base height figures. See [full_resolution_contract.md](full_resolution_contract.md). The original capture and numerical audit contract below is retained for provenance.
+
 # Predeclared figure contract
 
 Question: how do the frozen deployed rotations redistribute activation energy and change actual group-128 quantization error on matched Qwen3-8B-Base inputs? No direction of improvement is assumed.

@@ -1,97 +1,71 @@
 {
-  "reviewed_matrices": [
-    {
-      "path": "end_to_end/down_proj/raw/overview/matrix.png",
-      "sha256": "8ef7eca3e3fedb5376ea0205ff736fdbdd19bb5068e5e32331d05756181e4263"
-    },
-    {
-      "path": "end_to_end/down_proj/residual/overview/matrix.png",
-      "sha256": "9ad5a603dfe238bf477f3c6a73f3821b30f9ad279f6f0e1117e6c3091b41e4f0"
-    },
-    {
-      "path": "paired_local/down_proj/raw/detail/matrix.png",
-      "sha256": "aaecef402a5a039c61aee25b8211aea0e9ec601710ccc3a404bc00f025689b62"
-    },
-    {
-      "path": "paired_local/down_proj/residual/detail/matrix.png",
-      "sha256": "b2d707173d458784e5cabb77c83af0d19b68d2b2d0e84cc30bf42bb6f3ef9ecd"
-    },
-    {
-      "path": "paired_local/q_proj/raw/detail/matrix.png",
-      "sha256": "971f2fcfc37549b1e2ce2eac98d45fdbdf1b0f3ea7f8310faae57429b853cac2"
-    },
-    {
-      "path": "paired_local/q_proj/residual/detail/matrix.png",
-      "sha256": "8306db38992671ffc56b4458664f41e481943f2ffb909dba081bc825d0a5cf1a"
-    },
-    {
-      "path": "end_to_end/q_proj/raw/overview/matrix.png",
-      "sha256": "c8baa22415b8a7a6069f237ad0e057a3c7070a419c381d033acd7b464a4a5583"
-    },
-    {
-      "path": "end_to_end/q_proj/residual/overview/matrix.png",
-      "sha256": "baebb680200273f22ea158b054ab61013eed1fa051fcfbbee6a402d4ef980e47"
-    },
-    {
-      "path": "end_to_end/down_proj/raw/detail/matrix.png",
-      "sha256": "3793505e53520c1b746e9e4aeda796d40ee7f9683697df9e606797da9e54eef6"
-    },
-    {
-      "path": "end_to_end/down_proj/residual/detail/matrix.png",
-      "sha256": "dd7bc19656e44a37ead2f18edbaf50da827fcbf47bd3fbf127d67564667325a9"
-    },
-    {
-      "path": "end_to_end/q_proj/raw/detail/matrix.png",
-      "sha256": "d9cd13f9d5848ba441f4712cde5735d147231bd7f3b7760b6f8443ce93aac757"
-    },
-    {
-      "path": "end_to_end/q_proj/residual/detail/matrix.png",
-      "sha256": "f98adbd049c4542c8a8e8ba4d3e8538ca8ca272a1d74e927cefc5ba47925f905"
-    },
+  "checked_utc": "2026-09-11T09:37:29.099074+00:00",
+  "reviewed_figures": [
     {
       "path": "paired_local/down_proj/raw/overview/matrix.png",
-      "sha256": "9a16205158e29493c4698f4ea1af27360bc4f79cc1a89dd907f339f66dcc6ef6"
+      "sha256": "7f66176eeca530e264d5db4ba00c78caf4a466c19b47591b1e0d7256e1bd9780"
     },
     {
       "path": "paired_local/down_proj/residual/overview/matrix.png",
-      "sha256": "789eedc9aa02e67074577369a775ef058d76e0f88ff36b7a4d842bce1701f449"
+      "sha256": "300a7e027b9d2053d210ffd2a124ac0e6889e97d653d19fe943269f09331d4ea"
+    },
+    {
+      "path": "end_to_end/down_proj/raw/overview/matrix.png",
+      "sha256": "c887aea27fc3a5a1407bf1a0f6dc2b32bbad2102688e43201b34745a584492d0"
+    },
+    {
+      "path": "end_to_end/down_proj/residual/overview/matrix.png",
+      "sha256": "b264f691cdebd5c406e2b305a2695fce3601ae75dbd36fb03896d246c3f1d81d"
     },
     {
       "path": "paired_local/q_proj/raw/overview/matrix.png",
-      "sha256": "59cd108067b9a72bb02270331b28b7ef1fa2eb4e6b9179ad92d04c83f18ed43f"
+      "sha256": "23fdb272b0aa3e7cef6f1d001a96d805fee8a8c117d272d1a3a1ac6d141f95c9"
     },
     {
       "path": "paired_local/q_proj/residual/overview/matrix.png",
-      "sha256": "8c3e96012ae852587fcb7877d3e0808d43d2872a0f11f0775d422676bf2c1478"
-    }
-  ],
-  "coverage": "All 16 mode/site/quantity/view matrices; all 224 unique surface panels. Representative method rows, individual panels, and rotated-only down-projection overview zooms also reviewed. Four final ECDFs reviewed together at readable scale.",
-  "findings": [
-    "Matrix ticks, labels, titles and surfaces are readable; native PNG and enlarged PDF checks confirm complete numeric tick glyphs.",
-    "Shared linear scales retain large unrotated peaks; separately labelled rotated-only zooms reveal rotated distributions.",
-    "ECDF nonnegative limits and at most four x ticks eliminate the original overlap; legends and mode/site headers are readable."
-  ],
-  "warning_review": "Text-fill-edge and text-image-edge flags in 3D panels reflect pale pane boundaries or transparent corners of raster-surface bounding boxes. Reviewed matrix coverage and representative native exports show no obscured glyphs or confusing label collisions.",
-  "static_policy_exceptions": {
-    "FONT-FAMILY": "Explicit user-requested Times New Roman overrides the static checker sans-serif whitelist. Embedded font and rendered glyph-size checks still apply.",
-    "EXPORT-RASTER": "User requested 600-dpi PNG plus PDF/SVG, not TIFF."
-  },
-  "reviewed_ecdfs": [
+      "sha256": "2351d3fd19f3ed025987f6cfbb898c5cb0dd572d98fa989f306c2ccea3ee59bc"
+    },
+    {
+      "path": "end_to_end/q_proj/raw/overview/matrix.png",
+      "sha256": "0eb521634ad924bc78b398012e6306262ccb459a02bbe335c605f22b2eca8169"
+    },
+    {
+      "path": "end_to_end/q_proj/residual/overview/matrix.png",
+      "sha256": "fdf61a0ecf758e0adeffe24a1c9438e4ec5ceaea1189e1c7b715dbfcd5b049f6"
+    },
+    {
+      "path": "paired_local/down_proj/raw/overview/rotated_only_zoom.png",
+      "sha256": "2e39932ff06bd9e6f40813e303efe3b76eb4eb300ff11a6091cb1d98ef9959b9"
+    },
+    {
+      "path": "paired_local/down_proj/residual/overview/rotated_only_zoom.png",
+      "sha256": "ce1d92953f37f034ce7debec207d5b54b6b07bd157f934b912b7363cf6de8372"
+    },
+    {
+      "path": "paired_local/q_proj/raw/overview/rotated_only_zoom.png",
+      "sha256": "0e30b0cbb54b1e55ab16ce0434695608570b0bd01df7c2a1a9b919c67372070f"
+    },
+    {
+      "path": "paired_local/q_proj/residual/overview/rotated_only_zoom.png",
+      "sha256": "ee3151645dd0742d2e67c02d1f377f6c2e5ab5a48bcc61aee5baafbbe3d4cfcc"
+    },
     {
       "path": "end_to_end/down_proj/group_range_ecdf.png",
-      "sha256": "497ce57ee6bf9cd657f215dde19bba64e693c723e6e4d4660e044d64823936b7"
+      "sha256": "8ee054791d657dacbdff5cad4d734a2ee7dd271faed82f3d72eaf9d08c1a58ab"
     },
     {
       "path": "end_to_end/q_proj/group_range_ecdf.png",
-      "sha256": "5a9553cca6346876e68db6e54b31c63d9935c3775033471c863bbd1ec76a8d4a"
+      "sha256": "e2bc71854d56d8a9fcd0e5640b171af668e69cfea4d3f616df9c7f35f8761c4b"
     },
     {
       "path": "paired_local/down_proj/group_range_ecdf.png",
-      "sha256": "fa16c9d85d07bf007daea31d1128bd4acac1eec47d26c0181cd32808b2ee714b"
+      "sha256": "24faab113176607df7d073da7364c3e3bf53f90bbd3f9b7ff59da7925fd20a2e"
     },
     {
       "path": "paired_local/q_proj/group_range_ecdf.png",
-      "sha256": "d6ceb8cb0f0b59777f54663a1bfb1a0e7664d4797211c20c05eb7c3cb45e4aec"
+      "sha256": "0138c7e2df9400593d4d1322f647ad7969ab846bc3557fe3d08a1bc3971366b2"
     }
-  ]
+  ],
+  "review": "Inspected final eight full-grid matrices, four rotated-only matrices, and four unchanged exact ECDFs; matrix views cover all 112 distinct data panels. Final height-column single-panel preflight also inspected. Heights connect continuously to zero, including subpixel-width peaks; true indices and labels are readable. PDF warnings about image/pane bounding boxes reviewed against rendered figures; transparent bounding boxes do not obscure labels.",
+  "passed": true
 }

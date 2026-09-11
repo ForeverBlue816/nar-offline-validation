@@ -37,3 +37,5 @@ counts on small deterministic geometry tests; inspect the complete measured
 Block 36 panel before batch rendering; audit panel alignment, PDF text and
 collisions; inspect all revised matrix panels. No synthetic test surface may
 appear among the scientific figures.
+
+Final height-column rule: every measured vertex also contributes a depth-tested vertical segment from z=0 to its unchanged value. This connects even subpixel-width peaks continuously to the base. The segment represents geometric height, not additional activation observations. The complete grid-cell mesh and exterior closure remain present. Geometry reports record one vertical segment per source element.

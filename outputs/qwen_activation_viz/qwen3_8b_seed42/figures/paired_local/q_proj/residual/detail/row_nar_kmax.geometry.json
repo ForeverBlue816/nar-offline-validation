@@ -1,0 +1,119 @@
+{
+  "panels": [
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "nar_kmax",
+      "layer": 0,
+      "source": "activations/paired_local/nar_kmax/s00_l00_q_proj.pt",
+      "source_sha256": "e339c7892494c84fe8e0e5e76dd7ea9d9aa555dced519f0b14d92f18980a2523",
+      "maximum": 5.431337356567383,
+      "z_limit": 33.09106033325195
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "nar_kmax",
+      "layer": 12,
+      "source": "activations/paired_local/nar_kmax/s00_l12_q_proj.pt",
+      "source_sha256": "2d9f07cdf392213392ea2da9d364fd189a8f92a71e8d3c5787c23f578af4c634",
+      "maximum": 5.322556495666504,
+      "z_limit": 47.8656139755249
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "nar_kmax",
+      "layer": 23,
+      "source": "activations/paired_local/nar_kmax/s00_l23_q_proj.pt",
+      "source_sha256": "78d793e0fde9ef705c503ae666f466ba46bb9e25d04e7b74d5792c7a85833e44",
+      "maximum": 5.480830669403076,
+      "z_limit": 65.1389030456543
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "nar_kmax",
+      "layer": 35,
+      "source": "activations/paired_local/nar_kmax/s00_l35_q_proj.pt",
+      "source_sha256": "38a47cc2fdddc53d8d0bfa7d05432f94e4b7310cea6b041592bdfd1708f8d64d",
+      "maximum": 5.385024070739746,
+      "z_limit": 62.30065864562989
+    }
+  ],
+  "sample": 0,
+  "sidewalls": "geometric closure to z=0; not additional measurements",
+  "seconds": 7.60089487498044
+}

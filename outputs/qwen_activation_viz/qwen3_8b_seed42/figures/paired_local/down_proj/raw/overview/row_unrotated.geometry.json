@@ -1,0 +1,119 @@
+{
+  "panels": [
+    {
+      "shape": [
+        2048,
+        12288
+      ],
+      "vertices_processed": 25165824,
+      "surface_triangles": 50302978,
+      "sidewall_triangles": 57336,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 25165824,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 0,
+      "source": "activations/paired_local/unrotated/s00_l00_down_proj.pt",
+      "source_sha256": "8d00a1c78d4136bd3c97afc47f3b5fa00eb36cf355585c0d64f9967be4e8c833",
+      "maximum": 9.766485214233398,
+      "z_limit": 10.0594797706604
+    },
+    {
+      "shape": [
+        2048,
+        12288
+      ],
+      "vertices_processed": 25165824,
+      "surface_triangles": 50302978,
+      "sidewall_triangles": 57336,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 25165824,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 12,
+      "source": "activations/paired_local/unrotated/s00_l12_down_proj.pt",
+      "source_sha256": "30dda6ef93f22739ea00998c45fc186a1f4c3f1fa830725cbb4a9407a92db604",
+      "maximum": 13.931894302368164,
+      "z_limit": 14.349851131439209
+    },
+    {
+      "shape": [
+        2048,
+        12288
+      ],
+      "vertices_processed": 25165824,
+      "surface_triangles": 50302978,
+      "sidewall_triangles": 57336,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 25165824,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 23,
+      "source": "activations/paired_local/unrotated/s00_l23_down_proj.pt",
+      "source_sha256": "47ae51c1a9a640cfe07aa12c7eb6acf6da93d8fee1ef3fbe3b14ea151defde87",
+      "maximum": 51.458106994628906,
+      "z_limit": 53.00185020446777
+    },
+    {
+      "shape": [
+        2048,
+        12288
+      ],
+      "vertices_processed": 25165824,
+      "surface_triangles": 50302978,
+      "sidewall_triangles": 57336,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 25165824,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 35,
+      "source": "activations/paired_local/unrotated/s00_l35_down_proj.pt",
+      "source_sha256": "33dcdd381890e933cda71acc8f0355c27dfadbc5dc4883f40b2d81da9ab03b81",
+      "maximum": 3131.364013671875,
+      "z_limit": 3225.304934082031
+    }
+  ],
+  "sample": 0,
+  "sidewalls": "geometric closure to z=0; not additional measurements",
+  "seconds": 16.80754659100785
+}

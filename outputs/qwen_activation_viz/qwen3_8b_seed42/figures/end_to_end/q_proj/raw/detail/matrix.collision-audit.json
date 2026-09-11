@@ -1,18 +1,18 @@
 {
-  "pdf": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+  "pdf": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42_full/figures/end_to_end/q_proj/raw/detail/matrix.pdf",
   "auditable": true,
   "verdict": "REVIEW REQUIRED",
   "page_count": 1,
-  "visible_text_box_count": 117,
-  "text_trace_count": 117,
-  "stroke_path_count": 240,
+  "visible_text_box_count": 141,
+  "text_trace_count": 141,
+  "stroke_path_count": 288,
   "filled_region_count": 37,
   "image_region_count": 12,
   "summary": {
     "fail": 0,
-    "warn": 24,
-    "contained_fill_overlays": 0,
-    "contained_image_overlays": 0
+    "warn": 72,
+    "contained_fill_overlays": 12,
+    "contained_image_overlays": 48
   },
   "thresholds": {
     "text_inset_pt": 0.6,
@@ -25,43 +25,19 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "0",
       "text_bbox": [
-        66.06161499023438,
-        354.0175476074219,
-        85.19364929199219,
-        364.15374755859375
+        75.5053939819336,
+        165.20884704589844,
+        84.81574249267578,
+        171.5139923095703
       ],
       "other_text": null,
       "other_bbox": [
-        54.272064208984375,
-        322.2447204589844,
-        132.8601837158203,
-        355.49700927734375
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        43
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-fill-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
-      "text_bbox": [
-        66.0616226196289,
-        115.28115844726562,
-        85.19364929199219,
-        125.41737365722656
-      ],
-      "other_text": null,
-      "other_bbox": [
-        54.272064208984375,
-        83.50833129882812,
-        132.8601837158203,
-        116.7606201171875
+        81.90103149414062,
+        125.9434814453125,
+        213.5555419921875,
+        181.6492919921875
       ],
       "object_count": 1,
       "object_indexes": [
@@ -73,23 +49,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "0",
       "text_bbox": [
-        66.0616226196289,
-        234.6493377685547,
-        85.19364929199219,
-        244.78558349609375
+        75.50540161132812,
+        358.9847412109375,
+        84.81573486328125,
+        365.2899169921875
       ],
       "other_text": null,
       "other_bbox": [
-        54.272064208984375,
-        202.8765106201172,
-        132.8601837158203,
-        236.12879943847656
+        81.90103149414062,
+        319.7193908691406,
+        213.5555419921875,
+        375.4251708984375
       ],
       "object_count": 1,
       "object_indexes": [
-        23
+        27
       ]
     },
     {
@@ -97,23 +73,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "0",
       "text_bbox": [
-        179.70155334472656,
-        115.28115844726562,
-        198.83358764648438,
-        125.41737365722656
+        75.50540161132812,
+        552.7606811523438,
+        84.81582641601562,
+        559.0658569335938
       ],
       "other_text": null,
       "other_bbox": [
-        167.91201782226562,
-        83.50833129882812,
-        246.50013732910156,
-        116.7606201171875
+        81.90103149414062,
+        513.4953002929688,
+        213.5555419921875,
+        569.2011108398438
       ],
       "object_count": 1,
       "object_indexes": [
-        63
+        51
       ]
     },
     {
@@ -121,23 +97,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        179.70155334472656,
-        354.0175476074219,
-        198.83358764648438,
-        364.15374755859375
+        116.43518829345703,
+        177.57815551757812,
+        129.04547119140625,
+        196.19888305664062
       ],
       "other_text": null,
       "other_bbox": [
-        167.91201782226562,
-        322.2447204589844,
-        246.50013732910156,
-        355.49700927734375
+        81.90103149414062,
+        125.9434814453125,
+        213.5555419921875,
+        181.6492919921875
       ],
       "object_count": 1,
       "object_indexes": [
-        103
+        3
       ]
     },
     {
@@ -145,23 +121,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        179.70156860351562,
-        234.64935302734375,
-        198.83358764648438,
-        244.78558349609375
+        116.43521118164062,
+        371.3540954589844,
+        129.04547119140625,
+        389.97479248046875
       ],
       "other_text": null,
       "other_bbox": [
-        167.91201782226562,
-        202.8765106201172,
-        246.50013732910156,
-        236.12879943847656
+        81.90103149414062,
+        319.7193908691406,
+        213.5555419921875,
+        375.4251708984375
       ],
       "object_count": 1,
       "object_indexes": [
-        83
+        27
       ]
     },
     {
@@ -169,19 +145,91 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        293.34149169921875,
-        115.28115844726562,
-        312.4735412597656,
-        125.41737365722656
+        116.43521118164062,
+        565.1300048828125,
+        129.04544067382812,
+        583.7506713867188
       ],
       "other_text": null,
       "other_bbox": [
-        281.5519714355469,
-        83.50833129882812,
-        360.14007568359375,
-        116.7606201171875
+        81.90103149414062,
+        513.4953002929688,
+        213.5555419921875,
+        569.2011108398438
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        51
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        267.50750732421875,
+        165.20884704589844,
+        276.81787109375,
+        171.51400756835938
+      ],
+      "other_text": null,
+      "other_bbox": [
+        273.90313720703125,
+        125.9434814453125,
+        405.5576477050781,
+        181.6492919921875
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        75
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        267.5075378417969,
+        358.9847412109375,
+        276.81787109375,
+        365.2898864746094
+      ],
+      "other_text": null,
+      "other_bbox": [
+        273.90313720703125,
+        319.7193908691406,
+        405.5576477050781,
+        375.4251708984375
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        99
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        267.5075378417969,
+        552.7606811523438,
+        276.8179016113281,
+        559.0658569335938
+      ],
+      "other_text": null,
+      "other_bbox": [
+        273.90313720703125,
+        513.4953002929688,
+        405.5576477050781,
+        569.2011108398438
       ],
       "object_count": 1,
       "object_indexes": [
@@ -193,23 +241,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        293.34149169921875,
-        234.64935302734375,
-        312.4735412597656,
-        244.78555297851562
+        308.43731689453125,
+        177.57818603515625,
+        321.047607421875,
+        196.1988525390625
       ],
       "other_text": null,
       "other_bbox": [
-        281.5519714355469,
-        202.8765106201172,
-        360.14007568359375,
-        236.12879943847656
+        273.90313720703125,
+        125.9434814453125,
+        405.5576477050781,
+        181.6492919921875
       ],
       "object_count": 1,
       "object_indexes": [
-        143
+        75
       ]
     },
     {
@@ -217,23 +265,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        293.34149169921875,
-        354.0175476074219,
-        312.4735412597656,
-        364.15374755859375
+        308.43731689453125,
+        371.35406494140625,
+        321.0476379394531,
+        389.97479248046875
       ],
       "other_text": null,
       "other_bbox": [
-        281.5519714355469,
-        322.2447204589844,
-        360.14007568359375,
-        355.49700927734375
+        273.90313720703125,
+        319.7193908691406,
+        405.5576477050781,
+        375.4251708984375
       ],
       "object_count": 1,
       "object_indexes": [
-        163
+        99
       ]
     },
     {
@@ -241,23 +289,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "2000",
       "text_bbox": [
-        406.9814453125,
-        354.0175476074219,
-        426.113525390625,
-        364.1537780761719
+        308.43731689453125,
+        565.1299438476562,
+        321.0475769042969,
+        583.7506713867188
       ],
       "other_text": null,
       "other_bbox": [
-        395.19189453125,
-        322.2447204589844,
-        473.780029296875,
-        355.49700927734375
+        273.90313720703125,
+        513.4953002929688,
+        405.5576477050781,
+        569.2011108398438
       ],
       "object_count": 1,
       "object_indexes": [
-        223
+        123
       ]
     },
     {
@@ -265,23 +313,23 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "0",
       "text_bbox": [
-        406.9814758300781,
-        115.28115844726562,
-        426.1134948730469,
-        125.41737365722656
+        459.5096435546875,
+        165.2088623046875,
+        468.82000732421875,
+        171.51400756835938
       ],
       "other_text": null,
       "other_bbox": [
-        395.19189453125,
-        83.50833129882812,
-        473.780029296875,
-        116.7606201171875
+        465.9052734375,
+        125.9434814453125,
+        597.5597534179688,
+        181.6492919921875
       ],
       "object_count": 1,
       "object_indexes": [
-        183
+        147
       ]
     },
     {
@@ -289,23 +337,263 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel",
+      "text": "0",
       "text_bbox": [
-        406.9814758300781,
-        234.64935302734375,
-        426.1134948730469,
-        244.78555297851562
+        459.5096435546875,
+        358.9847412109375,
+        468.8199768066406,
+        365.2898864746094
       ],
       "other_text": null,
       "other_bbox": [
-        395.19189453125,
-        202.8765106201172,
-        473.780029296875,
-        236.12879943847656
+        465.9052734375,
+        319.7193908691406,
+        597.5597534179688,
+        375.4251708984375
       ],
       "object_count": 1,
       "object_indexes": [
-        203
+        171
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        459.5096435546875,
+        552.7606811523438,
+        468.82000732421875,
+        559.0658569335938
+      ],
+      "other_text": null,
+      "other_bbox": [
+        465.9052734375,
+        513.4953002929688,
+        597.5597534179688,
+        569.2011108398438
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        195
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        500.4394226074219,
+        177.57818603515625,
+        513.0496826171875,
+        196.19891357421875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        465.9052734375,
+        125.9434814453125,
+        597.5597534179688,
+        181.6492919921875
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        147
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        500.4394226074219,
+        371.35406494140625,
+        513.0497436523438,
+        389.97479248046875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        465.9052734375,
+        319.7193908691406,
+        597.5597534179688,
+        375.4251708984375
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        171
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        500.4394836425781,
+        565.1299438476562,
+        513.0496826171875,
+        583.7506713867188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        465.9052734375,
+        513.4953002929688,
+        597.5597534179688,
+        569.2011108398438
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        195
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        651.51171875,
+        165.20880126953125,
+        660.8220825195312,
+        171.51397705078125
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        125.9434814453125,
+        789.5618896484375,
+        181.6492919921875
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        219
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        651.51171875,
+        358.9847412109375,
+        660.8220825195312,
+        365.2899169921875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        319.7193908691406,
+        789.5618896484375,
+        375.4251708984375
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        243
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "0",
+      "text_bbox": [
+        651.5118408203125,
+        552.7606811523438,
+        660.8221435546875,
+        559.0658569335938
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        513.4953002929688,
+        789.5618896484375,
+        569.2011108398438
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        267
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        692.4415283203125,
+        177.57818603515625,
+        705.0517578125,
+        196.1988525390625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        125.9434814453125,
+        789.5618896484375,
+        181.6492919921875
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        219
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        692.4415283203125,
+        371.3541259765625,
+        705.0518188476562,
+        389.97479248046875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        319.7193908691406,
+        789.5618896484375,
+        375.4251708984375
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        243
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-fill-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
+      "text_bbox": [
+        692.4415283203125,
+        565.1299438476562,
+        705.0517578125,
+        583.750732421875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        657.9073486328125,
+        513.4953002929688,
+        789.5618896484375,
+        569.2011108398438
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        267
       ]
     },
     {
@@ -315,41 +603,17 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        66.06161499023438,
-        354.0175476074219,
-        85.19364929199219,
-        364.15374755859375
+        90.64476013183594,
+        202.455322265625,
+        121.95172119140625,
+        219.04190063476562
       ],
       "other_text": null,
       "other_bbox": [
-        53.880001068115234,
-        298.55999755859375,
-        133.1999969482422,
-        355.32000732421875
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        2
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "Channel",
-      "text_bbox": [
-        66.0616226196289,
-        115.28115844726562,
-        85.19364929199219,
-        125.41737365722656
-      ],
-      "other_text": null,
-      "other_bbox": [
-        54.119998931884766,
-        62.760009765625,
-        132.95999145507812,
-        116.04000854492188
+        64.80000305175781,
+        46.160888671875,
+        227.52000427246094,
+        208.88088989257812
       ],
       "object_count": 1,
       "object_indexes": [
@@ -363,17 +627,17 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        66.0616226196289,
-        234.6493377685547,
-        85.19364929199219,
-        244.78558349609375
+        90.64476013183594,
+        396.2312316894531,
+        121.95172119140625,
+        412.8177795410156
       ],
       "other_text": null,
       "other_bbox": [
-        53.880001068115234,
-        181.3200225830078,
-        132.9600067138672,
-        235.4400177001953
+        64.80000305175781,
+        239.93679809570312,
+        227.52000427246094,
+        402.65679931640625
       ],
       "object_count": 1,
       "object_indexes": [
@@ -387,17 +651,257 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        179.70155334472656,
-        115.28115844726562,
-        198.83358764648438,
-        125.41737365722656
+        90.644775390625,
+        590.0071411132812,
+        121.95171356201172,
+        606.5936279296875
       ],
       "other_text": null,
       "other_bbox": [
-        167.75999450683594,
-        66.1200180053711,
-        246.72000122070312,
-        116.52001953125
+        64.80000305175781,
+        433.7127380371094,
+        227.52000427246094,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        163.16421508789062,
+        190.64639282226562,
+        175.7744903564453,
+        209.26708984375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        46.160888671875,
+        227.52000427246094,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        0
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        163.16421508789062,
+        384.4223327636719,
+        175.77452087402344,
+        403.04302978515625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        239.93679809570312,
+        227.52000427246094,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        1
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        163.16421508789062,
+        578.1982421875,
+        175.7745361328125,
+        596.8189086914062
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        433.7127380371094,
+        227.52000427246094,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        213.99171447753906,
+        156.08132934570312,
+        230.99171447753906,
+        164.58132934570312
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        46.160888671875,
+        227.52000427246094,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        0
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        213.99171447753906,
+        349.85723876953125,
+        230.99171447753906,
+        358.35723876953125
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        239.93679809570312,
+        227.52000427246094,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        1
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        213.99171447753906,
+        543.6331787109375,
+        230.99171447753906,
+        552.1331787109375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        433.7127380371094,
+        227.52000427246094,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        223.79539489746094,
+        186.75588989257812,
+        246.56158447265625,
+        208.25363159179688
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        46.160888671875,
+        227.52000427246094,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        0
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        223.79539489746094,
+        380.5317687988281,
+        246.56161499023438,
+        402.029541015625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        239.93679809570312,
+        227.52000427246094,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        1
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        223.79541015625,
+        574.3077392578125,
+        246.5615234375,
+        595.805419921875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        64.80000305175781,
+        433.7127380371094,
+        227.52000427246094,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        2
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Channel",
+      "text_bbox": [
+        282.6468811035156,
+        202.45529174804688,
+        313.953857421875,
+        219.04188537597656
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        46.160888671875,
+        419.5221252441406,
+        208.88088989257812
       ],
       "object_count": 1,
       "object_indexes": [
@@ -411,41 +915,17 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        179.70155334472656,
-        354.0175476074219,
-        198.83358764648438,
-        364.15374755859375
+        282.6468811035156,
+        396.231201171875,
+        313.953857421875,
+        412.8177795410156
       ],
       "other_text": null,
       "other_bbox": [
-        167.39999389648438,
-        298.55999755859375,
-        246.59999084472656,
-        354.7200012207031
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        5
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "Channel",
-      "text_bbox": [
-        179.70156860351562,
-        234.64935302734375,
-        198.83358764648438,
-        244.78558349609375
-      ],
-      "other_text": null,
-      "other_bbox": [
-        167.39999389648438,
-        176.16000366210938,
-        246.59999084472656,
-        235.55999755859375
+        256.8021240234375,
+        239.93679809570312,
+        419.5221252441406,
+        402.65679931640625
       ],
       "object_count": 1,
       "object_indexes": [
@@ -459,17 +939,257 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        293.34149169921875,
-        115.28115844726562,
-        312.4735412597656,
-        125.41737365722656
+        282.6468811035156,
+        590.0071411132812,
+        313.953857421875,
+        606.5936279296875
       ],
       "other_text": null,
       "other_bbox": [
-        281.2799987792969,
-        68.1600341796875,
-        360.47998046875,
-        116.280029296875
+        256.8021240234375,
+        433.7127380371094,
+        419.5221252441406,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        5
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        355.1662902832031,
+        190.64639282226562,
+        367.776611328125,
+        209.26708984375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        46.160888671875,
+        419.5221252441406,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        3
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        355.16632080078125,
+        384.42230224609375,
+        367.776611328125,
+        403.04296875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        239.93679809570312,
+        419.5221252441406,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        4
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        355.16632080078125,
+        578.1981811523438,
+        367.7767028808594,
+        596.8189086914062
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        433.7127380371094,
+        419.5221252441406,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        5
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        405.99383544921875,
+        156.08132934570312,
+        422.99383544921875,
+        164.58132934570312
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        46.160888671875,
+        419.5221252441406,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        3
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        405.99383544921875,
+        349.85723876953125,
+        422.99383544921875,
+        358.35723876953125
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        239.93679809570312,
+        419.5221252441406,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        4
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        405.99383544921875,
+        543.6331787109375,
+        422.99383544921875,
+        552.1331787109375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        433.7127380371094,
+        419.5221252441406,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        5
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        415.7975158691406,
+        186.7559051513672,
+        438.563720703125,
+        208.2536163330078
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        46.160888671875,
+        419.5221252441406,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        3
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        415.7975158691406,
+        380.5317687988281,
+        438.56378173828125,
+        402.029541015625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        239.93679809570312,
+        419.5221252441406,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        4
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        415.7975158691406,
+        574.3077392578125,
+        438.56378173828125,
+        595.805419921875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        256.8021240234375,
+        433.7127380371094,
+        419.5221252441406,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        5
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Channel",
+      "text_bbox": [
+        474.64898681640625,
+        202.455322265625,
+        505.9559631347656,
+        219.04185485839844
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        46.160888671875,
+        611.5242309570312,
+        208.88088989257812
       ],
       "object_count": 1,
       "object_indexes": [
@@ -483,17 +1203,17 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        293.34149169921875,
-        234.64935302734375,
-        312.4735412597656,
-        244.78555297851562
+        474.64898681640625,
+        396.2312316894531,
+        505.9559631347656,
+        412.81781005859375
       ],
       "other_text": null,
       "other_bbox": [
-        281.1600036621094,
-        178.8000030517578,
-        360.239990234375,
-        235.6800079345703
+        448.8042297363281,
+        239.93679809570312,
+        611.5242309570312,
+        402.65679931640625
       ],
       "object_count": 1,
       "object_indexes": [
@@ -507,17 +1227,233 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        293.34149169921875,
-        354.0175476074219,
-        312.4735412597656,
-        364.15374755859375
+        474.64898681640625,
+        590.0071411132812,
+        505.9559631347656,
+        606.5936279296875
       ],
       "other_text": null,
       "other_bbox": [
-        281.1600036621094,
-        298.08001708984375,
-        360.3599853515625,
-        355.32000732421875
+        448.8042297363281,
+        433.7127380371094,
+        611.5242309570312,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        8
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        547.1683959960938,
+        578.1982421875,
+        559.7787475585938,
+        596.8189086914062
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        433.7127380371094,
+        611.5242309570312,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        8
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        547.16845703125,
+        190.64639282226562,
+        559.7787475585938,
+        209.26708984375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        46.160888671875,
+        611.5242309570312,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        6
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        547.16845703125,
+        384.4223327636719,
+        559.7787475585938,
+        403.04302978515625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        239.93679809570312,
+        611.5242309570312,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        7
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        597.9959716796875,
+        156.08132934570312,
+        614.9959716796875,
+        164.58132934570312
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        46.160888671875,
+        611.5242309570312,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        6
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        597.9959716796875,
+        349.85723876953125,
+        614.9959716796875,
+        358.35723876953125
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        239.93679809570312,
+        611.5242309570312,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        7
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        597.9959716796875,
+        543.6331787109375,
+        614.9959716796875,
+        552.1331787109375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        433.7127380371094,
+        611.5242309570312,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        8
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        607.7996215820312,
+        186.75592041015625,
+        630.5658569335938,
+        208.25364685058594
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        46.160888671875,
+        611.5242309570312,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        6
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        607.7996215820312,
+        380.5317687988281,
+        630.5657958984375,
+        402.029541015625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        239.93679809570312,
+        611.5242309570312,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        7
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        607.7996215820312,
+        574.3077392578125,
+        630.5657958984375,
+        595.805419921875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        448.8042297363281,
+        433.7127380371094,
+        611.5242309570312,
+        596.4327392578125
       ],
       "object_count": 1,
       "object_indexes": [
@@ -531,41 +1467,17 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        406.9814453125,
-        354.0175476074219,
-        426.113525390625,
-        364.1537780761719
+        666.6510620117188,
+        202.455322265625,
+        697.9580078125,
+        219.04188537597656
       ],
       "other_text": null,
       "other_bbox": [
-        394.67999267578125,
-        296.0400085449219,
-        473.8800048828125,
-        355.08001708984375
-      ],
-      "object_count": 1,
-      "object_indexes": [
-        11
-      ]
-    },
-    {
-      "severity": "WARN",
-      "kind": "text-image-edge",
-      "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "Channel",
-      "text_bbox": [
-        406.9814758300781,
-        115.28115844726562,
-        426.1134948730469,
-        125.41737365722656
-      ],
-      "other_text": null,
-      "other_bbox": [
-        394.9200134277344,
-        69.48001098632812,
-        474.1199951171875,
-        115.92001342773438
+        640.8063354492188,
+        46.160888671875,
+        803.5263671875,
+        208.88088989257812
       ],
       "object_count": 1,
       "object_indexes": [
@@ -579,21 +1491,261 @@
       "message": "Text partially overlaps the edge of 1 raster image(s)",
       "text": "Channel",
       "text_bbox": [
-        406.9814758300781,
-        234.64935302734375,
-        426.1134948730469,
-        244.78555297851562
+        666.651123046875,
+        396.231201171875,
+        697.9580078125,
+        412.8177490234375
       ],
       "other_text": null,
       "other_bbox": [
-        394.79998779296875,
-        178.68002319335938,
-        474.0,
-        235.80001831054688
+        640.8063354492188,
+        239.93679809570312,
+        803.5263671875,
+        402.65679931640625
       ],
       "object_count": 1,
       "object_indexes": [
         10
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Channel",
+      "text_bbox": [
+        666.651123046875,
+        590.0071411132812,
+        697.9580078125,
+        606.5936279296875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        433.7127380371094,
+        803.5263671875,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        11
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        739.1705322265625,
+        190.6463623046875,
+        751.7808227539062,
+        209.26715087890625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        46.160888671875,
+        803.5263671875,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        9
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        739.1705322265625,
+        384.42230224609375,
+        751.78076171875,
+        403.04302978515625
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        239.93679809570312,
+        803.5263671875,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        10
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "4000",
+      "text_bbox": [
+        739.1705932617188,
+        578.1982421875,
+        751.7808227539062,
+        596.8189086914062
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        433.7127380371094,
+        803.5263671875,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        11
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        789.998046875,
+        156.08132934570312,
+        806.998046875,
+        164.58132934570312
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        46.160888671875,
+        803.5263671875,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        9
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        789.998046875,
+        349.85723876953125,
+        806.998046875,
+        358.35723876953125
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        239.93679809570312,
+        803.5263671875,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        10
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "2000",
+      "text_bbox": [
+        789.998046875,
+        543.6331787109375,
+        806.998046875,
+        552.1331787109375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        433.7127380371094,
+        803.5263671875,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        11
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        799.8017578125,
+        186.755859375,
+        822.5679321289062,
+        208.253662109375
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        46.160888671875,
+        803.5263671875,
+        208.88088989257812
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        9
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        799.8017578125,
+        380.5317687988281,
+        822.5679931640625,
+        402.0295104980469
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        239.93679809570312,
+        803.5263671875,
+        402.65679931640625
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        10
+      ]
+    },
+    {
+      "severity": "WARN",
+      "kind": "text-image-edge",
+      "page": 1,
+      "message": "Text partially overlaps the edge of 1 raster image(s)",
+      "text": "Token",
+      "text_bbox": [
+        799.8017578125,
+        574.3076782226562,
+        822.5679931640625,
+        595.805419921875
+      ],
+      "other_text": null,
+      "other_bbox": [
+        640.8063354492188,
+        433.7127380371094,
+        803.5263671875,
+        596.4327392578125
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        11
       ]
     }
   ]

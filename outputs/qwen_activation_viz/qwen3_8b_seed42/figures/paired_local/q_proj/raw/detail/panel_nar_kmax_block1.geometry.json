@@ -1,0 +1,35 @@
+{
+  "panels": [
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1442,
+        1442
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "nar_kmax",
+      "layer": 0,
+      "source": "activations/paired_local/nar_kmax/s00_l00_q_proj.pt",
+      "source_sha256": "e339c7892494c84fe8e0e5e76dd7ea9d9aa555dced519f0b14d92f18980a2523",
+      "maximum": 5.442376136779785,
+      "z_limit": 33.2936584854126
+    }
+  ],
+  "sample": 0,
+  "sidewalls": "geometric closure to z=0; not additional measurements",
+  "seconds": 2.3426335509866476
+}

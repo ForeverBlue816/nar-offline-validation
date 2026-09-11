@@ -1,0 +1,35 @@
+{
+  "panels": [
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 24568,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 8388608,
+      "pixel_size": [
+        1442,
+        1442
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 0,
+      "source": "activations/paired_local/unrotated/s00_l00_q_proj.pt",
+      "source_sha256": "a30aaa47ef81a14b73739edea21dbd77aa1d1a836621d71eec8cd1aa942c7eba",
+      "maximum": 32.32394027709961,
+      "z_limit": 33.2936584854126
+    }
+  ],
+  "sample": 0,
+  "sidewalls": "geometric closure to z=0; not additional measurements",
+  "seconds": 2.4739645720110275
+}

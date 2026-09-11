@@ -5,6 +5,11 @@
     "23": 52.61683002471924,
     "35": 3200.3968383789065
   },
-  "shared_across_methods": "all methods in mode",
+  "shared_across_methods": [
+    "unrotated",
+    "hadamard",
+    "nar_k8",
+    "nar_kmax"
+  ],
   "linear": true
 }

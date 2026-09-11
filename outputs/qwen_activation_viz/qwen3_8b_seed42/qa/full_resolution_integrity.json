@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "checked_utc": "2026-09-11T09:37:29.099074+00:00",
+  "geometry_files": 304,
+  "rendered_panel_instances_including_compatibility_aliases": 768,
+  "distinct_data_panels": 112,
+  "all_source_hashes_match_capture_inventory": true,
+  "all_grid_vertices_and_cells_processed": true,
+  "all_measured_heights_have_zero_base_segments": true,
+  "base_z": 0,
+  "unchanged_numerical_files": [
+    "validation_report.json",
+    "activation_inventory.json",
+    "metrics_per_sample.csv",
+    "metrics_summary.csv"
+  ],
+  "input_data_selection": "same preselected sample 0; all 2048 tokens and all channels within it",
+  "compatibility_exports": "Renderer copies canonical overview to detail; publisher creates identical hardlinks for PNG/PDF/SVG"
+}

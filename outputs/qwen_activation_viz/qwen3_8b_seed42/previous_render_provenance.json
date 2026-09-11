@@ -1,0 +1,47 @@
+{
+  "command": [
+    "/home/yanlongc/qwen-activation-viz-work/nar/activation_viz/render_batch.py",
+    "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42",
+    "--workers",
+    "8"
+  ],
+  "slurm_job_id": "149760",
+  "git_commit": "5e5c1f0b5af3e8981a021b0089a3f06a95dbf2ee",
+  "matplotlib": "3.10.5",
+  "numpy": "2.4.6",
+  "workers": 8,
+  "font": {
+    "file": "Times.TTF",
+    "sha256": "4e98adeff8ccc8ef4e3ece8d4547e288ff85fdc9c7ca711a4599c234874bbe86"
+  },
+  "source_hashes": {
+    "plot.py": "1082bd57fc0c7237d342e1933b326065c0f6fb1ac10aa3469bc42d8857c1a1c1",
+    "render_batch.py": "785d7237cf2533ae78a8d5e28dd23095be97ad8493a95b0a2069667142d67912",
+    "__init__.py": "0656e5bb35a80080887abb1eba88fd39f674ee6257a0cbb637880d74c9a9e006",
+    "edge_checks.py": "5fa13bdef43271855c46b92ea0dfd63201e46fa6d8019d8ab17ccd7c54ff23b7",
+    "report.py": "5d48f1c5f2b741e35bcd19956d8ad7cb939b712b78fd3332c594508728107c36",
+    "metrics.py": "e776db90261c8eda8a79ab514cbb3abf627e89cf9342e1fda141745292f5fb41",
+    "capture.py": "c60cd7db78fbe262941a60889d71060e4ce5232c9c66ad076278c5d291e69a8f",
+    "factor_audit.py": "2fe8ca1ec6e2e113c64bfdf50c96c9b77378a9ad0a762514992d376945aface3",
+    "qa/__init__.py": "fc4041f8261bbb8d8fcf43c3700bce46fdfd21ecc6d9d2dbd47677388c2b111f",
+    "qa/collisions.py": "841ede7dcaefa3ab11576b5ba52375d1678a71f77d39f553d5464e81b0699283",
+    "qa/panel_alignment.py": "43958e6b49d897f326ff64e73cbed0bf057e17c06533b5b57d3dededf8111e76",
+    "qa/pdf_text.py": "11b8f3ec50bc13e2bd8561eeb7cd204307f4ce5a70ac57fa24c809ce1b9c252c"
+  },
+  "dpi": 600,
+  "formats": [
+    "pdf",
+    "svg",
+    "png"
+  ],
+  "surface_marks": "rasterized; all displayed grid vertices retained",
+  "text_and_axes": "vector and editable",
+  "face_color": "standard Matplotlib mean-of-face-vertex z, with shared linear normalization",
+  "ecdf_finalization": {
+    "git_commit": "41d6186ae8bd10232ac631857f54d812f8b764f3",
+    "command": "python -m nar.activation_viz.plot \"$RUN\" --select distributions",
+    "plot_source_sha256": "b69380e29cc9528bf54bc298c667cda2843292023dabd585c96e479aac019186",
+    "scope": "four ECDF sets only; all 304 surface exports retain the original render provenance",
+    "audit": "four updated PDF glyph and collision audits pass; merged into full 308-file audit index"
+  }
+}

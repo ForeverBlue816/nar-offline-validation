@@ -1,17 +1,17 @@
 {
-  "pdf": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/residual/overview/panel_nar_k8_block1.pdf",
+  "pdf": "/projects/nar/nar-validation/outputs/qwen_activation_viz/qwen3_8b_seed42_full/figures/paired_local/q_proj/residual/overview/panel_nar_k8_block1.pdf",
   "auditable": true,
   "verdict": "REVIEW REQUIRED",
   "page_count": 1,
-  "visible_text_box_count": 13,
-  "text_trace_count": 13,
-  "stroke_path_count": 20,
+  "visible_text_box_count": 15,
+  "text_trace_count": 15,
+  "stroke_path_count": 24,
   "filled_region_count": 4,
   "image_region_count": 1,
   "summary": {
     "fail": 0,
     "warn": 2,
-    "contained_fill_overlays": 0,
+    "contained_fill_overlays": 1,
     "contained_image_overlays": 0
   },
   "thresholds": {
@@ -25,19 +25,19 @@
       "kind": "text-fill-edge",
       "page": 1,
       "message": "Text partially overlaps the edge of 1 filled region(s)",
-      "text": "Channel bin",
+      "text": "0",
       "text_bbox": [
-        51.062808990478516,
-        119.18276977539062,
-        78.30265808105469,
-        131.533935546875
+        39.94783020019531,
+        169.9969482421875,
+        49.2581787109375,
+        176.30209350585938
       ],
       "other_text": null,
       "other_bbox": [
-        40.400848388671875,
-        85.7743911743164,
-        127.4942855834961,
-        122.62545776367188
+        46.34211349487305,
+        128.81948852539062,
+        186.31948852539062,
+        188.04685974121094
       ],
       "object_count": 1,
       "object_indexes": [
@@ -46,26 +46,26 @@
     },
     {
       "severity": "WARN",
-      "kind": "text-image-edge",
+      "kind": "text-fill-edge",
       "page": 1,
-      "message": "Text partially overlaps the edge of 1 raster image(s)",
-      "text": "Channel bin",
+      "message": "Text partially overlaps the edge of 1 filled region(s)",
+      "text": "2000",
       "text_bbox": [
-        51.062808990478516,
-        119.18276977539062,
-        78.30265808105469,
-        131.533935546875
+        83.66814422607422,
+        183.12840270996094,
+        96.27843475341797,
+        201.7490997314453
       ],
       "other_text": null,
       "other_bbox": [
-        40.31999969482422,
-        82.68000030517578,
-        127.68000030517578,
-        120.72000122070312
+        46.34211349487305,
+        128.81948852539062,
+        186.31948852539062,
+        188.04685974121094
       ],
       "object_count": 1,
       "object_indexes": [
-        0
+        3
       ]
     }
   ]

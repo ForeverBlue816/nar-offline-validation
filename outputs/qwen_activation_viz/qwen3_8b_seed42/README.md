@@ -12,10 +12,10 @@ Main mechanism figures use paired local inputs. End-to-end figures separately sh
 
 | Site | Raw magnitude | Group-centered residual | Range distribution |
 |---|---|---|---|
-| down_proj | [Overview](figures/paired_local/down_proj/raw/overview/matrix.png) · [Detail](figures/paired_local/down_proj/raw/detail/matrix.png) | [Overview](figures/paired_local/down_proj/residual/overview/matrix.png) · [Detail](figures/paired_local/down_proj/residual/detail/matrix.png) | [ECDF](figures/paired_local/down_proj/group_range_ecdf.pdf) |
-| q_proj | [Overview](figures/paired_local/q_proj/raw/overview/matrix.png) · [Detail](figures/paired_local/q_proj/raw/detail/matrix.png) | [Overview](figures/paired_local/q_proj/residual/overview/matrix.png) · [Detail](figures/paired_local/q_proj/residual/detail/matrix.png) | [ECDF](figures/paired_local/q_proj/group_range_ecdf.pdf) |
+| down_proj | [Full matrix](figures/paired_local/down_proj/raw/overview/matrix.png) · [Unrotated](figures/paired_local/down_proj/raw/overview/row_unrotated.png) | [Full matrix](figures/paired_local/down_proj/residual/overview/matrix.png) · [Rotated zoom](figures/paired_local/down_proj/residual/overview/rotated_only_zoom.png) | [ECDF](figures/paired_local/down_proj/group_range_ecdf.pdf) |
+| q_proj | [Full matrix](figures/paired_local/q_proj/raw/overview/matrix.png) · [Unrotated](figures/paired_local/q_proj/raw/overview/row_unrotated.png) | [Full matrix](figures/paired_local/q_proj/residual/overview/matrix.png) · [Rotated zoom](figures/paired_local/q_proj/residual/overview/rotated_only_zoom.png) | [ECDF](figures/paired_local/q_proj/group_range_ecdf.pdf) |
 
-PDF and SVG siblings accompany every PNG; individual panels and method rows are in the same directories. Overview colors encode max magnitude within each bin. Zero-based bin IDs map to exact token/channel edges in display_cache.npz. Different block columns may use different z limits; comparisons across methods within a column share z and color limits.
+PDF and SVG siblings accompany every PNG; individual panels and method rows are in the same directories. Every surface uses all 2048 tokens and all 12288 down-projection or 4096 query-projection channels. The axes show actual indices. All adjacent grid cells and measured vertices are rasterized without pooling, strides or cropping. Every measured vertex has a zero-to-value height segment, and exterior sidewalls close the surface to z=0 without changing any measured height. The historical overview and detail directories now contain identical full-resolution figures. Different block columns may use different z limits; comparisons across methods within a column share z and color limits.
 
 ## Full-resolution paired results
 
@@ -77,14 +77,14 @@ Group centering removes a common component for visualization. It preserves every
 
 [Run manifest](run_manifest.json) · [Capture sites](capture_site_report.md) · [Validation](validation_report.json) · [Predeclared contract](figure_contract.md) · [Captions](captions.tex) · [Per-sample metrics](metrics_per_sample.csv) · [Pooled metrics](metrics_summary.csv).
 
-Full signed FP32 tensors are retained at raw_activation_root in the run manifest; activation_inventory.json records every shard hash and shared canonical input hash. Binary checkpoints and multi-GB raw shards are not committed to Git. The compact display cache is derived only from sample 0; all statistics use full-resolution shards.
+Full signed FP32 tensors are retained at raw_activation_root in the run manifest; activation_inventory.json records every shard hash and shared canonical input hash. Binary checkpoints and multi-GB raw shards are not committed to Git. Figures directly read the complete sample-0 signed shards. The old pooled display cache is no longer used or distributed. Exact ECDF files retain every distinct group-range value and its full multiplicity across all eight samples. See full_resolution_contract.md and per-figure geometry.json for the rendering contract and source vertex counts.
 
 Style reference: [SpinQuant Appendix C, Figures 8 and 9](https://arxiv.org/pdf/2405.16406). These Qwen3 measurements and their fixed layer/sample choices are independent of the Llama illustrations in that paper.
 
 ```bash
 python -m nar.activation_viz.capture --workdir "$NAR_WORKDIR" --output "$RUN"
 python -m nar.activation_viz.metrics "$RUN" --device cuda
-python -m nar.activation_viz.plot "$RUN"
+python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 8
 python -m nar.activation_viz.report "$RUN"
 python -m nar.activation_viz.summarize "$RUN"
 python -m nar.activation_viz.render_batch "$RUN" --audit-only

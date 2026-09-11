@@ -1,0 +1,98 @@
+[
+  {
+    "mode": "paired_local",
+    "site": "down_proj",
+    "observations_per_curve": {
+      "unrotated__0": 1572864,
+      "hadamard__0": 1572864,
+      "nar_k8__0": 1572864,
+      "nar_kmax__0": 1572864,
+      "unrotated__12": 1572864,
+      "hadamard__12": 1572864,
+      "nar_k8__12": 1572864,
+      "nar_kmax__12": 1572864,
+      "unrotated__23": 1572864,
+      "hadamard__23": 1572864,
+      "nar_k8__23": 1572864,
+      "nar_kmax__23": 1572864,
+      "unrotated__35": 1572864,
+      "hadamard__35": 1572864,
+      "nar_k8__35": 1572864,
+      "nar_kmax__35": 1572864
+    },
+    "quantile_thinning": false,
+    "path_simplification": false,
+    "duplicate_values": "exact multiplicities; no binning",
+    "curve_marks": "rasterized at 600 dpi from all distinct values and exact cumulative counts"
+  },
+  {
+    "mode": "paired_local",
+    "site": "q_proj",
+    "observations_per_curve": {
+      "unrotated__0": 524288,
+      "hadamard__0": 524288,
+      "nar_k8__0": 524288,
+      "nar_kmax__0": 524288,
+      "unrotated__12": 524288,
+      "hadamard__12": 524288,
+      "nar_k8__12": 524288,
+      "nar_kmax__12": 524288,
+      "unrotated__23": 524288,
+      "hadamard__23": 524288,
+      "nar_k8__23": 524288,
+      "nar_kmax__23": 524288,
+      "unrotated__35": 524288,
+      "hadamard__35": 524288,
+      "nar_k8__35": 524288,
+      "nar_kmax__35": 524288
+    },
+    "quantile_thinning": false,
+    "path_simplification": false,
+    "duplicate_values": "exact multiplicities; no binning",
+    "curve_marks": "rasterized at 600 dpi from all distinct values and exact cumulative counts"
+  },
+  {
+    "mode": "end_to_end",
+    "site": "down_proj",
+    "observations_per_curve": {
+      "hadamard__0": 1572864,
+      "nar_k8__0": 1572864,
+      "nar_kmax__0": 1572864,
+      "hadamard__12": 1572864,
+      "nar_k8__12": 1572864,
+      "nar_kmax__12": 1572864,
+      "hadamard__23": 1572864,
+      "nar_k8__23": 1572864,
+      "nar_kmax__23": 1572864,
+      "hadamard__35": 1572864,
+      "nar_k8__35": 1572864,
+      "nar_kmax__35": 1572864
+    },
+    "quantile_thinning": false,
+    "path_simplification": false,
+    "duplicate_values": "exact multiplicities; no binning",
+    "curve_marks": "rasterized at 600 dpi from all distinct values and exact cumulative counts"
+  },
+  {
+    "mode": "end_to_end",
+    "site": "q_proj",
+    "observations_per_curve": {
+      "hadamard__0": 524288,
+      "nar_k8__0": 524288,
+      "nar_kmax__0": 524288,
+      "hadamard__12": 524288,
+      "nar_k8__12": 524288,
+      "nar_kmax__12": 524288,
+      "hadamard__23": 524288,
+      "nar_k8__23": 524288,
+      "nar_kmax__23": 524288,
+      "hadamard__35": 524288,
+      "nar_k8__35": 524288,
+      "nar_kmax__35": 524288
+    },
+    "quantile_thinning": false,
+    "path_simplification": false,
+    "duplicate_values": "exact multiplicities; no binning",
+    "curve_marks": "rasterized at 600 dpi from all distinct values and exact cumulative counts"
+  }
+]
