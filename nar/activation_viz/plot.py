@@ -41,7 +41,7 @@ def save(fig,path):
 
 
 def run(root, selected='all', parts='all'):
-    """Render complete raw shards; the former pooled display cache is unused."""
+    """Render fixed local windows; distributions retain complete data."""
     from .full_plot import run as full_run
     root = Path(root)
     manifest = json.loads((root/'run_manifest.json').read_text())

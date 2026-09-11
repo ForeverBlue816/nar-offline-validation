@@ -4,8 +4,13 @@ from pathlib import Path
 
 def audit(root):
     root=Path(root);qa=Path(__file__).parent/'qa';reports=[]
+    index = root/'qa/rendered_audit_index.json'
+    previous = {r['pdf']: r for r in json.loads(index.read_text())} if index.exists() else {}
     for pdf in sorted((root/'figures').rglob('*.pdf')):
         if '.collision-audit' in pdf.name:continue
+        relative = str(pdf.relative_to(root))
+        if (root/'detail_render_config.json').exists() and 'detail' not in pdf.parts and relative in previous:
+            reports.append(previous[relative]); continue
         text=subprocess.run([sys.executable,str(qa/'pdf_text.py'),str(pdf),'--min-pt','5','--json'],capture_output=True,text=True)
         pdf.with_suffix('.font-audit.json').write_text(text.stdout)
         collision=subprocess.run([sys.executable,str(qa/'collisions.py'),str(pdf),'--json-out',str(pdf.with_suffix('.collision-audit.json'))],capture_output=True,text=True)

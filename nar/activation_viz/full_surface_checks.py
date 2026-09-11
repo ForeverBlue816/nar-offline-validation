@@ -9,12 +9,12 @@ def run():
     matrix = np.eye(4); matrix[2, 2] = -1
     affine = np.array([15., 20., 15., 20.])
     z = np.full((4, 5), 2., dtype=np.float32); before = z.copy()
-    heights, depth = rasterize(z, matrix, affine, 160, 160, False)
+    heights, depth = rasterize(z, matrix, affine, 160, 160)
     assert np.allclose(heights[np.isfinite(depth)], 2)
     assert np.array_equal(z, before)
     matrix[0, 2] = .4; matrix[1, 2] = .6
-    opened, od = rasterize(z, matrix, affine, 160, 160, False)
-    closed, cd = rasterize(z, matrix, affine, 160, 160, True)
+    opened, od = rasterize(z, matrix, affine, 160, 160)
+    closed, cd = rasterize(z, matrix, affine, 160, 160, draw_sidewalls=True)
     assert np.isfinite(cd).sum() > np.isfinite(od).sum()
     wall_values = closed[np.isfinite(cd) & ~np.isfinite(od)]
     assert wall_values.min() >= 0 and wall_values.max() <= 2
@@ -24,7 +24,7 @@ def run():
     ph, pd = rasterize(peak, matrix, np.array([.02, 20., .02, 20.]), 40, 40)
     assert np.nanmax(ph) == 9
     matrix[1, 2] = 100.
-    ch, cd = rasterize(peak, matrix, np.array([.02, 20., .02, 20.]), 50, 50)
+    ch, cd = rasterize(peak, matrix, np.array([.02, 20., .02, 20.]), 50, 50, draw_height_columns=True)
     assert np.isfinite(cd[20:39, 20]).all()
     assert np.nanmax(ch) == 9
     # Nearer geometry wins regardless of primitive submission order.
@@ -45,8 +45,8 @@ def run():
     actual = project(2., 3., 4., sample_matrix, np.array([1., 0., 1., 0.]))[:3]
     assert np.allclose(reference, actual, atol=1e-14)
     return {'passed': True, 'constant_height_preserved': True, 'input_unchanged': True,
-            'sidewalls_close_to_zero': True, 'near_surface_wins': True,
-            'subpixel_peak_vertex_retained': True, 'subpixel_peak_connected_to_base': True, 'matplotlib_projection_matches': True,
+            'optional_sidewalls_close_to_zero': True, 'default_columns_and_sidewalls_disabled': True, 'near_surface_wins': True,
+            'subpixel_peak_vertex_retained': True, 'optional_height_columns_connect_peak_to_base': True, 'matplotlib_projection_matches': True,
             'role': 'synthetic geometry checks only; never scientific figure data'}
 
 

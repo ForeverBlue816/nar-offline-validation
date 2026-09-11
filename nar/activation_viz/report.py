@@ -1,71 +1,80 @@
-"""Build captions and an index from measured CSVs; no assumed performance claims."""
-import argparse,csv,json
+"""Describe revised figures without rewriting experimental results or metadata."""
+import argparse
+import json
 from pathlib import Path
-LABELS={'unrotated':'Unrotated','hadamard':'Hadamard','nar_k8':'PrismQuant (k=8)','nar_kmax':'PrismQuant (k=max)'}
-def num(x):
-    v=float(x)
-    return f'{v:.2e}' if v and (abs(v)<.01 or abs(v)>=1000) else f'{v:.2f}'
+from .detail_plot import CONFIG, write_json
+
+
 def run(root):
-    root=Path(root);rows=list(csv.DictReader((root/'metrics_summary.csv').open()))
-    manifest=json.loads((root/'run_manifest.json').read_text())
-    validation=json.loads((root/'validation_report.json').read_text())
-    failures=[r for r in validation['checks'] if not r['passed']]
-    text=['# Qwen3-8B activation diagnostics','',
-      'Real Qwen/Qwen3-8B-Base forwards; 8 fixed WikiText-2 test windows of 2048 tokens. Rotation seed 0; sample selection seed 42. Main surfaces show sample 0; statistics use all samples at full resolution.','',
-      '[Measured findings](measured_summary.md) · [Figure audit](qa/delivery_review.json) · [Publication inventory](publication_manifest.json)','',
-      '## Figures','',
-      '![Group-centered down-projection activations, rotated methods](figures/paired_local/down_proj/residual/overview/rotated_only_zoom.png)','',
-      'Main mechanism figures use paired local inputs. End-to-end figures separately show the three existing E22 W4A4KV4 evaluation rows; no unquantized reference is mislabelled as an end-to-end quantized row.','',
-      '| Site | Raw magnitude | Group-centered residual | Range distribution |','|---|---|---|---|']
-    for site in ('down_proj','q_proj'):
-        text.append(f'| {site} | [Full matrix](figures/paired_local/{site}/raw/overview/matrix.png) · [Unrotated](figures/paired_local/{site}/raw/overview/row_unrotated.png) | [Full matrix](figures/paired_local/{site}/residual/overview/matrix.png) · [Rotated zoom](figures/paired_local/{site}/residual/overview/rotated_only_zoom.png) | [ECDF](figures/paired_local/{site}/group_range_ecdf.pdf) |')
-    text+=['','PDF and SVG siblings accompany every PNG; individual panels and method rows are in the same directories. Every surface uses all 2048 tokens and all 12288 down-projection or 4096 query-projection channels. The axes show actual indices. All adjacent grid cells and measured vertices are rasterized without pooling, strides or cropping. Every measured vertex has a zero-to-value height segment, and exterior sidewalls close the surface to z=0 without changing any measured height. The historical overview and detail directories now contain identical full-resolution figures. Different block columns may use different z limits; comparisons across methods within a column share z and color limits.','',
-      '## Full-resolution paired results','',
-      'NMSE is pooled error energy divided by pooled activation energy. rho is pooled signed group-mean energy divided by activation energy. Range means include all non-padding token/group observations. Sample variability is in metrics_summary.csv; these eight windows are descriptive replicates, not independently trained models.','',
-      '| Site | Block | Method | NMSE | rho | Mean group range | Token 0 energy fraction |','|---|---:|---|---:|---:|---:|---:|']
-    for r in rows:
-        if r['mode']=='paired_local':text.append(f"| {r['site']} | {int(r['layer'])+1} | {LABELS[r['method']]} | {num(r['nmse'])} | {num(r['rho'])} | {num(r['range_mean'])} | {num(r['token0_energy_fraction'])} |")
-    text+=['','## Numerical validation','',f"Required-check status: {validation.get('required_checks_passed')}. Overall all-checks status: {validation['passed']}.",'','Frozen factors are reused unchanged. Supplementary failures are retained at their original thresholds:','']
+    root = Path(root)
+    validation = json.loads((root/'validation_report.json').read_text())
+    failures = [r for r in validation['checks'] if not r['passed']]
+    captions_path = root/'captions.tex'
+    previous = captions_path.read_text() if captions_path.exists() else ''
+    ecdf_captions = [cap for cap in previous.split('\n\n') if cap.startswith(r'\paragraph{Group-range ECDF;')]
+    captions = []
+    text = ['# Qwen3-8B activation diagnostics', '',
+        'Real Qwen/Qwen3-8B-Base activations, fixed sample 0 from eight WikiText-2 test windows. The current detail revision changes only presentation. Experimental metrics, frozen factors, quantizers and numerical limitations are unchanged.', '',
+        '[Revision report](figure_revision_report.md) · [Rendering contract](full_resolution_contract.md) · [Render settings](detail_render_config.json) · [Measured findings](measured_summary.md) · [Publication inventory](publication_manifest.json)', '',
+        '## Local surfaces', '',
+        '![Local group-centered down-projection activations](figures/paired_local/down_proj/residual/detail/rotated_only_zoom.png)', '',
+        '| Forward | Site | Raw detail | Residual detail | Full-domain context |',
+        '|---|---|---|---|---|']
+    for mode in ('paired_local', 'end_to_end'):
+        for site in ('q_proj', 'down_proj'):
+            prefix = f'figures/{mode}/{site}'
+            text.append(f'| {mode} | {site} | [PDF]({prefix}/raw/detail/matrix.pdf) | [PDF]({prefix}/residual/detail/matrix.pdf) | [Raw overview]({prefix}/raw/overview/matrix.pdf) · [Residual overview]({prefix}/residual/overview/matrix.pdf) |')
+            for quantity in ('raw', 'residual'):
+                desc = (r'$|Y[0:128,0:512]|$, with signed floating $Y$ immediately before activation QDQ' if quantity == 'raw'
+                        else r'$|E[0:128,0:512]|$, where $E=Y-\operatorname{mean}_{g128}(Y)$ is computed per token on complete signed $Y$ before cropping and taking absolute values')
+                rows = ('Rows apply Unrotated, Hadamard, PrismQuant ($k=8$), and PrismQuant ($k=\max$) to the same canonical input.' if mode == 'paired_local'
+                        else 'The top row reuses the matching paired-local Unrotated reference cache, from the BF16 checkpoint loaded and norm-fused in FP32 without rotation or quantization. The lower rows are observed Hadamard, PrismQuant ($k=8$), and PrismQuant ($k=\max$) E22 W4A4KV4 floating QDQ forwards, including upstream quantization; their intermediate activations are not identical canonical inputs.')
+                site_tex = site.replace('_', r'\_')
+                captions.append(f'\\paragraph{{Local detail; {mode.replace("_", " ")}; {site_tex}; {quantity}.}} '
+                    f'Qwen3-8B-Base, Blocks 1, 13, 24, and 36. Surfaces show {desc}. {rows} '
+                    'Sample 0, tokens 0--127 and channels 0--511, includes four complete contiguous groups of 128 channels; floor guides mark boundaries at 127.5, 255.5, and 383.5. '
+                    'All 65,536 local vertices enter the native 3D surface without pooling, data stride, padding, smoothing, height columns or sidewalls. '
+                    'Linear heights; square-root color mapping. Viridis with fixed gamma 0.5 maps colors only; each column shares zero to 1.03 times the maximum across its displayed methods, with a separate colorbar in measured units. '
+                    'The linear-color companion keeps the same heights, camera and limits. The rotated-only zoom uses a separately labelled scale shared by its three methods. '
+                    'Orthographic view: elevation 28 degrees, azimuth -55 degrees; box aspect 2:1.2:1. '
+                    'Unrotated reference means norm-fused FP32, not BF16 inference. Rotated channels denote a different basis. '
+                    'Group centering is diagnostic, not QDQ reconstruction error or the quantizer offset. '
+                    'The full-domain overview provides global context; this fixed local window need not include global outliers. Full-data metrics and ECDFs still use all eight 2048-token samples. '
+                    'Surface marks are rasterized at 600 dpi; text and axes remain vector. Supplementary validation failures remain unchanged.')
+    text += ['',
+        'Every detail directory contains `matrix`, `matrix_linear`, `rotated_only_zoom`, method rows and individual panels in PDF, PNG and SVG. Each column has its own measured-unit colorbar. Raw magnitudes may remain similar between methods; no visual separation is imposed.', '',
+        'Detail uses exactly tokens [0,128), channels [0,512), sample 0 and four g128 groups. Raw heights are abs(Y). Residual heights are abs(Y − mean_group(Y)), with the signed mean computed on full Y before slicing. Heights are linear; only color uses fixed square-root mapping. All methods use the same window and camera. The separate rotated-only view has a different, explicitly shared scale.', '',
+        'The unrotated row is an unquantized norm-fused FP32 reference. In end-to-end matrices it comes from the matching paired_local/unrotated cache. Its input IDs, sample, layer, site and norm-fusion metadata are checked; the three quantized forwards include upstream QDQ and are not claimed to share identical intermediate inputs.', '',
+        'Full-domain overviews remain available, unchanged from the preceding publication. Their historical solid geometry is documented in the archived full-resolution contract; it is not used for current local detail. Overview and detail are independent assets. Metrics and exact ECDF values/counts retain all eight full samples. The local window is not an exhaustive model-outlier survey.', '',
+        'Figures have 7 pt minimum label/tick text at their supplied physical dimensions. Keep matrices at native landscape width or use the individual panels for smaller placements; shrinking the full four-column matrix below that size also shrinks its text. PDF/SVG axes and text are vector; only surface marks are rasterized.', '',
+        '## Numerical results and limitations', '',
+        '[Per-sample metrics](metrics_per_sample.csv) · [Full-data summary](metrics_summary.csv) · [Original measured interpretation](measured_summary.md) · [Validation](validation_report.json)', '',
+        f'Required-check status: {validation.get("required_checks_passed")}. Overall all-checks status: {validation["passed"]}. The {len(failures)} supplementary failures below are retained at their original thresholds:', '']
     for failure in failures:
-        text.append(f"- {failure['check']}, {failure.get('method')}, Block {failure.get('layer',-1)+1}: {num(failure['value'])}; threshold {num(failure['limit'])}.")
-    text+=['','The initial eight-output-row projection probes are retained alongside checks of all actual output channels on the same real tokens. This explicitly broadens the tested operator; it does not make the narrow-probe failures pass. See the predeclared contract addendum and archived failed probes. Stored reflectors have small normalization deviations; these diagnostic figures are not a claim of exact finite-precision orthogonality.','']
-    text+=['','## Interpretation boundaries','',
-      'Group centering removes a common component for visualization. It preserves every signed group range (verified numerically) and is not an extra deployed operation. Its mean is not the quantizer offset. Raw peak suppression, residual energy, range, and actual QDQ error answer different questions. A local NMSE change alone does not establish perplexity or downstream accuracy. Large token-0 activations alone do not establish attention-sink causality. Rotated channels represent a new basis.','',
-      '## Provenance and reproduction','',
-      '[Run manifest](run_manifest.json) · [Capture sites](capture_site_report.md) · [Validation](validation_report.json) · [Predeclared contract](figure_contract.md) · [Captions](captions.tex) · [Per-sample metrics](metrics_per_sample.csv) · [Pooled metrics](metrics_summary.csv).','',
-      'Full signed FP32 tensors are retained at raw_activation_root in the run manifest; activation_inventory.json records every shard hash and shared canonical input hash. Binary checkpoints and multi-GB raw shards are not committed to Git. Figures directly read the complete sample-0 signed shards. The old pooled display cache is no longer used or distributed. Exact ECDF files retain every distinct group-range value and its full multiplicity across all eight samples. See full_resolution_contract.md and per-figure geometry.json for the rendering contract and source vertex counts.','',
-      'Style reference: [SpinQuant Appendix C, Figures 8 and 9](https://arxiv.org/pdf/2405.16406). These Qwen3 measurements and their fixed layer/sample choices are independent of the Llama illustrations in that paper.','',
-      '```bash',
-      'python -m nar.activation_viz.capture --workdir "$NAR_WORKDIR" --output "$RUN"',
-      'python -m nar.activation_viz.metrics "$RUN" --device cuda',
-      'python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 8',
-      'python -m nar.activation_viz.report "$RUN"',
-      'python -m nar.activation_viz.summarize "$RUN"',
-      'python -m nar.activation_viz.render_batch "$RUN" --audit-only',
-      'python -m nar.activation_viz.publish "$RUN" "$PUBLICATION_DIR"','```','']
-    manifest['bit_widths']={'linear_weights':4,'activation_inputs':4,'keys':4,'values':4,'exceptions':'embeddings, lm_head, norms and recent KV residual are floating; evaluation containers are FP32'}
-    manifest['weight_quantizer']={'implementation':'nar.quarot_gptq.WeightQuantizer','group_size':128,'group_axis':'input-channel groups within each output row','clipping':'per-output-row/per-group MSE search; norm=2.4, grid=100, maxshrink=0.8; detailed checkpoint settings retained','scale_definition':'clipped span / 15, span floor 1e-5; FP32 builder arithmetic','zero_point':'round(-clipped_min/scale), integer-valued zero point in FP32 builder container','saved_form':'only dequantized floating weights, not packed codes or separately serialized scale/zero arrays','nominal_packed_bit_budget':4.15625,'budget_assumption':'4-bit codes + 16-bit scale + 4-bit zero per 128 weights; not actual checkpoint file storage'}
-    manifest['module_paths']=[f'model.layers.{layer}.{site}' for layer in manifest['layers_zero_based'] for site in manifest['sites'].values()]
-    manifest['mathematical_audit_status']={'all_checks_passed':validation['passed'],'required_checks_passed':validation.get('required_checks_passed'),'failed_supplementary_checks':failures}
-    manifest.setdefault('previous_display_settings',manifest.get('display'))
-    manifest['display']={'tokens':2048,'down_proj_channels':12288,'q_proj_channels':4096,'sample':0,'data_stride':[1,1],'pooling':False,'cropping':False,'sidewall_base_z':0,'channel_tick_step':2000,'token_ticks':[0,1000,2000],'elev':25,'azim':-60,'overview_and_detail':'identical complete-data compatibility exports','ecdf':'exact values and multiplicities; no quantile thinning'}
-    manifest['render_commands']=['python -m nar.activation_viz.full_batch $RAW_RUN $RUN --workers 8','python -m nar.activation_viz.report $RUN']
-    (root/'run_manifest.json').write_text(json.dumps(manifest,indent=2,allow_nan=False)+'\n')
+        text.append(f'- {failure["check"]}, {failure.get("method")}, Block {failure.get("layer",-1)+1}: {failure["value"]}; threshold {failure["limit"]}.')
+    text += ['', 'Group means are not actual quantizer offsets. Local raw peaks, group-centered residuals, signed group ranges and QDQ errors answer different questions. These figures do not create a new downstream-accuracy conclusion.', '',
+        '## Reproduction', '',
+        'The raw signed FP32 shards remain at `raw_activation_root` in [run_manifest.json](run_manifest.json). [activation_inventory.json](activation_inventory.json) records all 448 shard hashes. No model rerun is needed.', '',
+        '```bash',
+        'python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 4',
+        'python -m nar.activation_viz.detail_checks "$RAW_RUN" "$RUN"',
+        'python -m nar.activation_viz.report "$RUN"',
+        'python -m nar.activation_viz.render_batch "$RUN" --audit-only',
+        'python -m nar.activation_viz.publish "$RUN" "$PUBLICATION_DIR"',
+        '```', '',
+        'This is a user-requested visualization revision. Earlier predeclared experiment rules and superseded display records are retained; the new window and color mapping are not presented as the original preregistration.', '']
     (root/'README.md').write_text('\n'.join(text))
-    captions=[]
-    for mode in ('paired_local','end_to_end'):
-        for site,location in [('down_proj',r'\texttt{mlp.down\_proj}, after $\mathrm{SiLU}(\mathrm{gate})\odot\mathrm{up}$'),('q_proj',r'\texttt{self\_attn.q\_proj}, using the deployed global $R_1$')]:
-            for quantity in ('raw','residual'):
-                desc=(r'$|Y|$, where $Y$ is floating activation after rotation and before activation QDQ' if quantity=='raw' else r'$|E|$, with $E=Y-\operatorname{mean}_{\mathrm{group}}(Y)$ computed from signed post-rotation, pre-QDQ activations')
-                rowsdesc=('Rows show Unrotated, Hadamard, PrismQuant ($k=8$), and PrismQuant ($k=\max$) applied to identical canonical inputs from a norm-fused FP32 reference.' if mode=='paired_local' else 'Rows show the Hadamard, PrismQuant ($k=8$), and PrismQuant ($k=\max$) E22 GPTQ group-128 asymmetric W4A4KV4 evaluation checkpoints. Each includes upstream quantization; these inputs are not paired canonical activations.')
-                site_tex=site.replace('_',chr(92)+'_')
-                cap=f"\\paragraph{{{mode.replace('_',' ')}; {site_tex}; {quantity}.}} Qwen3-8B-Base activations at {location}. Panels show {desc}. {rowsdesc} Columns are Blocks 1, 13, 24, and 36 (zero-based layers 0, 12, 23, and 35). Surfaces show sample 0 of eight WikiText-2 test windows, each 2048 tokens, selected with seed 42; no calibration uses these windows. Rotation seed is 0. Actual ranks are 8/32 for R1 and 8/96 for R4. All 2048 tokens and all channels enter each surface: 12288 channels at down-projection input and 4096 at query-projection input. There is no pooling, stride, smoothing, or crop. Every measured vertex and both triangles of every adjacent grid cell enter a depth-tested rasterizer. Every measured vertex also has a depth-tested vertical segment from zero to its value, retaining continuous height even for subpixel-width peaks. These segments and the exterior sides are geometric height/closure, not additional observations. Real channel indices are ticked every 2000. The historical overview/detail paths now show identical full-resolution figures. Finite output pixels and occlusion limit distinguishable detail without selecting input data. Linear z/color scales are shared across methods within each block/site/quantity/view but may differ across blocks. View: elevation 25 degrees, azimuth -60 degrees. Rotated channel coordinates denote a new basis. Quantizer groups contain 128 contiguous channels; scale and real offset are rounded to FP16 before QDQ. Full-resolution statistics use all eight windows. Group centering is diagnostic only and preserves signed group ranges; it is not the stored offset or a deployed operation. A separate rotated-only zoom uses a shared scale across the three rotated methods and a different scale from the main matrix. Supplementary inverse/narrow-output probes detect small frozen-factor deviations and are reported as failures; no factor is renormalized. Surface marks are rasterized at 600 dpi with vector text/axes."
-                captions.append(cap)
-    for mode in ('paired_local','end_to_end'):
-        for site in ('down_proj','q_proj'):
-            site_tex=site.replace('_',chr(92)+'_')
-            captions.append(f"\\paragraph{{Group-range ECDF; {mode.replace('_',' ')}; {site_tex}.}} Qwen3-8B-Base, Blocks 1, 13, 24, and 36. Group ranges are computed from signed floating inputs immediately before activation QDQ at the specified projection, using contiguous channel groups of 128. All eight WikiText-2 test windows of 2048 tokens enter the full-resolution distribution; selection seed is 42 and rotation seed is 0. Paired local rows share canonical norm-fused reference inputs, whereas end-to-end rows include upstream E22 W4A4KV4 quantization. The curves display the exact empirical distribution as steps over every distinct observed range and its exact multiplicity, including both extrema; no quantile thinning or path simplification is used. Curve marks are rasterized at 600 dpi, and all distribution values and counts are archived. The nonnegative x axis uses a symmetric-log transform with linear threshold 0.01; the y axis is cumulative probability. Methods share each block's x scale. No activation pooling precedes the distribution calculation. These descriptive distributions do not establish downstream accuracy or exact finite-precision orthogonality; see the retained supplementary numerical failures.")
-    (root/'captions.tex').write_text('\n\n'.join(captions)+'\n')
-    print('REPORT COMPLETE')
-if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('root');run(p.parse_args().root)
+    captions_path.write_text('\n\n'.join(captions + ecdf_captions) + '\n')
+    manifest = json.loads((root/'run_manifest.json').read_text())
+    manifest.setdefault('display_revision_history', []).append(manifest['display']) if manifest.get('display', {}).get('revision') != CONFIG['revision'] else None
+    manifest['display'] = {**CONFIG, 'overview': 'previous full-domain exports preserved independently',
+                           'ecdf': 'unchanged exact full-data values and multiplicities'}
+    manifest['render_commands'] = ['python -m nar.activation_viz.full_batch $RAW_RUN $RUN --workers 4']
+    write_json(root/'run_manifest.json', manifest)
+    if not (root/'detail_render_config.json').exists():
+        write_json(root/'detail_render_config.json', CONFIG)
+    print('FIGURE REPORT COMPLETE')
+
+
+if __name__ == '__main__':
+    p = argparse.ArgumentParser(); p.add_argument('root'); run(p.parse_args().root)

@@ -1,4 +1,4 @@
-"""Full-grid height rasterization, with depth-tested sidewalls down to zero.
+"""Full-grid height rasterization, with opt-in columns and sidewalls.
 
 Every measured vertex and every adjacent grid cell is processed. There is no
 stride, pooling, smoothing, or data selection. Matplotlib supplies the camera,
@@ -70,7 +70,8 @@ def wall(x0, y0, z0, x1, y1, z1, matrix, affine, depth, height):
 
 
 @njit(cache=True)
-def rasterize(z, matrix, affine, width, height_px, close_sides=True):
+def rasterize(z, matrix, affine, width, height_px, draw_surface=True,
+              draw_height_columns=False, draw_sidewalls=False):
     depth = np.full((height_px, width), np.inf)
     heights = np.full((height_px, width), np.nan)
     rows, cols = z.shape
@@ -79,15 +80,16 @@ def rasterize(z, matrix, affine, width, height_px, close_sides=True):
         for x in range(cols):
             current[x] = project(x, y, z[y, x], matrix, affine)
             # Preserve measured vertices even for subpixel projected triangles.
-            put_vertex(current[x], depth, heights)
-            if close_sides:
+            if draw_surface:
+                put_vertex(current[x], depth, heights)
+            if draw_height_columns:
                 height_column(project(x, y, 0., matrix, affine), current[x], depth, heights)
-        if y:
+        if y and draw_surface:
             for x in range(cols-1):
                 triangle(previous[x], previous[x+1], current[x+1], depth, heights)
                 triangle(previous[x], current[x+1], current[x], depth, heights)
         previous, current = current, previous
-    if close_sides:
+    if draw_sidewalls:
         for x in range(cols-1):
             wall(x, 0, z[0, x], x+1, 0, z[0, x+1], matrix, affine, depth, heights)
             wall(x, rows-1, z[-1, x], x+1, rows-1, z[-1, x+1], matrix, affine, depth, heights)
@@ -97,7 +99,8 @@ def rasterize(z, matrix, affine, width, height_px, close_sides=True):
     return heights, depth
 
 
-def add_height_surface(ax, z, limit, cmap):
+def add_height_surface(ax, z, limit, cmap, *, norm=None, draw_surface=True,
+                       draw_height_columns=False, draw_sidewalls=False):
     """Attach a 600-dpi full-grid raster in the exact Matplotlib camera frame."""
     from matplotlib.image import BboxImage
     bbox = ax.bbox
@@ -105,13 +108,18 @@ def add_height_surface(ax, z, limit, cmap):
     transform = ax.transData.get_affine().get_matrix()
     affine = np.array([transform[0, 0], transform[0, 2]-bbox.x0,
                        transform[1, 1], transform[1, 2]-bbox.y0])
-    values, depth = rasterize(z, ax.get_proj(), affine, width, height)
-    rgba = cmap(np.nan_to_num(values)/limit, bytes=True)
+    from matplotlib.colors import Normalize
+    norm = norm if norm is not None else Normalize(0, limit)
+    values, depth = rasterize(z, ax.get_proj(), affine, width, height,
+                              draw_surface, draw_height_columns, draw_sidewalls)
+    rgba = cmap(norm(np.nan_to_num(values)), bytes=True)
     rgba[..., 3] = np.where(np.isfinite(depth), 255, 0)
     image = BboxImage(bbox, interpolation='none', origin='lower', zorder=2)
     image.set_data(rgba); ax.add_artist(image)
     return {'shape': list(z.shape), 'vertices_processed': int(z.size),
-            'surface_triangles': int(2*(z.shape[0]-1)*(z.shape[1]-1)),
-            'sidewall_triangles': int(4*(z.shape[0]+z.shape[1]-2)),
+            'surface_triangles': int(2*(z.shape[0]-1)*(z.shape[1]-1)) if draw_surface else 0,
+            'sidewall_triangles': int(4*(z.shape[0]+z.shape[1]-2)) if draw_sidewalls else 0,
+            'draw_surface': draw_surface, 'draw_height_columns': draw_height_columns,
+            'draw_sidewalls': draw_sidewalls,
             'data_stride': [1, 1], 'pooling': False, 'cropping': False,
-            'base_z': 0, 'vertical_height_segments': int(z.size), 'pixel_size': [width, height], 'rasterizer': 'depth-tested full grid'}
+            'base_z': 0, 'vertical_height_segments': int(z.size) if draw_height_columns else 0, 'pixel_size': [width, height], 'rasterizer': 'depth-tested full grid'}

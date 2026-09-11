@@ -104,3 +104,7 @@ NAR_WORKDIR=/path/to/project-storage sbatch slurm_activation_diagnostics.sh
 The batch script expects the environment at `$NAR_WORKDIR/venv`. See
 [`nar/README.md`](nar/README.md) for frozen choices and individual stage
 commands.
+
+## Qwen3-8B activation visualization
+
+[Revised local 3D figures](outputs/qwen_activation_viz/qwen3_8b_seed42/README.md) use a fixed 128-token × 512-channel window, four g128 groups, and a true norm-fused FP32 unrotated reference. Heights remain linear; the fixed square-root mapping affects colors only. Full-domain overviews, exact ECDFs and all measured results are preserved. [Revision and audit](outputs/qwen_activation_viz/qwen3_8b_seed42/figure_revision_report.md).

@@ -1,26 +1,40 @@
-# Qwen3 activation diagnostics
+# Qwen3 activation figure revision
 
-Analysis of the existing E22 Qwen3-8B-Base experiment. No model training, calibration, benchmark rerun or optimized inference-kernel changes.
+The current renderer restores sample 0, tokens [0,128), channels [0,512), as
+native Matplotlib 3D upper surfaces. All 65,536 vertices are used without
+pooling, stride, zero padding, height columns or sidewalls. Four complete g128
+groups are located by real integer indices and floor-only boundary guides.
+See [the rendering contract](detail_contract.md).
 
 ```bash
-# GPU capture; required smoke checks gate complete collection.
-python -m nar.activation_viz.capture --workdir "$NAR_WORKDIR" --output "$RAW_RUN"
-# Complete statistics can be repeated without loading a model.
-python -m nar.activation_viz.metrics "$RAW_RUN" --device cuda
-# CPU rendering reads signed raw shards. RUN is a separate figure directory.
-python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 8
+python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 4
+python -m nar.activation_viz.detail_checks "$RAW_RUN" "$RUN"
+python -m nar.activation_viz.report "$RUN"
 python -m nar.activation_viz.render_batch "$RUN" --audit-only
-python -m nar.activation_viz.full_surface_checks --output geometry_checks.json
-python -m nar.activation_viz.summarize "$RUN"
 python -m nar.activation_viz.publish "$RUN" "$PUBLICATION_DIR"
 ```
 
-`slurm_qwen_full_resolution.sh` renders on CPUs only. The validated rendering environment uses Python 3.11, NumPy 2.4.6, Matplotlib 3.10.5, Numba 0.67.0 and llvmlite 0.49.0, plus the existing Torch environment. Install rendering additions in an isolated environment rather than changing experiment dependencies. Plotting requires Times New Roman fonts under `~/.local/share/figure-fonts/times-new-roman/`. This explicit user typography choice overrides the static checker's sans-serif whitelist; exported glyph-size audits still apply.
+Existing full-domain overviews and exact full-data ECDFs are preserved. Detail
+is rendered independently and is never copied or hardlinked from overview.
+`--redraw-overview` explicitly regenerates global surfaces with the optional
+Python/Numba renderer; its surface, height-column and sidewall switches are
+separate and the latter two default to false. It is unnecessary for the current
+local revision. No capture, calibration, metric or quantizer rerun is performed.
 
-All 2048 tokens and all 12288 down-projection or 4096 query-projection channels enter each surface. The old pooled display cache is no longer used or distributed. The historical overview/detail URLs both show identical complete-data exports. Figures never consume synthetic tensors; numerical and geometry test arrays are never figure data.
+`detail_plot.py` validates the run-wide input IDs and reference semantics, loads
+signed FP32 shards, checks their hashes and computes residuals before cropping
+and absolute values. Both modes have four main rows. End-to-end references
+reuse paired-local unrotated caches and are labelled norm-fused FP32; the other
+three rows remain the original floating QDQ forwards. No second rotation is
+applied. Each block shares its z limit and Viridis/PowerNorm(gamma=0.5) among
+methods. Linear heights are unchanged. Linear-color controls and rotated-only
+zooms are separate exports. Raw similarities remain similarities.
 
-Height surfaces are closed to z=0 at their exterior boundaries. The added sides convey height above the base; they do not change measured surface values or add activation observations. A streaming depth buffer processes every vertex, a zero-to-value vertical height segment at that vertex, and both triangles of every adjacent grid cell. The vertical segments keep subpixel-width peaks connected to the base. Per-panel geometry reports record source hashes and complete element counts. This avoids allocating tens of millions of Python polygon objects while retaining all input data. The output is still a finite-resolution raster with normal perspective occlusion. Text and axes remain editable in PDF/SVG.
-
-Signed activation shards (approximately 30 GB) remain on the experiment volume. Git contains their SHA-256 inventory, input IDs, full-precision per-sample and pooled summaries, exact ECDF values/counts, paper captions and PDF/SVG/600-dpi PNG exports. Exact ECDFs use every distinct range and its full multiplicity, without quantile thinning or path simplification.
-
-The plotting entry point blocks misaligned comparable panels. PDF text-size and collision audits follow export, and warnings require visual review. `qa/panel_alignment.py` is the unchanged utility copied from the nature-figure skill. The published run index contains numerical limitations and final visual-review decisions. `python -m nar.activation_viz.plot "$RUN" --select distributions` updates exact ECDFs only.
+Plotting uses the existing Python 3.11/Torch/Matplotlib environment and DejaVu
+Sans 7 pt or larger text at native export size. PDF/SVG text and axes are vector;
+surfaces are rasterized at 600 dpi. Use native landscape matrix dimensions or
+individual panel exports instead of reducing text below readable size. Panel
+alignment, rendered PDF glyphs, collisions, exact corner/peak coordinates and
+source hashes are audited. Debug arrays may be synthetic only in independent
+unit tests, never in scientific exports. Preserve supplementary validation
+failures and previous revision records.

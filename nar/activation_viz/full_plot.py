@@ -6,7 +6,6 @@ import torch
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 from .plot import style, CMAP, METHODS, LABELS, LAYERS, number, save
-from .full_surface import add_height_surface
 
 
 def setup_axes(ax, shape, limit):
@@ -35,6 +34,7 @@ def setup_axes(ax, shape, limit):
 
 
 def load(root, mode, method, layer, site, quantity):
+    if method == 'unrotated': mode = 'paired_local'
     path = root/'activations'/mode/method/f's00_l{layer:02d}_{site}.pt'
     y = torch.load(path, map_location='cpu', weights_only=True)
     assert y.shape == (2048, 12288 if site == 'down_proj' else 4096)
@@ -47,6 +47,7 @@ def load(root, mode, method, layer, site, quantity):
 
 def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
            name='matrix', scale_methods=None):
+    from .full_surface import add_height_surface
     torch.set_num_threads(1)
     nrow, ncol = len(methods), len(layers)
     width = 12 if ncol == 4 else 3.25
@@ -57,7 +58,7 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
                            bottom=35/(height*72), top=1-44/(height*72),
                            wspace=.18, hspace=.16)
     panels = []; limits = {}; started = time.monotonic()
-    candidates = scale_methods or (METHODS if mode == 'paired_local' else METHODS[1:])
+    candidates = scale_methods or METHODS
     for col, layer in enumerate(layers):
         maximum = max(float(load(root, mode, m, layer, site, quantity)[0].max()) for m in candidates)
         limit = maximum*1.03 or 1.; limits[str(layer)] = limit
@@ -73,7 +74,7 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
     title = 'Post-rotation activation magnitude' if quantity == 'raw' else 'Group-centered residual magnitude'
     if 'unrotated' in methods and quantity == 'raw': title = 'Pre-quantization activation magnitude'
     fig.text(.51, 1-4/(height*72), title, ha='center', va='top', fontsize=11)
-    fig.text(.51, 1-20/(height*72), 'All tokens and channels; sides extend to zero',
+    fig.text(.51, 1-20/(height*72), 'All tokens and channels; measured upper surface',
              ha='center', va='top', fontsize=8.5)
     # Freeze layout before projecting measured vertices into each exact camera.
     fig.canvas.draw()
@@ -104,21 +105,26 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
     path.with_suffix('.scales.json').write_text(json.dumps({'z_limits_by_layer': limits,
         'shared_across_methods': list(candidates), 'linear': True}, indent=2)+'\n')
     path.with_suffix('.geometry.json').write_text(json.dumps({'panels': records,
-        'sample': 0, 'sidewalls': 'geometric closure to z=0; not additional measurements',
+        'sample': 0, 'draw_surface': True, 'draw_height_columns': False, 'draw_sidewalls': False,
         'seconds': time.monotonic()-started}, indent=2)+'\n')
     print('FULL RESOLUTION', path, time.monotonic()-started, flush=True)
 
 
-def run(root, destination, selection, single=False, parts='all'):
+def run(root, destination, selection, single=False, parts='all', view='detail'):
+    if view == 'detail':
+        from .detail_plot import run as detail_run
+        return detail_run(root, destination, selection, parts)
+    if view != 'overview': raise ValueError(view)
+    from .detail_plot import reference_audit
+    reference_audit(str(root), str(destination))
     root, out = Path(root), Path(destination)/'figures'; style()
     mode, site, quantity = selection.split('/')
-    methods = METHODS if mode == 'paired_local' else METHODS[1:]
+    methods = METHODS
     if single:
         matrix(root, out, mode, site, quantity, ['nar_kmax'], [35], name='panel_nar_kmax_block36')
         return
     matrix(root, out, mode, site, quantity, methods)
-    if mode == 'paired_local':
-        matrix(root, out, mode, site, quantity, METHODS[1:], name='rotated_only_zoom', scale_methods=METHODS[1:])
+    matrix(root, out, mode, site, quantity, METHODS[1:], name='rotated_only_zoom', scale_methods=METHODS[1:])
     if parts == 'matrix': return
     for method in methods:
         matrix(root, out, mode, site, quantity, [method], name=f'row_{method}')
@@ -128,5 +134,6 @@ def run(root, destination, selection, single=False, parts='all'):
 
 if __name__ == '__main__':
     p=argparse.ArgumentParser(); p.add_argument('root'); p.add_argument('destination')
+    p.add_argument('--view', choices=['detail', 'overview'], default='detail')
     p.add_argument('--select', default='end_to_end/down_proj/raw'); p.add_argument('--single', action='store_true')
-    a=p.parse_args(); run(a.root, a.destination, a.select, a.single)
+    a=p.parse_args(); run(a.root, a.destination, a.select, a.single, view=a.view)
