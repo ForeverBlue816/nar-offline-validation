@@ -238,11 +238,12 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                          'xtick.labelsize': 7, 'ytick.labelsize': 7})
     candidates = list(scale_methods or methods)
     rows, cols = len(methods), len(layers)
+    zoom = name == 'rotated_only_zoom'
     font_size = 11.75 if cols == 4 else 8.5
-    width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows
+    width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0)
     fig = plt.figure(figsize=(width, height), dpi=600)
     grid = fig.add_gridspec(rows, cols, left=1.15 / width, right=1 - (.7 + (1.6 if debug else 0)) / width,
-                           bottom=1.8 / height, top=1 - .72 / height,
+                           bottom=1.8 / height, top=1 - (.97 if zoom else .72) / height,
                            hspace=.14, wspace=.16)
     title = 'Pre-quantization activation magnitude' if quantity == 'raw' else 'Group-centered residual magnitude'
     fig.text(.5, 1 - .1 / height, title, fontsize=font_size+2, ha='center', va='top')
@@ -332,6 +333,9 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
 
 def run(source, destination, selection, parts='all'):
     mode, site, quantity = selection.split('/')
+    if parts == 'zoom':
+        matrix(source, destination, mode, site, quantity, METHODS[1:], name='rotated_only_zoom')
+        return
     for name, methods, linear in [('matrix', METHODS, False), ('matrix_linear', METHODS, True),
                                    ('rotated_only_zoom', METHODS[1:], False)]:
         matrix(source, destination, mode, site, quantity, methods, name=name, linear=linear)
@@ -348,6 +352,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('source'); parser.add_argument('destination')
     parser.add_argument('--select', default='end_to_end/q_proj/raw')
-    parser.add_argument('--parts', choices=['all', 'matrix'], default='all')
+    parser.add_argument('--parts', choices=['all', 'matrix', 'zoom'], default='all')
     args = parser.parse_args()
     run(args.source, args.destination, args.select, args.parts)

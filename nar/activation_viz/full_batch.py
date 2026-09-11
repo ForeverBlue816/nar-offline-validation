@@ -38,7 +38,7 @@ def run(source, destination, workers=4, parts='all', overview=False):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(); p.add_argument('source'); p.add_argument('destination')
     p.add_argument('--workers', type=int, default=4)
-    p.add_argument('--parts', choices=['all', 'matrix'], default='all')
+    p.add_argument('--parts', choices=['all', 'matrix', 'zoom'], default='all')
     p.add_argument('--redraw-overview', action='store_true', help='also rebuild full-domain overviews')
     p.add_argument('--redraw-surfaces-only', action='store_true', help='legacy alias; metrics/ECDFs are always left untouched')
     a = p.parse_args()
