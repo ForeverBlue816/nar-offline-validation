@@ -25,3 +25,9 @@ matrices. [height_axis_revision/audit.json](height_axis_revision/audit.json)
 and their updated entries in detail_pdf_render_index.json describe the final
 pages. Existing reviews remain historical for those three pages; other figure
 files and experimental records are unchanged.
+
+The current palette review for the three priority matrices is
+[blue_orange_revision/audit.json](blue_orange_revision/audit.json). It restores
+the original blue-orange colors while retaining the height-axis revision.
+Earlier visual reviews for these three pages are historical; other figure
+files and scientific records remain unchanged.

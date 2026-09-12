@@ -139,7 +139,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -279,7 +279,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -419,7 +419,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -559,7 +559,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -699,7 +699,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -839,7 +839,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -979,7 +979,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1119,7 +1119,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1259,7 +1259,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1399,7 +1399,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1539,7 +1539,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1679,7 +1679,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1819,7 +1819,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -1959,7 +1959,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -2099,7 +2099,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -2239,7 +2239,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "viridis"
+        "cmap": "blue_warm_orange"
       },
       "debug_points": [
         {
@@ -2348,7 +2348,7 @@
     "linear_heights": true,
     "norm": "PowerNorm",
     "gamma": 0.5,
-    "cmap": "viridis",
+    "cmap": "blue_warm_orange",
     "vmin": 0,
     "view": "four_method_scale",
     "scale_differs_from_matrix": false
@@ -2364,8 +2364,24 @@
     "tick_padding_pt": "3; 5 for shared limits >=100 to clear longer labels",
     "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
   },
-  "git_commit": "e2a31a876f19837c5169075b021b8e6ac9a46090",
-  "plot_source_sha256": "f597fdf14877cc3c36e74e373bc028d250c8d0c785fcfe26bc22326b257c4c76",
+  "palette_style": {
+    "revision": "priority-blue-orange-v1",
+    "cmap": "blue_warm_orange",
+    "colors": [
+      "#225b8d",
+      "#4f8eb6",
+      "#96b8c6",
+      "#dac9a8",
+      "#eaa15d",
+      "#c46731"
+    ],
+    "source": "existing plot.CMAP, reused unchanged",
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+  },
+  "git_commit": "3849efd4fde3de5c1a3524cbd81d9c80446d5afb",
+  "plot_source_sha256": "08f2bfec96291bf88512f2b50feddf235b2176c8c8b664ed489a307879e90066",
   "output_paths": [
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/matrix.pdf",
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/matrix.png",

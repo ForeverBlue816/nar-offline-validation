@@ -1,0 +1,938 @@
+{
+  "scope": [
+    "end_to_end/q_proj/raw",
+    "end_to_end/down_proj/raw",
+    "paired_local/q_proj/raw"
+  ],
+  "records": [
+    {
+      "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "da10cc6a93ad82fb99df30260c4dc847c0e19c383e35013b8fdb1fa0889784c0",
+      "panels": [
+        {
+          "method": "unrotated",
+          "layer": 0,
+          "local_array_sha256": "a52fcf9bf6dc2333b5edde3129efe2676f23c44a98d7569b92e94a5e1fd6f77f",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 0,
+          "local_array_sha256": "7aee6ab89390852327874209a33251f7741f346ed24a2822234b7b1fd04c835c",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 0,
+          "local_array_sha256": "6cd7dc45d04f044089937ffe4d3041bc7f20a7491ebc449621ed3d17a93f129c",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 0,
+          "local_array_sha256": "e1b85394ec8ea072098ae909ba4d62b90175085d421a540354541600d5c47a38",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 12,
+          "local_array_sha256": "8adea53298563f96e4ecb945564adbf48030efb3acb61a0edfc5d4acce5dd0b2",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 12,
+          "local_array_sha256": "2e3c473f5f9425fd9dbc0de8dde93c6599df892ce1c27e1392b0dc79a69a5f5f",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 12,
+          "local_array_sha256": "37f0f7ceec46f8b76c3d319872a8d12b99799e4d9d591dde8a4710334f63c46b",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 12,
+          "local_array_sha256": "67397a59c7b8b0becd465ff52912bb31542bee740995159656c8423ddf738b02",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 23,
+          "local_array_sha256": "0f27743ae31d5d3f9cc45f2107335778c885960c613b5d545723872ba1252ed1",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 23,
+          "local_array_sha256": "462a651aeeba6637ff35a49f9f35d76b242b078b1f46f1f01ab0a6d02aec867c",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 23,
+          "local_array_sha256": "8e2ab41eb3f9e5da119768c2daac5bf8f9b056ceee5f249f07d39c9c0b24ffba",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 23,
+          "local_array_sha256": "c68cbbf8c4d7eb6c74b0dce707947d4f54e941dd150533a786faa5e55e8d58c3",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 35,
+          "local_array_sha256": "607a0b119b40ca481331636d8fc9b47985ffd764d03d7985b34eb797e97f5c12",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 35,
+          "local_array_sha256": "335656a0527c235404a992655fc761c391d64385c78673af734a0b98c0f63caa",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 35,
+          "local_array_sha256": "3a86a2d3502e6e265eebc6f15e9088f025dd75df6d4924bf2c2a0ddb6bac15d0",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 35,
+          "local_array_sha256": "1f5034fcbbcba44d6aecb167f29f238eea5a3bde993acd2d8b05a8a5ea355832",
+          "unchanged": true
+        }
+      ],
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "palette_before": "viridis",
+      "palette_after": "blue_warm_orange",
+      "font_exit": 0,
+      "collision_exit": 0
+    },
+    {
+      "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "b9f6834ba088343ccae72e8c722d213dac7434b64656b09fe212f0341667d2dc",
+      "panels": [
+        {
+          "method": "unrotated",
+          "layer": 0,
+          "local_array_sha256": "695b50b19d7a676b2d0b2ec81030358fbca1df54c974927eac97a5c59fede93a",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 0,
+          "local_array_sha256": "27081e63c3f7d9a6b7ce2b2a944b1dd326c5203b3906d59b5f3ae982365cda66",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 0,
+          "local_array_sha256": "69837a2c1745097e088530e9bf03b3307e30fc070d74a0e667003afed1412422",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 0,
+          "local_array_sha256": "230f8073195b3363528447df97454347888efe13b3be69c76a3da51d66d2cdb1",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 12,
+          "local_array_sha256": "4af313d1e3fba9fd4820627722162f0f2234f4525006ee5db92512600ac3143c",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 12,
+          "local_array_sha256": "f92b788bf3cceca826214f21d726151831f842bf67ddae64dec1c1ae95ec8fed",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 12,
+          "local_array_sha256": "7633452f72199becd4b09a9b694bf70045ee778e5cfe65af0b9e03b1c7581b8b",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 12,
+          "local_array_sha256": "b39aa6d1c7c114ce8469179e7584f75d01e13bf92745f9dd9b4c34795409469b",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 23,
+          "local_array_sha256": "edcebf9cc3d280d87ca01c8ca972c68cefeb797bede3cb04a4ab07f2b9087d92",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 23,
+          "local_array_sha256": "96160014dbf746945e5846253452913badcf9e10d91915f9eff2a7c20ebad767",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 23,
+          "local_array_sha256": "276b04a4bdc24180a0e83d32c1b8e7caaaada0040296a4fb2ce8151b8713e616",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 23,
+          "local_array_sha256": "49ef896fb2298b1ba3f082cd63e1036ab2ec7b9b8afa2834c9f9cb8052058803",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 35,
+          "local_array_sha256": "e995400c95a6d7f97edfc751641e8548a66e149dfe67cdb42102366dca47dc06",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 35,
+          "local_array_sha256": "9fe8260e8cb8c063d17a5dad16d964298493e64d553c4264405215748b1b4253",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 35,
+          "local_array_sha256": "10fbb99f81fac1e5e409666bc2a2680586639649615e6876f3067ceeb77397a4",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 35,
+          "local_array_sha256": "f660349a429085ada1b6160554616972873af79752aed4ba365d69826a04c498",
+          "unchanged": true
+        }
+      ],
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "palette_before": "viridis",
+      "palette_after": "blue_warm_orange",
+      "font_exit": 0,
+      "collision_exit": 0
+    },
+    {
+      "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "03dfc6cb3ea2bce4c444434c7ddfea11d05dca8da51bb53ac5eec9769e0e8f63",
+      "panels": [
+        {
+          "method": "unrotated",
+          "layer": 0,
+          "local_array_sha256": "a52fcf9bf6dc2333b5edde3129efe2676f23c44a98d7569b92e94a5e1fd6f77f",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 0,
+          "local_array_sha256": "851c38298065bf45d03550908588935bcdb0569547566cc42272216c65b8f253",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 0,
+          "local_array_sha256": "344fb90c7ab51c6a974ef725b93de798dc72d374d5063b6e75c12dbdd3e4de46",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 0,
+          "local_array_sha256": "de0a063fbbde4277c29123b9031cd7c9a5de4e1d1e23f555c557d4711cbac40d",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 12,
+          "local_array_sha256": "8adea53298563f96e4ecb945564adbf48030efb3acb61a0edfc5d4acce5dd0b2",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 12,
+          "local_array_sha256": "4eae9ae7b7bd0e3daa39e0ce6c7055626309a0a2f6973716368caeb345e89553",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 12,
+          "local_array_sha256": "65b74db8963b9c186f776bcdb5efa9928c92aae8a4034d74055fce6ca3ad8b1d",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 12,
+          "local_array_sha256": "791cc53b727c3eb3590eb2ad7f52701773ebb0046ac8cb64101ae8b6c81e20ff",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 23,
+          "local_array_sha256": "0f27743ae31d5d3f9cc45f2107335778c885960c613b5d545723872ba1252ed1",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 23,
+          "local_array_sha256": "8ca27501f343e0f8a797cb98c75e17a2771beabb1061430c5d21027c96e08441",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 23,
+          "local_array_sha256": "f6f50a2430edbac289e52e160df11f242394301b698de8512ae502c78505ae1a",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 23,
+          "local_array_sha256": "46db0c59e7d61bcc2fa7cc56f07b6dcd654ac9cae19fefe21344a8ca7124c2b3",
+          "unchanged": true
+        },
+        {
+          "method": "unrotated",
+          "layer": 35,
+          "local_array_sha256": "607a0b119b40ca481331636d8fc9b47985ffd764d03d7985b34eb797e97f5c12",
+          "unchanged": true
+        },
+        {
+          "method": "hadamard",
+          "layer": 35,
+          "local_array_sha256": "dd2b943f18a0077f1c515ae4563fce308f0d9f537a7e9bcb3a3fdbadb36a41f0",
+          "unchanged": true
+        },
+        {
+          "method": "nar_k8",
+          "layer": 35,
+          "local_array_sha256": "9c01fb82b04ef09244121064cf5efab2d7706178a418dc8a48e38198049ed340",
+          "unchanged": true
+        },
+        {
+          "method": "nar_kmax",
+          "layer": 35,
+          "local_array_sha256": "aeba08fcef4fbb9663bf90433c3c2bf98cb6c3477894e61deb8b9889932348e4",
+          "unchanged": true
+        }
+      ],
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "palette_before": "viridis",
+      "palette_after": "blue_warm_orange",
+      "font_exit": 0,
+      "collision_exit": 0
+    }
+  ],
+  "panels_unchanged": 48,
+  "other_figure_files_unchanged": 2688,
+  "experimental_artifacts_unchanged": true,
+  "palette_only_change": true,
+  "palette": {
+    "revision": "priority-blue-orange-v1",
+    "cmap": "blue_warm_orange",
+    "colors": [
+      "#225b8d",
+      "#4f8eb6",
+      "#96b8c6",
+      "#dac9a8",
+      "#eaa15d",
+      "#c46731"
+    ],
+    "source": "existing plot.CMAP, reused unchanged",
+    "norm": "PowerNorm",
+    "gamma": 0.5,
+    "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+  },
+  "visual_review": {
+    "passed": true,
+    "reviewer": "Codex inspection of all 48 panels in final PDF page renders",
+    "minimum_text_pt_at_183mm": 7.020747085528998,
+    "original_palette_commit": "bad2d4c1",
+    "original_palette_source": "plot.py CMAP; all six original color stops verified",
+    "pdf_bbox_warnings": "Native 3D pane/image bounding boxes overlap some tick bounding boxes; glyphs remain legible and separate. Original warning records remain available.",
+    "source_preflight_warnings": "The requested PDF/PNG/SVG formats are retained; explicit dynamic canvas dimensions preserve 7.02 pt text at 183 mm.",
+    "panels": [
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 1,
+        "source_array_sha256": "a52fcf9bf6dc2333b5edde3129efe2676f23c44a98d7569b92e94a5e1fd6f77f",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 1,
+        "source_array_sha256": "7aee6ab89390852327874209a33251f7741f346ed24a2822234b7b1fd04c835c",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 1,
+        "source_array_sha256": "6cd7dc45d04f044089937ffe4d3041bc7f20a7491ebc449621ed3d17a93f129c",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 1,
+        "source_array_sha256": "e1b85394ec8ea072098ae909ba4d62b90175085d421a540354541600d5c47a38",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 13,
+        "source_array_sha256": "8adea53298563f96e4ecb945564adbf48030efb3acb61a0edfc5d4acce5dd0b2",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 13,
+        "source_array_sha256": "2e3c473f5f9425fd9dbc0de8dde93c6599df892ce1c27e1392b0dc79a69a5f5f",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 13,
+        "source_array_sha256": "37f0f7ceec46f8b76c3d319872a8d12b99799e4d9d591dde8a4710334f63c46b",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 13,
+        "source_array_sha256": "67397a59c7b8b0becd465ff52912bb31542bee740995159656c8423ddf738b02",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 24,
+        "source_array_sha256": "0f27743ae31d5d3f9cc45f2107335778c885960c613b5d545723872ba1252ed1",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 24,
+        "source_array_sha256": "462a651aeeba6637ff35a49f9f35d76b242b078b1f46f1f01ab0a6d02aec867c",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 24,
+        "source_array_sha256": "8e2ab41eb3f9e5da119768c2daac5bf8f9b056ceee5f249f07d39c9c0b24ffba",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 24,
+        "source_array_sha256": "c68cbbf8c4d7eb6c74b0dce707947d4f54e941dd150533a786faa5e55e8d58c3",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 36,
+        "source_array_sha256": "607a0b119b40ca481331636d8fc9b47985ffd764d03d7985b34eb797e97f5c12",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 36,
+        "source_array_sha256": "335656a0527c235404a992655fc761c391d64385c78673af734a0b98c0f63caa",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 36,
+        "source_array_sha256": "3a86a2d3502e6e265eebc6f15e9088f025dd75df6d4924bf2c2a0ddb6bac15d0",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 36,
+        "source_array_sha256": "1f5034fcbbcba44d6aecb167f29f238eea5a3bde993acd2d8b05a8a5ea355832",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 1,
+        "source_array_sha256": "695b50b19d7a676b2d0b2ec81030358fbca1df54c974927eac97a5c59fede93a",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 1,
+        "source_array_sha256": "27081e63c3f7d9a6b7ce2b2a944b1dd326c5203b3906d59b5f3ae982365cda66",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 1,
+        "source_array_sha256": "69837a2c1745097e088530e9bf03b3307e30fc070d74a0e667003afed1412422",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 1,
+        "source_array_sha256": "230f8073195b3363528447df97454347888efe13b3be69c76a3da51d66d2cdb1",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 13,
+        "source_array_sha256": "4af313d1e3fba9fd4820627722162f0f2234f4525006ee5db92512600ac3143c",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 13,
+        "source_array_sha256": "f92b788bf3cceca826214f21d726151831f842bf67ddae64dec1c1ae95ec8fed",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 13,
+        "source_array_sha256": "7633452f72199becd4b09a9b694bf70045ee778e5cfe65af0b9e03b1c7581b8b",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 13,
+        "source_array_sha256": "b39aa6d1c7c114ce8469179e7584f75d01e13bf92745f9dd9b4c34795409469b",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 24,
+        "source_array_sha256": "edcebf9cc3d280d87ca01c8ca972c68cefeb797bede3cb04a4ab07f2b9087d92",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 24,
+        "source_array_sha256": "96160014dbf746945e5846253452913badcf9e10d91915f9eff2a7c20ebad767",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 24,
+        "source_array_sha256": "276b04a4bdc24180a0e83d32c1b8e7caaaada0040296a4fb2ce8151b8713e616",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 24,
+        "source_array_sha256": "49ef896fb2298b1ba3f082cd63e1036ab2ec7b9b8afa2834c9f9cb8052058803",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 36,
+        "source_array_sha256": "e995400c95a6d7f97edfc751641e8548a66e149dfe67cdb42102366dca47dc06",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 36,
+        "source_array_sha256": "9fe8260e8cb8c063d17a5dad16d964298493e64d553c4264405215748b1b4253",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 36,
+        "source_array_sha256": "10fbb99f81fac1e5e409666bc2a2680586639649615e6876f3067ceeb77397a4",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 36,
+        "source_array_sha256": "f660349a429085ada1b6160554616972873af79752aed4ba365d69826a04c498",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 1,
+        "source_array_sha256": "a52fcf9bf6dc2333b5edde3129efe2676f23c44a98d7569b92e94a5e1fd6f77f",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 1,
+        "source_array_sha256": "851c38298065bf45d03550908588935bcdb0569547566cc42272216c65b8f253",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 1,
+        "source_array_sha256": "344fb90c7ab51c6a974ef725b93de798dc72d374d5063b6e75c12dbdd3e4de46",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 1,
+        "source_array_sha256": "de0a063fbbde4277c29123b9031cd7c9a5de4e1d1e23f555c557d4711cbac40d",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 13,
+        "source_array_sha256": "8adea53298563f96e4ecb945564adbf48030efb3acb61a0edfc5d4acce5dd0b2",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 13,
+        "source_array_sha256": "4eae9ae7b7bd0e3daa39e0ce6c7055626309a0a2f6973716368caeb345e89553",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 13,
+        "source_array_sha256": "65b74db8963b9c186f776bcdb5efa9928c92aae8a4034d74055fce6ca3ad8b1d",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 13,
+        "source_array_sha256": "791cc53b727c3eb3590eb2ad7f52701773ebb0046ac8cb64101ae8b6c81e20ff",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 24,
+        "source_array_sha256": "0f27743ae31d5d3f9cc45f2107335778c885960c613b5d545723872ba1252ed1",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 24,
+        "source_array_sha256": "8ca27501f343e0f8a797cb98c75e17a2771beabb1061430c5d21027c96e08441",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 24,
+        "source_array_sha256": "f6f50a2430edbac289e52e160df11f242394301b698de8512ae502c78505ae1a",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 24,
+        "source_array_sha256": "46db0c59e7d61bcc2fa7cc56f07b6dcd654ac9cae19fefe21344a8ca7124c2b3",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "unrotated",
+        "block": 36,
+        "source_array_sha256": "607a0b119b40ca481331636d8fc9b47985ffd764d03d7985b34eb797e97f5c12",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "hadamard",
+        "block": 36,
+        "source_array_sha256": "dd2b943f18a0077f1c515ae4563fce308f0d9f537a7e9bcb3a3fdbadb36a41f0",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_k8",
+        "block": 36,
+        "source_array_sha256": "9c01fb82b04ef09244121064cf5efab2d7706178a418dc8a48e38198049ed340",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      },
+      {
+        "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+        "method": "nar_kmax",
+        "block": 36,
+        "source_array_sha256": "aeba08fcef4fbb9663bf90433c3c2bf98cb6c3477894e61deb8b9889932348e4",
+        "palette": "original blue_warm_orange; low values blue, high values orange; identical color scale within each column",
+        "data_and_geometry_unchanged": true,
+        "height_ticks_readable": true,
+        "zero_plane_explained": true,
+        "alignment_and_collision": "fresh PDF checks; no blocking failures",
+        "passed": true
+      }
+    ]
+  },
+  "passed": true
+}

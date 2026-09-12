@@ -84,6 +84,7 @@
   "statistical_unit": "fixed sample 0; descriptive surface, no uncertainty estimate",
   "git_commit": "4ba901aa5ca94dc48881c273ed5b9402f147f86d",
   "rendering_git_commits": [
+    "3849efd4fde3de5c1a3524cbd81d9c80446d5afb",
     "4ba901aa5ca94dc48881c273ed5b9402f147f86d",
     "503f442955a017ca7b931fe471853f105648104f",
     "e2a31a876f19837c5169075b021b8e6ac9a46090"
@@ -157,5 +158,34 @@
     "exports": "PDF/PNG/SVG; 600 dpi surface marks and PNGs; vector PDF/SVG text and axes",
     "audit": "qa/height_axis_revision/audit.json",
     "plot_source_sha256": "f597fdf14877cc3c36e74e373bc028d250c8d0c785fcfe26bc22326b257c4c76"
+  },
+  "palette_followup": {
+    "revision": "priority-blue-orange-v1",
+    "targets": [
+      "figures/end_to_end/q_proj/raw/detail/matrix",
+      "figures/end_to_end/down_proj/raw/detail/matrix",
+      "figures/paired_local/q_proj/raw/detail/matrix"
+    ],
+    "rendering_commit": "3849efd4fde3de5c1a3524cbd81d9c80446d5afb",
+    "slurm_job_id": "150750",
+    "style": {
+      "revision": "priority-blue-orange-v1",
+      "cmap": "blue_warm_orange",
+      "colors": [
+        "#225b8d",
+        "#4f8eb6",
+        "#96b8c6",
+        "#dac9a8",
+        "#eaa15d",
+        "#c46731"
+      ],
+      "source": "existing plot.CMAP, reused unchanged",
+      "norm": "PowerNorm",
+      "gamma": 0.5,
+      "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+    },
+    "changes": "original blue-orange palette restored; gamma=0.5, measured heights, camera, axes, dimensions and shared limits unchanged",
+    "audit": "qa/blue_orange_revision/audit.json",
+    "plot_source_sha256": "08f2bfec96291bf88512f2b50feddf235b2176c8c8b664ed489a307879e90066"
   }
 }

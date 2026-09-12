@@ -43,5 +43,14 @@
     ],
     "authoritative_review": "height_axis_revision/audit.json",
     "note": "The earlier layout review is historical for these three matrices only."
+  },
+  "palette_followup": {
+    "scope": [
+      "end_to_end/q_proj/raw",
+      "end_to_end/down_proj/raw",
+      "paired_local/q_proj/raw"
+    ],
+    "authoritative_review": "blue_orange_revision/audit.json",
+    "note": "Original blue-orange colormap restored in these three main matrices only; prior page reviews are historical."
   }
 }

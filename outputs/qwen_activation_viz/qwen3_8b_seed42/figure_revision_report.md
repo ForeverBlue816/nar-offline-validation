@@ -77,3 +77,27 @@ history; this scoped record supersedes them only for these three matrices.
 
 Renderer commit: `e2a31a8`; Slurm render job: `150582`. Reproduce with
 `python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"`.
+
+## Original blue-orange palette restored
+
+The user prefers the original blue-orange appearance. Only the same three
+priority raw main matrices are recolored using the existing `plot.CMAP`
+(`blue_warm_orange`) with its original six color stops. The common
+PowerNorm(gamma=0.5) is retained to make low-amplitude color structure easier
+to read. This supersedes the requested Viridis palette for those three main
+matrices only. Height ticks, the explicit z=0 floor cue, light borders, exact
+panel positions, camera, linear heights and shared limits are preserved.
+
+No data, activation transform or experimental conclusion changes. All 48
+panel arrays and their geometry are compared with the preceding height-axis
+version. All other 337 figure sets retain their existing files and palette.
+In particular, the retained linear-color and zoom companions still use
+Viridis; they are not a matched-colormap control for the newly restored
+blue-orange main matrices.
+
+The current scoped audit and final visual review are in
+[blue_orange_revision/audit.json](qa/blue_orange_revision/audit.json), with
+updated final PDF renders in the existing PDF render index. Previous visual
+reviews remain historical for these three pages. Renderer commit `3849efd`,
+Slurm job `150750`; reproduce with
+`python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"`.
