@@ -1,0 +1,28 @@
+{
+  "frozen_at": "2026-09-12T04:50:36.321031+00:00",
+  "before_reference_results": true,
+  "reason": "Add an independent RoPE frequency/cache/rotation check, beyond before/after KV-wrapper consistency. It runs alongside the already scheduled real-FP16 check without changing measured model computation.",
+  "models": [
+    "3b",
+    "8b"
+  ],
+  "layers": "all28/all32 actual model rotary buffers",
+  "positions": [
+    0,
+    1,
+    127,
+    128,
+    2047,
+    2048,
+    2175,
+    8191,
+    8192,
+    8319
+  ],
+  "thresholds": {
+    "inverse_frequency_max_relative_error": 2e-05,
+    "cache_and_rotation_relative_l2": 0.002
+  },
+  "reference": "Scalar FP64 frequency formula and complex rotation, following the pinned Transformers4.43.4 Llama3 definition. Installed Transformers remains4.36.2.",
+  "comparison_scope": "KV-wrapper consistency uses the same corrected RoPE for both paths; it is not equivalence to historical E28 stale-RoPE outputs."
+}

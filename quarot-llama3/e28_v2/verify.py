@@ -124,8 +124,11 @@ def model_check(a):
     from .cache_adapter import make_cache,clear,snapshot
     from .benchmark import finite_check
     m=build(a.model,a.method)
-    loaded_checkpoint=None
+    loaded_checkpoint=None;rope_reference=None
     if getattr(a,'real',False):
+        from .rope_check import check as check_rope
+        rope_reference=check_rope(m)
+        write(a.run/'correctness'/f'rope_reference_{a.model}.json',{'started':now(),'environment':environment(),**rope_reference,'ended':now()})
         if a.method!='fp16':raise RuntimeError('No compatible real INT4 checkpoint loader')
         from .checkpoint import load_base
         loaded_checkpoint=load_base(a.model,m)
@@ -167,7 +170,7 @@ def model_check(a):
             hu,hv=(old['prefill_hidden'],new['prefill_hidden']) if step==0 else (old['steps'][step]['hidden'],new['steps'][step]['hidden'])
             hidden_rel=float((hu.float()-hv.float()).norm()/hu.float().norm().clamp_min(1e-30)) if bool(torch.isfinite(hu).all() and torch.isfinite(hv).all()) else None
             rows.append({'window':wi,'step':step,'finite':finite,'relative_l2':rel,'hidden_relative_l2':hidden_rel,'cache_exact':cache_equal,'cache_before':None if step==0 else old['steps'][step]['cache'],'cache_after':None if step==0 else new['steps'][step]['cache'],'status':'PASS' if finite and rel<=.002 and hidden_rel is not None and hidden_rel<=.002 and cache_equal else 'FAIL'})
-    return {'status':'PASS' if all(r['status']=='PASS' for r in rows) else 'FAIL','rows':rows,'shared_state':state,'rope_cache_fix':m._e28_rope_fix_report,
+    return {'status':'PASS' if all(r['status']=='PASS' for r in rows) and (rope_reference is None or rope_reference['status']=='PASS') else 'FAIL','rows':rows,'rope_reference':rope_reference,'shared_state':state,'rope_cache_fix':m._e28_rope_fix_report,
       'weights':'real base checkpoint, FP16 implementation check only' if loaded_checkpoint else 'random-weight implementation check; no model quality claim','loaded_checkpoint':loaded_checkpoint,'text_source':str(tokenpath),'text_sha256':sha(tokenpath),'token_window_hashes':[tensor_hash(t) for t in windows],
       'real_checkpoint':{'status':'BLOCKED','reason':'No complete matching k8 integer checkpoint/loader; paper fake-quantized per-group weights are incompatible with this row/column-scale GEMM.'}}
 
