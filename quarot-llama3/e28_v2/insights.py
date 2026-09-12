@@ -45,6 +45,22 @@ def generate(out):
                                 'compulsory_bytes': byte_count, 'components_bytes': parts,
                                 'estimated_GB_per_second_event': byte_count / row['cuda_event_elapsed_us']['median'] / 1000,
                                 'interpretation': 'Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.'})
+    summaries=[]
+    short_names={'hadamard_fp16':'Hadamard (FP16)','nar_module':'NAR module','nar_prebound':'NAR prebound','nar_generic':'NAR generic','nar_generic_shuffle':'NAR shuffle','A_only':'NAR A','B_tc_only':'NAR B (TC)','B_shuffle_only':'NAR B (shuffle)','shared_quantizer':'Shared quantizer','hadamard_plus_quantizer':'Hadamard + Q','nar_plus_quantizer':'NAR + Q','nar_native':'NAR native','block_hadamard_native':'Block-Had native'}
+    for (model,tokens),sessions in sorted(grouped.items()):
+        names=sorted({name for records in sessions.values() for name in records})
+        for name in names:
+            records=[rows[name] for rows in sessions.values() if name in rows]
+            valid=sum(r['status']=='VALID' for r in records)
+            summaries.append({'model':model,'tokens':tokens,'implementation':name,'label':short_names.get(name,name),'scope':records[0]['scope'],
+                              'wall_us':stats([v for r in records for v in r['samples_wall_us']]),
+                              'event_us':stats([v for r in records for v in r['samples_event_elapsed_us']]),
+                              'sessions':len(records),'valid_sessions':valid,
+                              'status':'INVALID' if valid<len(records) else 'COMPLETE' if len(records)==3 else 'PROVISIONAL'})
+    write(out/'kernel_summary.json',{'rows':summaries,'dispersion':'Run population std;150 repeats represent3 sessions, not150 independent hardware sessions. Invalid timings are retained but not ranked.'})
+    table(out/'tables/kernel',['Model / T','Implementation','Wall us','Event us','Valid sessions','Status'],
+          [[r['model']+' / '+str(r['tokens']),r['label'],fmt(r['wall_us']['median']),fmt(r['event_us']['median']),str(r['valid_sessions']),r['status']] for r in summaries],
+          'Fixed layer0. FP16 module/stage/dispatch and E17 native packed-output contracts are distinct; Q is the shared QuaRot quantizer. Chains are directly timed. Complete records have three50-run sessions; invalid rows are not ranked.')
     pairs = [('E28 slot', 'hadamard_fp16', 'nar_module'),
              ('E28 frontend', 'hadamard_plus_quantizer', 'nar_plus_quantizer'),
              ('Dispatch', 'nar_generic', 'nar_prebound'),

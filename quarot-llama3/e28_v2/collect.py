@@ -9,9 +9,15 @@ def fmt(v):
 def escaped(s):return str(s).replace('_',r'\_').replace('%',r'\%')
 def table(path,headers,rows,caption):
     path.parent.mkdir(parents=True,exist_ok=True)
-    lines=['\\begin{table}[t]','\\centering','\\small','\\caption{'+escaped(caption)+'}','\\begin{tabular}{'+'l'*len(headers)+'}','\\toprule',' & '.join(escaped(h) for h in headers)+r' \\','\\midrule']
-    lines += [' & '.join(escaped(x) for x in r)+r' \\' for r in rows]
-    lines += ['\\bottomrule','\\end{tabular}','\\end{table}']
+    head=' & '.join(escaped(h) for h in headers)+r' \\'
+    if len(rows)>28:
+        lines=['{\\small','\\begin{longtable}{'+'l'*len(headers)+'}','\\caption{'+escaped(caption)+r'} \\','\\toprule',head,'\\midrule','\\endfirsthead','\\toprule',head,'\\midrule','\\endhead']
+        lines += [' & '.join(escaped(x) for x in r)+r' \\' for r in rows]
+        lines += ['\\bottomrule','\\end{longtable}','}']
+    else:
+        lines=['\\begin{table}[t]','\\centering','\\small','\\caption{'+escaped(caption)+'}','\\begin{tabular}{'+'l'*len(headers)+'}','\\toprule',head,'\\midrule']
+        lines += [' & '.join(escaped(x) for x in r)+r' \\' for r in rows]
+        lines += ['\\bottomrule','\\end{tabular}','\\end{table}']
     path.with_suffix('.tex').write_text('\n'.join(lines)+'\n')
     path.with_suffix('.md').write_text(caption+'\n\n| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+'\n'.join('| '+' | '.join(map(str,r))+' |' for r in rows)+'\n')
 
@@ -116,7 +122,7 @@ def main():
         if 'layer' in r and 'rows' in r:
             for k in r['rows']:
                 kernels.append([r['model'],str(k['tokens']),str(r['session']),k['scope'],k['implementation'],fmt(k['wall_us']['median']),fmt(k['cuda_event_elapsed_us']['median']),k['status']])
-    table(out/'tables/kernel',['Model','T','Session','Scope','Implementation','Wall us','Event us','Status'],kernels,'Fixed layer0 configurations, directly timed calls/chains; stage times must not be summed into chain measurements. Invalid rows excluded from rankings.')
+    table(out/'tables/kernel_sessions',['Model','T','Session','Scope','Implementation','Wall us','Event us','Status'],kernels,'Fixed layer0 configurations, directly timed calls/chains; stage times must not be summed into chain measurements. Invalid rows excluded from rankings.')
     session_rows=[]
     extension_rows=[]
     for r in aggregate:
