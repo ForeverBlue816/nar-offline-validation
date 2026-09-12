@@ -149,9 +149,25 @@
       ],
       "points": 392,
       "inset": true
+    },
+    "fig3c3": {
+      "families": [
+        "E26 MoE experts"
+      ],
+      "model": "qwen3_30b_a3b_base",
+      "points": 5342,
+      "inset": true,
+      "in_pooled_fit": false,
+      "own_fit": {
+        "intercept": 0.09889918341897097,
+        "slope": 0.8184215028399259,
+        "r_squared": 0.4327628065599256,
+        "points": 5342
+      },
+      "source": "fig3_range_law_moe.csv"
     }
   },
-  "fit_display": "same pooled fit in both views; not a per-family fit",
+  "fit_display": "same pooled fit of the three reference sources in all three views; not a per-family fit. The MoE view is held out of that fit and states its own R\u00b2 beside it.",
   "svg_export": {
     "range_law_marks": "native vector markers in main axes and insets",
     "composition": "single viewport with translated groups and unique IDs",

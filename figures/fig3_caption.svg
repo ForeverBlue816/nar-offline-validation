@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="381.6pt" height="137.44pt" viewBox="0 0 381.6 137.44" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="381.6pt" height="168.64pt" viewBox="0 0 381.6 168.64" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-09-10T03:55:07.036122</dc:date>
+    <dc:date>2026-09-12T01:17:27.178326</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -21,8 +21,8 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 137.44
-L 381.6 137.44
+   <path d="M 0 168.64
+L 381.6 168.64
 L 381.6 0
 L 0 0
 z
@@ -36,11 +36,14 @@ z
     <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 43.269)">in-plane lengths 0.0150 (full Hadamard) and 1.0000 (PrismQuant). Direction cosines and token standard</text>
     <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 52.0445)">deviations are distinct quantities. Percentile-initialized bounds expand to all observed points, avoiding</text>
     <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 60.82)">clipping. Panel b preserves cumulative uncentered energy curves for layers 1, 13, and 27 over k=1–256 on</text>
-    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 69.5955)">a logarithmic x axis. Panel c is supplied as two matched standalone views: 2520 E1c activation</text>
-    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 78.371)">observations, and 280 E7 V-cache plus 112 E20 multi-slot observations. Both show range relative to the</text>
-    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 87.1465)">paired Hadamard result against sqrt(1-f), the identity line, and the same pooled linear fit over all 2912</text>
-    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 95.922)">points (R²=0.861389). The fit is not estimated separately for either view. Insets enlarge the 0.85–1.0</text>
-    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 104.6975)">corner without omitting any point from the main panels.</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 69.5955)">a logarithmic x axis. Panel c is supplied as three matched standalone views: 2520 E1c activation</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 78.371)">observations; 280 E7 V-cache plus 112 E20 multi-slot observations; and 5342 E26 per-expert observations</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 87.1315)">on Qwen3-30B-A3B-Base, one per routed expert, with the expert rather than the layer as the unit and f</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 95.907)">measured at its own rank k&lt;=6. All three show range relative to the paired Hadamard result against</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 104.6825)">sqrt(1-f), the identity line, and the same pooled linear fit over the 2912 points of the three Llama-3.2-3B</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 113.458)">reference sources (R²=0.861389). The fit is not estimated separately for any view; the MoE observations</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 122.2335)">are held out of it entirely and their own fit (R²=0.4328) is stated in that panel. Insets enlarge the 0.85–1.0</text>
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Times New Roman'; fill: #1d3557" transform="translate(11.52 131.009)">corner without omitting any point from the main panels.</text>
    </g>
   </g>
  </g>

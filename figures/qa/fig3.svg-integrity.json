@@ -21,6 +21,16 @@
       ],
       "embedded_images": 0,
       "complete_vector_radical": true
+    },
+    "fig3c3": {
+      "plotted_points": [
+        5342
+      ],
+      "expected_points": [
+        5342
+      ],
+      "embedded_images": 0,
+      "complete_vector_radical": true
     }
   },
   "compositions": {
@@ -28,7 +38,8 @@
       "svg_renderer": "PyMuPDF",
       "ink_ratio_vs_standalone": {
         "fig3c1": 1.0,
-        "fig3c2": 1.0198460036872357
+        "fig3c2": 1.0198460036872357,
+        "fig3c3": 1.003188775510204
       }
     },
     "fig3": {

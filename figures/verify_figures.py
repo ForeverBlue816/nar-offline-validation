@@ -96,6 +96,8 @@ def main():
     assert 0 < arrows["hadamard"]["in_plane_length"] < 0.03
     assert f3["range_law_subpanels"]["fig3c1"]["points"] == 2520
     assert f3["range_law_subpanels"]["fig3c2"]["points"] == 392
+    assert f3["range_law_subpanels"]["fig3c3"]["points"] == 5342
+    assert f3["range_law_subpanels"]["fig3c3"]["in_pooled_fit"] is False
     with pymupdf.open(HERE / "fig3c1.pdf") as doc:
         text = doc[0].get_text()
         assert "E1c activations" in text and "E7 V cache" not in text
@@ -104,6 +106,10 @@ def main():
         text = doc[0].get_text()
         assert "E7 V cache" in text and "E20 multi-slot" in text
         assert "E1c activations" not in text and "Pooled R" in text
+    with pymupdf.open(HERE / "fig3c3.pdf") as doc:
+        text = doc[0].get_text()
+        assert "E26 MoE experts" in text and "E1c activations" not in text
+        assert "Pooled R" in text and "0.86" in text and "MoE R" in text and "0.43" in text
     law = pd.read_csv(HERE / "fig3_range_law.csv")
     x = law.sqrt_one_minus_f.to_numpy(); y = law.range_ratio_vs_hadamard.to_numpy()
     np.testing.assert_allclose(x, np.sqrt(1 - law.absorbed_energy_fraction.to_numpy()), atol=1e-12)
@@ -115,13 +121,28 @@ def main():
     assert f3["point_counts"] == {str(k): int(v) for k,v in law.source_family.value_counts().items()}
     assert x.min() >= 0 and x.max() <= f3["main_axis_limits"][0][1]
     assert y.min() >= 0 and y.max() <= f3["main_axis_limits"][1][1]
+    moe = pd.read_csv(HERE / "fig3_range_law_moe.csv")
+    mx = moe.sqrt_one_minus_f.to_numpy(); my = moe.range_ratio_vs_hadamard.to_numpy()
+    np.testing.assert_allclose(mx, np.sqrt(1 - moe.absorbed_energy_fraction.to_numpy()), atol=1e-12)
+    assert len(moe) == 5342 and set(moe.source_family) == {"E26 MoE experts"}
+    assert set(moe.model) == {"qwen3_30b_a3b_base"}
+    mdesign = np.column_stack([np.ones_like(mx), mx])
+    mi, ms = np.linalg.lstsq(mdesign, my, rcond=None)[0]
+    mr2 = 1 - np.sum((my - mdesign @ [mi, ms])**2) / np.sum((my - my.mean())**2)
+    own = f3["range_law_subpanels"]["fig3c3"]["own_fit"]
+    np.testing.assert_allclose([mi, ms, mr2], [own["intercept"], own["slope"], own["r_squared"]], atol=1e-12)
+    assert f"{mr2:.2f}" == "0.43"
+    # The MoE points are held out of the pooled fit, so the pooled numbers above
+    # must be unchanged by their presence; and no MoE point may be clipped.
+    assert mx.min() >= 0 and mx.max() <= f3["main_axis_limits"][0][1]
+    assert my.max() > f3["main_axis_limits"][1][1], "fig3c3 must widen its own y axis"
     df=pd.read_csv(HERE/'fig2_capture.csv'); meta2=json.loads((HERE/'fig2_metadata.json').read_text())
     for col,out in [('mean_group_range','mean_range_reduction_percent'),('nmse','mean_nmse_reduction_percent')]:
         part=df[df.model.eq('llama32_3b')&df.site.eq('down')&df.method.isin(['hadamard','nar'])]
         pivot=part.pivot(index='layer',columns='method',values=col)
         assert len(pivot)==28
         np.testing.assert_allclose(100*((pivot.hadamard-pivot.nar)/pivot.hadamard).mean(),meta2[out],rtol=1e-12)
-    panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]
+    panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2','c3']]
     sizes={}
     for name in panels+['fig1','fig2','fig3']:
         for suffix in ['pdf','svg']:

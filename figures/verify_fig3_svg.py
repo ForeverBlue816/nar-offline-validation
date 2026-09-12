@@ -26,8 +26,9 @@ def ink(image):
 def main():
     law = pd.read_csv(HERE / 'fig3_range_law.csv')
     counts = law.source_family.value_counts().to_dict()
+    counts.update(pd.read_csv(HERE / 'fig3_range_law_moe.csv').source_family.value_counts().to_dict())
     report = {'panels': {}, 'compositions': {}}
-    for stem in ['fig3c1', 'fig3c2', 'fig3c', 'fig3']:
+    for stem in ['fig3c1', 'fig3c2', 'fig3c3', 'fig3c', 'fig3']:
         root = ET.parse(HERE / f'{stem}.svg').getroot()
         ids = [e.get('id') for e in root.iter() if e.get('id')]
         assert len(ids) == len(set(ids)), 'Duplicate SVG IDs'
@@ -39,15 +40,16 @@ def main():
                     refs.append(value[1:])
         assert not set(refs) - set(ids), 'Unresolved marker or clipping reference'
         assert not root.findall('.//s:svg', NS), 'Nested viewport may lose right-hand panels on import'
-        if stem in ['fig3c1', 'fig3c2']:
+        if stem in ['fig3c1', 'fig3c2', 'fig3c3']:
             assert not root.findall('.//s:image', NS), 'Range-law marks must remain native vector'
             collections = [e for e in root.findall('.//s:g', NS)
                            if (e.get('id') or '').startswith('PathCollection_')]
-            n = 1 if stem == 'fig3c1' else 2
+            n = 2 if stem == 'fig3c2' else 1
             plotted = [len(g.findall('.//s:use', NS)) + len(g.findall('s:path', NS))
                        for g in collections[:n]]
-            expected = ([counts['E1c activations']] if n == 1
-                        else [counts['E7 V cache'], counts['E20 multi-slot']])
+            expected = {'fig3c1': [counts['E1c activations']],
+                        'fig3c2': [counts['E7 V cache'], counts['E20 multi-slot']],
+                        'fig3c3': [counts['E26 MoE experts']]}[stem]
             assert plotted == expected, (stem, plotted, expected)
             formula = next(e for e in root.iter() if e.get('id') == 'sqrt_one_minus_f')
             assert ''.join(formula.itertext()).strip() == '1 − f'
@@ -59,14 +61,15 @@ def main():
             assert points[-1, 0] - points[-2, 0] > 10, 'Missing full radicand overbar'
             report['panels'][stem] = {'plotted_points': plotted, 'expected_points': expected,
                                       'embedded_images': 0, 'complete_vector_radical': True}
-    for composite, stems in [('fig3c', ['fig3c1', 'fig3c2']),
-                              ('fig3', ['fig3a', 'fig3b', 'fig3c1', 'fig3c2'])]:
+    # (composite, panels, columns) — fig3c is a three-panel strip, fig3 a 2x2 grid.
+    for composite, stems, columns in [('fig3c', ['fig3c1', 'fig3c2', 'fig3c3'], 3),
+                                      ('fig3', ['fig3a', 'fig3b', 'fig3c1', 'fig3c2'], 2)]:
         combined = render(HERE / f'{composite}.svg')
-        rows = len(stems) // 2
+        rows = (len(stems) + columns - 1) // columns
         ratios = {}
         for i, stem in enumerate(stems):
-            y0, y1 = [round(v * combined.shape[0] / rows) for v in [i // 2, i // 2 + 1]]
-            x0, x1 = [round(v * combined.shape[1] / 2) for v in [i % 2, i % 2 + 1]]
+            y0, y1 = [round(v * combined.shape[0] / rows) for v in [i // columns, i // columns + 1]]
+            x0, x1 = [round(v * combined.shape[1] / columns) for v in [i % columns, i % columns + 1]]
             ratio = ink(combined[y0:y1, x0:x1]) / ink(render(HERE / f'{stem}.svg'))
             assert .90 < ratio < 1.10, (composite, stem, 'Missing or clipped content', ratio)
             ratios[stem] = ratio
