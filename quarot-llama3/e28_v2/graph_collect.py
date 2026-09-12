@@ -83,12 +83,24 @@ def generate(out):
             for method in ['hadamard','nar']:
                 candidate=lookup.get((model,method,mode))
                 paired.append({'model':model,'method':method,'mode':mode,'comparison':'FP16 / method latency; greater than one means faster than FP16',**paired_ratio(fp,candidate)})
+    method_comparisons=[]
+    for model in MODELS:
+        for mode in ['eager_sequence','cuda_graph_sequence']:
+            panel={method:lookup.get((model,method,mode)) for method in METHODS}
+            if not all(panel.values()):continue
+            f,h,n=[panel[method]['summary']['median'] for method in METHODS]
+            sessions={method:{r['session']:r['median'] for r in panel[method]['session_summaries']} for method in METHODS}
+            common=set(sessions['fp16'])&set(sessions['hadamard'])&set(sessions['nar'])
+            supported=len(common)==3 and all(sessions['fp16'][i]/sessions['hadamard'][i]>1.05 for i in common)
+            method_comparisons.append({'model':model,'mode':mode,'hadamard_speedup':f/h,'nar_speedup':f/n,'nar_latency_overhead_pct':100*(n/h-1),
+              'acceleration_retention_pct':100*(f/n-1)/(f/h-1) if supported else None,
+              'retention_reason':None if supported else 'Hadamard must exceed1.05x in every one of three matched sessions; negative, small or unstable denominators are not acceleration retention.'})
     finished=out/'stream_pipeline_finished.json'
     stage=read(finished) if finished.exists() else None
     complete=len(rows)==12 and all(r['status']=='COMPLETE' for r in rows)
     status=('COMPLETE' if conformance['status']=='PASS' else 'REVIEW_REQUIRED') if complete else ('PARTIAL_OR_BLOCKED' if stage else 'INCOMPLETE')
     summary = {'timestamp': now(), 'scope': 'Private current-stream patch, same binary for every row in this panel; not original-binary core timing',
-               'deployment': rows, 'comparisons': comparisons, 'paired_session_comparisons':paired, 'protocol_conformance':conformance, 'stage_completion':stage,
+               'deployment': rows, 'comparisons': comparisons, 'method_comparisons': method_comparisons, 'paired_session_comparisons':paired, 'protocol_conformance':conformance, 'stage_completion':stage,
                'raw_status': [{'key': r.get('key'), 'status': r.get('status'), 'reason': r.get('reason')} for r in raw],
                'status': status,
                'missing_reason': None if rows else 'No validated matched graph timing records yet'}
@@ -100,7 +112,24 @@ def generate(out):
         if r.get('status') == 'PASS':
             memory.append({'key': r['key'], 'loaded': r['loaded'], 'warmed': r['warmed'],
                            'inference_peak': r['inference_peak'], 'graph_preparation': r['graph_preparation'], 'storage': r['storage']})
-    write(out / 'graph_memory_breakdown.json', {'rows': memory, 'units': 'bytes; allocated/reserved and graph-pool deltas are distinct'})
+    capture_scope={'capture_deltas':'Global torch.cuda allocated/reserved after capture minus before capture; these are net changes, not an isolated per-pool measurement.',
+                   'negative_reserved_delta':'A negative net reserved difference is an allocator-state change across the capture boundary, not negative Graph memory usage.',
+                   'standalone_graph_pool_bytes':{'value':None,'reason':'No per-pool allocator snapshot or counter was captured. Pool identifiers and global net deltas are recorded; independent-process inference peaks include the retained graph.'}}
+    write(out / 'graph_memory_breakdown.json', {'rows': memory, 'units': 'bytes; allocated/reserved and NVML are distinct','capture_scope':capture_scope})
+    memory_summary=[]
+    for key,records in sorted(grouped.items()):
+        preparations=[r['graph_preparation'] for r in records if r['graph_preparation'].get('graphs')]
+        item={'model':key[0],'method':key[1],'mode':key[2],'sessions':len(records),
+              'inference_peak_allocated_bytes':max(r['inference_peak']['peak_allocated'] for r in records),
+              'inference_peak_reserved_bytes':max(r['inference_peak']['peak_reserved'] for r in records),
+              'capture_preparation_seconds':stats([p['seconds'] for p in preparations]),
+              'capture_net_allocated_delta_bytes':stats([p['allocated_delta_bytes'] for p in preparations]),
+              'capture_net_reserved_delta_bytes':stats([p['reserved_delta_bytes'] for p in preparations])}
+        memory_summary.append(item)
+    write(out/'graph_memory_summary.json',{'rows':memory_summary,'capture_scope':capture_scope})
+    table(out/'tables/graph_memory',['Model','Method','Mode','Peak alloc GB','Peak reserv GB','Capture s','Net alloc MB'],
+          [[r['model'],r['method'],r['mode'],fmt(r['inference_peak_allocated_bytes']/1e9),fmt(r['inference_peak_reserved_bytes']/1e9),fmt(r['capture_preparation_seconds']['median']),fmt(r['capture_net_allocated_delta_bytes']['median']/1e6 if r['capture_net_allocated_delta_bytes']['median'] is not None else None)] for r in memory_summary],
+          'Private panel; independent-process inference peaks. Capture preparation is separate from steady-state timing. Net capture allocated/reserved changes do not isolate private-pool size; negative reserved changes are retained in JSON. Eager capture fields are N/A.')
     (out/'paper').mkdir(exist_ok=True)
     paper=[]
     if status=='COMPLETE':
