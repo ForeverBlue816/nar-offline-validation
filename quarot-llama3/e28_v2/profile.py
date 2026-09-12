@@ -1,5 +1,6 @@
 """Separate CPU/CUDA timeline; profiled times never enter deployment samples."""
 from .common import *
+import gzip
 
 def main():
     p=arguments(__doc__);a=p.parse_args();dest=a.run/'profiles'/f'{a.model}_{a.method}'
@@ -21,8 +22,11 @@ def main():
             for _ in range(4):
                 with torch.profiler.record_function('e28_v2_causal_decode_step'):m(token,past_key_values=cache)
             torch.cuda.synchronize()
-        prof.export_chrome_trace(str(dest.with_suffix('.trace.json')))
-        trace=read(dest.with_suffix('.trace.json'))
+        trace_path=dest.with_suffix('.trace.json.gz')
+        prof.export_chrome_trace(str(trace_path))
+        with gzip.open(trace_path,'rb') as handle:trace_bytes=handle.read()
+        out['trace']={'path':str(trace_path.relative_to(a.run)),'compression':'gzip; lossless Chrome JSON','compressed_bytes':trace_path.stat().st_size,'compressed_sha256':sha(trace_path),'uncompressed_bytes':len(trace_bytes),'uncompressed_sha256':hashlib.sha256(trace_bytes).hexdigest()}
+        trace=json.loads(trace_bytes);del trace_bytes
         kernels=[e for e in trace.get('traceEvents',[]) if e.get('cat')=='kernel' and 'dur' in e]
         spans=sorted((e['ts'],e['ts']+e['dur']) for e in kernels)
         merged=[]

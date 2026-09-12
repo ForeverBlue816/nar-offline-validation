@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-09-12T05:16:18.418971+00:00",
+  "before_profile_results": true,
+  "reason": "Use the installed PyTorch2.4.1 lossless gzip Chrome-trace exporter; preserve compressed/uncompressed SHA256 and byte sizes. No trace events or numeric values are omitted, and export remains outside measured forward calls.",
+  "previous_profile_sha256": "dd0f89e585a536590847a105c65292a8d11094efd0b486d2ca25e2d348929fbf",
+  "profile_sha256": "4ff460e5e6b063be28d5a4291b958445870cea6c01f4d267c9094f592b622a89"
+}
