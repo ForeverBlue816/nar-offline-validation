@@ -108,10 +108,47 @@ def generate(out):
         bad = [r for r in result.get('rows', []) if r.get('status') in ('FAIL', 'INVALID', 'BLOCKED')]
         correctness.append({'source': str(path.relative_to(out)), 'status': result.get('status'),
                             'reason': result.get('reason'), 'failed_rows': bad})
+    def stage(name, paths, timing_runs=None, kernel_rows=None):
+        entries=[]
+        for path in paths:
+            record=read(path) if path.exists() else {}
+            status=record.get('status','PENDING')
+            if record.get('complete') is False:status='RUNNING'
+            terminal=status in ('PASS','COMPLETE','FAIL','INVALID','BLOCKED')
+            valid=status in ('PASS','COMPLETE')
+            if timing_runs is not None:valid=valid and len(record.get('samples',[]))==timing_runs
+            if kernel_rows is not None:
+                rows=record.get('rows',[])
+                valid=valid and len(rows)==kernel_rows and all(r.get('status')=='VALID' and len(r.get('samples_wall_us',[]))==50 and len(r.get('samples_event_elapsed_us',[]))==50 for r in rows)
+            entries.append({'source':str(path.relative_to(out)),'status':status,'terminal':terminal,'valid':valid,'reason':record.get('reason')})
+        finished=sum(e['terminal'] for e in entries)
+        passed=sum(e['valid'] for e in entries)
+        return {'stage':name,'expected':len(entries),'terminal_records':finished,'valid_records':passed,
+                'status':'PENDING_OR_RUNNING' if finished<len(entries) else 'PASS' if passed==len(entries) else 'COMPLETED_WITH_LIMITATIONS','records':entries}
+    stages=[stage('P0 core timings',[out/'raw_runs'/f'{model}_{method}_{mode}_{phase}_s{session}.json' for model in MODELS for method in METHODS for session in [1,2,3] for phase in ['prefill1','prefill16','decode'] for mode in (['eager_sequence','eager_step_sync'] if phase=='decode' else ['eager_sequence'])],timing_runs=50),
+            stage('P1 legacy diagnostics',[out/'raw_runs'/f'{model}_{method}_legacy_diagnostic_decode_s0.json' for model in MODELS for method in METHODS],timing_runs=1),
+            stage('P1 profiles',[out/'profiles'/f'{model}_{method}.json' for model in MODELS for method in METHODS]),
+            stage('P1 kernel sessions',[out/'raw_runs'/f'kernels_{model}_s{session}.json' for model in MODELS for session in [1,2,3]],kernel_rows=39),
+            stage('P1 original graph checks',[out/'correctness'/f'graph_{model}_{method}.json' for model in MODELS for method in METHODS]),
+            stage('P2 extended R4 checks',[out/'correctness'/f'r4_extended_{model}.json' for model in MODELS]),
+            stage('P2 real FP16 checks',[out/'correctness'/f'model_real_{model}_fp16.json' for model in MODELS]),
+            stage('P2 independent RoPE checks',[out/'correctness'/f'rope_reference_{model}.json' for model in MODELS]),
+            stage('P2 extension timings',[out/'raw_runs'/f'{model}_{method}_eager_sequence_{phase}_s1.json' for model in MODELS for method in METHODS for phase in ['decode8','decode8192']],timing_runs=50),
+            stage('P1 private graph checks',[out/'correctness'/f'graph_stream_{model}_{method}.json' for model in MODELS for method in METHODS]),
+            stage('P1 private eager/graph timings',list(out/'raw_graph_runs'/f'{model}_{method}_{mode}_decode_s{session}.json' for model in MODELS for method in METHODS for mode in ['eager_sequence','cuda_graph_sequence'] for session in [1,2,3]),timing_runs=50)]
+    stream_end=read(out/'stream_pipeline_finished.json') if (out/'stream_pipeline_finished.json').exists() else None
+    if stream_end:
+        for row in stages[-2:]:
+            if row['status']=='PENDING_OR_RUNNING':
+                row['status']='BLOCKED_OR_INCOMPLETE'
+                row['reason']='Private stage ended; missing rows cannot be treated as measured. See stream_pipeline_finished.json and growing-cache/equivalence gates.'
     write(out / 'completion_audit.json', {'timestamp': now(), 'core_complete_processes': len(complete),
           'core_expected_processes': 72, 'core_status': 'COMPLETE' if len(complete) == 72 else 'INCOMPLETE',
-          'raw_stage_failures': failures, 'correctness': correctness,
-          'pipeline_finished': (out / 'pipeline_finished.json').exists()})
+          'stages':stages,'raw_stage_failures': failures, 'correctness': correctness,
+          'pipeline_finished': (out / 'pipeline_finished.json').exists(),'stream_pipeline_finished':stream_end})
+    table(out/'tables/completion',['Stage','Terminal / expected','Valid records','Status'],
+          [[r['stage'],f"{r['terminal_records']}/{r['expected']}",str(r['valid_records']),r['status']] for r in stages],
+          'Terminal means the process recorded a final result, including failures or blocks. Valid requires the declared sample counts and numerical gates. Core completion alone does not complete E28-v2.')
 
     summary = read(out / 'metrics_summary.json')
     details = ['# Measured evidence appendix', '',
