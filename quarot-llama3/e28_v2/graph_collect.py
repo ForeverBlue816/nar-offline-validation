@@ -7,6 +7,20 @@ def generate(out):
     from .collect import table, fmt
     grouped = defaultdict(list)
     raw = [read(p) for p in sorted((out / 'raw_graph_runs').glob('*.json'))]
+    uuids=set();environments=set();binaries=set();inputs=set();state_checks=[]
+    for r in raw:
+        if r.get('status')!='PASS':continue
+        env=r['environment']
+        for line in env.get('processes','').splitlines():
+            fields=[x.strip() for x in line.split(',')]
+            if len(fields)>1 and fields[1]==str(env['pid']):uuids.add(fields[0])
+        environments.add(json.dumps({k:env.get(k) for k in ['versions','capability','cuda_runtime','affinity','torch_threads','torch_interop_threads']},sort_keys=True))
+        binaries.add(r['backend_manifest']['binary_sha256']);inputs.add(r['input_sha256'])
+        expected=read(out/'correctness'/f'model_{r["model"]}_{r["method"]}.json').get('shared_state')
+        state_checks.append({'key':r['key'],'state_matches_original_verified_model':bool(expected and expected==r['shared_state'])})
+    conformance={'same_gpu':len(uuids)==1 if uuids else None,'gpu_uuids':sorted(uuids),'same_environment':len(environments)==1 if environments else None,'binary_sha256':sorted(binaries),'same_input':len(inputs)==1 if inputs else None,'state_checks':state_checks}
+    conformance['status']='PASS' if state_checks and len(uuids)==len(environments)==len(binaries)==len(inputs)==1 and all(r['state_matches_original_verified_model'] for r in state_checks) else 'PENDING_OR_REVIEW_REQUIRED'
+    write(out/'graph_protocol_conformance.json',conformance)
     for row in raw:
         if row.get('status') == 'PASS' and len(row.get('samples', [])) == 50:
             grouped[(row['model'], row['method'], row['mode'])].append(row)
@@ -42,7 +56,7 @@ def generate(out):
                 display.append([model, method, mode, fmt(value), fmt(r['summary']['std']),
                                 fmt(speedup), str(r['independent_sessions'])])
     summary = {'timestamp': now(), 'scope': 'Private current-stream patch, same binary for every row in this panel; not original-binary core timing',
-               'deployment': rows, 'comparisons': comparisons,
+               'deployment': rows, 'comparisons': comparisons, 'protocol_conformance':conformance,
                'raw_status': [{'key': r.get('key'), 'status': r.get('status'), 'reason': r.get('reason')} for r in raw],
                'status': 'COMPLETE' if len(rows) == 12 and all(r['status'] == 'COMPLETE' for r in rows) else 'INCOMPLETE',
                'missing_reason': None if rows else 'No validated matched graph timing records yet'}
