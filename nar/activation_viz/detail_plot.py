@@ -17,7 +17,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.lines import Line2D
 from mpl_toolkits.mplot3d import proj3d
 
-from .plot import LAYERS, METHODS, LABELS, number, plt, style
+from .plot import CMAP, LAYERS, METHODS, LABELS, number, plt, style
 from .qa.panel_alignment import require_matplotlib_panel_alignment
 
 CONFIG = {
@@ -63,6 +63,16 @@ HEIGHT_AXIS_STYLE = {
     'floor_border': {'color': '#d0d0d0', 'linewidth': 0.3},
     'tick_padding_pt': '3; 5 for shared limits >=100 to clear longer labels',
     'scope': 'only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw',
+}
+
+
+PALETTE_STYLE = {
+    'revision': 'priority-blue-orange-v1',
+    'cmap': CMAP.name,
+    'colors': ['#225b8d', '#4f8eb6', '#96b8c6', '#dac9a8', '#eaa15d', '#c46731'],
+    'source': 'existing plot.CMAP, reused unchanged',
+    'norm': 'PowerNorm', 'gamma': 0.5,
+    'scope': HEIGHT_AXIS_STYLE['scope'],
 }
 
 
@@ -215,13 +225,13 @@ def setup_axes(ax, limit, labels=True, font_size=11.5, height_axis=False):
                 linewidth=.45, linestyle=(0, (3, 3)))
 
 
-def surface(ax, z, norm):
+def surface(ax, z, norm, cmap=None):
     channel_idx = np.arange(512)
     token_idx = np.arange(128)
     x, y = np.meshgrid(channel_idx, token_idx, indexing='xy')
     assert x.shape == y.shape == z.shape == (128, 512)
     artist = ax.plot_surface(x, y, z, rcount=z.shape[0], ccount=z.shape[1],
-                            cmap=colormaps['viridis'], norm=norm, shade=False,
+                            cmap=cmap if cmap is not None else colormaps['viridis'], norm=norm, shade=False,
                             linewidth=0, antialiased=False, rasterized=True)
     return artist
 
@@ -246,7 +256,8 @@ def export(fig, path, records, scales, colorbars):
         document[0].get_pixmap(dpi=600, alpha=False).save(str(path) + '.png')
     write_json(path.with_suffix('.geometry.json'), {
         'config': CONFIG, 'panels': records, 'scales': scales,
-        **({'height_axis_style': HEIGHT_AXIS_STYLE} if getattr(fig, '_height_axis_revision', False) else {}),
+        **({'height_axis_style': HEIGHT_AXIS_STYLE, 'palette_style': PALETTE_STYLE}
+           if getattr(fig, '_height_axis_revision', False) else {}),
         'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         'plot_source_sha256': digest(__file__),
         'output_paths': [str(path.with_suffix('.' + ext)) for ext in ('pdf', 'png', 'svg')],
@@ -269,6 +280,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     rows, cols = len(methods), len(layers)
     zoom = name == 'rotated_only_zoom'
     height_axis = name == 'matrix' and (mode, site, quantity) in HEIGHT_AXIS_TARGETS
+    cmap = CMAP if height_axis else colormaps['viridis']
     footer_extra = .25 if height_axis else 0
     font_size = 11.75 if cols == 4 else 8.5
     width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0) + footer_extra
@@ -299,7 +311,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
             ax = fig.add_subplot(grid[row, col], projection='3d')
             axes[row, col] = ax
             setup_axes(ax, limit, labels=False, font_size=font_size, height_axis=height_axis)
-            surface(ax, z, norm)
+            surface(ax, z, norm, cmap=cmap)
             if row == 0:
                 ax.set_title(f'Block {layer + 1}', fontsize=font_size+1, pad=5)
             if col == 0:
@@ -326,7 +338,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                 'vertical_height_segments': 0, 'sidewall_triangles': 0, 'zero_padding': False,
                 'z_limit': limit, 'all_zero_column': maximum == 0,
                 'norm': {'name': type(norm).__name__, 'gamma': None if linear else .5,
-                         'vmin': 0, 'vmax': limit, 'cmap': 'viridis'},
+                         'vmin': 0, 'vmax': limit, 'cmap': cmap.name},
                 'debug_points': points, 'camera': CONFIG['camera']})
         # One horizontal, data-unit colorbar per column, outside the surface grid.
         bottom_ax = axes[rows - 1, col].get_position()
@@ -334,7 +346,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
                  fontsize=font_size, ha='center', va='center')
         cax = fig.add_axes([bottom_ax.x0 + .1 * bottom_ax.width, (.8 + footer_extra) / height,
                             .80 * bottom_ax.width, .07 / height])
-        cb = fig.colorbar(ScalarMappable(norm=norm, cmap=colormaps['viridis']), cax=cax,
+        cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), cax=cax,
                           orientation='horizontal', ticks=[0, limit])
         cb.ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
         cb.ax.tick_params(labelsize=font_size, pad=1, length=2)
@@ -355,7 +367,7 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     scales = {'z_limits_by_layer': limits, 'all_zero_by_layer': zero_flags,
               'shared_across_methods': candidates, 'linear_heights': True,
               'norm': 'Normalize' if linear else 'PowerNorm', 'gamma': None if linear else .5,
-              'cmap': 'viridis', 'vmin': 0, 'view': 'rotated_only_zoom' if zoom else 'four_method_scale',
+              'cmap': cmap.name, 'vmin': 0, 'view': 'rotated_only_zoom' if zoom else 'four_method_scale',
               'scale_differs_from_matrix': zoom}
     export(fig, path, records, scales, colorbars)
     print('LOCAL SURFACE', path, flush=True)

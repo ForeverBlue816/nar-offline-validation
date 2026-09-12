@@ -1,7 +1,8 @@
 """Rerender and audit only the three user-selected raw activation matrices.
 
 The existing quantitative grid and all source data, camera and scales are fixed.
-Only height labels, the zero-plane cue and pale floor edges change. There are
+Height labels, the zero-plane cue and pale floor edges are preserved.
+The latest follow-up restores the original blue-orange colormap only. There are
 no uncertainty intervals because the surfaces describe one fixed sample.
 """
 import argparse
@@ -29,7 +30,7 @@ def render(args):
 
 
 def prepare(root):
-    out = root/'qa/height_axis_revision'
+    out = root/'qa/blue_orange_revision'
     out.mkdir(exist_ok=True)
     baseline = out/'baseline.json'
     if not baseline.exists():
@@ -43,7 +44,7 @@ def prepare(root):
 
 
 def audit(root):
-    out = root/'qa/height_axis_revision'
+    out = root/'qa/blue_orange_revision'
     baseline = json.loads((out/'baseline.json').read_text())
     audit_path = root/'qa/rendered_audit_index.json'
     audit_index = {r['pdf']: r for r in json.loads(audit_path.read_text())}
@@ -58,14 +59,21 @@ def audit(root):
         old = baseline['geometry'][selection]
         new = json.loads(stem.with_suffix('.geometry.json').read_text())
         assert new['height_axis_style'] == plot.HEIGHT_AXIS_STYLE
-        assert old['scales'] == new['scales']
+        assert new['palette_style'] == plot.PALETTE_STYLE
+        assert new['scales']['cmap'] == plot.CMAP.name
+        assert {k:v for k,v in old['scales'].items() if k != 'cmap'} == {k:v for k,v in new['scales'].items() if k != 'cmap'}
+        assert old['figure_inches'] == new['figure_inches']
         assert len(old['panels']) == len(new['panels']) == 16
         panel_records = []
         for a, b in zip(old['panels'], new['panels']):
             for field in ('source', 'source_sha256', 'source_tensor_sha256', 'local_array_sha256',
                           'shape', 'z_limit', 'norm', 'camera', 'surface_cells', 'surface_rcount',
                           'surface_ccount', 'draw_height_columns', 'draw_sidewalls', 'zero_padding'):
-                assert a[field] == b[field], (selection, field)
+                if field == 'norm':
+                    assert b[field]['cmap'] == plot.CMAP.name
+                    assert {k:v for k,v in a[field].items() if k != 'cmap'} == {k:v for k,v in b[field].items() if k != 'cmap'}
+                else:
+                    assert a[field] == b[field], (selection, field)
             for x, y in zip(a['debug_points'], b['debug_points']):
                 assert all(x[k] == y[k] for k in ('channel', 'token', 'z'))
                 assert all(abs(v-w) < 1e-12 for v, w in zip(x['native_projected_xy'], y['native_projected_xy']))
@@ -94,6 +102,7 @@ def audit(root):
                 'intended_insertion_width_inches': 7.2, 'review_png_sha256': plot.digest(review)}
         records.append({'pdf': relative, 'pdf_sha256': plot.digest(pdf),
             'panels': panel_records, 'minimum_text_pt_at_183mm': paper_font,
+            'palette_before': old['scales']['cmap'], 'palette_after': new['scales']['cmap'],
             'font_exit': text.returncode, 'collision_exit': collision.returncode})
     for file, expected in baseline['protected_figures'].items():
         assert plot.digest(root/file) == expected, file
@@ -104,10 +113,11 @@ def audit(root):
     result = {'scope': TARGETS, 'records': records, 'panels_unchanged': 48,
               'other_figure_files_unchanged': len(baseline['protected_figures']),
               'experimental_artifacts_unchanged': True,
+              'palette_only_change': True, 'palette': plot.PALETTE_STYLE,
               'visual_review': 'pending inspection of the final PDF renders'}
     plot.write_json(out/'audit.json', result)
     failures = [r for r in records if r['font_exit'] or r['collision_exit']]
-    print('HEIGHT AXIS AUDIT:', len(records), 'PDFs;', len(failures), 'blocking layouts', flush=True)
+    print('BLUE-ORANGE AUDIT:', len(records), 'PDFs;', len(failures), 'blocking layouts', flush=True)
     if failures:
         raise RuntimeError('Repair PDF layout before delivery')
 

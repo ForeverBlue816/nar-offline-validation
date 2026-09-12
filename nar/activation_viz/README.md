@@ -52,3 +52,10 @@ python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"
 `detail_plot --parts primary` renders one selected main matrix without touching
 its linear, zoom, row or panel companions. The revision audit verifies all
 48 panel arrays and the hashes of every other figure file against the baseline.
+
+The latest user-requested palette follow-up restores the original
+`plot.CMAP` blue-to-orange colors only in those three priority main matrices.
+Their PowerNorm gamma=0.5, linear heights, camera, dimensions and height-axis
+annotations are preserved. Other exports retain their previous palette.
+The same scoped render command above now records `qa/blue_orange_revision`;
+earlier height-axis review records remain historical and unchanged.
