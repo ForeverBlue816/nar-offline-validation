@@ -103,6 +103,9 @@ def main():
                 torch.cuda.synchronize(); elapsed=time.perf_counter()-start
                 if decoding and a.mode in ('eager_step_sync','legacy_diagnostic'):elapsed=sum(steps)
                 return elapsed, (start_event.elapsed_time(end_event) if events else None)
+            # Clear allocator-only preflight temporaries before the complete
+            # warmups, so reserved memory does not inherit instrumentation peaks.
+            gc.collect();torch.cuda.synchronize();torch.cuda.empty_cache()
             warmups=10;runs=50
             if a.mode=='legacy_diagnostic':warmups=1;runs=1
             for _ in range(warmups):run()
