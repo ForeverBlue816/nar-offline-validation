@@ -232,6 +232,15 @@ def main():
         report=report.replace('## One-page status',f"## Cohort stopped\n\n**{stopped['status']}**: {stopped['reason']} See the [replacement run](../{stopped['replacement_run']}/report_e28_v2.md). The records below are historical partial evidence, not an active pending run.\n\n## One-page status")
     (out/'report_e28_v2.md').write_text(report)
     rel=out.relative_to(ROOT)
-    (ROOT/'report_e28_v2.md').write_text(f'# E28-v2\n\nThe current experiment record is [{rel.name}]({rel}/report_e28_v2.md).\n\nThis is a random-weight integer kernel-swap study with explicit numerical gates. Native paper-format model deployment and real model quality are not established; the report also records the backend accumulator-overflow failures. Consult the linked report for completed, failed, blocked and pending stages.\n')
+    # Keep the root report self-contained, with links resolved from repository root.
+    import re,posixpath
+    def root_link(match):
+        target=match.group(1)
+        if target.startswith(('http:','https:','mailto:','#','/')):return match.group(0)
+        return ']('+posixpath.normpath(str(rel)+'/'+target)+')'
+    root_report=re.sub(r'\]\(([^)]+)\)',root_link,report)
+    root_report=root_report.replace('\n\n',f'\n\nRun record: [{rel.name}]({rel}/report_e28_v2.md).\n\n',1)
+    (ROOT/'report_e28_v2.md').write_text(root_report)
+
     print('COLLECT',len(aggregate),'groups',len(kernels),'kernel rows',flush=True)
 if __name__=='__main__':main()
