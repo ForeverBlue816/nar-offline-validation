@@ -8,9 +8,11 @@ def generate(out):
     grouped = defaultdict(list)
     raw = [read(p) for p in sorted((out / 'raw_graph_runs').glob('*.json'))]
     uuids=set();environments=set();binaries=set();inputs=set();state_checks=[]
+    sources={name:set() for name in ['common.py','cache_adapter.py','benchmark.py','graph_benchmark.py']}
     for r in raw:
         if r.get('status')!='PASS':continue
         env=r['environment']
+        for name,hashes in sources.items():hashes.add(env.get('execution_python_sha256',{}).get('quarot-llama3/e28_v2/'+name))
         for line in env.get('processes','').splitlines():
             fields=[x.strip() for x in line.split(',')]
             if len(fields)>1 and fields[1]==str(env['pid']):uuids.add(fields[0])
@@ -18,8 +20,9 @@ def generate(out):
         binaries.add(r['backend_manifest']['binary_sha256']);inputs.add(r['input_sha256'])
         expected=read(out/'correctness'/f'model_{r["model"]}_{r["method"]}.json').get('shared_state')
         state_checks.append({'key':r['key'],'state_matches_original_verified_model':bool(expected and expected==r['shared_state'])})
-    conformance={'same_gpu':len(uuids)==1 if uuids else None,'gpu_uuids':sorted(uuids),'same_environment':len(environments)==1 if environments else None,'binary_sha256':sorted(binaries),'same_input':len(inputs)==1 if inputs else None,'state_checks':state_checks}
-    conformance['status']='PASS' if state_checks and len(uuids)==len(environments)==len(binaries)==len(inputs)==1 and all(r['state_matches_original_verified_model'] for r in state_checks) else 'PENDING_OR_REVIEW_REQUIRED'
+    same_sources=all(len(v)==1 and None not in v for v in sources.values())
+    conformance={'same_measurement_sources':same_sources,'source_hashes':{k:sorted(v,key=str) for k,v in sources.items()},'same_gpu':len(uuids)==1 if uuids else None,'gpu_uuids':sorted(uuids),'same_environment':len(environments)==1 if environments else None,'binary_sha256':sorted(binaries),'same_input':len(inputs)==1 if inputs else None,'state_checks':state_checks}
+    conformance['status']='PASS' if same_sources and state_checks and len(uuids)==len(environments)==len(binaries)==len(inputs)==1 and all(r['state_matches_original_verified_model'] for r in state_checks) else 'PENDING_OR_REVIEW_REQUIRED'
     write(out/'graph_protocol_conformance.json',conformance)
     for row in raw:
         if row.get('status') == 'PASS' and len(row.get('samples', [])) == 50:
@@ -31,6 +34,7 @@ def generate(out):
         entry = {'model': key[0], 'method': key[1], 'mode': key[2],
                  'summary': stats([s['ms_per_token'] for r in records for s in r['samples']]),
                  'session_summaries': [dict(session=r['session'], **r['summary']) for r in records],
+                 'session_median_dispersion': stats([r['summary']['median'] for r in records]),
                  'independent_sessions': len(records),
                  'status': 'COMPLETE' if len(records) == 3 else 'PROVISIONAL',
                  'inference_peak_allocated_bytes': max(r['inference_peak']['peak_allocated'] for r in records),
@@ -55,10 +59,32 @@ def generate(out):
                                     'status': r['status']})
                 display.append([model, method, mode, fmt(value), fmt(r['summary']['std']),
                                 fmt(speedup), str(r['independent_sessions'])])
+    def paired_ratio(numerator,denominator):
+        if not numerator or not denominator:return {'samples':[],'summary':stats([]),'interpretation':'Missing matching method/mode records'}
+        ns={r['session']:r['median'] for r in numerator['session_summaries']}
+        ds={r['session']:r['median'] for r in denominator['session_summaries']}
+        samples=[{'session':s,'ratio':ns[s]/ds[s]} for s in sorted(ns.keys()&ds.keys())]
+        values=[r['ratio'] for r in samples]
+        consistent=len(values)==3 and (all(v<1 for v in values) or all(v>1 for v in values))
+        summary=stats(values)
+        interpretation=('fewer than three matched sessions; no stable advantage established' if len(values)<3 else 'near parity / within observed variability' if not consistent or abs(summary['median']-1)<=.01 else 'consistent observed direction in these three sessions')
+        return {'samples':samples,'summary':summary,'direction_consistent':consistent,'interpretation':interpretation}
+    paired=[]
+    for model in MODELS:
+        for method in METHODS:
+            eager=lookup.get((model,method,'eager_sequence'));graph=lookup.get((model,method,'cuda_graph_sequence'))
+            paired.append({'model':model,'method':method,'comparison':'same-method eager / graph latency; greater than one means graph is faster',**paired_ratio(eager,graph)})
+        for mode in ['eager_sequence','cuda_graph_sequence']:
+            nar=lookup.get((model,'nar',mode));had=lookup.get((model,'hadamard',mode))
+            paired.append({'model':model,'mode':mode,'comparison':'NAR / Hadamard latency; greater than one means NAR is slower',**paired_ratio(nar,had)})
+    finished=out/'stream_pipeline_finished.json'
+    stage=read(finished) if finished.exists() else None
+    complete=len(rows)==12 and all(r['status']=='COMPLETE' for r in rows)
+    status=('COMPLETE' if conformance['status']=='PASS' else 'REVIEW_REQUIRED') if complete else ('PARTIAL_OR_BLOCKED' if stage else 'INCOMPLETE')
     summary = {'timestamp': now(), 'scope': 'Private current-stream patch, same binary for every row in this panel; not original-binary core timing',
-               'deployment': rows, 'comparisons': comparisons, 'protocol_conformance':conformance,
+               'deployment': rows, 'comparisons': comparisons, 'paired_session_comparisons':paired, 'protocol_conformance':conformance, 'stage_completion':stage,
                'raw_status': [{'key': r.get('key'), 'status': r.get('status'), 'reason': r.get('reason')} for r in raw],
-               'status': 'COMPLETE' if len(rows) == 12 and all(r['status'] == 'COMPLETE' for r in rows) else 'INCOMPLETE',
+               'status': status,
                'missing_reason': None if rows else 'No validated matched graph timing records yet'}
     write(out / 'graph_metrics_summary.json', summary)
     table(out / 'tables/graph_deployment', ['Model', 'Method', 'Mode', 'ms/step', 'Run std', 'FP16 speedup', 'Sessions'], display,
