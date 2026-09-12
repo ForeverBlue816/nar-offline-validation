@@ -1,16 +1,133 @@
 {
-  "binary_sha256": [],
-  "gpu_uuids": [],
-  "same_environment": null,
-  "same_gpu": null,
-  "same_input": null,
-  "same_measurement_sources": false,
+  "binary_sha256": [
+    "8a74e93227fb04b1805c7c93106fac767575169709fd683edd7a89f2c2b84085"
+  ],
+  "gpu_uuids": [
+    "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22"
+  ],
+  "same_environment": true,
+  "same_gpu": true,
+  "same_input": true,
+  "same_measurement_sources": true,
   "source_hashes": {
-    "benchmark.py": [],
-    "cache_adapter.py": [],
-    "common.py": [],
-    "graph_benchmark.py": []
+    "benchmark.py": [
+      "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380"
+    ],
+    "cache_adapter.py": [
+      "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe"
+    ],
+    "common.py": [
+      "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8"
+    ],
+    "graph_benchmark.py": [
+      "a8d7ae0ff4b83ac8a3b171b344364656e2208e09f723e66366fb43a6248d7ca9"
+    ]
   },
-  "state_checks": [],
-  "status": "PENDING_OR_REVIEW_REQUIRED"
+  "state_checks": [
+    {
+      "key": "3b_fp16_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_fp16_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_fp16_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_fp16_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_nar_cuda_graph_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_nar_cuda_graph_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s1",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    }
+  ],
+  "status": "PASS"
 }

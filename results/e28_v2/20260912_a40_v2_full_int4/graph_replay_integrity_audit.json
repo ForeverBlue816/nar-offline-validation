@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-09-12T12:57:03.782399+00:00",
+  "status": "PASS",
+  "scope": "Offline integrity audit of already-recorded private Graph checks; no new GPU execution or threshold change.",
+  "rows": [
+    {
+      "source": "correctness/graph_stream_3b_fp16.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    },
+    {
+      "source": "correctness/graph_stream_3b_hadamard.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    },
+    {
+      "source": "correctness/graph_stream_3b_nar.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    },
+    {
+      "source": "correctness/graph_stream_8b_fp16.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    },
+    {
+      "source": "correctness/graph_stream_8b_hadamard.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    },
+    {
+      "source": "correctness/graph_stream_8b_nar.json",
+      "status": "PASS",
+      "checked_states": 36,
+      "max_logits_relative_l2": 0.0,
+      "max_hidden_relative_l2": 0.0,
+      "all_full_cache_hashes_and_metadata_exact": true,
+      "A_first_and_repeat_exact": true,
+      "A_and_B_cache_hashes_distinct": true,
+      "actual_page_boundary_verified": true
+    }
+  ]
+}

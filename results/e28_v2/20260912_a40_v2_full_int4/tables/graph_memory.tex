@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Private panel; independent-process inference peaks. Capture preparation is separate from steady-state timing. Net capture allocated/reserved changes do not isolate private-pool size; negative reserved changes are retained in JSON. Eager capture fields are N/A.}
+\begin{tabular}{llllllll}
+\toprule
+Model & Method & Mode & Peak alloc GB & Peak reserv GB & Graphs & Capture s & Net alloc MB \\
+\midrule
+3b & fp16 & cuda\_graph\_sequence & 8.74 & 8.85 & 1 & 0.60 & 9.03 \\
+3b & fp16 & eager\_sequence & 8.72 & 8.80 & N/A & N/A & N/A \\
+3b & hadamard & cuda\_graph\_sequence & 4.37 & 4.52 & 1 & 0.85 & 9.03 \\
+3b & hadamard & eager\_sequence & 4.35 & 4.47 & N/A & N/A & N/A \\
+3b & nar & cuda\_graph\_sequence & 4.39 & 4.54 & 1 & 0.53 & 9.03 \\
+3b & nar & eager\_sequence & 4.37 & 4.49 & N/A & N/A & N/A \\
+8b & fp16 & cuda\_graph\_sequence & 18.77 & 19.03 & 1 & 1.10 & 9.03 \\
+8b & fp16 & eager\_sequence & 18.75 & 18.99 & N/A & N/A & N/A \\
+8b & hadamard & cuda\_graph\_sequence & 8.15 & 8.33 & 1 & 0.83 & 9.03 \\
+8b & hadamard & eager\_sequence & 8.13 & 8.28 & N/A & N/A & N/A \\
+8b & nar & cuda\_graph\_sequence & 8.19 & 8.40 & 1 & 0.74 & 9.03 \\
+8b & nar & eager\_sequence & 8.18 & 8.35 & N/A & N/A & N/A \\
+\bottomrule
+\end{tabular}
+\end{table}

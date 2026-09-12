@@ -1,0 +1,402 @@
+{
+  "capture_scope": {
+    "capture_deltas": "Global torch.cuda allocated/reserved after capture minus before capture; these are net changes, not an isolated per-pool measurement.",
+    "negative_reserved_delta": "A negative net reserved difference is an allocator-state change across the capture boundary, not negative Graph memory usage.",
+    "standalone_graph_pool_bytes": {
+      "reason": "No per-pool allocator snapshot or counter was captured. Pool identifiers and global net deltas are recorded; independent-process inference peaks include the retained graph.",
+      "value": null
+    }
+  },
+  "rows": [
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728.0,
+        "min": 9033728,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -207618048,
+        "mean": -207618048.0,
+        "median": -207618048.0,
+        "min": -207618048,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 0.6197675070725381,
+        "mean": 0.6016926956363022,
+        "median": 0.6016926956363022,
+        "min": 0.5836178842000663,
+        "n": 2,
+        "std": 0.018074811436235905
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 8735643648,
+      "inference_peak_reserved_bytes": 8849981440,
+      "method": "fp16",
+      "mode": "cuda_graph_sequence",
+      "model": "3b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 8718088192,
+      "inference_peak_reserved_bytes": 8803844096,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728.0,
+        "min": 9033728,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -270532608,
+        "mean": -270532608.0,
+        "median": -270532608.0,
+        "min": -270532608,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 1.1200680918991566,
+        "mean": 0.8481967749539763,
+        "median": 0.8481967749539763,
+        "min": 0.576325458008796,
+        "n": 2,
+        "std": 0.2718713169451803
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 4370100224,
+      "inference_peak_reserved_bytes": 4515168256,
+      "method": "hadamard",
+      "mode": "cuda_graph_sequence",
+      "model": "3b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 4352544768,
+      "inference_peak_reserved_bytes": 4469030912,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728,
+        "min": 9033728,
+        "n": 3,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -335544320,
+        "mean": -335544320.0,
+        "median": -335544320,
+        "min": -335544320,
+        "n": 3,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 0.5503179179504514,
+        "mean": 0.5341213163919747,
+        "median": 0.53332539787516,
+        "min": 0.5187206333503127,
+        "n": 3,
+        "std": 0.012911808890562065
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 4392284672,
+      "inference_peak_reserved_bytes": 4538236928,
+      "method": "nar",
+      "mode": "cuda_graph_sequence",
+      "model": "3b",
+      "sessions": 3
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 4374729216,
+      "inference_peak_reserved_bytes": 4492099584,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "sessions": 3
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728.0,
+        "min": 9033728,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -356515840,
+        "mean": -356515840.0,
+        "median": -356515840.0,
+        "min": -356515840,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 1.283852060791105,
+        "mean": 1.1043266938067973,
+        "median": 1.1043266938067973,
+        "min": 0.9248013268224895,
+        "n": 2,
+        "std": 0.17952536698430777
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 18767063040,
+      "inference_peak_reserved_bytes": 19031654400,
+      "method": "fp16",
+      "mode": "cuda_graph_sequence",
+      "model": "8b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 18749507584,
+      "inference_peak_reserved_bytes": 18985517056,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728.0,
+        "min": 9033728,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -425721856,
+        "mean": -425721856.0,
+        "median": -425721856.0,
+        "min": -425721856,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 0.8703140378929675,
+        "mean": 0.8260162023361772,
+        "median": 0.8260162023361772,
+        "min": 0.781718366779387,
+        "n": 2,
+        "std": 0.04429783555679023
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 8149383168,
+      "inference_peak_reserved_bytes": 8327790592,
+      "method": "hadamard",
+      "mode": "cuda_graph_sequence",
+      "model": "8b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 8131827712,
+      "inference_peak_reserved_bytes": 8283750400,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "max": 9033728,
+        "mean": 9033728.0,
+        "median": 9033728.0,
+        "min": 9033728,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_net_reserved_delta_bytes": {
+        "max": -538968064,
+        "mean": -538968064.0,
+        "median": -538968064.0,
+        "min": -538968064,
+        "n": 2,
+        "std": 0.0
+      },
+      "capture_preparation_seconds": {
+        "max": 0.7818153011612594,
+        "mean": 0.7426240481436253,
+        "median": 0.7426240481436253,
+        "min": 0.7034327951259911,
+        "n": 2,
+        "std": 0.03919125301763415
+      },
+      "captured_graph_counts": [
+        1
+      ],
+      "inference_peak_allocated_bytes": 8193522176,
+      "inference_peak_reserved_bytes": 8399093760,
+      "method": "nar",
+      "mode": "cuda_graph_sequence",
+      "model": "8b",
+      "sessions": 2
+    },
+    {
+      "capture_net_allocated_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_net_reserved_delta_bytes": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "capture_preparation_seconds": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      },
+      "captured_graph_counts": [],
+      "inference_peak_allocated_bytes": 8175966720,
+      "inference_peak_reserved_bytes": 8352956416,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "sessions": 2
+    }
+  ]
+}

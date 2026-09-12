@@ -662,6 +662,36 @@
       "reason": null,
       "status": "PASS"
     },
+    "graph_stream_3b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "graph_stream_3b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "graph_stream_8b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "graph_stream_8b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "graph_stream_8b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
     "model_3b_fp16": {
       "complete": null,
       "completed_layers": null,
@@ -2711,174 +2741,1476 @@
       }
     }
   ],
-  "generated_at": "2026-09-12T12:45:19.395122+00:00",
+  "generated_at": "2026-09-12T15:33:09.728243+00:00",
   "graph_performance": {
-    "comparisons": [],
-    "deployment": [],
-    "missing_reason": "No validated matched graph timing records yet",
+    "comparisons": [
+      {
+        "method": "fp16",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 1.0,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 0.5102692642967449,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 0.5103968742854987,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "fp16",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": 1.462278413924093,
+        "same_mode_fp16_speedup": 1.0,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": 2.6389488371098198,
+        "same_mode_fp16_speedup": 0.9208742116456347,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "same_method_graph_vs_eager_speedup": 2.58725345940418,
+        "same_mode_fp16_speedup": 0.9030606388564153,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "fp16",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 1.0,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 0.5742476890653291,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": null,
+        "same_mode_fp16_speedup": 0.5942637158339725,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "fp16",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": 1.047964470191623,
+        "same_mode_fp16_speedup": 1.0,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": 2.2771305659678025,
+        "same_mode_fp16_speedup": 1.2477874989100828,
+        "status": "PROVISIONAL"
+      },
+      {
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "same_method_graph_vs_eager_speedup": 2.150422505793841,
+        "same_mode_fp16_speedup": 1.2194288120019752,
+        "status": "PROVISIONAL"
+      }
+    ],
+    "deployment": [
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8735643648,
+        "method": "fp16",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 15.03754435107112,
+          "mean": 15.037139285899077,
+          "median": 15.037139285899077,
+          "min": 15.036734220727036,
+          "n": 2,
+          "std": 0.00040506517204175196
+        },
+        "session_summaries": [
+          {
+            "max": 15.039475452310095,
+            "mean": 15.037607494120795,
+            "median": 15.03754435107112,
+            "min": 15.036265874126306,
+            "n": 50,
+            "session": 1,
+            "std": 0.0006988040290115129
+          },
+          {
+            "max": 15.038484994632503,
+            "mean": 15.036867193644866,
+            "median": 15.036734220727036,
+            "min": 15.035039799598357,
+            "n": 50,
+            "session": 2,
+            "std": 0.0007547519092459174
+          }
+        ],
+        "source_keys": [
+          "3b_fp16_cuda_graph_sequence_decode_s1",
+          "3b_fp16_cuda_graph_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 15.039475452310095,
+          "mean": 15.037237343882833,
+          "median": 15.037237480282784,
+          "min": 15.035039799598357,
+          "n": 100,
+          "std": 0.0008160882038126757
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8718088192,
+        "method": "fp16",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 22.016739594982937,
+          "mean": 21.995535183426302,
+          "median": 21.995535183426302,
+          "min": 21.974330771869667,
+          "n": 2,
+          "std": 0.021204411556634994
+        },
+        "session_summaries": [
+          {
+            "max": 22.65993880185609,
+            "mean": 21.966406198296077,
+            "median": 21.974330771869667,
+            "min": 20.909765378261607,
+            "n": 50,
+            "session": 1,
+            "std": 0.2914494801129504
+          },
+          {
+            "max": 23.529997351579368,
+            "mean": 22.035734478539474,
+            "median": 22.016739594982937,
+            "min": 21.32888086683427,
+            "n": 50,
+            "session": 2,
+            "std": 0.3841456040671061
+          }
+        ],
+        "source_keys": [
+          "3b_fp16_eager_sequence_decode_s1",
+          "3b_fp16_eager_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 23.529997351579368,
+          "mean": 22.001070338417776,
+          "median": 21.988627772467833,
+          "min": 20.909765378261607,
+          "n": 100,
+          "std": 0.34271989277173914
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 4370100224,
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 16.33109545800835,
+          "mean": 16.329796743229963,
+          "median": 16.329796743229963,
+          "min": 16.328498028451577,
+          "n": 2,
+          "std": 0.0012987147783860564
+        },
+        "session_summaries": [
+          {
+            "max": 16.331935576939333,
+            "mean": 16.32862547171923,
+            "median": 16.328498028451577,
+            "min": 16.32614874979481,
+            "n": 50,
+            "session": 1,
+            "std": 0.0010682059853304204
+          },
+          {
+            "max": 16.334683378227055,
+            "mean": 16.330947275971994,
+            "median": 16.33109545800835,
+            "min": 16.328255591603618,
+            "n": 50,
+            "session": 2,
+            "std": 0.0012853435421217578
+          }
+        ],
+        "source_keys": [
+          "3b_hadamard_cuda_graph_sequence_decode_s1",
+          "3b_hadamard_cuda_graph_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 16.334683378227055,
+          "mean": 16.32978637384561,
+          "median": 16.329306750170264,
+          "min": 16.32614874979481,
+          "n": 100,
+          "std": 0.0016565867834866228
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 4352544768,
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 43.10472506137255,
+          "mean": 43.07534649463681,
+          "median": 43.07534649463681,
+          "min": 43.045967927901074,
+          "n": 2,
+          "std": 0.02937856673573691
+        },
+        "session_summaries": [
+          {
+            "max": 44.72677198937163,
+            "mean": 43.047241858827576,
+            "median": 43.045967927901074,
+            "min": 41.74864716672649,
+            "n": 50,
+            "session": 1,
+            "std": 0.5346756008579258
+          },
+          {
+            "max": 44.960662307372935,
+            "mean": 43.074185990418,
+            "median": 43.10472506137255,
+            "min": 41.59885660822814,
+            "n": 50,
+            "session": 2,
+            "std": 0.5511602156502146
+          }
+        ],
+        "source_keys": [
+          "3b_hadamard_eager_sequence_decode_s1",
+          "3b_hadamard_eager_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 44.960662307372935,
+          "mean": 43.06071392462279,
+          "median": 43.09220505917135,
+          "min": 41.59885660822814,
+          "n": 100,
+          "std": 0.5431475741370646
+        }
+      },
+      {
+        "independent_sessions": 3,
+        "inference_peak_allocated_bytes": 4392284672,
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 16.651865250120558,
+          "mean": 16.65134766501271,
+          "median": 16.651753248879686,
+          "min": 16.650424496037886,
+          "n": 3,
+          "std": 0.000654378476901459
+        },
+        "session_summaries": [
+          {
+            "max": 16.65350782374541,
+            "mean": 16.651559504447505,
+            "median": 16.651753248879686,
+            "min": 16.64941144020607,
+            "n": 50,
+            "session": 1,
+            "std": 0.0010648055642982555
+          },
+          {
+            "max": 16.652081600235153,
+            "mean": 16.650089157978073,
+            "median": 16.650424496037886,
+            "min": 16.648248059209436,
+            "n": 50,
+            "session": 2,
+            "std": 0.0010254909447917713
+          },
+          {
+            "max": 16.65332850534469,
+            "mean": 16.651788170138996,
+            "median": 16.651865250120558,
+            "min": 16.64996655890718,
+            "n": 50,
+            "session": 3,
+            "std": 0.0008275162338440737
+          }
+        ],
+        "source_keys": [
+          "3b_nar_cuda_graph_sequence_decode_s1",
+          "3b_nar_cuda_graph_sequence_decode_s2",
+          "3b_nar_cuda_graph_sequence_decode_s3"
+        ],
+        "status": "COMPLETE",
+        "summary": {
+          "max": 16.65350782374541,
+          "mean": 16.651145610854858,
+          "median": 16.651415013863396,
+          "min": 16.648248059209436,
+          "n": 150,
+          "std": 0.0012343025973423824
+        }
+      },
+      {
+        "independent_sessions": 3,
+        "inference_peak_allocated_bytes": 4374729216,
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "session_median_dispersion": {
+          "max": 43.54181707991908,
+          "mean": 43.112446615446565,
+          "median": 43.279509783800066,
+          "min": 42.516012982620545,
+          "n": 3,
+          "std": 0.43512533686578747
+        },
+        "session_summaries": [
+          {
+            "max": 45.09365505849322,
+            "mean": 43.32393166500454,
+            "median": 43.279509783800066,
+            "min": 42.465794509431966,
+            "n": 50,
+            "session": 1,
+            "std": 0.4227856859475919
+          },
+          {
+            "max": 44.963850639760494,
+            "mean": 43.46878092402282,
+            "median": 43.54181707991908,
+            "min": 41.91531680213908,
+            "n": 50,
+            "session": 2,
+            "std": 0.7809802846975717
+          },
+          {
+            "max": 43.6396871926263,
+            "mean": 42.48512068577111,
+            "median": 42.516012982620545,
+            "min": 41.229568813772254,
+            "n": 50,
+            "session": 3,
+            "std": 0.5411382716363942
+          }
+        ],
+        "source_keys": [
+          "3b_nar_eager_sequence_decode_s1",
+          "3b_nar_eager_sequence_decode_s2",
+          "3b_nar_eager_sequence_decode_s3"
+        ],
+        "status": "COMPLETE",
+        "summary": {
+          "max": 45.09365505849322,
+          "mean": 43.09261109159949,
+          "median": 43.08143109859277,
+          "min": 41.229568813772254,
+          "n": 150,
+          "std": 0.740622736629446
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 18767063040,
+        "method": "fp16",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 28.833626909181476,
+          "mean": 28.831662710096378,
+          "median": 28.831662710096378,
+          "min": 28.82969851101128,
+          "n": 2,
+          "std": 0.0019641990850978175
+        },
+        "session_summaries": [
+          {
+            "max": 28.831782133784145,
+            "mean": 28.829937386869766,
+            "median": 28.82969851101128,
+            "min": 28.82748841463278,
+            "n": 50,
+            "session": 1,
+            "std": 0.000950634531469384
+          },
+          {
+            "max": 28.836176358163357,
+            "mean": 28.833470359599836,
+            "median": 28.833626909181476,
+            "min": 28.830170615886647,
+            "n": 50,
+            "session": 2,
+            "std": 0.001545515464916339
+          }
+        ],
+        "source_keys": [
+          "8b_fp16_cuda_graph_sequence_decode_s1",
+          "8b_fp16_cuda_graph_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 28.836176358163357,
+          "mean": 28.8317038732348,
+          "median": 28.83119380179172,
+          "min": 28.82748841463278,
+          "n": 100,
+          "std": 0.002183262721301063
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 18749507584,
+        "method": "fp16",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 30.22086034179665,
+          "mean": 30.20687744234844,
+          "median": 30.20687744234844,
+          "min": 30.192894542900227,
+          "n": 2,
+          "std": 0.013982899448212294
+        },
+        "session_summaries": [
+          {
+            "max": 30.301465032001335,
+            "mean": 30.224226628818236,
+            "median": 30.22086034179665,
+            "min": 30.218610966888566,
+            "n": 50,
+            "session": 1,
+            "std": 0.01218028142090026
+          },
+          {
+            "max": 30.209522508084774,
+            "mean": 30.194171114203833,
+            "median": 30.192894542900227,
+            "min": 30.18826423988988,
+            "n": 50,
+            "session": 2,
+            "std": 0.005124734457238896
+          }
+        ],
+        "source_keys": [
+          "8b_fp16_eager_sequence_decode_s1",
+          "8b_fp16_eager_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 30.301465032001335,
+          "mean": 30.209198871511035,
+          "median": 30.214066737486668,
+          "min": 30.18826423988988,
+          "n": 100,
+          "std": 0.017695891304452503
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8149383168,
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 23.106618376914412,
+          "mean": 23.103231800875314,
+          "median": 23.103231800875314,
+          "min": 23.09984522483622,
+          "n": 2,
+          "std": 0.0033865760390963118
+        },
+        "session_summaries": [
+          {
+            "max": 23.112168116495013,
+            "mean": 23.107067467256762,
+            "median": 23.106618376914412,
+            "min": 23.105110158212483,
+            "n": 50,
+            "session": 1,
+            "std": 0.0016134832795061825
+          },
+          {
+            "max": 23.109188842742395,
+            "mean": 23.10116642472955,
+            "median": 23.09984522483622,
+            "min": 23.09916775751238,
+            "n": 50,
+            "session": 2,
+            "std": 0.0031613813248141595
+          }
+        ],
+        "source_keys": [
+          "8b_hadamard_cuda_graph_sequence_decode_s1",
+          "8b_hadamard_cuda_graph_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 23.112168116495013,
+          "mean": 23.104116945993155,
+          "median": 23.105852420364194,
+          "min": 23.09916775751238,
+          "n": 100,
+          "std": 0.0038735520925948144
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8131827712,
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 52.64714095780316,
+          "mean": 52.611821394142076,
+          "median": 52.611821394142076,
+          "min": 52.57650183048099,
+          "n": 2,
+          "std": 0.035319563661083464
+        },
+        "session_summaries": [
+          {
+            "max": 52.99314400957277,
+            "mean": 52.52435309928842,
+            "median": 52.64714095780316,
+            "min": 51.22146798142543,
+            "n": 50,
+            "session": 1,
+            "std": 0.3951437261935949
+          },
+          {
+            "max": 55.16969495608161,
+            "mean": 52.57198732579127,
+            "median": 52.57650183048099,
+            "min": 51.26372257558008,
+            "n": 50,
+            "session": 2,
+            "std": 0.6139199006248652
+          }
+        ],
+        "source_keys": [
+          "8b_hadamard_eager_sequence_decode_s1",
+          "8b_hadamard_eager_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 55.16969495608161,
+          "mean": 52.548170212539844,
+          "median": 52.615042799152434,
+          "min": 51.22146798142543,
+          "n": 100,
+          "std": 0.5168030178417429
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8193522176,
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 23.643457476282492,
+          "mean": 23.643283181202907,
+          "median": 23.643283181202907,
+          "min": 23.643108886123322,
+          "n": 2,
+          "std": 0.00017429507958510726
+        },
+        "session_summaries": [
+          {
+            "max": 23.646573819375288,
+            "mean": 23.642605839995667,
+            "median": 23.643108886123322,
+            "min": 23.639668706649292,
+            "n": 50,
+            "session": 1,
+            "std": 0.00155270935457301
+          },
+          {
+            "max": 23.645365017000586,
+            "mean": 23.642645885469392,
+            "median": 23.643457476282492,
+            "min": 23.63909484120086,
+            "n": 50,
+            "session": 2,
+            "std": 0.0018119146276667458
+          }
+        ],
+        "source_keys": [
+          "8b_nar_cuda_graph_sequence_decode_s1",
+          "8b_nar_cuda_graph_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 23.646573819375288,
+          "mean": 23.64262586273253,
+          "median": 23.64319550106302,
+          "min": 23.63909484120086,
+          "n": 100,
+          "std": 0.0016874155945875004
+        }
+      },
+      {
+        "independent_sessions": 2,
+        "inference_peak_allocated_bytes": 8175966720,
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "session_median_dispersion": {
+          "max": 50.987578606388226,
+          "mean": 50.48941037190768,
+          "median": 50.48941037190768,
+          "min": 49.99124213742713,
+          "n": 2,
+          "std": 0.4981682344805485
+        },
+        "session_summaries": [
+          {
+            "max": 51.7281613079831,
+            "mean": 50.2307504628164,
+            "median": 49.99124213742713,
+            "min": 48.81446261424571,
+            "n": 50,
+            "session": 1,
+            "std": 0.8168932067271136
+          },
+          {
+            "max": 53.95923683342213,
+            "mean": 51.11059376193832,
+            "median": 50.987578606388226,
+            "min": 50.23329549391443,
+            "n": 50,
+            "session": 2,
+            "std": 0.6909246623583731
+          }
+        ],
+        "source_keys": [
+          "8b_nar_eager_sequence_decode_s1",
+          "8b_nar_eager_sequence_decode_s2"
+        ],
+        "status": "PROVISIONAL",
+        "summary": {
+          "max": 53.95923683342213,
+          "mean": 50.67067211237736,
+          "median": 50.8428597143696,
+          "min": 48.81446261424571,
+          "n": 100,
+          "std": 0.8751438498203592
+        }
+      }
+    ],
+    "method_comparisons": [
+      {
+        "acceleration_retention_pct": null,
+        "hadamard_speedup": 0.5102692642967449,
+        "mode": "eager_sequence",
+        "model": "3b",
+        "nar_latency_overhead_pct": -0.025002110158389712,
+        "nar_speedup": 0.5103968742854987,
+        "retention_reason": "Hadamard must exceed1.05x in every one of three matched sessions; negative, small or unstable denominators are not acceleration retention."
+      },
+      {
+        "acceleration_retention_pct": null,
+        "hadamard_speedup": 0.9208742116456347,
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "nar_latency_overhead_pct": 1.972577701069711,
+        "nar_speedup": 0.9030606388564153,
+        "retention_reason": "Hadamard must exceed1.05x in every one of three matched sessions; negative, small or unstable denominators are not acceleration retention."
+      },
+      {
+        "acceleration_retention_pct": null,
+        "hadamard_speedup": 0.5742476890653291,
+        "mode": "eager_sequence",
+        "model": "8b",
+        "nar_latency_overhead_pct": -3.368206107040128,
+        "nar_speedup": 0.5942637158339725,
+        "retention_reason": "Hadamard must exceed1.05x in every one of three matched sessions; negative, small or unstable denominators are not acceleration retention."
+      },
+      {
+        "acceleration_retention_pct": null,
+        "hadamard_speedup": 1.2477874989100828,
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "nar_latency_overhead_pct": 2.3255713354476404,
+        "nar_speedup": 1.2194288120019752,
+        "retention_reason": "Hadamard must exceed1.05x in every one of three matched sessions; negative, small or unstable denominators are not acceleration retention."
+      }
+    ],
+    "missing_reason": null,
     "paired_session_comparisons": [
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "method": "fp16",
         "model": "3b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 1.4612978195674908,
+            "session": 1
+          },
+          {
+            "ratio": 1.4641968975307467,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 1.4641968975307467,
+          "mean": 1.4627473585491186,
+          "median": 1.4627473585491186,
+          "min": 1.4612978195674908,
+          "n": 2,
+          "std": 0.001449538981627918
         }
       },
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "method": "hadamard",
         "model": "3b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 2.6362478565325276,
+            "session": 1
+          },
+          {
+            "ratio": 2.6394264348161105,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 2.6394264348161105,
+          "mean": 2.637837145674319,
+          "median": 2.637837145674319,
+          "min": 2.6362478565325276,
+          "n": 2,
+          "std": 0.0015892891417914612
         }
       },
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": true,
+        "interpretation": "consistent observed direction in these three sessions",
         "method": "nar",
         "model": "3b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 2.599096271541969,
+            "session": 1
+          },
+          {
+            "ratio": 2.6150574773802453,
+            "session": 2
+          },
+          {
+            "ratio": 2.553228262660409,
+            "session": 3
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 2.6150574773802453,
+          "mean": 2.5891273371942076,
+          "median": 2.599096271541969,
+          "min": 2.553228262660409,
+          "n": 3,
+          "std": 0.02620747587032365
         }
       },
       {
         "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "mode": "eager_sequence",
         "model": "3b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 1.0054254060749699,
+            "session": 1
+          },
+          {
+            "ratio": 1.0101402344620967,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 1.0101402344620967,
+          "mean": 1.0077828202685333,
+          "median": 1.0077828202685333,
+          "min": 1.0054254060749699,
+          "n": 2,
+          "std": 0.0023574141935633897
         }
       },
       {
         "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "mode": "cuda_graph_sequence",
         "model": "3b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 1.019796996629136,
+            "session": 1
+          },
+          {
+            "ratio": 1.0195534365009755,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 1.019796996629136,
+          "mean": 1.0196752165650558,
+          "median": 1.0196752165650558,
+          "min": 1.0195534365009755,
+          "n": 2,
+          "std": 0.00012178006408025688
         }
       },
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "method": "fp16",
         "model": "8b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 1.0482544703079024,
+            "session": 1
+          },
+          {
+            "ratio": 1.0471417500822944,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 1.0482544703079024,
+          "mean": 1.0476981101950984,
+          "median": 1.0476981101950984,
+          "min": 1.0471417500822944,
+          "n": 2,
+          "std": 0.0005563601128040219
         }
       },
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "method": "hadamard",
         "model": "8b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 2.278444214511388,
+            "session": 1
+          },
+          {
+            "ratio": 2.276054290353098,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 2.278444214511388,
+          "mean": 2.277249252432243,
+          "median": 2.277249252432243,
+          "min": 2.276054290353098,
+          "n": 2,
+          "std": 0.0011949620791451565
         }
       },
       {
         "comparison": "same-method eager / graph latency; greater than one means graph is faster",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "method": "nar",
         "model": "8b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 2.1144106884677982,
+            "session": 1
+          },
+          {
+            "ratio": 2.1565195639231485,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 2.1565195639231485,
+          "mean": 2.1354651261954736,
+          "median": 2.1354651261954736,
+          "min": 2.1144106884677982,
+          "n": 2,
+          "std": 0.021054437727675124
         }
       },
       {
         "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "mode": "eager_sequence",
         "model": "8b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 0.9495528385386637,
+            "session": 1
+          },
+          {
+            "ratio": 0.9697788333423965,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 0.9697788333423965,
+          "mean": 0.9596658359405301,
+          "median": 0.9596658359405301,
+          "min": 0.9495528385386637,
+          "n": 2,
+          "std": 0.010112997401866386
         }
       },
       {
         "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
-        "interpretation": "Missing matching method/mode records",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
         "mode": "cuda_graph_sequence",
         "model": "8b",
-        "samples": [],
+        "samples": [
+          {
+            "ratio": 1.0232180451703359,
+            "session": 1
+          },
+          {
+            "ratio": 1.02353315557551,
+            "session": 2
+          }
+        ],
         "summary": {
-          "mean": null,
-          "median": null,
-          "n": 0,
-          "reason": "no valid measurements",
-          "std": null
+          "max": 1.02353315557551,
+          "mean": 1.023375600372923,
+          "median": 1.023375600372923,
+          "min": 1.0232180451703359,
+          "n": 2,
+          "std": 0.00015755520258708966
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "samples": [
+          {
+            "ratio": 0.5104852284579848,
+            "session": 1
+          },
+          {
+            "ratio": 0.5107732287733069,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.5107732287733069,
+          "mean": 0.5106292286156459,
+          "median": 0.5106292286156459,
+          "min": 0.5104852284579848,
+          "n": 2,
+          "std": 0.00014400015766102836
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "samples": [
+          {
+            "ratio": 0.507730583863842,
+            "session": 1
+          },
+          {
+            "ratio": 0.5056458611860912,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.507730583863842,
+          "mean": 0.5066882225249666,
+          "median": 0.5066882225249666,
+          "min": 0.5056458611860912,
+          "n": 2,
+          "std": 0.0010423613388753639
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "samples": [
+          {
+            "ratio": 0.9209386144928311,
+            "session": 1
+          },
+          {
+            "ratio": 0.92074253435053,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.9209386144928311,
+          "mean": 0.9208405744216805,
+          "median": 0.9208405744216805,
+          "min": 0.92074253435053,
+          "n": 2,
+          "std": 9.804007115055136e-05
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "samples": [
+          {
+            "ratio": 0.9030607243764455,
+            "session": 1
+          },
+          {
+            "ratio": 0.9030841360414059,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.9030841360414059,
+          "mean": 0.9030724302089257,
+          "median": 0.9030724302089257,
+          "min": 0.9030607243764455,
+          "n": 2,
+          "std": 1.1705832480224387e-05
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "hadamard",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "samples": [
+          {
+            "ratio": 0.5740266193375774,
+            "session": 1
+          },
+          {
+            "ratio": 0.574265945654757,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.574265945654757,
+          "mean": 0.5741462824961672,
+          "median": 0.5741462824961672,
+          "min": 0.5740266193375774,
+          "n": 2,
+          "std": 0.00011966315858980003
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "nar",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "samples": [
+          {
+            "ratio": 0.6045230934394225,
+            "session": 1
+          },
+          {
+            "ratio": 0.5921617650444252,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 0.6045230934394225,
+          "mean": 0.5983424292419238,
+          "median": 0.5983424292419238,
+          "min": 0.5921617650444252,
+          "n": 2,
+          "std": 0.006180664197498631
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "hadamard",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "samples": [
+          {
+            "ratio": 1.2476814235965719,
+            "session": 1
+          },
+          {
+            "ratio": 1.2482173204424971,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 1.2482173204424971,
+          "mean": 1.2479493720195345,
+          "median": 1.2479493720195345,
+          "min": 1.2476814235965719,
+          "n": 2,
+          "std": 0.0002679484229626272
+        }
+      },
+      {
+        "comparison": "FP16 / method latency; greater than one means faster than FP16",
+        "direction_consistent": false,
+        "interpretation": "fewer than three matched sessions; no stable advantage established",
+        "method": "nar",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "samples": [
+          {
+            "ratio": 1.219370035043576,
+            "session": 1
+          },
+          {
+            "ratio": 1.219518208709763,
+            "session": 2
+          }
+        ],
+        "summary": {
+          "max": 1.219518208709763,
+          "mean": 1.2194441218766694,
+          "median": 1.2194441218766694,
+          "min": 1.219370035043576,
+          "n": 2,
+          "std": 7.40868330934008e-05
         }
       }
     ],
     "protocol_conformance": {
-      "binary_sha256": [],
-      "gpu_uuids": [],
-      "same_environment": null,
-      "same_gpu": null,
-      "same_input": null,
-      "same_measurement_sources": false,
+      "binary_sha256": [
+        "8a74e93227fb04b1805c7c93106fac767575169709fd683edd7a89f2c2b84085"
+      ],
+      "gpu_uuids": [
+        "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22"
+      ],
+      "same_environment": true,
+      "same_gpu": true,
+      "same_input": true,
+      "same_measurement_sources": true,
       "source_hashes": {
-        "benchmark.py": [],
-        "cache_adapter.py": [],
-        "common.py": [],
-        "graph_benchmark.py": []
+        "benchmark.py": [
+          "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380"
+        ],
+        "cache_adapter.py": [
+          "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe"
+        ],
+        "common.py": [
+          "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8"
+        ],
+        "graph_benchmark.py": [
+          "a8d7ae0ff4b83ac8a3b171b344364656e2208e09f723e66366fb43a6248d7ca9"
+        ]
       },
-      "state_checks": [],
-      "status": "PENDING_OR_REVIEW_REQUIRED"
+      "state_checks": [
+        {
+          "key": "3b_fp16_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_fp16_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_fp16_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_fp16_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_hadamard_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_hadamard_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_hadamard_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_hadamard_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_cuda_graph_sequence_decode_s3",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "3b_nar_eager_sequence_decode_s3",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_fp16_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_fp16_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_fp16_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_fp16_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_hadamard_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_hadamard_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_hadamard_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_hadamard_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_nar_cuda_graph_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_nar_cuda_graph_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_nar_eager_sequence_decode_s1",
+          "state_matches_original_verified_model": true
+        },
+        {
+          "key": "8b_nar_eager_sequence_decode_s2",
+          "state_matches_original_verified_model": true
+        }
+      ],
+      "status": "PASS"
     },
-    "raw_status": [],
+    "raw_status": [
+      {
+        "key": "3b_fp16_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_fp16_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_fp16_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_fp16_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_hadamard_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_hadamard_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_hadamard_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_hadamard_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_cuda_graph_sequence_decode_s3",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "3b_nar_eager_sequence_decode_s3",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_fp16_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_fp16_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_fp16_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_fp16_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_hadamard_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_hadamard_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_hadamard_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_hadamard_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_nar_cuda_graph_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_nar_cuda_graph_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_nar_eager_sequence_decode_s1",
+        "reason": null,
+        "status": "PASS"
+      },
+      {
+        "key": "8b_nar_eager_sequence_decode_s2",
+        "reason": null,
+        "status": "PASS"
+      }
+    ],
     "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
     "stage_completion": null,
     "status": "INCOMPLETE",
-    "timestamp": "2026-09-12T12:45:19.399027+00:00"
+    "timestamp": "2026-09-12T15:33:09.818302+00:00"
   },
   "missing_policy": "null+reason; never fill unmeasured performance with zero",
   "protocol_sha256": "9fb2c2cfdcdb666c661a4c84c91d6c436c1043e80a5cb43bc58c29ad52383528",

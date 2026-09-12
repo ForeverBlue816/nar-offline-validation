@@ -1,5 +1,16 @@
-Private current-stream backend only. Full one-step growing-context graph and matched eager use prefix2048,128 steps, discard8. Metadata updates are included. Incomplete rows are provisional.
+Private current-stream backend only. Full one-step growing-context graph and matched eager use prefix2048,128 steps, discard8. Metadata updates are included. Run std describes all run samples; session median std describes the available independent session medians (three required for final conclusions). Incomplete rows are provisional.
 
-| Model | Method | Mode | ms/step | Run std | FP16 speedup | Sessions |
-| --- | --- | --- | --- | --- | --- | --- |
-
+| Model | Method | Mode | ms/step | Run std | FP16 speedup | Session median std | Sessions |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 3b | fp16 | eager_sequence | 21.99 | 0.34 | 1.00 | 0.02 | 2 |
+| 3b | hadamard | eager_sequence | 43.09 | 0.54 | 0.51 | 0.03 | 2 |
+| 3b | nar | eager_sequence | 43.08 | 0.74 | 0.51 | 0.44 | 3 |
+| 3b | fp16 | cuda_graph_sequence | 15.04 | 8.16e-04 | 1.00 | 4.05e-04 | 2 |
+| 3b | hadamard | cuda_graph_sequence | 16.33 | 1.66e-03 | 0.92 | 1.30e-03 | 2 |
+| 3b | nar | cuda_graph_sequence | 16.65 | 1.23e-03 | 0.90 | 6.54e-04 | 3 |
+| 8b | fp16 | eager_sequence | 30.21 | 0.02 | 1.00 | 0.01 | 2 |
+| 8b | hadamard | eager_sequence | 52.62 | 0.52 | 0.57 | 0.04 | 2 |
+| 8b | nar | eager_sequence | 50.84 | 0.88 | 0.59 | 0.50 | 2 |
+| 8b | fp16 | cuda_graph_sequence | 28.83 | 2.18e-03 | 1.00 | 1.96e-03 | 2 |
+| 8b | hadamard | cuda_graph_sequence | 23.11 | 3.87e-03 | 1.25 | 3.39e-03 | 2 |
+| 8b | nar | cuda_graph_sequence | 23.64 | 1.69e-03 | 1.22 | 1.74e-04 | 2 |

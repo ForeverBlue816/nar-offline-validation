@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-09-12T15:33:56.856313+00:00",
+  "status": "IN_PROGRESS",
+  "scope": "CPU-only audit of retained measurements; no new GPU execution, sample exclusion, or threshold changes.",
+  "completed_private_processes": 26,
+  "expected_private_processes": 36,
+  "private_timing_samples": 1300,
+  "timing_harness_cache_states_checked": 78,
+  "full_A_B_A_cache_states_checked": 216,
+  "original_primary_counts": {
+    "kernel_processes": 6,
+    "formal_processes": 84,
+    "total": 90,
+    "legacy_single_trace_processes": 6
+  },
+  "measurement_sources_unchanged": {
+    "common.py": "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8",
+    "cache_adapter.py": "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe",
+    "benchmark.py": "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380",
+    "graph_benchmark.py": "a8d7ae0ff4b83ac8a3b171b344364656e2208e09f723e66366fb43a6248d7ca9"
+  },
+  "same_gpu_environment_binary_inputs_and_verified_states": true,
+  "protected_historical_files_unchanged": 12,
+  "root_and_run_report_links_valid": true,
+  "retained_limitations": [
+    "Two original INT4 dequantization overflow boundary failures",
+    "Six invalid original-binary Graph attempts",
+    "No compensated native-paper-format INT4 checkpoint deployment or full model-quality evaluation",
+    "Standalone per-pool Graph memory was not isolated",
+    "LaTeX exports were not compiled in this environment"
+  ],
+  "graph_summary_sha256": "c9b92b40ed9e58adfd95227a4b74a280dee307d9adec9ff7712b01548e5c181e"
+}
