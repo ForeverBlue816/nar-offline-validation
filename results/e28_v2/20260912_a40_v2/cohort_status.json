@@ -1,0 +1,8 @@
+{
+  "recorded_at": "2026-09-12T04:25:55.490425+00:00",
+  "status": "STOPPED_NUMERICAL_FAILURE",
+  "reason": "The name-stable legacy packed-byte1..6 state produced nonfinite final decoder residuals for8B NAR. R4 and integer-linear outputs remained finite in the diagnostic. This cohort was stopped and its partial measurements are preserved, never pooled with the replacement.",
+  "replacement_run": "20260912_a40_v2_full_int4",
+  "evidence": "correctness/activation_diagnose_8b.json",
+  "scope_note": "This names the initial v2 state, not byte-identical tensors from historical E28."
+}
