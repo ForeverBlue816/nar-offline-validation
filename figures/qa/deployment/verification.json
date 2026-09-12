@@ -1,0 +1,257 @@
+{
+  "status": "PASS",
+  "source_commit": "6747960b96b0b03e626e98eaeeccf0d1abc34e79",
+  "frozen_source_files": 121,
+  "deployment_rows": 416,
+  "accuracy_points": 37,
+  "graph_correctness": "6/6 PASS",
+  "matched_graph_timing": "36/36 PASS",
+  "font": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "renderer_font_match": true,
+  "figures": [
+    {
+      "file": "figures/fig4_revised",
+      "width_inches": 5.5,
+      "height_inches": 4.649999830457899,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/fig_deployment_efficiency",
+      "width_inches": 5.5,
+      "height_inches": 5.350000169542101,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/appendix/fig4_metadata_8b",
+      "width_inches": 3.4000000423855252,
+      "height_inches": 4.649999830457899,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/appendix/fig_e17_rank_cost",
+      "width_inches": 5.5,
+      "height_inches": 2.9000000423855252,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/appendix/fig_matched_eager_graph",
+      "width_inches": 5.5,
+      "height_inches": 2.9499999152289496,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/appendix/fig_kernel_all_shapes",
+      "width_inches": 5.5,
+      "height_inches": 7.799999660915798,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig4_revised_a",
+      "width_inches": 2.6403681437174478,
+      "height_inches": 3.563166724310981,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig4_revised_b",
+      "width_inches": 2.636756261189779,
+      "height_inches": 2.0659957461886935,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig4_revised_c",
+      "width_inches": 2.338363859388563,
+      "height_inches": 1.7600541644626193,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_deployment_efficiency_a",
+      "width_inches": 2.4924719068739147,
+      "height_inches": 1.9250748952229817,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_deployment_efficiency_b",
+      "width_inches": 2.544971889919705,
+      "height_inches": 1.8210748036702473,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_deployment_efficiency_c",
+      "width_inches": 2.543721728854709,
+      "height_inches": 1.8210748036702473,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_deployment_efficiency_d",
+      "width_inches": 2.4438434176974826,
+      "height_inches": 1.9930366939968533,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_deployment_efficiency_implementation",
+      "width_inches": 5.277500152587891,
+      "height_inches": 0.7487499978807237,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_kernel_all_shapes_a",
+      "width_inches": 2.5683837466769748,
+      "height_inches": 2.175749248928494,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_kernel_all_shapes_b",
+      "width_inches": 2.5683837466769748,
+      "height_inches": 2.175749248928494,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_kernel_all_shapes_c",
+      "width_inches": 2.5683837466769748,
+      "height_inches": 2.175749248928494,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_kernel_all_shapes_d",
+      "width_inches": 2.5683837466769748,
+      "height_inches": 2.175749248928494,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_kernel_all_shapes_e",
+      "width_inches": 2.5683837466769748,
+      "height_inches": 2.175749248928494,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_matched_eager_graph_a",
+      "width_inches": 2.466933568318685,
+      "height_inches": 2.237572987874349,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig_matched_eager_graph_b",
+      "width_inches": 2.466933568318685,
+      "height_inches": 2.237572987874349,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    }
+  ],
+  "source_preflight_notes": [
+    "5.5 inches is the explicit manuscript width, overriding Nature 89/183 mm defaults.",
+    "PNG at 600 dpi is the requested raster format; no TIFF required.",
+    "Shared modules are included in source preflight; the explicit Times New Roman contract supersedes the generic sans-serif default."
+  ]
+}
