@@ -16,9 +16,12 @@ def main():
         old_gate=any(r.get('reason')=='factor export/fold direction mismatch' for r in d.get('rows',[]))
         if old_gate or d.get('reason')=='AttributeError("\'NoneType\' object has no attribute \'get\'")':
             dest=OUT/'correctness/attempt_1'/f.name;dest.parent.mkdir(exist_ok=True);f.rename(dest)
-    write(OUT/'verification_harness_corrections.json',{'timestamp':now(),'changes':['Pass required cache_kwargs={} in direct KV operator test.','Rebuilt factor bitwise identity was an overstrict harness check across CPU hosts. Preserve exact-match diagnostic; validate original Householder path against the actually exported factors using the already-frozen fold relative-L2 <=2e-5. No transform/code-match thresholds changed.'],'source_sha256':sha(ROOT/'quarot-llama3/e28_v2/verify.py')})
+    if not (OUT/'verification_harness_corrections.json').exists():
+        write(OUT/'verification_harness_corrections.json',{'timestamp':now(),'changes':['Pass required cache_kwargs={} in direct KV operator test.','Rebuilt factor bitwise identity was an overstrict harness check across CPU hosts. Preserve exact-match diagnostic; validate original Householder path against the actually exported factors using the already-frozen fold relative-L2 <=2e-5. No transform/code-match thresholds changed.'],'source_sha256':sha(ROOT/'quarot-llama3/e28_v2/verify.py')})
     # Identify every Python source actually executed after the harness correction.
-    write(OUT/'execution_source_manifest.json',{'timestamp':now(),'parent_manifest_sha256':sha(OUT/'source_manifest.json'),'files':{str(f.relative_to(ROOT)):sha(f) for f in (ROOT/'quarot-llama3/e28_v2').glob('*.py')}})
+    execution_manifest=OUT/'execution_source_manifest.json'
+    if execution_manifest.exists():execution_manifest=OUT/('resume_execution_manifest_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'.json')
+    write(execution_manifest,{'timestamp':now(),'parent_manifest_sha256':sha(OUT/'source_manifest.json'),'files':{str(f.relative_to(ROOT)):sha(f) for f in (ROOT/'quarot-llama3/e28_v2').glob('*.py')}})
     run('cache_diagnose')
     run('verify','--level','operators')
     for m in MODELS:run('verify','--level','r4','--model',m)

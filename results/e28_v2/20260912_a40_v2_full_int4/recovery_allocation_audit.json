@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-09-12T05:57:16.292256+00:00",
+  "controller_job": 151007,
+  "actual_gpu_step": "150777.22",
+  "actual_gpu_job": 150777,
+  "observed_pid": 2810645,
+  "affinity": [
+    32,
+    33,
+    34,
+    35
+  ],
+  "cgroup_ancestors": [
+    {
+      "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_22/user/task_0",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "32-35",
+      "memory.max": "max"
+    },
+    {
+      "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_22/user",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "32-35",
+      "memory.max": "42949672960"
+    },
+    {
+      "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_22",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "32-35",
+      "memory.max": "max"
+    },
+    {
+      "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "32-35",
+      "memory.max": "42949672960"
+    },
+    {
+      "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "0-39",
+      "memory.max": "max"
+    },
+    {
+      "path": "/sys/fs/cgroup/system.slice",
+      "cpu.max": "max 100000",
+      "cpuset.cpus.effective": "0-39",
+      "memory.max": "max"
+    },
+    {
+      "path": "/sys/fs/cgroup",
+      "cpuset.cpus.effective": "0-39"
+    }
+  ],
+  "step_resources": "StepId=150777.22 UserId=295800911 StartTime=2026-09-12T05:55:19 TimeLimit=UNLIMITED\n   State=RUNNING Partition=cluster02 NodeList=gpu-a40-1\n   Nodes=1 CPUs=4 Tasks=1 Name=bash Network=(null)\n   TRES=cpu=4,gres/gpu:a40=1,gres/gpu=1,mem=40G,node=1\n   ResvPorts=(null)\n   CPUFreqReq=Default Dist=Cyclic\n   SrunHost:Pid=cpu-2:3846033\n   TresPerStep=gres/gpu:a40:1\n   TresPerTask=cpu:4\n\n",
+  "note": "Raw process environments preserve some inherited CPU-controller SLURM_JOB_* and SLURM_MEM_PER_NODE fields. Authoritative step TRES is4 CPUs,40G,A40 on gpu-a40-1; affinity/cgroup are measured on the actual GPU process. No comparison uses the controller CPU as model execution hardware."
+}
