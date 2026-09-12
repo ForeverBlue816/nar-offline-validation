@@ -3,11 +3,15 @@ from .common import *
 import time, math, types
 
 def main():
-    p=arguments(__doc__);a=p.parse_args();dest=a.run/'correctness'/f'graph_{a.model}_{a.method}.json'
+    p=arguments(__doc__);p.add_argument('--backend',choices=['original','current_stream'],default='original');a=p.parse_args();dest=a.run/'correctness'/f'graph_{"stream_" if a.backend=="current_stream" else ""}{a.model}_{a.method}.json'
     if dest.exists():return
+    backend_manifest=None
+    if a.backend=='current_stream':
+        from .stream_backend import activate
+        backend_manifest=activate(a.run)
     import torch
     from .cache_adapter import make_cache,clear,snapshot
-    initialize();result={'started':now(),'environment':environment(),'scope':'full one-step model forward, all three methods identical capture boundary','status':'RUNNING','checks':[]}
+    initialize();result={'started':now(),'environment':environment(),'scope':'full one-step model forward, all three methods identical capture boundary','status':'RUNNING','checks':[],'backend':a.backend,'backend_manifest':backend_manifest}
     try:
       with torch.inference_mode():
         m=build(a.model,a.method)
