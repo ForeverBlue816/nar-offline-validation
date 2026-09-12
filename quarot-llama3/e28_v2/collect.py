@@ -197,6 +197,17 @@ def main():
             complete=all(get(c['model'],method,c['mode'],c['phase']) and get(c['model'],method,c['mode'],c['phase'])['status']=='COMPLETE' for method in METHODS)
             if complete:
                 paper_results.append(f"For {dict([('3b','Llama-3.2-3B'),('8b','Llama-3.1-8B')])[c['model']]} {c['phase']}, Hadamard and PrismQuant achieve {fmt(c['hadamard_speedup'])}x and {fmt(c['nar_speedup'])}x relative to FP16 under the same eager-sequence timing protocol. Relative to FP16: {fp_interpretation}. Relative to Hadamard: {relative}; {c.get('interpretation','')}. ")
+    graph_metrics=summary['graph_performance']
+    for comparison in graph_metrics.get('comparisons',[]):
+        if comparison['mode']!='cuda_graph_sequence' or comparison['method']=='fp16':continue
+        pairing=next((r for r in graph_metrics.get('paired_session_comparisons',[]) if r['model']==comparison['model'] and r.get('method')==comparison['method'] and r.get('mode')=='cuda_graph_sequence' and r['comparison'].startswith('FP16 /')), {})
+        answer.append(f"- Private Graph panel, {comparison['model']} {comparison['method']}: {fmt(comparison['same_mode_fp16_speedup'])}x relative to the same-mode private FP16 baseline; {pairing.get('interpretation','comparison incomplete')}.")
+    for model in MODELS:
+        rows={r['method']:r for r in graph_metrics.get('deployment',[]) if r['model']==model and r['mode']=='cuda_graph_sequence'}
+        if 'nar' in rows and 'hadamard' in rows:
+            ratio=rows['nar']['summary']['median']/rows['hadamard']['summary']['median']
+            pairing=next((r for r in graph_metrics.get('paired_session_comparisons',[]) if r['model']==model and r.get('mode')=='cuda_graph_sequence' and r['comparison'].startswith('NAR /')), {})
+            hadamard_answer.append(f"- Private Graph panel, {model}: NAR latency difference {fmt(100*(ratio-1))}% versus same-mode private Hadamard; {pairing.get('interpretation','comparison incomplete')}.")
     (out/'paper/results.tex').write_text(escaped(''.join(paper_results).strip())+'\n' if paper_results else 'Core three-session collection is incomplete; no final speedup conclusion is emitted.\n')
 
     kernel_evidence=read(out/'kernel_comparisons.json')

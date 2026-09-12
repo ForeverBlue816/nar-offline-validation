@@ -4,7 +4,7 @@ from collections import defaultdict
 
 
 def generate(out):
-    from .collect import table, fmt
+    from .collect import table, fmt, escaped
     grouped = defaultdict(list)
     raw = [read(p) for p in sorted((out / 'raw_graph_runs').glob('*.json'))]
     uuids=set();environments=set();binaries=set();inputs=set();state_checks=[]
@@ -56,7 +56,7 @@ def generate(out):
                 gain = eager['summary']['median'] / value if eager and mode == 'cuda_graph_sequence' else None
                 comparisons.append({'model': model, 'method': method, 'mode': mode,
                                     'same_mode_fp16_speedup': speedup, 'same_method_graph_vs_eager_speedup': gain,
-                                    'status': r['status']})
+                                    'status': 'COMPLETE' if r['status']=='COMPLETE' and f and f['status']=='COMPLETE' else 'PROVISIONAL'})
                 display.append([model, method, mode, fmt(value), fmt(r['summary']['std']),
                                 fmt(speedup), str(r['independent_sessions'])])
     def paired_ratio(numerator,denominator):
@@ -77,6 +77,12 @@ def generate(out):
         for mode in ['eager_sequence','cuda_graph_sequence']:
             nar=lookup.get((model,'nar',mode));had=lookup.get((model,'hadamard',mode))
             paired.append({'model':model,'mode':mode,'comparison':'NAR / Hadamard latency; greater than one means NAR is slower',**paired_ratio(nar,had)})
+    for model in MODELS:
+        for mode in ['eager_sequence','cuda_graph_sequence']:
+            fp=lookup.get((model,'fp16',mode))
+            for method in ['hadamard','nar']:
+                candidate=lookup.get((model,method,mode))
+                paired.append({'model':model,'method':method,'mode':mode,'comparison':'FP16 / method latency; greater than one means faster than FP16',**paired_ratio(fp,candidate)})
     finished=out/'stream_pipeline_finished.json'
     stage=read(finished) if finished.exists() else None
     complete=len(rows)==12 and all(r['status']=='COMPLETE' for r in rows)
@@ -95,4 +101,15 @@ def generate(out):
             memory.append({'key': r['key'], 'loaded': r['loaded'], 'warmed': r['warmed'],
                            'inference_peak': r['inference_peak'], 'graph_preparation': r['graph_preparation'], 'storage': r['storage']})
     write(out / 'graph_memory_breakdown.json', {'rows': memory, 'units': 'bytes; allocated/reserved and graph-pool deltas are distinct'})
+    (out/'paper').mkdir(exist_ok=True)
+    paper=[]
+    if status=='COMPLETE':
+        paper.append('The following decode results use the isolated current-stream adapter and a separate matched eager/Graph panel on the same physical A40. All six full-model Graph paths passed growing-cache A-B-A checks, including a page boundary. ')
+        for model in MODELS:
+            fp=lookup[(model,'fp16','cuda_graph_sequence')]['summary']['median']
+            had=lookup[(model,'hadamard','cuda_graph_sequence')]['summary']['median']
+            nar=lookup[(model,'nar','cuda_graph_sequence')]['summary']['median']
+            variability=next(x['interpretation'] for x in paired if x['model']==model and x.get('mode')=='cuda_graph_sequence' and x['comparison'].startswith('NAR /'))
+            paper.append(f'For {model}, Graph decode medians are {fmt(fp)}, {fmt(had)}, and {fmt(nar)} ms per step for FP16, Hadamard, and PrismQuant. PrismQuant achieves {fmt(fp/nar)}x relative to FP16 and has {fmt(100*(nar/had-1))}% latency difference relative to Hadamard; {variability}. ')
+    (out/'paper/graph_results.tex').write_text(escaped(''.join(paper).strip())+'\n' if paper else 'The matched three-session private Graph panel is incomplete; no final Graph speedup conclusion is emitted.\n')
     return summary
