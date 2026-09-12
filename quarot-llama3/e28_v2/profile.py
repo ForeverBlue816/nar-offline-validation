@@ -29,9 +29,21 @@ def main():
             else:merged.append([left,right])
         busy=sum(right-left for left,right in merged)
         out['timeline_summary']={'kernel_count':len(kernels),'kernel_sum_ms_per_step':sum(e['dur'] for e in kernels)/4000 if kernels else None,'kernel_union_busy_ms':busy/1000 if kernels else None,'device_kernel_span_ms':(max(b for _,b in spans)-spans[0][0])/1000 if spans else None,'inter_kernel_gap_ms':((max(b for _,b in spans)-spans[0][0])-busy)/1000 if spans else None,'gap_interpretation':'Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.','hardware_counters':{'value':None,'reason':'No Nsight hardware counters collected; no measured DRAM or compute utilization claim.'}}
+        by_kernel={}
+        for event in kernels:
+            item=by_kernel.setdefault(event['name'],{'name':event['name'],'calls':0,'total_us':0.})
+            item['calls']+=1;item['total_us']+=event['dur']
+        out['kernels_by_total_duration']=sorted(by_kernel.values(),key=lambda e:e['total_us'],reverse=True)
+        runtime={}
+        for event in trace.get('traceEvents',[]):
+            if event.get('cat') in ('cuda_runtime','cuda_driver') and 'dur' in event:
+                item=runtime.setdefault(event['name'],{'calls':0,'total_host_us':0.})
+                item['calls']+=1;item['total_host_us']+=event['dur']
+        out['cuda_api_activity']=runtime
         events=[]
         for e in prof.key_averages():
             events.append({'name':e.key,'device_type':e.device_type.name,'calls':e.count,'self_cpu_us':e.self_cpu_time_total,'self_device_us':e.self_device_time_total,'cpu_memory_bytes':e.cpu_memory_usage,'device_memory_bytes':e.device_memory_usage})
+        out['allocation_conversion_diagnostics']=[e for e in events if any(word in e['name'] for word in ('aten::empty','aten::_to_copy','aten::copy_','aten::contiguous'))]
         out.update(status='PASS',steps=4,events=events,kernel_sum_ms_per_step=out['timeline_summary']['kernel_sum_ms_per_step'],
            warning='Sum of profiler kernel durations is distinct from wall time and CUDA event elapsed; overlap/idle/launch/profiler overhead prevent treating the difference as CPU compute.')
     except Exception as exc:
