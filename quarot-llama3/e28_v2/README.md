@@ -49,3 +49,10 @@ For the recorded `20260912_a40_v2_full_int4` run, the primary and private graph 
 Profiler timelines are complete Chrome JSON traces compressed losslessly as `profiles/*.trace.json.gz` using the installed PyTorch exporter. Each profile summary records both compressed and uncompressed SHA256 and byte counts. Decompress with `gzip -dk path/to/model_method.trace.json.gz` before opening in a viewer that requires plain JSON. No trace events are discarded.
 
 The recorded run recovered from termination of an interactive continuation using `slurm_resume_controller.sh`: a CPU-only batch controller launches the remaining pipeline as a step in the still-active A40 allocation. Its pinned CPU mask is specific to this recorded allocation. The interrupted record and session gap are preserved, completed phases are skipped, and resumed source manifests never overwrite the initial execution manifest. Consult `session_interruption_1.json` and `recovery_allocation_audit.json` for the actual recovery resources and inherited environment-field caveat.
+
+The private panel exports `tables/graph_sessions.*` for each independent process
+and separates pooled run dispersion from the dispersion of session medians in
+`tables/graph_deployment.*`. `tables/graph_memory.*` reports capture count,
+preparation time and independent inference peaks. Capture allocated/reserved
+deltas are global net allocator changes; no standalone private-pool byte count
+is claimed, and negative reserved deltas remain visible in the JSON.

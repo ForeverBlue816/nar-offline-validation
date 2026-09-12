@@ -58,7 +58,7 @@ def generate(out):
                                     'same_mode_fp16_speedup': speedup, 'same_method_graph_vs_eager_speedup': gain,
                                     'status': 'COMPLETE' if r['status']=='COMPLETE' and f and f['status']=='COMPLETE' else 'PROVISIONAL'})
                 display.append([model, method, mode, fmt(value), fmt(r['summary']['std']),
-                                fmt(speedup), str(r['independent_sessions'])])
+                                fmt(speedup), fmt(r['session_median_dispersion']['std']), str(r['independent_sessions'])])
     def paired_ratio(numerator,denominator):
         if not numerator or not denominator:return {'samples':[],'summary':stats([]),'interpretation':'Missing matching method/mode records'}
         ns={r['session']:r['median'] for r in numerator['session_summaries']}
@@ -105,8 +105,14 @@ def generate(out):
                'status': status,
                'missing_reason': None if rows else 'No validated matched graph timing records yet'}
     write(out / 'graph_metrics_summary.json', summary)
-    table(out / 'tables/graph_deployment', ['Model', 'Method', 'Mode', 'ms/step', 'Run std', 'FP16 speedup', 'Sessions'], display,
-          'Private current-stream backend only. Full one-step growing-context graph and matched eager use prefix2048,128 steps, discard8. Metadata updates are included. Incomplete rows are provisional.')
+    table(out / 'tables/graph_deployment', ['Model', 'Method', 'Mode', 'ms/step', 'Run std', 'FP16 speedup', 'Session median std', 'Sessions'], display,
+          'Private current-stream backend only. Full one-step growing-context graph and matched eager use prefix2048,128 steps, discard8. Metadata updates are included. Run std describes all run samples; session median std describes the available independent session medians (three required for final conclusions). Incomplete rows are provisional.')
+    session_display = []
+    for r in rows:
+        for session in r['session_summaries']:
+            session_display.append([r['model'], r['method'], r['mode'], str(session['session']), fmt(session['median']), fmt(session['std'])])
+    table(out / 'tables/graph_sessions', ['Model', 'Method', 'Mode', 'Session', 'Median ms/step', 'Run std'], session_display,
+          'Private matched panel. Each session row comes from one independent process with ten complete warmups and fifty formal runs. The final panel requires three independently initialized sessions; pooled run samples are not additional independent sessions.')
     memory = []
     for r in raw:
         if r.get('status') == 'PASS':
@@ -122,23 +128,26 @@ def generate(out):
         item={'model':key[0],'method':key[1],'mode':key[2],'sessions':len(records),
               'inference_peak_allocated_bytes':max(r['inference_peak']['peak_allocated'] for r in records),
               'inference_peak_reserved_bytes':max(r['inference_peak']['peak_reserved'] for r in records),
+              'captured_graph_counts':sorted({p['graphs'] for p in preparations}),
               'capture_preparation_seconds':stats([p['seconds'] for p in preparations]),
               'capture_net_allocated_delta_bytes':stats([p['allocated_delta_bytes'] for p in preparations]),
               'capture_net_reserved_delta_bytes':stats([p['reserved_delta_bytes'] for p in preparations])}
         memory_summary.append(item)
     write(out/'graph_memory_summary.json',{'rows':memory_summary,'capture_scope':capture_scope})
-    table(out/'tables/graph_memory',['Model','Method','Mode','Peak alloc GB','Peak reserv GB','Capture s','Net alloc MB'],
-          [[r['model'],r['method'],r['mode'],fmt(r['inference_peak_allocated_bytes']/1e9),fmt(r['inference_peak_reserved_bytes']/1e9),fmt(r['capture_preparation_seconds']['median']),fmt(r['capture_net_allocated_delta_bytes']['median']/1e6 if r['capture_net_allocated_delta_bytes']['median'] is not None else None)] for r in memory_summary],
+    table(out/'tables/graph_memory',['Model','Method','Mode','Peak alloc GB','Peak reserv GB','Graphs','Capture s','Net alloc MB'],
+          [[r['model'],r['method'],r['mode'],fmt(r['inference_peak_allocated_bytes']/1e9),fmt(r['inference_peak_reserved_bytes']/1e9),'/'.join(map(str,r['captured_graph_counts'])) if r['captured_graph_counts'] else 'N/A',fmt(r['capture_preparation_seconds']['median']),fmt(r['capture_net_allocated_delta_bytes']['median']/1e6 if r['capture_net_allocated_delta_bytes']['median'] is not None else None)] for r in memory_summary],
           'Private panel; independent-process inference peaks. Capture preparation is separate from steady-state timing. Net capture allocated/reserved changes do not isolate private-pool size; negative reserved changes are retained in JSON. Eager capture fields are N/A.')
     (out/'paper').mkdir(exist_ok=True)
     paper=[]
     if status=='COMPLETE':
-        paper.append('The following decode results use the isolated current-stream adapter and a separate matched eager/Graph panel on the same physical A40. All six full-model Graph paths passed growing-cache A-B-A checks, including a page boundary. ')
+        paper.append('These random-weight model-forward decode results use the isolated current-stream adapter and a separate matched eager/Graph panel on the same physical A40, with three balanced sessions of fifty formal runs each. All six full-model Graph paths passed growing-cache A-B-A checks, including a page boundary. ')
         for model in MODELS:
             fp=lookup[(model,'fp16','cuda_graph_sequence')]['summary']['median']
             had=lookup[(model,'hadamard','cuda_graph_sequence')]['summary']['median']
             nar=lookup[(model,'nar','cuda_graph_sequence')]['summary']['median']
             variability=next(x['interpretation'] for x in paired if x['model']==model and x.get('mode')=='cuda_graph_sequence' and x['comparison'].startswith('NAR /'))
-            paper.append(f'For {model}, Graph decode medians are {fmt(fp)}, {fmt(had)}, and {fmt(nar)} ms per step for FP16, Hadamard, and PrismQuant. PrismQuant achieves {fmt(fp/nar)}x relative to FP16 and has {fmt(100*(nar/had-1))}% latency difference relative to Hadamard; {variability}. ')
+            display_model = {"3b": "Llama-3.2-3B", "8b": "Llama-3.1-8B"}[model]
+            eager_nar = lookup[(model, 'nar', 'eager_sequence')]['summary']['median']
+            paper.append(f'For {display_model}, Graph decode medians are {fmt(fp)}, {fmt(had)}, and {fmt(nar)} ms per step for FP16, Hadamard, and PrismQuant. PrismQuant achieves {fmt(fp/nar)}x relative to FP16 and has {fmt(100*(nar/had-1))}% latency difference relative to Hadamard; {variability}. Relative to its own matched eager path, PrismQuant Graph is {fmt(eager_nar/nar)}x faster. This execution-mode gain is distinct from the within-Graph method comparison. ')
     (out/'paper/graph_results.tex').write_text(escaped(''.join(paper).strip())+'\n' if paper else 'The matched three-session private Graph panel is incomplete; no final Graph speedup conclusion is emitted.\n')
     return summary
