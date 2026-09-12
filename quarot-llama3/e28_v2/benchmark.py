@@ -38,6 +38,10 @@ def main():
     key=f'{a.model}_{a.method}_{a.mode}_{a.phase}_s{a.session}'
     dest=a.run/'raw_runs'/f'{key}.json'
     if dest.exists():print('EXISTS',dest,flush=True);return
+    if a.phase in ('decode8','decode8192') and a.method=='nar':
+        validation=a.run/'correctness'/f'r4_extended_{a.model}.json'
+        if not validation.exists() or read(validation).get('status')!='PASS':
+            write(dest,{'key':key,'model':a.model,'method':a.method,'mode':a.mode,'phase':a.phase,'session':a.session,'status':'INVALID','reason':'Extended actual-shape R4 validation missing or failed'});return
     import torch
     from .cache_adapter import make_cache,clear,snapshot
     initialize(); protocol=read(a.run/'protocol.json')

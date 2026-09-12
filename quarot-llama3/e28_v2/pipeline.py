@@ -59,7 +59,9 @@ def main():
       for session in [1,2,3]:run('kernel_bench','--model',model,'--session',session)
     run('collect')
     if not (OUT/'base_checkpoint_manifest.json').exists():run('checkpoint')
-    for model in MODELS:run('verify','--level','model','--model',model,'--method','fp16','--real')
+    for model in MODELS:
+        run('verify','--level','r4','--model',model,'--extended')
+        run('verify','--level','model','--model',model,'--method','fp16','--real')
     for model in MODELS:
       for method in METHODS:
         if eligible(model,method):

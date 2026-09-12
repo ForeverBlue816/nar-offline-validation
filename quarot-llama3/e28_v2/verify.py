@@ -37,7 +37,7 @@ def r4(a):
         export_factor_max_abs=max(float((fold.y_prime_fp32-layer['y_prime_fp32'].cpu()).abs().max()),float((fold.w_h_t_fp32-layer['w_h_t_fp32'].cpu()).abs().max()))
         mod=nk.NARDownTransform(layer['y_prime_fp32'],layer['w_h_t_fp32'],8,selection(a.model)).cuda()
         source={'path':str(datafile),'file_sha256':sha(datafile),'rows_available':len(raw),'consumed_rows':8192,'factor_sha256':sha(factorfile),'fold_export_exact':factor_exact,'unfolded_vs_folded_relative_l2':direction_rel,'unfolded_vs_exported_relative_l2':export_rel,'export_factor_max_abs':export_factor_max_abs}
-        for T in [1,2048,32768]:
+        for T in ([8,8192,16384] if getattr(a,'extended',False) else [1,2048,32768]):
             g=torch.Generator(device='cpu').manual_seed(17+i)
             base=torch.randn((1,n),generator=g).half()
             cases={'real':real.repeat((math.ceil(T/len(real)),1))[:T],
@@ -52,11 +52,11 @@ def r4(a):
                 # Chunk only the independent reference, never the tested launch.
                 ref=torch.empty_like(out,dtype=torch.float32)
                 for lo in range(0,T,256):ref[lo:lo+256]=nk.reference_transform(x[lo:lo+256],layer['y_prime_fp32'],layer['w_h_t_fp32'])
-                row={'layer':i,'tokens':T,'case':name,'source':source,'config':selection(a.model)[str(T)],'repeated_real_rows':name=='real' and T>len(real),**compare(out,ref)}
+                row={'layer':i,'tokens':T,'case':name,'source':source,'config':{'proj':mod.plan(T)[0].__dict__,'tile':mod.plan(T)[1].__dict__},'repeated_real_rows':name=='real' and T>len(real),**compare(out,ref)}
                 if export_rel>2e-5 or direction_rel>2e-5:row.update(status='FAIL',reason='factor export/fold direction mismatch')
                 rows.append(row);del x,out,ref
             del cases
-        write(a.run/'correctness'/f'r4_{a.model}.json',{'status':'PASS' if all(r['status']=='PASS' for r in rows) else 'FAIL','complete':i+1==len(payload['layers']),'completed_layers':i+1,'rows':rows})
+        write(a.run/'correctness'/f'r4_{"extended_" if getattr(a,"extended",False) else ""}{a.model}.json',{'status':'PASS' if all(r['status']=='PASS' for r in rows) else 'FAIL','complete':i+1==len(payload['layers']),'completed_layers':i+1,'rows':rows})
         print('R4',a.model,i,'failures',sum(r['status']=='FAIL' for r in rows),flush=True)
         del mod
     return {'status':'PASS' if all(r['status']=='PASS' for r in rows) else 'FAIL','complete':True,'completed_layers':len(payload['layers']),'rows':rows}
@@ -172,8 +172,8 @@ def model_check(a):
       'real_checkpoint':{'status':'BLOCKED','reason':'No complete matching k8 integer checkpoint/loader; paper fake-quantized per-group weights are incompatible with this row/column-scale GEMM.'}}
 
 def main():
-    p=arguments(__doc__);p.add_argument('--level',choices=['r4','operators','model'],required=True);p.add_argument('--real',action='store_true');a=p.parse_args()
-    dest=a.run/'correctness'/f'{a.level}_{"real_" if a.real else ""}{a.model or "all"}{"_"+a.method if a.method else ""}.json'
+    p=arguments(__doc__);p.add_argument('--level',choices=['r4','operators','model'],required=True);p.add_argument('--real',action='store_true');p.add_argument('--extended',action='store_true');a=p.parse_args()
+    dest=a.run/'correctness'/f'{a.level}_{"real_" if a.real else "extended_" if a.extended else ""}{a.model or "all"}{"_"+a.method if a.method else ""}.json'
     if dest.exists() and read(dest).get('complete',True):print('EXISTS',dest,flush=True);return
     import torch
     initialize();payload={'started':now(),'environment':environment()}
