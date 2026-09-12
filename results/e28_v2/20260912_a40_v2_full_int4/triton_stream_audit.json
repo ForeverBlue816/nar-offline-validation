@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-09-12T05:37:28.789948+00:00",
+  "installed_triton": "3.0.0",
+  "source": "/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/triton/compiler/compiler.py",
+  "source_sha256": "dc767c8fadcf23ea82d79e257c37d44077eae7f681cf967565fd43e9c017937b",
+  "symbol": "CompiledKernel.__getitem__.runner",
+  "lines": [
+    401,
+    410
+  ],
+  "finding": "The pre-bound runner resolves driver.active.get_current_stream(device) on each invocation when stream is None. NAR calls do not explicitly override stream. It does not freeze the compile-time/default stream.",
+  "scope": "Static source audit only; growing-cache replay tests remain required. No Triton or NAR code modification."
+}
