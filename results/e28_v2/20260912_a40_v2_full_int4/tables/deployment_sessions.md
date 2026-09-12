@@ -5,6 +5,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 3b | FP16 | eager_sequence / decode | 1 | 21.02 | 0.24 | 50 |
 | 3b | FP16 | eager_sequence / decode | 2 | 22.62 | 0.30 | 50 |
 | 3b | FP16 | eager_sequence / decode | 3 | 22.13 | 0.38 | 50 |
+| 3b | FP16 | eager_sequence / decode8 | 1 | 22.60 | 0.47 | 50 |
+| 3b | FP16 | eager_sequence / decode8192 | 1 | 24.12 | 0.01 | 50 |
 | 3b | FP16 | eager_sequence / prefill1 | 1 | 10172.58 | 11.60 | 50 |
 | 3b | FP16 | eager_sequence / prefill1 | 2 | 10158.48 | 14.54 | 50 |
 | 3b | FP16 | eager_sequence / prefill1 | 3 | 10155.22 | 11.06 | 50 |
@@ -17,6 +19,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 3b | QuaRot Hadamard | eager_sequence / decode | 1 | 43.47 | 0.35 | 50 |
 | 3b | QuaRot Hadamard | eager_sequence / decode | 2 | 43.57 | 0.58 | 50 |
 | 3b | QuaRot Hadamard | eager_sequence / decode | 3 | 43.43 | 0.50 | 50 |
+| 3b | QuaRot Hadamard | eager_sequence / decode8 | 1 | 51.60 | 2.46 | 50 |
+| 3b | QuaRot Hadamard | eager_sequence / decode8192 | 1 | 50.56 | 3.71 | 50 |
 | 3b | QuaRot Hadamard | eager_sequence / prefill1 | 1 | 12824.19 | 28.34 | 50 |
 | 3b | QuaRot Hadamard | eager_sequence / prefill1 | 2 | 12816.33 | 13.05 | 50 |
 | 3b | QuaRot Hadamard | eager_sequence / prefill1 | 3 | 12826.89 | 25.96 | 50 |
@@ -29,6 +33,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 3b | PrismQuant k=8 | eager_sequence / decode | 1 | 41.27 | 0.34 | 50 |
 | 3b | PrismQuant k=8 | eager_sequence / decode | 2 | 42.48 | 0.60 | 50 |
 | 3b | PrismQuant k=8 | eager_sequence / decode | 3 | 43.95 | 0.50 | 50 |
+| 3b | PrismQuant k=8 | eager_sequence / decode8 | 1 | 42.45 | 0.70 | 50 |
+| 3b | PrismQuant k=8 | eager_sequence / decode8192 | 1 | 43.13 | 2.44 | 50 |
 | 3b | PrismQuant k=8 | eager_sequence / prefill1 | 1 | 12677.75 | 23.05 | 50 |
 | 3b | PrismQuant k=8 | eager_sequence / prefill1 | 2 | 12673.05 | 22.57 | 50 |
 | 3b | PrismQuant k=8 | eager_sequence / prefill1 | 3 | 12673.35 | 18.61 | 50 |
@@ -41,6 +47,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 8b | FP16 | eager_sequence / decode | 1 | 30.20 | 0.03 | 50 |
 | 8b | FP16 | eager_sequence / decode | 2 | 30.21 | 4.26e-03 | 50 |
 | 8b | FP16 | eager_sequence / decode | 3 | 30.25 | 4.78e-03 | 50 |
+| 8b | FP16 | eager_sequence / decode8 | 1 | 33.13 | 0.01 | 50 |
+| 8b | FP16 | eager_sequence / decode8192 | 1 | 38.91 | 3.89e-03 | 50 |
 | 8b | FP16 | eager_sequence / prefill1 | 1 | 5244.35 | 14.62 | 50 |
 | 8b | FP16 | eager_sequence / prefill1 | 2 | 5244.52 | 16.87 | 50 |
 | 8b | FP16 | eager_sequence / prefill1 | 3 | 5226.06 | 14.16 | 50 |
@@ -53,6 +61,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 8b | QuaRot Hadamard | eager_sequence / decode | 1 | 52.93 | 0.69 | 50 |
 | 8b | QuaRot Hadamard | eager_sequence / decode | 2 | 53.39 | 1.02 | 50 |
 | 8b | QuaRot Hadamard | eager_sequence / decode | 3 | 52.60 | 1.02 | 50 |
+| 8b | QuaRot Hadamard | eager_sequence / decode8 | 1 | 61.11 | 2.87 | 50 |
+| 8b | QuaRot Hadamard | eager_sequence / decode8192 | 1 | 53.31 | 2.99 | 50 |
 | 8b | QuaRot Hadamard | eager_sequence / prefill1 | 1 | 7606.22 | 6.64 | 50 |
 | 8b | QuaRot Hadamard | eager_sequence / prefill1 | 2 | 7607.98 | 5.71 | 50 |
 | 8b | QuaRot Hadamard | eager_sequence / prefill1 | 3 | 7607.95 | 4.66 | 50 |
@@ -65,6 +75,8 @@ Core session medians and run population std. Prefill units are total input tok/s
 | 8b | PrismQuant k=8 | eager_sequence / decode | 1 | 50.43 | 0.55 | 50 |
 | 8b | PrismQuant k=8 | eager_sequence / decode | 2 | 50.82 | 0.44 | 50 |
 | 8b | PrismQuant k=8 | eager_sequence / decode | 3 | 50.14 | 0.80 | 50 |
+| 8b | PrismQuant k=8 | eager_sequence / decode8 | 1 | 51.05 | 0.77 | 50 |
+| 8b | PrismQuant k=8 | eager_sequence / decode8192 | 1 | 51.56 | 1.02 | 50 |
 | 8b | PrismQuant k=8 | eager_sequence / prefill1 | 1 | 7676.94 | 6.37 | 50 |
 | 8b | PrismQuant k=8 | eager_sequence / prefill1 | 2 | 7678.79 | 5.51 | 50 |
 | 8b | PrismQuant k=8 | eager_sequence / prefill1 | 3 | 7676.45 | 3.57 | 50 |

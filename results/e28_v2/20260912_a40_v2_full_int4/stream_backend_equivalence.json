@@ -1,0 +1,8 @@
+{
+  "extension_output_storage_exact": true,
+  "interpretation": "Equivalence of actual outputs/storage on the original operator suite; known numerical boundary failures remain failures in both backends.",
+  "original": "correctness/backend_fingerprint_original.json",
+  "patched": "correctness/backend_fingerprint_current_stream.json",
+  "status": "PASS",
+  "timestamp": "2026-09-12T12:42:07.206429+00:00"
+}

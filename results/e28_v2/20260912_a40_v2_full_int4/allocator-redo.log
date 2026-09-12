@@ -1,0 +1,22 @@
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+3b_fp16_eager_sequence_prefill1_s1 run 0 0.20188
+3b_fp16_eager_sequence_prefill1_s1 run 10 0.20115
+3b_fp16_eager_sequence_prefill1_s1 run 20 0.20133
+3b_fp16_eager_sequence_prefill1_s1 run 30 0.20132
+3b_fp16_eager_sequence_prefill1_s1 run 40 0.20149
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+3b_fp16_eager_sequence_prefill16_s1 run 0 2.32918
+3b_fp16_eager_sequence_prefill16_s1 run 10 2.33485
+3b_fp16_eager_sequence_prefill16_s1 run 20 2.35054
+3b_fp16_eager_sequence_prefill16_s1 run 30 2.35904
+3b_fp16_eager_sequence_prefill16_s1 run 40 2.3618

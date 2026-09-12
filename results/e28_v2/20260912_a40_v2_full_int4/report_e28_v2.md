@@ -1,6 +1,6 @@
 # E28-v2: auditable deployment experiments
 
-Generated 2026-09-12T09:53:24.758673+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
+Generated 2026-09-12T12:45:20.207901+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
 
 ## Initialization revision and reused evidence
 
@@ -22,23 +22,38 @@ Core timing: **72/72** independent processes complete. Full timing completion do
 
 | Check | Status | Reason |
 | --- | --- | --- |
+| backend_fingerprint_current_stream | COMPLETE |  |
+| backend_fingerprint_original | COMPLETE |  |
 | cache_diagnose | DIAGNOSTIC_RECORDED |  |
+| graph_3b_fp16 | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_3b_hadamard | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_3b_nar | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_fp16 | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_hadamard | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_nar | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_stream_3b_fp16 | PASS |  |
 | model_3b_fp16 | PASS |  |
 | model_3b_hadamard | PASS |  |
 | model_3b_nar | PASS |  |
 | model_8b_fp16 | PASS |  |
 | model_8b_hadamard | PASS |  |
 | model_8b_nar | PASS |  |
+| model_real_3b_fp16 | PASS |  |
+| model_real_8b_fp16 | PASS |  |
 | operators_all | FAIL |  |
 | r4_3b | PASS |  |
 | r4_8b | PASS |  |
+| r4_extended_3b | PASS |  |
+| r4_extended_8b | PASS |  |
+| rope_reference_3b | PASS |  |
+| rope_reference_8b | PASS |  |
 
 ## Numerical boundaries and real weights
 
 - `int4_gemm_dequant` / large_accumulator, reduction width 8192: integer accumulation 401408 is exact, but conversion to FP16 before scale multiplication produces nonfinite output. This remains **FAIL** in the existing backend.
 - `int4_gemm_dequant` / large_accumulator, reduction width 14336: integer accumulation 702464 is exact, but conversion to FP16 before scale multiplication produces nonfinite output. This remains **FAIL** in the existing backend.
 
-Real base-checkpoint FP16 implementation checks: 3b: PENDING; 8b: PENDING. The independent pinned RoPE reference is recorded in `correctness/rope_reference_3b.json` and `correctness/rope_reference_8b.json` when run. This is separate from compensated INT4 checkpoint support and from model quality. Prefill hidden/logits and multi-step decode are checked; exact cache comparisons cover steps1,2,9,64,65,128.
+Real base-checkpoint FP16 implementation checks: 3b: PASS; 8b: PASS. The independent pinned RoPE reference is recorded in `correctness/rope_reference_3b.json` and `correctness/rope_reference_8b.json` when run. This is separate from compensated INT4 checkpoint support and from model quality. Prefill hidden/logits and multi-step decode are checked; exact cache comparisons cover steps1,2,9,64,65,128.
 
 ## Six questions
 
@@ -57,10 +72,18 @@ Real base-checkpoint FP16 implementation checks: 3b: PENDING; 8b: PENDING. The i
 - 8b prefill1: NAR throughput is 100.92% of Hadamard; near parity / within observed variability.
 - 8b prefill16: NAR throughput is 101.11% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
 - 8b decode: NAR latency difference -4.36%; consistent observed direction across three sessions, specific to this implementation/workload.
+- 3b: separate profiled NAR-minus-Hadamard kernel sum 0.33 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
+- 8b: separate profiled NAR-minus-Hadamard kernel sum 0.52 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
 
 3. **Does dispatch optimization help reproducibly?** The generic/prebound protocol requires identical kernels, byte-equal outputs and three separately recorded sessions; only completed valid records support a conclusion. See [kernel records](tables/kernel.md). A one-percent difference without consistent session direction is near parity, not a stable advantage.
+- 3b T=1: prebound/generic wall ratio 0.53, CUDA-event elapsed ratio 0.53; consistent direction in these three sessions; no cross-hardware claim.
+- 3b T=2048: prebound/generic wall ratio 0.91, CUDA-event elapsed ratio 0.92; consistent direction in these three sessions; no cross-hardware claim.
+- 3b T=32768: prebound/generic wall ratio 0.99, CUDA-event elapsed ratio 0.99; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=1: prebound/generic wall ratio 0.63, CUDA-event elapsed ratio 0.58; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=2048: prebound/generic wall ratio 0.96, CUDA-event elapsed ratio 0.96; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=32768: prebound/generic wall ratio 1.00, CUDA-event elapsed ratio 1.00; near parity / within observed variability.
 
-4. **Does graph replay grow the KV context?** See [graphability audit](graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps1,2,9,64,65,128, full cache hashes and actual page crossing can pass. Original-binary capture and the bounded private current-stream adapter have separate records. Any matched adapter timing is in the [separate graph panel](tables/graph_deployment.md), with [preparation and memory](graph_memory_breakdown.json). No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null.
+4. **Does graph replay grow the KV context?** See [graphability audit](graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps1,2,9,64,65,128, full cache hashes and actual page crossing can pass. Original-binary capture and the bounded private current-stream adapter have separate records. Any matched adapter timing is in the [separate graph panel](tables/graph_deployment.md), with [preparation and memory](graph_memory_breakdown.json). No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null. Original backend: 0/6 PASS, 6/6 failed or blocked, 0/6 pending. Private current-stream backend: 1/6 PASS, 0/6 failed or blocked, 5/6 pending. Matched private timing panel: INCOMPLETE.
 
 5. **Which results execute integer kernels?** E28 Hadamard/NAR use the actual packed INT4 GEMM/quantizer and INT4 decode cache; FP16 uses FP16 arithmetic/cache. E17-native rows are local packed-activation microbenchmarks, not an end-to-end model. Random states are verified by [shared_state_audit.json](shared_state_audit.json). Real model quality remains untested.
 
@@ -71,6 +94,14 @@ Real base-checkpoint FP16 implementation checks: 3b: PENDING; 8b: PENDING. The i
 The interactive driver step150777.7 was terminated during session2. Its interrupted prefill16 process had no complete timing samples; all29 complete processes were retained. The interrupted JSON is preserved under `raw_runs/interrupted_attempt_1/`, and only that unfinished process restarts with the same10 warmups and50 formal runs. The unplanned idle gap within session2 remains a protocol deviation, not a reason to select or drop timings. See [interruption record](session_interruption_1.json).
 
 A durable CPU Slurm controller launches the continuation within the original A40 allocation. [Actual step/cgroup audit](recovery_allocation_audit.json) confirms the same cores32--35, no CFS quota,40GiB host-memory limit and original GPU node. Raw environments preserve some inherited controller job fields; the actual GPU step TRES, host, affinity and cgroups are authoritative. Original execution manifests remain intact; resumed code has a separate timestamped manifest.
+
+## Private Graph provenance
+
+The [pre-measurement allocation amendment](protocol_graph_allocation_addendum.json) places the full matched private-backend eager/graph panel in one subsequent allocation because the original allocation has a fixed12-hour limit. All three methods and both timing modes are compared within that panel; original-binary core results are kept separate. [Observed allocation](stream_allocation.json) records the enforced physical A40 UUID and CPU affinity when the stage starts.
+
+The primary experiment driver and its durable controller both completed with exit0. The outer allocation was then deliberately cancelled to release the stopped predecessor parent and start the dependent Graph job; [the cleanup record](primary_allocation_cleanup.json) distinguishes this scheduler status from experimental failure.
+
+The [cache-evidence amendment](protocol_graph_cache_evidence_addendum.json), frozen before private Graph measurements, retains both already-computed expected/observed whole-cache hashes and metadata. Original-backend failed checks retained equality booleans only; they remain unchanged. This recording addition changes neither validation thresholds nor timing.
 
 ## Technical appendix
 

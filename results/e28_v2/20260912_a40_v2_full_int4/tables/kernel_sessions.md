@@ -2,4 +2,237 @@ Fixed layer0 configurations, directly timed calls/chains; stage times must not b
 
 | Model | T | Session | Scope | Implementation | Wall us | Event us | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-
+| 3b | 1 | 1 | E28 slot | hadamard_fp16 | 94.90 | 96.26 | VALID |
+| 3b | 1 | 1 | E28 slot | nar_module | 44.22 | 46.08 | VALID |
+| 3b | 1 | 1 | E28 dispatch (preallocated) | nar_prebound | 45.65 | 49.15 | VALID |
+| 3b | 1 | 1 | E28 dispatch (preallocated) | nar_generic | 56.70 | 59.39 | VALID |
+| 3b | 1 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 52.91 | 54.27 | VALID |
+| 3b | 1 | 1 | E28 stage | A_only | 37.20 | 32.77 | VALID |
+| 3b | 1 | 1 | E28 stage | B_tc_only | 33.53 | 35.84 | VALID |
+| 3b | 1 | 1 | E28 stage | B_shuffle_only | 30.09 | 30.72 | VALID |
+| 3b | 1 | 1 | E28 stage | shared_quantizer | 74.28 | 76.27 | VALID |
+| 3b | 1 | 1 | E28 frontend | hadamard_plus_quantizer | 150.30 | 148.99 | VALID |
+| 3b | 1 | 1 | E28 frontend | nar_plus_quantizer | 120.39 | 122.88 | VALID |
+| 3b | 1 | 1 | E17 native | nar_native | 55.85 | 55.30 | VALID |
+| 3b | 1 | 1 | E17 native | block_hadamard_native | 30.27 | 30.72 | VALID |
+| 3b | 2048 | 1 | E28 slot | hadamard_fp16 | 191.69 | 182.78 | VALID |
+| 3b | 2048 | 1 | E28 slot | nar_module | 218.97 | 212.99 | VALID |
+| 3b | 2048 | 1 | E28 dispatch (preallocated) | nar_prebound | 204.43 | 199.68 | VALID |
+| 3b | 2048 | 1 | E28 dispatch (preallocated) | nar_generic | 220.31 | 215.04 | VALID |
+| 3b | 2048 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 569.73 | 565.25 | VALID |
+| 3b | 2048 | 1 | E28 stage | A_only | 94.15 | 88.06 | VALID |
+| 3b | 2048 | 1 | E28 stage | B_tc_only | 164.66 | 155.65 | VALID |
+| 3b | 2048 | 1 | E28 stage | B_shuffle_only | 506.80 | 501.76 | VALID |
+| 3b | 2048 | 1 | E28 stage | shared_quantizer | 258.74 | 254.00 | VALID |
+| 3b | 2048 | 1 | E28 frontend | hadamard_plus_quantizer | 416.97 | 404.48 | VALID |
+| 3b | 2048 | 1 | E28 frontend | nar_plus_quantizer | 457.69 | 452.10 | VALID |
+| 3b | 2048 | 1 | E17 native | nar_native | 578.98 | 573.44 | VALID |
+| 3b | 2048 | 1 | E17 native | block_hadamard_native | 453.56 | 448.51 | VALID |
+| 3b | 32768 | 1 | E28 slot | hadamard_fp16 | 1737.44 | 1728.00 | VALID |
+| 3b | 32768 | 1 | E28 slot | nar_module | 2670.99 | 2660.86 | VALID |
+| 3b | 32768 | 1 | E28 dispatch (preallocated) | nar_prebound | 2647.59 | 2640.37 | VALID |
+| 3b | 32768 | 1 | E28 dispatch (preallocated) | nar_generic | 2681.08 | 2673.15 | VALID |
+| 3b | 32768 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 6956.37 | 6943.22 | VALID |
+| 3b | 32768 | 1 | E28 stage | A_only | 877.18 | 869.38 | VALID |
+| 3b | 32768 | 1 | E28 stage | B_tc_only | 1817.74 | 1809.41 | VALID |
+| 3b | 32768 | 1 | E28 stage | B_shuffle_only | 6115.49 | 6098.94 | VALID |
+| 3b | 32768 | 1 | E28 stage | shared_quantizer | 3586.99 | 3578.88 | VALID |
+| 3b | 32768 | 1 | E28 frontend | hadamard_plus_quantizer | 5339.33 | 5307.42 | VALID |
+| 3b | 32768 | 1 | E28 frontend | nar_plus_quantizer | 6246.94 | 6236.16 | VALID |
+| 3b | 32768 | 1 | E17 native | nar_native | 11982.93 | 11975.17 | VALID |
+| 3b | 32768 | 1 | E17 native | block_hadamard_native | 6761.91 | 6753.28 | VALID |
+| 3b | 1 | 2 | E28 frontend | nar_plus_quantizer | 119.79 | 120.29 | VALID |
+| 3b | 1 | 2 | E28 frontend | hadamard_plus_quantizer | 155.73 | 158.21 | VALID |
+| 3b | 1 | 2 | E28 stage | shared_quantizer | 72.66 | 73.73 | VALID |
+| 3b | 1 | 2 | E28 stage | B_shuffle_only | 29.71 | 29.70 | VALID |
+| 3b | 1 | 2 | E28 stage | B_tc_only | 33.10 | 34.82 | VALID |
+| 3b | 1 | 2 | E28 stage | A_only | 36.26 | 31.74 | VALID |
+| 3b | 1 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 50.99 | 52.22 | VALID |
+| 3b | 1 | 2 | E28 dispatch (preallocated) | nar_generic | 56.03 | 58.37 | VALID |
+| 3b | 1 | 2 | E28 dispatch (preallocated) | nar_prebound | 29.50 | 30.72 | VALID |
+| 3b | 1 | 2 | E28 slot | nar_module | 42.96 | 45.04 | VALID |
+| 3b | 1 | 2 | E28 slot | hadamard_fp16 | 57.19 | 59.39 | VALID |
+| 3b | 1 | 2 | E17 native | nar_native | 72.39 | 74.75 | VALID |
+| 3b | 1 | 2 | E17 native | block_hadamard_native | 27.97 | 28.67 | VALID |
+| 3b | 2048 | 2 | E28 frontend | nar_plus_quantizer | 454.74 | 450.03 | VALID |
+| 3b | 2048 | 2 | E28 frontend | hadamard_plus_quantizer | 426.43 | 417.79 | VALID |
+| 3b | 2048 | 2 | E28 stage | shared_quantizer | 260.15 | 254.46 | VALID |
+| 3b | 2048 | 2 | E28 stage | B_shuffle_only | 507.58 | 502.78 | VALID |
+| 3b | 2048 | 2 | E28 stage | B_tc_only | 154.99 | 149.50 | VALID |
+| 3b | 2048 | 2 | E28 stage | A_only | 81.90 | 77.81 | VALID |
+| 3b | 2048 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 575.17 | 566.78 | VALID |
+| 3b | 2048 | 2 | E28 dispatch (preallocated) | nar_generic | 214.30 | 209.41 | VALID |
+| 3b | 2048 | 2 | E28 dispatch (preallocated) | nar_prebound | 196.02 | 193.49 | VALID |
+| 3b | 2048 | 2 | E28 slot | nar_module | 207.20 | 201.73 | VALID |
+| 3b | 2048 | 2 | E28 slot | hadamard_fp16 | 155.03 | 150.02 | VALID |
+| 3b | 2048 | 2 | E17 native | nar_native | 584.62 | 579.07 | VALID |
+| 3b | 2048 | 2 | E17 native | block_hadamard_native | 452.65 | 447.49 | VALID |
+| 3b | 32768 | 2 | E28 frontend | nar_plus_quantizer | 6268.48 | 6250.50 | VALID |
+| 3b | 32768 | 2 | E28 frontend | hadamard_plus_quantizer | 5342.70 | 5329.92 | VALID |
+| 3b | 32768 | 2 | E28 stage | shared_quantizer | 3592.57 | 3582.98 | VALID |
+| 3b | 32768 | 2 | E28 stage | B_shuffle_only | 6087.12 | 6080.51 | VALID |
+| 3b | 32768 | 2 | E28 stage | B_tc_only | 1821.10 | 1812.48 | VALID |
+| 3b | 32768 | 2 | E28 stage | A_only | 899.01 | 893.95 | VALID |
+| 3b | 32768 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 6946.12 | 6938.11 | VALID |
+| 3b | 32768 | 2 | E28 dispatch (preallocated) | nar_generic | 2658.27 | 2652.18 | VALID |
+| 3b | 32768 | 2 | E28 dispatch (preallocated) | nar_prebound | 2649.86 | 2640.90 | VALID |
+| 3b | 32768 | 2 | E28 slot | nar_module | 2680.97 | 2672.13 | VALID |
+| 3b | 32768 | 2 | E28 slot | hadamard_fp16 | 1729.86 | 1718.27 | VALID |
+| 3b | 32768 | 2 | E17 native | nar_native | 11989.02 | 11978.75 | VALID |
+| 3b | 32768 | 2 | E17 native | block_hadamard_native | 6755.54 | 6746.11 | VALID |
+| 8b | 1 | 1 | E28 slot | hadamard_fp16 | 124.57 | 124.93 | VALID |
+| 8b | 1 | 1 | E28 slot | nar_module | 47.15 | 48.13 | VALID |
+| 8b | 1 | 1 | E28 dispatch (preallocated) | nar_prebound | 37.08 | 34.29 | VALID |
+| 8b | 1 | 1 | E28 dispatch (preallocated) | nar_generic | 58.45 | 58.88 | VALID |
+| 8b | 1 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 55.20 | 54.32 | VALID |
+| 8b | 1 | 1 | E28 stage | A_only | 42.76 | 38.91 | VALID |
+| 8b | 1 | 1 | E28 stage | B_tc_only | 35.83 | 36.86 | VALID |
+| 8b | 1 | 1 | E28 stage | B_shuffle_only | 31.48 | 30.72 | VALID |
+| 8b | 1 | 1 | E28 stage | shared_quantizer | 74.28 | 75.78 | VALID |
+| 8b | 1 | 1 | E28 frontend | hadamard_plus_quantizer | 220.20 | 222.72 | VALID |
+| 8b | 1 | 1 | E28 frontend | nar_plus_quantizer | 150.71 | 140.29 | VALID |
+| 8b | 1 | 1 | E17 native | nar_native | 57.95 | 57.31 | VALID |
+| 8b | 1 | 1 | E17 native | block_hadamard_native | 29.91 | 29.68 | VALID |
+| 8b | 2048 | 1 | E28 slot | hadamard_fp16 | 463.18 | 444.93 | VALID |
+| 8b | 2048 | 1 | E28 slot | nar_module | 321.58 | 316.38 | VALID |
+| 8b | 2048 | 1 | E28 dispatch (preallocated) | nar_prebound | 309.38 | 304.61 | VALID |
+| 8b | 2048 | 1 | E28 dispatch (preallocated) | nar_generic | 322.39 | 318.94 | VALID |
+| 8b | 2048 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 972.24 | 964.61 | VALID |
+| 8b | 2048 | 1 | E28 stage | A_only | 122.03 | 117.76 | VALID |
+| 8b | 2048 | 1 | E28 stage | B_tc_only | 231.49 | 227.84 | VALID |
+| 8b | 2048 | 1 | E28 stage | B_shuffle_only | 871.68 | 863.18 | VALID |
+| 8b | 2048 | 1 | E28 stage | shared_quantizer | 429.63 | 423.90 | VALID |
+| 8b | 2048 | 1 | E28 frontend | hadamard_plus_quantizer | 869.51 | 855.04 | VALID |
+| 8b | 2048 | 1 | E28 frontend | nar_plus_quantizer | 740.45 | 733.18 | VALID |
+| 8b | 2048 | 1 | E17 native | nar_native | 987.97 | 978.94 | VALID |
+| 8b | 2048 | 1 | E17 native | block_hadamard_native | 780.50 | 776.19 | VALID |
+| 8b | 32768 | 1 | E28 slot | hadamard_fp16 | 5995.37 | 5977.60 | VALID |
+| 8b | 32768 | 1 | E28 slot | nar_module | 4623.18 | 4605.44 | VALID |
+| 8b | 32768 | 1 | E28 dispatch (preallocated) | nar_prebound | 4571.24 | 4559.36 | VALID |
+| 8b | 32768 | 1 | E28 dispatch (preallocated) | nar_generic | 4587.47 | 4579.33 | VALID |
+| 8b | 32768 | 1 | E28 dispatch (preallocated) | nar_generic_shuffle | 12049.56 | 12041.73 | VALID |
+| 8b | 32768 | 1 | E28 stage | A_only | 1492.58 | 1490.43 | VALID |
+| 8b | 32768 | 1 | E28 stage | B_tc_only | 3125.47 | 3118.08 | VALID |
+| 8b | 32768 | 1 | E28 stage | B_shuffle_only | 10626.66 | 10618.88 | VALID |
+| 8b | 32768 | 1 | E28 stage | shared_quantizer | 6228.72 | 6219.26 | VALID |
+| 8b | 32768 | 1 | E28 frontend | hadamard_plus_quantizer | 12151.43 | 12141.57 | VALID |
+| 8b | 32768 | 1 | E28 frontend | nar_plus_quantizer | 10812.71 | 10791.94 | VALID |
+| 8b | 32768 | 1 | E17 native | nar_native | 20911.26 | 20899.33 | VALID |
+| 8b | 32768 | 1 | E17 native | block_hadamard_native | 11764.45 | 11754.50 | VALID |
+| 3b | 1 | 3 | E28 slot | hadamard_fp16 | 67.19 | 73.73 | VALID |
+| 3b | 1 | 3 | E28 slot | nar_module | 70.77 | 72.70 | VALID |
+| 3b | 1 | 3 | E28 dispatch (preallocated) | nar_prebound | 30.93 | 31.74 | VALID |
+| 3b | 1 | 3 | E28 dispatch (preallocated) | nar_generic | 85.66 | 89.09 | VALID |
+| 3b | 1 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 53.29 | 54.27 | VALID |
+| 3b | 1 | 3 | E28 stage | A_only | 37.27 | 33.79 | VALID |
+| 3b | 1 | 3 | E28 stage | B_tc_only | 34.51 | 35.87 | VALID |
+| 3b | 1 | 3 | E28 stage | B_shuffle_only | 30.69 | 30.72 | VALID |
+| 3b | 1 | 3 | E28 stage | shared_quantizer | 75.15 | 76.29 | VALID |
+| 3b | 1 | 3 | E28 frontend | hadamard_plus_quantizer | 150.95 | 145.92 | VALID |
+| 3b | 1 | 3 | E28 frontend | nar_plus_quantizer | 126.39 | 126.48 | VALID |
+| 3b | 1 | 3 | E17 native | nar_native | 82.72 | 86.02 | VALID |
+| 3b | 1 | 3 | E17 native | block_hadamard_native | 29.49 | 30.72 | VALID |
+| 3b | 2048 | 3 | E28 slot | hadamard_fp16 | 160.43 | 152.58 | VALID |
+| 3b | 2048 | 3 | E28 slot | nar_module | 208.69 | 203.78 | VALID |
+| 3b | 2048 | 3 | E28 dispatch (preallocated) | nar_prebound | 198.11 | 193.54 | VALID |
+| 3b | 2048 | 3 | E28 dispatch (preallocated) | nar_generic | 218.34 | 216.06 | VALID |
+| 3b | 2048 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 571.21 | 565.25 | VALID |
+| 3b | 2048 | 3 | E28 stage | A_only | 82.03 | 77.82 | VALID |
+| 3b | 2048 | 3 | E28 stage | B_tc_only | 155.41 | 150.53 | VALID |
+| 3b | 2048 | 3 | E28 stage | B_shuffle_only | 508.82 | 503.81 | VALID |
+| 3b | 2048 | 3 | E28 stage | shared_quantizer | 264.27 | 258.59 | VALID |
+| 3b | 2048 | 3 | E28 frontend | hadamard_plus_quantizer | 425.71 | 418.82 | VALID |
+| 3b | 2048 | 3 | E28 frontend | nar_plus_quantizer | 457.78 | 452.61 | VALID |
+| 3b | 2048 | 3 | E17 native | nar_native | 584.60 | 576.00 | VALID |
+| 3b | 2048 | 3 | E17 native | block_hadamard_native | 453.53 | 447.47 | VALID |
+| 3b | 32768 | 3 | E28 slot | hadamard_fp16 | 1746.04 | 1736.19 | VALID |
+| 3b | 32768 | 3 | E28 slot | nar_module | 2683.15 | 2667.01 | VALID |
+| 3b | 32768 | 3 | E28 dispatch (preallocated) | nar_prebound | 2652.75 | 2640.90 | VALID |
+| 3b | 32768 | 3 | E28 dispatch (preallocated) | nar_generic | 2704.70 | 2695.68 | VALID |
+| 3b | 32768 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 6944.45 | 6938.11 | VALID |
+| 3b | 32768 | 3 | E28 stage | A_only | 897.96 | 890.37 | VALID |
+| 3b | 32768 | 3 | E28 stage | B_tc_only | 1818.84 | 1811.46 | VALID |
+| 3b | 32768 | 3 | E28 stage | B_shuffle_only | 6106.78 | 6095.36 | VALID |
+| 3b | 32768 | 3 | E28 stage | shared_quantizer | 3595.07 | 3586.05 | VALID |
+| 3b | 32768 | 3 | E28 frontend | hadamard_plus_quantizer | 5358.59 | 5343.23 | VALID |
+| 3b | 32768 | 3 | E28 frontend | nar_plus_quantizer | 6266.25 | 6251.01 | VALID |
+| 3b | 32768 | 3 | E17 native | nar_native | 11979.69 | 11971.58 | VALID |
+| 3b | 32768 | 3 | E17 native | block_hadamard_native | 6756.03 | 6747.65 | VALID |
+| 8b | 1 | 2 | E28 frontend | nar_plus_quantizer | 124.71 | 125.95 | VALID |
+| 8b | 1 | 2 | E28 frontend | hadamard_plus_quantizer | 228.58 | 224.26 | VALID |
+| 8b | 1 | 2 | E28 stage | shared_quantizer | 75.51 | 77.82 | VALID |
+| 8b | 1 | 2 | E28 stage | B_shuffle_only | 41.30 | 42.50 | VALID |
+| 8b | 1 | 2 | E28 stage | B_tc_only | 52.63 | 54.27 | VALID |
+| 8b | 1 | 2 | E28 stage | A_only | 43.09 | 39.94 | VALID |
+| 8b | 1 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 68.66 | 69.12 | VALID |
+| 8b | 1 | 2 | E28 dispatch (preallocated) | nar_generic | 61.11 | 60.42 | VALID |
+| 8b | 1 | 2 | E28 dispatch (preallocated) | nar_prebound | 36.96 | 33.79 | VALID |
+| 8b | 1 | 2 | E28 slot | nar_module | 67.96 | 69.63 | VALID |
+| 8b | 1 | 2 | E28 slot | hadamard_fp16 | 119.20 | 119.81 | VALID |
+| 8b | 1 | 2 | E17 native | nar_native | 58.33 | 56.32 | VALID |
+| 8b | 1 | 2 | E17 native | block_hadamard_native | 30.38 | 30.72 | VALID |
+| 8b | 2048 | 2 | E28 frontend | nar_plus_quantizer | 734.78 | 726.02 | VALID |
+| 8b | 2048 | 2 | E28 frontend | hadamard_plus_quantizer | 862.14 | 852.99 | VALID |
+| 8b | 2048 | 2 | E28 stage | shared_quantizer | 428.16 | 422.40 | VALID |
+| 8b | 2048 | 2 | E28 stage | B_shuffle_only | 864.42 | 859.14 | VALID |
+| 8b | 2048 | 2 | E28 stage | B_tc_only | 232.94 | 225.25 | VALID |
+| 8b | 2048 | 2 | E28 stage | A_only | 120.86 | 116.74 | VALID |
+| 8b | 2048 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 966.24 | 960.51 | VALID |
+| 8b | 2048 | 2 | E28 dispatch (preallocated) | nar_generic | 322.86 | 317.95 | VALID |
+| 8b | 2048 | 2 | E28 dispatch (preallocated) | nar_prebound | 306.23 | 302.08 | VALID |
+| 8b | 2048 | 2 | E28 slot | nar_module | 321.19 | 315.39 | VALID |
+| 8b | 2048 | 2 | E28 slot | hadamard_fp16 | 439.19 | 432.64 | VALID |
+| 8b | 2048 | 2 | E17 native | nar_native | 983.63 | 976.90 | VALID |
+| 8b | 2048 | 2 | E17 native | block_hadamard_native | 770.02 | 763.90 | VALID |
+| 8b | 32768 | 2 | E28 frontend | nar_plus_quantizer | 10816.05 | 10806.27 | VALID |
+| 8b | 32768 | 2 | E28 frontend | hadamard_plus_quantizer | 12144.21 | 12133.36 | VALID |
+| 8b | 32768 | 2 | E28 stage | shared_quantizer | 6229.10 | 6221.82 | VALID |
+| 8b | 32768 | 2 | E28 stage | B_shuffle_only | 10632.11 | 10616.29 | VALID |
+| 8b | 32768 | 2 | E28 stage | B_tc_only | 3122.15 | 3115.01 | VALID |
+| 8b | 32768 | 2 | E28 stage | A_only | 1506.23 | 1499.65 | VALID |
+| 8b | 32768 | 2 | E28 dispatch (preallocated) | nar_generic_shuffle | 12058.97 | 12051.97 | VALID |
+| 8b | 32768 | 2 | E28 dispatch (preallocated) | nar_generic | 4583.29 | 4574.72 | VALID |
+| 8b | 32768 | 2 | E28 dispatch (preallocated) | nar_prebound | 4605.59 | 4599.30 | VALID |
+| 8b | 32768 | 2 | E28 slot | nar_module | 4572.29 | 4563.97 | VALID |
+| 8b | 32768 | 2 | E28 slot | hadamard_fp16 | 5920.57 | 5906.93 | VALID |
+| 8b | 32768 | 2 | E17 native | nar_native | 20900.86 | 20892.16 | VALID |
+| 8b | 32768 | 2 | E17 native | block_hadamard_native | 11759.67 | 11751.42 | VALID |
+| 8b | 1 | 3 | E28 slot | hadamard_fp16 | 135.71 | 130.56 | VALID |
+| 8b | 1 | 3 | E28 slot | nar_module | 46.11 | 46.02 | VALID |
+| 8b | 1 | 3 | E28 dispatch (preallocated) | nar_prebound | 36.20 | 33.79 | VALID |
+| 8b | 1 | 3 | E28 dispatch (preallocated) | nar_generic | 57.16 | 58.37 | VALID |
+| 8b | 1 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 54.27 | 52.22 | VALID |
+| 8b | 1 | 3 | E28 stage | A_only | 42.14 | 38.91 | VALID |
+| 8b | 1 | 3 | E28 stage | B_tc_only | 35.63 | 35.84 | VALID |
+| 8b | 1 | 3 | E28 stage | B_shuffle_only | 32.37 | 30.72 | VALID |
+| 8b | 1 | 3 | E28 stage | shared_quantizer | 72.67 | 74.75 | VALID |
+| 8b | 1 | 3 | E28 frontend | hadamard_plus_quantizer | 204.11 | 206.34 | VALID |
+| 8b | 1 | 3 | E28 frontend | nar_plus_quantizer | 118.23 | 120.34 | VALID |
+| 8b | 1 | 3 | E17 native | nar_native | 57.29 | 54.27 | VALID |
+| 8b | 1 | 3 | E17 native | block_hadamard_native | 43.94 | 46.02 | VALID |
+| 8b | 2048 | 3 | E28 slot | hadamard_fp16 | 440.09 | 435.20 | VALID |
+| 8b | 2048 | 3 | E28 slot | nar_module | 320.55 | 316.42 | VALID |
+| 8b | 2048 | 3 | E28 dispatch (preallocated) | nar_prebound | 306.99 | 302.08 | VALID |
+| 8b | 2048 | 3 | E28 dispatch (preallocated) | nar_generic | 319.25 | 314.88 | VALID |
+| 8b | 2048 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 980.31 | 973.82 | VALID |
+| 8b | 2048 | 3 | E28 stage | A_only | 119.57 | 114.69 | VALID |
+| 8b | 2048 | 3 | E28 stage | B_tc_only | 228.39 | 223.23 | VALID |
+| 8b | 2048 | 3 | E28 stage | B_shuffle_only | 871.73 | 865.28 | VALID |
+| 8b | 2048 | 3 | E28 stage | shared_quantizer | 427.75 | 422.91 | VALID |
+| 8b | 2048 | 3 | E28 frontend | hadamard_plus_quantizer | 850.87 | 842.75 | VALID |
+| 8b | 2048 | 3 | E28 frontend | nar_plus_quantizer | 734.87 | 729.09 | VALID |
+| 8b | 2048 | 3 | E17 native | nar_native | 981.70 | 975.34 | VALID |
+| 8b | 2048 | 3 | E17 native | block_hadamard_native | 771.39 | 764.93 | VALID |
+| 8b | 32768 | 3 | E28 slot | hadamard_fp16 | 5996.32 | 5983.74 | VALID |
+| 8b | 32768 | 3 | E28 slot | nar_module | 4669.40 | 4631.55 | VALID |
+| 8b | 32768 | 3 | E28 dispatch (preallocated) | nar_prebound | 4583.85 | 4566.53 | VALID |
+| 8b | 32768 | 3 | E28 dispatch (preallocated) | nar_generic | 4612.77 | 4605.44 | VALID |
+| 8b | 32768 | 3 | E28 dispatch (preallocated) | nar_generic_shuffle | 12098.35 | 12071.42 | VALID |
+| 8b | 32768 | 3 | E28 stage | A_only | 1502.49 | 1494.02 | VALID |
+| 8b | 32768 | 3 | E28 stage | B_tc_only | 3130.80 | 3125.25 | VALID |
+| 8b | 32768 | 3 | E28 stage | B_shuffle_only | 10659.98 | 10641.92 | VALID |
+| 8b | 32768 | 3 | E28 stage | shared_quantizer | 6265.07 | 6242.82 | VALID |
+| 8b | 32768 | 3 | E28 frontend | hadamard_plus_quantizer | 12238.44 | 12252.16 | VALID |
+| 8b | 32768 | 3 | E28 frontend | nar_plus_quantizer | 10853.11 | 10813.42 | VALID |
+| 8b | 32768 | 3 | E17 native | nar_native | 20905.69 | 20893.18 | VALID |
+| 8b | 32768 | 3 | E17 native | block_hadamard_native | 11764.55 | 11755.52 | VALID |

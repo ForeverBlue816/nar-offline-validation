@@ -1,4 +1,2033 @@
 {
   "dispersion": "Run population std;150 repeats represent3 sessions, not150 independent hardware sessions. Invalid timings are retained but not ranked.",
-  "rows": []
+  "rows": [
+    {
+      "event_us": {
+        "max": 58.36800113320351,
+        "mean": 33.99701327085495,
+        "median": 32.76799991726875,
+        "min": 30.719999223947525,
+        "n": 150,
+        "std": 4.109652458716784
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 67.02402606606483,
+        "mean": 37.90645549694697,
+        "median": 36.93951293826103,
+        "min": 34.80957821011543,
+        "n": 150,
+        "std": 3.835343208868164
+      }
+    },
+    {
+      "event_us": {
+        "max": 64.51199948787689,
+        "mean": 31.810133295754593,
+        "median": 30.719999223947525,
+        "min": 27.648000046610832,
+        "n": 150,
+        "std": 4.652133298194919
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 48.52795973420143,
+        "mean": 31.19693137705326,
+        "median": 30.087539926171303,
+        "min": 28.328970074653625,
+        "n": 150,
+        "std": 3.4428798876729574
+      }
+    },
+    {
+      "event_us": {
+        "max": 73.72800260782242,
+        "mean": 37.65760066608588,
+        "median": 35.840000957250595,
+        "min": 33.79200026392937,
+        "n": 150,
+        "std": 5.999339005130125
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 66.12902507185936,
+        "mean": 35.64098849892616,
+        "median": 33.81050191819668,
+        "min": 32.045878469944,
+        "n": 150,
+        "std": 5.656833499970594
+      }
+    },
+    {
+      "event_us": {
+        "max": 52.22399905323982,
+        "mean": 31.792640077571075,
+        "median": 30.719999223947525,
+        "min": 27.648000046610832,
+        "n": 150,
+        "std": 4.562095431214355
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 60.83305925130844,
+        "mean": 30.886226644118626,
+        "median": 29.41885031759739,
+        "min": 26.940368115901947,
+        "n": 150,
+        "std": 5.054211380432524
+      }
+    },
+    {
+      "event_us": {
+        "max": 162.78399527072906,
+        "mean": 77.63349366684754,
+        "median": 70.65600156784058,
+        "min": 56.32000043988228,
+        "n": 150,
+        "std": 21.75236935995743
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 135.16610488295555,
+        "mean": 75.97902168830235,
+        "median": 68.0331140756607,
+        "min": 55.159907788038254,
+        "n": 150,
+        "std": 20.352624030782728
+      }
+    },
+    {
+      "event_us": {
+        "max": 214.01600539684296,
+        "mean": 157.42954621712366,
+        "median": 151.0400027036667,
+        "min": 136.19199395179749,
+        "n": 150,
+        "std": 18.004137753976494
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 214.67870101332664,
+        "mean": 154.97658401727676,
+        "median": 152.79743820428848,
+        "min": 134.2841424047947,
+        "n": 150,
+        "std": 16.69611552698362
+      }
+    },
+    {
+      "event_us": {
+        "max": 145.4080045223236,
+        "mean": 70.54826748867829,
+        "median": 59.39200147986412,
+        "min": 54.27199974656105,
+        "n": 150,
+        "std": 18.672689870393476
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 137.9973255097866,
+        "mean": 67.8343294809262,
+        "median": 57.41603672504425,
+        "min": 52.95826122164726,
+        "n": 150,
+        "std": 18.158616019599958
+      }
+    },
+    {
+      "event_us": {
+        "max": 108.5439994931221,
+        "mean": 58.53802618881067,
+        "median": 53.247999399900436,
+        "min": 50.175998359918594,
+        "n": 150,
+        "std": 12.11573727704139
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 106.67601600289345,
+        "mean": 56.82677961885929,
+        "median": 52.38293670117855,
+        "min": 49.38896745443344,
+        "n": 150,
+        "std": 10.422182191315356
+      }
+    },
+    {
+      "event_us": {
+        "max": 116.7680025100708,
+        "mean": 55.35104048748811,
+        "median": 46.60800099372864,
+        "min": 43.007999658584595,
+        "n": 150,
+        "std": 15.65877125096828
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 119.40393596887589,
+        "mean": 53.24570772548517,
+        "median": 44.61989738047123,
+        "min": 40.936749428510666,
+        "n": 150,
+        "std": 14.580066123666372
+      }
+    },
+    {
+      "event_us": {
+        "max": 128.00000607967377,
+        "mean": 72.19200059771538,
+        "median": 72.7040022611618,
+        "min": 52.22399905323982,
+        "n": 150,
+        "std": 15.280553390001096
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 133.64432379603386,
+        "mean": 70.70576461652915,
+        "median": 70.88202983140945,
+        "min": 52.413903176784515,
+        "n": 150,
+        "std": 15.1094012385618
+      }
+    },
+    {
+      "event_us": {
+        "max": 241.66400730609894,
+        "mean": 133.0589871108532,
+        "median": 122.8799968957901,
+        "min": 114.656001329422,
+        "n": 150,
+        "std": 22.254644841236257
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 240.0190569460392,
+        "mean": 132.06872157752514,
+        "median": 121.22746556997299,
+        "min": 112.59876191616058,
+        "n": 150,
+        "std": 24.094616083445356
+      }
+    },
+    {
+      "event_us": {
+        "max": 71.68000191450119,
+        "mean": 36.767146637042366,
+        "median": 31.74399957060814,
+        "min": 28.672000393271446,
+        "n": 150,
+        "std": 9.208986478908857
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 73.06830957531929,
+        "mean": 34.779819349447884,
+        "median": 31.08847886323929,
+        "min": 28.700102120637894,
+        "n": 150,
+        "std": 7.7454982274444335
+      }
+    },
+    {
+      "event_us": {
+        "max": 128.00000607967377,
+        "mean": 79.90613440672557,
+        "median": 75.77600330114365,
+        "min": 70.68800181150436,
+        "n": 150,
+        "std": 10.78354943273844
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 114.52287435531616,
+        "mean": 77.96465108791988,
+        "median": 74.18100722134113,
+        "min": 69.19587031006813,
+        "n": 150,
+        "std": 10.11052279757542
+      }
+    },
+    {
+      "event_us": {
+        "max": 114.68800157308578,
+        "mean": 83.23413357138634,
+        "median": 78.84799689054489,
+        "min": 75.77600330114365,
+        "n": 150,
+        "std": 7.439022547997827
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 117.45374649763107,
+        "mean": 87.13094828029473,
+        "median": 83.2313671708107,
+        "min": 80.26743307709694,
+        "n": 150,
+        "std": 7.168419404766328
+      }
+    },
+    {
+      "event_us": {
+        "max": 539.5839810371399,
+        "mean": 503.790726463,
+        "median": 502.78401374816895,
+        "min": 497.6640045642853,
+        "n": 150,
+        "std": 6.133711288598372
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 588.3541889488697,
+        "mean": 510.0696937491496,
+        "median": 507.60526210069656,
+        "min": 504.57706674933434,
+        "n": 150,
+        "std": 8.419377388216228
+      }
+    },
+    {
+      "event_us": {
+        "max": 188.48000466823578,
+        "mean": 153.7096549073855,
+        "median": 150.52799880504608,
+        "min": 145.4080045223236,
+        "n": 150,
+        "std": 6.784791674359651
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 189.8440532386303,
+        "mean": 158.7742536018292,
+        "median": 155.91178089380264,
+        "min": 149.46004375815392,
+        "n": 150,
+        "std": 7.268417350954617
+      }
+    },
+    {
+      "event_us": {
+        "max": 467.9679870605469,
+        "mean": 448.9188241958618,
+        "median": 447.488009929657,
+        "min": 444.35200095176697,
+        "n": 150,
+        "std": 4.527349728875623
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 478.96336764097214,
+        "mean": 455.1383356253306,
+        "median": 453.3573519438505,
+        "min": 448.65719974040985,
+        "n": 150,
+        "std": 5.115755101203966
+      }
+    },
+    {
+      "event_us": {
+        "max": 266.2400007247925,
+        "mean": 168.24064155419669,
+        "median": 161.79199516773224,
+        "min": 146.43199741840363,
+        "n": 150,
+        "std": 25.27930415645559
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 281.70784935355186,
+        "mean": 176.83377799888453,
+        "median": 169.0974459052086,
+        "min": 151.6616903245449,
+        "n": 150,
+        "std": 29.104976394421904
+      }
+    },
+    {
+      "event_us": {
+        "max": 512.0000243186951,
+        "mean": 417.421226700147,
+        "median": 412.6720130443573,
+        "min": 397.3119854927063,
+        "n": 150,
+        "std": 18.900324985847497
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 483.9501343667507,
+        "mean": 426.54574538270634,
+        "median": 423.36713522672653,
+        "min": 402.6009701192379,
+        "n": 150,
+        "std": 18.101375373945203
+      }
+    },
+    {
+      "event_us": {
+        "max": 261.1199915409088,
+        "mean": 212.67882625261942,
+        "median": 211.96800470352173,
+        "min": 200.70399343967438,
+        "n": 150,
+        "std": 9.293208463798555
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 288.5819412767887,
+        "mean": 219.4533310830593,
+        "median": 216.61841310560703,
+        "min": 203.94101738929749,
+        "n": 150,
+        "std": 13.07774506914524
+      }
+    },
+    {
+      "event_us": {
+        "max": 614.4000291824341,
+        "mean": 568.3313055833181,
+        "median": 565.2480125427246,
+        "min": 560.1279735565186,
+        "n": 150,
+        "std": 8.509607298513487
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 626.611988991499,
+        "mean": 574.8544322947661,
+        "median": 570.5258809030056,
+        "min": 564.9607628583908,
+        "n": 150,
+        "std": 10.299317269738282
+      }
+    },
+    {
+      "event_us": {
+        "max": 261.05600595474243,
+        "mean": 209.52085236708322,
+        "median": 207.85599946975708,
+        "min": 198.65599274635315,
+        "n": 150,
+        "std": 10.433417476313128
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 270.75689285993576,
+        "mean": 214.97968273858228,
+        "median": 212.81978115439415,
+        "min": 201.66486501693726,
+        "n": 150,
+        "std": 11.931517682638601
+      }
+    },
+    {
+      "event_us": {
+        "max": 615.4239773750305,
+        "mean": 577.4111986160278,
+        "median": 575.4400193691254,
+        "min": 568.3199763298035,
+        "n": 150,
+        "std": 7.955921669983834
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 631.5154023468494,
+        "mean": 585.0024707615376,
+        "median": 580.6202534586191,
+        "min": 575.6332539021969,
+        "n": 150,
+        "std": 9.30915126540527
+      }
+    },
+    {
+      "event_us": {
+        "max": 497.6640045642853,
+        "mean": 453.2942924896876,
+        "median": 452.57601141929626,
+        "min": 442.3680007457733,
+        "n": 150,
+        "std": 8.870331396336223
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 501.1758767068386,
+        "mean": 459.58527363836765,
+        "median": 456.0435190796852,
+        "min": 449.140090495348,
+        "n": 150,
+        "std": 9.736366602946724
+      }
+    },
+    {
+      "event_us": {
+        "max": 218.1120067834854,
+        "mean": 196.5169072151184,
+        "median": 195.5839991569519,
+        "min": 188.4160041809082,
+        "n": 150,
+        "std": 5.017004042204055
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 224.1348847746849,
+        "mean": 200.47912995020548,
+        "median": 199.15401935577393,
+        "min": 192.4377866089344,
+        "n": 150,
+        "std": 5.24562077172442
+      }
+    },
+    {
+      "event_us": {
+        "max": 280.5759906768799,
+        "mean": 257.08287874857587,
+        "median": 254.97600436210632,
+        "min": 250.88000297546387,
+        "n": 150,
+        "std": 5.215906917921787
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 307.86311253905296,
+        "mean": 263.14963897069293,
+        "median": 260.491156950593,
+        "min": 255.36119937896729,
+        "n": 150,
+        "std": 7.933338956593574
+      }
+    },
+    {
+      "event_us": {
+        "max": 913.4079813957214,
+        "mean": 882.4209066232046,
+        "median": 879.6160221099854,
+        "min": 859.1359853744507,
+        "n": 150,
+        "std": 14.409649739334842
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 920.0349450111389,
+        "mean": 889.106597751379,
+        "median": 886.1059322953224,
+        "min": 861.4980615675449,
+        "n": 150,
+        "std": 14.303591698343373
+      }
+    },
+    {
+      "event_us": {
+        "max": 6153.2158851623535,
+        "mean": 6098.274329503377,
+        "median": 6082.560062408447,
+        "min": 6077.439785003662,
+        "n": 150,
+        "std": 23.47755683436529
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6286.221090704203,
+        "mean": 6108.199454223116,
+        "median": 6090.747890993953,
+        "min": 6083.558779209852,
+        "n": 150,
+        "std": 28.875286517232624
+      }
+    },
+    {
+      "event_us": {
+        "max": 1909.7599983215332,
+        "mean": 1815.0387048721313,
+        "median": 1811.4559650421143,
+        "min": 1803.2640218734741,
+        "n": 150,
+        "std": 11.225291638492674
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 5127.066280692816,
+        "mean": 1844.2889489233494,
+        "median": 1818.7910318374634,
+        "min": 1810.428686439991,
+        "n": 150,
+        "std": 269.11109946325314
+      }
+    },
+    {
+      "event_us": {
+        "max": 6773.759841918945,
+        "mean": 6752.170683542888,
+        "median": 6749.184131622314,
+        "min": 6744.063854217529,
+        "n": 150,
+        "std": 7.74295011581507
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6820.659153163433,
+        "mean": 6761.007377256949,
+        "median": 6758.232368156314,
+        "min": 6751.572247594595,
+        "n": 150,
+        "std": 9.798204632593812
+      }
+    },
+    {
+      "event_us": {
+        "max": 1822.7200508117676,
+        "mean": 1732.8183523813884,
+        "median": 1727.4880409240723,
+        "min": 1707.0080041885376,
+        "n": 150,
+        "std": 22.134604083877008
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 1979.6178676187992,
+        "mean": 1747.466279193759,
+        "median": 1737.4432645738125,
+        "min": 1714.6570608019829,
+        "n": 150,
+        "std": 35.048611123314124
+      }
+    },
+    {
+      "event_us": {
+        "max": 5457.920074462891,
+        "mean": 5335.067300796509,
+        "median": 5331.455945968628,
+        "min": 5279.776096343994,
+        "n": 150,
+        "std": 30.900445699775318
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6219.531875103712,
+        "mean": 5359.887977441152,
+        "median": 5347.879137843847,
+        "min": 5301.817320287228,
+        "n": 150,
+        "std": 77.87041234660241
+      }
+    },
+    {
+      "event_us": {
+        "max": 2787.328004837036,
+        "mean": 2678.4708054860434,
+        "median": 2668.544054031372,
+        "min": 2646.0158824920654,
+        "n": 150,
+        "std": 28.98214338392344
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 2826.876938343048,
+        "mean": 2689.1256061693034,
+        "median": 2677.0876720547676,
+        "min": 2649.0739546716213,
+        "n": 150,
+        "std": 34.39564536099117
+      }
+    },
+    {
+      "event_us": {
+        "max": 7104.5122146606445,
+        "mean": 6953.2533232371015,
+        "median": 6938.623905181885,
+        "min": 6912.992000579834,
+        "n": 150,
+        "std": 37.79927829278732
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 7159.448694437742,
+        "mean": 6967.077519123753,
+        "median": 6946.761859580874,
+        "min": 6923.705339431763,
+        "n": 150,
+        "std": 46.668800717064705
+      }
+    },
+    {
+      "event_us": {
+        "max": 2828.2880783081055,
+        "mean": 2673.3087984720864,
+        "median": 2665.4720306396484,
+        "min": 2651.1359214782715,
+        "n": 150,
+        "std": 22.63951282627475
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "3b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 2823.9008970558643,
+        "mean": 2684.5202315598726,
+        "median": 2677.4355210363865,
+        "min": 2657.0423506200314,
+        "n": 150,
+        "std": 24.22059542767129
+      }
+    },
+    {
+      "event_us": {
+        "max": 12126.208305358887,
+        "mean": 11984.540774027506,
+        "median": 11973.631858825684,
+        "min": 11964.415550231934,
+        "n": 150,
+        "std": 28.195304188535715
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "3b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 12196.571100503206,
+        "mean": 11996.345985680819,
+        "median": 11982.369003817439,
+        "min": 11971.304193139076,
+        "n": 150,
+        "std": 34.183738886835556
+      }
+    },
+    {
+      "event_us": {
+        "max": 6294.528007507324,
+        "mean": 6248.753906885783,
+        "median": 6248.447895050049,
+        "min": 6225.9202003479,
+        "n": 150,
+        "std": 13.588795044942067
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "3b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6327.916868031025,
+        "mean": 6262.727572272222,
+        "median": 6260.160356760025,
+        "min": 6236.058194190264,
+        "n": 150,
+        "std": 16.420861905461912
+      }
+    },
+    {
+      "event_us": {
+        "max": 2678.783893585205,
+        "mean": 2642.376135190328,
+        "median": 2640.8960819244385,
+        "min": 2631.6800117492676,
+        "n": 150,
+        "std": 7.705132820323086
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "3b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 2685.4537427425385,
+        "mean": 2651.1567582686744,
+        "median": 2649.3328623473644,
+        "min": 2638.6440731585026,
+        "n": 150,
+        "std": 8.688091812157289
+      }
+    },
+    {
+      "event_us": {
+        "max": 3611.6480827331543,
+        "mean": 3585.0498485565186,
+        "median": 3582.9761028289795,
+        "min": 3573.7600326538086,
+        "n": 150,
+        "std": 6.961152663704859
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "3b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 3619.4813437759876,
+        "mean": 3594.198627397418,
+        "median": 3592.552850022912,
+        "min": 3581.02610334754,
+        "n": 150,
+        "std": 8.209583813630486
+      }
+    },
+    {
+      "event_us": {
+        "max": 61.43999844789505,
+        "mean": 40.06805278360844,
+        "median": 38.91199827194214,
+        "min": 36.86400130391121,
+        "n": 150,
+        "std": 3.3799702040513018
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 69.93534043431282,
+        "mean": 43.58545566598574,
+        "median": 42.73839294910431,
+        "min": 40.75421020388603,
+        "n": 150,
+        "std": 3.466150062347275
+      }
+    },
+    {
+      "event_us": {
+        "max": 72.7040022611618,
+        "mean": 34.71018670747677,
+        "median": 30.719999223947525,
+        "min": 28.672000393271446,
+        "n": 150,
+        "std": 8.132455584452504
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 65.70620462298393,
+        "mean": 35.280423859755196,
+        "median": 32.36648626625538,
+        "min": 30.371826142072678,
+        "n": 150,
+        "std": 6.578275033001112
+      }
+    },
+    {
+      "event_us": {
+        "max": 83.96799862384796,
+        "mean": 41.873494014143944,
+        "median": 36.86400130391121,
+        "min": 34.752000123262405,
+        "n": 150,
+        "std": 9.958210650407107
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 86.85002103447914,
+        "mean": 41.59101905922095,
+        "median": 36.07431426644325,
+        "min": 34.281983971595764,
+        "n": 150,
+        "std": 9.57482060978401
+      }
+    },
+    {
+      "event_us": {
+        "max": 67.58400052785873,
+        "mean": 34.5981868977348,
+        "median": 30.719999223947525,
+        "min": 27.648000046610832,
+        "n": 150,
+        "std": 8.136162933114615
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 70.24593651294708,
+        "mean": 33.85016384224097,
+        "median": 30.40861338376999,
+        "min": 28.301961719989777,
+        "n": 150,
+        "std": 6.966258079218268
+      }
+    },
+    {
+      "event_us": {
+        "max": 257.02399015426636,
+        "mean": 137.79712056120238,
+        "median": 123.87199699878693,
+        "min": 109.56799983978271,
+        "n": 150,
+        "std": 33.712270962631514
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 239.92639034986496,
+        "mean": 135.94369093577066,
+        "median": 123.67102317512035,
+        "min": 108.36496949195862,
+        "n": 150,
+        "std": 29.951219211608446
+      }
+    },
+    {
+      "event_us": {
+        "max": 391.1679983139038,
+        "mean": 233.1566932797432,
+        "median": 219.13599967956543,
+        "min": 191.48799777030945,
+        "n": 150,
+        "std": 44.4571078270251
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 396.72479033470154,
+        "mean": 230.00461670259634,
+        "median": 217.44659170508385,
+        "min": 190.86617976427078,
+        "n": 150,
+        "std": 42.427722251538356
+      }
+    },
+    {
+      "event_us": {
+        "max": 139.26400244235992,
+        "mean": 66.57856059571107,
+        "median": 59.39200147986412,
+        "min": 54.27199974656105,
+        "n": 150,
+        "std": 15.577375072115236
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 122.00186029076576,
+        "mean": 65.28112726906936,
+        "median": 58.44770930707455,
+        "min": 55.033713579177856,
+        "n": 150,
+        "std": 14.416506462830025
+      }
+    },
+    {
+      "event_us": {
+        "max": 120.83200365304947,
+        "mean": 59.501866276065506,
+        "median": 54.27199974656105,
+        "min": 49.18399825692177,
+        "n": 150,
+        "std": 12.043888926154121
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 95.02889588475227,
+        "mean": 60.031057024995484,
+        "median": 55.18971011042595,
+        "min": 51.131006330251694,
+        "n": 150,
+        "std": 9.581236028698813
+      }
+    },
+    {
+      "event_us": {
+        "max": 101.3759970664978,
+        "mean": 58.26325414081415,
+        "median": 50.6879985332489,
+        "min": 43.007999658584595,
+        "n": 150,
+        "std": 13.696134169213085
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 105.51698505878448,
+        "mean": 56.403481091062226,
+        "median": 47.694891691207886,
+        "min": 44.77985203266144,
+        "n": 150,
+        "std": 13.018657120950472
+      }
+    },
+    {
+      "event_us": {
+        "max": 88.06400001049042,
+        "mean": 56.83370674649874,
+        "median": 55.296000093221664,
+        "min": 52.22399905323982,
+        "n": 150,
+        "std": 4.68550339808299
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 74.49788972735405,
+        "mean": 59.270660082499184,
+        "median": 57.8584149479866,
+        "min": 55.19203841686249,
+        "n": 150,
+        "std": 4.168494054208344
+      }
+    },
+    {
+      "event_us": {
+        "max": 241.66400730609894,
+        "mean": 139.07498707373938,
+        "median": 125.44000148773193,
+        "min": 112.64000087976456,
+        "n": 150,
+        "std": 31.25565925816257
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 247.80584499239922,
+        "mean": 137.83425403138003,
+        "median": 123.04424308240414,
+        "min": 110.74217036366463,
+        "n": 150,
+        "std": 31.070496914132555
+      }
+    },
+    {
+      "event_us": {
+        "max": 77.79199630022049,
+        "mean": 35.06602689623833,
+        "median": 33.79200026392937,
+        "min": 31.74399957060814,
+        "n": 150,
+        "std": 5.319471975407217
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 55.28191104531288,
+        "mean": 38.15784429510435,
+        "median": 36.81471571326256,
+        "min": 35.18862649798393,
+        "n": 150,
+        "std": 3.6677668236070864
+      }
+    },
+    {
+      "event_us": {
+        "max": 139.26400244235992,
+        "mean": 80.2442678809166,
+        "median": 75.77600330114365,
+        "min": 69.63200122117996,
+        "n": 150,
+        "std": 11.378721910307517
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 1,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 106.65785521268845,
+        "mean": 77.9599944750468,
+        "median": 74.00684989988804,
+        "min": 67.74626672267914,
+        "n": 150,
+        "std": 9.325615180968349
+      }
+    },
+    {
+      "event_us": {
+        "max": 143.36000382900238,
+        "mean": 117.83381521701813,
+        "median": 116.73600226640701,
+        "min": 112.64000087976456,
+        "n": 150,
+        "std": 5.084283121185182
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 147.73476868867874,
+        "mean": 122.73499431709449,
+        "median": 121.11803516745567,
+        "min": 117.13709682226181,
+        "n": 150,
+        "std": 5.06599501960478
+      }
+    },
+    {
+      "event_us": {
+        "max": 933.8880181312561,
+        "mean": 866.6916255156199,
+        "median": 863.6960089206696,
+        "min": 854.0160059928894,
+        "n": 150,
+        "std": 10.636391675156867
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 950.1432068645954,
+        "mean": 875.0379830598831,
+        "median": 870.6622757017612,
+        "min": 860.6142364442348,
+        "n": 150,
+        "std": 13.729839369198318
+      }
+    },
+    {
+      "event_us": {
+        "max": 261.1199915409088,
+        "mean": 227.3258650302887,
+        "median": 225.2800017595291,
+        "min": 218.1120067834854,
+        "n": 150,
+        "std": 7.523831522168784
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 261.33982464671135,
+        "mean": 233.3645181109508,
+        "median": 231.05437867343426,
+        "min": 224.04873743653297,
+        "n": 150,
+        "std": 7.937541716990229
+      }
+    },
+    {
+      "event_us": {
+        "max": 803.8399815559387,
+        "mean": 770.5096554756165,
+        "median": 765.9519910812378,
+        "min": 758.7839961051941,
+        "n": 150,
+        "std": 9.470374025693067
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 820.7978680729866,
+        "mean": 778.1782560050488,
+        "median": 774.3791211396456,
+        "min": 765.9569382667542,
+        "n": 150,
+        "std": 10.788740535092481
+      }
+    },
+    {
+      "event_us": {
+        "max": 496.63999676704407,
+        "mean": 443.81930728753406,
+        "median": 435.7120096683502,
+        "min": 419.840008020401,
+        "n": 150,
+        "std": 19.26660055693852
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 529.8620089888573,
+        "mean": 455.0926635662715,
+        "median": 445.07067650556564,
+        "min": 426.49731040000916,
+        "n": 150,
+        "std": 23.18284579347656
+      }
+    },
+    {
+      "event_us": {
+        "max": 1003.5200119018555,
+        "mean": 859.1217076778412,
+        "median": 848.8960266113281,
+        "min": 832.5120210647583,
+        "n": 150,
+        "std": 26.665453435564082
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 1067.6449164748192,
+        "mean": 870.7948060085376,
+        "median": 858.9716162532568,
+        "min": 842.1237580478191,
+        "n": 150,
+        "std": 31.481078284892963
+      }
+    },
+    {
+      "event_us": {
+        "max": 353.2800078392029,
+        "mean": 318.66623799006146,
+        "median": 316.4159953594208,
+        "min": 310.2720081806183,
+        "n": 150,
+        "std": 6.7226813488732775
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 347.1071831882,
+        "mean": 323.25310943027335,
+        "median": 321.0867289453745,
+        "min": 315.0561824440956,
+        "n": 150,
+        "std": 6.384285592725951
+      }
+    },
+    {
+      "event_us": {
+        "max": 1129.472017288208,
+        "mean": 970.92138727506,
+        "median": 966.6400253772736,
+        "min": 954.367995262146,
+        "n": 150,
+        "std": 17.12462767705403
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 3510.009963065386,
+        "mean": 993.7075898051262,
+        "median": 972.8337172418833,
+        "min": 961.7567993700504,
+        "n": 150,
+        "std": 206.44781928159495
+      }
+    },
+    {
+      "event_us": {
+        "max": 337.92001008987427,
+        "mean": 317.4649598201116,
+        "median": 315.871998667717,
+        "min": 308.22399258613586,
+        "n": 150,
+        "std": 6.697229231321705
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 350.825022906065,
+        "mean": 322.7005402247111,
+        "median": 321.2990704923868,
+        "min": 311.1199475824833,
+        "n": 150,
+        "std": 7.972146317950505
+      }
+    },
+    {
+      "event_us": {
+        "max": 1035.264015197754,
+        "mean": 979.4540786743164,
+        "median": 976.8959879875183,
+        "min": 971.776008605957,
+        "n": 150,
+        "std": 9.07369660459589
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 1046.0847988724709,
+        "mean": 987.2616610179344,
+        "median": 984.4095911830664,
+        "min": 978.600699454546,
+        "n": 150,
+        "std": 9.795521411985776
+      }
+    },
+    {
+      "event_us": {
+        "max": 812.0319843292236,
+        "mean": 731.8722144762675,
+        "median": 729.5680046081543,
+        "min": 719.871997833252,
+        "n": 150,
+        "std": 10.584304536937216
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 818.9165964722633,
+        "mean": 739.6644540131092,
+        "median": 735.9874434769154,
+        "min": 725.2651266753674,
+        "n": 150,
+        "std": 12.061492469757424
+      }
+    },
+    {
+      "event_us": {
+        "max": 318.4640109539032,
+        "mean": 304.10688122113544,
+        "median": 303.1040132045746,
+        "min": 297.9840040206909,
+        "n": 150,
+        "std": 4.232011568183619
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 339.59466964006424,
+        "mean": 308.37517852584523,
+        "median": 307.55437910556793,
+        "min": 301.4029935002327,
+        "n": 150,
+        "std": 5.082943808287061
+      }
+    },
+    {
+      "event_us": {
+        "max": 449.535995721817,
+        "mean": 424.0424523750941,
+        "median": 422.91200160980225,
+        "min": 417.7919924259186,
+        "n": 150,
+        "std": 4.985782978960992
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 2048,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 869.5069700479507,
+        "mean": 433.17717500030994,
+        "median": 428.33504267036915,
+        "min": 421.4928485453129,
+        "n": 150,
+        "std": 36.808373524308266
+      }
+    },
+    {
+      "event_us": {
+        "max": 1538.0480289459229,
+        "mean": 1493.565862973531,
+        "median": 1498.1119632720947,
+        "min": 1448.9599466323853,
+        "n": 150,
+        "std": 20.16684075591091
+      },
+      "implementation": "A_only",
+      "label": "NAR A",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 1541.385892778635,
+        "mean": 1499.8313412070274,
+        "median": 1505.1004011183977,
+        "min": 1456.0488052666187,
+        "n": 150,
+        "std": 21.454863628469163
+      }
+    },
+    {
+      "event_us": {
+        "max": 10782.719612121582,
+        "mean": 10643.967138926188,
+        "median": 10625.02384185791,
+        "min": 10610.688209533691,
+        "n": 150,
+        "std": 40.76173194491194
+      },
+      "implementation": "B_shuffle_only",
+      "label": "NAR B (shuffle)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 10946.357157081366,
+        "mean": 10662.271212786436,
+        "median": 10634.672129526734,
+        "min": 10617.665015161037,
+        "n": 150,
+        "std": 59.92680998486572
+      }
+    },
+    {
+      "event_us": {
+        "max": 3190.783977508545,
+        "mean": 3124.168747266134,
+        "median": 3119.1039085388184,
+        "min": 3111.936092376709,
+        "n": 150,
+        "std": 13.129147283468336
+      },
+      "implementation": "B_tc_only",
+      "label": "NAR B (TC)",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 3184.7390346229076,
+        "mean": 3131.141805400451,
+        "median": 3125.556977465749,
+        "min": 3116.882871836424,
+        "n": 150,
+        "std": 13.175554004285932
+      }
+    },
+    {
+      "event_us": {
+        "max": 11842.559814453125,
+        "mean": 11756.595802307129,
+        "median": 11754.479885101318,
+        "min": 11748.35205078125,
+        "n": 150,
+        "std": 9.586284976088386
+      },
+      "implementation": "block_hadamard_native",
+      "label": "Block-Had native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 11883.700732141733,
+        "mean": 11767.151538903514,
+        "median": 11763.693066313863,
+        "min": 11756.309308111668,
+        "n": 150,
+        "std": 13.2767081107715
+      }
+    },
+    {
+      "event_us": {
+        "max": 6189.055919647217,
+        "mean": 5968.308041890462,
+        "median": 5956.607818603516,
+        "min": 5859.327793121338,
+        "n": 150,
+        "std": 63.163920480363174
+      },
+      "implementation": "hadamard_fp16",
+      "label": "Hadamard (FP16)",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6316.762883216143,
+        "mean": 5990.145097797115,
+        "median": 5974.462488666177,
+        "min": 5862.959194928408,
+        "n": 150,
+        "std": 77.43740906283071
+      }
+    },
+    {
+      "event_us": {
+        "max": 12505.087852478027,
+        "mean": 12185.258026123047,
+        "median": 12148.736000061035,
+        "min": 12104.703903198242,
+        "n": 150,
+        "std": 77.49384540222084
+      },
+      "implementation": "hadamard_plus_quantizer",
+      "label": "Hadamard + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 12533.38810056448,
+        "mean": 12198.564733068148,
+        "median": 12174.742529168725,
+        "min": 12126.768007874489,
+        "n": 150,
+        "std": 73.6825751620487
+      }
+    },
+    {
+      "event_us": {
+        "max": 4729.856014251709,
+        "mean": 4596.011950174968,
+        "median": 4579.8399448394775,
+        "min": 4557.82413482666,
+        "n": 150,
+        "std": 37.77800704230602
+      },
+      "implementation": "nar_generic",
+      "label": "NAR generic",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 4773.030057549477,
+        "mean": 4604.586313168208,
+        "median": 4587.556002661586,
+        "min": 4569.083917886019,
+        "n": 150,
+        "std": 35.91704087808762
+      }
+    },
+    {
+      "event_us": {
+        "max": 12392.448425292969,
+        "mean": 12080.14102935791,
+        "median": 12058.111667633057,
+        "min": 12031.999588012695,
+        "n": 150,
+        "std": 59.5186620822378
+      },
+      "implementation": "nar_generic_shuffle",
+      "label": "NAR shuffle",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 12342.674192041159,
+        "mean": 12092.977867772182,
+        "median": 12063.543312251568,
+        "min": 12038.730084896088,
+        "n": 150,
+        "std": 60.728663332309715
+      }
+    },
+    {
+      "event_us": {
+        "max": 4910.0799560546875,
+        "mean": 4615.434045791626,
+        "median": 4586.495876312256,
+        "min": 4550.655841827393,
+        "n": 150,
+        "std": 70.86055633553838
+      },
+      "implementation": "nar_module",
+      "label": "NAR module",
+      "model": "8b",
+      "scope": "E28 slot",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 4909.807816147804,
+        "mean": 4632.432538395126,
+        "median": 4606.582224369049,
+        "min": 4557.740408927202,
+        "n": 150,
+        "std": 75.53978330182613
+      }
+    },
+    {
+      "event_us": {
+        "max": 20981.760025024414,
+        "mean": 20897.962608337402,
+        "median": 20895.23220062256,
+        "min": 20882.43293762207,
+        "n": 150,
+        "std": 11.90102463550897
+      },
+      "implementation": "nar_native",
+      "label": "NAR native",
+      "model": "8b",
+      "scope": "E17 native",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 21271.246019750834,
+        "mean": 20913.2064661632,
+        "median": 20906.344521790743,
+        "min": 20886.98511943221,
+        "n": 150,
+        "std": 38.418356612928164
+      }
+    },
+    {
+      "event_us": {
+        "max": 10992.639541625977,
+        "mean": 10809.281520843506,
+        "median": 10802.176475524902,
+        "min": 10775.551795959473,
+        "n": 150,
+        "std": 29.460855987633035
+      },
+      "implementation": "nar_plus_quantizer",
+      "label": "NAR + Q",
+      "model": "8b",
+      "scope": "E28 frontend",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 11025.770101696253,
+        "mean": 10834.98232687513,
+        "median": 10825.49523562193,
+        "min": 10789.934080094099,
+        "n": 150,
+        "std": 38.861917168895985
+      }
+    },
+    {
+      "event_us": {
+        "max": 4703.2318115234375,
+        "mean": 4582.338778177897,
+        "median": 4568.063974380493,
+        "min": 4536.320209503174,
+        "n": 150,
+        "std": 37.05958051267658
+      },
+      "implementation": "nar_prebound",
+      "label": "NAR prebound",
+      "model": "8b",
+      "scope": "E28 dispatch (preallocated)",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 4705.0886787474155,
+        "mean": 4595.50934843719,
+        "median": 4581.873072311282,
+        "min": 4542.303271591663,
+        "n": 150,
+        "std": 37.58296769896887
+      }
+    },
+    {
+      "event_us": {
+        "max": 6316.06388092041,
+        "mean": 6231.975053151448,
+        "median": 6224.384069442749,
+        "min": 6209.536075592041,
+        "n": 150,
+        "std": 20.714672209543153
+      },
+      "implementation": "shared_quantizer",
+      "label": "Shared quantizer",
+      "model": "8b",
+      "scope": "E28 stage",
+      "sessions": 3,
+      "status": "COMPLETE",
+      "tokens": 32768,
+      "valid_sessions": 3,
+      "wall_us": {
+        "max": 6402.801256626844,
+        "mean": 6248.283010597031,
+        "median": 6234.653992578387,
+        "min": 6216.584239155054,
+        "n": 150,
+        "std": 32.86863424393526
+      }
+    }
+  ]
 }

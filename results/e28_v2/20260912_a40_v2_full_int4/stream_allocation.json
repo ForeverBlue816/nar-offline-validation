@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-09-12T12:41:50.129242+00:00",
+  "job_id": "150938",
+  "expected_gpu_uuid": "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22",
+  "observed_gpu_uuids": [
+    "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22"
+  ],
+  "affinity": [
+    32,
+    33,
+    34,
+    35
+  ],
+  "cgroup": "0::/system.slice/gpu-a40-1_slurmstepd.scope/job_150938/step_batch/user/task_0\n",
+  "scope": "The full private-backend eager/graph panel runs in this allocation; no ratios cross into original-binary core records."
+}

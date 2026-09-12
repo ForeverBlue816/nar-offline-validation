@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-09-12T12:44:00.279208+00:00",
+  "status": "PASS",
+  "rows": [
+    {
+      "path": "/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/fast_hadamard_transform_cuda.cpython-311-x86_64-linux-gnu.so",
+      "sha256": "7ca48dacc0936095da3bf491e69909367e4e3b919a2f026b6764cd01d33952c7",
+      "unchanged": true
+    },
+    {
+      "path": "/projects/nar/nar-validation/external/quarot/quarot/_CUDA.cpython-311-x86_64-linux-gnu.so",
+      "sha256": "3639d33f456151a8781e30f84d8af70a2da1a595d4f81209a206df03361452ec",
+      "unchanged": true
+    }
+  ]
+}

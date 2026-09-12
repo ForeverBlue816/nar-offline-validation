@@ -173,6 +173,82 @@
       "direction_consistent": false,
       "fp16_comparison": {
         "hadamard": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.43794791688817253
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.532412232423805
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.43794791688817253,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": -17.742701948372574,
+      "nar_speedup": 0.532412232423805,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode8",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.17742701948372575
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.47703798769643263
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5592727531270263
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.47703798769643263,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": -14.703874803626615,
+      "nar_speedup": 0.5592727531270263,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode8192",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.14703874803626615
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
           "direction_consistent": true,
           "interpretation": "slower than FP16 in all three sessions",
           "session_speedups": [
@@ -397,6 +473,82 @@
       "direction_consistent": false,
       "fp16_comparison": {
         "hadamard": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5421907015223805
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.6490386009162146
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.5421907015223805,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "nar_latency_overhead_pct": -16.462487630628196,
+      "nar_speedup": 0.6490386009162146,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode8",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.16462487630628198
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.7298886313746316
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": false,
+          "interpretation": "fewer than three comparable sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.7547383452921925
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.7298886313746316,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "nar_latency_overhead_pct": -3.2924938917659574,
+      "nar_speedup": 0.7547383452921925,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode8192",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.032924938917659574
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
           "direction_consistent": true,
           "interpretation": "slower than FP16 in all three sessions",
           "session_speedups": [
@@ -450,11 +602,65 @@
     }
   ],
   "correctness_status": {
+    "backend_fingerprint_current_stream": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "COMPLETE"
+    },
+    "backend_fingerprint_original": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "COMPLETE"
+    },
     "cache_diagnose": {
       "complete": null,
       "completed_layers": null,
       "reason": null,
       "status": "DIAGNOSTIC_RECORDED"
+    },
+    "graph_3b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_3b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_3b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_8b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_8b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_8b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": "Growing-cache/A-B-A replay check failed; graph timing excluded",
+      "status": "INVALID"
+    },
+    "graph_stream_3b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
     },
     "model_3b_fp16": {
       "complete": null,
@@ -492,6 +698,18 @@
       "reason": null,
       "status": "PASS"
     },
+    "model_real_3b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_real_8b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
     "operators_all": {
       "complete": null,
       "completed_layers": null,
@@ -507,6 +725,30 @@
     "r4_8b": {
       "complete": true,
       "completed_layers": 32,
+      "reason": null,
+      "status": "PASS"
+    },
+    "r4_extended_3b": {
+      "complete": true,
+      "completed_layers": 28,
+      "reason": null,
+      "status": "PASS"
+    },
+    "r4_extended_8b": {
+      "complete": true,
+      "completed_layers": 32,
+      "reason": null,
+      "status": "PASS"
+    },
+    "rope_reference_3b": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "rope_reference_8b": {
+      "complete": null,
+      "completed_layers": null,
       "reason": null,
       "status": "PASS"
     }
@@ -571,6 +813,88 @@
         "min": 20.582083410893876,
         "n": 150,
         "std": 0.7443631666793399
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 11549595648,
+      "peak_reserved_bytes": 11892948992,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 22.598580616371084,
+        "mean": 22.598580616371084,
+        "median": 22.598580616371084,
+        "min": 22.598580616371084,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 23.821465333458036,
+          "mean": 22.64255918686589,
+          "median": 22.598580616371084,
+          "min": 21.245485656739522,
+          "n": 50,
+          "session": 1,
+          "std": 0.47076783453970145
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 23.821465333458036,
+        "mean": 22.64255918686589,
+        "median": 22.598580616371084,
+        "min": 21.245485656739522,
+        "n": 50,
+        "std": 0.47076783453970145
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 9886799872,
+      "peak_reserved_bytes": 10078912512,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 24.121293961070478,
+        "mean": 24.121293961070478,
+        "median": 24.121293961070478,
+        "min": 24.121293961070478,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 24.155558230510604,
+          "mean": 24.12274692292946,
+          "median": 24.121293961070478,
+          "min": 24.10399941727519,
+          "n": 50,
+          "session": 1,
+          "std": 0.014367117326592165
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 24.155558230510604,
+        "mean": 24.12274692292946,
+        "median": 24.121293961070478,
+        "min": 24.10399941727519,
+        "n": 50,
+        "std": 0.014367117326592165
       }
     },
     {
@@ -818,6 +1142,88 @@
       }
     },
     {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 6130262016,
+      "peak_reserved_bytes": 6991904768,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 51.6010688598423,
+        "mean": 51.6010688598423,
+        "median": 51.6010688598423,
+        "min": 51.6010688598423,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 54.289996123407036,
+          "mean": 50.685701254832864,
+          "median": 51.6010688598423,
+          "min": 44.38228359989201,
+          "n": 50,
+          "session": 1,
+          "std": 2.4552134353743718
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 54.289996123407036,
+        "mean": 50.685701254832864,
+        "median": 51.6010688598423,
+        "min": 44.38228359989201,
+        "n": 50,
+        "std": 2.4552134353743718
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 5102886912,
+      "peak_reserved_bytes": 5540675584,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 50.56472352977532,
+        "mean": 50.56472352977532,
+        "median": 50.56472352977532,
+        "min": 50.56472352977532,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 55.00336978972579,
+          "mean": 50.060207457824916,
+          "median": 50.56472352977532,
+          "min": 42.86991499053935,
+          "n": 50,
+          "session": 1,
+          "std": 3.7146899462621645
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 55.00336978972579,
+        "mean": 50.060207457824916,
+        "median": 50.56472352977532,
+        "min": 42.86991499053935,
+        "n": 50,
+        "std": 3.7146899462621645
+      }
+    },
+    {
       "independent_sessions": 3,
       "method": "hadamard",
       "mode": "eager_sequence",
@@ -1059,6 +1465,88 @@
         "min": 40.74098333949223,
         "n": 150,
         "std": 1.1964961944929202
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 6152840192,
+      "peak_reserved_bytes": 7012876288,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 42.445645009865984,
+        "mean": 42.445645009865984,
+        "median": 42.445645009865984,
+        "min": 42.445645009865984,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 43.71220334044968,
+          "mean": 42.531146847953394,
+          "median": 42.445645009865984,
+          "min": 41.20526790696507,
+          "n": 50,
+          "session": 1,
+          "std": 0.6963881388187435
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 43.71220334044968,
+        "mean": 42.531146847953394,
+        "median": 42.445645009865984,
+        "min": 41.20526790696507,
+        "n": 50,
+        "std": 0.6963881388187435
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 5125464576,
+      "peak_reserved_bytes": 5563744256,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 43.12974988715723,
+        "mean": 43.12974988715723,
+        "median": 43.12974988715723,
+        "min": 43.12974988715723,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 50.525891373399645,
+          "mean": 44.34442442803022,
+          "median": 43.12974988715723,
+          "min": 41.73509110696614,
+          "n": 50,
+          "session": 1,
+          "std": 2.4447154740155126
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 50.525891373399645,
+        "mean": 44.34442442803022,
+        "median": 43.12974988715723,
+        "min": 41.73509110696614,
+        "n": 50,
+        "std": 2.4447154740155126
       }
     },
     {
@@ -1306,6 +1794,88 @@
       }
     },
     {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 22480136192,
+      "peak_reserved_bytes": 23481810944,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 33.133851626189426,
+        "mean": 33.133851626189426,
+        "median": 33.133851626189426,
+        "min": 33.133851626189426,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 33.17869461995239,
+          "mean": 33.13517312232094,
+          "median": 33.133851626189426,
+          "min": 33.11486305901781,
+          "n": 50,
+          "session": 1,
+          "std": 0.01095814487542157
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 33.17869461995239,
+        "mean": 33.13517312232094,
+        "median": 33.133851626189426,
+        "min": 33.11486305901781,
+        "n": 50,
+        "std": 0.01095814487542157
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 20297279488,
+      "peak_reserved_bytes": 20862468096,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 38.91137697889159,
+        "mean": 38.91137697889159,
+        "median": 38.91137697889159,
+        "min": 38.91137697889159,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 38.928128592669964,
+          "mean": 38.911917778197676,
+          "median": 38.91137697889159,
+          "min": 38.903152042378984,
+          "n": 50,
+          "session": 1,
+          "std": 0.0038916686064373015
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 38.928128592669964,
+        "mean": 38.911917778197676,
+        "median": 38.91137697889159,
+        "min": 38.903152042378984,
+        "n": 50,
+        "std": 0.0038916686064373015
+      }
+    },
+    {
       "independent_sessions": 3,
       "method": "fp16",
       "mode": "eager_sequence",
@@ -1547,6 +2117,88 @@
         "min": 50.79581711518889,
         "n": 150,
         "std": 1.0256219425379776
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 10805520384,
+      "peak_reserved_bytes": 12041846784,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 61.111065780278295,
+        "mean": 61.111065780278295,
+        "median": 61.111065780278295,
+        "min": 61.111065780278295,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 64.58459408410515,
+          "mean": 60.46291235686901,
+          "median": 61.111065780278295,
+          "min": 51.315484017444156,
+          "n": 50,
+          "session": 1,
+          "std": 2.8652142320594054
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 64.58459408410515,
+        "mean": 60.46291235686901,
+        "median": 61.111065780278295,
+        "min": 51.315484017444156,
+        "n": 50,
+        "std": 2.8652142320594054
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 9264375808,
+      "peak_reserved_bytes": 9946791936,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 53.31138930826758,
+        "mean": 53.31138930826758,
+        "median": 53.31138930826758,
+        "min": 53.31138930826758,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 62.24992284939314,
+          "mean": 54.39570629379402,
+          "median": 53.31138930826758,
+          "min": 50.69377560090894,
+          "n": 50,
+          "session": 1,
+          "std": 2.994498788087229
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 62.24992284939314,
+        "mean": 54.39570629379402,
+        "median": 53.31138930826758,
+        "min": 50.69377560090894,
+        "n": 50,
+        "std": 2.994498788087229
       }
     },
     {
@@ -1794,6 +2446,88 @@
       }
     },
     {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 10850053120,
+      "peak_reserved_bytes": 12113149952,
+      "phase": "decode8",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 51.05066413525492,
+        "mean": 51.05066413525492,
+        "median": 51.05066413525492,
+        "min": 51.05066413525492,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 53.43285040774693,
+          "mean": 51.154708606268585,
+          "median": 51.05066413525492,
+          "min": 49.638228580200426,
+          "n": 50,
+          "session": 1,
+          "std": 0.7720027757125324
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_sequence_decode8_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 53.43285040774693,
+        "mean": 51.154708606268585,
+        "median": 51.05066413525492,
+        "min": 49.638228580200426,
+        "n": 50,
+        "std": 0.7720027757125324
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 9308908032,
+      "peak_reserved_bytes": 10020192256,
+      "phase": "decode8192",
+      "required_sessions": 1,
+      "session_median_dispersion": {
+        "max": 51.5561150716773,
+        "mean": 51.5561150716773,
+        "median": 51.5561150716773,
+        "min": 51.5561150716773,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 53.4636968979612,
+          "mean": 51.38871832448058,
+          "median": 51.5561150716773,
+          "min": 49.57009745606532,
+          "n": 50,
+          "session": 1,
+          "std": 1.0172727594102464
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_sequence_decode8192_s1"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 53.4636968979612,
+        "mean": 51.38871832448058,
+        "median": 51.5561150716773,
+        "min": 49.57009745606532,
+        "n": 50,
+        "std": 1.0172727594102464
+      }
+    },
+    {
       "independent_sessions": 3,
       "method": "nar",
       "mode": "eager_sequence",
@@ -1977,7 +2711,7 @@
       }
     }
   ],
-  "generated_at": "2026-09-12T09:53:24.094212+00:00",
+  "generated_at": "2026-09-12T12:45:19.395122+00:00",
   "graph_performance": {
     "comparisons": [],
     "deployment": [],
@@ -2144,7 +2878,7 @@
     "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
     "stage_completion": null,
     "status": "INCOMPLETE",
-    "timestamp": "2026-09-12T09:53:24.100892+00:00"
+    "timestamp": "2026-09-12T12:45:19.399027+00:00"
   },
   "missing_policy": "null+reason; never fill unmeasured performance with zero",
   "protocol_sha256": "9fb2c2cfdcdb666c661a4c84c91d6c436c1043e80a5cb43bc58c29ad52383528",

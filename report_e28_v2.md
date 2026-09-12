@@ -1,5 +1,112 @@
-# E28-v2
+# E28-v2: auditable deployment experiments
 
-The current experiment record is [20260912_a40_v2_full_int4](results/e28_v2/20260912_a40_v2_full_int4/report_e28_v2.md).
+Run record: [20260912_a40_v2_full_int4](results/e28_v2/20260912_a40_v2_full_int4/report_e28_v2.md).
 
-This is a random-weight integer kernel-swap study with explicit numerical gates. Native paper-format model deployment and real model quality are not established; the report also records the backend accumulator-overflow failures. Consult the linked report for completed, failed, blocked and pending stages.
+Generated 2026-09-12T12:45:20.207901+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
+
+## Initialization revision and reused evidence
+
+The first E28-v2 cohort used the legacy1..6 packed-byte range with name-stable shared weights: half the channels are zero and all other weights positive. Its8B NAR model produced nonfinite outputs: the last decoder residual overflowed FP16 although the R4 operators stayed finite. [Original failure and partial measurements](results/e28_v2/20260912_a40_v2/report_e28_v2.md) are retained. This run uses one predefined uniform0..255 packed-byte initialization for both integer methods, with unchanged scales/seeds/kernels/thresholds. It is a separate frozen random-weight protocol, not a claim of improved model quality.
+
+[Allocator-preflight correction](results/e28_v2/20260912_a40_v2_full_int4/allocator_preflight_revision.json) identifies the first two affected processes and their fully retained/repeated measurements. The reruns apply one consistent memory-preparation protocol; no run was selected by speed.
+
+[Reused correctness records](results/e28_v2/20260912_a40_v2_full_int4/reused_correctness.json) identify unchanged local operators/factors and FP16 states verified in the same A40 allocation. All four integer model paths are rechecked for the new state; all formal performance sessions are newly measured.
+
+## One-page status
+
+Core timing: **72/72** independent processes complete. Full timing completion does not override any numerical failure below. The [stage completion table](results/e28_v2/20260912_a40_v2_full_int4/tables/completion.md) separately tracks every P1/P2 check and timing panel.
+
+- Preserved original E28/E17/E22/E26 artifacts.
+- Froze counts, shapes, selected configs, thresholds and exclusions in [protocol.json](results/e28_v2/20260912_a40_v2_full_int4/protocol.json); execution provenance in [source_manifest.json](results/e28_v2/20260912_a40_v2_full_int4/source_manifest.json) and [execution_source_manifest.json](results/e28_v2/20260912_a40_v2_full_int4/execution_source_manifest.json).
+- Corrected shared INT4 initialization, stale RoPE caches, timing boundaries, complete cache reset, throughput statistics, independent memory and invalid acceleration-retention ratios. The common metadata optimization is checked against the original wrapper with the same rebuilt RoPE caches on both sides; this does not establish equivalence to historical stale-RoPE outputs.
+- The exact original environment and A40 are reused; no new GEMM, calibration or serving framework.
+- Native paper-format integer deployment is BLOCKED by missing matching complete checkpoint and incompatible group-scale/KV interfaces.
+
+| Check | Status | Reason |
+| --- | --- | --- |
+| backend_fingerprint_current_stream | COMPLETE |  |
+| backend_fingerprint_original | COMPLETE |  |
+| cache_diagnose | DIAGNOSTIC_RECORDED |  |
+| graph_3b_fp16 | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_3b_hadamard | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_3b_nar | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_fp16 | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_hadamard | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_8b_nar | INVALID | Growing-cache/A-B-A replay check failed; graph timing excluded |
+| graph_stream_3b_fp16 | PASS |  |
+| model_3b_fp16 | PASS |  |
+| model_3b_hadamard | PASS |  |
+| model_3b_nar | PASS |  |
+| model_8b_fp16 | PASS |  |
+| model_8b_hadamard | PASS |  |
+| model_8b_nar | PASS |  |
+| model_real_3b_fp16 | PASS |  |
+| model_real_8b_fp16 | PASS |  |
+| operators_all | FAIL |  |
+| r4_3b | PASS |  |
+| r4_8b | PASS |  |
+| r4_extended_3b | PASS |  |
+| r4_extended_8b | PASS |  |
+| rope_reference_3b | PASS |  |
+| rope_reference_8b | PASS |  |
+
+## Numerical boundaries and real weights
+
+- `int4_gemm_dequant` / large_accumulator, reduction width 8192: integer accumulation 401408 is exact, but conversion to FP16 before scale multiplication produces nonfinite output. This remains **FAIL** in the existing backend.
+- `int4_gemm_dequant` / large_accumulator, reduction width 14336: integer accumulation 702464 is exact, but conversion to FP16 before scale multiplication produces nonfinite output. This remains **FAIL** in the existing backend.
+
+Real base-checkpoint FP16 implementation checks: 3b: PASS; 8b: PASS. The independent pinned RoPE reference is recorded in `correctness/rope_reference_3b.json` and `correctness/rope_reference_8b.json` when run. This is separate from compensated INT4 checkpoint support and from model quality. Prefill hidden/logits and multi-step decode are checked; exact cache comparisons cover steps1,2,9,64,65,128.
+
+## Six questions
+
+1. **Which stages accelerate relative to FP16?** Ratios above1x indicate faster execution than FP16; ratios below1x indicate slower execution. Same-mode ratios only; [raw metrics and session status](results/e28_v2/20260912_a40_v2_full_int4/metrics_summary.json), [deployment prefill](results/e28_v2/20260912_a40_v2_full_int4/tables/deployment_prefill.md), [decode](results/e28_v2/20260912_a40_v2_full_int4/tables/deployment_decode.md).
+- 3b prefill1: Hadamard/FP16 speedup 1.26x; PrismQuant/FP16 1.25x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
+- 3b prefill16: Hadamard/FP16 speedup 1.28x; PrismQuant/FP16 1.26x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
+- 3b decode: Hadamard/FP16 speedup 0.51x; PrismQuant/FP16 0.52x. hadamard: slower than FP16 in all three sessions; nar: slower than FP16 in all three sessions.
+- 8b prefill1: Hadamard/FP16 speedup 1.45x; PrismQuant/FP16 1.46x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
+- 8b prefill16: Hadamard/FP16 speedup 1.49x; PrismQuant/FP16 1.51x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
+- 8b decode: Hadamard/FP16 speedup 0.57x; PrismQuant/FP16 0.60x. hadamard: slower than FP16 in all three sessions; nar: slower than FP16 in all three sessions.
+
+2. **What does PrismQuant add versus Hadamard?** See directly measured A/B/quantizer/chain times in [kernel table](results/e28_v2/20260912_a40_v2_full_int4/tables/kernel.md), same-mode wall ratios in [metrics](results/e28_v2/20260912_a40_v2_full_int4/metrics_summary.json), and exact unique-storage categories/deltas in [memory_breakdown.json](results/e28_v2/20260912_a40_v2_full_int4/memory_breakdown.json) and [memory_deltas.json](results/e28_v2/20260912_a40_v2_full_int4/memory_deltas.json). Factor storage is96d bytes per layer plus one shared32768-byte H128; scratch is recorded separately. No rounded-to-zero overhead claim.
+- 3b prefill1: NAR throughput is 98.87% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
+- 3b prefill16: NAR throughput is 98.52% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
+- 3b decode: NAR latency difference -2.37%; near parity / within observed variability.
+- 8b prefill1: NAR throughput is 100.92% of Hadamard; near parity / within observed variability.
+- 8b prefill16: NAR throughput is 101.11% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
+- 8b decode: NAR latency difference -4.36%; consistent observed direction across three sessions, specific to this implementation/workload.
+- 3b: separate profiled NAR-minus-Hadamard kernel sum 0.33 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
+- 8b: separate profiled NAR-minus-Hadamard kernel sum 0.52 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
+
+3. **Does dispatch optimization help reproducibly?** The generic/prebound protocol requires identical kernels, byte-equal outputs and three separately recorded sessions; only completed valid records support a conclusion. See [kernel records](results/e28_v2/20260912_a40_v2_full_int4/tables/kernel.md). A one-percent difference without consistent session direction is near parity, not a stable advantage.
+- 3b T=1: prebound/generic wall ratio 0.53, CUDA-event elapsed ratio 0.53; consistent direction in these three sessions; no cross-hardware claim.
+- 3b T=2048: prebound/generic wall ratio 0.91, CUDA-event elapsed ratio 0.92; consistent direction in these three sessions; no cross-hardware claim.
+- 3b T=32768: prebound/generic wall ratio 0.99, CUDA-event elapsed ratio 0.99; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=1: prebound/generic wall ratio 0.63, CUDA-event elapsed ratio 0.58; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=2048: prebound/generic wall ratio 0.96, CUDA-event elapsed ratio 0.96; consistent direction in these three sessions; no cross-hardware claim.
+- 8b T=32768: prebound/generic wall ratio 1.00, CUDA-event elapsed ratio 1.00; near parity / within observed variability.
+
+4. **Does graph replay grow the KV context?** See [graphability audit](results/e28_v2/20260912_a40_v2_full_int4/graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps1,2,9,64,65,128, full cache hashes and actual page crossing can pass. Original-binary capture and the bounded private current-stream adapter have separate records. Any matched adapter timing is in the [separate graph panel](results/e28_v2/20260912_a40_v2_full_int4/tables/graph_deployment.md), with [preparation and memory](results/e28_v2/20260912_a40_v2_full_int4/graph_memory_breakdown.json). No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null. Original backend: 0/6 PASS, 6/6 failed or blocked, 0/6 pending. Private current-stream backend: 1/6 PASS, 0/6 failed or blocked, 5/6 pending. Matched private timing panel: INCOMPLETE.
+
+5. **Which results execute integer kernels?** E28 Hadamard/NAR use the actual packed INT4 GEMM/quantizer and INT4 decode cache; FP16 uses FP16 arithmetic/cache. E17-native rows are local packed-activation microbenchmarks, not an end-to-end model. Random states are verified by [shared_state_audit.json](results/e28_v2/20260912_a40_v2_full_int4/shared_state_audit.json). Real model quality remains untested.
+
+6. **What is missing for the paper's group128 asymmetric path?** See [quantizer contract](results/e28_v2/20260912_a40_v2_full_int4/quantizer_contract.md) and [checkpoint audit](results/e28_v2/20260912_a40_v2_full_int4/checkpoint_audit.json). Per-group reduction scales/offsets need partial sums/corrections absent from this GEMM interface; token/channel KV grouping and residual windows also differ. No discarded offsets or FP16 substitute is presented as native integer deployment.
+
+## Session interruption and durable recovery
+
+The interactive driver step150777.7 was terminated during session2. Its interrupted prefill16 process had no complete timing samples; all29 complete processes were retained. The interrupted JSON is preserved under `raw_runs/interrupted_attempt_1/`, and only that unfinished process restarts with the same10 warmups and50 formal runs. The unplanned idle gap within session2 remains a protocol deviation, not a reason to select or drop timings. See [interruption record](results/e28_v2/20260912_a40_v2_full_int4/session_interruption_1.json).
+
+A durable CPU Slurm controller launches the continuation within the original A40 allocation. [Actual step/cgroup audit](results/e28_v2/20260912_a40_v2_full_int4/recovery_allocation_audit.json) confirms the same cores32--35, no CFS quota,40GiB host-memory limit and original GPU node. Raw environments preserve some inherited controller job fields; the actual GPU step TRES, host, affinity and cgroups are authoritative. Original execution manifests remain intact; resumed code has a separate timestamped manifest.
+
+## Private Graph provenance
+
+The [pre-measurement allocation amendment](results/e28_v2/20260912_a40_v2_full_int4/protocol_graph_allocation_addendum.json) places the full matched private-backend eager/graph panel in one subsequent allocation because the original allocation has a fixed12-hour limit. All three methods and both timing modes are compared within that panel; original-binary core results are kept separate. [Observed allocation](results/e28_v2/20260912_a40_v2_full_int4/stream_allocation.json) records the enforced physical A40 UUID and CPU affinity when the stage starts.
+
+The primary experiment driver and its durable controller both completed with exit0. The outer allocation was then deliberately cancelled to release the stopped predecessor parent and start the dependent Graph job; [the cleanup record](results/e28_v2/20260912_a40_v2_full_int4/primary_allocation_cleanup.json) distinguishes this scheduler status from experimental failure.
+
+The [cache-evidence amendment](results/e28_v2/20260912_a40_v2_full_int4/protocol_graph_cache_evidence_addendum.json), frozen before private Graph measurements, retains both already-computed expected/observed whole-cache hashes and metadata. Original-backend failed checks retained equality booleans only; they remain unchanged. This recording addition changes neither validation thresholds nor timing.
+
+## Technical appendix
+
+[Kernel design](results/e28_v2/20260912_a40_v2_full_int4/kernel_design.md), [old claims audit](results/e28_v2/20260912_a40_v2_full_int4/old_claim_audit.json), [compatibility table](results/e28_v2/20260912_a40_v2_full_int4/tables/compatibility.md), [memory table](results/e28_v2/20260912_a40_v2_full_int4/tables/memory.md), and [measured evidence appendix](results/e28_v2/20260912_a40_v2_full_int4/evidence_appendix.md), [profile summary](results/e28_v2/20260912_a40_v2_full_int4/profile_summary.json) and [profile traces](results/e28_v2/20260912_a40_v2_full_int4/profiles) provide the detailed evidence. The [predecessor attempt directory](results/e28_v2/20260912_a40_v2/correctness/attempt_1) retains initial harness failures; [harness corrections](results/e28_v2/20260912_a40_v2_full_int4/verification_harness_corrections.json) explain the repair without changing numerical thresholds.
+
+All tables are regenerated by `collect`, which never launches a GPU experiment. Memory is bytes/decimal GB; pooled150 runs represent3 sessions. Profiler kernel sums, CUDA-event elapsed and wall time are distinct. Missing counters mean bandwidth/compute bottleneck labels remain hypotheses.

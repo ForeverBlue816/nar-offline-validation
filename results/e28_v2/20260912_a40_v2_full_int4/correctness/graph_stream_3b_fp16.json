@@ -1,0 +1,4100 @@
+{
+  "backend": "current_stream",
+  "backend_manifest": {
+    "binary": "/home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2_full_int4/local_build/quarot/_CUDA.cpython-311-x86_64-linux-gnu.so",
+    "binary_sha256": "8a74e93227fb04b1805c7c93106fac767575169709fd683edd7a89f2c2b84085",
+    "command": [
+      "/projects/nar/nar-validation/e28-env/bin/python",
+      "setup_stream.py",
+      "build_ext",
+      "--inplace"
+    ],
+    "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+    "ended": "2026-09-12T03:52:21.028343+00:00",
+    "environment": {
+      "CUDA_HOME": "/cluster/apps/software/CUDA/12.4.0",
+      "MAX_JOBS": "2",
+      "SLURM_CPUS_PER_TASK": "2",
+      "SLURM_JOB_ID": "150865"
+    },
+    "host": "cpu-2.cluster02.eee.ntu.edu.sg",
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2024 NVIDIA Corporation\nBuilt on Tue_Feb_27_16:19:38_PST_2024\nCuda compilation tools, release 12.4, V12.4.99\nBuild cuda_12.4.r12.4/compiler.33961263_0",
+    "patch_sha256": "b9ad575ad2d803164e9422215bb275815c51108f44f5fbcf8ab7d1a7c68b94ef",
+    "returncode": 0,
+    "scope": "Only launch stream: two quantization launches, six existing KV launches, and existing CUTLASS stream argument. No arithmetic, tile, dtype, quantizer or attention changes.",
+    "setup_sha256": "29a265a8a7fe9973221414e54bb907a22757ed7bc71989e0c9a04c6e7b934465",
+    "source_extension": [
+      {
+        "path": "/projects/nar/nar-validation/external/quarot/quarot/_CUDA.cpython-311-x86_64-linux-gnu.so",
+        "sha256": "3639d33f456151a8781e30f84d8af70a2da1a595d4f81209a206df03361452ec"
+      }
+    ],
+    "source_quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+    "started": "2026-09-12T03:48:43.800975+00:00",
+    "status": "BUILT"
+  },
+  "checks": [
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "2b536ddc7b6f947182acb5219277e042abd97dcb64a36a53684032c8bc1b5eba",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "2b536ddc7b6f947182acb5219277e042abd97dcb64a36a53684032c8bc1b5eba",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 1,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a1c2ae92c458357e9738cfdd01cffa95a19d04aaf04298becc1363bfeaa55855",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a1c2ae92c458357e9738cfdd01cffa95a19d04aaf04298becc1363bfeaa55855",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 2,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5ab7e9ad7247dfc799e3f4a73ea1ebb919e06992b086ba897ae9076aca007d4f",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5ab7e9ad7247dfc799e3f4a73ea1ebb919e06992b086ba897ae9076aca007d4f",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 9,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "3c698431426a9a7649b00dfad7ba25839c243ca6504f12239730fc7541d98199",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "3c698431426a9a7649b00dfad7ba25839c243ca6504f12239730fc7541d98199",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 64,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0be1b73a881f44dfc36695f6afd52d23a3d39c3767a11e98728282ba6b62d0c1",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0be1b73a881f44dfc36695f6afd52d23a3d39c3767a11e98728282ba6b62d0c1",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 65,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "1e69d15fc82fa6991c8bd976622eb6216bda656154d69e50b9057ce5ddb0fda1",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "1e69d15fc82fa6991c8bd976622eb6216bda656154d69e50b9057ce5ddb0fda1",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 128,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "f1cf41c8db0a6d7bc586d290d715f92ac12083762c2cc5a9c21944828e5d0e1d",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "f1cf41c8db0a6d7bc586d290d715f92ac12083762c2cc5a9c21944828e5d0e1d",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 1,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "20b679617f3524d611deefb604c1c9492ebabb3241d8d32de6dff405ace67772",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "20b679617f3524d611deefb604c1c9492ebabb3241d8d32de6dff405ace67772",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 2,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "51d346fbc2da531f1d251953ae10bf0bc7ca431a17138c288f025789334499e1",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "51d346fbc2da531f1d251953ae10bf0bc7ca431a17138c288f025789334499e1",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 9,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0ddda7eb6432a2f42bd068d1991698aeed85b220ac0720cd322743832a53297a",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0ddda7eb6432a2f42bd068d1991698aeed85b220ac0720cd322743832a53297a",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 64,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "6ca196720d6069f566d3de99322744f670b5740f3247361c947b7985fc533a71",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "6ca196720d6069f566d3de99322744f670b5740f3247361c947b7985fc533a71",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 65,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "98c2d581a7e058a1bb0914e8c702adb2a3f98ad236f2293a7bbe70d040fb3dc7",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "98c2d581a7e058a1bb0914e8c702adb2a3f98ad236f2293a7bbe70d040fb3dc7",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 128,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "2b536ddc7b6f947182acb5219277e042abd97dcb64a36a53684032c8bc1b5eba",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 129,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "2b536ddc7b6f947182acb5219277e042abd97dcb64a36a53684032c8bc1b5eba",
+        "scales_sha256": "7a056c492ad42af3ed6c0da507b349c6858dd232e977720fd81a1c335be6a3c3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 1,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a1c2ae92c458357e9738cfdd01cffa95a19d04aaf04298becc1363bfeaa55855",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 130,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            2
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a1c2ae92c458357e9738cfdd01cffa95a19d04aaf04298becc1363bfeaa55855",
+        "scales_sha256": "df7bbf8de280bfe5936ab2d00d4ece0fcd65f9d2acd540adca93a1d58ea453ec"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 2,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5ab7e9ad7247dfc799e3f4a73ea1ebb919e06992b086ba897ae9076aca007d4f",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 137,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            9
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5ab7e9ad7247dfc799e3f4a73ea1ebb919e06992b086ba897ae9076aca007d4f",
+        "scales_sha256": "c6e333e13e792ff18a47fdb6fc2c317c9e1e1656f9a5e7d1ebf415f3dbf2d0b1"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 9,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "3c698431426a9a7649b00dfad7ba25839c243ca6504f12239730fc7541d98199",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 192,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2
+          ],
+          "kv_indptr": [
+            0,
+            3
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "3c698431426a9a7649b00dfad7ba25839c243ca6504f12239730fc7541d98199",
+        "scales_sha256": "d204151e611290603f71ecf3c16b29a4c4ce74664f1a12d3e4da871b75c69ae3"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 64,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0be1b73a881f44dfc36695f6afd52d23a3d39c3767a11e98728282ba6b62d0c1",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 193,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            1
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "0be1b73a881f44dfc36695f6afd52d23a3d39c3767a11e98728282ba6b62d0c1",
+        "scales_sha256": "8ce9e572ff652d903e4a68372fb528f5108609f936ca96ff8ab70d2c5faba353"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 65,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "1e69d15fc82fa6991c8bd976622eb6216bda656154d69e50b9057ce5ddb0fda1",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 256,
+        "metadata": {
+          "kv_indices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "kv_indptr": [
+            0,
+            4
+          ],
+          "last_page_offset": [
+            64
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "1e69d15fc82fa6991c8bd976622eb6216bda656154d69e50b9057ce5ddb0fda1",
+        "scales_sha256": "6c2bf646b20550ee8b66b21003f86d61c1de6d6f2a4d5a536850624b4338eb85"
+      },
+      "page_size": 64,
+      "prefix": 128,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 128,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "38bac46f55e612ae218cfe8006b4683e0d4e70d12db387082e7a4513853c0dc3",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "38bac46f55e612ae218cfe8006b4683e0d4e70d12db387082e7a4513853c0dc3",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 1,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d285087a069147d76519c0f3f57fb24c21ea2506cfb198d2ca508804f195039",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d285087a069147d76519c0f3f57fb24c21ea2506cfb198d2ca508804f195039",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 2,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4b748fe8aac0369d5921bf696a9c0b510d8ccdf126cd1d71cf4d647ba409990a",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4b748fe8aac0369d5921bf696a9c0b510d8ccdf126cd1d71cf4d647ba409990a",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 9,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5f52279977aa3a4465029ab8a6056c213ce728316bb5884e8d706d251ca91e82",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5f52279977aa3a4465029ab8a6056c213ce728316bb5884e8d706d251ca91e82",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 64,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39ba56378fe0884051231ccaf8387f3796e7c00f9be0a0dd1fffdb945ed4d68b",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39ba56378fe0884051231ccaf8387f3796e7c00f9be0a0dd1fffdb945ed4d68b",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 65,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a69108ba70e8e29dd22bfb309df2b84bcd399e7b68888534d098fd51d8b0e301",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a69108ba70e8e29dd22bfb309df2b84bcd399e7b68888534d098fd51d8b0e301",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 0,
+      "status": "PASS",
+      "step": 128,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d4cc50207a51ad1ab6755a3296edf48611cb18be343fc61862f8257fcad4e05",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d4cc50207a51ad1ab6755a3296edf48611cb18be343fc61862f8257fcad4e05",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 1,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "518dab3a16c7d620a5a7cf3000d1a1dae9166f89c0b0204f056a1f05ef0dfa07",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "518dab3a16c7d620a5a7cf3000d1a1dae9166f89c0b0204f056a1f05ef0dfa07",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 2,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "941cfa40a0ee7a06cbb2200e5f5b999919eccb1cc8ac9a33e3062c0af019be0e",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "941cfa40a0ee7a06cbb2200e5f5b999919eccb1cc8ac9a33e3062c0af019be0e",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 9,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "255bb557e9a256d0da0f22695f67d410a64a2d2d0bc59f6414419dfb32437e02",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "255bb557e9a256d0da0f22695f67d410a64a2d2d0bc59f6414419dfb32437e02",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 64,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39c399a6135d50c2cb2427d70ba2dc2d6682e616d98309732f74756cefb95a90",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39c399a6135d50c2cb2427d70ba2dc2d6682e616d98309732f74756cefb95a90",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 65,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "d0998b273a25366f200bf634877fd365cdf8a43de0775557807eb761615f4271",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "d0998b273a25366f200bf634877fd365cdf8a43de0775557807eb761615f4271",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 1,
+      "status": "PASS",
+      "step": 128,
+      "window": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "38bac46f55e612ae218cfe8006b4683e0d4e70d12db387082e7a4513853c0dc3",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "38bac46f55e612ae218cfe8006b4683e0d4e70d12db387082e7a4513853c0dc3",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 1,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d285087a069147d76519c0f3f57fb24c21ea2506cfb198d2ca508804f195039",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "8d285087a069147d76519c0f3f57fb24c21ea2506cfb198d2ca508804f195039",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 2,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4b748fe8aac0369d5921bf696a9c0b510d8ccdf126cd1d71cf4d647ba409990a",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4b748fe8aac0369d5921bf696a9c0b510d8ccdf126cd1d71cf4d647ba409990a",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 9,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5f52279977aa3a4465029ab8a6056c213ce728316bb5884e8d706d251ca91e82",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "5f52279977aa3a4465029ab8a6056c213ce728316bb5884e8d706d251ca91e82",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 64,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39ba56378fe0884051231ccaf8387f3796e7c00f9be0a0dd1fffdb945ed4d68b",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "39ba56378fe0884051231ccaf8387f3796e7c00f9be0a0dd1fffdb945ed4d68b",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 65,
+      "window": 0
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a69108ba70e8e29dd22bfb309df2b84bcd399e7b68888534d098fd51d8b0e301",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "finite": true,
+      "hidden_relative_l2": 0.0,
+      "observed_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "a69108ba70e8e29dd22bfb309df2b84bcd399e7b68888534d098fd51d8b0e301",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "page_size": 2176,
+      "prefix": 2048,
+      "relative_l2": 0.0,
+      "sequence": 2,
+      "status": "PASS",
+      "step": 128,
+      "window": 0
+    }
+  ],
+  "ended": "2026-09-12T12:44:05.417489+00:00",
+  "environment": {
+    "affinity": [
+      32,
+      33,
+      34,
+      35
+    ],
+    "capability": [
+      8,
+      6
+    ],
+    "cgroup": "0::/system.slice/gpu-a40-1_slurmstepd.scope/job_150938/step_batch/user/task_0\n",
+    "command": [
+      "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/graph.py",
+      "--model",
+      "3b",
+      "--method",
+      "fp16",
+      "--backend",
+      "current_stream",
+      "--run",
+      "/home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2_full_int4"
+    ],
+    "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  40\nOn-line CPU(s) list:                     0-39\nVendor ID:                               GenuineIntel\nModel name:                              QEMU Virtual CPU version 2.5+\nCPU family:                              15\nModel:                                   107\nThread(s) per core:                      1\nCore(s) per socket:                      20\nSocket(s):                               2\nStepping:                                1\nBogoMIPS:                                5799.99\nFlags:                                   fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm constant_tsc nopl xtopology cpuid tsc_known_freq pni ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c hypervisor lahf_lm abm cpuid_fault pti bmi1 avx2 bmi2\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               1.3 MiB (40 instances)\nL1i cache:                               1.3 MiB (40 instances)\nL2 cache:                                160 MiB (40 instances)\nL3 cache:                                32 MiB (2 instances)\nNUMA node(s):                            2\nNUMA node0 CPU(s):                       0-19\nNUMA node1 CPU(s):                       20-39\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             KVM: Mitigation: VMX unsupported\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Unknown: No mitigations\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected",
+    "cpu_max": null,
+    "cuda_runtime": "12.4",
+    "device": "NVIDIA A40",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "MKL_NUM_THREADS": "4",
+      "OMP_NUM_THREADS": "4",
+      "SLURM_CLUSTER_NAME": "(null)",
+      "SLURM_CONF": "/var/spool/slurmd/conf-cache/slurm.conf",
+      "SLURM_CPUS_ON_NODE": "4",
+      "SLURM_CPUS_PER_TASK": "4",
+      "SLURM_GPUS": "a40:1",
+      "SLURM_GPUS_ON_NODE": "1",
+      "SLURM_GTIDS": "0",
+      "SLURM_JOBID": "150938",
+      "SLURM_JOB_ACCOUNT": "rose",
+      "SLURM_JOB_CPUS_PER_NODE": "4",
+      "SLURM_JOB_DEPENDENCY": "afterany:150777",
+      "SLURM_JOB_END_TIME": "1789245709",
+      "SLURM_JOB_GID": "295800911",
+      "SLURM_JOB_GPUS": "8",
+      "SLURM_JOB_ID": "150938",
+      "SLURM_JOB_NAME": "nar-e28-v2-graph",
+      "SLURM_JOB_NODELIST": "gpu-a40-1",
+      "SLURM_JOB_NUM_NODES": "1",
+      "SLURM_JOB_PARTITION": "cluster02",
+      "SLURM_JOB_QOS": "rose",
+      "SLURM_JOB_START_TIME": "1789216909",
+      "SLURM_JOB_UID": "295800911",
+      "SLURM_JOB_USER": "yanlongc",
+      "SLURM_LOCALID": "0",
+      "SLURM_MEM_PER_NODE": "40960",
+      "SLURM_NNODES": "1",
+      "SLURM_NODEID": "0",
+      "SLURM_NODELIST": "gpu-a40-1",
+      "SLURM_PRIO_PROCESS": "0",
+      "SLURM_PROCID": "0",
+      "SLURM_SUBMIT_DIR": "/home/yanlongc/e28-v2-work",
+      "SLURM_SUBMIT_HOST": "login-1.cluster02.eee.ntu.edu.sg",
+      "SLURM_TASKS_PER_NODE": "1",
+      "SLURM_TASK_PID": "2882614",
+      "SLURM_TOPOLOGY_ADDR": "gpu-a40-1",
+      "SLURM_TOPOLOGY_ADDR_PATTERN": "node",
+      "SLURM_TRES_PER_TASK": "cpu:4"
+    },
+    "execution_python_sha256": {
+      "quarot-llama3/e28_v2/__init__.py": "99cd857bd33dd85f4526a93ec3aa6c1a911423c4dfd6efc8c488d058951cf8ec",
+      "quarot-llama3/e28_v2/activation_diagnose.py": "ed52cde64ab53799c118f4b2da6432c20ee8b91217b660b181afd1aa1bb6bb87",
+      "quarot-llama3/e28_v2/audit.py": "38dd7ce249811a6c0fa7915465e1e97b664623ce00f661bdc1e0800439bcae29",
+      "quarot-llama3/e28_v2/backend_fingerprint.py": "7223cceb5880226401bfd694250d5d922e2ce5e3551cdd145bfd080fd35cfc98",
+      "quarot-llama3/e28_v2/benchmark.py": "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380",
+      "quarot-llama3/e28_v2/cache_adapter.py": "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe",
+      "quarot-llama3/e28_v2/cache_diagnose.py": "df27eb25f3ad8844d8f8373048b9861d087f41e3f6089192417efedddb49ecfc",
+      "quarot-llama3/e28_v2/checkpoint.py": "ea3704f3e5f2584e41f359f8ca4cbffa5f845b6b6e5d816237ae58c68813ebbc",
+      "quarot-llama3/e28_v2/collect.py": "ab426e933a97d6b53ba763caf34fab0b6aeece5a3e684245c6f1c2499e112e2c",
+      "quarot-llama3/e28_v2/common.py": "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8",
+      "quarot-llama3/e28_v2/graph.py": "c2dfb088c85696408be74e50303e9cf0a02d3652860a3a33fa6662b32a10da41",
+      "quarot-llama3/e28_v2/graph_benchmark.py": "a8d7ae0ff4b83ac8a3b171b344364656e2208e09f723e66366fb43a6248d7ca9",
+      "quarot-llama3/e28_v2/graph_collect.py": "2605a651ba780ea7407ac1e28b20fac26be78cd1ee6ada2ca233ff6ab5b9a788",
+      "quarot-llama3/e28_v2/insights.py": "581b048f4261da6945655ea24a5e37978fae4ef44c79ecab303c2beff6e5a490",
+      "quarot-llama3/e28_v2/kernel_bench.py": "ee09e0dd6270dcbf35cb39520460f206b36da08f587de418e39a723578fc4b8d",
+      "quarot-llama3/e28_v2/pipeline.py": "0235ff6606aae734b449a4dc03aff26a918d13a262d08c845e6b4b3c6f58eddb",
+      "quarot-llama3/e28_v2/profile.py": "4ff460e5e6b063be28d5a4291b958445870cea6c01f4d267c9094f592b622a89",
+      "quarot-llama3/e28_v2/redo_allocator_preflight.py": "844d5cc649d1586d9d58a18127b8716c23ab471ad07fdebb20e2ff00195e2f5f",
+      "quarot-llama3/e28_v2/rope_check.py": "6fc9dc9ca8c6c1ddde7e459566f2f17c0ff5b62a279d929bca1315cef6f60fc4",
+      "quarot-llama3/e28_v2/stream_backend.py": "785dab38a46d45ba94ebdc734902b09884214a5e7869f80007ec766b3e3c7d2d",
+      "quarot-llama3/e28_v2/stream_pipeline.py": "3ddf6ab880ca1ca98c402888e5bbde6412e573a83f01f49e7b93df92c55e2b64",
+      "quarot-llama3/e28_v2/verify.py": "7c9d73adf2b4bef6d2c7e46ef77360b88fefb55db6eb4a4261a9b3342709b4f4"
+    },
+    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 61.81 W, 30, 1740 MHz, 7251 MHz, P0, 273 MiB",
+    "host": "gpu-a40-1.cluster02.eee.ntu.edu.sg",
+    "nvcc": "UNAVAILABLE: [Errno 2] No such file or directory: 'nvcc'",
+    "pid": 2882835,
+    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2882835, /projects/nar/nar-validation/e28-env/bin/python, 264 MiB",
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 12:42:11 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1617925046548 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014874006473 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
+    "timestamp": "2026-09-12T12:42:10.736472+00:00",
+    "torch_interop_threads": 1,
+    "torch_threads": 4,
+    "versions": {
+      "fast-hadamard-transform": "1.0.4.post1",
+      "flash-attn": "2.6.3",
+      "flashinfer": null,
+      "quarot": "0.0.0",
+      "torch": "2.4.1+cu124",
+      "transformers": "4.36.2",
+      "triton": "3.0.0"
+    },
+    "weight_initialization": "uniform_full_signed_int4_bytes_0_to_255"
+  },
+  "graphs": [
+    {
+      "allocated_delta_bytes": 9033728,
+      "page_size": 64,
+      "prefix": 128,
+      "prepare_capture_s": 0.2178361490368843
+    },
+    {
+      "allocated_delta_bytes": 507904,
+      "page_size": 2176,
+      "prefix": 2048,
+      "prepare_capture_s": 0.8807598217390478
+    }
+  ],
+  "input_sequences": [
+    {
+      "capacity": 256,
+      "distinct": true,
+      "prefix": 128,
+      "sha256": [
+        "702d36d3dc9822e9592a3a4c1f56bf34fe77ebac58a7242ec629fb0fab9dbf75",
+        "253051554c1243204d9c2d9a532d324599d4586023f4390807f0d0591b1bd035"
+      ]
+    },
+    {
+      "capacity": 2176,
+      "distinct": true,
+      "prefix": 2048,
+      "sha256": [
+        "24adb164a5bccb125516045239436e49e310b3fb2ff5892fd4a0fd55a09723d5",
+        "a88cbd941b4b236ec891ec79b767b650490d9b1c8e5c12f1d6c3b677105d4a41"
+      ]
+    }
+  ],
+  "scope": "full one-step model forward, all three methods identical capture boundary",
+  "started": "2026-09-12T12:42:10.728333+00:00",
+  "status": "PASS",
+  "text_sha256": "0b1879cd29bec44e095f6ed5fa5c672a1cb1d7dac199c7f33ec5eca400e05a50",
+  "text_source": "/projects/nar/nar-validation/cache/tokenized/llama32_3b-wikitext2-test-full-l2048.pt",
+  "timing": {
+    "reason": "Feasibility/correctness process only; no unvalidated or unmatched graph speedup.",
+    "value": null
+  },
+  "window_start_offsets": [
+    0,
+    4096
+  ]
+}

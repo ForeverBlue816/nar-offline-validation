@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-09-12T12:41:32.278951+00:00",
+  "job_to_release": "150777",
+  "action": "scancel only the completed primary allocation, still held by the intentionally SIGSTOPped failed-cohort parent PID2776296",
+  "reason": "Primary driver step150777.22 and durable controller151007 both completed0:0; all72 core and12 extension processes passed. No active CUDA compute process remains. Release allows dependent private graph job150938 to start.",
+  "pipeline_finished_sha256": "635bffb4fe71713ebb6337272356890b2219619fb3d105c4ceaee79cb6fc5e21",
+  "core_completed": 72,
+  "extension_completed": 12,
+  "accounting_before_release": "150777.22|COMPLETED|0:0|06:44:05|cpu=4,gres/gpu:a40=1,gres/gpu=1,mem=40G,node=1\n151007|COMPLETED|0:0|06:44:05|cpu=1,mem=11G,node=1\n151007.batch|COMPLETED|0:0|06:44:05|cpu=1,mem=11G,node=1\n151007.extern|COMPLETED|0:0|06:44:05|cpu=1,mem=11G,node=1\n",
+  "scientific_limitations_unchanged": [
+    "Original backend graph checks INVALID",
+    "Two INT4 large-accumulator dequantization boundary cases FAIL",
+    "Native paper-format integer checkpoint/backend BLOCKED"
+  ],
+  "accounting_note": "The outer allocation is expected to become CANCELLED due to deliberate cleanup; this does not mean the completed experiment driver or records failed."
+}

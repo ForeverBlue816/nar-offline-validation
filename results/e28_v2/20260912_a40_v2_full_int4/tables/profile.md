@@ -2,9 +2,9 @@ Separate four-step profiler trace; profiler perturbation prevents replacing stea
 
 | Model | Method | Status | Kernel ms/step | Kernels/4 steps | Gap ms/4 steps |
 | --- | --- | --- | --- | --- | --- |
-| 3b | fp16 | PENDING | N/A | N/A | N/A |
-| 3b | hadamard | PENDING | N/A | N/A | N/A |
-| 3b | nar | PENDING | N/A | N/A | N/A |
-| 8b | fp16 | PENDING | N/A | N/A | N/A |
-| 8b | hadamard | PENDING | N/A | N/A | N/A |
-| 8b | nar | PENDING | N/A | N/A | N/A |
+| 3b | fp16 | PASS | 15.69 | 5676 | 115.45 |
+| 3b | hadamard | PASS | 17.36 | 10044 | 372.87 |
+| 3b | nar | PASS | 17.69 | 10156 | 397.19 |
+| 8b | fp16 | PASS | 29.24 | 6092 | 139.78 |
+| 8b | hadamard | PASS | 24.35 | 11724 | 376.03 |
+| 8b | nar | PASS | 24.87 | 11724 | 376.01 |

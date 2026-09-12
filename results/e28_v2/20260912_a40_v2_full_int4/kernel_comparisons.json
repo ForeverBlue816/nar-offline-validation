@@ -1,4 +1,1566 @@
 {
-  "comparisons": [],
-  "traffic_estimates": []
+  "comparisons": [
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": false,
+      "event_ratio": {
+        "max": 0.9861111069004876,
+        "mean": 0.7410619275499201,
+        "median": 0.7583512780815107,
+        "min": 0.4787233976677615,
+        "n": 3,
+        "std": 0.20750062345522646
+      },
+      "interpretation": "near parity / within observed variability",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 0.4787233976677615,
+          "session": 1,
+          "wall_ratio": 0.46592247301275763
+        },
+        {
+          "event_ratio": 0.7583512780815107,
+          "session": 2,
+          "wall_ratio": 0.7512540308133285
+        },
+        {
+          "event_ratio": 0.9861111069004876,
+          "session": 3,
+          "wall_ratio": 1.0534056451752638
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 1.0534056451752638,
+        "mean": 0.7568607163337834,
+        "median": 0.7512540308133285,
+        "min": 0.46592247301275763,
+        "n": 3,
+        "std": 0.23987176516550696
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.8667762979019049,
+        "mean": 0.8172780331886775,
+        "median": 0.8247422360782679,
+        "min": 0.7603155655858597,
+        "n": 3,
+        "std": 0.04378171326706991
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 0.8247422360782679,
+          "session": 1,
+          "wall_ratio": 0.80100444284714
+        },
+        {
+          "event_ratio": 0.7603155655858597,
+          "session": 2,
+          "wall_ratio": 0.7692334143664912
+        },
+        {
+          "event_ratio": 0.8667762979019049,
+          "session": 3,
+          "wall_ratio": 0.8373481245883534
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 0.8373481245883534,
+        "mean": 0.8025286606006615,
+        "median": 0.80100444284714,
+        "min": 0.7692334143664912,
+        "n": 3,
+        "std": 0.027828592813533566
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.8275862155481063,
+        "mean": 0.5700746047799102,
+        "median": 0.5263157659595096,
+        "min": 0.35632183283211466,
+        "n": 3,
+        "std": 0.1948651783248331
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.8275862155481063,
+          "session": 1,
+          "wall_ratio": 0.8050637277445635
+        },
+        {
+          "event_ratio": 0.5263157659595096,
+          "session": 2,
+          "wall_ratio": 0.5264785080283235
+        },
+        {
+          "event_ratio": 0.35632183283211466,
+          "session": 3,
+          "wall_ratio": 0.36111526366287683
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 0.8050637277445635,
+        "mean": 0.5642191664785879,
+        "median": 0.5264785080283235,
+        "min": 0.36111526366287683,
+        "n": 3,
+        "std": 0.1831953923461992
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.6415094482085322,
+        "mean": 1.2844987346706647,
+        "median": 1.11764710078407,
+        "min": 1.0943396550193916,
+        "n": 3,
+        "std": 0.2526239582761057
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 1.0943396550193916,
+          "session": 1,
+          "wall_ratio": 1.0716089799438533
+        },
+        {
+          "event_ratio": 1.11764710078407,
+          "session": 2,
+          "wall_ratio": 1.098909529289276
+        },
+        {
+          "event_ratio": 1.6415094482085322,
+          "session": 3,
+          "wall_ratio": 1.6074563415603877
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 1.6074563415603877,
+        "mean": 1.2593249502645056,
+        "median": 1.098909529289276,
+        "min": 1.0716089799438533,
+        "n": 3,
+        "std": 0.24641824770478526
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 2.8000000485063854,
+        "mean": 2.4023810071465577,
+        "median": 2.607142924426903,
+        "min": 1.8000000485063854,
+        "n": 3,
+        "std": 0.4331632348789866
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.8000000485063854,
+          "session": 1,
+          "wall_ratio": 1.8453709758067618
+        },
+        {
+          "event_ratio": 2.607142924426903,
+          "session": 2,
+          "wall_ratio": 2.5876438814491767
+        },
+        {
+          "event_ratio": 2.8000000485063854,
+          "session": 3,
+          "wall_ratio": 2.8052668982943776
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 2.8052668982943776,
+        "mean": 2.4127605851834386,
+        "median": 2.5876438814491767,
+        "min": 1.8453709758067618,
+        "n": 3,
+        "std": 0.4109243003982324
+      }
+    },
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.3447098847284704,
+        "mean": 1.281848824709886,
+        "median": 1.3355704868406737,
+        "min": 1.1652661025605136,
+        "n": 3,
+        "std": 0.08252082757807744
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 1.1652661025605136,
+          "session": 1,
+          "wall_ratio": 1.142283157378212
+        },
+        {
+          "event_ratio": 1.3447098847284704,
+          "session": 2,
+          "wall_ratio": 1.3365442956608455
+        },
+        {
+          "event_ratio": 1.3355704868406737,
+          "session": 3,
+          "wall_ratio": 1.3008272258907192
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 1.3365442956608455,
+        "mean": 1.2598848929765922,
+        "median": 1.3008272258907192,
+        "min": 1.142283157378212,
+        "n": 3,
+        "std": 0.08442572052818392
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.1177214913804403,
+        "mean": 1.0918578856851966,
+        "median": 1.0806845704797643,
+        "min": 1.0771675951953854,
+        "n": 3,
+        "std": 0.01834460599117194
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 1.1177214913804403,
+          "session": 1,
+          "wall_ratio": 1.0976752964510748
+        },
+        {
+          "event_ratio": 1.0771675951953854,
+          "session": 2,
+          "wall_ratio": 1.0663930456508837
+        },
+        {
+          "event_ratio": 1.0806845704797643,
+          "session": 3,
+          "wall_ratio": 1.0753236383126508
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 1.0976752964510748,
+        "mean": 1.0797973268048697,
+        "median": 1.0753236383126508,
+        "min": 1.0663930456508837,
+        "n": 3,
+        "std": 0.013156879577508069
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.9285714384706907,
+        "mean": 0.9160940576176091,
+        "median": 0.9239761695843909,
+        "min": 0.8957345647977456,
+        "n": 3,
+        "std": 0.014518053931706373
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.9285714384706907,
+          "session": 1,
+          "wall_ratio": 0.9279304510304784
+        },
+        {
+          "event_ratio": 0.9239761695843909,
+          "session": 2,
+          "wall_ratio": 0.91470466165871
+        },
+        {
+          "event_ratio": 0.8957345647977456,
+          "session": 3,
+          "wall_ratio": 0.9073235597717133
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.9279304510304784,
+        "mean": 0.9166528908203005,
+        "median": 0.91470466165871,
+        "min": 0.9073235597717133,
+        "n": 3,
+        "std": 0.00852477524580352
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.38224637910395637,
+        "mean": 0.37738272088367264,
+        "median": 0.3804347711468849,
+        "min": 0.36946701240017676,
+        "n": 3,
+        "std": 0.005645901843774122
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 0.3804347711468849,
+          "session": 1,
+          "wall_ratio": 0.38668917082659876
+        },
+        {
+          "event_ratio": 0.36946701240017676,
+          "session": 2,
+          "wall_ratio": 0.3725821579519846
+        },
+        {
+          "event_ratio": 0.38224637910395637,
+          "session": 3,
+          "wall_ratio": 0.38224104099632256
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.38668917082659876,
+        "mean": 0.38050412325830196,
+        "median": 0.38224104099632256,
+        "min": 0.3725821579519846,
+        "n": 3,
+        "std": 0.005888667958184325
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.2940503113976591,
+        "mean": 1.2866068332282021,
+        "median": 1.2872313069305756,
+        "min": 1.2785388813563714,
+        "n": 3,
+        "std": 0.006347891567817779
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.2785388813563714,
+          "session": 1,
+          "wall_ratio": 1.2765381410942511
+        },
+        {
+          "event_ratio": 1.2940503113976591,
+          "session": 2,
+          "wall_ratio": 1.2915702424925455
+        },
+        {
+          "event_ratio": 1.2872313069305756,
+          "session": 3,
+          "wall_ratio": 1.2890073197602725
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 1.2915702424925455,
+        "mean": 1.285705234449023,
+        "median": 1.2890073197602725,
+        "min": 1.2765381410942511,
+        "n": 3,
+        "std": 0.006566015720573521
+      }
+    },
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.555125222788265,
+        "mean": 1.5437007013316812,
+        "median": 1.5398518093355082,
+        "min": 1.5361250718712705,
+        "n": 3,
+        "std": 0.008220377562934523
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 1.5398518093355082,
+          "session": 1,
+          "wall_ratio": 1.5373134848387795
+        },
+        {
+          "event_ratio": 1.555125222788265,
+          "session": 2,
+          "wall_ratio": 1.5498205576441744
+        },
+        {
+          "event_ratio": 1.5361250718712705,
+          "session": 3,
+          "wall_ratio": 1.5367056651371223
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 1.5498205576441744,
+        "mean": 1.5412799025400254,
+        "median": 1.5373134848387795,
+        "min": 1.5367056651371223,
+        "n": 3,
+        "std": 0.006044250899460874
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.174988092376475,
+        "mean": 1.1725331025896046,
+        "median": 1.1727185637913937,
+        "min": 1.169892651600945,
+        "n": 3,
+        "std": 0.002084334596821509
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 1.174988092376475,
+          "session": 1,
+          "wall_ratio": 1.1699855491827302
+        },
+        {
+          "event_ratio": 1.1727185637913937,
+          "session": 2,
+          "wall_ratio": 1.1732788657276105
+        },
+        {
+          "event_ratio": 1.169892651600945,
+          "session": 3,
+          "wall_ratio": 1.1693839985421668
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 1.1732788657276105,
+        "mean": 1.170882804484169,
+        "median": 1.1699855491827302,
+        "min": 1.1693839985421668,
+        "n": 3,
+        "std": 0.0017119770062770194
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.995746911023498,
+        "mean": 0.9877199447287062,
+        "median": 0.9877357878436186,
+        "min": 0.9796771353190021,
+        "n": 3,
+        "std": 0.006560468024534984
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.9877357878436186,
+          "session": 1,
+          "wall_ratio": 0.9875081859614224
+        },
+        {
+          "event_ratio": 0.995746911023498,
+          "session": 2,
+          "wall_ratio": 0.9968359134032635
+        },
+        {
+          "event_ratio": 0.9796771353190021,
+          "session": 3,
+          "wall_ratio": 0.9807897534332942
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 0.9968359134032635,
+        "mean": 0.98837795093266,
+        "median": 0.9875081859614224,
+        "min": 0.9807897534332942,
+        "n": 3,
+        "std": 0.006579624141968146
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.3885322137027577,
+        "mean": 0.3852653827971939,
+        "median": 0.38500201463102174,
+        "min": 0.38226192005780235,
+        "n": 3,
+        "std": 0.002566601863905728
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 0.38500201463102174,
+          "session": 1,
+          "wall_ratio": 0.3854134880484289
+        },
+        {
+          "event_ratio": 0.38226192005780235,
+          "session": 2,
+          "wall_ratio": 0.3826989987048056
+        },
+        {
+          "event_ratio": 0.3885322137027577,
+          "session": 3,
+          "wall_ratio": 0.3894768022745103
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 0.3894768022745103,
+        "mean": 0.3858630963425816,
+        "median": 0.3854134880484289,
+        "min": 0.3826989987048056,
+        "n": 3,
+        "std": 0.0027852308128176887
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.7756527563430802,
+        "mean": 1.774358766978093,
+        "median": 1.7741862525721523,
+        "min": 1.7732372920190458,
+        "n": 3,
+        "std": 0.0009936256472681112
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "3b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.7732372920190458,
+          "session": 1,
+          "wall_ratio": 1.7721225328759065
+        },
+        {
+          "event_ratio": 1.7756527563430802,
+          "session": 2,
+          "wall_ratio": 1.7746930269237042
+        },
+        {
+          "event_ratio": 1.7741862525721523,
+          "session": 3,
+          "wall_ratio": 1.7731840890029158
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 1.7746930269237042,
+        "mean": 1.7733332162675088,
+        "median": 1.7731840890029158,
+        "min": 1.7721225328759065,
+        "n": 3,
+        "std": 0.0010546845083482424
+      }
+    },
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.5811965753498771,
+        "mean": 0.43963115246409173,
+        "median": 0.38524590872758563,
+        "min": 0.3524509733148126,
+        "n": 3,
+        "std": 0.10099324619268826
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 0.38524590872758563,
+          "session": 1,
+          "wall_ratio": 0.37848158047212305
+        },
+        {
+          "event_ratio": 0.5811965753498771,
+          "session": 2,
+          "wall_ratio": 0.5701223918962736
+        },
+        {
+          "event_ratio": 0.3524509733148126,
+          "session": 3,
+          "wall_ratio": 0.33979274966973766
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 0.5701223918962736,
+        "mean": 0.4294655740127114,
+        "median": 0.37848158047212305,
+        "min": 0.33979274966973766,
+        "n": 3,
+        "std": 0.10070571556126982
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.629885044551609,
+        "mean": 0.5915776778932736,
+        "median": 0.5832041143716991,
+        "min": 0.5616438747565129,
+        "n": 3,
+        "std": 0.028481593334270788
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 0.629885044551609,
+          "session": 1,
+          "wall_ratio": 0.6844039122389638
+        },
+        {
+          "event_ratio": 0.5616438747565129,
+          "session": 2,
+          "wall_ratio": 0.5455909420094259
+        },
+        {
+          "event_ratio": 0.5832041143716991,
+          "session": 3,
+          "wall_ratio": 0.5792453884788111
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 0.6844039122389638,
+        "mean": 0.603080080909067,
+        "median": 0.5792453884788111,
+        "min": 0.5455909420094259,
+        "n": 3,
+        "std": 0.05912320243029416
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.5823369489569441,
+        "mean": 0.5735354440056053,
+        "median": 0.578947361702717,
+        "min": 0.5593220213571547,
+        "n": 3,
+        "std": 0.010145224261563347
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.5823369489569441,
+          "session": 1,
+          "wall_ratio": 0.6343519326298346
+        },
+        {
+          "event_ratio": 0.5593220213571547,
+          "session": 2,
+          "wall_ratio": 0.6048384638829625
+        },
+        {
+          "event_ratio": 0.578947361702717,
+          "session": 3,
+          "wall_ratio": 0.6332300147850064
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 0.6343519326298346,
+        "mean": 0.6241401370992677,
+        "median": 0.6332300147850064,
+        "min": 0.6048384638829625,
+        "n": 3,
+        "std": 0.013656027158350638
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": false,
+      "event_ratio": {
+        "max": 1.11764710078407,
+        "mean": 1.0252227302344592,
+        "median": 1.0839470026706601,
+        "min": 0.8740740872486473,
+        "n": 3,
+        "std": 0.10776009886333211
+      },
+      "interpretation": "near parity / within observed variability",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 1.0839470026706601,
+          "session": 1,
+          "wall_ratio": 1.058773661301751
+        },
+        {
+          "event_ratio": 0.8740740872486473,
+          "session": 2,
+          "wall_ratio": 0.8901097037828306
+        },
+        {
+          "event_ratio": 1.11764710078407,
+          "session": 3,
+          "wall_ratio": 1.0532368977602753
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 1.058773661301751,
+        "mean": 1.000706754281619,
+        "median": 1.0532368977602753,
+        "min": 0.8901097037828306,
+        "n": 3,
+        "std": 0.07823658403373798
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.9309972826593451,
+        "mean": 1.6479155070195075,
+        "median": 1.833333393966315,
+        "min": 1.1794158444328622,
+        "n": 3,
+        "std": 0.33367000581563766
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.9309972826593451,
+          "session": 1,
+          "wall_ratio": 1.937443082311734
+        },
+        {
+          "event_ratio": 1.833333393966315,
+          "session": 2,
+          "wall_ratio": 1.9198286366806403
+        },
+        {
+          "event_ratio": 1.1794158444328622,
+          "session": 3,
+          "wall_ratio": 1.3040365445864093
+        }
+      ],
+      "tokens": 1,
+      "wall_ratio": {
+        "max": 1.937443082311734,
+        "mean": 1.7204360878595946,
+        "median": 1.9198286366806403,
+        "min": 1.3040365445864093,
+        "n": 3,
+        "std": 0.29452674117676836
+      }
+    },
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.7289940521070157,
+        "mean": 0.722381062096109,
+        "median": 0.7270588032272244,
+        "min": 0.7110903309540868,
+        "n": 3,
+        "std": 0.008022749086099077
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 0.7110903309540868,
+          "session": 1,
+          "wall_ratio": 0.6942844532826367
+        },
+        {
+          "event_ratio": 0.7289940521070157,
+          "session": 2,
+          "wall_ratio": 0.7313306077095005
+        },
+        {
+          "event_ratio": 0.7270588032272244,
+          "session": 3,
+          "wall_ratio": 0.7283805095914095
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.7313306077095005,
+        "mean": 0.7179985235278489,
+        "median": 0.7283805095914095,
+        "min": 0.6942844532826367,
+        "n": 3,
+        "std": 0.016811575683096786
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.865127612696541,
+        "mean": 0.8579176819381132,
+        "median": 0.8574849927059179,
+        "min": 0.8511404404118811,
+        "n": 3,
+        "std": 0.005718429977358779
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 0.8574849927059179,
+          "session": 1,
+          "wall_ratio": 0.8515652864996985
+        },
+        {
+          "event_ratio": 0.8511404404118811,
+          "session": 2,
+          "wall_ratio": 0.8522659941807427
+        },
+        {
+          "event_ratio": 0.865127612696541,
+          "session": 3,
+          "wall_ratio": 0.8636711281593955
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.8636711281593955,
+        "mean": 0.8558341362799456,
+        "median": 0.8522659941807427,
+        "min": 0.8515652864996985,
+        "n": 3,
+        "std": 0.005548968619031333
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.9593496150415033,
+        "mean": 0.9548272608563271,
+        "median": 0.9550516563048818,
+        "min": 0.9500805112225961,
+        "n": 3,
+        "std": 0.003787420968541272
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.9550516563048818,
+          "session": 1,
+          "wall_ratio": 0.959645339465337
+        },
+        {
+          "event_ratio": 0.9500805112225961,
+          "session": 2,
+          "wall_ratio": 0.9484870337785214
+        },
+        {
+          "event_ratio": 0.9593496150415033,
+          "session": 3,
+          "wall_ratio": 0.9616228094166005
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.9616228094166005,
+        "mean": 0.9565850608868196,
+        "median": 0.959645339465337,
+        "min": 0.9484870337785214,
+        "n": 3,
+        "std": 0.005782798004258691
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.33102346755453416,
+        "mean": 0.32833784693237084,
+        "median": 0.3306462341713939,
+        "min": 0.32334383907118447,
+        "n": 3,
+        "std": 0.0035346534148373763
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 0.3306462341713939,
+          "session": 1,
+          "wall_ratio": 0.3315928068456238
+        },
+        {
+          "event_ratio": 0.33102346755453416,
+          "session": 2,
+          "wall_ratio": 0.33414314072576157
+        },
+        {
+          "event_ratio": 0.32334383907118447,
+          "session": 3,
+          "wall_ratio": 0.32565736972308673
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 0.33414314072576157,
+        "mean": 0.33046443909815737,
+        "median": 0.3315928068456238,
+        "min": 0.32565736972308673,
+        "n": 3,
+        "std": 0.003554995331230046
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.27882040064662,
+        "mean": 1.2717045288901632,
+        "median": 1.2750794764458449,
+        "min": 1.2612137095780245,
+        "n": 3,
+        "std": 0.007573708728178975
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.2612137095780245,
+          "session": 1,
+          "wall_ratio": 1.2658074577796101
+        },
+        {
+          "event_ratio": 1.27882040064662,
+          "session": 2,
+          "wall_ratio": 1.277414630045894
+        },
+        {
+          "event_ratio": 1.2750794764458449,
+          "session": 3,
+          "wall_ratio": 1.272634774873917
+        }
+      ],
+      "tokens": 2048,
+      "wall_ratio": {
+        "max": 1.277414630045894,
+        "mean": 1.2719522875664737,
+        "median": 1.272634774873917,
+        "min": 1.2658074577796101,
+        "n": 3,
+        "std": 0.004763118985035826
+      }
+    },
+    {
+      "baseline": "hadamard_fp16",
+      "candidate": "nar_module",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.7740224668924064,
+        "mean": 0.7723729223352085,
+        "median": 0.7726466504021804,
+        "min": 0.7704496497110387,
+        "n": 3,
+        "std": 0.001471382783609848
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 slot",
+      "sessions": [
+        {
+          "event_ratio": 0.7704496497110387,
+          "session": 1,
+          "wall_ratio": 0.7711239570555792
+        },
+        {
+          "event_ratio": 0.7726466504021804,
+          "session": 2,
+          "wall_ratio": 0.7722719522340202
+        },
+        {
+          "event_ratio": 0.7740224668924064,
+          "session": 3,
+          "wall_ratio": 0.7787120928052177
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 0.7787120928052177,
+        "mean": 0.7740360006982724,
+        "median": 0.7722719522340202,
+        "min": 0.7711239570555792,
+        "n": 3,
+        "std": 0.003339546004764529
+      }
+    },
+    {
+      "baseline": "hadamard_plus_quantizer",
+      "candidate": "nar_plus_quantizer",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.8906248256076713,
+        "mean": 0.8873465822635337,
+        "median": 0.8888420142487561,
+        "min": 0.8825729069341736,
+        "n": 3,
+        "std": 0.0034530745911409795
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E28 frontend",
+      "sessions": [
+        {
+          "event_ratio": 0.8888420142487561,
+          "session": 1,
+          "wall_ratio": 0.8898305679054112
+        },
+        {
+          "event_ratio": 0.8906248256076713,
+          "session": 2,
+          "wall_ratio": 0.8906343371409177
+        },
+        {
+          "event_ratio": 0.8825729069341736,
+          "session": 3,
+          "wall_ratio": 0.8868048751375617
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 0.8906343371409177,
+        "mean": 0.8890899267279635,
+        "median": 0.8898305679054112,
+        "min": 0.8868048751375617,
+        "n": 3,
+        "std": 0.0016487584872837096
+      }
+    },
+    {
+      "baseline": "nar_generic",
+      "candidate": "nar_prebound",
+      "direction_consistent": false,
+      "event_ratio": {
+        "max": 1.0053721730815355,
+        "mean": 0.9975208500436795,
+        "median": 0.9956395277703124,
+        "min": 0.9915508492791906,
+        "n": 3,
+        "std": 0.005797227960241964
+      },
+      "interpretation": "near parity / within observed variability",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "Dispatch",
+      "sessions": [
+        {
+          "event_ratio": 0.9956395277703124,
+          "session": 1,
+          "wall_ratio": 0.9964633333292731
+        },
+        {
+          "event_ratio": 1.0053721730815355,
+          "session": 2,
+          "wall_ratio": 1.0048653629238162
+        },
+        {
+          "event_ratio": 0.9915508492791906,
+          "session": 3,
+          "wall_ratio": 0.9937308761994175
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 1.0048653629238162,
+        "mean": 0.9983531908175022,
+        "median": 0.9964633333292731,
+        "min": 0.9937308761994175,
+        "n": 3,
+        "std": 0.0047379932213483964
+      }
+    },
+    {
+      "baseline": "nar_generic_shuffle",
+      "candidate": "nar_generic",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 0.38151589546861026,
+        "mean": 0.3804623288388009,
+        "median": 0.3802882819353674,
+        "min": 0.3795828091124249,
+        "n": 3,
+        "std": 0.0007987177050596174
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "B implementation",
+      "sessions": [
+        {
+          "event_ratio": 0.3802882819353674,
+          "session": 1,
+          "wall_ratio": 0.38071640051997513
+        },
+        {
+          "event_ratio": 0.3795828091124249,
+          "session": 2,
+          "wall_ratio": 0.3800728594355054
+        },
+        {
+          "event_ratio": 0.38151589546861026,
+          "session": 3,
+          "wall_ratio": 0.3812728679139705
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 0.3812728679139705,
+        "mean": 0.3806873759564837,
+        "median": 0.38071640051997513,
+        "min": 0.3800728594355054,
+        "n": 3,
+        "std": 0.0004903311167374222
+      }
+    },
+    {
+      "baseline": "block_hadamard_native",
+      "candidate": "nar_native",
+      "direction_consistent": true,
+      "event_ratio": {
+        "max": 1.7779858832295565,
+        "mean": 1.7777116436686946,
+        "median": 1.7778406901136081,
+        "min": 1.777308357662919,
+        "n": 3,
+        "std": 0.00029126158010800933
+      },
+      "interpretation": "consistent direction in these three sessions; no cross-hardware claim",
+      "model": "8b",
+      "ratio_definition": "candidate elapsed / baseline elapsed; greater than one means slower",
+      "scope": "E17 native",
+      "sessions": [
+        {
+          "event_ratio": 1.7779858832295565,
+          "session": 1,
+          "wall_ratio": 1.777494906828694
+        },
+        {
+          "event_ratio": 1.7778406901136081,
+          "session": 2,
+          "wall_ratio": 1.777333996708244
+        },
+        {
+          "event_ratio": 1.777308357662919,
+          "session": 3,
+          "wall_ratio": 1.7770068533183805
+        }
+      ],
+      "tokens": 32768,
+      "wall_ratio": {
+        "max": 1.777494906828694,
+        "mean": 1.7772785856184397,
+        "median": 1.777333996708244,
+        "min": 1.7770068533183805,
+        "n": 3,
+        "std": 0.00020306296049474716
+      }
+    }
+  ],
+  "traffic_estimates": [
+    {
+      "components_bytes": {
+        "input_A_and_B": 32768,
+        "output": 16384,
+        "padded_factors": 786432,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 868608,
+      "estimated_GB_per_second_event": 18.84999971423661,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 1,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 67108864,
+        "output": 33554432,
+        "padded_factors": 786432,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 101744640,
+      "estimated_GB_per_second_event": 477.69231307585164,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 1,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1073741824,
+        "output": 536870912,
+        "padded_factors": 786432,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1613529088,
+      "estimated_GB_per_second_event": 606.3929200053808,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 1,
+      "tokens": 32768
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 32768,
+        "output": 16384,
+        "padded_factors": 786432,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 868608,
+      "estimated_GB_per_second_event": 19.28525745033226,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 2,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 67108864,
+        "output": 33554432,
+        "padded_factors": 786432,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 101744640,
+      "estimated_GB_per_second_event": 504.3654791409347,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 2,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1073741824,
+        "output": 536870912,
+        "padded_factors": 786432,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1613529088,
+      "estimated_GB_per_second_event": 603.8367319585591,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 2,
+      "tokens": 32768
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 32768,
+        "output": 16384,
+        "padded_factors": 786432,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 868608,
+      "estimated_GB_per_second_event": 11.94718272702309,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 3,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 67108864,
+        "output": 33554432,
+        "padded_factors": 786432,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 101744640,
+      "estimated_GB_per_second_event": 499.2964776825512,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 3,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1073741824,
+        "output": 536870912,
+        "padded_factors": 786432,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1613529088,
+      "estimated_GB_per_second_event": 604.9959589124544,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "3b",
+      "session": 3,
+      "tokens": 32768
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 57344,
+        "output": 28672,
+        "padded_factors": 1376256,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1495296,
+      "estimated_GB_per_second_event": 31.069148037633727,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 1,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 117440512,
+        "output": 58720256,
+        "padded_factors": 1376256,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 177831936,
+      "estimated_GB_per_second_event": 562.0762571986023,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 1,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1879048192,
+        "output": 939524096,
+        "padded_factors": 1376256,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 2822078464,
+      "estimated_GB_per_second_event": 612.7706634867991,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 1,
+      "tokens": 32768
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 57344,
+        "output": 28672,
+        "padded_factors": 1376256,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1495296,
+      "estimated_GB_per_second_event": 21.474264329274742,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 2,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 117440512,
+        "output": 58720256,
+        "padded_factors": 1376256,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 177831936,
+      "estimated_GB_per_second_event": 563.8441780799533,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 2,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1879048192,
+        "output": 939524096,
+        "padded_factors": 1376256,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 2822078464,
+      "estimated_GB_per_second_event": 618.338768304999,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 2,
+      "tokens": 32768
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 57344,
+        "output": 28672,
+        "padded_factors": 1376256,
+        "partial_write_read": 256,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 1495296,
+      "estimated_GB_per_second_event": 32.49513197878489,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 3,
+      "tokens": 1
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 117440512,
+        "output": 58720256,
+        "padded_factors": 1376256,
+        "partial_write_read": 262144,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 177831936,
+      "estimated_GB_per_second_event": 562.0194257183445,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 3,
+      "tokens": 2048
+    },
+    {
+      "components_bytes": {
+        "input_A_and_B": 1879048192,
+        "output": 939524096,
+        "padded_factors": 1376256,
+        "partial_write_read": 2097152,
+        "shared_h128": 32768
+      },
+      "compulsory_bytes": 2822078464,
+      "estimated_GB_per_second_event": 609.3159118847533,
+      "interpretation": "Compulsory-data estimate, not measured DRAM bandwidth; factors, scratch and H may be reread by programs and served from cache.",
+      "model": "8b",
+      "session": 3,
+      "tokens": 32768
+    }
+  ]
 }

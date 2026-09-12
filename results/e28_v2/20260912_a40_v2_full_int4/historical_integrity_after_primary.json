@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-09-12T12:42:37.127279+00:00",
+  "status": "PASS",
+  "protected_files": [
+    {
+      "path": "report_e28.md",
+      "expected_sha256": "b2c2aea76a8b014f68fec26762fa36139fa5f3ece9f0177fcd89cae573f7a1cc",
+      "observed_sha256": "b2c2aea76a8b014f68fec26762fa36139fa5f3ece9f0177fcd89cae573f7a1cc"
+    },
+    {
+      "path": "results/e28/3b/metrics.json",
+      "expected_sha256": "a345388bf6ed562c698c64a6e34c9c9754950a82c12f690ea4a928ae78b1a64f",
+      "observed_sha256": "a345388bf6ed562c698c64a6e34c9c9754950a82c12f690ea4a928ae78b1a64f"
+    },
+    {
+      "path": "results/e28/3b/metrics_fp16.json",
+      "expected_sha256": "fd9765e5f0f61284102ecb5795223246b17de6a55612df89313ccb45c1107ddf",
+      "observed_sha256": "fd9765e5f0f61284102ecb5795223246b17de6a55612df89313ccb45c1107ddf"
+    },
+    {
+      "path": "results/e28/3b/metrics_hadamard.json",
+      "expected_sha256": "4417426b0bd3df66e55fcdcb4d65e927e8de39064c7e818c1798bd696e987438",
+      "observed_sha256": "4417426b0bd3df66e55fcdcb4d65e927e8de39064c7e818c1798bd696e987438"
+    },
+    {
+      "path": "results/e28/3b/metrics_nar.json",
+      "expected_sha256": "40f35716e824ae7239345f37634d3e771b993778ea6e17a71b1b39ed6d1b0c26",
+      "observed_sha256": "40f35716e824ae7239345f37634d3e771b993778ea6e17a71b1b39ed6d1b0c26"
+    },
+    {
+      "path": "results/e28/8b/metrics.json",
+      "expected_sha256": "2db6696f7e6080d002c472a87b4e265cec47ff506cbeb0f076aa4704679a13d1",
+      "observed_sha256": "2db6696f7e6080d002c472a87b4e265cec47ff506cbeb0f076aa4704679a13d1"
+    },
+    {
+      "path": "results/e28/8b/metrics_fp16.json",
+      "expected_sha256": "d270e0895827a946f2518dd252fb340b2aa75f699674744d9dcc495ed6d227bc",
+      "observed_sha256": "d270e0895827a946f2518dd252fb340b2aa75f699674744d9dcc495ed6d227bc"
+    },
+    {
+      "path": "results/e28/8b/metrics_hadamard.json",
+      "expected_sha256": "d5e70943b87b43cc0ba55372a7b3367dce4287698747301238f0b39ac7b8dffe",
+      "observed_sha256": "d5e70943b87b43cc0ba55372a7b3367dce4287698747301238f0b39ac7b8dffe"
+    },
+    {
+      "path": "results/e28/8b/metrics_nar.json",
+      "expected_sha256": "475d5c74fb066cc632458600f913d756f119f3936a7dd3a27f8f3d6a539fdc86",
+      "observed_sha256": "475d5c74fb066cc632458600f913d756f119f3936a7dd3a27f8f3d6a539fdc86"
+    },
+    {
+      "path": "results/e28/e17v3_a40_summary.json",
+      "expected_sha256": "aa7b0e2a3abc543590bcefb94df9e8cafd078825953782fa438dc98721e29574",
+      "observed_sha256": "aa7b0e2a3abc543590bcefb94df9e8cafd078825953782fa438dc98721e29574"
+    },
+    {
+      "path": "results/e28/env.txt",
+      "expected_sha256": "98920fe42b2306f40cd1e4ac9676218947e8020f0830bbe0593bfee313a1c1b3",
+      "observed_sha256": "98920fe42b2306f40cd1e4ac9676218947e8020f0830bbe0593bfee313a1c1b3"
+    },
+    {
+      "path": "results/e28/table.tex",
+      "expected_sha256": "33bbfb60cbd2af7ce42c41ba5e85ba4a56b6e13b8eee12a4aa6ba85b9437affb",
+      "observed_sha256": "33bbfb60cbd2af7ce42c41ba5e85ba4a56b6e13b8eee12a4aa6ba85b9437affb"
+    }
+  ],
+  "scope": "Original E28 report and recorded result inputs unchanged after all primary E28-v2 work."
+}

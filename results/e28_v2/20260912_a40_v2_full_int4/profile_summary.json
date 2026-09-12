@@ -2,40 +2,106 @@
   "interpretation": "Profiler durations are separate diagnostics, not main timing samples. Kernel sum, wall and event elapsed are distinct. Gaps do not measure CPU arithmetic.",
   "rows": [
     {
+      "device_kernel_span_ms": 178.1932646484375,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 115.4499033203125,
+      "kernel_count": 5676,
+      "kernel_sum_ms_per_step": 15.685864000000349,
+      "kernel_union_busy_ms": 62.743361328125,
       "method": "fp16",
       "model": "3b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/3b_fp16.json",
+      "status": "PASS"
     },
     {
+      "device_kernel_span_ms": 442.3284775390625,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 372.8719169921875,
+      "kernel_count": 10044,
+      "kernel_sum_ms_per_step": 17.36400125000009,
+      "kernel_union_busy_ms": 69.456560546875,
       "method": "hadamard",
       "model": "3b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/3b_hadamard.json",
+      "status": "PASS"
     },
     {
+      "device_kernel_span_ms": 467.96377734375,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 397.1932861328125,
+      "kernel_count": 10156,
+      "kernel_sum_ms_per_step": 17.692655500000043,
+      "kernel_union_busy_ms": 70.7704912109375,
       "method": "nar",
       "model": "3b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/3b_nar.json",
+      "status": "PASS"
     },
     {
+      "device_kernel_span_ms": 256.72049609375,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 139.7761279296875,
+      "kernel_count": 6092,
+      "kernel_sum_ms_per_step": 29.236100749999878,
+      "kernel_union_busy_ms": 116.9443681640625,
       "method": "fp16",
       "model": "8b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/8b_fp16.json",
+      "status": "PASS"
     },
     {
+      "device_kernel_span_ms": 473.40924609375,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 376.028208984375,
+      "kernel_count": 11724,
+      "kernel_sum_ms_per_step": 24.34527850000032,
+      "kernel_union_busy_ms": 97.381037109375,
       "method": "hadamard",
       "model": "8b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/8b_hadamard.json",
+      "status": "PASS"
     },
     {
+      "device_kernel_span_ms": 475.4823759765625,
+      "gap_interpretation": "Includes host submission, copies/synchronization/profiler effects; not CPU arithmetic time.",
+      "hardware_counters": {
+        "reason": "No Nsight hardware counters collected; no measured DRAM or compute utilization claim.",
+        "value": null
+      },
+      "inter_kernel_gap_ms": 376.0060224609375,
+      "kernel_count": 11724,
+      "kernel_sum_ms_per_step": 24.86905550000024,
+      "kernel_union_busy_ms": 99.476353515625,
       "method": "nar",
       "model": "8b",
-      "reason": "No profile record yet",
-      "status": "PENDING"
+      "reason": null,
+      "source": "profiles/8b_nar.json",
+      "status": "PASS"
     }
   ]
 }

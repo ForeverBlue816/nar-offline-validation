@@ -3,6 +3,6 @@ Performance, numerical consistency and native-paper-format deployment are separa
 | Path | Format | Weights | Numerical status | Deployment status |
 | --- | --- | --- | --- | --- |
 | E28 kernel swap | Sym W4/A4; KV4 | Random | Boundary FAIL | Measured integer |
-| FP16 base models | W16/A16/KV16 | Real base | 3B/8B: PENDING/PENDING | FP16 only |
+| FP16 base models | W16/A16/KV16 | Real base | 3B/8B: PASS/PASS | FP16 only |
 | E17 native R4 | Asym A4 g128 | Real factors | See kernel table | Local R4 only |
 | Paper native | Asym g128; KV R32 | k8 state absent | BLOCKED | GEMM/KV gap |

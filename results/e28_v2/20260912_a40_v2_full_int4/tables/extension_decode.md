@@ -2,4 +2,15 @@ Appendix only: fixed batch8/prefix2048 and batch1/prefix8192 workloads, one sess
 
 | Model | Method | Workload | ms/step | Run std | Status |
 | --- | --- | --- | --- | --- | --- |
-
+| 3b | FP16 | decode8 | 22.60 | 0.47 | COMPLETE |
+| 3b | FP16 | decode8192 | 24.12 | 0.01 | COMPLETE |
+| 3b | QuaRot Hadamard | decode8 | 51.60 | 2.46 | COMPLETE |
+| 3b | QuaRot Hadamard | decode8192 | 50.56 | 3.71 | COMPLETE |
+| 3b | PrismQuant k=8 | decode8 | 42.45 | 0.70 | COMPLETE |
+| 3b | PrismQuant k=8 | decode8192 | 43.13 | 2.44 | COMPLETE |
+| 8b | FP16 | decode8 | 33.13 | 0.01 | COMPLETE |
+| 8b | FP16 | decode8192 | 38.91 | 3.89e-03 | COMPLETE |
+| 8b | QuaRot Hadamard | decode8 | 61.11 | 2.87 | COMPLETE |
+| 8b | QuaRot Hadamard | decode8192 | 53.31 | 2.99 | COMPLETE |
+| 8b | PrismQuant k=8 | decode8 | 51.05 | 0.77 | COMPLETE |
+| 8b | PrismQuant k=8 | decode8192 | 51.56 | 1.02 | COMPLETE |

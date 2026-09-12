@@ -1,0 +1,245 @@
+FROZEN /home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2 9042df3fabb29a16532ee729d9d662e2fcb0c87f71771da60323f1f83387750b
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/_hdd/nar/nar-validation/external/quarot/quarot/functional/quantization.py:10: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  minq = torch.tensor(-maxq -1)
+Traceback (most recent call last):
+  File "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/verify.py", line 161, in main
+    with torch.inference_mode():payload.update({'r4':r4,'operators':operators,'model':model_check}[a.level](a))
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/verify.py", line 98, in operators
+    cache.update(k,v,0)
+  File "/projects/_hdd/nar/nar-validation/external/quarot/quarot/transformers/kv_cache.py", line 211, in update
+    attention_mask = cache_kwargs.get("attention_mask")
+                     ^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
+
+R4 3b 0 failures 18
+R4 3b 1 failures 36
+R4 3b 2 failures 54
+R4 3b 3 failures 72
+R4 3b 4 failures 90
+R4 3b 5 failures 108
+R4 3b 6 failures 126
+R4 3b 7 failures 144
+R4 3b 8 failures 162
+R4 3b 9 failures 180
+R4 3b 10 failures 198
+R4 3b 11 failures 216
+R4 3b 12 failures 234
+R4 3b 13 failures 252
+R4 3b 14 failures 270
+R4 3b 15 failures 288
+R4 3b 16 failures 306
+R4 3b 17 failures 324
+R4 3b 18 failures 342
+R4 3b 19 failures 360
+R4 3b 20 failures 378
+R4 3b 21 failures 396
+R4 3b 22 failures 414
+R4 3b 23 failures 432
+R4 3b 24 failures 450
+R4 3b 25 failures 468
+R4 3b 26 failures 486
+R4 3b 27 failures 504
+R4 8b 0 failures 18
+R4 8b 1 failures 36
+R4 8b 2 failures 54
+R4 8b 3 failures 72
+R4 8b 4 failures 90
+R4 8b 5 failures 108
+R4 8b 6 failures 126
+R4 8b 7 failures 144
+R4 8b 8 failures 162
+R4 8b 9 failures 180
+R4 8b 10 failures 198
+R4 8b 11 failures 216
+R4 8b 12 failures 234
+R4 8b 13 failures 252
+R4 8b 14 failures 270
+R4 8b 15 failures 288
+R4 8b 16 failures 306
+R4 8b 17 failures 324
+R4 8b 18 failures 342
+R4 8b 19 failures 360
+R4 8b 20 failures 378
+R4 8b 21 failures 396
+R4 8b 22 failures 414
+R4 8b 23 failures 432
+R4 8b 24 failures 450
+R4 8b 25 failures 468
+R4 8b 26 failures 486
+R4 8b 27 failures 504
+R4 8b 28 failures 522
+R4 8b 29 failures 540
+R4 8b 30 failures 558
+R4 8b 31 failures 576
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+CACHE PAIR 0 1 [625, 451]
+CACHE PAIR 1 2 [0, 0]
+CACHE PAIR 2 3 [0, 0]
+CACHE PAIR 0 3 [625, 451]
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/_hdd/nar/nar-validation/external/quarot/quarot/functional/quantization.py:10: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  minq = torch.tensor(-maxq -1)
+R4 3b 0 failures 0
+R4 3b 1 failures 0
+R4 3b 2 failures 0
+R4 3b 3 failures 0
+R4 3b 4 failures 0
+R4 3b 5 failures 0
+R4 3b 6 failures 0
+R4 3b 7 failures 0
+R4 3b 8 failures 0
+R4 3b 9 failures 0
+R4 3b 10 failures 0
+R4 3b 11 failures 0
+R4 3b 12 failures 0
+R4 3b 13 failures 0
+R4 3b 14 failures 0
+R4 3b 15 failures 0
+R4 3b 16 failures 0
+R4 3b 17 failures 0
+R4 3b 18 failures 0
+R4 3b 19 failures 0
+R4 3b 20 failures 0
+R4 3b 21 failures 0
+R4 3b 22 failures 0
+R4 3b 23 failures 0
+R4 3b 24 failures 0
+R4 3b 25 failures 0
+R4 3b 26 failures 0
+R4 3b 27 failures 0
+R4 8b 0 failures 0
+R4 8b 1 failures 0
+R4 8b 2 failures 0
+R4 8b 3 failures 0
+R4 8b 4 failures 0
+R4 8b 5 failures 0
+R4 8b 6 failures 0
+R4 8b 7 failures 0
+R4 8b 8 failures 0
+R4 8b 9 failures 0
+R4 8b 10 failures 0
+R4 8b 11 failures 0
+R4 8b 12 failures 0
+R4 8b 13 failures 0
+R4 8b 14 failures 0
+R4 8b 15 failures 0
+R4 8b 16 failures 0
+R4 8b 17 failures 0
+R4 8b 18 failures 0
+R4 8b 19 failures 0
+R4 8b 20 failures 0
+R4 8b 21 failures 0
+R4 8b 22 failures 0
+R4 8b 23 failures 0
+R4 8b 24 failures 0
+R4 8b 25 failures 0
+R4 8b 26 failures 0
+R4 8b 27 failures 0
+R4 8b 28 failures 0
+R4 8b 29 failures 0
+R4 8b 30 failures 0
+R4 8b 31 failures 0
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+3b_fp16_eager_sequence_prefill1_s1 run 0 0.20155
+3b_fp16_eager_sequence_prefill1_s1 run 10 0.20177
+3b_fp16_eager_sequence_prefill1_s1 run 20 0.20256
+3b_fp16_eager_sequence_prefill1_s1 run 30 0.20262
+3b_fp16_eager_sequence_prefill1_s1 run 40 0.20295
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+3b_fp16_eager_sequence_prefill16_s1 run 0 2.3269
+3b_fp16_eager_sequence_prefill16_s1 run 10 2.33325
+3b_fp16_eager_sequence_prefill16_s1 run 20 2.33834
+3b_fp16_eager_sequence_prefill16_s1 run 30 2.34935
+3b_fp16_eager_sequence_prefill16_s1 run 40 2.35347
+slurmstepd-gpu-a40-1: error: *** JOB 150777 ON gpu-a40-1 CANCELLED AT 2026-09-12T12:41:32 ***
