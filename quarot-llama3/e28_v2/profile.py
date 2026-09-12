@@ -10,7 +10,9 @@ def main():
     try:
       with torch.inference_mode():
         m=build(a.model,a.method);cache=make_cache(m,1,2176)
-        inp=torch.full((1,2048),100,device='cuda',dtype=torch.int32);token=inp[:,:1].contiguous()
+        gen=torch.Generator(device='cpu').manual_seed(0)
+        inp=torch.randint(100,200,(1,2048),generator=gen,dtype=torch.int32).cuda();token=torch.full((1,1),100,device='cuda',dtype=torch.int32)
+        out.update(model=a.model,method=a.method,input_sha256=tensor_hash(inp),decode_token=100,batch=1,prefix=2048,capacity=2176)
         clear(cache);m(inp,past_key_values=cache)
         for _ in range(8):m(token,past_key_values=cache)
         torch.cuda.synchronize()

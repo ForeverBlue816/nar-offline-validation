@@ -25,9 +25,11 @@ def main():
     p=arguments(__doc__);a=p.parse_args();out=a.run.resolve()
     raw=[read(f) for f in (out/'raw_runs').glob('*.json')]
     checks=[];uuids=set();environments=set();input_hashes=collections.defaultdict(set)
+    core_sources={name:set() for name in ['common.py','cache_adapter.py','benchmark.py']}
     for record in raw:
         if record.get('samples') and record.get('status')=='PASS':
             env=record['environment'];pid=str(env['pid'])
+            for name,hashes in core_sources.items():hashes.add(env.get('execution_python_sha256',{}).get('quarot-llama3/e28_v2/'+name))
             for line in env.get('processes','').splitlines():
                 fields=[x.strip() for x in line.split(',')]
                 if len(fields)>1 and fields[1]==pid:uuids.add(fields[0])
@@ -36,7 +38,8 @@ def main():
             modelcheck=out/'correctness'/f'model_{record["model"]}_{record["method"]}.json'
             reference=read(modelcheck).get('shared_state') if modelcheck.exists() else None
             checks.append({'key':record['key'],'shared_state_matches_verified_model':bool(reference and record.get('shared_state')==reference)})
-    write(out/'protocol_conformance.json',{'gpu_uuids':sorted(uuids),'same_gpu':len(uuids)==1 if uuids else None,'environment_variants':len(environments),'same_inputs':all(len(v)==1 for v in input_hashes.values()),'state_checks':checks,'status':'PASS' if checks and len(uuids)==1 and len(environments)==1 and all(c['shared_state_matches_verified_model'] for c in checks) and all(len(v)==1 for v in input_hashes.values()) else 'PENDING_OR_REVIEW_REQUIRED'})
+    same_core_sources=all(len(v)==1 and None not in v for v in core_sources.values())
+    write(out/'protocol_conformance.json',{'core_source_hashes':{k:sorted(v,key=str) for k,v in core_sources.items()},'same_core_measurement_sources':same_core_sources,'gpu_uuids':sorted(uuids),'same_gpu':len(uuids)==1 if uuids else None,'environment_variants':len(environments),'same_inputs':all(len(v)==1 for v in input_hashes.values()),'state_checks':checks,'status':'PASS' if same_core_sources and checks and len(uuids)==1 and len(environments)==1 and all(c['shared_state_matches_verified_model'] for c in checks) and all(len(v)==1 for v in input_hashes.values()) else 'PENDING_OR_REVIEW_REQUIRED'})
     groups=collections.defaultdict(list)
     for r in raw:
         if r.get('status')=='PASS' and r.get('samples') and r.get('mode')!='legacy_diagnostic':groups[(r['model'],r['method'],r['mode'],r['phase'])].append(r)
