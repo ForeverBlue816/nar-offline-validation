@@ -1,0 +1,13 @@
+{
+  "question": "How does an anisotropic point cloud define a dominant direction and its orthogonal complement?",
+  "conclusion": "The empirical first principal component follows the long axis of the cloud; the second remains orthogonal.",
+  "archetype": "single-panel conceptual schematic",
+  "backend": "Python / matplotlib; existing repository workflow",
+  "data": "Seeded simulated Gaussian points, not model activations or experimental observations.",
+  "revision": "Increase conceptual samples from 72 to 216 using the existing seed and sampling law; retain every generated point and refit empirical PCA.",
+  "style": "User reference supplies palette only: sage samples and outer contour, teal inner contour and secondary direction, blue primary direction; colors do not denote separate populations.",
+  "geometry": "One isotropic scale with equal axes preserves PCA angles, orthogonality, and covariance contours. Widen the canvas from aspect 1.5 to 2.0 without anisotropic stretching.",
+  "export": "2 x 1 inch editable SVG/PDF, 600 dpi PNG, source CSV and metadata; existing Times New Roman Bold labels, rendered glyph floor 5 pt.",
+  "statistics": "Empirical covariance ellipses at Mahalanobis radii 1 and 2 are geometric contours, not confidence intervals; no inferential or experimental claim.",
+  "qa": "Source preflight, single-panel alignment record, PDF glyph and collision checks, vector/editability and numerical geometry checks, visual inspection."
+}

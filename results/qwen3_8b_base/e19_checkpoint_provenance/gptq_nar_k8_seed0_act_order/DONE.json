@@ -1,0 +1,98 @@
+{
+  "bf16_reparameterization_drift": {
+    "exceeds_previous_bf16_gate": false,
+    "max_abs_logit_error": 0.002002716064453125,
+    "previous_bf16_gate": 0.01,
+    "probe_tokens": 128,
+    "relative_l2_logit_error": 1.2321061149123125e-05
+  },
+  "checkpoint": "one bf16 fake-quantized state file per decoder layer",
+  "elapsed_seconds": 1062.7876784801483,
+  "fold": {
+    "embedding_centering": false,
+    "norm": "all RMSNorm affine weights fused into consumer weights then set to one",
+    "official_bug_avoided": "official head calls rotate_embeddings twice; E14 applies algebraic R1 once",
+    "r1": "global residual rotation; input rows WQ, residual output Q^T W",
+    "r2": "per-head V rotation with identical fold into every GQA-expanded o_proj head block",
+    "r3": "QuaRot cross-head Hadamard at o_proj for Hadamard rows; omitted for the specified NAR R1/R2/R4 rows",
+    "r4": "per-layer down-input rotation folded into down_proj rows",
+    "tied_embeddings_materialized_before_final_norm_fusion": false
+  },
+  "fp32_algebra_control": {
+    "row": {
+      "below_reference_share": "0.9375",
+      "chunks": "64",
+      "chunks_below_reference": "60",
+      "fold_dtype": "float32",
+      "max_abs_logit_difference": "0.003330230712890625",
+      "max_abs_nll_delta": "1.71661376953125e-05",
+      "max_round_trip_relative_error": "4.091880043688434e-07",
+      "mean_nll_delta": "-3.883615136146545e-06",
+      "model": "qwen3_8b_base",
+      "model_id": "Qwen/Qwen3-8B-Base",
+      "passed": "True",
+      "ppl_abs_difference": "3.2921755289905263e-05",
+      "quantizer": "identity",
+      "r1_rank": "8",
+      "r1_slots": "32",
+      "r2_rank": "1",
+      "r4_rank": "8",
+      "r4_slots": "96",
+      "reference_ppl": "8.47710652665169",
+      "relative_l2_logit_difference": "1.3867794223187957e-05",
+      "required_max_abs_nll_delta": "0.001",
+      "required_ppl_abs_difference": "0.01",
+      "rotation": "nar_k8",
+      "rotation_only_ppl": "8.4770736048964",
+      "round_trip_tolerance": "1e-06",
+      "seed": "0",
+      "sign_balanced": "False",
+      "sign_test_applicable": "False"
+    },
+    "source": "/projects/_hdd/nar/nar-validation/results/qwen3_8b_base/e19_rotation_only_control.csv"
+  },
+  "gptq": {
+    "act_order": true,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_dataset": "WikiText-2 train",
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head"
+    ],
+    "grid": 100,
+    "groupsize": -1,
+    "maxshrink": 0.8,
+    "mse_clipping": true,
+    "norm": 2.4,
+    "percdamp": 0.01,
+    "perchannel": true,
+    "protocol": "act_order",
+    "sequence_length": 2048,
+    "static_groups": false,
+    "symmetric": true
+  },
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-pro6000-4.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-b2e68c42-6ad7-84fe-4552-e64e11fc8731, 97887 MiB, 96403 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "1",
+    "slurm_job_id": "139731",
+    "torch": "2.11.0+cu128"
+  },
+  "model": "qwen3_8b_base",
+  "model_id": "Qwen/Qwen3-8B-Base",
+  "quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+  "rotation": "nar_k8"
+}

@@ -1133,7 +1133,13 @@ def effective_bits(model_config: Any, quantized: bool, context: int) -> dict[str
     expert_values = experts * (2 * inter * h + h * inter)
     expert_scales = experts * (2 * inter + h)
     router_values = experts * h
-    w_bits = 4 + (16 + 4) * (attn_scales + expert_scales) / (attn_values + expert_values) if quantized else 16.0
+    # g128_asym stores one fp16 scale and one int4 zero per group of 128 input
+    # channels, so the metadata is 20 bits per 128 weights (4.15625 bits/weight),
+    # not 20 bits per output row.  An earlier version of this function divided by
+    # the row count and reported 4.015; every input dimension here (2048, 512,
+    # 768) is a multiple of 128, so the width is exactly e14's protocol constant.
+    del attn_scales, expert_scales
+    w_bits = e14.weight_effective_bits(PROTOCOL) if quantized else 16.0
     w_bits_with_router = ((w_bits * (attn_values + expert_values) + 16 * router_values) / (attn_values + expert_values + router_values)
                           if quantized else 16.0)
     bits = e19.effective_bits(ACTIVATION_KIND if quantized else None, quantized, quantized,

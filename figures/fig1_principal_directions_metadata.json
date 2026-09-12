@@ -1,40 +1,45 @@
 {
   "kind": "synthetic conceptual illustration, not measured activations",
   "seed": 20260907,
-  "samples_generated": 72,
-  "samples_plotted": 72,
+  "samples_generated": 216,
+  "samples_plotted": 216,
   "sampling": "NumPy default_rng; 2D Gaussian standard deviations [1.0, 0.24], rotated 28 degrees; sample centered",
   "empirical_covariance": [
     [
-      0.7207386909332671,
-      0.4021702036088287
+      0.7326335847147665,
+      0.39550679943231587
     ],
     [
-      0.4021702036088287,
-      0.2936396860590124
+      0.39550679943231587,
+      0.28722789674741156
     ]
   ],
   "empirical_eigenvalues": [
-    0.9625398914295067,
-    0.05183848556277282
+    0.9638274086144436,
+    0.05603407284773443
   ],
   "empirical_eigenvectors_columns": [
     [
-      0.8570233628354534,
-      -0.5152775519603108
+      0.8633210792217987,
+      -0.5046550447298717
     ],
     [
-      0.5152775519603108,
-      0.8570233628354534
+      0.5046550447298717,
+      0.8633210792217987
     ]
   ],
-  "principal_energy_fraction": 0.9488963026632347,
-  "sample_array_sha256": "3f4744f09a7ff39a76fc55ab1d38c37714ba7a392e8af8233e1ecf99af45d73a",
+  "principal_energy_fraction": 0.94505717309041,
+  "sample_array_sha256": "44e6a0053ce9e78120ae3f54f54bad2c852ede9b1e621017adf8d8ec0d79b448",
   "palette": {
-    "principal_direction": "#1D3557",
-    "samples": "#457B9D",
-    "contour": "#A8DADC"
+    "principal_direction": "#4D6694",
+    "secondary_direction": "#539B8B",
+    "samples": "#9FBC89",
+    "sample_edges": "#567650",
+    "outer_contour": "#86A875",
+    "outer_fill": "#ECF3E7",
+    "inner_fill": "#D1E6DC"
   },
+  "color_semantics": "One simulated population; colors distinguish sample marks, geometric contours, and PCA arrows, not classes.",
   "font": {
     "family": "Times New Roman",
     "weight": "bold",
@@ -45,19 +50,30 @@
     "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
   },
   "geometry": {
-    "sample_count": 72,
-    "covariance_contour_mahalanobis_radius": 2.0,
-    "scale": 0.16605571245196082,
+    "sample_count": 216,
+    "covariance_contour_mahalanobis_radii": [
+      1.0,
+      2.0
+    ],
+    "scale": 0.2983025374785492,
     "center": [
       0,
-      -0.075
+      0
     ],
-    "width": 0.74,
+    "width": 1.34,
     "secondary_direction": true
   },
   "arrow_linewidth_pt": {
-    "v1": 0.4,
-    "v2": 0.3
+    "v1": 1.15,
+    "v2": 0.95
   },
-  "output": "1 in by 2/3 in, white background; editable vector SVG and PDF; 300 x 200 PNG"
+  "revision": {
+    "previous_samples": 72,
+    "current_samples": 216,
+    "sampling_law_unchanged": true,
+    "previous_canvas_aspect": 1.5,
+    "current_canvas_aspect": 2.0
+  },
+  "contour_interpretation": "Mahalanobis radii 1 and 2 of empirical covariance; not confidence intervals.",
+  "output": "2 in by 1 in, white background; editable vector SVG and PDF; 1200 x 600 PNG at 600 dpi"
 }

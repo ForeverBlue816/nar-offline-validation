@@ -1,22 +1,41 @@
 {
-  "verdict": "PASS",
-  "all_72_samples_preserved": true,
+  "verdict": "PASS_WITH_DOCUMENTED_SOURCE_PREFLIGHT_EXCEPTIONS",
+  "data_kind": "Synthetic conceptual Gaussian samples; no experimental observations",
+  "sample_count": 216,
+  "all_samples_plotted": true,
+  "all_samples_inside_axes": true,
   "empirical_PCA_verified": true,
   "eigenvectors_orthogonal": true,
+  "single_isotropic_scale": 0.2983025374785492,
+  "canvas_inches": [
+    2,
+    1
+  ],
+  "png_size_pixels": [
+    1200,
+    600
+  ],
   "svg_and_pdf_fully_vector": true,
   "svg_text_editable": true,
   "all_text_Times_New_Roman_bold": true,
   "all_pdf_fonts_embedded": true,
-  "no_text_clipping": true,
-  "png_size_pixels": [
-    300,
-    200
-  ],
+  "minimum_glyph_pt": 6.65,
   "collision_audit": {
     "fail": 0,
     "warn": 0,
     "contained_fill_overlays": 0,
     "contained_image_overlays": 0
   },
-  "visual_review": "Compact tilted cloud with an empirical covariance contour. Both v1 and v2 are present. Thin arrows, minimal labels, white background; no axes or grid."
+  "alignment": "NOT APPLICABLE: one plot area; fresh measured geometry archived.",
+  "visual_review": "Inspected the complete final PNG and labels. Sage points with dark edges remain visible against pale green/teal empirical contours. The blue v1 is dominant and the teal v2 remains perpendicular. The dashed inner contour differs by line style as well as color. Tail points are all retained and visible; neither label nor arrow is clipped. White background, no axes or grid.",
+  "revision_data_effect": "The random seed, anisotropy and nominal 28-degree orientation are unchanged. Increasing n from 72 to 216 changes empirical centering and PCA; the new fit and all plotted coordinates are exported. Colors do not imply separate classes.",
+  "artifacts": {
+    "principal_direction_icon.py": "7de05114331a1509e3fa126d6079bb065e4dba9394e435a727e777bd4de6063b",
+    "figure_style.py": "facb0b0ffa161fc4441b3ecdb9eb088a3b11b461b125dce54bb2d61f9bce8d31",
+    "figure_typography.py": "a72e5e9a214f9a1a7715dc4dfccffa0f077fcafa3d0deb8da2548e93e7005648",
+    "fig1_principal_directions.csv": "e9011ca593908af0fd4932fd092474bc91bbf0bb908f1aae47fcc9910255916e",
+    "fig1_principal_directions.svg": "1fa8a8c660f0796957fe1e1e3af51d5003b785578b85c36ba777c9c141cd9b96",
+    "fig1_principal_directions.pdf": "a6056d2a6f4904480731bb105fbcc21c81dbf778fa9ff9ce04ce56df77348da3",
+    "fig1_principal_directions.png": "bfacdac5f003c30c180e3f4c76724ce89293f50dcbefafc4b689241b4e2a4518"
+  }
 }

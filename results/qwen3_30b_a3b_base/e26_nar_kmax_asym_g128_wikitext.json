@@ -742,9 +742,10 @@
     "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
     "value": 4.43359375,
     "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
-    "weight": 4.014960805976431,
+    "weight": 4.15625,
+    "weight_correction": "written as 4.014960805976431 by a formula that counted one fp16 scale and int4 zero per output row; g128_asym stores them per group of 128 input channels. Corrected 2026-09-12 without re-running the evaluation; no measured quantity depends on it.",
     "weight_definition": "GPTQ g128_asym over attention and all 128 experts per layer (fp16 scale + int4 zero per group); router gates bf16",
-    "weight_including_bf16_router": 4.02000289230122
+    "weight_including_bf16_router": 4.16123264619268
   },
   "elapsed_seconds": 1805.7533373832703,
   "fold_dtype": "float32",

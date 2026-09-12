@@ -78,7 +78,7 @@
     {
       "check_id": "FINAL-WIDTH",
       "level": "WARN",
-      "message": "Detected width 25.4 mm is not near the common 89/183 mm defaults; verify the target journal",
+      "message": "Detected width 50.8 mm is not near the common 89/183 mm defaults; verify the target journal",
       "evidence": []
     },
     {
@@ -149,5 +149,12 @@
       "evidence": []
     }
   ],
-  "font_resolution": "User explicitly requests Times New Roman Bold; every rendered glyph is verified as embedded TimesNewRomanPS-BoldMT. Sans-serif-only static rule is superseded."
+  "reviewed_exceptions": {
+    "FONT-FAMILY": "The static check accepts sans-serif only. Preserve the existing manuscript Times New Roman Bold contract; all final PDF font resources are embedded TimesNewRomanPS-BoldMT.",
+    "FONT-GLYPH-FLOOR": "Final PDF text audit measures every glyph at >=6.65 pt, above the 5 pt floor.",
+    "EXPORT-RASTER": "SVG is the requested deliverable; matching PDF and 600 dpi PNG are included. No TIFF required for this vector micro-diagram.",
+    "FINAL-WIDTH": "Standalone 50.8 mm concept glyph for placement in the manuscript, not a full single/double-column quantitative figure.",
+    "DEMO-DATA": "This separate principal_direction_icon.py example is explicitly a synthetic concept illustration in its docstring, CSV columns, metadata, figure contract and README. No measured activation data are represented.",
+    "UNCERTAINTY-ENCODING": "No across-seed experimental estimate. Contours are geometric Mahalanobis radii 1 and 2, not confidence intervals."
+  }
 }

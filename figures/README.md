@@ -388,10 +388,19 @@ in qa/. Figure 2's measurements and files are preserved.
 ## Dominant eigendirections micro-diagram
 
 `fig1_principal_directions.svg/pdf/png` is a standalone, editable vector
-concept glyph for Figure 1: 72 seeded anisotropic Gaussian samples, their
-empirical two-standard-deviation covariance contour, and orthogonal v1/v2
-arrows. Both arrows are thin (0.4/0.3 pt); labels use Times New Roman Bold.
-The white-background PNG is 300 × 200 px; vectors are 1 × 2/3 in.
+concept glyph for Figure 1: **216 seeded anisotropic Gaussian samples**, their
+empirical covariance contours at Mahalanobis radii 1 and 2, and orthogonal
+v1/v2 arrows. Sage points and their outer contour, a teal inner contour and
+v2, and a blue v1 follow the requested reference palette. The colors distinguish
+geometric elements of one population, not different classes. Contours are
+geometric levels, not confidence intervals.
+
+The v1/v2 line widths are **1.15/0.95 pt**; labels retain Times New Roman Bold.
+The canvas is **2 × 1 in (2:1)**, widened from 1.5:1 while retaining one
+isotropic coordinate scale. The white-background PNG is 1200 × 600 px at
+600 dpi; SVG and PDF remain fully vector with editable text. Increasing the
+conceptual sample count from 72 to 216 preserves the seed and sampling law,
+then refits empirical centering, covariance, and PCA to all 216 points.
 
 Reproduce with `python figures/principal_direction_icon.py`, using the same
 font installation as Figure 1. These are **simulated conceptual samples,
@@ -400,3 +409,10 @@ not measured model activations**. Every generated point is retained in
 rendering parameters are in `fig1_principal_directions_metadata.json`.
 The icon is delivered separately for placement; the Figure 1 assembly and
 its measured panels are unchanged in this revision.
+
+Rendered QA for this revision is in `qa/fig1_principal_directions.*`: no
+text collisions or clipping, every PDF glyph at least 6.65 pt, all 216 vector
+markers present, and orthogonal empirical eigenvectors. The source checker
+flags the inherited serif font because it only recognizes sans-serif families;
+the retained Times New Roman Bold font is verified embedded in the final PDF.
+Other source-preflight warnings are reviewed in the QA record.
