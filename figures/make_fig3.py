@@ -131,12 +131,16 @@ def fit_law(law: pd.DataFrame) -> tuple[float, float, float]:
 
 
 def scatter_sources(ax: plt.Axes, law: pd.DataFrame, inset: bool = False) -> None:
+    # (colour, marker, size, alpha, label).  The MoE family carries 5,342 points
+    # against 112-2,520 for the others, so it is drawn smaller and fainter; every
+    # point is still a native vector mark.
     specs = {
-        "E1c activations": (PALETTE["prismquant"], "o", 7.0, "E1c activations"),
-        "E7 V cache": (PALETTE["identity"], "s", 7.0, "E7 V cache"),
-        "E20 multi-slot": (PALETTE["hadamard"], "^", 7.0, "E20 multi-slot"),
+        "E1c activations": (PALETTE["prismquant"], "o", 7.0, 0.35, "E1c activations"),
+        "E7 V cache": (PALETTE["identity"], "s", 7.0, 0.35, "E7 V cache"),
+        "E20 multi-slot": (PALETTE["hadamard"], "^", 7.0, 0.35, "E20 multi-slot"),
+        "E26 MoE experts": (PALETTE["prismquant_light"], "D", 2.6, 0.16, "E26 MoE experts"),
     }
-    for family, (color, marker, size, label) in specs.items():
+    for family, (color, marker, size, alpha, label) in specs.items():
         part = law[law.source_family.eq(family)]
         if part.empty:
             continue
@@ -144,7 +148,7 @@ def scatter_sources(ax: plt.Axes, law: pd.DataFrame, inset: bool = False) -> Non
             part = part[part.sqrt_one_minus_f.between(0.85, 1.0) & part.range_ratio_vs_hadamard.between(0.85, 1.0)]
         ax.scatter(
             part.sqrt_one_minus_f, part.range_ratio_vs_hadamard,
-            color=color, marker=marker, s=size, alpha=0.35,
+            color=color, marker=marker, s=size, alpha=alpha,
             edgecolors="none", rasterized=False, label=None if inset else label,
         )
 
@@ -177,7 +181,8 @@ def range_law_xlabel(ax: plt.Axes) -> None:
     ax.add_artist(label)
 
 
-def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = None) -> dict[str, float | bool]:
+def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = None,
+             own_fit_label: str | None = None) -> dict[str, float | bool]:
     fig, ax = new_panel(left=0.30)
     scatter_sources(ax, law)
     intercept, slope, r_squared = fit_law(law if pooled is None else pooled)
@@ -186,8 +191,19 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
     ax.plot(grid, intercept + slope * grid, color=PALETTE["reference"], lw=0.95)
     ax.text(0.035, 0.965, f"Pooled R² = {r_squared:.2f}", transform=ax.transAxes,
             color=PALETTE["text"], fontsize=7.0, ha="left", va="top")
+    own = None
+    if own_fit_label is not None:
+        # The line drawn is always the pooled fit of the three reference sources;
+        # a view whose own points did not enter that fit states its own R² too,
+        # so the reader is not told the line was fitted to them.
+        own = fit_law(law)
+        ax.text(0.035, 0.035, f"{own_fit_label} R² = {own[2]:.2f}", transform=ax.transAxes,
+                color=PALETTE["prismquant_light"], fontsize=7.0, ha="left", va="bottom")
     ax.set_xlim(0, 1.02)
-    ax.set_ylim(0, max(1.02, float((law if pooled is None else pooled).range_ratio_vs_hadamard.max()) * 1.04))
+    # The axis must contain every point of the view as well as the fitted frame:
+    # the MoE view has one expert at 1.0477, above the reference sources' maximum.
+    ax.set_ylim(0, max(1.02, float(law.range_ratio_vs_hadamard.max()) * 1.04,
+                       float((law if pooled is None else pooled).range_ratio_vs_hadamard.max()) * 1.04))
     range_law_xlabel(ax)
     ax.set_ylabel("range / paired Hadamard range", fontsize=7.0)
     crowded = int(((law.sqrt_one_minus_f > 0.85) & (law.range_ratio_vs_hadamard > 0.85)).sum()) >= 100
@@ -226,7 +242,10 @@ def render_c(law: pd.DataFrame, outbase: Path, pooled: pd.DataFrame | None = Non
     for text in legend.get_texts():
         text.set_color(PALETTE["text"])
     save_panel(fig, outbase)
-    return {"fit_intercept": intercept, "fit_slope": slope, "fit_r_squared": r_squared, "corner_inset": crowded, "inset_limits": [0.85, 1.0], "fit_definition": "pooled ordinary least squares with intercept; all source rows included", "main_axis_limits": [list(ax.get_xlim()), list(ax.get_ylim())]}
+    result = {"fit_intercept": intercept, "fit_slope": slope, "fit_r_squared": r_squared, "corner_inset": crowded, "inset_limits": [0.85, 1.0], "fit_definition": "pooled ordinary least squares with intercept; all source rows included", "main_axis_limits": [list(ax.get_xlim()), list(ax.get_ylim())]}
+    if own is not None:
+        result["own_fit"] = {"intercept": own[0], "slope": own[1], "r_squared": own[2], "points": int(len(law))}
+    return result
 
 
 def compose_panels(here: Path, stems: list[str], outbase: str, columns: int) -> None:
@@ -277,7 +296,9 @@ def compose_panels(here: Path, stems: list[str], outbase: str, columns: int) -> 
 
 
 def make_preview(here: Path) -> None:
-    compose_panels(here, ["fig3c1", "fig3c2"], "fig3c", 2)
+    # fig3 (the paper's main figure) keeps its 2x2 layout and its two reference
+    # views; the MoE view is published in the fig3c strip beside them.
+    compose_panels(here, ["fig3c1", "fig3c2", "fig3c3"], "fig3c", 3)
     compose_panels(here, ["fig3a", "fig3b", "fig3c1", "fig3c2"], "fig3", 2)
 
 
@@ -292,10 +313,12 @@ def main() -> None:
     geometry = json.loads((here / "fig3_geometry_metadata.json").read_text())
     render_a(projections, geometry, here / "fig3a")
     render_b(eigenspace, here / "fig3b")
+    moe = pd.read_csv(here / "fig3_range_law_moe.csv")
     activation = law[law.source_family.eq("E1c activations")]
     cache_and_multislot = law[~law.source_family.eq("E1c activations")]
     fit = render_c(activation, here / "fig3c1", pooled=law)
     other_fit = render_c(cache_and_multislot, here / "fig3c2", pooled=law)
+    moe_fit = render_c(moe, here / "fig3c3", pooled=law, own_fit_label="MoE")
     make_preview(here)
     typography = configure_style()
     export_caption(here, figure=3, width=5.3)
@@ -314,8 +337,8 @@ def main() -> None:
         "typography": typography,
         "stroke_widths_pt": {"axes": 0.9, "ticks": 0.8, "energy_curves": [1.5, 1.5, 1.8], "identity": 1.1, "pooled_fit": 0.95},
         **fit,
-        "range_law_subpanels": {"fig3c1": {"families": ["E1c activations"], "points": len(activation), "inset": fit["corner_inset"]}, "fig3c2": {"families": ["E7 V cache", "E20 multi-slot"], "points": len(cache_and_multislot), "inset": other_fit["corner_inset"]}},
-        "fit_display": "same pooled fit in both views; not a per-family fit",
+        "range_law_subpanels": {"fig3c1": {"families": ["E1c activations"], "points": len(activation), "inset": fit["corner_inset"]}, "fig3c2": {"families": ["E7 V cache", "E20 multi-slot"], "points": len(cache_and_multislot), "inset": other_fit["corner_inset"]}, "fig3c3": {"families": ["E26 MoE experts"], "model": "qwen3_30b_a3b_base", "points": len(moe), "inset": moe_fit["corner_inset"], "in_pooled_fit": False, "own_fit": moe_fit["own_fit"], "source": "fig3_range_law_moe.csv"}},
+        "fit_display": "same pooled fit of the three reference sources in all three views; not a per-family fit. The MoE view is held out of that fit and states its own R² beside it.",
         "svg_export": {"range_law_marks": "native vector markers in main axes and insets", "composition": "single viewport with translated groups and unique IDs", "x_formula": "complete vector radical and overbar; editable Times New Roman Bold radicand"},
     }
     (here / "fig3_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")

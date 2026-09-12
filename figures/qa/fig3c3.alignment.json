@@ -20,18 +20,23 @@
     "schema_version": 1,
     "backend": "python-matplotlib",
     "figure": {
-      "width_pt": 381.59999999999997,
-      "height_pt": 168.64
+      "width_pt": 190.79999999999998,
+      "height_pt": 169.20000000000002
     },
     "panels": [
       {
         "id": "a",
         "bbox_pt": [
-          11.52,
-          11.52,
-          370.08,
-          157.12
-        ]
+          57.239999999999995,
+          40.608000000000004,
+          179.35199999999998,
+          159.048
+        ],
+        "grid_id": "matplotlib-grid-1",
+        "row_start": 0,
+        "row_stop": 1,
+        "col_start": 0,
+        "col_stop": 1
       }
     ],
     "row_groups": [],
