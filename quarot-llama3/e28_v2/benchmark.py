@@ -3,25 +3,29 @@ from __future__ import annotations
 import gc, time
 from .common import *
 
-def finite_check(model,ids,cache):
+def finite_check(model,ids,cache,tail_token=None):
     import torch
     from .cache_adapter import clear
-    checks=[]; handles=[]
+    checks={}; handles=[]
     def hook(name):
         def check(mod,inputs,out):
-            values=[out] if torch.is_tensor(out) else [getattr(out,'scales_x',None)]
+            values=[out] if torch.is_tensor(out) else list(out) if isinstance(out,tuple) else [getattr(out,'scales_x',None)]
             for v in values:
                 if torch.is_tensor(v) and v.is_floating_point():
-                    checks.append({'module':name,'finite':bool(torch.isfinite(v).all()),'max_abs':float(v.abs().max()) if bool(torch.isfinite(v).all()) else None})
+                    ok=bool(torch.isfinite(v).all());value=float(v.abs().max()) if ok else None
+                    previous=checks.get(name,{'finite':True,'max_abs':0.,'observations':0})
+                    checks[name]={'module':name,'finite':previous['finite'] and ok,'max_abs':max(previous['max_abs'] or 0,value) if ok else None,'observations':previous['observations']+1}
         return check
     for name,mod in model.named_modules():
-        if mod.__class__.__name__ in ('Linear4bit','Quantizer','RMSNorm','QuarotLlamaMLP','QuarotNARLlamaMLP','QuarotLlamaAttention','NARDownTransform') or name=='lm_head':
+        if mod.__class__.__name__ in ('Linear','LlamaRMSNorm','LlamaMLP','QuarotFP16LlamaAttention','Linear4bit','Quantizer','RMSNorm','QuarotLlamaMLP','QuarotNARLlamaMLP','QuarotLlamaAttention','NARDownTransform') or name=='lm_head':
             handles.append(mod.register_forward_hook(hook(name)))
     clear(cache)
     try:
         out=model(ids,past_key_values=cache)
-        finite=bool(torch.isfinite(out.logits).all()) and all(c['finite'] for c in checks)
-        return {'status':'PASS' if finite else 'FAIL','checks':checks,'output_finite':bool(torch.isfinite(out.logits).all())}
+        if tail_token is not None:
+            for _ in range(128):out=model(tail_token,past_key_values=cache)
+        finite=bool(torch.isfinite(out.logits).all()) and all(c['finite'] for c in checks.values())
+        return {'status':'PASS' if finite else 'FAIL','checks':list(checks.values()),'decode_steps_checked':128 if tail_token is not None else 0,'output_finite':bool(torch.isfinite(out.logits).all())}
     finally:
         for h in handles:h.remove()
 
@@ -51,7 +55,7 @@ def main():
             token=torch.full((batch,1),100,dtype=torch.int32,device='cuda')
             cache=make_cache(m,batch,capacity,legacy=a.mode=='legacy_diagnostic')
             result.update(batch=batch,prefix=prefix,capacity=capacity,input_sha256=tensor_hash(ids),decode_token=100)
-            result['finite']=finite_check(m,ids,cache)
+            result['finite']=finite_check(m,ids,cache,tail_token=token if decoding else None)
             if result['finite']['status']!='PASS':
                 result.update(status='INVALID',reason='Nonfinite model outputs/intermediates before timing');return
             # Full content and all flags are reset; rebuild the prefix outside timing.
@@ -72,7 +76,10 @@ def main():
             def run(events=False):
                 prepare()
                 if decoding:
-                    for _ in range(8):m(token,past_key_values=cache)
+                    for _ in range(8):
+                        if a.mode in ('eager_step_sync','legacy_diagnostic'):torch.cuda.synchronize()
+                        m(token,past_key_values=cache)
+                        if a.mode in ('eager_step_sync','legacy_diagnostic'):torch.cuda.synchronize()
                 torch.cuda.synchronize()
                 start_event=torch.cuda.Event(enable_timing=True) if events else None
                 end_event=torch.cuda.Event(enable_timing=True) if events else None
