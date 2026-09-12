@@ -6,9 +6,10 @@
 \toprule
 Path & Format & Weights & Numerical status & Deployment status \\
 \midrule
-E28 kernel swap & Signed INT4 W/A; token-channel affine KV4 & Random weights & See correctness JSON & Paper format not connected \\
-E17 native R4 & Group128 asymmetric packed A4 & Real calibrated factors & Local only & No model GEMM/KV claim \\
-Paper accuracy path & GPTQ W4; group128 asymmetric A4; K/V residual32 & Local k8 checkpoint absent & BLOCKED & Current row/column-scale GEMM incompatible \\
+E28 kernel swap & Sym W4/A4; KV4 & Random & Boundary FAIL & Measured integer \\
+FP16 base models & W16/A16/KV16 & Real base & 3B/8B: PENDING/PENDING & FP16 only \\
+E17 native R4 & Asym A4 g128 & Real factors & See kernel table & Local R4 only \\
+Paper native & Asym g128; KV R32 & k8 state absent & BLOCKED & GEMM/KV gap \\
 \bottomrule
 \end{tabular}
 \end{table}

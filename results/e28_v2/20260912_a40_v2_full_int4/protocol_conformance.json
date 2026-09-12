@@ -1,13 +1,29 @@
 {
+  "core_source_hashes": {
+    "benchmark.py": [
+      "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380"
+    ],
+    "cache_adapter.py": [
+      "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe"
+    ],
+    "common.py": [
+      "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8"
+    ]
+  },
   "environment_variants": 1,
   "gpu_uuids": [
     "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22"
   ],
+  "same_core_measurement_sources": true,
   "same_gpu": true,
   "same_inputs": true,
   "state_checks": [
     {
       "key": "3b_fp16_eager_sequence_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_prefill16_s1",
       "shared_state_matches_verified_model": true
     },
     {
@@ -19,11 +35,171 @@
       "shared_state_matches_verified_model": true
     },
     {
+      "key": "3b_hadamard_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_step_sync_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_step_sync_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill1_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_prefill1_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_prefill16_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_step_sync_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_prefill16_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_prefill1_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill16_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill16_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
       "key": "3b_nar_eager_sequence_prefill1_s1",
       "shared_state_matches_verified_model": true
     },
     {
+      "key": "8b_fp16_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
       "key": "3b_fp16_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill16_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill16_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_step_sync_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_prefill16_s3",
       "shared_state_matches_verified_model": true
     },
     {
@@ -35,7 +211,59 @@
       "shared_state_matches_verified_model": true
     },
     {
+      "key": "8b_fp16_eager_sequence_prefill16_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
       "key": "3b_fp16_eager_sequence_prefill16_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_prefill1_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_step_sync_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_nar_eager_sequence_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_prefill1_s3",
       "shared_state_matches_verified_model": true
     },
     {
@@ -43,7 +271,35 @@
       "shared_state_matches_verified_model": true
     },
     {
+      "key": "3b_nar_eager_sequence_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_prefill1_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_prefill1_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_step_sync_decode_s2",
+      "shared_state_matches_verified_model": true
+    },
+    {
       "key": "3b_hadamard_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_prefill16_s3",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_decode_s3",
       "shared_state_matches_verified_model": true
     },
     {

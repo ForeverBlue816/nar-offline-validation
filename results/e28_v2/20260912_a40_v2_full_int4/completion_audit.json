@@ -1,7 +1,7 @@
 {
-  "core_complete_processes": 11,
+  "core_complete_processes": 72,
   "core_expected_processes": 72,
-  "core_status": "INCOMPLETE",
+  "core_status": "COMPLETE",
   "correctness": [
     {
       "failed_rows": [],
@@ -89,5 +89,1199 @@
   ],
   "pipeline_finished": false,
   "raw_stage_failures": [],
-  "timestamp": "2026-09-12T04:07:00.965588+00:00"
+  "stages": [
+    {
+      "expected": 72,
+      "records": [
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill1_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill16_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_step_sync_decode_s1.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill1_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill16_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_step_sync_decode_s2.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill1_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_prefill16_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_step_sync_decode_s3.json",
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
+        }
+      ],
+      "stage": "P0 core timings",
+      "status": "PASS",
+      "terminal_records": 72,
+      "valid_records": 72
+    },
+    {
+      "expected": 6,
+      "records": [
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_legacy_diagnostic_decode_s0.json",
+          "status": "RUNNING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_legacy_diagnostic_decode_s0.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_legacy_diagnostic_decode_s0.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_legacy_diagnostic_decode_s0.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_legacy_diagnostic_decode_s0.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_legacy_diagnostic_decode_s0.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 legacy diagnostics",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 6,
+      "records": [
+        {
+          "reason": null,
+          "source": "profiles/3b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "profiles/3b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "profiles/3b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "profiles/8b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "profiles/8b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "profiles/8b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 profiles",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 6,
+      "records": [
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_3b_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_3b_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_3b_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_8b_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_8b_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/kernels_8b_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 kernel sessions",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 6,
+      "records": [
+        {
+          "reason": null,
+          "source": "correctness/graph_3b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_3b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_3b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_8b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_8b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_8b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 original graph checks",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 2,
+      "records": [
+        {
+          "reason": null,
+          "source": "correctness/r4_extended_3b.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/r4_extended_8b.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P2 extended R4 checks",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 2,
+      "records": [
+        {
+          "reason": null,
+          "source": "correctness/model_real_3b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/model_real_8b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P2 real FP16 checks",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 2,
+      "records": [
+        {
+          "reason": null,
+          "source": "correctness/rope_reference_3b.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/rope_reference_8b.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P2 independent RoPE checks",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 12,
+      "records": [
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_fp16_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_hadamard_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/3b_nar_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_fp16_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_hadamard_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_decode8_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_runs/8b_nar_eager_sequence_decode8192_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P2 extension timings",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 6,
+      "records": [
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_3b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_3b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_3b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_8b_fp16.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_8b_hadamard.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "correctness/graph_stream_8b_nar.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 private graph checks",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    },
+    {
+      "expected": 36,
+      "records": [
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_fp16_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_hadamard_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/3b_nar_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_fp16_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_hadamard_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_eager_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_eager_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_eager_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_cuda_graph_sequence_decode_s1.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_cuda_graph_sequence_decode_s2.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        },
+        {
+          "reason": null,
+          "source": "raw_graph_runs/8b_nar_cuda_graph_sequence_decode_s3.json",
+          "status": "PENDING",
+          "terminal": false,
+          "valid": false
+        }
+      ],
+      "stage": "P1 private eager/graph timings",
+      "status": "PENDING_OR_RUNNING",
+      "terminal_records": 0,
+      "valid_records": 0
+    }
+  ],
+  "stream_pipeline_finished": null,
+  "timestamp": "2026-09-12T09:53:24.719702+00:00"
 }

@@ -1,6 +1,10 @@
 # E28-v2: auditable deployment experiments
 
-Generated 2026-09-12T04:07:00.748501+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
+Generated 2026-09-12T04:25:55.679897+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
+
+## Cohort stopped
+
+**STOPPED_NUMERICAL_FAILURE**: The name-stable legacy packed-byte1..6 state produced nonfinite final decoder residuals for8B NAR. R4 and integer-linear outputs remained finite in the diagnostic. This cohort was stopped and its partial measurements are preserved, never pooled with the replacement. See the [replacement run](../20260912_a40_v2_full_int4/report_e28_v2.md). The records below are historical partial evidence, not an active pending run.
 
 ## One-page status
 

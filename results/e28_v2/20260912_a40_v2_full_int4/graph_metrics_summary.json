@@ -2,17 +2,167 @@
   "comparisons": [],
   "deployment": [],
   "missing_reason": "No validated matched graph timing records yet",
+  "paired_session_comparisons": [
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "fp16",
+      "model": "3b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "hadamard",
+      "model": "3b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "nar",
+      "model": "3b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+      "interpretation": "Missing matching method/mode records",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+      "interpretation": "Missing matching method/mode records",
+      "mode": "cuda_graph_sequence",
+      "model": "3b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "fp16",
+      "model": "8b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "hadamard",
+      "model": "8b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+      "interpretation": "Missing matching method/mode records",
+      "method": "nar",
+      "model": "8b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+      "interpretation": "Missing matching method/mode records",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    },
+    {
+      "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+      "interpretation": "Missing matching method/mode records",
+      "mode": "cuda_graph_sequence",
+      "model": "8b",
+      "samples": [],
+      "summary": {
+        "mean": null,
+        "median": null,
+        "n": 0,
+        "reason": "no valid measurements",
+        "std": null
+      }
+    }
+  ],
   "protocol_conformance": {
     "binary_sha256": [],
     "gpu_uuids": [],
     "same_environment": null,
     "same_gpu": null,
     "same_input": null,
+    "same_measurement_sources": false,
+    "source_hashes": {
+      "benchmark.py": [],
+      "cache_adapter.py": [],
+      "common.py": [],
+      "graph_benchmark.py": []
+    },
     "state_checks": [],
     "status": "PENDING_OR_REVIEW_REQUIRED"
   },
   "raw_status": [],
   "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
+  "stage_completion": null,
   "status": "INCOMPLETE",
-  "timestamp": "2026-09-12T04:07:00.848645+00:00"
+  "timestamp": "2026-09-12T09:53:24.100892+00:00"
 }

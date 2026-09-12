@@ -1,63 +1,452 @@
 {
   "comparisons": [
     {
-      "acceleration_retention_pct": null,
-      "direction_consistent": false,
-      "hadamard_speedup": 1.2606626507961531,
-      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "acceleration_retention_pct": 94.52850044282613,
+      "direction_consistent": true,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.2606626507961531
+            },
+            {
+              "session": 2,
+              "speedup": 1.2616377533945182
+            },
+            {
+              "session": 3,
+              "speedup": 1.2630833808954474
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.2462664030871529
+            },
+            {
+              "session": 2,
+              "speedup": 1.2475333020736172
+            },
+            {
+              "session": 3,
+              "speedup": 1.2479642511640014
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 1.2613538126491526,
+      "interpretation": "consistent observed direction across three sessions, specific to this implementation/workload",
       "mode": "eager_sequence",
       "model": "3b",
       "nar_latency_overhead_pct": null,
-      "nar_speedup": 1.2462664030871529,
-      "nar_throughput_ratio_pct": 98.85804122935596,
+      "nar_speedup": 1.2470538399473972,
+      "nar_throughput_ratio_pct": 98.86629964104029,
       "phase": "prefill1",
-      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "retention_reason": null,
       "session_nar_over_had_minus_one": [
-        -0.01141958770644036
+        -0.01141958770644036,
+        -0.011179477851667063,
+        -0.011970017150195966
       ]
     },
     {
-      "acceleration_retention_pct": null,
-      "direction_consistent": false,
-      "hadamard_speedup": 1.2859266896452253,
-      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "acceleration_retention_pct": 93.23737343464182,
+      "direction_consistent": true,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.2859266896452253
+            },
+            {
+              "session": 2,
+              "speedup": 1.2782671284784883
+            },
+            {
+              "session": 3,
+              "speedup": 1.278713681420302
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.267211584561848
+            },
+            {
+              "session": 2,
+              "speedup": 1.2592488997803812
+            },
+            {
+              "session": 3,
+              "speedup": 1.2593847949901649
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 1.279549057082805,
+      "interpretation": "consistent observed direction across three sessions, specific to this implementation/workload",
       "mode": "eager_sequence",
       "model": "3b",
       "nar_latency_overhead_pct": null,
-      "nar_speedup": 1.267211584561848,
-      "nar_throughput_ratio_pct": 98.54462114877322,
+      "nar_speedup": 1.260644198285315,
+      "nar_throughput_ratio_pct": 98.52253739762112,
       "phase": "prefill16",
-      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "retention_reason": null,
       "session_nar_over_had_minus_one": [
-        -0.014553788512267851
+        -0.014553788512267851,
+        -0.01487813327464993,
+        -0.015115883024468757
       ]
     },
     {
       "acceleration_retention_pct": null,
       "direction_consistent": false,
-      "hadamard_speedup": 0.4835665706807561,
-      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.4835665706807561
+            },
+            {
+              "session": 2,
+              "speedup": 0.5192036901043591
+            },
+            {
+              "session": 3,
+              "speedup": 0.5096324560335171
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.509432691874359
+            },
+            {
+              "session": 2,
+              "speedup": 0.532549764509466
+            },
+            {
+              "session": 3,
+              "speedup": 0.5035744834906754
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.5079914909804535,
+      "interpretation": "near parity / within observed variability",
       "mode": "eager_sequence",
       "model": "3b",
-      "nar_latency_overhead_pct": -5.0774364516013915,
-      "nar_speedup": 0.509432691874359,
+      "nar_latency_overhead_pct": -2.3742580021991033,
+      "nar_speedup": 0.5203458438163742,
       "nar_throughput_ratio_pct": null,
       "phase": "decode",
       "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
       "session_nar_over_had_minus_one": [
-        -0.050774364516013915
+        -0.050774364516013915,
+        -0.025060708490595385,
+        0.012029943417404931
       ]
     },
     {
       "acceleration_retention_pct": null,
-      "hadamard_speedup": 0.536555598199275,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.536555598199275
+            },
+            {
+              "session": 2,
+              "speedup": 0.5121584741110019
+            },
+            {
+              "session": 3,
+              "speedup": 0.5109459654673093
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.525395584980263
+            },
+            {
+              "session": 2,
+              "speedup": 0.5012373207804053
+            },
+            {
+              "session": 3,
+              "speedup": 0.522584411757859
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.5162413274424424,
+      "interpretation": "near parity / within observed variability",
       "mode": "eager_step_sync",
       "model": "3b",
-      "nar_latency_overhead_pct": null,
-      "nar_speedup": null,
+      "nar_latency_overhead_pct": -0.2866557746429743,
+      "nar_speedup": 0.5177254172477777,
       "nar_throughput_ratio_pct": null,
       "phase": "decode",
-      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention."
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        0.021241162921898926,
+        0.02178838821018525,
+        -0.022270940404442108
+      ]
+    },
+    {
+      "acceleration_retention_pct": 102.94256810788843,
+      "direction_consistent": true,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.4503655406903309
+            },
+            {
+              "session": 2,
+              "speedup": 1.4506515697958597
+            },
+            {
+              "session": 3,
+              "speedup": 1.4557706655587561
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.4638501456169208
+            },
+            {
+              "session": 2,
+              "speedup": 1.4641537390599721
+            },
+            {
+              "session": 3,
+              "speedup": 1.4688791611092837
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 1.4513246367246675,
+      "interpretation": "near parity / within observed variability",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": 1.4646051715479709,
+      "nar_throughput_ratio_pct": 100.91506300432376,
+      "phase": "prefill1",
+      "retention_reason": null,
+      "session_nar_over_had_minus_one": [
+        0.009297383692783878,
+        0.009307658396573215,
+        0.009004505902374671
+      ]
+    },
+    {
+      "acceleration_retention_pct": 103.3705951270027,
+      "direction_consistent": true,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.4893968940103202
+            },
+            {
+              "session": 2,
+              "speedup": 1.4851572272325986
+            },
+            {
+              "session": 3,
+              "speedup": 1.493679533970739
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "faster than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 1.5042116438264033
+            },
+            {
+              "session": 2,
+              "speedup": 1.5057959000645251
+            },
+            {
+              "session": 3,
+              "speedup": 1.5071274019360696
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 1.4888375888473213,
+      "interpretation": "consistent observed direction across three sessions, specific to this implementation/workload",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": 1.5053143247959666,
+      "nar_throughput_ratio_pct": 101.10668457540771,
+      "phase": "prefill16",
+      "retention_reason": null,
+      "session_nar_over_had_minus_one": [
+        0.009946811273517042,
+        0.013896624851218009,
+        0.009003181512155622
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": true,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5704743633455445
+            },
+            {
+              "session": 2,
+              "speedup": 0.565790149158782
+            },
+            {
+              "session": 3,
+              "speedup": 0.5752308842944449
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5987491176136173
+            },
+            {
+              "session": 2,
+              "speedup": 0.5944095995312568
+            },
+            {
+              "session": 3,
+              "speedup": 0.6034130577710434
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.5708555428794739,
+      "interpretation": "consistent observed direction across three sessions, specific to this implementation/workload",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "nar_latency_overhead_pct": -4.35946774720054,
+      "nar_speedup": 0.5968761668646659,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.047223041230966656,
+        -0.048147692088155614,
+        -0.046704613222493196
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "fp16_comparison": {
+        "hadamard": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5830076308968261
+            },
+            {
+              "session": 2,
+              "speedup": 0.5658769264979955
+            },
+            {
+              "session": 3,
+              "speedup": 0.5492935521693189
+            }
+          ]
+        },
+        "nar": {
+          "direction_consistent": true,
+          "interpretation": "slower than FP16 in all three sessions",
+          "session_speedups": [
+            {
+              "session": 1,
+              "speedup": 0.5754380002771501
+            },
+            {
+              "session": 2,
+              "speedup": 0.6096590190844234
+            },
+            {
+              "session": 3,
+              "speedup": 0.6183829133026166
+            }
+          ]
+        }
+      },
+      "hadamard_speedup": 0.5640647392185889,
+      "interpretation": "near parity / within observed variability",
+      "mode": "eager_step_sync",
+      "model": "8b",
+      "nar_latency_overhead_pct": -6.922501942118775,
+      "nar_speedup": 0.6060162241015754,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        0.01315455464538351,
+        -0.07181406526582546,
+        -0.11172585730790996
+      ]
     }
   ],
   "correctness_status": {
@@ -65,7 +454,7 @@
       "complete": null,
       "completed_layers": null,
       "reason": null,
-      "status": null
+      "status": "DIAGNOSTIC_RECORDED"
     },
     "model_3b_fp16": {
       "complete": null,
@@ -124,7 +513,7 @@
   },
   "deployment": [
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "fp16",
       "mode": "eager_sequence",
       "model": "3b",
@@ -133,12 +522,12 @@
       "phase": "decode",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 21.022602170705795,
-        "mean": 21.022602170705795,
-        "median": 21.022602170705795,
+        "max": 22.622758509047948,
+        "mean": 21.925541539288435,
+        "median": 22.131263938111566,
         "min": 21.022602170705795,
-        "n": 1,
-        "std": 0.0
+        "n": 3,
+        "std": 0.6692614615217277
       },
       "session_summaries": [
         {
@@ -149,23 +538,43 @@
           "n": 50,
           "session": 1,
           "std": 0.23989153314041672
+        },
+        {
+          "max": 23.150912877948333,
+          "mean": 22.60588988925641,
+          "median": 22.622758509047948,
+          "min": 21.75851541493709,
+          "n": 50,
+          "session": 2,
+          "std": 0.29987342659333804
+        },
+        {
+          "max": 23.39893851506834,
+          "mean": 22.20656993503993,
+          "median": 22.131263938111566,
+          "min": 21.165048292217154,
+          "n": 50,
+          "session": 3,
+          "std": 0.37732981368348706
         }
       ],
       "source_keys": [
-        "3b_fp16_eager_sequence_decode_s1"
+        "3b_fp16_eager_sequence_decode_s1",
+        "3b_fp16_eager_sequence_decode_s2",
+        "3b_fp16_eager_sequence_decode_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 21.8154959497042,
-        "mean": 21.013758251288287,
-        "median": 21.022602170705795,
+        "max": 23.39893851506834,
+        "mean": 21.94207269186154,
+        "median": 22.104334937951837,
         "min": 20.582083410893876,
-        "n": 50,
-        "std": 0.23989153314041672
+        "n": 150,
+        "std": 0.7443631666793399
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "fp16",
       "mode": "eager_sequence",
       "model": "3b",
@@ -175,11 +584,11 @@
       "required_sessions": 3,
       "session_median_dispersion": {
         "max": 10172.58061058015,
-        "mean": 10172.58061058015,
-        "median": 10172.58061058015,
-        "min": 10172.58061058015,
-        "n": 1,
-        "std": 0.0
+        "mean": 10162.095030299402,
+        "median": 10158.482885478868,
+        "min": 10155.22159483919,
+        "n": 3,
+        "std": 7.533018409071103
       },
       "session_summaries": [
         {
@@ -190,23 +599,43 @@
           "n": 50,
           "session": 1,
           "std": 11.603751420878465
+        },
+        {
+          "max": 10185.050336274477,
+          "mean": 10161.514746830975,
+          "median": 10158.482885478868,
+          "min": 10133.927937234608,
+          "n": 50,
+          "session": 2,
+          "std": 14.539141419338842
+        },
+        {
+          "max": 10195.886930219242,
+          "mean": 10157.19729773976,
+          "median": 10155.22159483919,
+          "min": 10136.330173427663,
+          "n": 50,
+          "session": 3,
+          "std": 11.06491902831251
         }
       ],
       "source_keys": [
-        "3b_fp16_eager_sequence_prefill1_s1"
+        "3b_fp16_eager_sequence_prefill1_s1",
+        "3b_fp16_eager_sequence_prefill1_s2",
+        "3b_fp16_eager_sequence_prefill1_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 10184.303967367816,
-        "mean": 10170.204621673332,
-        "median": 10172.58061058015,
+        "max": 10195.886930219242,
+        "mean": 10162.972222081356,
+        "median": 10163.477746829489,
         "min": 10128.814428692245,
-        "n": 50,
-        "std": 11.603751420878465
+        "n": 150,
+        "std": 13.616750743928408
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "fp16",
       "mode": "eager_sequence",
       "model": "3b",
@@ -215,12 +644,12 @@
       "phase": "prefill16",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 13915.92414964468,
-        "mean": 13915.92414964468,
-        "median": 13915.92414964468,
+        "max": 14004.62566586752,
+        "mean": 13969.004482359387,
+        "median": 13986.463631565966,
         "min": 13915.92414964468,
-        "n": 1,
-        "std": 0.0
+        "n": 3,
+        "std": 38.25882175673866
       },
       "session_summaries": [
         {
@@ -231,23 +660,43 @@
           "n": 50,
           "session": 1,
           "std": 69.34822309200977
+        },
+        {
+          "max": 14129.93717787173,
+          "mean": 14004.523995072115,
+          "median": 14004.62566586752,
+          "min": 13913.317023250595,
+          "n": 50,
+          "session": 2,
+          "std": 50.55577132633784
+        },
+        {
+          "max": 14120.9479175507,
+          "mean": 14000.47708344062,
+          "median": 13986.463631565966,
+          "min": 13944.966155507911,
+          "n": 50,
+          "session": 3,
+          "std": 47.54878069982994
         }
       ],
       "source_keys": [
-        "3b_fp16_eager_sequence_prefill16_s1"
+        "3b_fp16_eager_sequence_prefill16_s1",
+        "3b_fp16_eager_sequence_prefill16_s2",
+        "3b_fp16_eager_sequence_prefill16_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 14068.466517458863,
-        "mean": 13941.273736407293,
-        "median": 13915.92414964468,
+        "max": 14129.93717787173,
+        "mean": 13982.091604973342,
+        "median": 13985.12731595497,
         "min": 13851.62273947,
-        "n": 50,
-        "std": 69.34822309200977
+        "n": 150,
+        "std": 63.59581994845787
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "fp16",
       "mode": "eager_step_sync",
       "model": "3b",
@@ -256,12 +705,12 @@
       "phase": "decode",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 23.124728353771694,
-        "mean": 23.124728353771694,
-        "median": 23.124728353771694,
+        "max": 23.527430331644915,
+        "mean": 23.261884041130543,
+        "median": 23.133493437975027,
         "min": 23.124728353771694,
-        "n": 1,
-        "std": 0.0
+        "n": 3,
+        "std": 0.18780367582439106
       },
       "session_summaries": [
         {
@@ -272,23 +721,43 @@
           "n": 50,
           "session": 1,
           "std": 0.1834531682073116
+        },
+        {
+          "max": 23.408130909471463,
+          "mean": 23.12173460874086,
+          "median": 23.133493437975027,
+          "min": 22.53264944301918,
+          "n": 50,
+          "session": 2,
+          "std": 0.15534675959405042
+        },
+        {
+          "max": 23.84261783445254,
+          "mean": 23.490290688971676,
+          "median": 23.527430331644915,
+          "min": 22.69722829029585,
+          "n": 50,
+          "session": 3,
+          "std": 0.23830640457339383
         }
       ],
       "source_keys": [
-        "3b_fp16_eager_step_sync_decode_s1"
+        "3b_fp16_eager_step_sync_decode_s1",
+        "3b_fp16_eager_step_sync_decode_s2",
+        "3b_fp16_eager_step_sync_decode_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 23.50867537315935,
-        "mean": 23.087990785328053,
-        "median": 23.124728353771694,
-        "min": 22.588375327177346,
-        "n": 50,
-        "std": 0.1834531682073116
+        "max": 23.84261783445254,
+        "mean": 23.23333869434686,
+        "median": 23.186265875119716,
+        "min": 22.53264944301918,
+        "n": 150,
+        "std": 0.26719745334623174
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "hadamard",
       "mode": "eager_sequence",
       "model": "3b",
@@ -297,12 +766,12 @@
       "phase": "decode",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 43.47406013015036,
-        "mean": 43.47406013015036,
+        "max": 43.57202951408302,
+        "mean": 43.490673591926075,
         "median": 43.47406013015036,
-        "min": 43.47406013015036,
-        "n": 1,
-        "std": 0.0
+        "min": 43.425931131544836,
+        "n": 3,
+        "std": 0.060790293519048785
       },
       "session_summaries": [
         {
@@ -313,23 +782,43 @@
           "n": 50,
           "session": 1,
           "std": 0.3543055770059157
+        },
+        {
+          "max": 45.48633162242671,
+          "mean": 43.78421533418198,
+          "median": 43.57202951408302,
+          "min": 42.88296418186898,
+          "n": 50,
+          "session": 2,
+          "std": 0.578662487299953
+        },
+        {
+          "max": 44.52406879281625,
+          "mean": 43.4716724109215,
+          "median": 43.425931131544836,
+          "min": 42.46540671447292,
+          "n": 50,
+          "session": 3,
+          "std": 0.5030152691212288
         }
       ],
       "source_keys": [
-        "3b_hadamard_eager_sequence_decode_s1"
+        "3b_hadamard_eager_sequence_decode_s1",
+        "3b_hadamard_eager_sequence_decode_s2",
+        "3b_hadamard_eager_sequence_decode_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 44.26901136757806,
-        "mean": 43.44014656947304,
-        "median": 43.47406013015036,
+        "max": 45.48633162242671,
+        "mean": 43.56534477152551,
+        "median": 43.51319919805974,
         "min": 42.361051899691425,
-        "n": 50,
-        "std": 0.3543055770059157
+        "n": 150,
+        "std": 0.5117813664742081
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "hadamard",
       "mode": "eager_sequence",
       "model": "3b",
@@ -338,12 +827,12 @@
       "phase": "prefill1",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 12824.192437971522,
-        "mean": 12824.192437971522,
+        "max": 12826.891625751941,
+        "mean": 12822.469863085229,
         "median": 12824.192437971522,
-        "min": 12824.192437971522,
-        "n": 1,
-        "std": 0.0
+        "min": 12816.325525532222,
+        "n": 3,
+        "std": 4.482266290055761
       },
       "session_summaries": [
         {
@@ -354,23 +843,43 @@
           "n": 50,
           "session": 1,
           "std": 28.335172766908105
+        },
+        {
+          "max": 12824.979700278087,
+          "mean": 12813.326198239489,
+          "median": 12816.325525532222,
+          "min": 12743.34444977195,
+          "n": 50,
+          "session": 2,
+          "std": 13.045160320015052
+        },
+        {
+          "max": 12834.51467382297,
+          "mean": 12813.791436785481,
+          "median": 12826.891625751941,
+          "min": 12753.783170121578,
+          "n": 50,
+          "session": 3,
+          "std": 25.95902181308844
         }
       ],
       "source_keys": [
-        "3b_hadamard_eager_sequence_prefill1_s1"
+        "3b_hadamard_eager_sequence_prefill1_s1",
+        "3b_hadamard_eager_sequence_prefill1_s2",
+        "3b_hadamard_eager_sequence_prefill1_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 12833.46851695313,
-        "mean": 12808.925238642301,
-        "median": 12824.192437971522,
+        "max": 12834.51467382297,
+        "mean": 12812.014291222424,
+        "median": 12819.741405738194,
         "min": 12736.448001853583,
-        "n": 50,
-        "std": 28.335172766908105
+        "n": 150,
+        "std": 23.532605955810286
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "hadamard",
       "mode": "eager_sequence",
       "model": "3b",
@@ -379,12 +888,12 @@
       "phase": "prefill16",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 17894.858275106628,
-        "mean": 17894.858275106628,
+        "max": 17901.65263532461,
+        "mean": 17893.731103600705,
         "median": 17894.858275106628,
-        "min": 17894.858275106628,
-        "n": 1,
-        "std": 0.0
+        "min": 17884.682400370883,
+        "n": 3,
+        "std": 6.973765376944873
       },
       "session_summaries": [
         {
@@ -395,23 +904,43 @@
           "n": 50,
           "session": 1,
           "std": 13.301073453681065
+        },
+        {
+          "max": 17926.12390114988,
+          "mean": 17901.195292874618,
+          "median": 17901.65263532461,
+          "min": 17868.42476626813,
+          "n": 50,
+          "session": 2,
+          "std": 15.335264022182237
+        },
+        {
+          "max": 17917.650097679823,
+          "mean": 17888.249053952408,
+          "median": 17884.682400370883,
+          "min": 17868.878344004992,
+          "n": 50,
+          "session": 3,
+          "std": 14.335713919558954
         }
       ],
       "source_keys": [
-        "3b_hadamard_eager_sequence_prefill16_s1"
+        "3b_hadamard_eager_sequence_prefill16_s1",
+        "3b_hadamard_eager_sequence_prefill16_s2",
+        "3b_hadamard_eager_sequence_prefill16_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 17924.3976779061,
-        "mean": 17898.69467985243,
-        "median": 17894.858275106628,
-        "min": 17879.134564019532,
-        "n": 50,
-        "std": 13.301073453681065
+        "max": 17926.12390114988,
+        "mean": 17896.046342226484,
+        "median": 17894.65647031316,
+        "min": 17868.42476626813,
+        "n": 150,
+        "std": 15.404811592709496
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "hadamard",
       "mode": "eager_step_sync",
       "model": "3b",
@@ -420,12 +949,12 @@
       "phase": "decode",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 43.09847559391831,
-        "mean": 43.09847559391831,
-        "median": 43.09847559391831,
+        "max": 46.04680714158651,
+        "mean": 44.77130217516484,
+        "median": 45.1686237899897,
         "min": 43.09847559391831,
-        "n": 1,
-        "std": 0.0
+        "n": 3,
+        "std": 1.2360051450672775
       },
       "session_summaries": [
         {
@@ -436,23 +965,43 @@
           "n": 50,
           "session": 1,
           "std": 0.4546231833869019
+        },
+        {
+          "max": 46.6018239967525,
+          "mean": 45.14428407551411,
+          "median": 45.1686237899897,
+          "min": 43.78906049920867,
+          "n": 50,
+          "session": 2,
+          "std": 0.6696365906325796
+        },
+        {
+          "max": 47.42980711550141,
+          "mean": 45.90284148805465,
+          "median": 46.04680714158651,
+          "min": 44.181725941598415,
+          "n": 50,
+          "session": 3,
+          "std": 0.7339263050365912
         }
       ],
       "source_keys": [
-        "3b_hadamard_eager_step_sync_decode_s1"
+        "3b_hadamard_eager_step_sync_decode_s1",
+        "3b_hadamard_eager_step_sync_decode_s2",
+        "3b_hadamard_eager_step_sync_decode_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 44.532556020809956,
-        "mean": 43.230748586279034,
-        "median": 43.09847559391831,
+        "max": 47.42980711550141,
+        "mean": 44.759291383282594,
+        "median": 44.91361819091253,
         "min": 42.6647911236311,
-        "n": 50,
-        "std": 0.4546231833869019
+        "n": 150,
+        "std": 1.28920033626519
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "nar",
       "mode": "eager_sequence",
       "model": "3b",
@@ -461,12 +1010,12 @@
       "phase": "decode",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 41.266692354111,
-        "mean": 41.266692354111,
-        "median": 41.266692354111,
+        "max": 43.94834262590545,
+        "mean": 42.5650395213678,
+        "median": 42.48008358408697,
         "min": 41.266692354111,
-        "n": 1,
-        "std": 0.0
+        "n": 3,
+        "std": 1.0964260663669196
       },
       "session_summaries": [
         {
@@ -477,23 +1026,43 @@
           "n": 50,
           "session": 1,
           "std": 0.33933179601307845
+        },
+        {
+          "max": 43.40768062587207,
+          "mean": 42.4547058827399,
+          "median": 42.48008358408697,
+          "min": 41.21284319941575,
+          "n": 50,
+          "session": 2,
+          "std": 0.6030077288026432
+        },
+        {
+          "max": 45.365480124019086,
+          "mean": 43.99201506694469,
+          "median": 43.94834262590545,
+          "min": 42.903703183401376,
+          "n": 50,
+          "session": 3,
+          "std": 0.5005799071900984
         }
       ],
       "source_keys": [
-        "3b_nar_eager_sequence_decode_s1"
+        "3b_nar_eager_sequence_decode_s1",
+        "3b_nar_eager_sequence_decode_s2",
+        "3b_nar_eager_sequence_decode_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 42.289935083438955,
-        "mean": 41.33240633706252,
-        "median": 41.266692354111,
+        "max": 45.365480124019086,
+        "mean": 42.5930424289157,
+        "median": 42.48008358408697,
         "min": 40.74098333949223,
-        "n": 50,
-        "std": 0.33933179601307845
+        "n": 150,
+        "std": 1.1964961944929202
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "nar",
       "mode": "eager_sequence",
       "model": "3b",
@@ -503,11 +1072,11 @@
       "required_sessions": 3,
       "session_median_dispersion": {
         "max": 12677.745447661837,
-        "mean": 12677.745447661837,
-        "median": 12677.745447661837,
-        "min": 12677.745447661837,
-        "n": 1,
-        "std": 0.0
+        "mean": 12674.714886283202,
+        "median": 12673.353513007985,
+        "min": 12673.04569817978,
+        "n": 3,
+        "std": 2.146611934246879
       },
       "session_summaries": [
         {
@@ -518,23 +1087,43 @@
           "n": 50,
           "session": 1,
           "std": 23.050000896728868
+        },
+        {
+          "max": 12679.747498743722,
+          "mean": 12665.969168322943,
+          "median": 12673.04569817978,
+          "min": 12586.466575856757,
+          "n": 50,
+          "session": 2,
+          "std": 22.57454926981698
+        },
+        {
+          "max": 12681.691308614327,
+          "mean": 12667.401188471587,
+          "median": 12673.353513007985,
+          "min": 12605.056427090518,
+          "n": 50,
+          "session": 3,
+          "std": 18.610052302742048
         }
       ],
       "source_keys": [
-        "3b_nar_eager_sequence_prefill1_s1"
+        "3b_nar_eager_sequence_prefill1_s1",
+        "3b_nar_eager_sequence_prefill1_s2",
+        "3b_nar_eager_sequence_prefill1_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
         "max": 12686.008759587758,
-        "mean": 12669.941853903234,
-        "median": 12677.745447661837,
-        "min": 12594.734637873064,
-        "n": 50,
-        "std": 23.050000896728868
+        "mean": 12667.770736899254,
+        "median": 12674.403951403634,
+        "min": 12586.466575856757,
+        "n": 150,
+        "std": 21.566508195238786
       }
     },
     {
-      "independent_sessions": 1,
+      "independent_sessions": 3,
       "method": "nar",
       "mode": "eager_sequence",
       "model": "3b",
@@ -543,12 +1132,12 @@
       "phase": "prefill16",
       "required_sessions": 3,
       "session_median_dispersion": {
-        "max": 17634.42029231372,
-        "mean": 17634.42029231372,
+        "max": 17635.309461579764,
+        "mean": 17628.023129056863,
         "median": 17634.42029231372,
-        "min": 17634.42029231372,
-        "n": 1,
-        "std": 0.0
+        "min": 17614.3396332771,
+        "n": 3,
+        "std": 9.682499610533254
       },
       "session_summaries": [
         {
@@ -559,40 +1148,1003 @@
           "n": 50,
           "session": 1,
           "std": 19.59018449913409
+        },
+        {
+          "max": 17677.485973194984,
+          "mean": 17634.879200301246,
+          "median": 17635.309461579764,
+          "min": 17593.670422389536,
+          "n": 50,
+          "session": 2,
+          "std": 22.85511884736287
+        },
+        {
+          "max": 17656.138914589013,
+          "mean": 17610.32092168621,
+          "median": 17614.3396332771,
+          "min": 17572.006681418185,
+          "n": 50,
+          "session": 3,
+          "std": 24.446624873301587
         }
       ],
       "source_keys": [
-        "3b_nar_eager_sequence_prefill16_s1"
+        "3b_nar_eager_sequence_prefill16_s1",
+        "3b_nar_eager_sequence_prefill16_s2",
+        "3b_nar_eager_sequence_prefill16_s3"
       ],
-      "status": "PROVISIONAL",
+      "status": "COMPLETE",
       "summary": {
-        "max": 17674.900993058614,
-        "mean": 17636.78251482107,
-        "median": 17634.42029231372,
-        "min": 17588.891961551657,
-        "n": 50,
-        "std": 19.59018449913409
+        "max": 17677.485973194984,
+        "mean": 17627.32754560284,
+        "median": 17630.26961314011,
+        "min": 17572.006681418185,
+        "n": 150,
+        "std": 25.42582966575879
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "nar",
+      "mode": "eager_step_sync",
+      "model": "3b",
+      "peak_allocated_bytes": 4374729216,
+      "peak_reserved_bytes": 4492099584,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 46.15277530004581,
+        "mean": 45.06267135988714,
+        "median": 45.0213014439214,
+        "min": 44.01393733569421,
+        "n": 3,
+        "std": 0.8736668174608232
+      },
+      "session_summaries": [
+        {
+          "max": 45.03279512670512,
+          "mean": 44.084210013427466,
+          "median": 44.01393733569421,
+          "min": 43.41612400021404,
+          "n": 50,
+          "session": 1,
+          "std": 0.36923110308886625
+        },
+        {
+          "max": 48.33144973575448,
+          "mean": 46.100303062315405,
+          "median": 46.15277530004581,
+          "min": 43.875560959956296,
+          "n": 50,
+          "session": 2,
+          "std": 0.8572921395792652
+        },
+        {
+          "max": 47.25390105353048,
+          "mean": 44.73391696911615,
+          "median": 45.0213014439214,
+          "min": 43.62093637464568,
+          "n": 50,
+          "session": 3,
+          "std": 0.7330191037348868
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_step_sync_decode_s1",
+        "3b_nar_eager_step_sync_decode_s2",
+        "3b_nar_eager_step_sync_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 48.33144973575448,
+        "mean": 44.97281001495301,
+        "median": 44.78487071076718,
+        "min": 43.41612400021404,
+        "n": 150,
+        "std": 1.08420767512869
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 18749507584,
+      "peak_reserved_bytes": 18985517056,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 30.25466565353175,
+        "mean": 30.219302143410058,
+        "median": 30.207506415899843,
+        "min": 30.195734360798575,
+        "n": 3,
+        "std": 0.025463420906889828
+      },
+      "session_summaries": [
+        {
+          "max": 30.392173503059894,
+          "mean": 30.20092069194652,
+          "median": 30.195734360798575,
+          "min": 30.189245198077213,
+          "n": 50,
+          "session": 1,
+          "std": 0.028050205987033755
+        },
+        {
+          "max": 30.220749442620825,
+          "mean": 30.209046508573614,
+          "median": 30.207506415899843,
+          "min": 30.203116925743718,
+          "n": 50,
+          "session": 2,
+          "std": 0.004264580362245954
+        },
+        {
+          "max": 30.267511509979766,
+          "mean": 30.256189744221047,
+          "median": 30.25466565353175,
+          "min": 30.25043121694277,
+          "n": 50,
+          "session": 3,
+          "std": 0.004784700669270679
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_sequence_decode_s1",
+        "8b_fp16_eager_sequence_decode_s2",
+        "8b_fp16_eager_sequence_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 30.392173503059894,
+        "mean": 30.222052314913725,
+        "median": 30.208773406532906,
+        "min": 30.189245198077213,
+        "n": 150,
+        "std": 0.029489854919799295
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 18732468224,
+      "peak_reserved_bytes": 18964545536,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 5244.524045361033,
+        "mean": 5238.311486650089,
+        "median": 5244.349142883877,
+        "min": 5226.061271705357,
+        "n": 3,
+        "std": 8.662504347790252
+      },
+      "session_summaries": [
+        {
+          "max": 5269.858722182316,
+          "mean": 5246.828830698629,
+          "median": 5244.349142883877,
+          "min": 5219.494222976422,
+          "n": 50,
+          "session": 1,
+          "std": 14.615000632926506
+        },
+        {
+          "max": 5261.126242748195,
+          "mean": 5239.553394635394,
+          "median": 5244.524045361033,
+          "min": 5207.080015150666,
+          "n": 50,
+          "session": 2,
+          "std": 16.87452566554393
+        },
+        {
+          "max": 5269.543963767497,
+          "mean": 5231.231603783147,
+          "median": 5226.061271705357,
+          "min": 5210.182900640848,
+          "n": 50,
+          "session": 3,
+          "std": 14.158108301232687
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_sequence_prefill1_s1",
+        "8b_fp16_eager_sequence_prefill1_s2",
+        "8b_fp16_eager_sequence_prefill1_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 5269.858722182316,
+        "mean": 5239.204609705723,
+        "median": 5241.695874092715,
+        "min": 5207.080015150666,
+        "n": 150,
+        "std": 16.539035751057078
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 26471081984,
+      "peak_reserved_bytes": 28347203584,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 6422.4170412694675,
+        "mean": 6415.546384371314,
+        "median": 6419.61000720922,
+        "min": 6404.612104635253,
+        "n": 3,
+        "std": 7.816167648477913
+      },
+      "session_summaries": [
+        {
+          "max": 6490.180791802067,
+          "mean": 6432.464086645388,
+          "median": 6419.61000720922,
+          "min": 6402.409423193486,
+          "n": 50,
+          "session": 1,
+          "std": 25.4002976196749
+        },
+        {
+          "max": 6483.194606024391,
+          "mean": 6429.097504808912,
+          "median": 6422.4170412694675,
+          "min": 6401.612057196428,
+          "n": 50,
+          "session": 2,
+          "std": 18.66358228495804
+        },
+        {
+          "max": 6507.182304667582,
+          "mean": 6408.684026345764,
+          "median": 6404.612104635253,
+          "min": 6357.739228238121,
+          "n": 50,
+          "session": 3,
+          "std": 43.25587139272435
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_sequence_prefill16_s1",
+        "8b_fp16_eager_sequence_prefill16_s2",
+        "8b_fp16_eager_sequence_prefill16_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 6507.182304667582,
+        "mean": 6423.415205933355,
+        "median": 6418.427125065233,
+        "min": 6357.739228238121,
+        "n": 150,
+        "std": 32.6381844241425
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "fp16",
+      "mode": "eager_step_sync",
+      "model": "8b",
+      "peak_allocated_bytes": 18749507584,
+      "peak_reserved_bytes": 18985517056,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 31.324551415552072,
+        "mean": 31.174297438701615,
+        "median": 31.127544723373525,
+        "min": 31.07079617717924,
+        "n": 3,
+        "std": 0.10874217992826013
+      },
+      "session_summaries": [
+        {
+          "max": 31.212632575382788,
+          "mean": 31.079863665004574,
+          "median": 31.07079617717924,
+          "min": 30.97004002192989,
+          "n": 50,
+          "session": 1,
+          "std": 0.05433711197157815
+        },
+        {
+          "max": 31.570815112597,
+          "mean": 31.30869389208965,
+          "median": 31.324551415552072,
+          "min": 31.038207141682506,
+          "n": 50,
+          "session": 2,
+          "std": 0.10908362763937005
+        },
+        {
+          "max": 31.373788792795192,
+          "mean": 31.135342765754707,
+          "median": 31.127544723373525,
+          "min": 30.94678132329136,
+          "n": 50,
+          "session": 3,
+          "std": 0.08959977539472973
+        }
+      ],
+      "source_keys": [
+        "8b_fp16_eager_step_sync_decode_s1",
+        "8b_fp16_eager_step_sync_decode_s2",
+        "8b_fp16_eager_step_sync_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 31.570815112597,
+        "mean": 31.174633440949645,
+        "median": 31.137382989982143,
+        "min": 30.94678132329136,
+        "n": 150,
+        "std": 0.1308652633525256
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 8131827712,
+      "peak_reserved_bytes": 8283750400,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 53.389947599498555,
+        "mean": 52.9721869498543,
+        "median": 52.93092258119334,
+        "min": 52.595690668871,
+        "n": 3,
+        "std": 0.32556420672755826
+      },
+      "session_summaries": [
+        {
+          "max": 55.93188925025364,
+          "mean": 53.19646335183643,
+          "median": 52.93092258119334,
+          "min": 52.46972270154705,
+          "n": 50,
+          "session": 1,
+          "std": 0.6866366131094422
+        },
+        {
+          "max": 55.789193767122924,
+          "mean": 53.48358350433409,
+          "median": 53.389947599498555,
+          "min": 51.87563472427428,
+          "n": 50,
+          "session": 2,
+          "std": 1.0164141457641866
+        },
+        {
+          "max": 53.89594789206361,
+          "mean": 52.4145508040674,
+          "median": 52.595690668871,
+          "min": 50.79581711518889,
+          "n": 50,
+          "session": 3,
+          "std": 1.019271722040483
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_sequence_decode_s1",
+        "8b_hadamard_eager_sequence_decode_s2",
+        "8b_hadamard_eager_sequence_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 55.93188925025364,
+        "mean": 53.03153255341264,
+        "median": 52.9184200509917,
+        "min": 50.79581711518889,
+        "n": 150,
+        "std": 1.0256219425379776
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 8127371264,
+      "peak_reserved_bytes": 8279556096,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 7607.977039235116,
+        "mean": 7607.382338394705,
+        "median": 7607.946695761348,
+        "min": 7606.223280187648,
+        "n": 3,
+        "std": 0.8196715305972854
+      },
+      "session_summaries": [
+        {
+          "max": 7610.610296629449,
+          "mean": 7603.608008227438,
+          "median": 7606.223280187648,
+          "min": 7582.574245774118,
+          "n": 50,
+          "session": 1,
+          "std": 6.63945181235845
+        },
+        {
+          "max": 7612.016353387448,
+          "mean": 7606.2287849543745,
+          "median": 7607.977039235116,
+          "min": 7584.735388409277,
+          "n": 50,
+          "session": 2,
+          "std": 5.705305366193284
+        },
+        {
+          "max": 7616.808003064218,
+          "mean": 7607.290494339906,
+          "median": 7607.946695761348,
+          "min": 7596.598058799196,
+          "n": 50,
+          "session": 3,
+          "std": 4.661510838645456
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_sequence_prefill1_s1",
+        "8b_hadamard_eager_sequence_prefill1_s2",
+        "8b_hadamard_eager_sequence_prefill1_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 7616.808003064218,
+        "mean": 7605.709095840572,
+        "median": 7607.402360288797,
+        "min": 7582.574245774118,
+        "n": 150,
+        "std": 5.931497285276273
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 13789865984,
+      "peak_reserved_bytes": 16271802368,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 9566.438023714938,
+        "mean": 9555.36143811769,
+        "median": 9561.347205494982,
+        "min": 9538.299085143151,
+        "n": 3,
+        "std": 12.24260387085413
+      },
+      "session_summaries": [
+        {
+          "max": 9592.241243313827,
+          "mean": 9564.010115343073,
+          "median": 9561.347205494982,
+          "min": 9551.146783296706,
+          "n": 50,
+          "session": 1,
+          "std": 10.379496065352239
+        },
+        {
+          "max": 9568.9544918892,
+          "mean": 9543.53592004095,
+          "median": 9538.299085143151,
+          "min": 9533.533205312347,
+          "n": 50,
+          "session": 2,
+          "std": 10.726390267039692
+        },
+        {
+          "max": 9591.8200260238,
+          "mean": 9565.741576266855,
+          "median": 9566.438023714938,
+          "min": 9544.730667229123,
+          "n": 50,
+          "session": 3,
+          "std": 13.935847913838515
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_sequence_prefill16_s1",
+        "8b_hadamard_eager_sequence_prefill16_s2",
+        "8b_hadamard_eager_sequence_prefill16_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 9592.241243313827,
+        "mean": 9557.762537216959,
+        "median": 9555.995565074365,
+        "min": 9533.533205312347,
+        "n": 150,
+        "std": 15.514414552103512
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "hadamard",
+      "mode": "eager_step_sync",
+      "model": "8b",
+      "peak_allocated_bytes": 8131827712,
+      "peak_reserved_bytes": 8283750400,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 56.6683235228993,
+        "mean": 55.106023096919266,
+        "median": 55.35576721498121,
+        "min": 53.29397855287728,
+        "n": 3,
+        "std": 1.3888436647221163
+      },
+      "session_summaries": [
+        {
+          "max": 54.03942465394115,
+          "mean": 53.31387041672133,
+          "median": 53.29397855287728,
+          "min": 52.74741225099812,
+          "n": 50,
+          "session": 1,
+          "std": 0.3283301302888881
+        },
+        {
+          "max": 58.32647889231642,
+          "mean": 55.38656243596536,
+          "median": 55.35576721498121,
+          "min": 53.47500702676674,
+          "n": 50,
+          "session": 2,
+          "std": 1.1596339466330592
+        },
+        {
+          "max": 60.22601900622249,
+          "mean": 56.71812173274036,
+          "median": 56.6683235228993,
+          "min": 54.34603709727526,
+          "n": 50,
+          "session": 3,
+          "std": 1.1661861005241483
+        }
+      ],
+      "source_keys": [
+        "8b_hadamard_eager_step_sync_decode_s1",
+        "8b_hadamard_eager_step_sync_decode_s2",
+        "8b_hadamard_eager_step_sync_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 60.22601900622249,
+        "mean": 55.13951819514235,
+        "median": 55.20178948451455,
+        "min": 52.74741225099812,
+        "n": 150,
+        "std": 1.702796854431884
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 8175966720,
+      "peak_reserved_bytes": 8352956416,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 50.819344841875136,
+        "mean": 50.46331252087839,
+        "median": 50.431363441748545,
+        "min": 50.13922927901149,
+        "n": 3,
+        "std": 0.278573571916251
+      },
+      "session_summaries": [
+        {
+          "max": 52.03985763170446,
+          "mean": 50.45543331280351,
+          "median": 50.431363441748545,
+          "min": 49.53113538213074,
+          "n": 50,
+          "session": 1,
+          "std": 0.5523351150678255
+        },
+        {
+          "max": 51.415745013703905,
+          "mean": 50.760423657950014,
+          "median": 50.819344841875136,
+          "min": 48.991917011638485,
+          "n": 50,
+          "session": 2,
+          "std": 0.4444640507490523
+        },
+        {
+          "max": 52.23259480747705,
+          "mean": 50.48355558786231,
+          "median": 50.13922927901149,
+          "min": 49.45519811784228,
+          "n": 50,
+          "session": 3,
+          "std": 0.8000841144596734
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_sequence_decode_s1",
+        "8b_nar_eager_sequence_decode_s2",
+        "8b_nar_eager_sequence_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 52.23259480747705,
+        "mean": 50.56647085287194,
+        "median": 50.611458596540615,
+        "min": 48.991917011638485,
+        "n": 150,
+        "std": 0.6323445603544753
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 8171509760,
+      "peak_reserved_bytes": 8348762112,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 7678.789490605288,
+        "mean": 7677.394414590036,
+        "median": 7676.941256476537,
+        "min": 7676.452496688282,
+        "n": 3,
+        "std": 1.0064456762631055
+      },
+      "session_summaries": [
+        {
+          "max": 7682.304912037395,
+          "mean": 7674.697594855181,
+          "median": 7676.941256476537,
+          "min": 7656.250199669255,
+          "n": 50,
+          "session": 1,
+          "std": 6.366360697273605
+        },
+        {
+          "max": 7684.240567475619,
+          "mean": 7677.355289434192,
+          "median": 7678.789490605288,
+          "min": 7661.131547970043,
+          "n": 50,
+          "session": 2,
+          "std": 5.505681045195158
+        },
+        {
+          "max": 7680.083137756532,
+          "mean": 7675.55402201192,
+          "median": 7676.452496688282,
+          "min": 7662.603529214297,
+          "n": 50,
+          "session": 3,
+          "std": 3.569707009852128
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_sequence_prefill1_s1",
+        "8b_nar_eager_sequence_prefill1_s2",
+        "8b_nar_eager_sequence_prefill1_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 7684.240567475619,
+        "mean": 7675.8689687670985,
+        "median": 7677.014884877852,
+        "min": 7656.250199669255,
+        "n": 150,
+        "std": 5.393401457983882
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "8b",
+      "peak_allocated_bytes": 13834921984,
+      "peak_reserved_bytes": 16338911232,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 9670.849249248102,
+        "mean": 9659.955924194648,
+        "median": 9656.45212166861,
+        "min": 9652.56640166723,
+        "n": 3,
+        "std": 7.864396693217744
+      },
+      "session_summaries": [
+        {
+          "max": 9697.642249646911,
+          "mean": 9656.37207329594,
+          "median": 9656.45212166861,
+          "min": 9635.117124495373,
+          "n": 50,
+          "session": 1,
+          "std": 17.919074544987847
+        },
+        {
+          "max": 9694.675957611265,
+          "mean": 9666.181220373159,
+          "median": 9670.849249248102,
+          "min": 9438.940490958877,
+          "n": 50,
+          "session": 2,
+          "std": 33.68136396241674
+        },
+        {
+          "max": 9693.480164263183,
+          "mean": 9658.087055295922,
+          "median": 9652.56640166723,
+          "min": 9548.148864178007,
+          "n": 50,
+          "session": 3,
+          "std": 21.510774977073407
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_sequence_prefill16_s1",
+        "8b_nar_eager_sequence_prefill16_s2",
+        "8b_nar_eager_sequence_prefill16_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 9697.642249646911,
+        "mean": 9660.213449655008,
+        "median": 9661.750294019688,
+        "min": 9438.940490958877,
+        "n": 150,
+        "std": 25.645876625549295
+      }
+    },
+    {
+      "independent_sessions": 3,
+      "method": "nar",
+      "mode": "eager_step_sync",
+      "model": "8b",
+      "peak_allocated_bytes": 8175966720,
+      "peak_reserved_bytes": 8352956416,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 53.995037106021,
+        "mean": 51.90416271216236,
+        "median": 51.38044453536471,
+        "min": 50.33700649510138,
+        "n": 3,
+        "std": 1.538615727233941
+      },
+      "session_summaries": [
+        {
+          "max": 57.44118410317848,
+          "mean": 54.37856096650164,
+          "median": 53.995037106021,
+          "min": 53.37061005023619,
+          "n": 50,
+          "session": 1,
+          "std": 1.0100476587882712
+        },
+        {
+          "max": 52.66695471558099,
+          "mean": 51.405435775561884,
+          "median": 51.38044453536471,
+          "min": 50.11026206193492,
+          "n": 50,
+          "session": 2,
+          "std": 0.608353974330394
+        },
+        {
+          "max": 50.99857106106356,
+          "mean": 50.30803344693656,
+          "median": 50.33700649510138,
+          "min": 49.768005788791925,
+          "n": 50,
+          "session": 3,
+          "std": 0.2868343520631847
+        }
+      ],
+      "source_keys": [
+        "8b_nar_eager_step_sync_decode_s1",
+        "8b_nar_eager_step_sync_decode_s2",
+        "8b_nar_eager_step_sync_decode_s3"
+      ],
+      "status": "COMPLETE",
+      "summary": {
+        "max": 57.44118410317848,
+        "mean": 52.03067672966669,
+        "median": 51.38044453536471,
+        "min": 49.768005788791925,
+        "n": 150,
+        "std": 1.856838827724322
       }
     }
   ],
-  "generated_at": "2026-09-12T04:07:00.845550+00:00",
+  "generated_at": "2026-09-12T09:53:24.094212+00:00",
   "graph_performance": {
     "comparisons": [],
     "deployment": [],
     "missing_reason": "No validated matched graph timing records yet",
+    "paired_session_comparisons": [
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "fp16",
+        "model": "3b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "hadamard",
+        "model": "3b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "nar",
+        "model": "3b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+        "interpretation": "Missing matching method/mode records",
+        "mode": "eager_sequence",
+        "model": "3b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+        "interpretation": "Missing matching method/mode records",
+        "mode": "cuda_graph_sequence",
+        "model": "3b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "fp16",
+        "model": "8b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "hadamard",
+        "model": "8b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "same-method eager / graph latency; greater than one means graph is faster",
+        "interpretation": "Missing matching method/mode records",
+        "method": "nar",
+        "model": "8b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+        "interpretation": "Missing matching method/mode records",
+        "mode": "eager_sequence",
+        "model": "8b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      },
+      {
+        "comparison": "NAR / Hadamard latency; greater than one means NAR is slower",
+        "interpretation": "Missing matching method/mode records",
+        "mode": "cuda_graph_sequence",
+        "model": "8b",
+        "samples": [],
+        "summary": {
+          "mean": null,
+          "median": null,
+          "n": 0,
+          "reason": "no valid measurements",
+          "std": null
+        }
+      }
+    ],
     "protocol_conformance": {
       "binary_sha256": [],
       "gpu_uuids": [],
       "same_environment": null,
       "same_gpu": null,
       "same_input": null,
+      "same_measurement_sources": false,
+      "source_hashes": {
+        "benchmark.py": [],
+        "cache_adapter.py": [],
+        "common.py": [],
+        "graph_benchmark.py": []
+      },
       "state_checks": [],
       "status": "PENDING_OR_REVIEW_REQUIRED"
     },
     "raw_status": [],
     "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
+    "stage_completion": null,
     "status": "INCOMPLETE",
-    "timestamp": "2026-09-12T04:07:00.848645+00:00"
+    "timestamp": "2026-09-12T09:53:24.100892+00:00"
   },
   "missing_policy": "null+reason; never fill unmeasured performance with zero",
   "protocol_sha256": "9fb2c2cfdcdb666c661a4c84c91d6c436c1043e80a5cb43bc58c29ad52383528",
