@@ -4,7 +4,7 @@ The source of truth is the pinned code and binaries in `source_manifest.json`, n
 
 | Property | E28-v2 integer kernel swap | E17 native R4 | Paper accuracy path (E14/E22 g128_asym) |
 | --- | --- | --- | --- |
-| W | Signed INT4, one FP16 scale/output channel; benchmark packed bytes 1..6 have upper nibble zero | No complete W GEMM in this local benchmark | GPTQ W4, group128 along input/reduction axis, per-output/group scales and asymmetric integer zero point |
+| W | Signed INT4, one FP16 scale/output channel; benchmark packed bytes0..255 cover both signed nibbles; legacy1..6 initialization is retained as a failed predecessor | No complete W GEMM in this local benchmark | GPTQ W4, group128 along input/reduction axis, per-output/group scales and asymmetric integer zero point |
 | A | Signed INT4, symmetric, one scale per complete token row | Unsigned INT4, asymmetric, per token/channel-group128 | Asymmetric A4, per token/channel-group128; fake quantization in floating model |
 | A scale/offset | FP16 `max(abs(x))/7`, clip ratio1; no offset and no zero-scale guard | FP16 `(max-min)/15`; if range0, scale1; FP16 real offset=min | `dynamic_asym_int4`: FP16 group scale and real-valued min offset; follow recorded accuracy protocol |
 | Rounding/packing | FP16 division, CUDA nearest-even, saturation[-8,7], even channel in low nibble, odd in high | FP32 quotient using rounded FP16 scale/offset; floor(q+0.5), clamp[0,15], low/even nibble | Fake quant/dequant; not evidence of a compatible packed GEMM |

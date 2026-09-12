@@ -58,7 +58,7 @@ def environment():
       'environment':{k:v for k,v in os.environ.items() if k.startswith(('SLURM_','OMP_','MKL_')) or k=='CUDA_VISIBLE_DEVICES'},
       'torch_threads':torch.get_num_threads(),'torch_interop_threads':torch.get_num_interop_threads(),
       'nvcc':command(['nvcc','--version']), 'host':command(['hostname']),
-      'command':sys.argv,'pid':os.getpid(),
+      'command':sys.argv,'pid':os.getpid(),'weight_initialization':'legacy_bytes_1_to_6' if os.environ.get('E28_LEGACY_PACKED_BYTES')=='1' else 'uniform_full_signed_int4_bytes_0_to_255',
       'execution_python_sha256':{str(f.relative_to(ROOT)):sha(f) for f in (ROOT/'quarot-llama3/e28_v2').glob('*.py')}}
 
 def tensor_hash(t):
@@ -79,7 +79,8 @@ def build(model,method):
     for name,mod in m.named_modules():
         if mod.__class__.__name__=='Linear4bit':
             g=torch.Generator(device='cpu').manual_seed(int(hashlib.sha256(('e28-v2:'+name).encode()).hexdigest()[:15],16))
-            mod.weight.copy_(torch.randint(1,7,mod.weight.shape,generator=g,dtype=torch.uint8))
+            lo,hi=(1,7) if os.environ.get('E28_LEGACY_PACKED_BYTES')=='1' else (0,256)
+            mod.weight.copy_(torch.randint(lo,hi,mod.weight.shape,generator=g,dtype=torch.uint8))
             mod.weight_scales.copy_((torch.rand(mod.weight_scales.shape,generator=g)*.002+.001).half())
     # E28 changed inv_freq after construction but left the old cos/sin cache.
     # Rebuild at the existing capacity for every method; no footprint shortcut.

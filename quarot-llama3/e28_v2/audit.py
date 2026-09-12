@@ -9,7 +9,7 @@ def main():
     protocol={
       'schema':2,'run_id':a.run.name,'frozen_at':now(),'priority':['P0','P1','P2'],
       'models':MODELS,'methods':METHODS,'rank':8,'weights':'random-weight performance benchmark',
-      'shared_random_state':'Old FP16 parameter initialization; INT4 packed bytes uniform 1..6 (upper nibble zero), scales uniform .001..003; name-hashed CPU generator per Linear4bit; byte hashes checked for every common state tensor.',
+      'shared_random_state':'Old FP16 parameter initialization; INT4 packed bytes uniform 0..255 (both signed nibbles cover[-8,7]), scales uniform .001..003; name-hashed CPU generator per Linear4bit; byte hashes checked for every common state tensor.',
       'seed':0,'hardware':{'name':'NVIDIA A40','capability':[8,6],'same_physical_gpu':'one Slurm allocation for every formal phase and all three sessions','cpus':4,'torch_threads':4,'interop_threads':1},
       'environment':'existing e28-env torch2.4.1+cu124, triton3.0.0; no dependency upgrade',
       'core':{'prefill':{'batch':[1,16],'length':2048},'decode':{'batch':1,'prefix':2048,'steps':128,'discard':8},'warmup':10,'runs':50,'sessions':3},
