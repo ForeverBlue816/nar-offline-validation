@@ -76,7 +76,7 @@ def main():
                         # Ignore inactive extra index capacity; compare active metadata.
                         gs=snapshot(cache);gs['metadata']['kv_indices']=gs['metadata']['kv_indices'][:math.ceil(cache.length/page)]
                         same=gs==cs
-                        result['checks'].append({'prefix':prefix,'page_size':page,'sequence':sequence,'window':window,'step':step,'finite':finite,'relative_l2':rel,'hidden_relative_l2':hidden_rel,'cache_exact':same,'status':'PASS' if finite and rel<=.002 and hidden_rel<=.002 and same else 'FAIL'})
+                        result['checks'].append({'prefix':prefix,'page_size':page,'sequence':sequence,'window':window,'step':step,'finite':finite,'relative_l2':rel,'hidden_relative_l2':hidden_rel,'cache_exact':same,'expected_cache':cs,'observed_cache':gs,'status':'PASS' if finite and rel<=.002 and hidden_rel<=.002 and same else 'FAIL'})
             if any(x['status']!='PASS' for x in result['checks']):
                 result.update(status='INVALID',reason='Growing-cache/A-B-A replay check failed; graph timing excluded');break
             # Only a validated adapter is eligible for an independent graph panel.

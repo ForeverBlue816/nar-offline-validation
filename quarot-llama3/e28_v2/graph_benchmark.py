@@ -116,8 +116,9 @@ def main():
                         expected, expected_cache = reference[step]
                         finite = bool(torch.isfinite(output.logits).all())
                         rel = float((output.logits.float() - expected.float()).norm() / expected.float().norm().clamp_min(1e-30)) if finite else None
-                        exact = snapshot(cache) == expected_cache
-                        replay_checks.append({'step': step, 'finite': finite, 'relative_l2': rel, 'cache_exact': exact,
+                        observed_cache = snapshot(cache)
+                        exact = observed_cache == expected_cache
+                        replay_checks.append({'step': step, 'finite': finite, 'relative_l2': rel, 'cache_exact': exact, 'expected_cache': expected_cache, 'observed_cache': observed_cache,
                                               'status': 'PASS' if finite and rel <= .002 and exact else 'FAIL'})
                 result['timing_harness_replay_checks'] = replay_checks
                 if any(r['status'] != 'PASS' for r in replay_checks):

@@ -1,0 +1,23 @@
+{
+  "frozen_at": "2026-09-12T12:11:13.029612+00:00",
+  "before_private_graph_measurement": true,
+  "original_graph_checks_already_complete": true,
+  "change": "Serialize the already-computed expected/observed whole-cache hashes, length, needs_init and page metadata in private graph correctness and timing-harness replay checks. No added GPU operations, thresholds, arithmetic, capture boundary, or timing changes.",
+  "before_sources": {
+    "graph.py": "937ed7c6b1a52ccfc7bfa54d654bc6f6c62bae1b2c7969e09e1d7e227a059ce3",
+    "graph_benchmark.py": "18c5857f4fe5c90ac9f7bbc3ae8385ffbd4f47c41837822cc4b4ebe077a281ae"
+  },
+  "after_sources": {
+    "graph.py": "c2dfb088c85696408be74e50303e9cf0a02d3652860a3a33fa6662b32a10da41",
+    "graph_benchmark.py": "a8d7ae0ff4b83ac8a3b171b344364656e2208e09f723e66366fb43a6248d7ca9"
+  },
+  "original_graph_results_preserved": {
+    "graph_3b_fp16.json": "43522bf5bd1b062dbd3399e9c553bfa7fd505470714b2b2912149017ddf2a8d9",
+    "graph_3b_hadamard.json": "e503d974000f17d1ea8d5f468801f8a320554d2310185ea08320c6bfc519ac0c",
+    "graph_3b_nar.json": "d64a86c79fe580d8960a4ad4ff0576d7dcff2898a1d0594125a123d81e9b2029",
+    "graph_8b_fp16.json": "fc57e727e35503bb16727f52e9ab6bb9eb9f058c27245c6384c755447613c902",
+    "graph_8b_hadamard.json": "d6b9fdd35d57c51e962c3206adb766b91fbe5ae6db88f26c7f43dec8998cbed0",
+    "graph_8b_nar.json": "6ab3adb5992b8718e5d1f53eb8018a659285e7b52d74dd06f84f90743fdb8e42"
+  },
+  "limitation": "The original-backend failed records retain exact-comparison booleans but did not serialize both cache snapshots; they are not rewritten or retrospectively completed."
+}
