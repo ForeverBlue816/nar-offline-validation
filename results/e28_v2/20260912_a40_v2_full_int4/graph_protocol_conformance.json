@@ -33,11 +33,19 @@
       "state_matches_original_verified_model": true
     },
     {
+      "key": "3b_fp16_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
       "key": "3b_fp16_eager_sequence_decode_s1",
       "state_matches_original_verified_model": true
     },
     {
       "key": "3b_fp16_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_decode_s3",
       "state_matches_original_verified_model": true
     },
     {
@@ -49,11 +57,19 @@
       "state_matches_original_verified_model": true
     },
     {
+      "key": "3b_hadamard_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
       "key": "3b_hadamard_eager_sequence_decode_s1",
       "state_matches_original_verified_model": true
     },
     {
       "key": "3b_hadamard_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "3b_hadamard_eager_sequence_decode_s3",
       "state_matches_original_verified_model": true
     },
     {
@@ -89,11 +105,19 @@
       "state_matches_original_verified_model": true
     },
     {
+      "key": "8b_fp16_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
       "key": "8b_fp16_eager_sequence_decode_s1",
       "state_matches_original_verified_model": true
     },
     {
       "key": "8b_fp16_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_fp16_eager_sequence_decode_s3",
       "state_matches_original_verified_model": true
     },
     {
@@ -105,11 +129,19 @@
       "state_matches_original_verified_model": true
     },
     {
+      "key": "8b_hadamard_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
       "key": "8b_hadamard_eager_sequence_decode_s1",
       "state_matches_original_verified_model": true
     },
     {
       "key": "8b_hadamard_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_hadamard_eager_sequence_decode_s3",
       "state_matches_original_verified_model": true
     },
     {
@@ -121,11 +153,19 @@
       "state_matches_original_verified_model": true
     },
     {
+      "key": "8b_nar_cuda_graph_sequence_decode_s3",
+      "state_matches_original_verified_model": true
+    },
+    {
       "key": "8b_nar_eager_sequence_decode_s1",
       "state_matches_original_verified_model": true
     },
     {
       "key": "8b_nar_eager_sequence_decode_s2",
+      "state_matches_original_verified_model": true
+    },
+    {
+      "key": "8b_nar_eager_sequence_decode_s3",
       "state_matches_original_verified_model": true
     }
   ],

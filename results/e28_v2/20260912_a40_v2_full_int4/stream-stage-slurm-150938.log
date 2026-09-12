@@ -336,3 +336,109 @@ GRAPH_PANEL 3b_nar_cuda_graph_sequence_decode_s3 40 1.99823
   _torch_pytree._register_pytree_node(
 /projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
   _torch_pytree._register_pytree_node(
+GRAPH_PANEL 3b_fp16_eager_sequence_decode_s3 0 2.53562
+GRAPH_PANEL 3b_fp16_eager_sequence_decode_s3 10 2.55998
+GRAPH_PANEL 3b_fp16_eager_sequence_decode_s3 20 2.50192
+GRAPH_PANEL 3b_fp16_eager_sequence_decode_s3 30 2.49734
+GRAPH_PANEL 3b_fp16_eager_sequence_decode_s3 40 2.51441
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 3b_fp16_cuda_graph_sequence_decode_s3 0 1.80457
+GRAPH_PANEL 3b_fp16_cuda_graph_sequence_decode_s3 10 1.80455
+GRAPH_PANEL 3b_fp16_cuda_graph_sequence_decode_s3 20 1.80449
+GRAPH_PANEL 3b_fp16_cuda_graph_sequence_decode_s3 30 1.80438
+GRAPH_PANEL 3b_fp16_cuda_graph_sequence_decode_s3 40 1.80452
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 3b_hadamard_eager_sequence_decode_s3 0 5.09387
+GRAPH_PANEL 3b_hadamard_eager_sequence_decode_s3 10 5.0669
+GRAPH_PANEL 3b_hadamard_eager_sequence_decode_s3 20 5.08953
+GRAPH_PANEL 3b_hadamard_eager_sequence_decode_s3 30 5.11168
+GRAPH_PANEL 3b_hadamard_eager_sequence_decode_s3 40 4.99405
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 3b_hadamard_cuda_graph_sequence_decode_s3 0 1.96002
+GRAPH_PANEL 3b_hadamard_cuda_graph_sequence_decode_s3 10 1.9601
+GRAPH_PANEL 3b_hadamard_cuda_graph_sequence_decode_s3 20 1.96016
+GRAPH_PANEL 3b_hadamard_cuda_graph_sequence_decode_s3 30 1.96015
+GRAPH_PANEL 3b_hadamard_cuda_graph_sequence_decode_s3 40 1.96012
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_nar_eager_sequence_decode_s3 0 5.75641
+GRAPH_PANEL 8b_nar_eager_sequence_decode_s3 10 5.85885
+GRAPH_PANEL 8b_nar_eager_sequence_decode_s3 20 5.78811
+GRAPH_PANEL 8b_nar_eager_sequence_decode_s3 30 5.72464
+GRAPH_PANEL 8b_nar_eager_sequence_decode_s3 40 5.81082
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_nar_cuda_graph_sequence_decode_s3 0 2.83714
+GRAPH_PANEL 8b_nar_cuda_graph_sequence_decode_s3 10 2.83689
+GRAPH_PANEL 8b_nar_cuda_graph_sequence_decode_s3 20 2.837
+GRAPH_PANEL 8b_nar_cuda_graph_sequence_decode_s3 30 2.83684
+GRAPH_PANEL 8b_nar_cuda_graph_sequence_decode_s3 40 2.83703
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_fp16_eager_sequence_decode_s3 0 3.62595
+GRAPH_PANEL 8b_fp16_eager_sequence_decode_s3 10 3.62618
+GRAPH_PANEL 8b_fp16_eager_sequence_decode_s3 20 3.62618
+GRAPH_PANEL 8b_fp16_eager_sequence_decode_s3 30 3.62641
+GRAPH_PANEL 8b_fp16_eager_sequence_decode_s3 40 3.62603
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_fp16_cuda_graph_sequence_decode_s3 0 3.45943
+GRAPH_PANEL 8b_fp16_cuda_graph_sequence_decode_s3 10 3.45923
+GRAPH_PANEL 8b_fp16_cuda_graph_sequence_decode_s3 20 3.45966
+GRAPH_PANEL 8b_fp16_cuda_graph_sequence_decode_s3 30 3.45916
+GRAPH_PANEL 8b_fp16_cuda_graph_sequence_decode_s3 40 3.45925
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_hadamard_eager_sequence_decode_s3 0 6.22726
+GRAPH_PANEL 8b_hadamard_eager_sequence_decode_s3 10 6.18214
+GRAPH_PANEL 8b_hadamard_eager_sequence_decode_s3 20 6.12058
+GRAPH_PANEL 8b_hadamard_eager_sequence_decode_s3 30 6.23948
+GRAPH_PANEL 8b_hadamard_eager_sequence_decode_s3 40 6.11494
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:441: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/transformers/utils/generic.py:309: FutureWarning: `torch.utils._pytree._register_pytree_node` is deprecated. Please use `torch.utils._pytree.register_pytree_node` instead.
+  _torch_pytree._register_pytree_node(
+GRAPH_PANEL 8b_hadamard_cuda_graph_sequence_decode_s3 0 2.77164
+GRAPH_PANEL 8b_hadamard_cuda_graph_sequence_decode_s3 10 2.77163
+GRAPH_PANEL 8b_hadamard_cuda_graph_sequence_decode_s3 20 2.77169
+GRAPH_PANEL 8b_hadamard_cuda_graph_sequence_decode_s3 30 2.7716
+GRAPH_PANEL 8b_hadamard_cuda_graph_sequence_decode_s3 40 2.77157
+COLLECT 36 groups 234 kernel rows
+COLLECT 36 groups 234 kernel rows

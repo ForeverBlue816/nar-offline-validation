@@ -12,26 +12,26 @@
       "capture_net_allocated_delta_bytes": {
         "max": 9033728,
         "mean": 9033728.0,
-        "median": 9033728.0,
+        "median": 9033728,
         "min": 9033728,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_net_reserved_delta_bytes": {
         "max": -207618048,
         "mean": -207618048.0,
-        "median": -207618048.0,
+        "median": -207618048,
         "min": -207618048,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_preparation_seconds": {
         "max": 0.6197675070725381,
-        "mean": 0.6016926956363022,
-        "median": 0.6016926956363022,
-        "min": 0.5836178842000663,
-        "n": 2,
-        "std": 0.018074811436235905
+        "mean": 0.5903582943913838,
+        "median": 0.5836178842000663,
+        "min": 0.5676894919015467,
+        "n": 3,
+        "std": 0.02178844897643267
       },
       "captured_graph_counts": [
         1
@@ -41,7 +41,7 @@
       "method": "fp16",
       "mode": "cuda_graph_sequence",
       "model": "3b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -71,32 +71,32 @@
       "method": "fp16",
       "mode": "eager_sequence",
       "model": "3b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
         "max": 9033728,
         "mean": 9033728.0,
-        "median": 9033728.0,
+        "median": 9033728,
         "min": 9033728,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_net_reserved_delta_bytes": {
         "max": -270532608,
         "mean": -270532608.0,
-        "median": -270532608.0,
+        "median": -270532608,
         "min": -270532608,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_preparation_seconds": {
         "max": 1.1200680918991566,
-        "mean": 0.8481967749539763,
-        "median": 0.8481967749539763,
-        "min": 0.576325458008796,
-        "n": 2,
-        "std": 0.2718713169451803
+        "mean": 0.7462943082985779,
+        "median": 0.576325458008796,
+        "min": 0.542489374987781,
+        "n": 3,
+        "std": 0.2646587124441217
       },
       "captured_graph_counts": [
         1
@@ -106,7 +106,7 @@
       "method": "hadamard",
       "mode": "cuda_graph_sequence",
       "model": "3b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -136,7 +136,7 @@
       "method": "hadamard",
       "mode": "eager_sequence",
       "model": "3b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -207,26 +207,26 @@
       "capture_net_allocated_delta_bytes": {
         "max": 9033728,
         "mean": 9033728.0,
-        "median": 9033728.0,
+        "median": 9033728,
         "min": 9033728,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_net_reserved_delta_bytes": {
         "max": -356515840,
         "mean": -356515840.0,
-        "median": -356515840.0,
+        "median": -356515840,
         "min": -356515840,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_preparation_seconds": {
         "max": 1.283852060791105,
-        "mean": 1.1043266938067973,
-        "median": 1.1043266938067973,
+        "mean": 1.0505988919176161,
+        "median": 0.9431432881392539,
         "min": 0.9248013268224895,
-        "n": 2,
-        "std": 0.17952536698430777
+        "n": 3,
+        "std": 0.1651047899131128
       },
       "captured_graph_counts": [
         1
@@ -236,7 +236,7 @@
       "method": "fp16",
       "mode": "cuda_graph_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -266,32 +266,32 @@
       "method": "fp16",
       "mode": "eager_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
         "max": 9033728,
         "mean": 9033728.0,
-        "median": 9033728.0,
+        "median": 9033728,
         "min": 9033728,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_net_reserved_delta_bytes": {
         "max": -425721856,
         "mean": -425721856.0,
-        "median": -425721856.0,
+        "median": -425721856,
         "min": -425721856,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_preparation_seconds": {
-        "max": 0.8703140378929675,
-        "mean": 0.8260162023361772,
-        "median": 0.8260162023361772,
+        "max": 0.9471828751266003,
+        "mean": 0.8664050932663182,
+        "median": 0.8703140378929675,
         "min": 0.781718366779387,
-        "n": 2,
-        "std": 0.04429783555679023
+        "n": 3,
+        "std": 0.06760712865133335
       },
       "captured_graph_counts": [
         1
@@ -301,7 +301,7 @@
       "method": "hadamard",
       "mode": "cuda_graph_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -331,32 +331,32 @@
       "method": "hadamard",
       "mode": "eager_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
         "max": 9033728,
         "mean": 9033728.0,
-        "median": 9033728.0,
+        "median": 9033728,
         "min": 9033728,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_net_reserved_delta_bytes": {
         "max": -538968064,
         "mean": -538968064.0,
-        "median": -538968064.0,
+        "median": -538968064,
         "min": -538968064,
-        "n": 2,
+        "n": 3,
         "std": 0.0
       },
       "capture_preparation_seconds": {
-        "max": 0.7818153011612594,
-        "mean": 0.7426240481436253,
-        "median": 0.7426240481436253,
+        "max": 1.1754513923078775,
+        "mean": 0.8868998295317093,
+        "median": 0.7818153011612594,
         "min": 0.7034327951259911,
-        "n": 2,
-        "std": 0.03919125301763415
+        "n": 3,
+        "std": 0.20653080092893153
       },
       "captured_graph_counts": [
         1
@@ -366,7 +366,7 @@
       "method": "nar",
       "mode": "cuda_graph_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     },
     {
       "capture_net_allocated_delta_bytes": {
@@ -396,7 +396,7 @@
       "method": "nar",
       "mode": "eager_sequence",
       "model": "8b",
-      "sessions": 2
+      "sessions": 3
     }
   ]
 }

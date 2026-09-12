@@ -1160,9 +1160,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/3b_fp16_eager_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1181,9 +1181,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/3b_fp16_cuda_graph_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1202,9 +1202,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/3b_hadamard_eager_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1223,9 +1223,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/3b_hadamard_cuda_graph_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1286,9 +1286,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_fp16_eager_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1307,9 +1307,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_fp16_cuda_graph_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1328,9 +1328,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_hadamard_eager_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1349,9 +1349,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_hadamard_cuda_graph_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1370,9 +1370,9 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_nar_eager_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         },
         {
           "reason": null,
@@ -1391,17 +1391,25 @@
         {
           "reason": null,
           "source": "raw_graph_runs/8b_nar_cuda_graph_sequence_decode_s3.json",
-          "status": "PENDING",
-          "terminal": false,
-          "valid": false
+          "status": "PASS",
+          "terminal": true,
+          "valid": true
         }
       ],
       "stage": "P1 private eager/graph timings",
-      "status": "PENDING_OR_RUNNING",
-      "terminal_records": 26,
-      "valid_records": 26
+      "status": "PASS",
+      "terminal_records": 36,
+      "valid_records": 36
     }
   ],
-  "stream_pipeline_finished": null,
-  "timestamp": "2026-09-12T15:33:10.711725+00:00"
+  "stream_pipeline_finished": {
+    "eligible_models": [
+      "3b",
+      "8b"
+    ],
+    "note": "See individual statuses; finite/metadata failures are not hidden by this completion marker.",
+    "status": "FINISHED",
+    "timestamp": "2026-09-12T16:36:21.108239+00:00"
+  },
+  "timestamp": "2026-09-12T16:36:23.552307+00:00"
 }

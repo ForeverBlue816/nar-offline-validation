@@ -34,9 +34,9 @@
   },
   "batch": 1,
   "capacity": 2176,
-  "cuda_event_elapsed_ms": 2501.231689453125,
+  "cuda_event_elapsed_ms": 1804.55224609375,
   "decode_token": 100,
-  "ended": "2026-09-12T15:37:40.281561+00:00",
+  "ended": "2026-09-12T15:42:18.298942+00:00",
   "environment": {
     "affinity": [
       32,
@@ -56,7 +56,7 @@
       "--method",
       "fp16",
       "--mode",
-      "eager_sequence",
+      "cuda_graph_sequence",
       "--session",
       "3",
       "--run",
@@ -132,14 +132,14 @@
       "quarot-llama3/e28_v2/stream_pipeline.py": "3ddf6ab880ca1ca98c402888e5bbde6412e573a83f01f49e7b93df92c55e2b64",
       "quarot-llama3/e28_v2/verify.py": "7c9d73adf2b4bef6d2c7e46ef77360b88fefb55db6eb4a4261a9b3342709b4f4"
     },
-    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 32.80 W, 32, 1740 MHz, 7251 MHz, P0, 273 MiB",
+    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 62.67 W, 38, 1740 MHz, 7251 MHz, P0, 273 MiB",
     "host": "gpu-a40-1.cluster02.eee.ntu.edu.sg",
     "nvcc": "UNAVAILABLE: [Errno 2] No such file or directory: 'nvcc'",
-    "pid": 2903219,
-    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2903219, /projects/nar/nar-validation/e28-env/bin/python, 264 MiB",
+    "pid": 2904174,
+    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2904174, /projects/nar/nar-validation/e28-env/bin/python, 264 MiB",
     "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
-    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 15:33:21 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1618316684245 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014957347574 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
-    "timestamp": "2026-09-12T15:33:20.982363+00:00",
+    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 15:38:10 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1618354991562 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014970925834 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
+    "timestamp": "2026-09-12T15:38:10.689616+00:00",
     "torch_interop_threads": 1,
     "torch_threads": 4,
     "versions": {
@@ -172,7 +172,7 @@
       "--method",
       "fp16",
       "--mode",
-      "eager_sequence",
+      "cuda_graph_sequence",
       "--session",
       "3",
       "--run",
@@ -248,14 +248,14 @@
       "quarot-llama3/e28_v2/stream_pipeline.py": "3ddf6ab880ca1ca98c402888e5bbde6412e573a83f01f49e7b93df92c55e2b64",
       "quarot-llama3/e28_v2/verify.py": "7c9d73adf2b4bef6d2c7e46ef77360b88fefb55db6eb4a4261a9b3342709b4f4"
     },
-    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 165.02 W, 50, 1740 MHz, 7251 MHz, P0, 8727 MiB",
+    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 204.01 W, 56, 1740 MHz, 7251 MHz, P0, 8801 MiB",
     "host": "gpu-a40-1.cluster02.eee.ntu.edu.sg",
     "nvcc": "UNAVAILABLE: [Errno 2] No such file or directory: 'nvcc'",
-    "pid": 2903219,
-    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2903219, /projects/nar/nar-validation/e28-env/bin/python, 8718 MiB",
+    "pid": 2904174,
+    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2904174, /projects/nar/nar-validation/e28-env/bin/python, 8792 MiB",
     "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
-    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 15:37:40 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1618340336371 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014957347574 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
-    "timestamp": "2026-09-12T15:37:39.735555+00:00",
+    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 15:42:18 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1618380905657 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014970925834 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
+    "timestamp": "2026-09-12T15:42:18.056899+00:00",
     "torch_interop_threads": 1,
     "torch_threads": 4,
     "versions": {
@@ -2137,332 +2137,338 @@
     "status": "PASS"
   },
   "graph_preparation": {
-    "graphs": 0,
-    "reason": "Eager process does not capture or retain a graph pool",
-    "seconds": null
+    "allocated_delta_bytes": 9033728,
+    "graphs": 1,
+    "note": "Private graph-pool deltas are separate from total independent-process inference peaks.",
+    "pool_identifier": [
+      1,
+      0
+    ],
+    "reserved_delta_bytes": -207618048,
+    "seconds": 0.5676894919015467
   },
   "inference_peak": {
-    "allocated": 8567076864,
-    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2903219, 8718 MiB",
-    "peak_allocated": 8718088192,
-    "peak_reserved": 8803844096,
-    "reserved": 8803844096
+    "allocated": 8584630784,
+    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2904174, 8792 MiB",
+    "peak_allocated": 8735643648,
+    "peak_reserved": 8849981440,
+    "reserved": 8849981440
   },
   "input_sha256": "67df784eea02fa7895d84976ee6a41e2bb68f9cdfe7b827097ebe158013076ca",
-  "key": "3b_fp16_eager_sequence_decode_s3",
+  "key": "3b_fp16_cuda_graph_sequence_decode_s3",
   "loaded": {
     "allocated": 8305086464,
-    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2903219, 8272 MiB",
+    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2904174, 8272 MiB",
     "peak_allocated": 8506937856,
     "peak_reserved": 8554283008,
     "reserved": 8352956416
   },
   "method": "fp16",
-  "mode": "eager_sequence",
+  "mode": "cuda_graph_sequence",
   "model": "3b",
   "phase": "decode",
   "prefix": 2048,
   "protocol_stream_sha256": "4a4c458b4bf0d0246317f52f7929aa063df60651a1d9e1f3c3f471cca32fbc33",
   "samples": [
     {
-      "elapsed_s": 2.5356215089559555,
-      "ms_per_token": 21.13017924129963,
+      "elapsed_s": 1.8045724350959063,
+      "ms_per_token": 15.038103625799218,
       "run": 0,
-      "timestamp": "2026-09-12T15:35:12.551057+00:00"
+      "timestamp": "2026-09-12T15:40:29.412951+00:00"
     },
     {
-      "elapsed_s": 2.5135546820238233,
-      "ms_per_token": 20.946289016865194,
+      "elapsed_s": 1.804570612963289,
+      "ms_per_token": 15.038088441360742,
       "run": 1,
-      "timestamp": "2026-09-12T15:35:15.450642+00:00"
+      "timestamp": "2026-09-12T15:40:31.543154+00:00"
     },
     {
-      "elapsed_s": 2.5348099912516773,
-      "ms_per_token": 21.123416593763977,
+      "elapsed_s": 1.8045825487934053,
+      "ms_per_token": 15.03818790661171,
       "run": 2,
-      "timestamp": "2026-09-12T15:35:18.318827+00:00"
+      "timestamp": "2026-09-12T15:40:33.669772+00:00"
     },
     {
-      "elapsed_s": 2.523694867733866,
-      "ms_per_token": 21.030790564448882,
+      "elapsed_s": 1.804618481080979,
+      "ms_per_token": 15.038487342341492,
       "run": 3,
-      "timestamp": "2026-09-12T15:35:21.213516+00:00"
+      "timestamp": "2026-09-12T15:40:35.796627+00:00"
     },
     {
-      "elapsed_s": 2.502351007424295,
-      "ms_per_token": 20.852925061869126,
+      "elapsed_s": 1.8045331500470638,
+      "ms_per_token": 15.037776250392199,
       "run": 4,
-      "timestamp": "2026-09-12T15:35:24.092756+00:00"
+      "timestamp": "2026-09-12T15:40:37.923580+00:00"
     },
     {
-      "elapsed_s": 2.5610587182454765,
-      "ms_per_token": 21.34215598537897,
+      "elapsed_s": 1.804520308971405,
+      "ms_per_token": 15.037669241428375,
       "run": 5,
-      "timestamp": "2026-09-12T15:35:26.950593+00:00"
+      "timestamp": "2026-09-12T15:40:40.050639+00:00"
     },
     {
-      "elapsed_s": 2.555675592739135,
-      "ms_per_token": 21.29729660615946,
+      "elapsed_s": 1.804608274716884,
+      "ms_per_token": 15.038402289307365,
       "run": 6,
-      "timestamp": "2026-09-12T15:35:29.865863+00:00"
+      "timestamp": "2026-09-12T15:40:42.177698+00:00"
     },
     {
-      "elapsed_s": 2.5090302368626,
-      "ms_per_token": 20.908585307188332,
+      "elapsed_s": 1.8044718578457832,
+      "ms_per_token": 15.037265482048193,
       "run": 7,
-      "timestamp": "2026-09-12T15:35:32.783808+00:00"
+      "timestamp": "2026-09-12T15:40:44.304959+00:00"
     },
     {
-      "elapsed_s": 2.572580856271088,
-      "ms_per_token": 21.43817380225907,
+      "elapsed_s": 1.8046321752481163,
+      "ms_per_token": 15.038601460400969,
       "run": 8,
-      "timestamp": "2026-09-12T15:35:35.650209+00:00"
+      "timestamp": "2026-09-12T15:40:46.431932+00:00"
     },
     {
-      "elapsed_s": 2.5971090118400753,
-      "ms_per_token": 21.642575098667294,
+      "elapsed_s": 1.8047026549465954,
+      "ms_per_token": 15.039188791221628,
       "run": 9,
-      "timestamp": "2026-09-12T15:35:38.577426+00:00"
+      "timestamp": "2026-09-12T15:40:48.558678+00:00"
     },
     {
-      "elapsed_s": 2.559980373829603,
-      "ms_per_token": 21.33316978191336,
+      "elapsed_s": 1.8045498207211494,
+      "ms_per_token": 15.037915172676245,
       "run": 10,
-      "timestamp": "2026-09-12T15:35:41.539090+00:00"
+      "timestamp": "2026-09-12T15:40:50.685134+00:00"
     },
     {
-      "elapsed_s": 2.5024986038915813,
-      "ms_per_token": 20.854155032429844,
+      "elapsed_s": 1.8046580599620938,
+      "ms_per_token": 15.038817166350782,
       "run": 11,
-      "timestamp": "2026-09-12T15:35:44.459482+00:00"
+      "timestamp": "2026-09-12T15:40:52.811799+00:00"
     },
     {
-      "elapsed_s": 2.521750958170742,
-      "ms_per_token": 21.014591318089515,
+      "elapsed_s": 1.8044902859255672,
+      "ms_per_token": 15.037419049379727,
       "run": 12,
-      "timestamp": "2026-09-12T15:35:47.318317+00:00"
+      "timestamp": "2026-09-12T15:40:54.938126+00:00"
     },
     {
-      "elapsed_s": 2.514397361315787,
-      "ms_per_token": 20.953311344298225,
+      "elapsed_s": 1.8046986390836537,
+      "ms_per_token": 15.039155325697115,
       "run": 13,
-      "timestamp": "2026-09-12T15:35:50.195452+00:00"
+      "timestamp": "2026-09-12T15:40:57.064382+00:00"
     },
     {
-      "elapsed_s": 2.5090323919430375,
-      "ms_per_token": 20.908603266191978,
+      "elapsed_s": 1.8045893679372966,
+      "ms_per_token": 15.038244732810805,
       "run": 14,
-      "timestamp": "2026-09-12T15:35:53.066181+00:00"
+      "timestamp": "2026-09-12T15:40:59.191076+00:00"
     },
     {
-      "elapsed_s": 2.6318618459627032,
-      "ms_per_token": 21.932182049689192,
+      "elapsed_s": 1.8044609632343054,
+      "ms_per_token": 15.037174693619212,
       "run": 15,
-      "timestamp": "2026-09-12T15:35:55.928926+00:00"
+      "timestamp": "2026-09-12T15:41:01.317436+00:00"
     },
     {
-      "elapsed_s": 2.5591808049939573,
-      "ms_per_token": 21.326506708282977,
+      "elapsed_s": 1.8044094913639128,
+      "ms_per_token": 15.03674576136594,
       "run": 16,
-      "timestamp": "2026-09-12T15:35:58.923158+00:00"
+      "timestamp": "2026-09-12T15:41:03.443622+00:00"
     },
     {
-      "elapsed_s": 2.518670655786991,
-      "ms_per_token": 20.988922131558258,
+      "elapsed_s": 1.8045791587792337,
+      "ms_per_token": 15.038159656493614,
       "run": 17,
-      "timestamp": "2026-09-12T15:36:01.846779+00:00"
+      "timestamp": "2026-09-12T15:41:05.569883+00:00"
     },
     {
-      "elapsed_s": 2.5027763042598963,
-      "ms_per_token": 20.8564692021658,
+      "elapsed_s": 1.8044288819655776,
+      "ms_per_token": 15.036907349713147,
       "run": 18,
-      "timestamp": "2026-09-12T15:36:04.724419+00:00"
+      "timestamp": "2026-09-12T15:41:07.696393+00:00"
     },
     {
-      "elapsed_s": 2.511051088105887,
-      "ms_per_token": 20.925425734215725,
+      "elapsed_s": 1.804336401168257,
+      "ms_per_token": 15.036136676402142,
       "run": 19,
-      "timestamp": "2026-09-12T15:36:07.582090+00:00"
+      "timestamp": "2026-09-12T15:41:09.823266+00:00"
     },
     {
-      "elapsed_s": 2.501917000859976,
-      "ms_per_token": 20.8493083404998,
+      "elapsed_s": 1.8044869187287986,
+      "ms_per_token": 15.037390989406655,
       "run": 20,
-      "timestamp": "2026-09-12T15:36:10.448520+00:00"
+      "timestamp": "2026-09-12T15:41:11.949392+00:00"
     },
     {
-      "elapsed_s": 2.5195713229477406,
-      "ms_per_token": 20.996427691231172,
+      "elapsed_s": 1.8045865120366216,
+      "ms_per_token": 15.038220933638513,
       "run": 21,
-      "timestamp": "2026-09-12T15:36:13.307992+00:00"
+      "timestamp": "2026-09-12T15:41:14.090175+00:00"
     },
     {
-      "elapsed_s": 2.553085334133357,
-      "ms_per_token": 21.275711117777973,
+      "elapsed_s": 1.8046283619478345,
+      "ms_per_token": 15.03856968289862,
       "run": 22,
-      "timestamp": "2026-09-12T15:36:16.183139+00:00"
+      "timestamp": "2026-09-12T15:41:16.216559+00:00"
     },
     {
-      "elapsed_s": 2.5455815130844712,
-      "ms_per_token": 21.213179275703926,
+      "elapsed_s": 1.8047359860502183,
+      "ms_per_token": 15.039466550418487,
       "run": 23,
-      "timestamp": "2026-09-12T15:36:19.093188+00:00"
+      "timestamp": "2026-09-12T15:41:18.343193+00:00"
     },
     {
-      "elapsed_s": 2.5607716431841254,
-      "ms_per_token": 21.339763693201046,
+      "elapsed_s": 1.804555774666369,
+      "ms_per_token": 15.037964788886407,
       "run": 24,
-      "timestamp": "2026-09-12T15:36:21.997050+00:00"
+      "timestamp": "2026-09-12T15:41:20.470008+00:00"
     },
     {
-      "elapsed_s": 2.5397080769762397,
-      "ms_per_token": 21.164233974802,
+      "elapsed_s": 1.8046012888662517,
+      "ms_per_token": 15.038344073885431,
       "run": 25,
-      "timestamp": "2026-09-12T15:36:24.913247+00:00"
+      "timestamp": "2026-09-12T15:41:22.596531+00:00"
     },
     {
-      "elapsed_s": 2.5084326840005815,
-      "ms_per_token": 20.903605700004846,
+      "elapsed_s": 1.8047143369913101,
+      "ms_per_token": 15.039286141594252,
       "run": 26,
-      "timestamp": "2026-09-12T15:36:27.812828+00:00"
+      "timestamp": "2026-09-12T15:41:24.723079+00:00"
     },
     {
-      "elapsed_s": 2.569766802713275,
-      "ms_per_token": 21.41472335594396,
+      "elapsed_s": 1.804554267320782,
+      "ms_per_token": 15.037952227673182,
       "run": 27,
-      "timestamp": "2026-09-12T15:36:30.676406+00:00"
+      "timestamp": "2026-09-12T15:41:26.849883+00:00"
     },
     {
-      "elapsed_s": 2.4970518560148776,
-      "ms_per_token": 20.808765466790646,
+      "elapsed_s": 1.8044646559283137,
+      "ms_per_token": 15.037205466069281,
       "run": 28,
-      "timestamp": "2026-09-12T15:36:33.600525+00:00"
+      "timestamp": "2026-09-12T15:41:28.976755+00:00"
     },
     {
-      "elapsed_s": 2.506945639848709,
-      "ms_per_token": 20.89121366540591,
+      "elapsed_s": 1.8044909471645951,
+      "ms_per_token": 15.03742455970496,
       "run": 29,
-      "timestamp": "2026-09-12T15:36:36.454760+00:00"
+      "timestamp": "2026-09-12T15:41:31.103160+00:00"
     },
     {
-      "elapsed_s": 2.497339305933565,
-      "ms_per_token": 20.811160882779706,
+      "elapsed_s": 1.8043770878575742,
+      "ms_per_token": 15.036475732146451,
       "run": 30,
-      "timestamp": "2026-09-12T15:36:39.316135+00:00"
+      "timestamp": "2026-09-12T15:41:33.229515+00:00"
     },
     {
-      "elapsed_s": 2.505961185786873,
-      "ms_per_token": 20.883009881557275,
+      "elapsed_s": 1.8044951427727938,
+      "ms_per_token": 15.037459523106614,
       "run": 31,
-      "timestamp": "2026-09-12T15:36:42.168572+00:00"
+      "timestamp": "2026-09-12T15:41:35.373312+00:00"
     },
     {
-      "elapsed_s": 2.5037109148688614,
-      "ms_per_token": 20.86425762390718,
+      "elapsed_s": 1.8044423810206354,
+      "ms_per_token": 15.037019841838628,
       "run": 32,
-      "timestamp": "2026-09-12T15:36:45.028884+00:00"
+      "timestamp": "2026-09-12T15:41:37.499789+00:00"
     },
     {
-      "elapsed_s": 2.516095797996968,
-      "ms_per_token": 20.967464983308066,
+      "elapsed_s": 1.8043632972985506,
+      "ms_per_token": 15.036360810821256,
       "run": 33,
-      "timestamp": "2026-09-12T15:36:47.887316+00:00"
+      "timestamp": "2026-09-12T15:41:39.626329+00:00"
     },
     {
-      "elapsed_s": 2.4761876119300723,
-      "ms_per_token": 20.634896766083937,
+      "elapsed_s": 1.804570663254708,
+      "ms_per_token": 15.0380888604559,
       "run": 34,
-      "timestamp": "2026-09-12T15:36:50.756285+00:00"
+      "timestamp": "2026-09-12T15:41:41.753010+00:00"
     },
     {
-      "elapsed_s": 2.492647447157651,
-      "ms_per_token": 20.772062059647094,
+      "elapsed_s": 1.8045037896372378,
+      "ms_per_token": 15.037531580310315,
       "run": 35,
-      "timestamp": "2026-09-12T15:36:53.586684+00:00"
+      "timestamp": "2026-09-12T15:41:43.879453+00:00"
     },
     {
-      "elapsed_s": 2.4967836011201143,
-      "ms_per_token": 20.806530009334285,
+      "elapsed_s": 1.80438834708184,
+      "ms_per_token": 15.036569559015334,
       "run": 36,
-      "timestamp": "2026-09-12T15:36:56.434684+00:00"
+      "timestamp": "2026-09-12T15:41:46.005882+00:00"
     },
     {
-      "elapsed_s": 2.534446911420673,
-      "ms_per_token": 21.12039092850561,
+      "elapsed_s": 1.8045593090355396,
+      "ms_per_token": 15.03799424196283,
       "run": 37,
-      "timestamp": "2026-09-12T15:36:59.287185+00:00"
+      "timestamp": "2026-09-12T15:41:48.132252+00:00"
     },
     {
-      "elapsed_s": 2.50395774981007,
-      "ms_per_token": 20.866314581750583,
+      "elapsed_s": 1.8045823350548744,
+      "ms_per_token": 15.038186125457287,
       "run": 38,
-      "timestamp": "2026-09-12T15:37:02.178057+00:00"
+      "timestamp": "2026-09-12T15:41:50.259115+00:00"
     },
     {
-      "elapsed_s": 2.497079947963357,
-      "ms_per_token": 20.808999566361308,
+      "elapsed_s": 1.804635507054627,
+      "ms_per_token": 15.038629225455225,
       "run": 39,
-      "timestamp": "2026-09-12T15:37:05.035871+00:00"
+      "timestamp": "2026-09-12T15:41:52.385976+00:00"
     },
     {
-      "elapsed_s": 2.514409377705306,
-      "ms_per_token": 20.95341148087755,
+      "elapsed_s": 1.8045183490030468,
+      "ms_per_token": 15.037652908358723,
       "run": 40,
-      "timestamp": "2026-09-12T15:37:07.887510+00:00"
+      "timestamp": "2026-09-12T15:41:54.513303+00:00"
     },
     {
-      "elapsed_s": 2.579437920358032,
-      "ms_per_token": 21.4953160029836,
+      "elapsed_s": 1.8046858818270266,
+      "ms_per_token": 15.039049015225222,
       "run": 41,
-      "timestamp": "2026-09-12T15:37:10.759096+00:00"
+      "timestamp": "2026-09-12T15:41:56.645341+00:00"
     },
     {
-      "elapsed_s": 2.5865490110591054,
-      "ms_per_token": 21.55457509215921,
+      "elapsed_s": 1.8044929448515177,
+      "ms_per_token": 15.03744120709598,
       "run": 42,
-      "timestamp": "2026-09-12T15:37:13.696787+00:00"
+      "timestamp": "2026-09-12T15:41:58.772405+00:00"
     },
     {
-      "elapsed_s": 2.5739769442006946,
-      "ms_per_token": 21.44980786833912,
+      "elapsed_s": 1.804526227992028,
+      "ms_per_token": 15.037718566600233,
       "run": 43,
-      "timestamp": "2026-09-12T15:37:16.642362+00:00"
+      "timestamp": "2026-09-12T15:42:00.899412+00:00"
     },
     {
-      "elapsed_s": 2.5197681919671595,
-      "ms_per_token": 20.998068266392995,
+      "elapsed_s": 1.8045880878344178,
+      "ms_per_token": 15.038234065286815,
       "run": 44,
-      "timestamp": "2026-09-12T15:37:19.576040+00:00"
+      "timestamp": "2026-09-12T15:42:03.026285+00:00"
     },
     {
-      "elapsed_s": 2.501229412853718,
-      "ms_per_token": 20.843578440447647,
+      "elapsed_s": 1.8045046059414744,
+      "ms_per_token": 15.03753838284562,
       "run": 45,
-      "timestamp": "2026-09-12T15:37:22.453492+00:00"
+      "timestamp": "2026-09-12T15:42:05.153214+00:00"
     },
     {
-      "elapsed_s": 2.5109941489063203,
-      "ms_per_token": 20.924951240886003,
+      "elapsed_s": 1.8045227597467601,
+      "ms_per_token": 15.037689664556334,
       "run": 46,
-      "timestamp": "2026-09-12T15:37:25.313340+00:00"
+      "timestamp": "2026-09-12T15:42:07.280071+00:00"
     },
     {
-      "elapsed_s": 2.501459446270019,
-      "ms_per_token": 20.84549538558349,
+      "elapsed_s": 1.804642564151436,
+      "ms_per_token": 15.038688034595301,
       "run": 47,
-      "timestamp": "2026-09-12T15:37:28.178731+00:00"
+      "timestamp": "2026-09-12T15:42:09.407008+00:00"
     },
     {
-      "elapsed_s": 2.4982756222598255,
-      "ms_per_token": 20.81896351883188,
+      "elapsed_s": 1.8046779753640294,
+      "ms_per_token": 15.038983128033578,
       "run": 48,
-      "timestamp": "2026-09-12T15:37:31.034540+00:00"
+      "timestamp": "2026-09-12T15:42:11.534235+00:00"
     },
     {
-      "elapsed_s": 2.498953585047275,
-      "ms_per_token": 20.82461320872729,
+      "elapsed_s": 1.804574403911829,
+      "ms_per_token": 15.038120032598576,
       "run": 49,
-      "timestamp": "2026-09-12T15:37:33.886574+00:00"
+      "timestamp": "2026-09-12T15:42:13.661394+00:00"
     }
   ],
   "scope": "Private current-stream backend, matched eager/graph panel only; never pooled with original binary core records",
@@ -4456,7 +4462,7 @@
       }
     }
   },
-  "started": "2026-09-12T15:33:20.888402+00:00",
+  "started": "2026-09-12T15:38:10.681766+00:00",
   "status": "PASS",
   "storage": {
     "aliases": [
@@ -4479,12 +4485,24 @@
       {
         "alias_of": "cache.scales",
         "name": "cache.spec.kv_param"
+      },
+      {
+        "alias_of": "cache.spec.kv_indices",
+        "name": "kv_indices"
+      },
+      {
+        "alias_of": "cache.spec.kv_indptr",
+        "name": "kv_indptr"
+      },
+      {
+        "alias_of": "cache.spec.last_page_offset",
+        "name": "last_page_offset"
       }
     ],
     "bytes_by_category": {
       "cache_metadata": 16,
       "embedding_head": 788004864,
-      "harness_static_io": 8196,
+      "harness_static_io": 8204,
       "kv_codes_or_fp16": 249561088,
       "kv_scales_offsets": 3899392,
       "rope": 1879055360,
@@ -4494,19 +4512,19 @@
       "cache_metadata": [
         {
           "dtype": "torch.int32",
-          "name": "cache.spec.kv_indptr",
-          "shape": [
-            2
-          ],
-          "storage_bytes": 8
-        },
-        {
-          "dtype": "torch.int32",
           "name": "cache.spec.kv_indices",
           "shape": [
             1
           ],
           "storage_bytes": 4
+        },
+        {
+          "dtype": "torch.int32",
+          "name": "cache.spec.kv_indptr",
+          "shape": [
+            2
+          ],
+          "storage_bytes": 8
         },
         {
           "dtype": "torch.int32",
@@ -4546,6 +4564,15 @@
             1
           ],
           "storage_bytes": 4
+        },
+        {
+          "dtype": "torch.int64",
+          "name": "position",
+          "shape": [
+            1,
+            1
+          ],
+          "storage_bytes": 8
         }
       ],
       "kv_codes_or_fp16": [
@@ -7531,23 +7558,631 @@
         }
       ]
     },
-    "unattributed_allocator_bytes": 9053164,
-    "unique_storage_bytes": 8558023700,
+    "unattributed_allocator_bytes": 26607076,
+    "unique_storage_bytes": 8558023708,
     "units": "bytes; GB=1e9, MB=1e6; tensor views deduplicated by underlying storage"
   },
   "summary": {
-    "max": 21.932182049689192,
-    "mean": 21.0581304783312,
-    "median": 20.95336141258789,
-    "min": 20.634896766083937,
+    "max": 15.039466550418487,
+    "mean": 15.037914046707254,
+    "median": 15.037979515424619,
+    "min": 15.036136676402142,
     "n": 50,
-    "std": 0.26847055980904583
+    "std": 0.0007738490236520422
   },
+  "timing_harness_replay_checks": [
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4191fbd0e759789a11a07dc27ffa37dc0385d3dea9800cc28c819a7d129bbbf5",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2049,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2049
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "4191fbd0e759789a11a07dc27ffa37dc0385d3dea9800cc28c819a7d129bbbf5",
+        "scales_sha256": "d06c72f9e79fffbe7b06fc4d7c5396ff1a27f663475acdbaac4e0a32fc2d4d74"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 1
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "9f5c3fc870b0ef6e9e97060c5a00c939c933094489928c590ec219ea4dce3ebe",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2050,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2050
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "9f5c3fc870b0ef6e9e97060c5a00c939c933094489928c590ec219ea4dce3ebe",
+        "scales_sha256": "67b86ed0ed6f4c987748c2a140b096a48fdbbf397d88d7c861306bef241b2bae"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 2
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "ee0637646562cc297f25a9d687a53f3c62cfefe973efc41e1d2bd19ecb7065c2",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2057,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2057
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "ee0637646562cc297f25a9d687a53f3c62cfefe973efc41e1d2bd19ecb7065c2",
+        "scales_sha256": "ad7194f3f6ca9e28c9942f7fbc0f039dd6dba6e8fa2f27d8e93cb54e0e0b7122"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 9
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "c975a923349fee31341112779adbc9118198592b15987b517d551a307483ba40",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2112,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2112
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "c975a923349fee31341112779adbc9118198592b15987b517d551a307483ba40",
+        "scales_sha256": "1abac77c798e53b2cf8da5340335c37ae6edcdd82354dc2bac5fbc223349b9bf"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 64
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "bc6d6a3ae8fbe4d78c7dd865416efefc93d208f07ff234549530cf0f6fc149a9",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2113,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2113
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "bc6d6a3ae8fbe4d78c7dd865416efefc93d208f07ff234549530cf0f6fc149a9",
+        "scales_sha256": "34a605c445af8833a0eea1ab211a616584c556b04000021c13367e60f76b3cb0"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 65
+    },
+    {
+      "cache_exact": true,
+      "expected_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "d0c0776699bc9aa0873cc5a42f628f576c6dc65304a4f074e45f193b97415a73",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "finite": true,
+      "observed_cache": {
+        "length": 2176,
+        "metadata": {
+          "kv_indices": [
+            0
+          ],
+          "kv_indptr": [
+            0,
+            1
+          ],
+          "last_page_offset": [
+            2176
+          ]
+        },
+        "needs_init": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "pages_sha256": "d0c0776699bc9aa0873cc5a42f628f576c6dc65304a4f074e45f193b97415a73",
+        "scales_sha256": "d393d4b59d39744a250c035dc7faf2a5ad8f8ac421d2550d9779a2497b6636fa"
+      },
+      "relative_l2": 0.0,
+      "status": "PASS",
+      "step": 128
+    }
+  ],
   "warmed": {
-    "allocated": 8567076864,
-    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2903219, 8718 MiB",
+    "allocated": 8584630784,
+    "nvidia_smi": "gpu_uuid, pid, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2904174, 8792 MiB",
     "peak_allocated": 8768419840,
-    "peak_reserved": 8858370048,
-    "reserved": 8803844096
+    "peak_reserved": 8881438720,
+    "reserved": 8849981440
   }
 }

@@ -1,6 +1,6 @@
 # E28-v2: auditable deployment experiments
 
-Generated 2026-09-12T15:33:10.751618+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
+Generated 2026-09-12T16:36:23.623975+00:00. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.
 
 ## Initialization revision and reused evidence
 
@@ -69,10 +69,10 @@ Real base-checkpoint FP16 implementation checks: 3b: PASS; 8b: PASS. The indepen
 - 8b prefill1: Hadamard/FP16 speedup 1.45x; PrismQuant/FP16 1.46x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
 - 8b prefill16: Hadamard/FP16 speedup 1.49x; PrismQuant/FP16 1.51x. hadamard: faster than FP16 in all three sessions; nar: faster than FP16 in all three sessions.
 - 8b decode: Hadamard/FP16 speedup 0.57x; PrismQuant/FP16 0.60x. hadamard: slower than FP16 in all three sessions; nar: slower than FP16 in all three sessions.
-- Private Graph panel, 3b hadamard: 0.92x relative to the same-mode private FP16 baseline; fewer than three matched sessions; no stable advantage established.
-- Private Graph panel, 3b nar: 0.90x relative to the same-mode private FP16 baseline; fewer than three matched sessions; no stable advantage established.
-- Private Graph panel, 8b hadamard: 1.25x relative to the same-mode private FP16 baseline; fewer than three matched sessions; no stable advantage established.
-- Private Graph panel, 8b nar: 1.22x relative to the same-mode private FP16 baseline; fewer than three matched sessions; no stable advantage established.
+- Private Graph panel, 3b hadamard: 0.92x relative to the same-mode private FP16 baseline; consistent observed direction in these three sessions.
+- Private Graph panel, 3b nar: 0.90x relative to the same-mode private FP16 baseline; consistent observed direction in these three sessions.
+- Private Graph panel, 8b hadamard: 1.25x relative to the same-mode private FP16 baseline; consistent observed direction in these three sessions.
+- Private Graph panel, 8b nar: 1.22x relative to the same-mode private FP16 baseline; consistent observed direction in these three sessions.
 
 2. **What does PrismQuant add versus Hadamard?** See directly measured A/B/quantizer/chain times in [kernel table](tables/kernel.md), same-mode wall ratios in [metrics](metrics_summary.json), and exact unique-storage categories/deltas in [memory_breakdown.json](memory_breakdown.json) and [memory_deltas.json](memory_deltas.json). Factor storage is 96d bytes per layer plus one shared 32768-byte H128; scratch is recorded separately. No rounded-to-zero overhead claim.
 - 3b prefill1: NAR throughput is 98.87% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
@@ -81,8 +81,8 @@ Real base-checkpoint FP16 implementation checks: 3b: PASS; 8b: PASS. The indepen
 - 8b prefill1: NAR throughput is 100.92% of Hadamard; near parity / within observed variability.
 - 8b prefill16: NAR throughput is 101.11% of Hadamard; consistent observed direction across three sessions, specific to this implementation/workload.
 - 8b decode: NAR latency difference -4.36%; consistent observed direction across three sessions, specific to this implementation/workload.
-- Private Graph panel, 3b: NAR latency difference 1.97% versus same-mode private Hadamard; fewer than three matched sessions; no stable advantage established.
-- Private Graph panel, 8b: NAR latency difference 2.33% versus same-mode private Hadamard; fewer than three matched sessions; no stable advantage established.
+- Private Graph panel, 3b: NAR latency difference 1.96% versus same-mode private Hadamard; consistent observed direction in these three sessions.
+- Private Graph panel, 8b: NAR latency difference 2.35% versus same-mode private Hadamard; consistent observed direction in these three sessions.
 - 3b: separate profiled NAR-minus-Hadamard kernel sum 0.33 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
 - 8b: separate profiled NAR-minus-Hadamard kernel sum 0.52 ms/step. This trace does not show reduced total GPU kernel duration. Profiler perturbation and host submission prevent interpreting this as a causal explanation of the main wall-time difference.
 
@@ -94,7 +94,7 @@ Real base-checkpoint FP16 implementation checks: 3b: PASS; 8b: PASS. The indepen
 - 8b T=2048: prebound/generic wall ratio 0.96, CUDA-event elapsed ratio 0.96; consistent direction in these three sessions; no cross-hardware claim.
 - 8b T=32768: prebound/generic wall ratio 1.00, CUDA-event elapsed ratio 1.00; near parity / within observed variability.
 
-4. **Does graph replay grow the KV context?** See [graphability audit](graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps 1, 2, 9, 64, 65, 128, full cache hashes and actual page crossing can pass. Original-binary capture and the bounded private current-stream adapter have separate records. Any matched adapter timing is in the [separate graph panel](tables/graph_deployment.md), with [individual session results](tables/graph_sessions.md), [preparation/memory table](tables/graph_memory.md) and [allocation details](graph_memory_breakdown.json). Capture deltas are global allocator changes, not isolated private-pool sizes; standalone pool attribution remains unavailable. No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null. Original backend: 0/6 PASS, 6/6 failed or blocked, 0/6 pending. Private current-stream backend: 6/6 PASS, 0/6 failed or blocked, 0/6 pending. Matched private timing panel: INCOMPLETE.
+4. **Does graph replay grow the KV context?** See [graphability audit](graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps 1, 2, 9, 64, 65, 128, full cache hashes and actual page crossing can pass. Original-binary capture and the bounded private current-stream adapter have separate records. Any matched adapter timing is in the [separate graph panel](tables/graph_deployment.md), with [individual session results](tables/graph_sessions.md), [preparation/memory table](tables/graph_memory.md) and [allocation details](graph_memory_breakdown.json). The timed layout uses one preallocated 2176-token page for prefix 2048 plus 128 causal steps; a separate prefix-128/page-64 correctness layout crosses actual page boundaries. Capture deltas are global allocator changes, not isolated private-pool sizes; standalone pool attribution remains unavailable. No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null. Original backend: 0/6 PASS, 6/6 failed or blocked, 0/6 pending. Private current-stream backend: 6/6 PASS, 0/6 failed or blocked, 0/6 pending. Matched private timing panel: COMPLETE.
 
 5. **Which results execute integer kernels?** E28 Hadamard/NAR use the actual packed INT4 GEMM/quantizer and INT4 decode cache; FP16 uses FP16 arithmetic/cache. E17-native rows are local packed-activation microbenchmarks, not an end-to-end model. Random states are verified by [shared_state_audit.json](shared_state_audit.json). Real model quality remains untested.
 

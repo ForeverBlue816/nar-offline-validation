@@ -56,3 +56,9 @@ and separates pooled run dispersion from the dispersion of session medians in
 preparation time and independent inference peaks. Capture allocated/reserved
 deltas are global net allocator changes; no standalone private-pool byte count
 is claimed, and negative reserved deltas remain visible in the JSON.
+
+Private Graph timings use one preallocated 2176-token cache page (2048-token
+prefix plus 128 causal steps). The logical length and write position advance
+on every replay. The separate A-B-A correctness suite additionally uses
+64-token pages and crosses real page boundaries; that multi-page check is
+not presented as a timed general serving configuration.

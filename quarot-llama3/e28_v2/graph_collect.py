@@ -100,13 +100,14 @@ def generate(out):
     complete=len(rows)==12 and all(r['status']=='COMPLETE' for r in rows)
     status=('COMPLETE' if conformance['status']=='PASS' else 'REVIEW_REQUIRED') if complete else ('PARTIAL_OR_BLOCKED' if stage else 'INCOMPLETE')
     summary = {'timestamp': now(), 'scope': 'Private current-stream patch, same binary for every row in this panel; not original-binary core timing',
+               'cache_layout': {'timing': 'One preallocated 2176-token page, batch1, prefix2048 plus128 causal steps; active length and write location advance on every replay.', 'correctness': 'Separate prefix128/page64 A-B-A checks cross actual page boundaries, and prefix2048/page2176 checks match the timed layout.'},
                'deployment': rows, 'comparisons': comparisons, 'method_comparisons': method_comparisons, 'paired_session_comparisons':paired, 'protocol_conformance':conformance, 'stage_completion':stage,
                'raw_status': [{'key': r.get('key'), 'status': r.get('status'), 'reason': r.get('reason')} for r in raw],
                'status': status,
                'missing_reason': None if rows else 'No validated matched graph timing records yet'}
     write(out / 'graph_metrics_summary.json', summary)
     table(out / 'tables/graph_deployment', ['Model', 'Method', 'Mode', 'ms/step', 'Run std', 'FP16 speedup', 'Session median std', 'Sessions'], display,
-          'Private current-stream backend only. Full one-step growing-context graph and matched eager use prefix2048,128 steps, discard8. Metadata updates are included. Run std describes all run samples; session median std describes the available independent session medians (three required for final conclusions). Incomplete rows are provisional.')
+          'Private current-stream backend only. Full one-step growing-context graph and matched eager use one preallocated 2176-token page, prefix2048,128 steps, discard8. Metadata updates are included. Run std describes all run samples; session median std describes the available independent session medians (three required for final conclusions). Incomplete rows are provisional.')
     session_display = []
     for r in rows:
         for session in r['session_summaries']:
@@ -140,7 +141,7 @@ def generate(out):
     (out/'paper').mkdir(exist_ok=True)
     paper=[]
     if status=='COMPLETE':
-        paper.append('These random-weight model-forward decode results use the isolated current-stream adapter and a separate matched eager/Graph panel on the same physical A40, with three balanced sessions of fifty formal runs each. All six full-model Graph paths passed growing-cache A-B-A checks, including a page boundary. ')
+        paper.append('These random-weight model-forward decode results use the isolated current-stream adapter and a separate matched eager/Graph panel on the same physical A40, with three balanced sessions of fifty formal runs each. All six full-model Graph paths passed growing-cache A-B-A checks. Timings use one preallocated 2176-token page; separate correctness checks use 64-token pages and cross actual page boundaries. ')
         for model in MODELS:
             fp=lookup[(model,'fp16','cuda_graph_sequence')]['summary']['median']
             had=lookup[(model,'hadamard','cuda_graph_sequence')]['summary']['median']

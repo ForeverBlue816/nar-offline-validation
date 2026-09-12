@@ -12,4 +12,4 @@ Terminal means the process recorded a final result, including failures or blocks
 | P2 independent RoPE checks | 2/2 | 2 | PASS |
 | P2 extension timings | 12/12 | 12 | PASS |
 | P1 private graph checks | 6/6 | 6 | PASS |
-| P1 private eager/graph timings | 26/36 | 26 | PENDING_OR_RUNNING |
+| P1 private eager/graph timings | 36/36 | 36 | PASS |
