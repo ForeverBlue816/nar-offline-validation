@@ -29,3 +29,5 @@ bash quarot-llama3/e28_v2/run.sh verify --run "$E28_RUN" --level model --model 3
 ```
 
 The real FP16 result has its own `model_real_*` record. It does not establish a compensated k8 INT4 checkpoint or model accuracy. `base_checkpoint_manifest.json` hashes the actual weight files. Cold versus warmed scripted KV packing can differ even on the original wrapper; `cache_diagnose.json` and `verification_warmup_correction.json` retain the evidence and preparation fix.
+
+`collect` also creates `completion_audit.json`, `kernel_comparisons.json`, `memory_deltas.json`, `profile_summary.json` and `evidence_appendix.md`. Ratios are candidate elapsed / baseline elapsed (greater than one means slower); invalid kernel rows are excluded and fewer than three sessions cannot establish a stable benefit. `tables/deployment_sessions.*` preserves run dispersion separately from dispersion across session medians.

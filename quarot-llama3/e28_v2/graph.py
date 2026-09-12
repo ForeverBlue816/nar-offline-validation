@@ -11,6 +11,8 @@ def main():
     try:
       with torch.inference_mode():
         m=build(a.model,a.method)
+        latest_hidden={}
+        hidden_hook=m.lm_head.register_forward_pre_hook(lambda mod,args:latest_hidden.update(value=args[0].detach().clone()))
         # Indexed RoPE values remain identical, but the view must include future
         # positions; the Python seq_len during capture never advances on replay.
         for layer in m.model.layers:
@@ -47,24 +49,26 @@ def main():
             g=torch.cuda.CUDAGraph()
             before=torch.cuda.memory_allocated()
             with torch.cuda.graph(g):out=m(static_token,past_key_values=cache,position_ids=pos)
+            captured_hidden=latest_hidden['value']
             torch.cuda.synchronize();result.setdefault('graphs',[]).append({'prefix':prefix,'page_size':page,'prepare_capture_s':time.perf_counter()-prep,'allocated_delta_bytes':torch.cuda.memory_allocated()-before})
             for sequence,window in enumerate([0,1,0]):
                 reset(window);reference={}
                 cache.graph_mode=False
                 for step in range(1,129):
                     o=m(ids[window][prefix+step-1:prefix+step].reshape(1,1),past_key_values=cache)
-                    if step in [1,2,9,64,65,128]:reference[step]=(o.logits.detach().clone(),snapshot(cache))
+                    if step in [1,2,9,64,65,128]:reference[step]=(o.logits.detach().clone(),latest_hidden['value'].clone(),snapshot(cache))
                 reset(window)
                 for step in range(1,129):
                     static_token.copy_(ids[window][prefix+step-1:prefix+step].reshape(1,1));metadata(prefix+step)
                     g.replay();cache.length=prefix+step
                     if step in reference:
-                        expected,cs=reference[step];finite=bool(torch.isfinite(out.logits).all())
-                        rel=float((out.logits-expected).norm()/expected.norm().clamp_min(1e-30)) if finite else None
+                        expected,expected_hidden,cs=reference[step];finite=bool(torch.isfinite(out.logits).all() and torch.isfinite(captured_hidden).all())
+                        rel=float((out.logits.float()-expected.float()).norm()/expected.float().norm().clamp_min(1e-30)) if finite else None
+                        hidden_rel=float((captured_hidden.float()-expected_hidden.float()).norm()/expected_hidden.float().norm().clamp_min(1e-30)) if finite else None
                         # Ignore inactive extra index capacity; compare active metadata.
                         gs=snapshot(cache);gs['metadata']['kv_indices']=gs['metadata']['kv_indices'][:math.ceil(cache.length/page)]
                         same=gs==cs
-                        result['checks'].append({'prefix':prefix,'page_size':page,'sequence':sequence,'window':window,'step':step,'finite':finite,'relative_l2':rel,'cache_exact':same,'status':'PASS' if finite and rel<=.002 and same else 'FAIL'})
+                        result['checks'].append({'prefix':prefix,'page_size':page,'sequence':sequence,'window':window,'step':step,'finite':finite,'relative_l2':rel,'hidden_relative_l2':hidden_rel,'cache_exact':same,'status':'PASS' if finite and rel<=.002 and hidden_rel<=.002 and same else 'FAIL'})
             if any(x['status']!='PASS' for x in result['checks']):
                 result.update(status='INVALID',reason='Growing-cache/A-B-A replay check failed; graph timing excluded');break
             # Only a validated adapter is eligible for an independent graph panel.
