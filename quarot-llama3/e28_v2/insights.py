@@ -127,7 +127,7 @@ def generate(out):
         same = [r for r in deltas if r['model'] == model and r['mode'] == 'eager_sequence' and r['phase'] == 'decode']
         if same:
             r = same[0]
-            details.append(f"- {model}: resident NAR factors {r['factor_bytes']} bytes, shared H128 {r['shared_h128_bytes']} bytes, removed Hadamard buffer {r['removed_hadamard_buffer_bytes']} bytes. Predicted loaded delta {r['expected_model_storage_delta_bytes']} bytes; observed {r['observed_model_loaded_allocated_delta_bytes']} bytes; unassigned remainder {r['unattributed_loaded_delta_bytes']} bytes. Decode partial workspace {r['partial_workspace_bytes']} bytes. Every session/phase is retained in [memory deltas](memory_deltas.json).")
+            details.append(f"- {model}: resident NAR factors {r['factor_bytes']} bytes, shared H128 {r['shared_h128_bytes']} bytes, removed Hadamard buffer {r['removed_hadamard_buffer_bytes']} bytes. Predicted loaded delta {r['expected_model_storage_delta_bytes']} bytes; observed {r['observed_model_loaded_allocated_delta_bytes']} bytes; unassigned remainder {r['unattributed_loaded_delta_bytes']} bytes. Decode partial workspace {r['partial_workspace_bytes']} bytes; warmed allocated minus uniquely counted storage delta leaves {r['unattributed_warmed_delta_bytes']} bytes explicitly unassigned. Every session/phase is retained in [memory deltas](memory_deltas.json).")
         comparison = next((r for r in summary['comparisons'] if r['model'] == model and r['mode'] == 'eager_sequence' and r['phase'] == 'decode'), None)
         if comparison:
             details.append(f"- {model}: NAR vs Hadamard decode wall overhead {fmt(comparison['nar_latency_overhead_pct'])}%; {comparison.get('interpretation', 'not enough comparable results')}.")
