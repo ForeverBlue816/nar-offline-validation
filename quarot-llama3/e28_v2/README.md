@@ -1,0 +1,31 @@
+# E28-v2
+
+Run only in the existing E28 environment on an allocated NVIDIA A40. Historical E28/E17/E22/E26 files are read only. Code lives here; all experiment output belongs under `results/e28_v2/<run_id>/`.
+
+```bash
+E28_RUN="$PWD/results/e28_v2/<run_id>"
+bash quarot-llama3/e28_v2/run.sh audit --run "$E28_RUN"
+bash quarot-llama3/e28_v2/run.sh verify --run "$E28_RUN" --level operators
+bash quarot-llama3/e28_v2/run.sh verify --run "$E28_RUN" --level r4 --model 3b
+bash quarot-llama3/e28_v2/run.sh verify --run "$E28_RUN" --level model --model 3b --method nar
+bash quarot-llama3/e28_v2/run.sh benchmark --run "$E28_RUN" --model 3b --method nar --phase decode --mode eager_sequence --session 1
+bash quarot-llama3/e28_v2/run.sh profile --run "$E28_RUN" --model 3b --method nar
+bash quarot-llama3/e28_v2/run.sh collect --run "$E28_RUN"
+```
+
+`slurm.sh` allocates one A40 for all phases. The pipeline uses new processes for each model/method/mode/phase, three balanced core sessions, and separate profile/kernel/graph jobs within that allocation. `graph` is bounded feasibility/correctness; it cannot create speedup claims without validated comparable timing. `kernel_bench` executes the two fixed ablations and three distinct contracts without autotuning. Extra decode workloads are limited to b8/p2048 and b1/p8192, one50-run session each.
+
+`audit` freezes counts, thresholds and source hashes. `verification_harness_corrections.json` and `correctness/attempt_1/` preserve fixes to the initial verifier without changing thresholds. The execution source manifest identifies corrected code before the main run. Do not edit measurement code during a running formal phase; use a new manifest/run for a computational change.
+
+Completed JSON files are skipped, allowing collection/report changes without GPU reruns. Interrupted/failed files are retained; explicitly move them into a numbered attempt directory before a justified retry. Do not silently overwrite failures. `collect` can run on a CPU/login node and generates JSON summaries, four table types, paper LaTeX and `report_e28_v2.md`.
+
+The benchmark initializes random weights by name and hashes every common state tensor. Real-text inputs validate implementation behavior only. No full PPL/task quality claim, no complete real k8 checkpoint, and no paper-native group128 asymmetric integer deployment are implied. Full cache content/flags/metadata are reset and the prefix rebuilt outside each timing interval. Main decode is120 sequential causal calls following eight warm steps, not a parallel prefill or serving latency.
+
+A separate optional P2 check loads the existing base safetensors into the FP16 backend only:
+
+```bash
+bash quarot-llama3/e28_v2/run.sh checkpoint --run "$E28_RUN"
+bash quarot-llama3/e28_v2/run.sh verify --run "$E28_RUN" --level model --model 3b --method fp16 --real
+```
+
+The real FP16 result has its own `model_real_*` record. It does not establish a compensated k8 INT4 checkpoint or model accuracy. `base_checkpoint_manifest.json` hashes the actual weight files. Cold versus warmed scripted KV packing can differ even on the original wrapper; `cache_diagnose.json` and `verification_warmup_correction.json` retain the evidence and preparation fix.

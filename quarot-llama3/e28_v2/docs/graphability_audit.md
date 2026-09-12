@@ -1,0 +1,13 @@
+# Graphability audit before capture
+
+The installed environment is PyTorch2.4.1/CUDA12.4. The applicable rules are stable addresses, capture-safe operations and explicit management of replay-varying values; see [PyTorch2.4 CUDA graphs](https://docs.pytorch.org/docs/2.4/notes/cuda.html#cuda-graphs) and [NVIDIA graph constraints](https://docs.nvidia.com/dl-cuda-graph/latest/cuda-graph-basics/constraints.html). CUDA-event elapsed includes stream scheduling/idle time and is not automatically pure arithmetic time.
+
+The original `MultiLayerPagedKVCache4Bit.get_cache_specs_for_flash_infer` constructs GPU seqlens each call, converts a GPU `.any()` into a Python condition and passes a GPU page count into `torch.arange`. It is called twice per decode layer. This has CPU synchronization/dynamic-allocation consequences and is not directly graph safe. `cache.length += 1` and `_needs_init` are Python state; graph replay cannot update them. Transformers4.36's rotary cache slicing also uses a Python seq_len frozen at capture.
+
+The common eager adapter computes metadata once per known equal-length unmasked step. It does not change quantization, attention or GEMM. The graph-only bounded adapter uses stable input/position/page-index/offset buffers, full cached RoPE views, and external GPU metadata updates for every replay. Those updates are part of the real path. It uses the original KV append/decode kernels. No new attention implementation is introduced.
+
+Before measurement, the adapter checks prefix128/page64 and prefix2048/page2176, steps1,2,9,64,65,128, and A→B→A with two fixed real-text windows. Page64 crosses real boundaries. The cached integer K/V bytes, scales, logical length and active page metadata are compared exactly; logits are checked for finiteness and the frozen relative-L2 threshold. The full cache is cleared and the prefix recomputed between sequences.
+
+A second potential backend blocker exists below Python: `quarot/kernels/quant.cu` uses CUDA launches without an explicit PyTorch current stream, while CUDA graph capture runs on a nondefault stream. The CUTLASS/FlashInfer wrapper stream behavior must also be observed. If capture fails or replay diverges, the saved exception/check is the result; a Python length assignment is not a repair. A backend current-stream interface/binary change would need its own validation and is not silently introduced into the existing E28 environment.
+
+`correctness/graph_<model>_<method>.json` contains actual outcomes. All three rows use the same complete-one-step capture boundary. Failed/blocked capture cannot populate a graph speedup panel. A successful feasibility check alone does not establish a three-session graph performance comparison; missing timing is explicitly null.

@@ -1,0 +1,120 @@
+"""Regenerate JSON, four tables and paper text without repeating GPU work."""
+from .common import *
+import collections
+
+def fmt(v):
+    if v is None:return 'N/A'
+    if 0<abs(v)<.01:return f'{v:.2e}'
+    return f'{v:.2f}'
+def escaped(s):return str(s).replace('_',r'\_').replace('%',r'\%')
+def table(path,headers,rows,caption):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    lines=['\\begin{table}[t]','\\centering','\\small','\\caption{'+escaped(caption)+'}','\\begin{tabular}{'+'l'*len(headers)+'}','\\toprule',' & '.join(escaped(h) for h in headers)+r' \\','\\midrule']
+    lines += [' & '.join(escaped(x) for x in r)+r' \\' for r in rows]
+    lines += ['\\bottomrule','\\end{tabular}','\\end{table}']
+    path.with_suffix('.tex').write_text('\n'.join(lines)+'\n')
+    path.with_suffix('.md').write_text(caption+'\n\n| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+'\n'.join('| '+' | '.join(map(str,r))+' |' for r in rows)+'\n')
+
+def main():
+    p=arguments(__doc__);a=p.parse_args();out=a.run.resolve()
+    raw=[read(f) for f in (out/'raw_runs').glob('*.json')]
+    checks=[];uuids=set();environments=set();input_hashes=collections.defaultdict(set)
+    for record in raw:
+        if record.get('samples') and record.get('status')=='PASS':
+            env=record['environment'];pid=str(env['pid'])
+            for line in env.get('processes','').splitlines():
+                fields=[x.strip() for x in line.split(',')]
+                if len(fields)>1 and fields[1]==pid:uuids.add(fields[0])
+            environments.add(json.dumps({k:env.get(k) for k in ['versions','capability','cuda_runtime','affinity','torch_threads','torch_interop_threads']},sort_keys=True))
+            input_hashes[(record['model'],record['phase'])].add(record['input_sha256'])
+            modelcheck=out/'correctness'/f'model_{record["model"]}_{record["method"]}.json'
+            reference=read(modelcheck).get('shared_state') if modelcheck.exists() else None
+            checks.append({'key':record['key'],'shared_state_matches_verified_model':record.get('shared_state')==reference})
+    write(out/'protocol_conformance.json',{'gpu_uuids':sorted(uuids),'same_gpu':len(uuids)==1 if uuids else None,'environment_variants':len(environments),'same_inputs':all(len(v)==1 for v in input_hashes.values()),'state_checks':checks,'status':'PASS' if checks and len(uuids)==1 and len(environments)==1 and all(c['shared_state_matches_verified_model'] for c in checks) and all(len(v)==1 for v in input_hashes.values()) else 'PENDING_OR_REVIEW_REQUIRED'})
+    groups=collections.defaultdict(list)
+    for r in raw:
+        if r.get('status')=='PASS' and r.get('samples') and r.get('mode')!='legacy_diagnostic':groups[(r['model'],r['method'],r['mode'],r['phase'])].append(r)
+    aggregate=[];lookup={}
+    for key,records in sorted(groups.items()):
+        records.sort(key=lambda r:r['session']);model,method,mode,phase=key;decode=phase.startswith('decode')
+        values=[s['ms_per_token'] if decode else s['prefill_tokens_per_second'] for r in records for s in r['samples']]
+        per_session=[dict(session=r['session'],**r['summary']) for r in records]
+        entry={'model':model,'method':method,'mode':mode,'phase':phase,'summary':stats(values),'session_summaries':per_session,'session_median_dispersion':stats([s['median'] for s in per_session]),'independent_sessions':len(records),'required_sessions':1 if phase in ['decode8','decode8192'] else 3,
+          'peak_allocated_bytes':max(r['inference_peak']['peak_allocated'] for r in records),'peak_reserved_bytes':max(r['inference_peak']['peak_reserved'] for r in records),'source_keys':[r['key'] for r in records]}
+        entry['status']='COMPLETE' if len(records)==entry['required_sessions'] and all(len(r['samples'])==50 for r in records) else 'PROVISIONAL'
+        aggregate.append(entry);lookup[key]=entry
+    def get(model,method,mode,phase):return lookup.get((model,method,mode,phase))
+    def med(r):return r['summary']['median'] if r else None
+    comparisons=[]
+    for model in MODELS:
+      for mode in ['eager_sequence','eager_step_sync','cuda_graph_sequence']:
+       for phase in ['prefill1','prefill16','decode','decode8','decode8192']:
+        rows={method:get(model,method,mode,phase) for method in METHODS}
+        if not any(rows.values()):continue
+        f,h,n=[med(rows[m]) for m in METHODS];decode=phase.startswith('decode')
+        ratio=lambda v:f/v if decode else v/f
+        sh=ratio(h) if f and h else None;sn=ratio(n) if f and n else None
+        supported=False
+        if rows['fp16'] and rows['hadamard'] and rows['nar']:
+            sessions={method:{r['session']:r['median'] for r in rows[method]['session_summaries']} for method in METHODS}
+            common=set(sessions['fp16'])&set(sessions['hadamard'])&set(sessions['nar'])
+            supported=len(common)==3 and all((sessions['fp16'][s]/sessions['hadamard'][s] if decode else sessions['hadamard'][s]/sessions['fp16'][s])>1.05 for s in common)
+        c={'model':model,'mode':mode,'phase':phase,'hadamard_speedup':sh,'nar_speedup':sn,
+          'nar_latency_overhead_pct':100*(n/h-1) if decode and n and h else None,
+          'nar_throughput_ratio_pct':100*n/h if not decode and n and h else None,
+          'acceleration_retention_pct':100*(sn-1)/(sh-1) if supported else None,
+          'retention_reason':None if supported else 'Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.'}
+        if h and n and rows['hadamard'] and rows['nar']:
+            hs={r['session']:r['median'] for r in rows['hadamard']['session_summaries']};ns={r['session']:r['median'] for r in rows['nar']['session_summaries']}
+            diffs=[ns[s]/hs[s]-1 for s in hs.keys()&ns.keys()];c['session_nar_over_had_minus_one']=diffs
+            c['direction_consistent']=len(diffs)==3 and (all(d>0 for d in diffs) or all(d<0 for d in diffs))
+            c['interpretation']='near parity / within observed variability' if abs(n/h-1)<=.01 or not c['direction_consistent'] else 'consistent observed direction across three sessions, specific to this implementation/workload'
+        comparisons.append(c)
+    correct={f.stem:read(f) for f in (out/'correctness').glob('*.json')}
+    write(out/'env.json',{'generated_at':now(),'per_process_sources':'All raw_runs/*.json and correctness/*.json preserve start environment; deployment records also preserve end environment.','session_examples':{str(session):next((r['environment'] for r in raw if r.get('session')==session and r.get('samples')),None) for session in [1,2,3]},'correctness_example':next((v['environment'] for v in correct.values() if 'environment' in v),None)})
+    summary={'generated_at':now(),'protocol_sha256':sha(out/'protocol.json'),'deployment':aggregate,'comparisons':comparisons,'correctness_status':{k:{t:v.get(t) for t in ['status','reason','complete','completed_layers']} for k,v in correct.items()},
+      'real_checkpoint':read(out/'checkpoint_audit.json') if (out/'checkpoint_audit.json').exists() else None,
+      'graph_performance':{'value':None,'reason':'No validated three-session full graph timing records; feasibility status is separate.'},'missing_policy':'null+reason; never fill unmeasured performance with zero'}
+    write(out/'metrics_summary.json',summary)
+    memory=[]
+    for r in raw:
+      if r.get('status')=='PASS' and r.get('storage'):
+        memory.append({k:r[k] for k in ['key','model','method','phase','mode','session','loaded','warmed','inference_peak','storage']})
+    write(out/'memory_breakdown.json',{'records':memory,'theory':{'3b_factor_bytes':28*8192*96,'8b_factor_bytes':32*14336*96,'shared_h128_bytes':32768,'formula':'per layer 2*d*16*2+2*k*d*2=96d bytes at k8; shared scratch adds4*T*splits*k per distinct shape','GB_divisor':1e9,'MB_divisor':1e6}})
+    names={'fp16':'FP16','hadamard':'QuaRot Hadamard','nar':'PrismQuant k=8'}
+    pre=[];dec=[];mem=[]
+    for model in MODELS:
+      for method in METHODS:
+        a1=get(model,method,'eager_sequence','prefill1');a16=get(model,method,'eager_sequence','prefill16');ad=get(model,method,'eager_sequence','decode')
+        f1=med(get(model,'fp16','eager_sequence','prefill1'));f16=med(get(model,'fp16','eager_sequence','prefill16'));fd=med(get(model,'fp16','eager_sequence','decode'))
+        pre.append([model,names[method],fmt(med(a1)),fmt(med(a1)/f1 if a1 and f1 else None),fmt(med(a16)),fmt(med(a16)/f16 if a16 and f16 else None)])
+        for mode in ['eager_sequence','eager_step_sync']:
+            r=get(model,method,mode,'decode');f=med(get(model,'fp16',mode,'decode'))
+            dec.append([model,names[method],mode,fmt(med(r)),fmt(r['summary']['std'] if r else None),fmt(f/med(r) if f and r else None),str(r['independent_sessions']) if r else '0'])
+        hd=get(model,'hadamard','eager_sequence','decode');fp=get(model,'fp16','eager_sequence','decode')
+        mem.append([model,names[method],fmt(a16['peak_allocated_bytes']/1e9 if a16 else None),fmt(ad['peak_allocated_bytes']/1e9 if ad else None),fmt((ad['peak_allocated_bytes']-hd['peak_allocated_bytes'])/1e6 if ad and hd and method=='nar' else None),fmt(100*(1-ad['peak_allocated_bytes']/fp['peak_allocated_bytes']) if ad and fp else None)])
+    table(out/'tables/deployment_prefill',['Model','Method','B1 tok/s','Speedup','B16 tok/s','Speedup'],pre,'Random weights; total input throughput. Core values require three sessions; inspect JSON status for provisional rows.')
+    table(out/'tables/deployment_decode',['Model','Method','Mode','ms/token','Run std','Speedup','Sessions'],dec,'Random weights;128 causal steps, first8 discarded. Pooled run dispersion is not session dispersion.')
+    table(out/'tables/memory',['Model','Method','Prefill16 GB','Decode GB','Extra vs Had MB','Saved vs FP16 %'],mem,'Independent process peak allocated bytes, GB=1e9. Reserved and NVML values are reported separately in JSON.')
+    kernels=[]
+    for r in raw:
+        if 'layer' in r and 'rows' in r:
+            for k in r['rows']:
+                kernels.append([r['model'],str(k['tokens']),str(r['session']),k['scope'],k['implementation'],fmt(k['wall_us']['median']),fmt(k['cuda_event_elapsed_us']['median']),k['status']])
+    table(out/'tables/kernel',['Model','T','Session','Scope','Implementation','Wall us','Event us','Status'],kernels,'Fixed layer0 configurations, directly timed calls/chains; stage times must not be summed into chain measurements. Invalid rows excluded from rankings.')
+    comp=[['E28 kernel swap','Signed INT4 W/A; token-channel affine KV4','Random weights','See correctness JSON','Paper format not connected'],['E17 native R4','Group128 asymmetric packed A4','Real calibrated factors','Local only','No model GEMM/KV claim'],['Paper accuracy path','GPTQ W4; group128 asymmetric A4; K/V residual32','Local k8 checkpoint absent','BLOCKED','Current row/column-scale GEMM incompatible']]
+    table(out/'tables/compatibility',['Path','Format','Weights','Numerical status','Deployment status'],comp,'Performance, numerical consistency and native-paper-format deployment are separate claims.')
+    (out/'paper').mkdir(exist_ok=True)
+    (out/'paper/experiment.tex').write_text('We benchmark random-weight Llama-3.2-3B and Llama-3.1-8B on one NVIDIA A40 with the existing QuaRot integer backend. Core measurements use ten complete warm-up runs and fifty repetitions in each of three balanced sessions. Decode is a sequence of causal model-forward calls, excludes the first eight of128 steps, and is not serving or sampling latency. We report independent process memory and separate wall, CUDA-event and profiler durations. Per-session and pooled statistics are generated from raw JSON; missing or invalid results are not imputed.\n')
+    (out/'paper/kernel.tex').write_text(r'For row-major activations, $U=XA$ and $Z=XH_{128}-UB$, where $A\in\mathbb{R}^{d\times8}$ and $B\in\mathbb{R}^{8\times d}$. Kernel A forms split FP32 partials from two FP16 factor terms, with rank padded to16. Kernel B uses a normalized128-channel Hadamard and three high/low correction products, writes FP16, and feeds the unchanged QuaRot quantizer. The E17 native groupwise packing epilogue is a distinct contract. A shared scratch buffer assumes sequential execution.'+'\n')
+    statuslines=[f'| {k} | {v.get("status","MISSING")} | {v.get("reason", "")} |' for k,v in sorted(correct.items())]
+    answer=[]
+    for c in comparisons:
+        if c['mode']=='eager_sequence' and c['phase'] in ['prefill1','prefill16','decode']:
+            answer.append(f"- {c['model']} {c['phase']}: Hadamard/FP16 speedup {fmt(c['hadamard_speedup'])}; PrismQuant/FP16 {fmt(c['nar_speedup'])}. {c.get('interpretation','')}.")
+    report=f'''# E28-v2: auditable deployment experiments\n\nGenerated {now()}. This report contains completed records only where the linked JSON says COMPLETE/PASS; other stages remain explicitly incomplete, failed or blocked. All model performance rows use **random weights**, even when validation inputs are real text. No full model-quality evaluation is claimed.\n\n## One-page status\n\n- Preserved original E28/E17/E22/E26 artifacts.\n- Froze counts, shapes, selected configs, thresholds and exclusions in [protocol.json](protocol.json); execution provenance in [source_manifest.json](source_manifest.json) and [execution_source_manifest.json](execution_source_manifest.json).\n- Corrected shared INT4 initialization, stale RoPE caches, timing boundaries, complete cache reset, throughput statistics, independent memory and invalid acceleration-retention ratios. The common metadata optimization is checked against the original wrapper.\n- The exact original environment and A40 are reused; no new GEMM, calibration or serving framework.\n- Native paper-format integer deployment is BLOCKED by missing matching complete checkpoint and incompatible group-scale/KV interfaces.\n\n| Check | Status | Reason |\n| --- | --- | --- |\n{chr(10).join(statuslines)}\n\n## Six questions\n\n1. **Which stages accelerate relative to FP16?** Same-mode ratios only; [raw metrics and session status](metrics_summary.json), [deployment prefill](tables/deployment_prefill.md), [decode](tables/deployment_decode.md).\n{chr(10).join(answer) or '- No complete measurements yet; no speedup claim.'}\n\n2. **What does PrismQuant add versus Hadamard?** See directly measured A/B/quantizer/chain times in [kernel table](tables/kernel.md), same-mode wall ratios in [metrics](metrics_summary.json), and exact unique-storage categories in [memory_breakdown.json](memory_breakdown.json). Factor storage is96d bytes per layer plus one shared32768-byte H128; scratch is recorded separately. No rounded-to-zero overhead claim.\n\n3. **Does dispatch optimization help reproducibly?** The generic/prebound ablation uses identical kernels and byte-equal outputs, with three separately recorded sessions. See [kernel records](tables/kernel.md). A one-percent difference without consistent session direction is near parity, not a stable advantage.\n\n4. **Does graph replay grow the KV context?** See [graphability audit](graphability_audit.md) and the graph correctness rows above. Only A-B-A replay with steps1,2,9,64,65,128, full cache hashes and actual page crossing can pass. No graph performance panel is populated from a fixed-context microbenchmark; absent timings remain null.\n\n5. **Which results execute integer kernels?** E28 Hadamard/NAR use the actual packed INT4 GEMM/quantizer and INT4 decode cache; FP16 uses FP16 arithmetic/cache. E17-native rows are local packed-activation microbenchmarks, not an end-to-end model. Random states are verified by [shared_state_audit.json](shared_state_audit.json). Real model quality remains untested.\n\n6. **What is missing for the paper's group128 asymmetric path?** See [quantizer contract](quantizer_contract.md) and [checkpoint audit](checkpoint_audit.json). Per-group reduction scales/offsets need partial sums/corrections absent from this GEMM interface; token/channel KV grouping and residual windows also differ. No discarded offsets or FP16 substitute is presented as native integer deployment.\n\n## Technical appendix\n\n[Kernel design](kernel_design.md), [old claims audit](old_claim_audit.json), [compatibility table](tables/compatibility.md), [memory table](tables/memory.md), and [profile traces](profiles/) provide the detailed evidence. `correctness/attempt_1/` retains initial harness failures; [harness corrections](verification_harness_corrections.json) explain the repair without changing numerical thresholds.\n\nAll tables are regenerated by `collect`, which never launches a GPU experiment. Memory is bytes/decimal GB; pooled150 runs represent3 sessions. Profiler kernel sums, CUDA-event elapsed and wall time are distinct. Missing counters mean bandwidth/compute bottleneck labels remain hypotheses.\n'''
+    (out/'report_e28_v2.md').write_text(report)
+    rel=out.relative_to(ROOT)
+    (ROOT/'report_e28_v2.md').write_text(f'# E28-v2\n\nThe current experiment record is [{rel.name}]({rel}/report_e28_v2.md).\n\nThis is a random-weight integer kernel-swap study with explicit numerical gates. Native paper-format model deployment and real model quality are not established. Consult the linked report for completed, failed, blocked and pending stages.\n')
+    print('COLLECT',len(aggregate),'groups',len(kernels),'kernel rows',flush=True)
+if __name__=='__main__':main()
