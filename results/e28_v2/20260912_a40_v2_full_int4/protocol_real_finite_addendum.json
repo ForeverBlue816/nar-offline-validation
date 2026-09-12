@@ -1,0 +1,8 @@
+{
+  "frozen_at": "2026-09-12T05:03:19.254665+00:00",
+  "before_real_model_results": true,
+  "reason": "Persist existing per-module prefill finite checks and include them in overall short-forward status. No model computation, thresholds or performance timing change.",
+  "previous_random_model_records": "Unchanged historical validation records; every retained deployment process separately gates and preserves full prefix/128-step intermediate finite checks in raw_runs.",
+  "previous_verify_sha256": "337561e49a4c70392598fde810ef06b19c5a01aa9db7ee8c64993020cac98011",
+  "verify_sha256": "7c9d73adf2b4bef6d2c7e46ef77360b88fefb55db6eb4a4261a9b3342709b4f4"
+}

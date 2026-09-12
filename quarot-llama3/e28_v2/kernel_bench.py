@@ -54,7 +54,7 @@ def main():
             transformed=mod(x).clone()
             fns=[('E28 slot','hadamard_fp16',lambda:had(x),valid_had),
                  ('E28 slot','nar_module',lambda:mod(x),valid),
-                 ('E28 dispatch (preallocated)','nar_prebound',prebound if fast is not False else generic,dict(valid,status=valid['status'] if fast is not False else 'UNAVAILABLE')),
+                 ('E28 dispatch (preallocated)','nar_prebound',prebound if fast is not False else generic,dict(valid,status=valid['status'] if fast is not False and bitwise else 'FAIL',prebound_bitwise=bitwise)),
                  ('E28 dispatch (preallocated)','nar_generic',generic,dict(valid,prebound_bitwise=bitwise)),
                  ('E28 dispatch (preallocated)','nar_generic_shuffle',generic_shuffle,validshuffle),
                  ('E28 stage','A_only',A,valid),('E28 stage','B_tc_only',B,valid),('E28 stage','B_shuffle_only',Bs,validshuffle),
@@ -82,8 +82,15 @@ def main():
             def native_valid(packed,reference):
                 r=reference.reshape(T,n//128,128);z=r.amin(-1).half();s=((r.amax(-1)-r.amin(-1))/15);s=torch.where(s>0,s,torch.ones_like(s)).half()
                 codes=((r-z.float()[...,None])/s.float()[...,None]+.5).floor().clamp(0,15).to(torch.uint8).reshape(T,n)
-                match=float((k3.unpack(packed.codes,n)==codes).float().mean())
-                return {'status':'PASS' if match>=.999 else 'FAIL','code_match_fraction':match,'format':'E17 native group128 asymmetric, not QuaRot quantizer'}
+                unpacked=k3.unpack(packed.codes,n)
+                match=float((unpacked==codes).float().mean())
+                actual=unpacked.float().reshape(T,n//128,128)*packed.scales.float()[...,None]+packed.zeros.float()[...,None]
+                expected=codes.float().reshape(T,n//128,128)*s.float()[...,None]+z.float()[...,None]
+                finite=bool(torch.isfinite(actual).all() and torch.isfinite(expected).all())
+                rel=float((actual-expected).norm()/expected.norm().clamp_min(1e-30)) if finite else None
+                scale_rel=float((packed.scales.float()-s.float()).norm()/s.float().norm().clamp_min(1e-30)) if finite else None
+                offset_rel=float((packed.zeros.float()-z.float()).norm()/z.float().norm().clamp_min(1e-30)) if finite else None
+                return {'status':'PASS' if finite and match>=.999 and rel<=.002 else 'FAIL','code_match_fraction':match,'finite':finite,'matched_dequant_relative_l2':rel,'scale_relative_l2':scale_rel,'offset_relative_l2':offset_rel,'format':'E17 native group128 asymmetric, not QuaRot quantizer'}
             native_ref=torch.empty_like(ref)
             for low in range(0,T,256):native_ref[low:low+256]=nk.reference_transform(bx[low:low+256],layer['y_prime_fp32'],layer['w_h_t_fp32'])
             nv=native_valid(outputs,native_ref)

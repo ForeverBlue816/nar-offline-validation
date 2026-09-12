@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-12T04:58:47.175987+00:00",
+  "reason": "Source audit clarifies actual nearest-even vs floor-half-up rounding, activation clipping and fake-quantized GPTQ metadata precision; no measurement or implementation change.",
+  "initial_sha256": "93c2b0bbded5350c224f5c17a9c85c40fcc283cef38fb8337db87f2199a41edd",
+  "revised_sha256": "1e7bd5ca7184c63ce3e805ef59d667416ff340d3aa62e51d45c9a621e9d330f5",
+  "source_sha256": {
+    "nar/quarot_gptq.py": "84da020ecdf05384d56026ab18e2fd8f50ceea92782285580c1e499a31e6dd1e",
+    "nar/experiment.py": "199e3a5e674a9098ff0f67f28d503afaf415271293d7d6d093928179a2c66f6f",
+    "nar/e14_w4a4kv4.py": "c7ab1b96621084d43d3dae4f694eb4e6bc534d753cd7ef6c5d620cd000559ab3",
+    "nar/e22_qwen3_family.py": "c8f12709f525aa5182eee44175db4953e6ceec19f1539b80657fe60f0ebe10ce"
+  }
+}

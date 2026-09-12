@@ -147,12 +147,13 @@ def model_check(a):
         clear(warm);m(windows[0,:128].cuda().int().view(1,-1),past_key_values=warm)
         for token in windows[0,128:130]:m(token.cuda().int().view(1,1),past_key_values=warm)
     del warm
-    rows=[]
+    rows=[];prefill_finite_checks=[]
     for wi,tokens in enumerate(windows):
         inp=tokens[:128].view(1,-1).cuda().int();states=[]
         for legacy in [True,False]:
             cache=make_cache(m,1,256,legacy=legacy,page_size=64)
             finite=finite_check(m,inp,cache)
+            prefill_finite_checks.append({'window':wi,'legacy_cache':legacy,**finite})
             clear(cache);out=m(inp,past_key_values=cache)
             saved={'prefill':out.logits.detach().cpu(),'prefill_hidden':latest_hidden['value'].cpu(),'finite':finite,'steps':{}}
             for step in range(1,129):
@@ -170,7 +171,7 @@ def model_check(a):
             hu,hv=(old['prefill_hidden'],new['prefill_hidden']) if step==0 else (old['steps'][step]['hidden'],new['steps'][step]['hidden'])
             hidden_rel=float((hu.float()-hv.float()).norm()/hu.float().norm().clamp_min(1e-30)) if bool(torch.isfinite(hu).all() and torch.isfinite(hv).all()) else None
             rows.append({'window':wi,'step':step,'finite':finite,'relative_l2':rel,'hidden_relative_l2':hidden_rel,'cache_exact':cache_equal,'cache_before':None if step==0 else old['steps'][step]['cache'],'cache_after':None if step==0 else new['steps'][step]['cache'],'status':'PASS' if finite and rel<=.002 and hidden_rel is not None and hidden_rel<=.002 and cache_equal else 'FAIL'})
-    return {'status':'PASS' if all(r['status']=='PASS' for r in rows) and (rope_reference is None or rope_reference['status']=='PASS') else 'FAIL','rows':rows,'rope_reference':rope_reference,'shared_state':state,'rope_cache_fix':m._e28_rope_fix_report,
+    return {'status':'PASS' if all(r['status']=='PASS' for r in rows) and all(r['status']=='PASS' for r in prefill_finite_checks) and (rope_reference is None or rope_reference['status']=='PASS') else 'FAIL','rows':rows,'prefill_finite_checks':prefill_finite_checks,'rope_reference':rope_reference,'shared_state':state,'rope_cache_fix':m._e28_rope_fix_report,
       'weights':'real base checkpoint, FP16 implementation check only' if loaded_checkpoint else 'random-weight implementation check; no model quality claim','loaded_checkpoint':loaded_checkpoint,'text_source':str(tokenpath),'text_sha256':sha(tokenpath),'token_window_hashes':[tensor_hash(t) for t in windows],
       'real_checkpoint':{'status':'BLOCKED','reason':'No complete matching k8 integer checkpoint/loader; paper fake-quantized per-group weights are incompatible with this row/column-scale GEMM.'}}
 

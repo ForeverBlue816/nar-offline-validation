@@ -1,0 +1,12 @@
+{
+  "frozen_at": "2026-09-12T05:00:26.598189+00:00",
+  "before_microbenchmark_results": true,
+  "reason": "Require both dispatch candidates to pass their identical-output check. Validate E17 packed scales/offsets through reconstructed outputs, beyond code-only agreement. No kernel/config/timing changes.",
+  "native_thresholds": {
+    "code_match_min": 0.999,
+    "matched_dequant_relative_l2_max": 0.002,
+    "all_reconstructed_values_finite": true
+  },
+  "kernel_bench_previous_sha256": "fbb244b60bc95cae48a7c7c455ce7be692deacdaa47b4f5b380bbacca62afffc",
+  "kernel_bench_sha256": "ee09e0dd6270dcbf35cb39520460f206b36da08f587de418e39a723578fc4b8d"
+}
