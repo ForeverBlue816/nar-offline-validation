@@ -87,12 +87,12 @@ def main():
                 torch.cuda.current_stream().wait_stream(stream)
                 torch.cuda.synchronize()
                 graph_prefix()
-                before = mempoint()
+                before = {'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved()}
                 graph = torch.cuda.CUDAGraph()
                 with torch.cuda.graph(graph):
                     output = model(token, past_key_values=cache, position_ids=position)
                 torch.cuda.synchronize()
-                after = mempoint()
+                after = {'allocated':torch.cuda.memory_allocated(),'reserved':torch.cuda.memory_reserved()}
                 result['graph_preparation'] = {'seconds': time.perf_counter() - preparation_start, 'graphs': 1,
                         'allocated_delta_bytes': after['allocated'] - before['allocated'],
                         'reserved_delta_bytes': after['reserved'] - before['reserved'],

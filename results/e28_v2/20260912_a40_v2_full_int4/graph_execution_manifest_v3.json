@@ -1,13 +1,13 @@
 {
-  "captured_at": "2026-09-12T04:29:18.589207+00:00",
+  "captured_at": "2026-09-12T04:23:08.053081+00:00",
   "before_graph_measurement": true,
-  "supersedes_sha256": "1e77f36465b90f3bf36ac5507f4fe1265c8660fe7fa5e4da3d5ec488422ee90f",
-  "reason": "Exclude nvidia-smi diagnostic subprocesses from graph preparation elapsed; steady-state timing and model computation are unchanged, no graph measurements exist yet.",
+  "supersedes_sha256": "72ed127f4caf5b26c2953e285c4a7093d057d856e6f7e9a3f40a6fec9ab7a7e3",
+  "reason": "Fresh runs can generate the same stream addendum; activation/graph arithmetic is unchanged.",
   "sources": {
     "stream_backend.py": "785dab38a46d45ba94ebdc734902b09884214a5e7869f80007ec766b3e3c7d2d",
     "backend_fingerprint.py": "7223cceb5880226401bfd694250d5d922e2ce5e3551cdd145bfd080fd35cfc98",
     "graph.py": "937ed7c6b1a52ccfc7bfa54d654bc6f6c62bae1b2c7969e09e1d7e227a059ce3",
-    "graph_benchmark.py": "18c5857f4fe5c90ac9f7bbc3ae8385ffbd4f47c41837822cc4b4ebe077a281ae",
+    "graph_benchmark.py": "0ffccc67b48c451572dc32be169cd5106c9c15227937a99d33889b9c32e0f411",
     "stream_pipeline.py": "3ddf6ab880ca1ca98c402888e5bbde6412e573a83f01f49e7b93df92c55e2b64"
   }
 }
