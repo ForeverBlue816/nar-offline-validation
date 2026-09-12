@@ -1,12 +1,10 @@
 {
-  "captured_at": "2026-09-12T04:17:38.053180+00:00",
+  "captured_at": "2026-09-12T03:56:55.429839+00:00",
   "before_graph_measurement": true,
-  "supersedes_sha256": "e6ae92c3f0a13711c255dda8c92dd5f3c4d18bfb44f87f6426007cab4097b5d1",
-  "reason": "Add explicit hashes proving two distinct predetermined graph inputs; window selection and computation are unchanged.",
   "sources": {
     "stream_backend.py": "5e497379bbe8c019ec80030bcddf01b76509417dae18ca6b1900ef031e6ae672",
     "backend_fingerprint.py": "7223cceb5880226401bfd694250d5d922e2ce5e3551cdd145bfd080fd35cfc98",
-    "graph.py": "937ed7c6b1a52ccfc7bfa54d654bc6f6c62bae1b2c7969e09e1d7e227a059ce3",
+    "graph.py": "4c6d7111eb90e3c92d35ed0738daee5eced0ba591eb258cea622a9e821e87a28",
     "graph_benchmark.py": "0ffccc67b48c451572dc32be169cd5106c9c15227937a99d33889b9c32e0f411",
     "stream_pipeline.py": "3ddf6ab880ca1ca98c402888e5bbde6412e573a83f01f49e7b93df92c55e2b64"
   }

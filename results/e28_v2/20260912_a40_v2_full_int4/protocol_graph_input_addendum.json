@@ -1,0 +1,7 @@
+{
+  "frozen_at": "2026-09-12T04:17:38.053180+00:00",
+  "before_graph_measurement": true,
+  "graph_windows": "Cached real-text token stream starts0 and4096; each contains prefix+128 tokens. Offsets already fixed in original graph code; output now hashes both sequences.",
+  "model_level3_windows": "Unchanged first256 tokens of cached2048 windows0 and1.",
+  "reason": "The core graph check needs2176 tokens, so its nonoverlapping windows are longer than the short Level3 windows."
+}

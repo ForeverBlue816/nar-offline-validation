@@ -25,9 +25,13 @@ def main():
         textfile=WORK/'cache/tokenized'/f'{MODELS[a.model]}-wikitext2-test-full-l2048.pt'
         if not textfile.exists():textfile=WORK/'cache/tokenized/llama32_3b-wikitext2-test-full-l2048.pt'
         tokens=torch.load(textfile,weights_only=True).reshape(-1)
+        result.update(text_source=str(textfile),text_sha256=sha(textfile),window_start_offsets=[0,4096])
         for prefix,page in [(128,64),(2048,2176)]:
             capacity=prefix+128;cache=make_cache(m,1,capacity,page_size=page)
             ids=[tokens[j*4096:j*4096+capacity].cuda().int() for j in range(2)]
+            input_hashes=[tensor_hash(v) for v in ids]
+            if len(set(input_hashes))!=2:raise RuntimeError('A-B-A verification needs two distinct input windows')
+            result.setdefault('input_sequences',[]).append({'prefix':prefix,'capacity':capacity,'sha256':input_hashes,'distinct':True})
             static_token=torch.empty((1,1),device='cuda',dtype=torch.int32)
             pos=torch.empty((1,1),device='cuda',dtype=torch.int64)
             max_pages=math.ceil(capacity/page)
