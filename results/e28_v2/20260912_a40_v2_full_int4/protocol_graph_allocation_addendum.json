@@ -1,0 +1,12 @@
+{
+  "frozen_at": "2026-09-12T04:44:32.765282+00:00",
+  "before_any_private_graph_measurement": true,
+  "reason": "Slurm rejects changes to a running job TimeLimit. Actual phase durations indicate the complete fixed primary plus matched graph plan may approach12 hours.",
+  "primary_job": 150777,
+  "graph_schedule": "The entire private-backend panel, including three balanced sessions for all methods and both modes, moves to one subsequent scheduler allocation on the same physical A40.",
+  "required_gpu_uuid": "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22",
+  "resources": "Same4 PyTorch/OMP/MKL threads, interop1,4 allocated CPUs; record actual affinity/cgroup and enforce within-panel equality.",
+  "unchanged": "No workload, repetition count, threshold, kernel or dataset change. No formal graph sample existed before rescheduling.",
+  "comparisons": "Private-backend eager and graph are compared within the new allocation. Original-binary core measurements remain in their original panel.",
+  "original_hardware_protocol_scope": "The one-allocation promise remains true for the original-binary primary pipeline. This addendum explicitly extends the separate private-backend panel."
+}
