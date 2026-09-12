@@ -24,6 +24,15 @@ def main():
     if dest.exists():
         print('EXISTS', dest, flush=True)
         return
+    protocol_file=out/'protocol_stream_addendum.json'
+    if not protocol_file.exists():
+        write(protocol_file,{'frozen_at':now(),'stage':'P1 conditional bounded adapter',
+              'attempts':'One current-stream patch to existing quantization/KV/CUTLASS dispatch; no arithmetic/tile/dtype change or tuning.',
+              'validation':'Exact original/patched extension output and KV storage fingerprints, followed by all-three-method A-B-A growing-cache verification with exact cache and hidden/logit relativeL2<=0.002.',
+              'timing_condition':'Only after every method of a model passes: same patched binary eager and graph,10 complete warmups+50 runs+3 balanced sessions,2048prefix+128steps discard8; metadata updates included.',
+              'method_order':read(out/'protocol.json')['method_order'],
+              'window_start_offsets':[0,4096],
+              'scope':'Separate raw_graph_runs; never pooled with original-binary core measurements. Known accumulator narrowing and native-paper-format limits remain unchanged.'})
     source = WORK / 'external/quarot'
     local = out / 'local_build'
     local.mkdir(exist_ok=True)

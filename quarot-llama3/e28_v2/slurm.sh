@@ -20,3 +20,5 @@ for model in 3b 8b; do
 done
 touch "$E28_RUN/verification.done"
 run pipeline
+
+if [[ ${E28_STREAM_GRAPH:-0} == 1 ]]; then run stream_pipeline; fi
