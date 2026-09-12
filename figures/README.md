@@ -27,6 +27,9 @@ scatter/bar marks are explicitly identified as schematic illustrations.
 
 ## Current exports
 
+- Figure 4: `fig4_revised.pdf/svg/png`, also available through `fig4.pdf/svg` and `fig4_preview.png`.
+- Deployment: `fig_deployment_efficiency.pdf/svg/png`; full details and appendices below.
+
 - Figure 1: fig1a through fig1g, each in SVG/PDF/transparent 300-dpi PNG.
   fig1_preview.png and fig1.pdf/svg form a compact 6.6 × 4.25-inch mechanism
   teaser with a raw-activation fork, two rotation paths, matched range outcomes,
@@ -38,9 +41,9 @@ scatter/bar marks are explicitly identified as schematic illustrations.
   fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
   the side-by-side range-law comparison. No in-panel titles or footer captions.
 
-## Figures 3 and 4 typography and print strokes
+## Figures 3 and 4 typography and print strokes (historical baseline)
 
-Figures 3 and 4 now use the same verified, upright **Times New Roman Bold**
+The original Figures 3 and 4 use the same verified, upright **Times New Roman Bold**
 as Figures 1 and 2, including all tick numbers, axes, direct labels, insets,
 and legends. `FIGURE3_FONT_DIR` and `FIGURE4_FONT_DIR` support a custom
 font directory; rendering fails if the actual bold font is unavailable.
@@ -194,99 +197,79 @@ asset and frozen-code roots as the Figure 4 measurement helper, supports CPU
 or CUDA, and resumes complete per-layer checkpoints. Original E1c summaries
 are retained; the addendum lives in the per-layer CSV and done metadata.
 
-## Figure 4
+## Figure 4 and deployment efficiency — 2026-09-12
 
-`fig4a` (3B metadata budget), `fig4b` (recovery and kernel cost), and
-`fig4a_8b` (appendix) are separate 2.7-by-4.2-inch SVG/PDF/300-dpi PNG panels.
-`fig4_preview.png` and `fig4.pdf/svg` combine the two main panels. The figures
-contain no titles, footers, protocol notes, or missing-data notices. The
-requested short deployment interpretation appears inside panel b.
+The revised Figure 4 preserves all accuracy observations and replaces its
+main cost panel with measured k=8 overhead from matched private CUDA Graph
+records. The deployment figure provides eager prefill throughput, private
+Graph decode latency and allocated memory, and measured implementation
+ablations. It is named `fig_deployment_efficiency` until the complete
+manuscript establishes numbering.
 
-The budget panels retain every requested existing E20 configuration, with
-mean PPL recomputed from three seeds on 64 chunks and effective bits
-`4 + 16*(m+1)/g`. The unaccounted fp32 coefficient controls are excluded.
-Each panel's CSV lists the exact summary-file row and physical CSV line for
-every point and the bf16 reference. Bracket endpoints are those same plotted
-points; their source lines and PPL differences are in `fig4_metadata.json`.
+![Revised Figure 4](fig4_revised.png)
 
-The revised presentation keeps both columns at 2.7 by 4.2 inches. Panel a
-spans the two stacked panels at right: b1 shows recovery, b2 shows kernel
-cost. Both right-hand axes have the same plot width as a, share their x
-limits, and use a 62:38 ratio of plot heights. Their combined top and bottom
-edges align with a. The two legends occupy a dedicated bottom row with
-matching rectangular frames and 6.5-pt type. Only the three model entries
-appear in the right-hand legend; b2 identifies the timing models directly.
+![Deployment efficiency](fig_deployment_efficiency.png)
 
-The separate bare exports `fig4b1` and `fig4b2` have widths of 2.7 inches
-and heights of 2.604 and 1.596 inches (62:38, summing to a's 4.2 inches).
-They preserve the marks and font sizes while giving each panel its own
-margins. `fig4b` retains the assembled right column with its shared legend.
-`fig4b1.csv` and `fig4b2.csv` partition the unchanged `fig4b.csv`, preserving
-source rows for all 15 recovery points, four kernel points and two references.
+Both main figures are drawn at **5.5 inches wide**, with real embedded Times
+New Roman Bold (all text at least 7.5 pt), editable SVG text, vector PDF, and
+600-dpi PNG. Figure 4 is 4.65 inches high; deployment is 5.35 inches high.
+`fig4.pdf`, `fig4.svg`, and `fig4_preview.png` are compatibility copies of the
+revised Figure 4, promoted only after QA. `fig4_revised_metadata.json` describes
+the current layout; `fig4_metadata.json` remains the original data/panel record.
 
-Budget tick labels are horizontal; the 4.1875 tick remains without text.
-The scale-resolution bracket spans the Hadamard (256,1)/(128,1) pair with
-its label above and no leader. The null-space bracket lies at x=4.25; its
-label sits to the right, clear of the (256,3) point label. A small stroke
-gap at the intervening measured triangle avoids crossing the marker.
-The 3B lower bound stays at 7.60, and the measured bf16 line at 7.61675.
-The 8B appendix uses the same presentation.
+Frozen sources are commit `6747960b96b0b03e626e98eaeeccf0d1abc34e79` and
+`results/e28_v2/20260912_a40_v2_full_int4`. Private Graph correctness is 6/6
+PASS and matched timing 36/36 PASS; failed original-backend Graph captures
+are not plotted. The figure builder verifies raw samples, collector summaries,
+paired denominators, independent memory bytes, and source hashes. Raw CSVs use
+full precision. `deployment_efficiency_table.md` provides readable values.
 
-The green deployed band extends through both right-hand axes. Recovery
-labels (0.39, 0.36, 0.59) sit to the left of k=8, staggered for clearance.
-The two-line interpretation sits at the upper left of b1. Only b2 carries
-x tick labels and the shared x-axis label. Its two solid red diamond lines
-connect measured k=8 and k=32 costs, with percentages beside the markers
-and model names at the ends. Dashed Hadamard references have right-aligned
-labels. All source CSV numbers remain unchanged by this layout revision.
+`fig4_revised_data.csv` retains the 3B/8B budget points, all 15 rank observations,
+original E17 cost points/references, and new Graph overhead. The deployment CSV
+contains 416 central/session rows, including all 30 kernel comparisons. Source
+file, pointer or CSV row, frozen commit/run, backend/mode, workload, units,
+statistic and formula are recorded. Ratio-of-pooled-medians and
+median-of-session-ratios are explicitly distinguished. Memory is maximum
+inference peak allocated bytes across sessions, divided by 1e9.
 
-The recovery panel evaluates `(mean PPL_Hadamard - mean PPL_k) /
-(mean PPL_Hadamard - PPL_bf16)`, directly from PPLs. It does not reuse legacy
-recovery columns with different averaging or rotation-only corrections.
-Llama uses the E11 activation-only protocol (64 chunks; seeds 20260902,
-20260903, 20260904). Qwen uses the existing E18 v2 activation-only results
-(146 chunks; seed 20260902). All five requested categories are measured for
-all three models; there are no missing k values and no interpolated points.
-The per-site maxima (qkv/down) are 24/64 for 3B, 32/112 for Llama 8B,
-and 32/96 for Qwen 8B. At each nominal k, the actual site value is capped
-by that site's maximum. The CSV records both values.
+The paper's accuracy protocols and random-weight E28 timing protocol are not
+checkpoint-level joint accuracy/speed measurements. E28 uses per-token
+symmetric INT4, different from the native paper group-128 asymmetric format.
+See `captions.txt` / `captions.tex` for the full protocol, Graph page layout,
+statistics, backend stress limitations, and interpretation boundaries.
 
-The previously absent Llama k=64 rows were measured on September 5, 2026,
-using the original E11 code at `f424b82`, original test tokens and rotation
-seeds, bf16 weights/KV, and group-128 activation quantization at both sites.
-The frozen E11 eigenvectors were recovered by inverting its b64 Householder
-factors, checked against the stored b128 k32 reflectors, then used for a
-fresh original-protocol 128-sequence permutation calibration. There is no
-new eigensolver fit. Raw losses, factor/basis audits, summary PPLs, and device
-and token-hash provenance are in `results/<model>/e11_k64_*` and
-`E11_K64_DONE.json`. Original E11 tables are preserved.
+Appendix exports in `appendix/` preserve the original RTX PRO 6000 E17 rank
+cost, 8B metadata budget, matched private eager-to-Graph comparison, and all
+T=1/2048/32768 implementation ablations, including unfavorable TC-B points.
+`panels/` holds bare vector/600-dpi panel exports for assembly; reuse each main
+figure's corresponding legend. The complete original Figure 4 and its old
+README are saved in `archive/fig4_before_e28/`; original CSVs and individual
+component exports remain unchanged.
 
-Kernel costs come from E17 v3's `*_share_of_layer` columns:
-`100 * kernel_ms / (decoder_layer_ms + kernel_ms)`. The k=8 timing row
-supplies each model's single horizontal Hadamard reference. PrismQuant has
-only the measured k=8 and k=32 timing points; no costs are estimated at other
-k values. `fig4b.csv` carries separate source files and exact CSV line numbers
-for every recovery value, each baseline, and each kernel measurement.
-
-To reproduce the exports and independently verify raw-loss and CSV linkage:
+Reproduce with a CPU plotting environment containing
+`requirements-deployment-figures.txt` and a locally licensed Times New Roman
+installation. Use `FIGURE4_FONT_DIR` if needed; font files are never committed.
 
 ```bash
-python figures/make_fig4.py
-python figures/verify_fig4.py
-python figures/audit_exports.py --figure 4
+python figures/build_e28_figure_data.py
+python figures/make_fig4_revised.py --reuse-data
+python figures/make_deployment_efficiency.py --reuse-data
+python figures/make_deployment_appendix.py --reuse-data
+python figures/write_deployment_captions.py
+python figures/verify_deployment_figures.py --promote-fig4
+# Optional stronger check: two identical full render bundles.
+python figures/check_deployment_reproducibility.py
 ```
 
-To repeat a missing-k experiment, export the `nar/` directory from commit
-`f424b82` into a separate code directory, then run on an allocated GPU:
-
-```bash
-python figures/measure_fig4_k64.py --model llama32_3b \
-  --repo "$PWD" --assets "$NAR_WORKDIR" --scratch "$FIG4_SCRATCH" \
-  --code-root "$FIG4_FROZEN_CODE"
-```
-
-Use `llama31_8b` for the other model. Existing completed measurements are
-reused. The required frozen factors and model cache reside in the asset root.
+`--draft` produces 150-dpi review PNGs; rerun without it for final delivery.
+`--reuse-data` skips data rebuilding and never launches an experiment. None of
+these commands trains, calibrates, benchmarks a GPU, or modifies a kernel.
+Use `include_deployment_figures.tex` for the LaTeX integration. The QA entry
+point checks every main/appendix/standalone vector and PNG, verifies actual
+font embedding, renders PDF and SVG independently, and records results under
+`qa/deployment/`. The source validator includes shared modules and accepts the
+explicit manuscript font contract; its generic Nature TIFF/column-width
+warnings are reviewed against this task's PNG/5.5-inch specification.
 
 ## Figure 1
 
