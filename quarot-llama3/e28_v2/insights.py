@@ -135,6 +135,13 @@ def generate(out):
         nar = next((r for r in profiles if r['model'] == model and r['method'] == 'nar'), {})
         if had.get('kernel_sum_ms_per_step') is not None and nar.get('kernel_sum_ms_per_step') is not None:
             details.append(f"- {model}: separate profiled NAR minus Hadamard kernel sum {fmt(nar['kernel_sum_ms_per_step'] - had['kernel_sum_ms_per_step'])} ms/step. This difference is not a wall-time estimate.")
+    alignment=read(out/'allocator_alignment_audit.json')
+    details += ['', '## Allocator alignment check', '', 'The native allocator rounding model in [PyTorch2.4.1](https://raw.githubusercontent.com/pytorch/pytorch/v2.4.1/c10/cuda/CUDACachingAllocator.cpp) rounds ordinary requested blocks to multiples of512 bytes. [The derived audit](allocator_alignment_audit.json) applies this formula separately to every recorded unique storage; it does not alter measured allocated bytes or the unrounded residuals.', '']
+    for model in MODELS:
+        rows=[r for r in alignment['rows'] if r['model']==model]
+        if rows:
+            matches=sum(r['remaining_loaded_delta_bytes']==r['remaining_warmed_delta_bytes']==0 for r in rows)
+            details.append(f'- {model}: rounded storage differences exactly match both loaded and warmed NAR-minus-Hadamard allocated differences for {matches}/{len(rows)} recorded phase/session pairs. This is evidence consistent with allocator alignment, not an allocator block snapshot or a complete account of external allocations.')
     details += ['', '## Explicit failures and limits', '',
                 'The operator boundary test is a deployment limitation even if random-weight forwards remain finite. Failed graph capture/replay cannot establish a graph speedup. Real FP16 base-checkpoint consistency cannot establish real INT4 model quality.', '',
                 'Full details: [completion and failures](completion_audit.json), [profiles](profile_summary.json), [kernel ratios and byte estimates](kernel_comparisons.json), [session metrics](metrics_summary.json).', '']

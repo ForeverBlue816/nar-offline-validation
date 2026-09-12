@@ -107,6 +107,20 @@ def main():
         warmed_delta=nar['warmed']['allocated']-had['warmed']['allocated']
         storage_delta=nar['storage']['unique_storage_bytes']-had['storage']['unique_storage_bytes']
         deltas.append({'model':model,'mode':mode,'phase':phase,'session':session,'factor_bytes':cat.get('nar_factors',0),'shared_h128_bytes':cat.get('h128',0),'removed_hadamard_buffer_bytes':removed,'expected_model_storage_delta_bytes':expected,'observed_model_loaded_allocated_delta_bytes':loaded,'unattributed_loaded_delta_bytes':loaded-expected,'partial_workspace_bytes':cat.get('partial_workspace',0),'partial_workspace_delta_bytes':partial_delta,'warmed_allocated_delta_bytes':warmed_delta,'warmed_unique_storage_delta_bytes':storage_delta,'unattributed_warmed_delta_bytes':warmed_delta-storage_delta,'factor_and_partial_unexplained_bytes':warmed_delta-expected-partial_delta,'inference_peak_allocated_delta_bytes':nar['inference_peak']['peak_allocated']-had['inference_peak']['peak_allocated'],'note':'Unattributed remainder is retained explicitly; allocator granularity and extension allocations are not conflated with tensor storage.'})
+    alignment=[]
+    for row in deltas:
+        key=(row['model'],'nar',row['mode'],row['phase'],row['session'])
+        pair=[indexed[(key[0],method,*key[2:])] for method in ['hadamard','nar']]
+        aligned=[];model_aligned=[];detail=[]
+        for record in pair:
+            entries=[dict(entry,category=category) for category,items in record['storage']['groups'].items() for entry in items]
+            rounding=lambda n:((n+511)//512)*512 if n else 0
+            aligned.append(sum(rounding(e['storage_bytes']) for e in entries))
+            model_entries=[e for e in entries if e['category'] not in ('cache_metadata','harness_static_io','kv_codes_or_fp16','kv_scales_offsets','partial_workspace')]
+            model_aligned.append(sum(rounding(e['storage_bytes']) for e in model_entries))
+            detail.append({'method':record['method'],'nonaligned_differing_entries':[{'name':e['name'],'bytes':e['storage_bytes'],'rounded_512_bytes':rounding(e['storage_bytes'])} for e in entries if e['storage_bytes']%512 and ('.mlp.down_proj.0.' in e['name'] or e['category']=='partial_workspace')]})
+        alignment.append({**{k:row[k] for k in ('model','mode','phase','session')},'rounded_warmed_storage_delta_bytes':aligned[1]-aligned[0],'observed_warmed_allocated_delta_bytes':row['warmed_allocated_delta_bytes'],'remaining_warmed_delta_bytes':row['warmed_allocated_delta_bytes']-(aligned[1]-aligned[0]),'rounded_model_storage_delta_bytes':model_aligned[1]-model_aligned[0],'observed_loaded_allocated_delta_bytes':row['observed_model_loaded_allocated_delta_bytes'],'remaining_loaded_delta_bytes':row['observed_model_loaded_allocated_delta_bytes']-(model_aligned[1]-model_aligned[0]),'differing_small_storage':detail})
+    write(out/'allocator_alignment_audit.json',{'rows':alignment,'source':'https://raw.githubusercontent.com/pytorch/pytorch/v2.4.1/c10/cuda/CUDACachingAllocator.cpp','source_symbols':['kMinBlockSize','round_size'],'formula':'sum(512*ceil(unique_storage_bytes/512)); compare matched NAR-Hadamard differences','interpretation':'Source-based native-allocator rounding model, checked against recorded allocations. Exact matching supports this attribution but is not a captured per-block allocator snapshot or a complete NVML/external-allocation audit. Original unrounded remainders stay in memory_deltas.json.'})
     write(out/'memory_deltas.json',{'rows':deltas,'units':'exact bytes; MB=1e6; same model/mode/phase/session only'})
     names={'fp16':'FP16','hadamard':'QuaRot Hadamard','nar':'PrismQuant k=8'}
     pre=[];dec=[];mem=[]
