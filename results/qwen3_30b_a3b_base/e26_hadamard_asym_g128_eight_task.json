@@ -1,0 +1,191 @@
+{
+  "activation_kind": "asymmetric_g128",
+  "benchmark": "eight_task",
+  "compute_dtype": "float32",
+  "effective_bits": {
+    "activation": 4.25,
+    "context": 2048,
+    "key": 5.171875,
+    "key_definition": "KIVI per-channel K, token group 32, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "value": 4.43359375,
+    "value_definition": "per-token V, group head_dim=128, fp16 scale+zero, newest 32 tokens bf16, at context 2048",
+    "weight": 4.15625,
+    "weight_correction": "written as 4.014960805976431 by a formula that counted one fp16 scale and int4 zero per output row; g128_asym stores them per group of 128 input channels. Corrected 2026-09-12 without re-running the evaluation; no measured quantity depends on it.",
+    "weight_definition": "GPTQ g128_asym over attention and all 128 experts per layer (fp16 scale + int4 zero per group); router gates bf16",
+    "weight_including_bf16_router": 4.16123264619268
+  },
+  "elapsed_seconds": 109487.64987325668,
+  "fold_dtype": "float32",
+  "git_commit": "7f2c868e05380d6a8ee7758b578aa735cb17bf82",
+  "gptq": {
+    "act_order": false,
+    "bits": 4,
+    "blocksize": 128,
+    "calibration_seed": 0,
+    "calibration_sequences": 128,
+    "excluded": [
+      "embed_tokens",
+      "lm_head",
+      "router gates (bf16)"
+    ],
+    "experts_with_pooled_hessian": 237,
+    "per_expert_hessian": true,
+    "percdamp": 0.01,
+    "pooled_hessian_below": 512,
+    "protocol": "g128_asym",
+    "sequence_length": 2048,
+    "weight_groupsize": 128,
+    "weight_sym": false
+  },
+  "gptq_protocol": "g128_asym",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+    "hostname": "gpu-node",
+    "nvidia_smi": [
+      "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02",
+      "1, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, GPU-REDACTED, 97887 MiB, 97244 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2,3",
+    "slurm_job_id": "149127",
+    "torch": "2.11.0+cu128"
+  },
+  "harness_commit": "b954108c9baaaa934b4ad842033b31a97ee30816",
+  "headline": 67.47057503701117,
+  "headline_metric": "eight-task mean",
+  "kv_policy": "E14 KIVI",
+  "model": "qwen3_30b_a3b_base",
+  "model_id": "Qwen/Qwen3-30B-A3B-Base",
+  "num_fewshot": 0,
+  "ranks": {
+    "r1_rank": null,
+    "r1_slots": 16,
+    "r2_rank": null,
+    "r4_per_expert": true,
+    "r4_rank": null,
+    "r4_rank_min": null,
+    "r4_slots": 6
+  },
+  "results": {
+    "arc_challenge": {
+      "acc,none": 0.515358361774744,
+      "acc_norm,none": 0.5537542662116041,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_challenge",
+      "name": "arc_challenge",
+      "sample_len": 1172
+    },
+    "arc_easy": {
+      "acc,none": 0.7832491582491582,
+      "acc_norm,none": 0.7904040404040404,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "arc_easy",
+      "name": "arc_easy",
+      "sample_len": 2376
+    },
+    "boolq": {
+      "acc,none": 0.8140672782874617,
+      "acc_stderr,none": "N/A",
+      "alias": "boolq",
+      "name": "boolq",
+      "sample_len": 3270
+    },
+    "hellaswag": {
+      "acc,none": 0.5954989046006771,
+      "acc_norm,none": 0.7923720374427405,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "hellaswag",
+      "name": "hellaswag",
+      "sample_len": 10042
+    },
+    "openbookqa": {
+      "acc,none": 0.338,
+      "acc_norm,none": 0.448,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "openbookqa",
+      "name": "openbookqa",
+      "sample_len": 500
+    },
+    "piqa": {
+      "acc,none": 0.7861806311207835,
+      "acc_norm,none": 0.7932535364526659,
+      "acc_norm_stderr,none": "N/A",
+      "acc_stderr,none": "N/A",
+      "alias": "piqa",
+      "name": "piqa",
+      "sample_len": 1838
+    },
+    "social_iqa": {
+      "acc,none": 0.5025588536335721,
+      "acc_stderr,none": "N/A",
+      "alias": "social_iqa",
+      "name": "social_iqa",
+      "sample_len": 1954
+    },
+    "winogrande": {
+      "acc,none": 0.7032359905288083,
+      "acc_stderr,none": "N/A",
+      "alias": "winogrande",
+      "name": "winogrande",
+      "sample_len": 1267
+    }
+  },
+  "rotation_checkpoint": "hadamard",
+  "row": "hadamard_asym_g128",
+  "sample_counts": {
+    "arc_challenge": {
+      "effective": 1172,
+      "original": 1172
+    },
+    "arc_easy": {
+      "effective": 2376,
+      "original": 2376
+    },
+    "boolq": {
+      "effective": 3270,
+      "original": 3270
+    },
+    "hellaswag": {
+      "effective": 10042,
+      "original": 10042
+    },
+    "openbookqa": {
+      "effective": 500,
+      "original": 500
+    },
+    "piqa": {
+      "effective": 1838,
+      "original": 1838
+    },
+    "social_iqa": {
+      "effective": 1954,
+      "original": 1954
+    },
+    "winogrande": {
+      "effective": 1267,
+      "original": 1267
+    }
+  },
+  "seed": 0,
+  "tasks": [
+    "arc_easy",
+    "arc_challenge",
+    "boolq",
+    "hellaswag",
+    "openbookqa",
+    "piqa",
+    "social_iqa",
+    "winogrande"
+  ],
+  "variant": "shrinkage"
+}

@@ -1535,9 +1535,7 @@ The six-task suite adds LAMBADA (accuracy 75.24 bf16, 74.15 Hadamard, 74.64 k=8,
 
 Single seed, one checkpoint. Summary: `results/mistral_7b_v03/e25_summary.csv`; completion marker `E25_DONE.json`.
 
-# E26 — Qwen3-30B-A3B-Base (interim)
-
-*Interim section, updated 2026-09-11. The Hadamard row and the quantized eight-task rows are still being evaluated; cells marked "running" are filled in when they land.*
+# E26 — Qwen3-30B-A3B-Base
 
 E26 takes the E22 pipeline to a mixture-of-experts model: `Qwen/Qwen3-30B-A3B-Base`. The attention path is E22's unchanged. Every expert is quantized, the router is not, and four things are specific to experts: the router keeps its decisions, each expert gets its own R4, cold experts are calibrated with shrinkage, and GPTQ runs per expert. Weights use GPTQ `g128_asym` over attention and all 128 experts per layer (4.156 bits), activations the asymmetric group-128 quantizer (4.25 bits), and the KV cache E14's KIVI. Containers are fp32, and the rotation-only control uses the exact transpose. Fused-kernel timing is skipped: a routed-expert GEMM with a per-expert rotation needs its own kernel, and that is outside this study.
 
@@ -1589,9 +1587,29 @@ Shrinkage is best, and the three variants differ by at most 0.023. How cold expe
 | Qwen3-30B-A3B-Base, W4A4KV4 | WikiText-2 | C4 | eight-task |
 |---|---:|---:|---:|
 | bf16 | 6.112 | 10.696 | 68.71 |
-| Hadamard | 6.678 | 11.473 | running |
-| NAR k=8 | 6.447 | 11.189 | 68.52 |
-| NAR k=max | 6.424 | 11.176 | 68.23 |
+| Hadamard | 6.678 | 11.473 | 67.47 |
+| NAR k=8 | 6.447 | 11.189 | **68.52** |
+| NAR k=max | **6.424** | **11.176** | 68.23 |
+| NAR best − Hadamard | −0.254 | −0.297 | +1.04 |
+
+| Eight-task detail | ARC-e | ARC-c | BoolQ | HellaSwag | OBQA | PIQA | SIQA | WinoGrande |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| bf16 | 79.55 | 57.68 | 81.41 | 81.40 | 44.00 | 80.96 | 52.15 | 72.53 |
+| Hadamard | 79.04 | 55.38 | 81.41 | 79.24 | 44.80 | 79.33 | 50.26 | 70.32 |
+| NAR k=8 | 79.29 | 57.25 | 81.90 | 80.08 | 45.40 | 80.30 | 51.28 | 72.61 |
+| NAR k=max | 79.84 | 55.63 | 83.55 | 79.60 | 44.40 | 79.60 | 51.94 | 71.27 |
+
+## Reading
+
+**NAR beats Hadamard on all three benchmarks.** On perplexity the ordering is the usual one and the margins are ordinary: k=max is 0.254 below Hadamard on WikiText-2 and 0.297 below on C4, recovering 45% and 38% of Hadamard's degradation from bf16. The eight-task mean is what is unusual: Hadamard costs 1.24 points against bf16 and NAR k=8 gives back 1.04 of them, landing 0.19 below bf16. That 1.04-point gap is 2.4 standard errors of the mean (the binomial standard error of the eight-task mean is 0.433 points here), where the corresponding gap on Mistral-7B was 0.38 and inside one standard error. It is visible per task rather than carried by one benchmark: k=8 is above Hadamard on all eight, by 0.25 to 2.29 points. In absolute terms the gap is smaller than the dense Qwen3-8B's 2.77 points, because Hadamard damages this model far less to begin with; as a fraction of what Hadamard loses it is the largest of the four models measured under this protocol (84%, against 83% on Llama-3.1-70B, 76% on Qwen3-8B and 26% on Mistral-7B).
+
+**The two NAR rows split between the two kinds of benchmark.** k=max wins both perplexities and k=8 wins the eight-task mean by 0.29. The two rows share their per-expert R4 and differ only in R1 (8 or 16 of 16 slots), so this is the R1 rank alone, and the difference is inside one standard error on the accuracy suite.
+
+**Against the dense Qwen3 family.** Under the identical protocol, tasks and bit widths, [E22](#e22--the-qwen3-base-family-under-one-protocol)'s dense Qwen3-8B-Base loses 3.62 eight-task points to Hadamard and NAR recovers 76% of them; the 30B MoE loses only 1.24 and NAR recovers 84%. The MoE is the easier model to quantize of the two — its Hadamard row is already close to bf16 — and NAR's relative advantage survives that. The same holds on perplexity: Hadamard costs the dense 8B 2.60 WikiText-2 points and the MoE 0.57.
+
+**Effective widths.** Weights 4.15625 bits (4.16123 counting the bf16 router gates), activations 4.25, K 5.171875 and V 4.43359375 at context 2048. An earlier version of `effective_bits` in `nar/e26_moe.py` reported the weight width as 4.015 because it counted one fp16 scale and one int4 zero per **output row** rather than per group of 128 input channels; g128_asym stores them per group, and every input dimension here (2048, 512, 768) is a multiple of 128, so the width is exactly E14's protocol constant. The prose above and in the section header always carried 4.156; only the `effective_bits` block of the stored result JSONs was wrong, and those eleven files were corrected in place on 2026-09-12 without re-running anything. No measured quantity depends on the field.
+
+Single seed, one checkpoint per rotation. Per-row results are `results/qwen3_30b_a3b_base/e26_<row>_<benchmark>.json`; the per-expert tables are `e26_expert_f.csv`, `e26_expert_range_law.csv` and `e26_expert_routing_counts.csv`; the routing verdict is `e26_control_verdict.json`.
 
 # Infrastructure defects found and fixed during E19
 
