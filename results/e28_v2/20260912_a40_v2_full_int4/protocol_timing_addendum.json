@@ -1,0 +1,8 @@
+{
+  "frozen_at": "2026-09-12T02:44:40.262259+00:00",
+  "before_formal_timing": true,
+  "prefill_cache": "Preallocated once at the same fixed capacity; pages/scales/flags reset outside timer. Full forward, cache writes and last-position logits are timed.",
+  "decode_cache": "Full prefix recomputed before each repetition, after complete cache clear. The120 causal calls and their evolving KV writes are timed.",
+  "numerical_prewarm": "Two prefill+two-token runs stabilize TorchScript shape specialization before exact cache reset/path audits. Formal10 complete warmups and50 samples unchanged.",
+  "comparison_to_old": "V2 includes corrected RoPE, byte-identical INT4 state, preallocated cache and shared metadata. Legacy-wrapper diagnostic is not an exact reproduction of the old random initialization/RoPE."
+}

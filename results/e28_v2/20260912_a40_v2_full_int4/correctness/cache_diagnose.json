@@ -1,0 +1,1874 @@
+{
+  "order_legacy": [
+    true,
+    true,
+    false,
+    true
+  ],
+  "pairs": [
+    {
+      "decode": [
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "588b40c532044bba7820b8a6e27fc975ab889668be510d655a9b25147dd9da19",
+          "scales_sha256": "62d0512b0380fb22ad4cbef206f33bf6e1a7f1e189c7c2b477ef1a478617e77d"
+        },
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        }
+      ],
+      "differences": [
+        {
+          "count": 6680,
+          "first_indices": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              18
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              22
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              41
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              2,
+              12
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              3,
+              46
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              7,
+              39
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              11
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              11,
+              48
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              11,
+              59
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              13,
+              24
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              13,
+              38
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              26,
+              58
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              27,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              33,
+              25
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              33,
+              53
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              36,
+              55
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              61,
+              11
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1,
+              6
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              5,
+              58
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              8,
+              10
+            ]
+          ],
+          "first_values": [
+            [
+              136.0,
+              137.0
+            ],
+            [
+              172.0,
+              171.0
+            ],
+            [
+              140.0,
+              124.0
+            ],
+            [
+              104.0,
+              88.0
+            ],
+            [
+              72.0,
+              73.0
+            ],
+            [
+              162.0,
+              178.0
+            ],
+            [
+              172.0,
+              173.0
+            ],
+            [
+              118.0,
+              119.0
+            ],
+            [
+              169.0,
+              185.0
+            ],
+            [
+              134.0,
+              118.0
+            ],
+            [
+              152.0,
+              153.0
+            ],
+            [
+              133.0,
+              117.0
+            ],
+            [
+              166.0,
+              150.0
+            ],
+            [
+              108.0,
+              107.0
+            ],
+            [
+              40.0,
+              56.0
+            ],
+            [
+              106.0,
+              122.0
+            ],
+            [
+              172.0,
+              156.0
+            ],
+            [
+              198.0,
+              182.0
+            ],
+            [
+              40.0,
+              39.0
+            ],
+            [
+              103.0,
+              87.0
+            ]
+          ],
+          "prefill_count": 345,
+          "tensor": 0
+        },
+        {
+          "count": 820,
+          "first_indices": [
+            [
+              2,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              2,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              2,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              3,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              3,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              4,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              4,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              5,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              5,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              6,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              6,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              7,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              7,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              0,
+              1
+            ]
+          ],
+          "first_values": [
+            [
+              0.341064453125,
+              0.348388671875
+            ],
+            [
+              2.1875,
+              2.2265625
+            ],
+            [
+              0.56201171875,
+              0.5400390625
+            ],
+            [
+              3.892578125,
+              3.84375
+            ],
+            [
+              0.47802734375,
+              0.426025390625
+            ],
+            [
+              2.861328125,
+              2.208984375
+            ],
+            [
+              0.38525390625,
+              0.38330078125
+            ],
+            [
+              2.828125,
+              2.560546875
+            ],
+            [
+              0.4521484375,
+              0.41259765625
+            ],
+            [
+              2.162109375,
+              1.806640625
+            ],
+            [
+              0.341552734375,
+              0.35546875
+            ],
+            [
+              1.66796875,
+              2.07421875
+            ],
+            [
+              0.395751953125,
+              0.3759765625
+            ],
+            [
+              2.478515625,
+              2.435546875
+            ],
+            [
+              0.442626953125,
+              0.409912109375
+            ],
+            [
+              2.537109375,
+              2.09765625
+            ],
+            [
+              0.182373046875,
+              0.1990966796875
+            ],
+            [
+              0.80224609375,
+              0.71337890625
+            ],
+            [
+              0.1895751953125,
+              0.1793212890625
+            ],
+            [
+              0.68701171875,
+              0.646484375
+            ]
+          ],
+          "prefill_count": 0,
+          "tensor": 1
+        }
+      ],
+      "legacy": [
+        true,
+        true
+      ],
+      "prefill": [
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "eecfef7b17b3fec18654367cda44915d37f5f9cf010362e32273f2f7a56f2f0d",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        },
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        }
+      ],
+      "runs": [
+        0,
+        1
+      ]
+    },
+    {
+      "decode": [
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        },
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        }
+      ],
+      "differences": [
+        {
+          "count": 0,
+          "first_indices": [],
+          "first_values": [],
+          "prefill_count": 0,
+          "tensor": 0
+        },
+        {
+          "count": 0,
+          "first_indices": [],
+          "first_values": [],
+          "prefill_count": 0,
+          "tensor": 1
+        }
+      ],
+      "legacy": [
+        true,
+        false
+      ],
+      "prefill": [
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        },
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        }
+      ],
+      "runs": [
+        1,
+        2
+      ]
+    },
+    {
+      "decode": [
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        },
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        }
+      ],
+      "differences": [
+        {
+          "count": 0,
+          "first_indices": [],
+          "first_values": [],
+          "prefill_count": 0,
+          "tensor": 0
+        },
+        {
+          "count": 0,
+          "first_indices": [],
+          "first_values": [],
+          "prefill_count": 0,
+          "tensor": 1
+        }
+      ],
+      "legacy": [
+        false,
+        true
+      ],
+      "prefill": [
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        },
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        }
+      ],
+      "runs": [
+        2,
+        3
+      ]
+    },
+    {
+      "decode": [
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "588b40c532044bba7820b8a6e27fc975ab889668be510d655a9b25147dd9da19",
+          "scales_sha256": "62d0512b0380fb22ad4cbef206f33bf6e1a7f1e189c7c2b477ef1a478617e77d"
+        },
+        {
+          "length": 129,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1,
+              2
+            ],
+            "kv_indptr": [
+              0,
+              3
+            ],
+            "last_page_offset": [
+              1
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "d00e2e38683e9eced8fa38a430cba009c2bbf687fa4872a813588e49fdea96b5",
+          "scales_sha256": "922978e6272d400fa365e4022924183593b20bbd9d041e7a7e843671009055e1"
+        }
+      ],
+      "differences": [
+        {
+          "count": 6680,
+          "first_indices": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              18
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              22
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              1,
+              41
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              2,
+              12
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              3,
+              46
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              7,
+              39
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              10,
+              11
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              11,
+              48
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              11,
+              59
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              13,
+              24
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              13,
+              38
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              26,
+              58
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              27,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              33,
+              25
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              33,
+              53
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              36,
+              55
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              61,
+              11
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              1,
+              6
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              5,
+              58
+            ],
+            [
+              0,
+              0,
+              0,
+              1,
+              8,
+              10
+            ]
+          ],
+          "first_values": [
+            [
+              136.0,
+              137.0
+            ],
+            [
+              172.0,
+              171.0
+            ],
+            [
+              140.0,
+              124.0
+            ],
+            [
+              104.0,
+              88.0
+            ],
+            [
+              72.0,
+              73.0
+            ],
+            [
+              162.0,
+              178.0
+            ],
+            [
+              172.0,
+              173.0
+            ],
+            [
+              118.0,
+              119.0
+            ],
+            [
+              169.0,
+              185.0
+            ],
+            [
+              134.0,
+              118.0
+            ],
+            [
+              152.0,
+              153.0
+            ],
+            [
+              133.0,
+              117.0
+            ],
+            [
+              166.0,
+              150.0
+            ],
+            [
+              108.0,
+              107.0
+            ],
+            [
+              40.0,
+              56.0
+            ],
+            [
+              106.0,
+              122.0
+            ],
+            [
+              172.0,
+              156.0
+            ],
+            [
+              198.0,
+              182.0
+            ],
+            [
+              40.0,
+              39.0
+            ],
+            [
+              103.0,
+              87.0
+            ]
+          ],
+          "prefill_count": 345,
+          "tensor": 0
+        },
+        {
+          "count": 820,
+          "first_indices": [
+            [
+              2,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              2,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              2,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              3,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              3,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              4,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              4,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              5,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              5,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              6,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              6,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              0,
+              7,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              0,
+              7,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              0,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              0,
+              0
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              0,
+              1
+            ]
+          ],
+          "first_values": [
+            [
+              0.341064453125,
+              0.348388671875
+            ],
+            [
+              2.1875,
+              2.2265625
+            ],
+            [
+              0.56201171875,
+              0.5400390625
+            ],
+            [
+              3.892578125,
+              3.84375
+            ],
+            [
+              0.47802734375,
+              0.426025390625
+            ],
+            [
+              2.861328125,
+              2.208984375
+            ],
+            [
+              0.38525390625,
+              0.38330078125
+            ],
+            [
+              2.828125,
+              2.560546875
+            ],
+            [
+              0.4521484375,
+              0.41259765625
+            ],
+            [
+              2.162109375,
+              1.806640625
+            ],
+            [
+              0.341552734375,
+              0.35546875
+            ],
+            [
+              1.66796875,
+              2.07421875
+            ],
+            [
+              0.395751953125,
+              0.3759765625
+            ],
+            [
+              2.478515625,
+              2.435546875
+            ],
+            [
+              0.442626953125,
+              0.409912109375
+            ],
+            [
+              2.537109375,
+              2.09765625
+            ],
+            [
+              0.182373046875,
+              0.1990966796875
+            ],
+            [
+              0.80224609375,
+              0.71337890625
+            ],
+            [
+              0.1895751953125,
+              0.1793212890625
+            ],
+            [
+              0.68701171875,
+              0.646484375
+            ]
+          ],
+          "prefill_count": 0,
+          "tensor": 1
+        }
+      ],
+      "legacy": [
+        true,
+        true
+      ],
+      "prefill": [
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "eecfef7b17b3fec18654367cda44915d37f5f9cf010362e32273f2f7a56f2f0d",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        },
+        {
+          "length": 128,
+          "metadata": {
+            "kv_indices": [
+              0,
+              1
+            ],
+            "kv_indptr": [
+              0,
+              2
+            ],
+            "last_page_offset": [
+              64
+            ]
+          },
+          "needs_init": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "pages_sha256": "a105b3dec5eaa6de9792a36c3bfd7d0b1f72a1ccd9822741cc366e64f0017c0b",
+          "scales_sha256": "30740e78ff15a901fe83ace5a0cc16a0a7d9d31e6d9ce276912ead38d44d64ab"
+        }
+      ],
+      "runs": [
+        0,
+        3
+      ]
+    }
+  ]
+}

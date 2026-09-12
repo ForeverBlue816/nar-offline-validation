@@ -1,0 +1,10 @@
+Separate four-step profiler trace; profiler perturbation prevents replacing steady-state wall measurements with these times.
+
+| Model | Method | Status | Kernel ms/step | Kernels/4 steps | Gap ms/4 steps |
+| --- | --- | --- | --- | --- | --- |
+| 3b | fp16 | PENDING | N/A | N/A | N/A |
+| 3b | hadamard | PENDING | N/A | N/A | N/A |
+| 3b | nar | PENDING | N/A | N/A | N/A |
+| 8b | fp16 | PENDING | N/A | N/A | N/A |
+| 8b | hadamard | PENDING | N/A | N/A | N/A |
+| 8b | nar | PENDING | N/A | N/A | N/A |

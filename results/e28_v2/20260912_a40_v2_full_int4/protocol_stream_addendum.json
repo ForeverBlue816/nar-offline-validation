@@ -1,0 +1,10 @@
+{
+  "frozen_at": "2026-09-12T03:44:35.340058+00:00",
+  "stage": "P1 conditional bounded adapter",
+  "trigger": "Static audit found nine backend launches using default stream; original binary capture tests remain separately recorded.",
+  "attempts": "One isolated current-stream patch; no other kernel/algorithm change or tuning.",
+  "unchanged": "Original P0 binary/environment and all primary timing records.",
+  "validation": "Same all-three-method full one-step growing-cache A-B-A test, prefixes128/2048, steps1,2,9,64,65,128, exact cache and hidden/logit relativeL2<=0.002; source and binary hashes separate.",
+  "timing_condition": "Only after all three methods of a model pass, same patched binary eager and graph, 10 complete warmups+50 runs+3 balanced sessions, 2048prefix+128steps discard8; graph metadata updates included.",
+  "native_integer_contract": "No repair of accumulator narrowing, quantizer or paper-format incompatibility is attempted."
+}

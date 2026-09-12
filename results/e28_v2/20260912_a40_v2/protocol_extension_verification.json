@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-09-12T02:53:43.069186+00:00",
+  "purpose": "Verify only extra shapes implied by the two pre-specified P2 workloads, before their timings",
+  "tokens": [
+    8,
+    8192,
+    16384
+  ],
+  "shape_sources": {
+    "8": "batch8 one-token decode",
+    "8192": "batch1 prefix8192",
+    "16384": "batch8 prefix2048"
+  },
+  "configs": "Existing nearest-log-token NARDownTransform.plan; no search or tuning",
+  "thresholds": "Same frozen L2<=.002 and actual quantizer code-match>=.999",
+  "coverage": "All layers, unchanged real8192 rows repeated only to exercise larger launch shapes, same five pressure cases",
+  "priority": "After P0; no new workload grid"
+}

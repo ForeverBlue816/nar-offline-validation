@@ -1,0 +1,627 @@
+{
+  "environment": {
+    "affinity": [
+      32,
+      33,
+      34,
+      35
+    ],
+    "capability": [
+      8,
+      6
+    ],
+    "cgroup": "0::/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_6/user/task_0\n",
+    "command": [
+      "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/activation_diagnose.py",
+      "--model",
+      "8b",
+      "--run",
+      "/home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2"
+    ],
+    "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  40\nOn-line CPU(s) list:                     0-39\nVendor ID:                               GenuineIntel\nModel name:                              QEMU Virtual CPU version 2.5+\nCPU family:                              15\nModel:                                   107\nThread(s) per core:                      1\nCore(s) per socket:                      20\nSocket(s):                               2\nStepping:                                1\nBogoMIPS:                                5799.99\nFlags:                                   fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm constant_tsc nopl xtopology cpuid tsc_known_freq pni ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c hypervisor lahf_lm abm cpuid_fault pti bmi1 avx2 bmi2\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               1.3 MiB (40 instances)\nL1i cache:                               1.3 MiB (40 instances)\nL2 cache:                                160 MiB (40 instances)\nL3 cache:                                32 MiB (2 instances)\nNUMA node(s):                            2\nNUMA node0 CPU(s):                       0-19\nNUMA node1 CPU(s):                       20-39\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             KVM: Mitigation: VMX unsupported\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Unknown: No mitigations\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected",
+    "cpu_max": null,
+    "cuda_runtime": "12.4",
+    "device": "NVIDIA A40",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "MKL_NUM_THREADS": "4",
+      "OMP_NUM_THREADS": "4",
+      "SLURM_CONF": "/var/spool/slurmd/conf-cache/slurm.conf",
+      "SLURM_CPUS_ON_NODE": "4",
+      "SLURM_CPUS_PER_TASK": "4",
+      "SLURM_CPU_BIND": "quiet,mask_cpu:0x0F00000000",
+      "SLURM_CPU_BIND_LIST": "0x0F00000000",
+      "SLURM_CPU_BIND_TYPE": "mask_cpu:",
+      "SLURM_CPU_BIND_VERBOSE": "quiet",
+      "SLURM_DISTRIBUTION": "cyclic",
+      "SLURM_GPUS": "a40:1",
+      "SLURM_GPUS_ON_NODE": "1",
+      "SLURM_GTIDS": "0",
+      "SLURM_JOBID": "150777",
+      "SLURM_JOB_CPUS_PER_NODE": "4",
+      "SLURM_JOB_END_TIME": "1789222432",
+      "SLURM_JOB_GID": "295800911",
+      "SLURM_JOB_ID": "150777",
+      "SLURM_JOB_NAME": "env",
+      "SLURM_JOB_NODELIST": "gpu-a40-1",
+      "SLURM_JOB_PARTITION": "cluster02",
+      "SLURM_JOB_START_TIME": "1789179232",
+      "SLURM_JOB_UID": "295800911",
+      "SLURM_JOB_USER": "yanlongc",
+      "SLURM_LAUNCH_NODE_IPADDR": "11.11.11.129",
+      "SLURM_LOCALID": "0",
+      "SLURM_MEM_PER_NODE": "40960",
+      "SLURM_NNODES": "1",
+      "SLURM_NODEID": "0",
+      "SLURM_NODELIST": "gpu-a40-1",
+      "SLURM_NPROCS": "1",
+      "SLURM_NTASKS": "1",
+      "SLURM_PRIO_PROCESS": "0",
+      "SLURM_PROCID": "0",
+      "SLURM_SRUN_COMM_HOST": "11.11.11.129",
+      "SLURM_SRUN_COMM_PORT": "35027",
+      "SLURM_STEPID": "6",
+      "SLURM_STEP_GPUS": "8",
+      "SLURM_STEP_ID": "6",
+      "SLURM_STEP_LAUNCHER_PORT": "35027",
+      "SLURM_STEP_NODELIST": "gpu-a40-1",
+      "SLURM_STEP_NUM_NODES": "1",
+      "SLURM_STEP_NUM_TASKS": "1",
+      "SLURM_STEP_TASKS_PER_NODE": "1",
+      "SLURM_TASKS_PER_NODE": "1",
+      "SLURM_TASK_PID": "2787223",
+      "SLURM_TOPOLOGY_ADDR": "gpu-a40-1",
+      "SLURM_TOPOLOGY_ADDR_PATTERN": "node",
+      "SLURM_TRES_PER_TASK": "cpu:4",
+      "SLURM_UMASK": "0002"
+    },
+    "execution_python_sha256": {
+      "quarot-llama3/e28_v2/__init__.py": "99cd857bd33dd85f4526a93ec3aa6c1a911423c4dfd6efc8c488d058951cf8ec",
+      "quarot-llama3/e28_v2/activation_diagnose.py": "ed52cde64ab53799c118f4b2da6432c20ee8b91217b660b181afd1aa1bb6bb87",
+      "quarot-llama3/e28_v2/audit.py": "38dd7ce249811a6c0fa7915465e1e97b664623ce00f661bdc1e0800439bcae29",
+      "quarot-llama3/e28_v2/benchmark.py": "4b71652eae4ee99c34d2b5e1a16d425be5deacc1558c6c7649d1d8eb12d7a4e1",
+      "quarot-llama3/e28_v2/cache_adapter.py": "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe",
+      "quarot-llama3/e28_v2/cache_diagnose.py": "df27eb25f3ad8844d8f8373048b9861d087f41e3f6089192417efedddb49ecfc",
+      "quarot-llama3/e28_v2/checkpoint.py": "ea3704f3e5f2584e41f359f8ca4cbffa5f845b6b6e5d816237ae58c68813ebbc",
+      "quarot-llama3/e28_v2/collect.py": "e7e678aba3b53675a6dd2727438ea5727c4e5f442c3faf5a4ffdbd25456f110e",
+      "quarot-llama3/e28_v2/common.py": "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8",
+      "quarot-llama3/e28_v2/graph.py": "a424981d1a568681e0542c59c368a640db2e92e70eaa8065972a4413af1ef749",
+      "quarot-llama3/e28_v2/kernel_bench.py": "fbb244b60bc95cae48a7c7c455ce7be692deacdaa47b4f5b380bbacca62afffc",
+      "quarot-llama3/e28_v2/pipeline.py": "c2f96809c8a884a7b85ec9fa8f954b16e74355c5808f7e0fb77f8a79e51abee9",
+      "quarot-llama3/e28_v2/profile.py": "680de3b2e83cc5a0e53b262ea453e1237f412aa03787fcd6b654398365f990a4",
+      "quarot-llama3/e28_v2/verify.py": "c655b519e550302c946065b81e7543b48df60df332503ed64f4bfc0203f7619b"
+    },
+    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 77.29 W, 32, 1740 MHz, 7251 MHz, P0, 7855 MiB",
+    "host": "gpu-a40-1.cluster02.eee.ntu.edu.sg",
+    "nvcc": "UNAVAILABLE: [Errno 2] No such file or directory: 'nvcc'",
+    "pid": 2787223,
+    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2787223, /projects/nar/nar-validation/e28-env/bin/python, 7846 MiB",
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 03:06:34 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1612361805727 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1014199801712 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
+    "timestamp": "2026-09-12T03:06:34.146481+00:00",
+    "torch_interop_threads": 1,
+    "torch_threads": 4,
+    "versions": {
+      "fast-hadamard-transform": "1.0.4.post1",
+      "flash-attn": "2.6.3",
+      "flashinfer": null,
+      "quarot": "0.0.0",
+      "torch": "2.4.1+cu124",
+      "transformers": "4.36.2",
+      "triton": "3.0.0"
+    },
+    "weight_initialization": "legacy_bytes_1_to_6"
+  },
+  "events": [
+    {
+      "event": "R4_input",
+      "layer": 0,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 459.4931640625,
+      "x_finite": true,
+      "x_max_abs": 431.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 2742.0,
+      "module": "residual_layer_0",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 1,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 755.8577880859375,
+      "x_finite": true,
+      "x_max_abs": 436.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 4904.0,
+      "module": "residual_layer_1",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 2,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 734.2606811523438,
+      "x_finite": true,
+      "x_max_abs": 453.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 7288.0,
+      "module": "residual_layer_2",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 3,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 642.1907958984375,
+      "x_finite": true,
+      "x_max_abs": 457.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 9584.0,
+      "module": "residual_layer_3",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 4,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 825.2765502929688,
+      "x_finite": true,
+      "x_max_abs": 454.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 12064.0,
+      "module": "residual_layer_4",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 5,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 752.8118896484375,
+      "x_finite": true,
+      "x_max_abs": 450.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 13968.0,
+      "module": "residual_layer_5",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 6,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 744.94580078125,
+      "x_finite": true,
+      "x_max_abs": 464.0
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 16160.0,
+      "module": "residual_layer_6",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 7,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 601.6091918945312,
+      "x_finite": true,
+      "x_max_abs": 458.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 18208.0,
+      "module": "residual_layer_7",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 8,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 1132.2032470703125,
+      "x_finite": true,
+      "x_max_abs": 463.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 20480.0,
+      "module": "residual_layer_8",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 9,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 520.3184204101562,
+      "x_finite": true,
+      "x_max_abs": 459.0
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 22592.0,
+      "module": "residual_layer_9",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 10,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 738.8697509765625,
+      "x_finite": true,
+      "x_max_abs": 463.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 24944.0,
+      "module": "residual_layer_10",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 11,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 724.6167602539062,
+      "x_finite": true,
+      "x_max_abs": 459.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 27632.0,
+      "module": "residual_layer_11",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 12,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 692.39111328125,
+      "x_finite": true,
+      "x_max_abs": 465.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 29392.0,
+      "module": "residual_layer_12",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 13,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 653.47607421875,
+      "x_finite": true,
+      "x_max_abs": 462.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 30928.0,
+      "module": "residual_layer_13",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 14,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 665.9588623046875,
+      "x_finite": true,
+      "x_max_abs": 464.0
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 33504.0,
+      "module": "residual_layer_14",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 15,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 838.2733764648438,
+      "x_finite": true,
+      "x_max_abs": 472.0
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 35552.0,
+      "module": "residual_layer_15",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 16,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 824.5390014648438,
+      "x_finite": true,
+      "x_max_abs": 467.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 37376.0,
+      "module": "residual_layer_16",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 17,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 691.89111328125,
+      "x_finite": true,
+      "x_max_abs": 464.0
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 40160.0,
+      "module": "residual_layer_17",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 18,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 780.3693237304688,
+      "x_finite": true,
+      "x_max_abs": 463.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 41920.0,
+      "module": "residual_layer_18",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 19,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 866.2232666015625,
+      "x_finite": true,
+      "x_max_abs": 462.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 43520.0,
+      "module": "residual_layer_19",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 20,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 954.7723999023438,
+      "x_finite": true,
+      "x_max_abs": 477.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 45984.0,
+      "module": "residual_layer_20",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 21,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 596.1505737304688,
+      "x_finite": true,
+      "x_max_abs": 467.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 47808.0,
+      "module": "residual_layer_21",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 22,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 651.9766845703125,
+      "x_finite": true,
+      "x_max_abs": 464.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 50144.0,
+      "module": "residual_layer_22",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 23,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 609.83984375,
+      "x_finite": true,
+      "x_max_abs": 467.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 52288.0,
+      "module": "residual_layer_23",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 24,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 985.8829345703125,
+      "x_finite": true,
+      "x_max_abs": 476.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 54432.0,
+      "module": "residual_layer_24",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 25,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 782.9070434570312,
+      "x_finite": true,
+      "x_max_abs": 476.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 55360.0,
+      "module": "residual_layer_25",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 26,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 752.9669189453125,
+      "x_finite": true,
+      "x_max_abs": 479.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 57440.0,
+      "module": "residual_layer_26",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 27,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 288.87548828125,
+      "x_finite": true,
+      "x_max_abs": 465.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 59904.0,
+      "module": "residual_layer_27",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 28,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 852.5728149414062,
+      "x_finite": true,
+      "x_max_abs": 470.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 61312.0,
+      "module": "residual_layer_28",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 29,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 811.3825073242188,
+      "x_finite": true,
+      "x_max_abs": 466.5
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 62976.0,
+      "module": "residual_layer_29",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 30,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 560.3471069335938,
+      "x_finite": true,
+      "x_max_abs": 481.25
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": true,
+      "max_abs": 64416.0,
+      "module": "residual_layer_30",
+      "nonfinite_count": 0
+    },
+    {
+      "event": "R4_input",
+      "layer": 31,
+      "u_exceeds_fp16": false,
+      "u_max_abs": 775.3663940429688,
+      "x_finite": true,
+      "x_max_abs": 476.75
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": false,
+      "max_abs": null,
+      "module": "residual_layer_31",
+      "nonfinite_count": 234
+    },
+    {
+      "event": "nonfinite_output",
+      "module": "residual_layer_31",
+      "type": "LlamaDecoderLayer"
+    },
+    {
+      "event": "residual_or_norm",
+      "finite": false,
+      "max_abs": null,
+      "module": "final_norm",
+      "nonfinite_count": 234
+    },
+    {
+      "event": "nonfinite_output",
+      "module": "final_norm",
+      "type": "LlamaRMSNorm"
+    },
+    {
+      "event": "nonfinite_output",
+      "module": "lm_head",
+      "type": "Linear"
+    }
+  ],
+  "first_nonfinite": {
+    "event": "nonfinite_output",
+    "module": "residual_layer_31",
+    "type": "LlamaDecoderLayer"
+  },
+  "logits_finite": false,
+  "method": "nar",
+  "model": "8b"
+}

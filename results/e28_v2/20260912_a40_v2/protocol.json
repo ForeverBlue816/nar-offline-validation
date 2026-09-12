@@ -1,0 +1,290 @@
+{
+  "core": {
+    "decode": {
+      "batch": 1,
+      "discard": 8,
+      "prefix": 2048,
+      "steps": 128
+    },
+    "prefill": {
+      "batch": [
+        1,
+        16
+      ],
+      "length": 2048
+    },
+    "runs": 50,
+    "sessions": 3,
+    "warmup": 10
+  },
+  "decode_reset": "zero all pages/scales; length=0; all needs_init=True; invalidate metadata; recompute complete prefix outside timer; compare full storage hashes across reset",
+  "environment": "existing e28-env torch2.4.1+cu124, triton3.0.0; no dependency upgrade",
+  "events": "one separate complete run after primary timing and memory capture; report CUDA event elapsed, not pure arithmetic",
+  "exclusions": [
+    "No deleting slow runs",
+    "Nonfinite forwards/reset mismatches invalid, raw diagnostics retained",
+    "Unverified kernels excluded from valid rankings",
+    "Unavailable data null+reason",
+    "No graph results before growing-cache validation",
+    "OOM not rescued by changing one row workload"
+  ],
+  "extensions": [
+    {
+      "batch": 8,
+      "prefix": 2048,
+      "runs": 50,
+      "sessions": 1,
+      "steps": 128,
+      "warmup": 10
+    },
+    {
+      "batch": 1,
+      "prefix": 8192,
+      "runs": 50,
+      "sessions": 1,
+      "steps": 128,
+      "warmup": 10
+    }
+  ],
+  "frozen_at": "2026-09-12T02:13:53.503035+00:00",
+  "graph": "bounded full-one-step capture using existing backend only; dynamic GPU position/page metadata; validate A-B-A at steps1,2,9,64,128 and page boundary; no timing if invalid",
+  "hardware": {
+    "capability": [
+      8,
+      6
+    ],
+    "cpus": 4,
+    "interop_threads": 1,
+    "name": "NVIDIA A40",
+    "same_physical_gpu": "one Slurm allocation for every formal phase and all three sessions",
+    "torch_threads": 4
+  },
+  "legacy_diagnostic": {
+    "description": "Original per-layer KV wrapper and per-step synchronization; v2 corrected RoPE/state; one diagnostic sample, not a core speedup denominator",
+    "runs": 1,
+    "warmup": 1
+  },
+  "memory": "independent phase processes; original RoPE capacity; load/warmed/inference allocated+reserved, process nvidia-smi separate; unique storage bytes; factors FP32 source released; shared H128/partial once; allocator outside tensors explicitly unattributed; GB=1e9",
+  "method_order": [
+    [
+      "fp16",
+      "hadamard",
+      "nar"
+    ],
+    [
+      "hadamard",
+      "nar",
+      "fp16"
+    ],
+    [
+      "nar",
+      "fp16",
+      "hadamard"
+    ]
+  ],
+  "methods": [
+    "fp16",
+    "hadamard",
+    "nar"
+  ],
+  "microbenchmark": {
+    "ablation": [
+      "generic_vs_prebound_identical_kernel",
+      "shuffle_vs_tc_same_fp16_io"
+    ],
+    "fixed_e17_b": {
+      "block_t": 8,
+      "num_stages": 2,
+      "num_warps": 4
+    },
+    "fixed_shuffle_b": {
+      "block_t": 8,
+      "num_stages": 2,
+      "num_warps": 4
+    },
+    "layer": 0,
+    "runs": 50,
+    "scope": [
+      "E28 slot",
+      "E28 frontend",
+      "E17 native"
+    ],
+    "sessions": 3,
+    "warmup": 10
+  },
+  "models": {
+    "3b": "llama32_3b",
+    "8b": "llama31_8b"
+  },
+  "modes": [
+    "eager_sequence",
+    "eager_step_sync"
+  ],
+  "prefill_mode": "eager_sequence",
+  "priority": [
+    "P0",
+    "P1",
+    "P2"
+  ],
+  "r4_cases": [
+    "real",
+    "zero",
+    "constant",
+    "rounding_boundary",
+    "common_offset_small_residual",
+    "outlier"
+  ],
+  "r4_shapes": [
+    1,
+    2048,
+    32768
+  ],
+  "rank": 8,
+  "real_activation_policy": "E27 matching model/down/layer BF16 replay, all8192 recorded rows; T32768 repeats these unchanged four times to exercise actual launch shape; not32768 independent samples",
+  "run_id": "20260912_a40_v2",
+  "schema": 2,
+  "scope_limits": [
+    "No new GEMM/backend/training/calibration",
+    "No complete PPL/task sweep",
+    "No wide autotuning",
+    "No edits to E17/E22/E26 histories or results/e28/report_e28.md"
+  ],
+  "seed": 0,
+  "selected_configs": {
+    "3b": {
+      "1": {
+        "kernel_a_ms": 0.01358984224498272,
+        "pipeline_ms": 0.019488509744405746,
+        "proj": {
+          "block_d": 64,
+          "block_t": 16,
+          "num_stages": 4,
+          "num_warps": 4,
+          "splits": 4
+        },
+        "tile": {
+          "block_t": 16,
+          "num_stages": 2,
+          "num_warps": 4,
+          "use_tc": true
+        }
+      },
+      "2048": {
+        "kernel_a_ms": 0.06320055574178696,
+        "pipeline_ms": 0.18030454218387604,
+        "proj": {
+          "block_d": 128,
+          "block_t": 64,
+          "num_stages": 3,
+          "num_warps": 8,
+          "splits": 2
+        },
+        "tile": {
+          "block_t": 64,
+          "num_stages": 2,
+          "num_warps": 8,
+          "use_tc": true
+        }
+      },
+      "32768": {
+        "kernel_a_ms": 0.8390056490898132,
+        "pipeline_ms": 2.617216110229492,
+        "proj": {
+          "block_d": 64,
+          "block_t": 16,
+          "num_stages": 4,
+          "num_warps": 4,
+          "splits": 1
+        },
+        "tile": {
+          "block_t": 64,
+          "num_stages": 2,
+          "num_warps": 8,
+          "use_tc": true
+        }
+      }
+    },
+    "8b": {
+      "1": {
+        "kernel_a_ms": 0.018842367455363274,
+        "pipeline_ms": 0.025451097637414932,
+        "proj": {
+          "block_d": 128,
+          "block_t": 16,
+          "num_stages": 4,
+          "num_warps": 4,
+          "splits": 4
+        },
+        "tile": {
+          "block_t": 16,
+          "num_stages": 2,
+          "num_warps": 8,
+          "use_tc": true
+        }
+      },
+      "2048": {
+        "kernel_a_ms": 0.09972784668207169,
+        "pipeline_ms": 0.2936812937259674,
+        "proj": {
+          "block_d": 128,
+          "block_t": 64,
+          "num_stages": 3,
+          "num_warps": 8,
+          "splits": 2
+        },
+        "tile": {
+          "block_t": 64,
+          "num_stages": 2,
+          "num_warps": 8,
+          "use_tc": true
+        }
+      },
+      "32768": {
+        "kernel_a_ms": 1.434544563293457,
+        "pipeline_ms": 4.512256145477295,
+        "proj": {
+          "block_d": 64,
+          "block_t": 16,
+          "num_stages": 4,
+          "num_warps": 4,
+          "splits": 1
+        },
+        "tile": {
+          "block_t": 64,
+          "num_stages": 2,
+          "num_warps": 8,
+          "use_tc": true
+        }
+      }
+    }
+  },
+  "shared_implementation_changes": [
+    "Name-stable INT4 initialization",
+    "Rebuild stale RoPE cos/sin after installing Llama3 inverse frequencies, at original capacity",
+    "Equal-length unmasked KV metadata shared across layers; attention/GEMM/quantization unchanged"
+  ],
+  "shared_random_state": "Old FP16 parameter initialization; INT4 packed bytes uniform 1..6 (upper nibble zero), scales uniform .001..003; name-hashed CPU generator per Linear4bit; byte hashes checked for every common state tensor.",
+  "statistics": {
+    "decode_speedup": "FP16 latency / method latency",
+    "dispersion": "population std of individual samples; throughput std computed after per-sample inversion; session median/std separately; pooled150 runs are3 hardware sessions",
+    "memory_saving_pct": "100*(1-nar/fp16)",
+    "nar_latency_overhead_pct": "100*(nar/had-1)",
+    "nar_throughput_ratio_pct": "100*nar/had",
+    "prefill_speedup": "method throughput / FP16 throughput",
+    "retention": "100*(speedup_nar-1)/(speedup_had-1), only when every session had>1.05, else null+reason"
+  },
+  "text_windows": "First256 tokens of the first two cached WikiText2 test2048 windows; prefix128 plus128 teacher-forced causal tokens; random weights checks implementation only",
+  "thresholds": {
+    "cache_bytes_metadata_exact": true,
+    "fold_relative_l2_max": 2e-05,
+    "gemm_relative_l2_max": 0.002,
+    "gqa_relative_l2_max": 0.002,
+    "model_logits_relative_l2_max": 0.002,
+    "near_parity_fraction": 0.01,
+    "r4_actual_quantizer_code_match_min": 0.999,
+    "r4_relative_l2_max": 0.002,
+    "retention_min_hadamard_speedup": 1.05
+  },
+  "timing": "sequence: sync immediately before/after 120 causal calls; step_sync: sync before/after each of 120 calls; first8 excluded; fixed token100, no sampling",
+  "weights": "random-weight performance benchmark"
+}

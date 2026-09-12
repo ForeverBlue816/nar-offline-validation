@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-09-12T02:43:50.353978+00:00",
+  "before_any_kernel_timing": true,
+  "seed": 31,
+  "all_layer_pressure_seed": "17+layer",
+  "micro_input": "FP16 standard normal *0.5, converted to BF16 only in separately labeled E17-native panel",
+  "E17_native_factor_terms": 3,
+  "E17_native_A": "frozen E28 selected ProjectionConfig; no out_dtype/cuBLAS API dependency",
+  "E17_native_B": {
+    "block_t": 8,
+    "num_warps": 4,
+    "num_stages": 2,
+    "use_dot": false
+  },
+  "dispatch_abi": "Generic and prebound both preallocate outputs; actual module slot timing is a separate row",
+  "fixed_order": "base order in odd sessions, reversed in even session",
+  "actual_hadamard_reference": "full-width FP32 matmul_hadU; E17 baseline is block-H128"
+}

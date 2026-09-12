@@ -1,0 +1,499 @@
+{
+  "captured_at": "2026-09-12T03:06:37.217179+00:00",
+  "compiled_parameters_source": "/projects/nar/nar-validation/external/quarot/setup.py",
+  "extension_flags_note": "Existing binary SHA256 recorded; setup/build scripts and submodule commits recorded. Historical shell compiler environment cannot be reconstructed beyond old env.txt.",
+  "files": {
+    "/home/yanlongc/e28-v2-work/nar/__init__.py": {
+      "bytes": 49,
+      "sha256": "158c3f551a921779b85431098fd5f30df7808b695befa10c2e80e84a7f43458b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/activation_diagnostics.py": {
+      "bytes": 31696,
+      "sha256": "1f8058ea923b681e7f234ec6332230f6f7935d871876a575ef0eea09d64f4ed9"
+    },
+    "/home/yanlongc/e28-v2-work/nar/activation_experiments.py": {
+      "bytes": 48657,
+      "sha256": "99296c5642069c445b0254562404840362412305d360019b312719ad0c3df23d"
+    },
+    "/home/yanlongc/e28-v2-work/nar/activation_report.py": {
+      "bytes": 12640,
+      "sha256": "89536864eeb73d4e5c6d99ed51f0164ac4f283857384fb284438dbe14f968a7f"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e11_fair_baselines.py": {
+      "bytes": 41297,
+      "sha256": "8516033bf3ce3da12f8827b0dba2e5cd4a371d299244246c64ebb36383769763"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e11_report.py": {
+      "bytes": 7413,
+      "sha256": "d5119026d159860be685b5f21ec9c86d1c64042e907f387ffea5ec3df0caa682"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e12_report.py": {
+      "bytes": 3920,
+      "sha256": "1243fbba170a49938a3a1f47b5e13a5052b6c1c3b99a291064a7e7e3f49e8d19"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e12_wy.py": {
+      "bytes": 9459,
+      "sha256": "57ef771aa7f8fec8d30c26a49b333fa09ad84d9cb9c05be7fc2848b078dbbc1f"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e13_report.py": {
+      "bytes": 3451,
+      "sha256": "996c68e8bdf5d72808ba9f2ff71c9577c20bcfcd480922d5833be083bff3964b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e13_zero_shot.py": {
+      "bytes": 7603,
+      "sha256": "38a51cfe7bc45b4bef54120c568d4e9d03bb6bad1b120463c200731ed4e75534"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_anchor_gate.py": {
+      "bytes": 1823,
+      "sha256": "1da3e0f51117ecd86cf045a4d9f0e457df9373b761523d8f8220c3122f2cde20"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_bf16_reference.py": {
+      "bytes": 4456,
+      "sha256": "d1001632f21c1bb14177ae11ffcea6cf8174dbdf604a13fa145f9c954174da4d"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_fold_diagnostic.py": {
+      "bytes": 8853,
+      "sha256": "4a0b6136cb824f4ab92ccbc17c3215cb06d4a41d51335419d738b4e4ac32712f"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_report.py": {
+      "bytes": 8435,
+      "sha256": "1dfa0a069815b048e198cf313c3f3c4e3948654960c63c934ab3000721f8f2f4"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_seed_interval.py": {
+      "bytes": 5661,
+      "sha256": "fb5a3d9031e19acfe8b6d6857d6f6dafcf28bce9c3b5b279b21f1f6aa77038e8"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_w4a4kv4.py": {
+      "bytes": 73819,
+      "sha256": "c7ab1b96621084d43d3dae4f694eb4e6bc534d753cd7ef6c5d620cd000559ab3"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e14_zero_shot_context_lengths.py": {
+      "bytes": 3028,
+      "sha256": "7539410a0de426762260b3978564e123f8e0b4398f60d4ea7a176ed394d0fefd"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e15_followup.py": {
+      "bytes": 16405,
+      "sha256": "63222fc84058efea74f1f236d3895db9cd1ddb382b16258e88a330f53efb1e47"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e15_fp4.py": {
+      "bytes": 9087,
+      "sha256": "451cd3d92e0c07b0cc22ba3206d276bb1a6d293fca719a0ef98f72171b22f5a4"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e15_h128_control.py": {
+      "bytes": 5588,
+      "sha256": "692eaf16ef032090490c3afe1c8d9353ba035f7d56397eea61e1e9b4b4f4996d"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e15_pi_control.py": {
+      "bytes": 10859,
+      "sha256": "8f2e6ce779fa6f4b8860d6431e7f57370c5d901a7484925db06164a53c802448"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e15_report.py": {
+      "bytes": 3292,
+      "sha256": "8f9c6b2a58ee7a2bf1d14fa755cb20ee2cd64fccc9e953504c9912d1313d1e71"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e16_diagnostics.py": {
+      "bytes": 19489,
+      "sha256": "d02b2bd63423699a159adb0fb6798cfe64be1412d1db92e83132ec7939105957"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e16_report.py": {
+      "bytes": 8048,
+      "sha256": "4a75d3e4553e6fbafa64870d6b4429f95856cedf0bdef8e098dd21d15ccc843b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e16_smoothquant_robustness.py": {
+      "bytes": 8139,
+      "sha256": "0746f140b8728c982d254fddf0c021db7f9f7149ce331afe0dfc2b5c98dde9c8"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e17_fused_r4.py": {
+      "bytes": 13833,
+      "sha256": "561d56aaa64ba126684587bccc16cfe679703c6c21288538a68dd0a0b7903d8d"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e17_report.py": {
+      "bytes": 3169,
+      "sha256": "767f7dca923ac15c0c604c65dc91bedd4b3d1686f811c1b2c5abca4fcc62d3a4"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e17_v2.py": {
+      "bytes": 19543,
+      "sha256": "d25f1d14279b7d6d2ba6bfd7ef8ed2f339e7fd7449923aea2a48d896ef293af2"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e17_v2_fold_verify.py": {
+      "bytes": 13894,
+      "sha256": "328977eb203aa2ae388194994d2f220fa566116e8c2e824cf2d1c42bb370ebbd"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e17_v3.py": {
+      "bytes": 22146,
+      "sha256": "73e104568fa3c6bcd61465c9d5ee4c3c0b312710cba76a055522d20f6427a262"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e18_70b.py": {
+      "bytes": 25398,
+      "sha256": "0691ce5d8b7966675f9eacbe38085efc24c8c142412107ca3c40a5b88709eb02"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e18_fp16_range_probe.py": {
+      "bytes": 6363,
+      "sha256": "23c69d6b85c4d974be7b477d5baca61a884b8e7f070f68b3d218ea7285ddab80"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e18_qwen_report.py": {
+      "bytes": 2992,
+      "sha256": "cbed6201ccac5792fd6019e359afd9053cf06aee3466c46508a276531d9593b7"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e18_v2.py": {
+      "bytes": 32386,
+      "sha256": "94a13efed0b9008f9b59a5c4806bc7e720729327b1f477b89e91cbd88bd8dc00"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e19_qwen3_e2e.py": {
+      "bytes": 51133,
+      "sha256": "771cda182a48f7c9c1019822670f0480aaec99cf6b4469fefe7c40985444ce9b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e19_zero_shot_context_lengths.py": {
+      "bytes": 2983,
+      "sha256": "bc05426a28bb244eb5e14b2c67493c8a73a199e6f5f22501d81107ce6d2dc99e"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e20_null_space.py": {
+      "bytes": 54457,
+      "sha256": "451402624aa1a3464c25875310c43a6eba0637a5c6014391b70a8e0c45b8ac42"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e21_cholesky_probe.py": {
+      "bytes": 2161,
+      "sha256": "3f904605b978710da4d1dcc8807e77b6785aa473d61a6df7a413038bd9085de1"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e21_llama70b_e2e.py": {
+      "bytes": 23252,
+      "sha256": "6b5fef07191e5b7cb820a9a1a39f57e9bd8ab362a772fdf0797bfca2307687a9"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e22_batch_probe.py": {
+      "bytes": 4128,
+      "sha256": "c4e352dc0de3652c50da9c3bce7b252fcb7126782aab083d727cd03228655aa6"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e22_decode_timing.py": {
+      "bytes": 4555,
+      "sha256": "c55dd038b67f1b5e929cf048ce98548b6dbd15c289699a5e27f61c458d237299"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e22_qwen3_family.py": {
+      "bytes": 42451,
+      "sha256": "c8f12709f525aa5182eee44175db4953e6ceec19f1539b80657fe60f0ebe10ce"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e22_report_tables.py": {
+      "bytes": 5900,
+      "sha256": "002a1dd0a24b89696fb4fe8407def37481f986f817008ef9fba7f7cf800f5810"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e23_bridge.py": {
+      "bytes": 12316,
+      "sha256": "3f6b3801430c994f4b89e5528a00ea240a8dd95422c85121baa5168a36477c78"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e25_mistral.py": {
+      "bytes": 9897,
+      "sha256": "6cbac2c6b5d61bc5f11bd3ab2a38908f97d5d3b36ed002cc1bb39d185340b4fa"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e26_moe.py": {
+      "bytes": 72086,
+      "sha256": "f824c36157335418910f0f7987d40388a396e1930038f6214c3b9e8e9404eea3"
+    },
+    "/home/yanlongc/e28-v2-work/nar/e27_direction_selection.py": {
+      "bytes": 45536,
+      "sha256": "0087c6a5a2a79edebb17de5d8656f3a1883665f48ac5ddb6415d79c346e16b69"
+    },
+    "/home/yanlongc/e28-v2-work/nar/experiment.py": {
+      "bytes": 71072,
+      "sha256": "199e3a5e674a9098ff0f67f28d503afaf415271293d7d6d093928179a2c66f6f"
+    },
+    "/home/yanlongc/e28-v2-work/nar/extended_experiment.py": {
+      "bytes": 58166,
+      "sha256": "8331f9bb5cd20c7877c836b2db1115aacf5689337fac4a7428ac59f7eb834f8b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/fold_signed_permutation.py": {
+      "bytes": 8809,
+      "sha256": "d8b8bb9aec56db6f51b916887923f6520725918353c1fdc5743033d5a9497a10"
+    },
+    "/home/yanlongc/e28-v2-work/nar/gptq_parity_check.py": {
+      "bytes": 2128,
+      "sha256": "f1d309b35d80fb4d3a8aa6314e11f29d0674d47a3e2b75a9728e71ae5f3c749a"
+    },
+    "/home/yanlongc/e28-v2-work/nar/kernels/__init__.py": {
+      "bytes": 56,
+      "sha256": "3bb2f9dc9e42a8d535c792dca631f2d2e990370ef55950475c7f54d0e923b75b"
+    },
+    "/home/yanlongc/e28-v2-work/nar/kernels/r4_fused_v2.py": {
+      "bytes": 15764,
+      "sha256": "5e71c1eccbb62b9e61e0fd4b8e817ab6ea725d59ff821757b2d2b3e99a594196"
+    },
+    "/home/yanlongc/e28-v2-work/nar/kernels/r4_fused_v3.py": {
+      "bytes": 11602,
+      "sha256": "0571b3512889e172f6f24494918195872520daa093ab42d2f505b1fbff352fcf"
+    },
+    "/home/yanlongc/e28-v2-work/nar/publish_results.py": {
+      "bytes": 1817,
+      "sha256": "6cae6646fe187193b019f90bfe24e41c3359e984cf02475b2a41e678e118da2d"
+    },
+    "/home/yanlongc/e28-v2-work/nar/quantizer_affine.py": {
+      "bytes": 8487,
+      "sha256": "6ad68c91f1ecd07e9fc8f1d4a7d33799cacc2984143415f7d351ac18105c926f"
+    },
+    "/home/yanlongc/e28-v2-work/nar/quantizer_fp16_regression.py": {
+      "bytes": 3930,
+      "sha256": "43138aeee7deb32521867119d99ef453ba82de6933345c24178e5afedafe21fa"
+    },
+    "/home/yanlongc/e28-v2-work/nar/quarot_gptq.py": {
+      "bytes": 19137,
+      "sha256": "84da020ecdf05384d56026ab18e2fd8f50ceea92782285580c1e499a31e6dd1e"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/build_env.sh": {
+      "bytes": 1472,
+      "sha256": "1ea2406fe1f46ab71b381b37df7f80e245b86de6daf6a578dae0de9d6f457dc3"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e17_a40_summary.py": {
+      "bytes": 3672,
+      "sha256": "67783985ad25459bb95a4c199001fb3a7f5a80949b392c9453b12246b900adda"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_bench.py": {
+      "bytes": 24898,
+      "sha256": "aec52ced4ca4396f41f56223cc6fe6748f42726192cceaf302eae783828b6e11"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/__init__.py": {
+      "bytes": 80,
+      "sha256": "99cd857bd33dd85f4526a93ec3aa6c1a911423c4dfd6efc8c488d058951cf8ec"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/activation_diagnose.py": {
+      "bytes": 2809,
+      "sha256": "ed52cde64ab53799c118f4b2da6432c20ee8b91217b660b181afd1aa1bb6bb87"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/audit.py": {
+      "bytes": 10952,
+      "sha256": "38dd7ce249811a6c0fa7915465e1e97b664623ce00f661bdc1e0800439bcae29"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/benchmark.py": {
+      "bytes": 8493,
+      "sha256": "4b71652eae4ee99c34d2b5e1a16d425be5deacc1558c6c7649d1d8eb12d7a4e1"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/cache_adapter.py": {
+      "bytes": 2628,
+      "sha256": "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/cache_diagnose.py": {
+      "bytes": 1586,
+      "sha256": "df27eb25f3ad8844d8f8373048b9861d087f41e3f6089192417efedddb49ecfc"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/checkpoint.py": {
+      "bytes": 2041,
+      "sha256": "ea3704f3e5f2584e41f359f8ca4cbffa5f845b6b6e5d816237ae58c68813ebbc"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/collect.py": {
+      "bytes": 17452,
+      "sha256": "e7e678aba3b53675a6dd2727438ea5727c4e5f442c3faf5a4ffdbd25456f110e"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/common.py": {
+      "bytes": 8467,
+      "sha256": "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/graph.py": {
+      "bytes": 5541,
+      "sha256": "a424981d1a568681e0542c59c368a640db2e92e70eaa8065972a4413af1ef749"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/kernel_bench.py": {
+      "bytes": 7372,
+      "sha256": "fbb244b60bc95cae48a7c7c455ce7be692deacdaa47b4f5b380bbacca62afffc"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/pipeline.py": {
+      "bytes": 5016,
+      "sha256": "c2f96809c8a884a7b85ec9fa8f954b16e74355c5808f7e0fb77f8a79e51abee9"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/profile.py": {
+      "bytes": 2095,
+      "sha256": "680de3b2e83cc5a0e53b262ea453e1237f412aa03787fcd6b654398365f990a4"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/verify.py": {
+      "bytes": 14730,
+      "sha256": "c655b519e550302c946065b81e7543b48df60df332503ed64f4bfc0203f7619b"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/export_nar_factors.py": {
+      "bytes": 2466,
+      "sha256": "451ebdbf20be268a90c1e7b535c3c14481bbef50bad258363ea0e6a44258b437"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/modeling_llama3.py": {
+      "bytes": 15551,
+      "sha256": "ec8f03779820a4a749a97a8e84b337a31f880c40e4145a0a0099ae3ca9299582"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/nar_r4_kernel.py": {
+      "bytes": 21391,
+      "sha256": "a22a1167f12065b848f805c2edd980511dcd892b069f7b9be87dadc42e1c0af1"
+    },
+    "/home/yanlongc/e28-v2-work/quarot-llama3/quarot_gqa_decode.patch": {
+      "bytes": 10718,
+      "sha256": "b72e73879393b16dfa7ef6b89734ae5ac06aa2ff8a9fcba80e92875f84cf2c5f"
+    },
+    "/home/yanlongc/e28-v2-work/results/e28/3b/nar_kernel_selection.json": {
+      "bytes": 96888,
+      "sha256": "03da00d93fbc5fbb769334da1cd9e98b32503b32a5e10604c9b81d24fed81e3f"
+    },
+    "/home/yanlongc/e28-v2-work/results/e28/8b/nar_kernel_selection.json": {
+      "bytes": 97477,
+      "sha256": "c139bcdb41fe379b250c9e60958f46acfeeb7447cd674b209412ed08df087019"
+    },
+    "/projects/nar/nar-validation/cache/huggingface/hub/models--unsloth--Llama-3.2-3B/snapshots/d4446454d87d51aa42e1fb174f25acc5f8762331/config.json": {
+      "bytes": 890,
+      "sha256": "c0a6833b9da6e99a2a8920e879de7c1532c78883948327658cfdbd1eac6d5be6"
+    },
+    "/projects/nar/nar-validation/cache/huggingface/hub/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc/config.json": {
+      "bytes": 947,
+      "sha256": "0ea2186ccf686654fea498aae830b9de201334432b24b07f031d80b76dd928f0"
+    },
+    "/projects/nar/nar-validation/e28-env/lib/python3.11/site-packages/fast_hadamard_transform_cuda.cpython-311-x86_64-linux-gnu.so": {
+      "bytes": 16132760,
+      "sha256": "7ca48dacc0936095da3bf491e69909367e4e3b919a2f026b6764cd01d33952c7"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/_CUDA.cpython-311-x86_64-linux-gnu.so": {
+      "bytes": 912912,
+      "sha256": "3639d33f456151a8781e30f84d8af70a2da1a595d4f81209a206df03361452ec"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/__init__.py": {
+      "bytes": 2212,
+      "sha256": "37ce035db79e7116a2ba8e7a6bdf0a6f8aed8cf168f62c821f780e40d219b948"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/functional/__init__.py": {
+      "bytes": 191,
+      "sha256": "b8f95e5ff1b9441600df4805a05b755ff0d86574db2b221048ceb43b41952272"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/functional/hadamard.py": {
+      "bytes": 427132,
+      "sha256": "c93cce8a9c8403ed9ce8ae30b781500c93ddc8b36907889a7300c5f9e2a4b422"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/functional/quantization.py": {
+      "bytes": 2063,
+      "sha256": "28661deb2a8f5ae8b245d075de0294da9f3fdf0edf8690d9a6f1e6ee05f508b6"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/bindings.cpp": {
+      "bytes": 17001,
+      "sha256": "d1419a23449ebee970e8648736ab97f6e5f316083899864988548b0af4143d9c"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/flashinfer.cu": {
+      "bytes": 10905,
+      "sha256": "a7dc196878da1f202b3cac646648502ce37ec916bf94ac581f09f884853d6f70"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/gemm.cu": {
+      "bytes": 1573,
+      "sha256": "a351529098342c4e92d2a773ea33a08436e03b4bffb5efdd84b7542d95d7eabd"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/common.h": {
+      "bytes": 1159,
+      "sha256": "7698f99d691fc342353b86896e36ed3efe7bb1fd2332d887f55fe9dd6b7ee91d"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer.h": {
+      "bytes": 3034,
+      "sha256": "7fc5a31a7fa1a273469ed13ca5ccc30ef8f4135a4e499e535837284d98f2f755"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/cp_async.cuh": {
+      "bytes": 3301,
+      "sha256": "77cb840944b97135160da7a35314f6740684735ad988057559dec0061ca00d51"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/decode.cuh": {
+      "bytes": 35627,
+      "sha256": "be4a6798f123923b132f7192f1f780df39356267e98d197e4f80356e12702afe"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/layout.cuh": {
+      "bytes": 2140,
+      "sha256": "4135828e6fdf0879e2ac67592f98c08109ae7de3e7acc87bb45de02aa7df2b94"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/math.cuh": {
+      "bytes": 639,
+      "sha256": "a0c6e60102fa8601153e8d15d45c6db56fbb76f931bb01bbfe02b6d4a0251042"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/mma.cuh": {
+      "bytes": 3355,
+      "sha256": "b978041ba9a207d9e8500cc1b56c8ec76bac857bb823239e84699756d009ad46"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/page.cuh": {
+      "bytes": 11094,
+      "sha256": "d9eaf161158e645b02894ba950aeabbfc572755551220a60e9f4d661e41fbcd6"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/permuted_smem.cuh": {
+      "bytes": 4660,
+      "sha256": "fadff9182d5922be9314edc3af8da7a77dfc844af0735a4abaf8a63b11c0c582"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/prefill.cuh": {
+      "bytes": 16548,
+      "sha256": "22a6cd858792dd6d4b5ceed9d3e52b2665be086833db1b03028319ced3a96654"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/quantization.cuh": {
+      "bytes": 3130,
+      "sha256": "7fd7a53e6cdcfb77d418073005de5af3501d407d21b4475fa845cce1b2df38c7"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/rope.cuh": {
+      "bytes": 733,
+      "sha256": "22722b1ea0f8b56026bcdebd66650abbad562fedad90a80975c564c5e8ae50f8"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/state.cuh": {
+      "bytes": 3228,
+      "sha256": "51660b86ebe77f8a9dbdb17f57fca81ecff4ba19177e6ce43700eaa829f9648f"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/utils.cuh": {
+      "bytes": 4506,
+      "sha256": "ca7c952ea92c5816b16dcf16c9af448405ab322767f8634da55471c26367a72d"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/flashinfer/vec_dtypes.cuh": {
+      "bytes": 44919,
+      "sha256": "f55146f8426b0cf36dfe8d9004dbd259c07217fdd88fe668a0bd13021d233694"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/gemm.h": {
+      "bytes": 195,
+      "sha256": "790e7cd9ddeb92752f959604c44957d36c7539be509aa1fd843beaaa2dac9bdc"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/int4.h": {
+      "bytes": 7312,
+      "sha256": "02a8334f25a18eade476fe740520edd510c562f9a4c60c42bcd26e7f4cc7b22d"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/quant.h": {
+      "bytes": 385,
+      "sha256": "9826d20b9a058a03cecd98fbafb437c632f42892005e228d6efd4d836eb576e0"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/include/util.h": {
+      "bytes": 3085,
+      "sha256": "601a9ae7170643658a0ee7f4ed760e69413de22348561798f6df516d2dc8f400"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/kernels/quant.cu": {
+      "bytes": 2677,
+      "sha256": "6f50ba4127380713e386b4bb2a7f78b936405db801e0eac19b1d6870f91e967e"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/nn/__init__.py": {
+      "bytes": 139,
+      "sha256": "9bfd744bbce59aa81967534db7db991007d11af181ec1a0e17200bd4408a5963"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/nn/hadamard.py": {
+      "bytes": 764,
+      "sha256": "5db54ccfa62d223ecc09e9e6d9dd0b1bfb439aecd5dac183fab50a950fcedfbe"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/nn/linear.py": {
+      "bytes": 3497,
+      "sha256": "d53d33fff182ea6e561bf3a8fc8a49c3380eb76634dc760226bbde742241ac9e"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/nn/normalization.py": {
+      "bytes": 742,
+      "sha256": "5b0fc700d10d6c0f6c36296f79e0957cc22ff4aead0563bf802625e230de2bf0"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/nn/quantization.py": {
+      "bytes": 485,
+      "sha256": "04b07eb72b55e556f2af7b9a5cb92c30f362bf41e4389ec9aed6855dac25fc0a"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/transformers/__init__.py": {
+      "bytes": 49,
+      "sha256": "1afb7d71c08bbc1e9ed511c629340705cd977b06614683683881af1eb03ea4b6"
+    },
+    "/projects/nar/nar-validation/external/quarot/quarot/transformers/kv_cache.py": {
+      "bytes": 11855,
+      "sha256": "48d9f12a1b712c6494ca928b7cfba600f1b7774f9abe11dbac68761692447304"
+    },
+    "/projects/nar/nar-validation/external/quarot/setup.py": {
+      "bytes": 2426,
+      "sha256": "d96760b779b042f5d1063268b7396c2b7a04f9043bfaf9676651b37281e6f829"
+    },
+    "/projects/nar/nar-validation/tmp/e28/nar_factors_llama31_8b_k8.pt": {
+      "bytes": 29379919,
+      "sha256": "38d178a4f2e37d4e9a90ffd481065e6577a88897b660b1eb0e6d5a29ef28f4b9"
+    },
+    "/projects/nar/nar-validation/tmp/e28/nar_factors_llama32_3b_k8.pt": {
+      "bytes": 14697495,
+      "sha256": "a92194990be04748ce81e567811d97315d4630241183cf8fcb57ac7c3298d6c1"
+    }
+  },
+  "head": "85bd88dfbd17a4ad02c5177f614658f7fc0ec270",
+  "quarot_commit": "5008669b08c1f11f9b64d52d16fddd47ca754c5a",
+  "quarot_submodules": "ffa34e70756b0bc744e1dfcc115b5a991a68f132 third-party/cutlass (v3.4.1-2-gffa34e70)\n 4ea722e434e3d4f2a14522341959ebdbe62be2de third-party/fast-hadamard-transform (v1.0.4.post1)\n d8dced8a64d9ce305add92fa6d274fd49b569b7e third-party/nvbench (old-cmake-186-gd8dced8)",
+  "status": "?? report_e28_v2.md\n?? results/e28_v2/"
+}

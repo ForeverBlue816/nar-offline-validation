@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-09-12T03:18:15.160298+00:00",
+  "head": "f33a7b27453f19e804d8057420318717e0471af6",
+  "before_any_formal_timing": false,
+  "reason": "Complete finite preflight now clears unused allocator blocks before the10 normal warmups; inference reserved memory excludes instrument-only transient peaks.",
+  "files": {
+    "quarot-llama3/e28_v2/collect.py": "924da5ee043962bd5cd725b906a0ecf7b422e6ff1feefe966cfd6016553d19b8",
+    "quarot-llama3/e28_v2/profile.py": "90b8a500445f465dd6dc4f24b093ec53a20d7006bc1f34ffd8323a27cfa1055a",
+    "quarot-llama3/e28_v2/common.py": "8be1e3f426acb796bfb15d51164a1f545c346ce9b024fb0e8dc879159449c5e8",
+    "quarot-llama3/e28_v2/graph.py": "a424981d1a568681e0542c59c368a640db2e92e70eaa8065972a4413af1ef749",
+    "quarot-llama3/e28_v2/__init__.py": "99cd857bd33dd85f4526a93ec3aa6c1a911423c4dfd6efc8c488d058951cf8ec",
+    "quarot-llama3/e28_v2/checkpoint.py": "ea3704f3e5f2584e41f359f8ca4cbffa5f845b6b6e5d816237ae58c68813ebbc",
+    "quarot-llama3/e28_v2/audit.py": "38dd7ce249811a6c0fa7915465e1e97b664623ce00f661bdc1e0800439bcae29",
+    "quarot-llama3/e28_v2/kernel_bench.py": "fbb244b60bc95cae48a7c7c455ce7be692deacdaa47b4f5b380bbacca62afffc",
+    "quarot-llama3/e28_v2/verify.py": "c655b519e550302c946065b81e7543b48df60df332503ed64f4bfc0203f7619b",
+    "quarot-llama3/e28_v2/cache_diagnose.py": "df27eb25f3ad8844d8f8373048b9861d087f41e3f6089192417efedddb49ecfc",
+    "quarot-llama3/e28_v2/cache_adapter.py": "91b8fa46bfa453d553190ccc526257717650002607b016ef917a1d383d5f3bfe",
+    "quarot-llama3/e28_v2/pipeline.py": "c2f96809c8a884a7b85ec9fa8f954b16e74355c5808f7e0fb77f8a79e51abee9",
+    "quarot-llama3/e28_v2/activation_diagnose.py": "ed52cde64ab53799c118f4b2da6432c20ee8b91217b660b181afd1aa1bb6bb87",
+    "quarot-llama3/e28_v2/benchmark.py": "2e99b15e516c4bcaa6caa88b3514b234eaa277b64953584c2c073083d96f1380"
+  }
+}

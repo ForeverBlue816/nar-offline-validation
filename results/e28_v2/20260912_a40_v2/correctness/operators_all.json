@@ -1,0 +1,336 @@
+{
+  "ended": "2026-09-12T02:34:04.243285+00:00",
+  "environment": {
+    "affinity": [
+      32,
+      33,
+      34,
+      35
+    ],
+    "capability": [
+      8,
+      6
+    ],
+    "cgroup": "0::/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_batch/user/task_0\n",
+    "command": [
+      "/home/yanlongc/e28-v2-work/quarot-llama3/e28_v2/verify.py",
+      "--level",
+      "operators",
+      "--run",
+      "/home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2"
+    ],
+    "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  40\nOn-line CPU(s) list:                     0-39\nVendor ID:                               GenuineIntel\nModel name:                              QEMU Virtual CPU version 2.5+\nCPU family:                              15\nModel:                                   107\nThread(s) per core:                      1\nCore(s) per socket:                      20\nSocket(s):                               2\nStepping:                                1\nBogoMIPS:                                5799.99\nFlags:                                   fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx lm constant_tsc nopl xtopology cpuid tsc_known_freq pni ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c hypervisor lahf_lm abm cpuid_fault pti bmi1 avx2 bmi2\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               1.3 MiB (40 instances)\nL1i cache:                               1.3 MiB (40 instances)\nL2 cache:                                160 MiB (40 instances)\nL3 cache:                                32 MiB (2 instances)\nNUMA node(s):                            2\nNUMA node0 CPU(s):                       0-19\nNUMA node1 CPU(s):                       20-39\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             KVM: Mitigation: VMX unsupported\nVulnerability L1tf:                      Mitigation; PTE Inversion\nVulnerability Mds:                       Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Meltdown:                  Mitigation; PTI\nVulnerability Mmio stale data:           Unknown: No mitigations\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected",
+    "cpu_max": null,
+    "cuda_runtime": "12.4",
+    "device": "NVIDIA A40",
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": "0",
+      "MKL_NUM_THREADS": "4",
+      "OMP_NUM_THREADS": "4",
+      "SLURM_CLUSTER_NAME": "(null)",
+      "SLURM_CONF": "/var/spool/slurmd/conf-cache/slurm.conf",
+      "SLURM_CPUS_ON_NODE": "4",
+      "SLURM_CPUS_PER_TASK": "4",
+      "SLURM_GPUS": "a40:1",
+      "SLURM_GPUS_ON_NODE": "1",
+      "SLURM_GTIDS": "0",
+      "SLURM_JOBID": "150777",
+      "SLURM_JOB_ACCOUNT": "rose",
+      "SLURM_JOB_CPUS_PER_NODE": "4",
+      "SLURM_JOB_END_TIME": "1789222432",
+      "SLURM_JOB_GID": "295800911",
+      "SLURM_JOB_GPUS": "8",
+      "SLURM_JOB_ID": "150777",
+      "SLURM_JOB_NAME": "nar-e28-v2",
+      "SLURM_JOB_NODELIST": "gpu-a40-1",
+      "SLURM_JOB_NUM_NODES": "1",
+      "SLURM_JOB_PARTITION": "cluster02",
+      "SLURM_JOB_QOS": "rose",
+      "SLURM_JOB_START_TIME": "1789179232",
+      "SLURM_JOB_UID": "295800911",
+      "SLURM_JOB_USER": "yanlongc",
+      "SLURM_LOCALID": "0",
+      "SLURM_MEM_PER_NODE": "40960",
+      "SLURM_NNODES": "1",
+      "SLURM_NODEID": "0",
+      "SLURM_NODELIST": "gpu-a40-1",
+      "SLURM_PRIO_PROCESS": "0",
+      "SLURM_PROCID": "0",
+      "SLURM_SUBMIT_DIR": "/home/yanlongc/e28-v2-work",
+      "SLURM_SUBMIT_HOST": "login-1.cluster02.eee.ntu.edu.sg",
+      "SLURM_TASKS_PER_NODE": "1",
+      "SLURM_TASK_PID": "2772732",
+      "SLURM_TOPOLOGY_ADDR": "gpu-a40-1",
+      "SLURM_TOPOLOGY_ADDR_PATTERN": "node",
+      "SLURM_TRES_PER_TASK": "cpu:4"
+    },
+    "execution_python_sha256": {
+      "quarot-llama3/e28_v2/__init__.py": "99cd857bd33dd85f4526a93ec3aa6c1a911423c4dfd6efc8c488d058951cf8ec",
+      "quarot-llama3/e28_v2/audit.py": "8bb76bc81d8896147ef12ca35828aaa580beb1896dea4efb7f9eea5244b70388",
+      "quarot-llama3/e28_v2/benchmark.py": "54a7af61dea5a912e39e81bb48e7c6cc2119032b66ed70c32b9cec6565f427a7",
+      "quarot-llama3/e28_v2/cache_adapter.py": "a31b2de0cf7e84d94c62d4fff4139f7d597259155f4ccfd340c7dfaccc20b0bd",
+      "quarot-llama3/e28_v2/cache_diagnose.py": "df27eb25f3ad8844d8f8373048b9861d087f41e3f6089192417efedddb49ecfc",
+      "quarot-llama3/e28_v2/collect.py": "dbbb02374f3d13eef5b21dcbe6321d34e537e816a4bbb3a9e0a02e0598b72f1f",
+      "quarot-llama3/e28_v2/common.py": "9d164eedc0b94a2c090beba5d48ae407d32b894388932ec3ebafc6b1e5c3eae1",
+      "quarot-llama3/e28_v2/graph.py": "a424981d1a568681e0542c59c368a640db2e92e70eaa8065972a4413af1ef749",
+      "quarot-llama3/e28_v2/kernel_bench.py": "6934198a16b7d341111bd1be23f62c7c469e409197254ee05c85ab1fe7f9ef4e",
+      "quarot-llama3/e28_v2/pipeline.py": "035b17505ffd93e8a8d54b99b2d352519b06424c9716173a10af37d6f2077756",
+      "quarot-llama3/e28_v2/profile.py": "680de3b2e83cc5a0e53b262ea453e1237f412aa03787fcd6b654398365f990a4",
+      "quarot-llama3/e28_v2/verify.py": "dc48bdccc13841c3ce48de8ffeb474442dbcda3439e58c2b08e70c18bfaacbb1"
+    },
+    "gpu": "index, name, uuid, driver_version, power.draw [W], temperature.gpu, clocks.current.sm [MHz], clocks.current.memory [MHz], pstate, memory.used [MiB]\n0, NVIDIA A40, GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 580.173.02, 60.33 W, 34, 1740 MHz, 7251 MHz, P0, 273 MiB",
+    "host": "gpu-a40-1.cluster02.eee.ntu.edu.sg",
+    "nvcc": "UNAVAILABLE: [Errno 2] No such file or directory: 'nvcc'",
+    "pid": 2776437,
+    "processes": "gpu_uuid, pid, process_name, used_gpu_memory [MiB]\nGPU-97605b97-fbc5-631d-fd5d-348d2f30ba22, 2776437, /projects/nar/nar-validation/e28-env/bin/python, 264 MiB",
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "throttle": "==============NVSMI LOG==============\n\nTimestamp                                              : Sat Sep 12 02:34:02 2026\nDriver Version                                         : 580.173.02\nCUDA Version                                           : 13.0\n\nAttached GPUs                                          : 1\nGPU 00000000:02:11.0\n    Performance State                                  : P0\n    Clocks Event Reasons\n        Idle                                           : Not Active\n        Applications Clocks Setting                    : Not Active\n        SW Power Cap                                   : Not Active\n        HW Slowdown                                    : Not Active\n            HW Thermal Slowdown                        : Not Active\n            HW Power Brake Slowdown                    : Not Active\n        Sync Boost                                     : Not Active\n        SW Thermal Slowdown                            : Not Active\n        Display Clock Setting                          : Not Active\n    Clocks Event Reasons Counters\n        SW Power Capping                               : 1611947292107 us\n        Sync Boost                                     : 0 us\n        SW Thermal Slowdown                            : 1013954580463 us\n        HW Thermal Slowdown                            : 0 us\n        HW Power Braking                               : 0 us\n    Sparse Operation Mode                              : N/A",
+    "timestamp": "2026-09-12T02:34:02.820072+00:00",
+    "torch_interop_threads": 1,
+    "torch_threads": 4,
+    "versions": {
+      "fast-hadamard-transform": "1.0.4.post1",
+      "flash-attn": "2.6.3",
+      "flashinfer": null,
+      "quarot": "0.0.0",
+      "torch": "2.4.1+cu124",
+      "transformers": "4.36.2",
+      "triton": "3.0.0"
+    }
+  },
+  "rows": [
+    {
+      "first_bytes": [
+        152,
+        186,
+        220,
+        254,
+        16,
+        50,
+        84,
+        118
+      ],
+      "status": "PASS",
+      "test": "signed_int4_nibble_order"
+    },
+    {
+      "observed": [
+        -8,
+        -8,
+        -8,
+        -2,
+        -2,
+        0,
+        0,
+        0,
+        2,
+        2,
+        7,
+        7
+      ],
+      "status": "PASS",
+      "test": "half_division_nearest_even_saturation"
+    },
+    {
+      "codes": [
+        0
+      ],
+      "note": "Backend has no zero-scale guard; this is an observation, not a safe-zero proof.",
+      "scale": [
+        [
+          0.0
+        ]
+      ],
+      "status": "OBSERVED",
+      "test": "zero_row_contract"
+    },
+    {
+      "case": "random_signed",
+      "finite": true,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 765,
+      "n": 128,
+      "relative_l2_vs_matched_float": 0.0003172507567796856,
+      "status": "PASS",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "case": "large_accumulator",
+      "finite": true,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 6272,
+      "n": 128,
+      "relative_l2_vs_matched_float": 4.246156458975747e-05,
+      "status": "PASS",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "case": "random_signed",
+      "finite": true,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 7955,
+      "n": 8192,
+      "relative_l2_vs_matched_float": 0.000389213120797649,
+      "status": "PASS",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "case": "large_accumulator",
+      "finite": false,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 401408,
+      "n": 8192,
+      "relative_l2_vs_matched_float": null,
+      "status": "FAIL",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "case": "random_signed",
+      "finite": true,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 10509,
+      "n": 14336,
+      "relative_l2_vs_matched_float": 0.0003882881428580731,
+      "status": "PASS",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "case": "large_accumulator",
+      "finite": false,
+      "integer_exact": true,
+      "matches_backend_narrowing_semantics": true,
+      "max_integer_accumulator": 702464,
+      "n": 14336,
+      "relative_l2_vs_matched_float": null,
+      "status": "FAIL",
+      "test": "int4_gemm_dequant"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": false,
+      "kv_heads": 8,
+      "length": 16,
+      "query_heads": 24,
+      "relative_l2": 0.0002049380273092538,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 17,
+      "query_heads": 24,
+      "relative_l2": 0.00020679019507952034,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 18,
+      "query_heads": 24,
+      "relative_l2": 0.00020655797561630607,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": false,
+      "kv_heads": 8,
+      "length": 16,
+      "query_heads": 32,
+      "relative_l2": 0.00020962802227586508,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 17,
+      "query_heads": 32,
+      "relative_l2": 0.00020298329764045775,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "fp16",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 18,
+      "query_heads": 32,
+      "relative_l2": 0.00020697976287920028,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": false,
+      "kv_heads": 8,
+      "length": 16,
+      "query_heads": 24,
+      "relative_l2": 0.0006065621855668724,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 17,
+      "query_heads": 24,
+      "relative_l2": 0.0006148044485598803,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 18,
+      "query_heads": 24,
+      "relative_l2": 0.0006193110602907836,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": false,
+      "kv_heads": 8,
+      "length": 16,
+      "query_heads": 32,
+      "relative_l2": 0.0006145727238617837,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 17,
+      "query_heads": 32,
+      "relative_l2": 0.0006177881150506437,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    },
+    {
+      "cache": "int4",
+      "crossed_page": true,
+      "kv_heads": 8,
+      "length": 18,
+      "query_heads": 32,
+      "relative_l2": 0.0006200394709594548,
+      "status": "PASS",
+      "test": "gqa_paged_decode"
+    }
+  ],
+  "started": "2026-09-12T02:34:02.811671+00:00",
+  "status": "FAIL"
+}

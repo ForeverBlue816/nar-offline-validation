@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-09-12T02:35:54.720342+00:00",
+  "status": "HARNESS_CORRECTION",
+  "evidence": "correctness/cache_diagnose.json",
+  "finding": "Legacy cold-vs-warm had625 differing KV bytes and451 parameter elements. Warm legacy-vs-adapter and adapter-vs-legacy each had zero differences.",
+  "correction": "Prime prefill/decode scripted shapes with two prefill+two-step runs before numerical/reset comparisons. Formal10 complete warmups and50 repeats remain unchanged; no thresholds relaxed.",
+  "validation_required": "Rerun all six two-window model checks; retain prior cold-vs-warm failures."
+}

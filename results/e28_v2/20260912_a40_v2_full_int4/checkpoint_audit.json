@@ -1,0 +1,33 @@
+{
+  "rows": [
+    {
+      "available_files": [
+        {
+          "bytes": 201329861,
+          "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_01.pt"
+        },
+        {
+          "bytes": 201329861,
+          "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_00.pt"
+        },
+        {
+          "bytes": 4070,
+          "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/gptq_audit.partial.csv"
+        }
+      ],
+      "complete_manifests": [],
+      "model": "3b",
+      "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b",
+      "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+      "status": "BLOCKED"
+    },
+    {
+      "available_files": [],
+      "complete_manifests": [],
+      "model": "8b",
+      "path": "/projects/nar/nar-validation/artifacts/e14/llama31_8b",
+      "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+      "status": "BLOCKED"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "captured_at": "2026-09-12T03:25:06.205530+00:00",
+  "records": [
+    {
+      "pid": 2787478,
+      "command": "/projects/nar/nar-validation/e28-env/bin/python -m e28_v2.pipeline --run /home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2_full_int4 ",
+      "affinity": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "limits": [
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_7/user/task_0",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_7/user",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_7",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "cpuset.cpus.effective": "0-39"
+        }
+      ]
+    },
+    {
+      "pid": 2792698,
+      "command": "/projects/nar/nar-validation/e28-env/bin/python -m e28_v2.redo_allocator_preflight --run /home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2_full_int4 ",
+      "affinity": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "limits": [
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10/user/task_0",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10/user",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "cpuset.cpus.effective": "0-39"
+        }
+      ]
+    },
+    {
+      "pid": 2792836,
+      "command": "/projects/nar/nar-validation/e28-env/bin/python -m e28_v2.benchmark --run /home/yanlongc/e28-v2-work/results/e28_v2/20260912_a40_v2_full_int4 --model 3b --method fp16 --phase prefill16 --mode eager_sequence --session 1 ",
+      "affinity": [
+        32,
+        33,
+        34,
+        35
+      ],
+      "limits": [
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10/user/task_0",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10/user",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777/step_10",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope/job_150777",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "32-35"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice/gpu-a40-1_slurmstepd.scope",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup/system.slice",
+          "cpu.max": "max 100000",
+          "cpuset.cpus.effective": "0-39"
+        },
+        {
+          "path": "/sys/fs/cgroup",
+          "cpuset.cpus.effective": "0-39"
+        }
+      ]
+    }
+  ],
+  "note": "Per-process and ancestor cgroup limits. cpu.max=max means no bandwidth quota; effective cpuset and four PyTorch threads constrain execution."
+}

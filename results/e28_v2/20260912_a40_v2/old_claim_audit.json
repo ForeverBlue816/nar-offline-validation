@@ -1,0 +1,78 @@
+{
+  "claims": [
+    {
+      "claim": "INT4 prefill faster than FP16",
+      "evidence": "Old50-run raw prefill records; one session only, random weights; new measurement pending.",
+      "status": "\u539f\u59cb\u8bb0\u5f55\u652f\u6301"
+    },
+    {
+      "claim": "INT4 decode acceleration",
+      "evidence": "Old speedup Had3B0.61,Had8B0.65, both below1.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "93%/101% acceleration retained",
+      "evidence": "Negative/negative ratios are not acceleration retention; new collector emits null.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "NAR vs Had stable1% lead",
+      "evidence": "Only one original session, no balanced order.",
+      "status": "\u4ecd\u662f\u63a8\u6d4b"
+    },
+    {
+      "claim": "CPU launch bound / shuffle compute bound",
+      "evidence": "Kernel sums vs wall do not isolate CPU compute or provide utilization counters.",
+      "status": "\u4ecd\u662f\u63a8\u6d4b"
+    },
+    {
+      "claim": "Original standalone decode peak memory",
+      "evidence": "Same process previously warmed b16; shared workspace persists.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "96d bytes of factors per layer",
+      "evidence": "FP16Y high/low with rank padded16 =64d; FP16W high/low rank8=32d; H12832768 bytes shared separately.",
+      "status": "\u539f\u59cb\u8bb0\u5f55\u652f\u6301"
+    },
+    {
+      "claim": "All actual R4 launch shapes validated",
+      "evidence": "Old all-layer check used T256; actual measuredT1/2048/32768 require checks.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "Original code-match uses actual quantizer",
+      "evidence": "Old proxy uses FP32 division and epsilon; actual CUDA uses FP16 division and has no zero guard.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "Correct Llama3 RoPE after inv_freq install",
+      "evidence": "Transformers4.36 builds cos/sin in constructor; old install only replaces inv_freq. v2 rebuilds cache uniformly.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "Shared seed proves equal INT4 weights",
+      "evidence": "NAR reconstructs MLPs, consuming RNG again; v2 resets by name and hashes tensors.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    },
+    {
+      "claim": "Paper native group128 asymmetric deployment",
+      "evidence": "Current GEMM has one scale per row/column and current KV quantizes channels per token with no residual window.",
+      "status": "\u5f53\u524d\u4e0d\u652f\u6301"
+    }
+  ],
+  "original_files": {
+    "report_e28.md": "b2c2aea76a8b014f68fec26762fa36139fa5f3ece9f0177fcd89cae573f7a1cc",
+    "results/e28/3b/metrics.json": "a345388bf6ed562c698c64a6e34c9c9754950a82c12f690ea4a928ae78b1a64f",
+    "results/e28/3b/metrics_fp16.json": "fd9765e5f0f61284102ecb5795223246b17de6a55612df89313ccb45c1107ddf",
+    "results/e28/3b/metrics_hadamard.json": "4417426b0bd3df66e55fcdcb4d65e927e8de39064c7e818c1798bd696e987438",
+    "results/e28/3b/metrics_nar.json": "40f35716e824ae7239345f37634d3e771b993778ea6e17a71b1b39ed6d1b0c26",
+    "results/e28/8b/metrics.json": "2db6696f7e6080d002c472a87b4e265cec47ff506cbeb0f076aa4704679a13d1",
+    "results/e28/8b/metrics_fp16.json": "d270e0895827a946f2518dd252fb340b2aa75f699674744d9dcc495ed6d227bc",
+    "results/e28/8b/metrics_hadamard.json": "d5e70943b87b43cc0ba55372a7b3367dce4287698747301238f0b39ac7b8dffe",
+    "results/e28/8b/metrics_nar.json": "475d5c74fb066cc632458600f913d756f119f3936a7dd3a27f8f3d6a539fdc86",
+    "results/e28/e17v3_a40_summary.json": "aa7b0e2a3abc543590bcefb94df9e8cafd078825953782fa438dc98721e29574",
+    "results/e28/env.txt": "98920fe42b2306f40cd1e4ac9676218947e8020f0830bbe0593bfee313a1c1b3",
+    "results/e28/table.tex": "33bbfb60cbd2af7ce42c41ba5e85ba4a56b6e13b8eee12a4aa6ba85b9437affb"
+  }
+}

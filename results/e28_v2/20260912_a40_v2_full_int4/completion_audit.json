@@ -1,0 +1,93 @@
+{
+  "core_complete_processes": 11,
+  "core_expected_processes": 72,
+  "core_status": "INCOMPLETE",
+  "correctness": [
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/cache_diagnose.json",
+      "status": null
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_3b_fp16.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_3b_hadamard.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_3b_nar.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_8b_fp16.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_8b_hadamard.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/model_8b_nar.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [
+        {
+          "case": "large_accumulator",
+          "finite": false,
+          "integer_exact": true,
+          "matches_backend_narrowing_semantics": true,
+          "max_integer_accumulator": 401408,
+          "n": 8192,
+          "relative_l2_vs_matched_float": null,
+          "status": "FAIL",
+          "test": "int4_gemm_dequant"
+        },
+        {
+          "case": "large_accumulator",
+          "finite": false,
+          "integer_exact": true,
+          "matches_backend_narrowing_semantics": true,
+          "max_integer_accumulator": 702464,
+          "n": 14336,
+          "relative_l2_vs_matched_float": null,
+          "status": "FAIL",
+          "test": "int4_gemm_dequant"
+        }
+      ],
+      "reason": null,
+      "source": "correctness/operators_all.json",
+      "status": "FAIL"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/r4_3b.json",
+      "status": "PASS"
+    },
+    {
+      "failed_rows": [],
+      "reason": null,
+      "source": "correctness/r4_8b.json",
+      "status": "PASS"
+    }
+  ],
+  "pipeline_finished": false,
+  "raw_stage_failures": [],
+  "timestamp": "2026-09-12T04:07:00.965588+00:00"
+}

@@ -1,0 +1,18 @@
+{
+  "frozen_at": "2026-09-12T03:04:57.851833+00:00",
+  "predecessor": "results/e28_v2/20260912_a40_v2",
+  "reason": "Legacy packed byte1..6 initializes upper nibble zero and lower nibble positive; 8B NAR produces nonfinite model outputs despite finite local R4 transforms.",
+  "single_predefined_control": "Uniform packed bytes0..255, independently covering full signed INT4 nibbles[-8,7]; same name-based seeds and scales, same shared hashes; no seed/distribution sweep.",
+  "retained": "All legacy failures and measured raw records remain at predecessor path.",
+  "unchanged": [
+    "FP16 reference state",
+    "all INT4 kernels and quantizers",
+    "factor tensors",
+    "configs",
+    "shapes",
+    "thresholds",
+    "10 warmup/50 repeats/3 sessions",
+    "GPU allocation150777"
+  ],
+  "interpretation": "A new frozen random-weight performance protocol, not real model quality and not a repair of the backend INT32-to-FP16 overflow boundary."
+}

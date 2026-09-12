@@ -1,0 +1,632 @@
+{
+  "comparisons": [
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "hadamard_speedup": 1.2606626507961531,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": 1.2462664030871529,
+      "nar_throughput_ratio_pct": 98.85804122935596,
+      "phase": "prefill1",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.01141958770644036
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "hadamard_speedup": 1.2859266896452253,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": 1.267211584561848,
+      "nar_throughput_ratio_pct": 98.54462114877322,
+      "phase": "prefill16",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.014553788512267851
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "direction_consistent": false,
+      "hadamard_speedup": 0.4835665706807561,
+      "interpretation": "fewer than three comparable sessions; no stable advantage established",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": -5.0774364516013915,
+      "nar_speedup": 0.509432691874359,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention.",
+      "session_nar_over_had_minus_one": [
+        -0.050774364516013915
+      ]
+    },
+    {
+      "acceleration_retention_pct": null,
+      "hadamard_speedup": 0.536555598199275,
+      "mode": "eager_step_sync",
+      "model": "3b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": null,
+      "nar_throughput_ratio_pct": null,
+      "phase": "decode",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention."
+    }
+  ],
+  "correctness_status": {
+    "cache_diagnose": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": null
+    },
+    "model_3b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_3b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_3b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "operators_all": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "FAIL"
+    },
+    "r4_3b": {
+      "complete": true,
+      "completed_layers": 28,
+      "reason": null,
+      "status": "PASS"
+    },
+    "r4_8b": {
+      "complete": true,
+      "completed_layers": 32,
+      "reason": null,
+      "status": "PASS"
+    }
+  },
+  "deployment": [
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 8718088192,
+      "peak_reserved_bytes": 8803844096,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 21.022602170705795,
+        "mean": 21.022602170705795,
+        "median": 21.022602170705795,
+        "min": 21.022602170705795,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 21.8154959497042,
+          "mean": 21.013758251288287,
+          "median": 21.022602170705795,
+          "min": 20.582083410893876,
+          "n": 50,
+          "session": 1,
+          "std": 0.23989153314041672
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_decode_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 21.8154959497042,
+        "mean": 21.013758251288287,
+        "median": 21.022602170705795,
+        "min": 20.582083410893876,
+        "n": 50,
+        "std": 0.23989153314041672
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 8703178752,
+      "peak_reserved_bytes": 8789164032,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 10172.58061058015,
+        "mean": 10172.58061058015,
+        "median": 10172.58061058015,
+        "min": 10172.58061058015,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 10184.303967367816,
+          "mean": 10170.204621673332,
+          "median": 10172.58061058015,
+          "min": 10128.814428692245,
+          "n": 50,
+          "session": 1,
+          "std": 11.603751420878465
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_prefill1_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 10184.303967367816,
+        "mean": 10170.204621673332,
+        "median": 10172.58061058015,
+        "min": 10128.814428692245,
+        "n": 50,
+        "std": 11.603751420878465
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 14546491392,
+      "peak_reserved_bytes": 15193866240,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 13915.92414964468,
+        "mean": 13915.92414964468,
+        "median": 13915.92414964468,
+        "min": 13915.92414964468,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 14068.466517458863,
+          "mean": 13941.273736407293,
+          "median": 13915.92414964468,
+          "min": 13851.62273947,
+          "n": 50,
+          "session": 1,
+          "std": 69.34822309200977
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_prefill16_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 14068.466517458863,
+        "mean": 13941.273736407293,
+        "median": 13915.92414964468,
+        "min": 13851.62273947,
+        "n": 50,
+        "std": 69.34822309200977
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_step_sync",
+      "model": "3b",
+      "peak_allocated_bytes": 8718088192,
+      "peak_reserved_bytes": 8803844096,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 23.124728353771694,
+        "mean": 23.124728353771694,
+        "median": 23.124728353771694,
+        "min": 23.124728353771694,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 23.50867537315935,
+          "mean": 23.087990785328053,
+          "median": 23.124728353771694,
+          "min": 22.588375327177346,
+          "n": 50,
+          "session": 1,
+          "std": 0.1834531682073116
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_step_sync_decode_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 23.50867537315935,
+        "mean": 23.087990785328053,
+        "median": 23.124728353771694,
+        "min": 22.588375327177346,
+        "n": 50,
+        "std": 0.1834531682073116
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 4352544768,
+      "peak_reserved_bytes": 4469030912,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 43.47406013015036,
+        "mean": 43.47406013015036,
+        "median": 43.47406013015036,
+        "min": 43.47406013015036,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 44.26901136757806,
+          "mean": 43.44014656947304,
+          "median": 43.47406013015036,
+          "min": 42.361051899691425,
+          "n": 50,
+          "session": 1,
+          "std": 0.3543055770059157
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_sequence_decode_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 44.26901136757806,
+        "mean": 43.44014656947304,
+        "median": 43.47406013015036,
+        "min": 42.361051899691425,
+        "n": 50,
+        "std": 0.3543055770059157
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 4348121088,
+      "peak_reserved_bytes": 4464836608,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 12824.192437971522,
+        "mean": 12824.192437971522,
+        "median": 12824.192437971522,
+        "min": 12824.192437971522,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 12833.46851695313,
+          "mean": 12808.925238642301,
+          "median": 12824.192437971522,
+          "min": 12736.448001853583,
+          "n": 50,
+          "session": 1,
+          "std": 28.335172766908105
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_sequence_prefill1_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 12833.46851695313,
+        "mean": 12808.925238642301,
+        "median": 12824.192437971522,
+        "min": 12736.448001853583,
+        "n": 50,
+        "std": 28.335172766908105
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 8099586048,
+      "peak_reserved_bytes": 9810477056,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 17894.858275106628,
+        "mean": 17894.858275106628,
+        "median": 17894.858275106628,
+        "min": 17894.858275106628,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 17924.3976779061,
+          "mean": 17898.69467985243,
+          "median": 17894.858275106628,
+          "min": 17879.134564019532,
+          "n": 50,
+          "session": 1,
+          "std": 13.301073453681065
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_sequence_prefill16_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 17924.3976779061,
+        "mean": 17898.69467985243,
+        "median": 17894.858275106628,
+        "min": 17879.134564019532,
+        "n": 50,
+        "std": 13.301073453681065
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "hadamard",
+      "mode": "eager_step_sync",
+      "model": "3b",
+      "peak_allocated_bytes": 4352544768,
+      "peak_reserved_bytes": 4469030912,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 43.09847559391831,
+        "mean": 43.09847559391831,
+        "median": 43.09847559391831,
+        "min": 43.09847559391831,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 44.532556020809956,
+          "mean": 43.230748586279034,
+          "median": 43.09847559391831,
+          "min": 42.6647911236311,
+          "n": 50,
+          "session": 1,
+          "std": 0.4546231833869019
+        }
+      ],
+      "source_keys": [
+        "3b_hadamard_eager_step_sync_decode_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 44.532556020809956,
+        "mean": 43.230748586279034,
+        "median": 43.09847559391831,
+        "min": 42.6647911236311,
+        "n": 50,
+        "std": 0.4546231833869019
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 4374729216,
+      "peak_reserved_bytes": 4492099584,
+      "phase": "decode",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 41.266692354111,
+        "mean": 41.266692354111,
+        "median": 41.266692354111,
+        "min": 41.266692354111,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 42.289935083438955,
+          "mean": 41.33240633706252,
+          "median": 41.266692354111,
+          "min": 40.74098333949223,
+          "n": 50,
+          "session": 1,
+          "std": 0.33933179601307845
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_sequence_decode_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 42.289935083438955,
+        "mean": 41.33240633706252,
+        "median": 41.266692354111,
+        "min": 40.74098333949223,
+        "n": 50,
+        "std": 0.33933179601307845
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 4370305024,
+      "peak_reserved_bytes": 4487905280,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 12677.745447661837,
+        "mean": 12677.745447661837,
+        "median": 12677.745447661837,
+        "min": 12677.745447661837,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 12686.008759587758,
+          "mean": 12669.941853903234,
+          "median": 12677.745447661837,
+          "min": 12594.734637873064,
+          "n": 50,
+          "session": 1,
+          "std": 23.050000896728868
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_sequence_prefill1_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 12686.008759587758,
+        "mean": 12669.941853903234,
+        "median": 12677.745447661837,
+        "min": 12594.734637873064,
+        "n": 50,
+        "std": 23.050000896728868
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "nar",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 8122687488,
+      "peak_reserved_bytes": 9833545728,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 17634.42029231372,
+        "mean": 17634.42029231372,
+        "median": 17634.42029231372,
+        "min": 17634.42029231372,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 17674.900993058614,
+          "mean": 17636.78251482107,
+          "median": 17634.42029231372,
+          "min": 17588.891961551657,
+          "n": 50,
+          "session": 1,
+          "std": 19.59018449913409
+        }
+      ],
+      "source_keys": [
+        "3b_nar_eager_sequence_prefill16_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 17674.900993058614,
+        "mean": 17636.78251482107,
+        "median": 17634.42029231372,
+        "min": 17588.891961551657,
+        "n": 50,
+        "std": 19.59018449913409
+      }
+    }
+  ],
+  "generated_at": "2026-09-12T04:07:00.845550+00:00",
+  "graph_performance": {
+    "comparisons": [],
+    "deployment": [],
+    "missing_reason": "No validated matched graph timing records yet",
+    "protocol_conformance": {
+      "binary_sha256": [],
+      "gpu_uuids": [],
+      "same_environment": null,
+      "same_gpu": null,
+      "same_input": null,
+      "state_checks": [],
+      "status": "PENDING_OR_REVIEW_REQUIRED"
+    },
+    "raw_status": [],
+    "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
+    "status": "INCOMPLETE",
+    "timestamp": "2026-09-12T04:07:00.848645+00:00"
+  },
+  "missing_policy": "null+reason; never fill unmeasured performance with zero",
+  "protocol_sha256": "9fb2c2cfdcdb666c661a4c84c91d6c436c1043e80a5cb43bc58c29ad52383528",
+  "real_checkpoint": {
+    "rows": [
+      {
+        "available_files": [
+          {
+            "bytes": 201329861,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_01.pt"
+          },
+          {
+            "bytes": 201329861,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_00.pt"
+          },
+          {
+            "bytes": 4070,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/gptq_audit.partial.csv"
+          }
+        ],
+        "complete_manifests": [],
+        "model": "3b",
+        "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b",
+        "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+        "status": "BLOCKED"
+      },
+      {
+        "available_files": [],
+        "complete_manifests": [],
+        "model": "8b",
+        "path": "/projects/nar/nar-validation/artifacts/e14/llama31_8b",
+        "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+        "status": "BLOCKED"
+      }
+    ]
+  }
+}

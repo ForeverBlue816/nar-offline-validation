@@ -1,0 +1,53 @@
+{
+  "rows": [
+    {
+      "expected_model_storage_delta_bytes": 22052864,
+      "factor_bytes": 22020096,
+      "inference_peak_allocated_delta_bytes": 22184448,
+      "mode": "eager_sequence",
+      "model": "3b",
+      "note": "Unattributed remainder is retained explicitly; allocator granularity and extension allocations are not conflated with tensor storage.",
+      "observed_model_loaded_allocated_delta_bytes": 22052864,
+      "partial_workspace_bytes": 131200,
+      "phase": "decode",
+      "removed_hadamard_buffer_bytes": 0,
+      "session": 1,
+      "shared_h128_bytes": 32768,
+      "unattributed_loaded_delta_bytes": 0,
+      "warmed_allocated_delta_bytes": 22184448
+    },
+    {
+      "expected_model_storage_delta_bytes": 22052864,
+      "factor_bytes": 22020096,
+      "inference_peak_allocated_delta_bytes": 23101440,
+      "mode": "eager_sequence",
+      "model": "3b",
+      "note": "Unattributed remainder is retained explicitly; allocator granularity and extension allocations are not conflated with tensor storage.",
+      "observed_model_loaded_allocated_delta_bytes": 22052864,
+      "partial_workspace_bytes": 1048576,
+      "phase": "prefill16",
+      "removed_hadamard_buffer_bytes": 0,
+      "session": 1,
+      "shared_h128_bytes": 32768,
+      "unattributed_loaded_delta_bytes": 0,
+      "warmed_allocated_delta_bytes": 23101440
+    },
+    {
+      "expected_model_storage_delta_bytes": 22052864,
+      "factor_bytes": 22020096,
+      "inference_peak_allocated_delta_bytes": 22183936,
+      "mode": "eager_sequence",
+      "model": "3b",
+      "note": "Unattributed remainder is retained explicitly; allocator granularity and extension allocations are not conflated with tensor storage.",
+      "observed_model_loaded_allocated_delta_bytes": 22052864,
+      "partial_workspace_bytes": 131072,
+      "phase": "prefill1",
+      "removed_hadamard_buffer_bytes": 0,
+      "session": 1,
+      "shared_h128_bytes": 32768,
+      "unattributed_loaded_delta_bytes": 0,
+      "warmed_allocated_delta_bytes": 22183936
+    }
+  ],
+  "units": "exact bytes; MB=1e6; same model/mode/phase/session only"
+}

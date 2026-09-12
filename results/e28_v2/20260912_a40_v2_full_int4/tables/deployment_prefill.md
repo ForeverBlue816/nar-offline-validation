@@ -1,0 +1,10 @@
+Random weights; total input throughput. Core values require three sessions; incomplete rows are provisional. Run/session dispersion is in deployment_sessions.md.
+
+| Model | Method | B1 tok/s | Speedup | B16 tok/s | Speedup |
+| --- | --- | --- | --- | --- | --- |
+| 3b | FP16 | 10172.58 | 1.00 | 13915.92 | 1.00 |
+| 3b | QuaRot Hadamard | 12824.19 | 1.26 | 17894.86 | 1.29 |
+| 3b | PrismQuant k=8 | 12677.75 | 1.25 | 17634.42 | 1.27 |
+| 8b | FP16 | N/A | N/A | N/A | N/A |
+| 8b | QuaRot Hadamard | N/A | N/A | N/A | N/A |
+| 8b | PrismQuant k=8 | N/A | N/A | N/A | N/A |

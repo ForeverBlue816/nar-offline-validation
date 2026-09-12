@@ -1,0 +1,41 @@
+{
+  "interpretation": "Profiler durations are separate diagnostics, not main timing samples. Kernel sum, wall and event elapsed are distinct. Gaps do not measure CPU arithmetic.",
+  "rows": [
+    {
+      "method": "fp16",
+      "model": "3b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    },
+    {
+      "method": "hadamard",
+      "model": "3b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    },
+    {
+      "method": "nar",
+      "model": "3b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    },
+    {
+      "method": "fp16",
+      "model": "8b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    },
+    {
+      "method": "hadamard",
+      "model": "8b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    },
+    {
+      "method": "nar",
+      "model": "8b",
+      "reason": "No profile record yet",
+      "status": "PENDING"
+    }
+  ]
+}

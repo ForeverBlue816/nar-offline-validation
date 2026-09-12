@@ -1,0 +1,9 @@
+{
+  "recorded_at": "2026-09-12T03:07:40.944264+00:00",
+  "evidence": "../20260912_a40_v2/correctness/activation_diagnose_8b.json",
+  "first_nonfinite_module": "residual_layer_31",
+  "previous_layer_max_abs": 64416.0,
+  "nonfinite_elements_after_final_decoder": 234,
+  "largest_observed_r4_u": 1132.2032470703125,
+  "conclusion": "Original positive/zero-nibble random state drives FP16 residual overflow; local R4 arithmetic remains finite. Complete signed INT4 initialization is a distinct fixed control, not changed factors/thresholds."
+}

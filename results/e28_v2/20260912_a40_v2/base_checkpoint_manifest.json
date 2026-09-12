@@ -1,0 +1,53 @@
+{
+  "rows": [
+    {
+      "files": [
+        {
+          "bytes": 4965799096,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Llama-3.2-3B/snapshots/d4446454d87d51aa42e1fb174f25acc5f8762331/model-00001-of-00002.safetensors",
+          "sha256": "584d8d3e3f82f7964955174dfe5e3b1cf117a9d859f022cfdf7fcb884856e002"
+        },
+        {
+          "bytes": 1459729952,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Llama-3.2-3B/snapshots/d4446454d87d51aa42e1fb174f25acc5f8762331/model-00002-of-00002.safetensors",
+          "sha256": "4719a04514ec2f060240711b7c33ab21187cac730ecaba3040b7a0fd95a9cefb"
+        }
+      ],
+      "integer_k8_status": "BLOCKED",
+      "model": "3b",
+      "reason": "A base floating checkpoint is not a compensated/quantized k8 checkpoint or a groupwise integer loader.",
+      "snapshot": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Llama-3.2-3B/snapshots/d4446454d87d51aa42e1fb174f25acc5f8762331",
+      "status": "AVAILABLE_FP16_BASE_ONLY"
+    },
+    {
+      "files": [
+        {
+          "bytes": 4976698672,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc/model-00001-of-00004.safetensors",
+          "sha256": "f8b9704ab09cdeb097aa4a0a24bca96f906eec36bad63ab495bc21475058601b"
+        },
+        {
+          "bytes": 4999802720,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc/model-00002-of-00004.safetensors",
+          "sha256": "c28b25e7541751056ee126627e007f8d4288319733285e9f7b17b9ff6eb313f0"
+        },
+        {
+          "bytes": 4915916176,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc/model-00003-of-00004.safetensors",
+          "sha256": "d8e9504dd4e4a146d484c52a97584ec14dac92237c46b064934af67a85e7d383"
+        },
+        {
+          "bytes": 1168138808,
+          "path": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc/model-00004-of-00004.safetensors",
+          "sha256": "e4486f35c040f683f7d790354f66c169c109eb9fa0954a4a35d7c458a108405d"
+        }
+      ],
+      "integer_k8_status": "BLOCKED",
+      "model": "8b",
+      "reason": "A base floating checkpoint is not a compensated/quantized k8 checkpoint or a groupwise integer loader.",
+      "snapshot": "/projects/nar/nar-validation/cache/huggingface/models--unsloth--Meta-Llama-3.1-8B/snapshots/e9a141a2091ea561b96483212645a2a05e6f99fc",
+      "status": "AVAILABLE_FP16_BASE_ONLY"
+    }
+  ],
+  "timestamp": "2026-09-12T02:41:04.614349+00:00"
+}

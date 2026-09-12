@@ -1,0 +1,19 @@
+{
+  "after_commit": "f33a7b27453f19e804d8057420318717e0471af6",
+  "originals": [
+    {
+      "execution_source_sha256": "4b71652eae4ee99c34d2b5e1a16d425be5deacc1558c6c7649d1d8eb12d7a4e1",
+      "key": "3b_fp16_eager_sequence_prefill1_s1",
+      "sha256": "386aad231a986ea922809c4a79a2442d7d70cc11198ff98d7b9ab78b38c54687",
+      "status": "PASS"
+    },
+    {
+      "execution_source_sha256": "4b71652eae4ee99c34d2b5e1a16d425be5deacc1558c6c7649d1d8eb12d7a4e1",
+      "key": "3b_fp16_eager_sequence_prefill16_s1",
+      "sha256": "43b2bb3467fc83bee00722c7a4688c4d5c4d06daa3cd6a440dd855557f78bfc7",
+      "status": "PASS"
+    }
+  ],
+  "reason": "Explicitly clear allocator-only correctness-preflight residue before10 complete inference warmups; both affected processes are repeated in full, no selection by speed.",
+  "timestamp": "2026-09-12T03:21:34.581582+00:00"
+}

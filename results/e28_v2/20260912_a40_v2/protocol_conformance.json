@@ -1,0 +1,19 @@
+{
+  "environment_variants": 1,
+  "gpu_uuids": [
+    "GPU-97605b97-fbc5-631d-fd5d-348d2f30ba22"
+  ],
+  "same_gpu": true,
+  "same_inputs": true,
+  "state_checks": [
+    {
+      "key": "3b_fp16_eager_sequence_prefill1_s1",
+      "shared_state_matches_verified_model": true
+    },
+    {
+      "key": "3b_fp16_eager_sequence_prefill16_s1",
+      "shared_state_matches_verified_model": true
+    }
+  ],
+  "status": "PASS"
+}

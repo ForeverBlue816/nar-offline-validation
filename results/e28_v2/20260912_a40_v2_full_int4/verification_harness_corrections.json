@@ -1,0 +1,8 @@
+{
+  "changes": [
+    "Pass required cache_kwargs={} in direct KV operator test.",
+    "Rebuilt factor bitwise identity was an overstrict harness check across CPU hosts. Preserve exact-match diagnostic; validate original Householder path against the actually exported factors using the already-frozen fold relative-L2 <=2e-5. No transform/code-match thresholds changed."
+  ],
+  "source_sha256": "c655b519e550302c946065b81e7543b48df60df332503ed64f4bfc0203f7619b",
+  "timestamp": "2026-09-12T03:10:11.320492+00:00"
+}

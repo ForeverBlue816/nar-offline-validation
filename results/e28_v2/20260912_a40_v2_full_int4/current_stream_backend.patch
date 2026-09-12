@@ -1,0 +1,102 @@
+--- a/quarot/kernels/quant.cu
++++ b/quarot/kernels/quant.cu
+@@ -1,3 +1,4 @@
++#include <ATen/cuda/CUDAContext.h>
+ #include <quant.h>
+ 
+ 
+@@ -57,7 +58,7 @@
+ 
+     dim3 block{std::min<uint32_t>(colsDst, 32), std::min<uint32_t>(rows, 16)};
+     dim3 grid{cdiv(colsDst, block.x), cdiv(rows, block.y)};
+-    sym_quantize_f16_i4_kernel<<<grid, block>>>(x, scale, rows, colsSrc, colsDst, q);
++    sym_quantize_f16_i4_kernel<<<grid, block, 0, at::cuda::getCurrentCUDAStream()>>>(x, scale, rows, colsSrc, colsDst, q);
+ }
+ 
+ 
+@@ -90,7 +91,7 @@
+ {
+     dim3 block{std::min<uint32_t>(cols, 16), std::min<uint32_t>(rows, 16)};
+     dim3 grid{cdiv(cols, block.x), cdiv(rows, block.y)};
+-    sym_dequantize_i32_f16_kernel<<<grid, block>>>(
++    sym_dequantize_i32_f16_kernel<<<grid, block, 0, at::cuda::getCurrentCUDAStream()>>>(
+             q,
+             scale_row, scale_col,
+             rows, cols, x);
+--- a/quarot/kernels/flashinfer.cu
++++ b/quarot/kernels/flashinfer.cu
+@@ -1,3 +1,4 @@
++#include <ATen/cuda/CUDAContext.h>
+ #pragma once
+ #include <algorithm>
+ #include <cmath>
+@@ -42,7 +43,7 @@
+ 
+   flashinfer::BatchDecodeWithPagedKVCacheKernel<
+       rotary_mode, norm_on_the_fly, vec_size, bdx, bdy, FoldFactor, DTypeInQ,
+-      DTypeIn, DTypeOut, int32_t><<<nblks, nthrs>>>(
++      DTypeIn, DTypeOut, int32_t><<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(
+       q, paged_kv, o, sm_scale, rope_inv_scale, rope_inv_theta);
+ }
+ 
+@@ -67,7 +68,7 @@
+   dim3 nblks(paged_kv.batch_size * ((paged_kv.num_heads + bdy - 1) / bdy));
+   dim3 nthrs(bdx, bdy);
+   flashinfer::AppendPagedKVCachePrefillKernel<head_dim, vec_size, bdx, bdy, T,
+-                                              int32_t><<<nblks, nthrs>>>(
++                                              int32_t><<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(
+       paged_kv, (T*)key, (T*)value, key_param, value_param, seqlen_indptr);
+ }
+ 
+@@ -93,7 +94,7 @@
+   dim3 nthrs(bdx, bdy);
+   flashinfer::AppendPagedKVCacheDecodeKernel<head_dim, vec_size, bdx, bdy, T,
+                                              int32_t>
+-      <<<nblks, nthrs>>>(paged_kv, (T*)key, (T*)value, key_param, value_param);
++      <<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(paged_kv, (T*)key, (T*)value, key_param, value_param);
+ }
+ 
+ 
+@@ -133,7 +134,7 @@
+ 
+   flashinfer::BatchDecodeWithPagedKVCacheKernel<
+       rotary_mode, norm_on_the_fly, vec_size, bdx, bdy, FoldFactor, DTypeInQ,
+-      DTypeIn, DTypeOut, int32_t><<<nblks, nthrs>>>(
++      DTypeIn, DTypeOut, int32_t><<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(
+       q, paged_kv, o, sm_scale, rope_inv_scale, rope_inv_theta);
+ }
+ 
+@@ -158,7 +159,7 @@
+   dim3 nblks(paged_kv.batch_size * ((paged_kv.num_heads + bdy - 1) / bdy));
+   dim3 nthrs(bdx, bdy);
+   flashinfer::AppendPagedKVCachePrefillKernel<head_dim, vec_size, bdx, bdy, T,
+-                                              int32_t><<<nblks, nthrs>>>(
++                                              int32_t><<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(
+       paged_kv, (T*)key, (T*)value, key_param, value_param, seqlen_indptr);
+ }
+ 
+@@ -184,7 +185,7 @@
+   dim3 nthrs(bdx, bdy);
+   flashinfer::AppendPagedKVCacheDecodeKernel<head_dim, vec_size, bdx, bdy, T,
+                                              int32_t>
+-      <<<nblks, nthrs>>>(paged_kv, (T*)key, (T*)value, key_param, value_param);
++      <<<nblks, nthrs, 0, at::cuda::getCurrentCUDAStream()>>>(paged_kv, (T*)key, (T*)value, key_param, value_param);
+ }
+ 
+ 
+--- a/quarot/kernels/gemm.cu
++++ b/quarot/kernels/gemm.cu
+@@ -1,3 +1,4 @@
++#include <ATen/cuda/CUDAContext.h>
+ #include <cutlass/gemm/device/gemm.h>
+ #include <gemm.h>
+ 
+@@ -38,7 +39,7 @@
+             {1,                                0}
+     };
+ 
+-    auto status = gemmOp(arguments);
++    auto status = gemmOp(arguments, nullptr, at::cuda::getCurrentCUDAStream());
+ 
+     ensure(status == cutlass::Status::kSuccess,
+            cutlassGetStatusString(status));

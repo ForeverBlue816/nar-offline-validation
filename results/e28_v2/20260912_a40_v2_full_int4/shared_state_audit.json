@@ -1,0 +1,21 @@
+{
+  "rows": [
+    {
+      "differences": [],
+      "hadamard_source": "correctness/model_3b_hadamard.json",
+      "model": "3b",
+      "nar_source": "correctness/model_3b_nar.json",
+      "status": "PASS",
+      "tensor_count": 423
+    },
+    {
+      "differences": [],
+      "hadamard_source": "correctness/model_8b_hadamard.json",
+      "model": "8b",
+      "nar_source": "correctness/model_8b_nar.json",
+      "status": "PASS",
+      "tensor_count": 451
+    }
+  ],
+  "status": "PASS"
+}

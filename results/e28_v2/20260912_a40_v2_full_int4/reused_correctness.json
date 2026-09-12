@@ -1,0 +1,30 @@
+{
+  "reused_at": "2026-09-12T03:04:57.851485+00:00",
+  "rows": [
+    {
+      "source": "results/e28_v2/20260912_a40_v2/correctness/r4_3b.json",
+      "sha256": "c420c66065e94aec214cc95806e9acb3cd54199f075ecd6c413e594e4a9199cc",
+      "reason": "Local operators/factors/real activation inputs and FP16 parameters are unchanged; only integer weight initialization changes."
+    },
+    {
+      "source": "results/e28_v2/20260912_a40_v2/correctness/r4_8b.json",
+      "sha256": "d321388e9eff91cb255158f4f5fc7dbb25643434dd7cfc4f1056b785a4cad09a",
+      "reason": "Local operators/factors/real activation inputs and FP16 parameters are unchanged; only integer weight initialization changes."
+    },
+    {
+      "source": "results/e28_v2/20260912_a40_v2/correctness/operators_all.json",
+      "sha256": "6fab0cf6705fac2596ef2ed6b82bc227375cf50a7524a6e1e740bfed4c03a6da",
+      "reason": "Local operators/factors/real activation inputs and FP16 parameters are unchanged; only integer weight initialization changes."
+    },
+    {
+      "source": "results/e28_v2/20260912_a40_v2/correctness/model_3b_fp16.json",
+      "sha256": "aa230036e55c6168ce80696f8e3910a430f1e741b4017f39490c56f49736cb3d",
+      "reason": "Local operators/factors/real activation inputs and FP16 parameters are unchanged; only integer weight initialization changes."
+    },
+    {
+      "source": "results/e28_v2/20260912_a40_v2/correctness/model_8b_fp16.json",
+      "sha256": "da430e691dd6d9248b27b4ab6544234a9d6291d0a1e79f0262bc03f24db5bba3",
+      "reason": "Local operators/factors/real activation inputs and FP16 parameters are unchanged; only integer weight initialization changes."
+    }
+  ]
+}

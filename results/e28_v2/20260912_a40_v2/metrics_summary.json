@@ -1,0 +1,232 @@
+{
+  "comparisons": [
+    {
+      "acceleration_retention_pct": null,
+      "hadamard_speedup": null,
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": null,
+      "nar_throughput_ratio_pct": null,
+      "phase": "prefill1",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention."
+    },
+    {
+      "acceleration_retention_pct": null,
+      "hadamard_speedup": null,
+      "mode": "eager_sequence",
+      "model": "3b",
+      "nar_latency_overhead_pct": null,
+      "nar_speedup": null,
+      "nar_throughput_ratio_pct": null,
+      "phase": "prefill16",
+      "retention_reason": "Hadamard must exceed1.05x in each of three comparable sessions; negative/near-zero/unstable denominators are not acceleration retention."
+    }
+  ],
+  "correctness_status": {
+    "activation_diagnose_8b": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": null
+    },
+    "cache_diagnose": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": null
+    },
+    "model_3b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_3b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_3b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_fp16": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_hadamard": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "PASS"
+    },
+    "model_8b_nar": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "FAIL"
+    },
+    "operators_all": {
+      "complete": null,
+      "completed_layers": null,
+      "reason": null,
+      "status": "FAIL"
+    },
+    "r4_3b": {
+      "complete": true,
+      "completed_layers": 28,
+      "reason": null,
+      "status": "PASS"
+    },
+    "r4_8b": {
+      "complete": true,
+      "completed_layers": 32,
+      "reason": null,
+      "status": "PASS"
+    }
+  },
+  "deployment": [
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 8703178752,
+      "peak_reserved_bytes": 8843689984,
+      "phase": "prefill1",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 10116.3318544025,
+        "mean": 10116.3318544025,
+        "median": 10116.3318544025,
+        "min": 10116.3318544025,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 10161.264425502048,
+          "mean": 10118.43625048346,
+          "median": 10116.3318544025,
+          "min": 10090.056174024823,
+          "n": 50,
+          "session": 1,
+          "std": 18.18876527364102
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_prefill1_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 10161.264425502048,
+        "mean": 10118.43625048346,
+        "median": 10116.3318544025,
+        "min": 10090.056174024823,
+        "n": 50,
+        "std": 18.18876527364102
+      }
+    },
+    {
+      "independent_sessions": 1,
+      "method": "fp16",
+      "mode": "eager_sequence",
+      "model": "3b",
+      "peak_allocated_bytes": 14546491392,
+      "peak_reserved_bytes": 16368271360,
+      "phase": "prefill16",
+      "required_sessions": 3,
+      "session_median_dispersion": {
+        "max": 13973.377881157292,
+        "mean": 13973.377881157292,
+        "median": 13973.377881157292,
+        "min": 13973.377881157292,
+        "n": 1,
+        "std": 0.0
+      },
+      "session_summaries": [
+        {
+          "max": 14082.262278459053,
+          "mean": 13983.77569184592,
+          "median": 13973.377881157292,
+          "min": 13902.545705658213,
+          "n": 50,
+          "session": 1,
+          "std": 58.476297852923935
+        }
+      ],
+      "source_keys": [
+        "3b_fp16_eager_sequence_prefill16_s1"
+      ],
+      "status": "PROVISIONAL",
+      "summary": {
+        "max": 14082.262278459053,
+        "mean": 13983.77569184592,
+        "median": 13973.377881157292,
+        "min": 13902.545705658213,
+        "n": 50,
+        "std": 58.476297852923935
+      }
+    }
+  ],
+  "generated_at": "2026-09-12T04:07:00.672070+00:00",
+  "graph_performance": {
+    "comparisons": [],
+    "deployment": [],
+    "missing_reason": "No validated matched graph timing records yet",
+    "protocol_conformance": {
+      "binary_sha256": [],
+      "gpu_uuids": [],
+      "same_environment": null,
+      "same_gpu": null,
+      "same_input": null,
+      "state_checks": [],
+      "status": "PENDING_OR_REVIEW_REQUIRED"
+    },
+    "raw_status": [],
+    "scope": "Private current-stream patch, same binary for every row in this panel; not original-binary core timing",
+    "status": "INCOMPLETE",
+    "timestamp": "2026-09-12T04:07:00.680326+00:00"
+  },
+  "missing_policy": "null+reason; never fill unmeasured performance with zero",
+  "protocol_sha256": "9042df3fabb29a16532ee729d9d662e2fcb0c87f71771da60323f1f83387750b",
+  "real_checkpoint": {
+    "rows": [
+      {
+        "available_files": [
+          {
+            "bytes": 201329861,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_01.pt"
+          },
+          {
+            "bytes": 201329861,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/layer_00.pt"
+          },
+          {
+            "bytes": 4070,
+            "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b/gptq_nar_kmax_seed1/gptq_audit.partial.csv"
+          }
+        ],
+        "complete_manifests": [],
+        "model": "3b",
+        "path": "/projects/nar/nar-validation/artifacts/e14/llama32_3b",
+        "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+        "status": "BLOCKED"
+      },
+      {
+        "available_files": [],
+        "complete_manifests": [],
+        "model": "8b",
+        "path": "/projects/nar/nar-validation/artifacts/e14/llama31_8b",
+        "reason": "No complete local k8 checkpoint; existing E14 loader is fake quantization and incompatible with current integer GEMM/KV contract.",
+        "status": "BLOCKED"
+      }
+    ]
+  }
+}

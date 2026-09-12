@@ -1,0 +1,191 @@
+diff --git a/quarot/kernels/bindings.cpp b/quarot/kernels/bindings.cpp
+index d48a18c..7aba1e4 100644
+--- a/quarot/kernels/bindings.cpp
++++ b/quarot/kernels/bindings.cpp
+@@ -142,17 +142,19 @@ void batch_decode_i4(torch::Tensor o, torch::Tensor q, torch::Tensor kv_data,
+   int page_size = static_cast<int>(kv_data.size(4));
+   int head_dim = static_cast<int>(kv_data.size(5)) * 2;
+   int batch_size = static_cast<int>(o.size(0));
++  int num_qo_heads = static_cast<int>(q.size(1));  // GQA: >= num_heads (KV heads)
+   CHECK_SHAPE(o, q);
+   CHECK_EQ(kv_indptr.size(0), batch_size + 1);
+   CHECK_EQ(last_page_offset.size(0), batch_size);
+   CHECK_EQ(head_dim, 128);
++  CHECK_EQ(num_qo_heads % num_heads, 0);
+ 
+   FlashInferBatchDecodeKernel_i4<128>(
+       (nv_half *)o.data_ptr(), (nv_half *)q.data_ptr(),
+       (void *)kv_data.data_ptr(), (nv_half2 *)kv_param.data_ptr(),
+       kv_indptr.data_ptr<int32_t>(), kv_indicies.data_ptr<int32_t>(),
+       last_page_offset.data_ptr<int32_t>(), num_layers, layer_idx, num_heads,
+-      page_size, batch_size);
++      page_size, batch_size, num_qo_heads);
+ }
+ 
+ void init_kv_i4(torch::Tensor kv_data, torch::Tensor kv_param,
+@@ -271,17 +273,19 @@ void batch_decode_f16(torch::Tensor o, torch::Tensor q, torch::Tensor kv_data,
+   int page_size = static_cast<int>(kv_data.size(4));
+   int head_dim = static_cast<int>(kv_data.size(5));
+   int batch_size = static_cast<int>(o.size(0));
++  int num_qo_heads = static_cast<int>(q.size(1));  // GQA: >= num_heads (KV heads)
+   CHECK_SHAPE(o, q);
+   CHECK_EQ(kv_indptr.size(0), batch_size + 1);
+   CHECK_EQ(last_page_offset.size(0), batch_size);
+   CHECK_EQ(head_dim, 128);
++  CHECK_EQ(num_qo_heads % num_heads, 0);
+ 
+   FlashInferBatchDecodeKernel_f16<128>(
+       (nv_half *)o.data_ptr(), (nv_half *)q.data_ptr(),
+       (void *)kv_data.data_ptr(), (nv_half2 *)kv_param.data_ptr(),
+       kv_indptr.data_ptr<int32_t>(), kv_indicies.data_ptr<int32_t>(),
+       last_page_offset.data_ptr<int32_t>(), num_layers, layer_idx, num_heads,
+-      page_size, batch_size);
++      page_size, batch_size, num_qo_heads);
+ }
+ 
+ void init_kv_f16(torch::Tensor kv_data, torch::Tensor kv_param,
+diff --git a/quarot/kernels/flashinfer.cu b/quarot/kernels/flashinfer.cu
+index 8e73523..1cd8035 100644
+--- a/quarot/kernels/flashinfer.cu
++++ b/quarot/kernels/flashinfer.cu
+@@ -12,7 +12,7 @@ void FlashInferBatchDecodeKernel_i4(nv_half* o, nv_half* q, void* kv_data,
+                                     int32_t* kv_indicies,
+                                     int32_t* last_page_offset, int num_layers,
+                                     int layer_idx, int num_heads, int page_size,
+-                                    int batch_size) {
++                                    int batch_size, int num_qo_heads) {
+   using DTypeIn = flashinfer::quant::__precision__s4;
+   using DTypeInQ = nv_half;
+   using DTypeOut = nv_half;
+@@ -36,7 +36,8 @@ void FlashInferBatchDecodeKernel_i4(nv_half* o, nv_half* q, void* kv_data,
+       static_cast<size_t>(head_dim / 32));
+   constexpr size_t bdx = head_dim / vec_size;
+   constexpr size_t bdy = 128 / bdx;
+-  dim3 nblks(paged_kv.batch_size, paged_kv.num_heads);
++  // GQA: one block per (batch, query head); the kernel maps query heads to KV heads.
++  dim3 nblks(paged_kv.batch_size, num_qo_heads);
+   dim3 nthrs(bdx, bdy);
+ 
+   flashinfer::BatchDecodeWithPagedKVCacheKernel<
+@@ -102,7 +103,7 @@ void FlashInferBatchDecodeKernel_f16(nv_half* o, nv_half* q, void* kv_data,
+                                     int32_t* kv_indicies,
+                                     int32_t* last_page_offset, int num_layers,
+                                     int layer_idx, int num_heads, int page_size,
+-                                    int batch_size) {
++                                    int batch_size, int num_qo_heads) {
+   using DTypeIn = nv_half;
+   using DTypeInQ = nv_half;
+   using DTypeOut = nv_half;
+@@ -126,7 +127,8 @@ void FlashInferBatchDecodeKernel_f16(nv_half* o, nv_half* q, void* kv_data,
+       static_cast<size_t>(head_dim / 32));
+   constexpr size_t bdx = head_dim / vec_size;
+   constexpr size_t bdy = 128 / bdx;
+-  dim3 nblks(paged_kv.batch_size, paged_kv.num_heads);
++  // GQA: one block per (batch, query head); the kernel maps query heads to KV heads.
++  dim3 nblks(paged_kv.batch_size, num_qo_heads);
+   dim3 nthrs(bdx, bdy);
+ 
+   flashinfer::BatchDecodeWithPagedKVCacheKernel<
+@@ -190,7 +192,7 @@ template void FlashInferBatchDecodeKernel_i4<128>(
+     nv_half* o, nv_half* q, void* kv_data, nv_half2* kv_param,
+     int32_t* kv_indptr, int32_t* kv_indicies, int32_t* last_page_offset,
+     int num_layers, int layer_idx, int num_heads, int page_size,
+-    int batch_size);
++    int batch_size, int num_qo_heads);
+ 
+ template void FlashInferInitKvKernel_i4<128>(
+     void* kv_data, nv_half2* kv_param, int32_t* kv_indptr, int32_t* kv_indicies,
+@@ -209,7 +211,7 @@ template void FlashInferBatchDecodeKernel_f16<128>(
+     nv_half* o, nv_half* q, void* kv_data, nv_half2* kv_param,
+     int32_t* kv_indptr, int32_t* kv_indicies, int32_t* last_page_offset,
+     int num_layers, int layer_idx, int num_heads, int page_size,
+-    int batch_size);
++    int batch_size, int num_qo_heads);
+ 
+ template void FlashInferInitKvKernel_f16<128>(
+     void* kv_data, nv_half2* kv_param, int32_t* kv_indptr, int32_t* kv_indicies,
+diff --git a/quarot/kernels/include/flashinfer.h b/quarot/kernels/include/flashinfer.h
+index a7c9b3c..207862b 100644
+--- a/quarot/kernels/include/flashinfer.h
++++ b/quarot/kernels/include/flashinfer.h
+@@ -9,7 +9,7 @@ void FlashInferBatchDecodeKernel_i4(nv_half* o, nv_half* q, void* kv_data,
+                                     int32_t* kv_indicies,
+                                     int32_t* last_page_offset, int num_layers,
+                                     int layer_idx, int num_heads, int page_size,
+-                                    int batch_size);
++                                    int batch_size, int num_qo_heads);
+ 
+ template <int head_dim>
+ void FlashInferInitKvKernel_i4(void* kv_data, nv_half2* kv_param,
+@@ -36,7 +36,7 @@ void FlashInferBatchDecodeKernel_f16(nv_half* o, nv_half* q, void* kv_data,
+                                     int32_t* kv_indicies,
+                                     int32_t* last_page_offset, int num_layers,
+                                     int layer_idx, int num_heads, int page_size,
+-                                    int batch_size);
++                                    int batch_size, int num_qo_heads);
+ 
+ template <int head_dim>
+ void FlashInferInitKvKernel_f16(void* kv_data, nv_half2* kv_param,
+diff --git a/quarot/kernels/include/flashinfer/decode.cuh b/quarot/kernels/include/flashinfer/decode.cuh
+index 842ca80..9daaeb3 100644
+--- a/quarot/kernels/include/flashinfer/decode.cuh
++++ b/quarot/kernels/include/flashinfer/decode.cuh
+@@ -505,7 +505,10 @@ __global__ void BatchDecodeWithPagedKVCacheKernel(
+   size_t batch_idx = blockIdx.x;
+   size_t head_idx = blockIdx.y;
+   size_t num_heads = gridDim.y;
+-  
++  // GQA (Llama-3): the grid spans the query heads; each group of
++  // num_heads / paged_kv.num_heads query heads reads one KV head.
++  size_t kv_head_idx = head_idx / (num_heads / paged_kv.num_heads);
++
+   // [cur_page_indptr_begin, cur_page_indptr_end)
+   size_t cur_page_indptr_begin = paged_kv.indptr[batch_idx], cur_page_indptr_end = paged_kv.indptr[batch_idx + 1];
+   size_t cur_last_page_offset = paged_kv.last_page_offset[batch_idx]; // Perfectly equal to seq_len here
+@@ -579,13 +582,13 @@ __global__ void BatchDecodeWithPagedKVCacheKernel(
+                                (ty_mem < bdy);
+     cp_async::pred_load<vec_bits, true>(
+       quant::get_ptr(k_smem, (stage_idx * bdy + ty_mem) * head_dim + tx_mem * vec_size * FoldFactor),
+-      quant::get_ptr(paged_kv.data, paged_kv.get_k_elem_offset(producer_page_idx, head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
++      quant::get_ptr(paged_kv.data, paged_kv.get_k_elem_offset(producer_page_idx, kv_head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
+       producer_pred_guard
+     );
+     cp_async::commit_group();
+     cp_async::pred_load<vec_bits, true>(
+       quant::get_ptr(v_smem, (stage_idx * bdy + ty_mem) * head_dim + tx_mem * vec_size * FoldFactor),
+-      quant::get_ptr(paged_kv.data, paged_kv.get_v_elem_offset(producer_page_idx, head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
++      quant::get_ptr(paged_kv.data, paged_kv.get_v_elem_offset(producer_page_idx, kv_head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
+       producer_pred_guard
+     );
+     cp_async::commit_group();
+@@ -629,10 +632,10 @@ __global__ void BatchDecodeWithPagedKVCacheKernel(
+       float2 paramK, paramV;
+       if(consumer_pred_guard){
+         paramK = __half22float2(
+-          quant::get_ptr(paged_kv.param, paged_kv.get_param_k_elem_offset(consumer_kv_page_idx, head_idx, consumer_kv_entry))[0]
++          quant::get_ptr(paged_kv.param, paged_kv.get_param_k_elem_offset(consumer_kv_page_idx, kv_head_idx, consumer_kv_entry))[0]
+         );
+         paramV = __half22float2(
+-          quant::get_ptr(paged_kv.param, paged_kv.get_param_v_elem_offset(consumer_kv_page_idx, head_idx, consumer_kv_entry))[0]
++          quant::get_ptr(paged_kv.param, paged_kv.get_param_v_elem_offset(consumer_kv_page_idx, kv_head_idx, consumer_kv_entry))[0]
+         );
+       }
+ 
+@@ -650,7 +653,7 @@ __global__ void BatchDecodeWithPagedKVCacheKernel(
+       // load k tiles
+       cp_async::pred_load<vec_bits, true>(
+         quant::get_ptr(k_smem, (stage_idx * bdy + ty_mem) * head_dim + tx_mem * vec_size * FoldFactor),
+-        quant::get_ptr(paged_kv.data, paged_kv.get_k_elem_offset(producer_page_idx, head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
++        quant::get_ptr(paged_kv.data, paged_kv.get_k_elem_offset(producer_page_idx, kv_head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
+         producer_pred_guard
+       );
+       cp_async::commit_group();
+@@ -668,7 +671,7 @@ __global__ void BatchDecodeWithPagedKVCacheKernel(
+       // load v tiles
+       cp_async::pred_load<vec_bits, true>(
+         quant::get_ptr(v_smem, (stage_idx * bdy + ty_mem) * head_dim + tx_mem * vec_size * FoldFactor),
+-        quant::get_ptr(paged_kv.data, paged_kv.get_v_elem_offset(producer_page_idx, head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
++        quant::get_ptr(paged_kv.data, paged_kv.get_v_elem_offset(producer_page_idx, kv_head_idx, producer_entry_base + ty_mem, tx_mem * vec_size * FoldFactor)),
+         producer_pred_guard
+       );
+       cp_async::commit_group();
