@@ -1,8 +1,8 @@
 {
   "source_commit": "519ddad56370051e59afbc83d18aa35db0456d55",
   "size_inches": [
-    5.5,
-    6.05
+    6.6,
+    4.95
   ],
   "panels": [
     "a",
@@ -38,6 +38,16 @@
     "solid": "Original BOS-excluded rank-256, layers 1/13/27; 768 unchanged points",
     "dashed": "Existing all-token rank-64, layers 5/9/18/22; 256 additional points; no continuation beyond measured rank"
   },
+  "shared_legend": {
+    "location": "between panel rows",
+    "center_figure_fraction": [
+      0.55,
+      0.505
+    ],
+    "columns": 5
+  },
+  "bin_summary_color": "#601D49",
+  "bin_marker_fill": "#F2E4ED",
   "reference_fit": {
     "intercept": 0.05980223276470587,
     "slope": 0.8665147718600141,

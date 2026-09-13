@@ -1,5 +1,14 @@
 # Manuscript figure revisions
 
+## 2026-09-13: wider Figures 2/3, central legend and Figure 5 naming
+
+- Increased Figure 2 from 5.5 × 2.55 to 6.6 × 2.25 inches and Figure 3 from 5.5 × 6.05 to 6.6 × 4.95 inches. Kept native font sizes, original Fig2 pastel colors/thin strokes, all points, fit coefficients and axis limits.
+- Consolidated Figure 3's family/reference/bin legend into a single row between panels b and c. Removed the bottom legend and moved the energy protocol key to b's subtitle to avoid crowding after reducing height.
+- Replaced the bin-median/quartile gold accent with Figure 1 burgundy #601D49 and a matching pale fill.
+- Assigned deployment efficiency to Figure 5: renamed main/component exports and the generator; updated metadata, captions, LaTeX references, README and QA. The old generator forwards to make_fig5.py; frozen measurement tables retain their descriptive names. Figure 5's plotted appearance and measurements are unchanged.
+- Refreshed all full-resolution exports, aliases, caption typesetting and rendered QA. Actual PDF dimensions, shared-legend position and burgundy color are checked in addition to existing source, font, point-count, alignment and collision gates.
+
+
 ## 2026-09-13: Figure 2 original colors and lighter strokes
 
 - Restored the original deep-blue PrismQuant, pale-cyan Hadamard and pale-pink DuQuant colors, including matching legend handles.

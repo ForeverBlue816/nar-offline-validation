@@ -76,7 +76,8 @@ def verify(promote=False):
         with Image.open(base.with_suffix('.png')) as im:
             assert min(im.info['dpi'])>599 and abs(im.width-page.rect.width/72*600)<3 and abs(im.height-page.rect.height/72*600)<3
         if base in BASES:
-            assert abs(page.rect.width/72-5.5)<.001
+            expected_width=5.5 if base.name=='fig3_energy_all_token_context' else 6.6
+            assert abs(page.rect.width/72-expected_width)<.001
             alignment=json.loads((QA/f'{base.name}.alignment.json').read_text());assert alignment['verdict'] in ['PASS','NOT APPLICABLE']
             page.get_pixmap(dpi=150).save(QA/f'{base.name}.pdf-render.png')
             cairosvg.svg2png(url=str(base.with_suffix('.svg')),write_to=str(QA/f'{base.name}.svg-render.png'),output_width=round(page.rect.width/72*150),output_height=round(page.rect.height/72*150))
@@ -102,6 +103,23 @@ def verify(promote=False):
             assert all(tag not in all_text for tag in ['E1c','E7','E20','E26'])
             assert all(label in page.get_text() for label in ['Activations','V-cache','Multi-slot','0.61','0.43'])
         report['assets'].append({'file':str(base.relative_to(ROOT)),'minimum_font_pt':minimum,'vector_only':True,'embedded_Times':True,'editable_SVG':True,'PNG_dpi':600,'collisions':0})
+    # Check the revised physical shape and the shared legend's actual PDF location.
+    shape_report={}
+    for name,size in [('fig2_revised',[6.6,2.25]),('fig3_revised',[6.6,4.95])]:
+        page=pymupdf.open(HERE/f'{name}.pdf')[0]
+        np.testing.assert_allclose([page.rect.width/72,page.rect.height/72],size,atol=1e-5)
+        shape_report[name]=size
+    page=pymupdf.open(HERE/'fig3_revised.pdf')[0]
+    legend=page.search_for('Bin median + IQR');assert len(legend)==1
+    axes=json.loads((QA/'fig3_revised.alignment.json').read_text())['layout']['panels']
+    bounds={a['id']:a['bbox_pt'] for a in axes}
+    page_height=page.rect.height
+    assert page_height-bounds['b'][1] < legend[0].y0 < legend[0].y1 < page_height-bounds['c'][3]
+    svg_text=(HERE/'fig3_revised.svg').read_text().lower()
+    assert '#601d49' in svg_text and '#a77b58' not in svg_text
+    meta3=json.loads((HERE/'fig3_revised_metadata.json').read_text())
+    assert meta3['bin_summary_color']=='#601D49'
+    report['layout_revision']={'native_size_inches':shape_report,'shared_legend_between_rows':True,'bin_color':'#601D49'}
     captions=(HERE/'captions_fig2_fig3.txt').read_text();assert not re.search(r'\bE(?:1c|7|20|26)\b',captions)
     (QA/'verification.json').write_text(json.dumps(report,indent=2)+'\n')
     for path in QA.glob('*.json'):path.write_text(path.read_text().replace(str(ROOT)+'/', ''))

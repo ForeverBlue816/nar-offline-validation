@@ -30,10 +30,10 @@ scatter/bar marks are explicitly identified as schematic illustrations.
 - **Figure 2:** [PDF](fig2_revised.pdf), [SVG](fig2_revised.svg), [600-dpi PNG](fig2_revised.png). Three paired layer panels, original blue/cyan/pink colors and lighter curves; every original value retained.
 - **Figure 3:** [PDF](fig3_revised.pdf), [SVG](fig3_revised.svg), [600-dpi PNG](fig3_revised.png). Four panels: geometry, seven-layer energy coverage, pooled range law, and all-expert MoE evidence. Internal experiment IDs appear only in provenance.
 - **Figure 4:** [PDF](fig4_revised.pdf), [SVG](fig4_revised.svg), [600-dpi PNG](fig4_revised.png). Accuracy and rank recovery, plus the restored blue/teal decoder-layer cost panel.
-- **Deployment:** [PDF](fig_deployment_efficiency.pdf), [SVG](fig_deployment_efficiency.svg), [600-dpi PNG](fig_deployment_efficiency.png). Explicit prefill batch size and enlarged implementation comparisons.
+- **Figure 5 — deployment:** [PDF](fig5.pdf), [SVG](fig5.svg), [600-dpi PNG](fig5.png). Explicit prefill batch size and enlarged implementation comparisons.
 - Figure 1 and the method framework retain their existing exports.
 
-`fig2.pdf/svg/png`, `fig3.pdf/svg/png`, and their preview files are verified compatibility copies. Active standalone panels are `fig2a/b/c` and `fig3a/b/c/d`, with equivalent named copies under `panels/fig2_fig3/`. The old split law panels and scripts are archived in `archive/fig2_fig3_before_oral_revision/`. All new figures use actual Times New Roman Bold at 7.5–10.5 pt and 5.5-inch manuscript width. Captions are kept separate from the bare figures.
+`fig2.pdf/svg/png`, `fig3.pdf/svg/png`, and their preview files are verified compatibility copies. Active standalone panels are `fig2a/b/c` and `fig3a/b/c/d`, with equivalent named copies under `panels/fig2_fig3/`. The old split law panels and scripts are archived in `archive/fig2_fig3_before_oral_revision/`. All new figures use actual Times New Roman Bold at 7.5–10.5 pt. Figures 2/3 use a wider 6.6-inch canvas; Figures 4/5 retain their 5.5-inch width. Captions are kept separate from the bare figures.
 
 ![Figure 2](fig2_revised.png)
 
@@ -201,16 +201,15 @@ are retained; the addendum lives in the per-layer CSV and done metadata.
 
 The revised Figure 4 has a left-spanning activation metadata panel, rank recovery at upper right, and the restored original decoder-layer transform cost at lower right. All accuracy and cost points are retained. The widened k=8 category band remains. Panel c uses blue/teal model colors, four k=8/32 points and both dashed Hadamard references; its separately benchmarked transform/(layer+transform) statistic is explained in the caption. The deployment figure provides eager prefill throughput, private
 Graph decode latency and allocated memory, and measured implementation
-ablations. It is named `fig_deployment_efficiency` until the complete
-manuscript establishes numbering.
+ablations. Deployment efficiency is now **Figure 5**, with canonical `fig5.pdf/svg/png`, `fig5_metadata.json`, and `fig5_caption.txt`. Frozen measurement/provenance tables retain their original descriptive filenames.
 
 ![Revised Figure 4](fig4_revised.png)
 
-![Deployment efficiency](fig_deployment_efficiency.png)
+![Figure 5 — deployment efficiency](fig5.png)
 
 Both main figures are drawn at **5.5 inches wide**, with real embedded Times
 New Roman Bold (all text at least 7.5 pt), editable SVG text, vector PDF, and
-600-dpi PNG. Figure 4 is 5.55 inches high; deployment is 5.35 inches high.
+600-dpi PNG. Figure 4 is 5.55 inches high; Figure 5 is 5.35 inches high.
 `fig4.pdf`, `fig4.svg`, and `fig4_preview.png` are compatibility copies of the
 revised Figure 4, promoted only after QA. `fig4_revised_metadata.json` describes
 the current layout; `fig4_metadata.json` remains the original data/panel record.
@@ -258,7 +257,7 @@ installation. Use `FIGURE4_FONT_DIR` if needed; font files are never committed.
 ```bash
 python figures/build_e28_figure_data.py
 python figures/make_fig4_revised.py --reuse-data
-python figures/make_deployment_efficiency.py --reuse-data
+python figures/make_fig5.py --reuse-data
 python figures/make_deployment_appendix.py --reuse-data
 python figures/write_deployment_captions.py
 python figures/verify_deployment_figures.py --promote-fig4
@@ -309,9 +308,9 @@ assembly, rather than the bare panels alone, carries the causal story.
 
 Figure 2 retains 252 values (28 layers × 3 methods × 3 metrics), the 1/128 reference, and the unchanged 25.30% range / 40.41% NMSE mean reductions. Main curves are 1.5 pt; comparators are 1.05 pt and the dashed reference is 0.85 pt. The original palette is restored: PrismQuant deep blue #1D3557, Hadamard pale cyan #A8DADC and DuQuant pale pink #F5CBCB. Markers and axes are lighter while the final-size font and layout are retained. The original diagnostic scope and source-row linkage remain explicit.
 
-Figure 3 has four equal plot areas. Panel a preserves all 8,064 standardized non-BOS token projections and both original unit-direction vectors. Panel b preserves all 768 original BOS-excluded rank-256 energy points at layers 1/13/27 and adds all 256 existing rank-64 points at layers 5/9/18/22. These additional spectra include BOS: dashed/solid styles, a visible note and the caption distinguish the protocols; no curve is extrapolated or spliced. A common all-token seven-layer view is in `appendix/fig3_energy_all_token_context.pdf/svg/png`, including the BOS-dominated layer-1 trace.
+Figure 2 is 6.6 × 2.25 inches and Figure 3 is 6.6 × 4.95 inches, increasing their horizontal-to-vertical ratios. Figure 3 has four equal plot areas and one shared law/family legend between its upper and lower rows, with no bottom legend. Panel a preserves all 8,064 standardized non-BOS token projections and both original unit-direction vectors. Panel b preserves all 768 original BOS-excluded rank-256 energy points at layers 1/13/27 and adds all 256 existing rank-64 points at layers 5/9/18/22. These additional spectra include BOS: dashed/solid styles, a visible note and the caption distinguish the protocols; no curve is extrapolated or spliced. A common all-token seven-layer view is in `appendix/fig3_energy_all_token_context.pdf/svg/png`, including the BOS-dominated layer-1 trace.
 
-Panel c combines all 2,912 existing activation/V-cache/multi-slot observations. Circle/square/diamond markers distinguish the families, without internal experiment IDs. The original reference coefficients and R² are unchanged. Panel d retains all 5,342 available experts and displays ten equal-count f-bin medians with empirical Q1–Q3 intervals. No MoE fitted line is displayed. The predefined full-row subset (4,955 experts reaching the original 256-row cap) has within-subset OLS R²=0.61; the all-expert value 0.43 remains visible. Metadata separately records transferred-reference predictive R² and every eligibility, binning and calibration rule.
+Panel c combines all 2,912 existing activation/V-cache/multi-slot observations. Circle/square/diamond markers distinguish the families, without internal experiment IDs. The original reference coefficients and R² are unchanged. Panel d retains all 5,342 available experts and displays ten equal-count f-bin medians with empirical Q1–Q3 intervals in Figure 1 burgundy (#601D49). No MoE fitted line is displayed. The predefined full-row subset (4,955 experts reaching the original 256-row cap) has within-subset OLS R²=0.61; the all-expert value 0.43 remains visible. Metadata separately records transferred-reference predictive R² and every eligibility, binning and calibration rule.
 
 Source inspection confirms 263 experts have f>0.5; excluding them reduces x variance by 71.38% and within-subset R² to 0.19. Cold (<2048 routed tokens) reference residuals have 3.82× the hot-expert standard deviation. These are descriptive checks, not causal evidence. MoE experts are excluded from the dense reference fit; their retained evaluation rows are part of expert calibration capture and are not described as an independent calibration/test split.
 
@@ -325,6 +324,8 @@ python figures/write_fig2_fig3_captions.py
 python figures/verify_fig2_fig3_revised.py --promote
 python figures/check_fig2_fig3_reproducibility.py
 ```
+
+The wider figures use the existing font sizes at native 6.6-inch width; LaTeX inclusion notes state the scale explicitly. Standalone panels c/d reuse the central shared legend from the full Figure 3.
 
 Use the existing `requirements-deployment-figures.txt` CPU environment and a licensed Times New Roman installation. The shared style honors `FIGURE4_FONT_DIR`; no font binaries are redistributed. The legacy `make_fig2.py` / `make_fig3.py` entry points dispatch to the active renderers. The data builder performs only file reads and NumPy/pandas summaries; it never launches calibration, eigensolvers, model inference or GPU work. Do not run historical preparation scripts to reproduce these exports.
 

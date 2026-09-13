@@ -193,7 +193,7 @@ def build():
     write_csv('fig4_revised_data.csv',accuracy+[x for x in ROWS if x['metric']=='decode_overhead' and x['mode']=='cuda_graph_sequence'])
     meta=dict(source_commit=COMMIT,source_run=RUN,graph_correctness='6/6 PASS',matched_private_timing='36/36 PASS',
         backend='Python/matplotlib; CPU-only artifact generation',source_hashes=HASHES,
-        figure_width_inches=5.5,figure_number='fig_deployment_efficiency; numbering deferred pending complete manuscript',
+        figure_width_inches=5.5,figure_number=5,
         statistics=dict(deployment_center='pooled median of 150 formal runs; three separately recorded sessions',
             kernel_center='median of three paired-session wall-time ratios',memory='max of independent-session inference peaks',
             whiskers='min–max of three session medians (paired ratios where applicable); memory uses session peaks; not 95% CI',

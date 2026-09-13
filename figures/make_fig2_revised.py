@@ -16,7 +16,7 @@ METHODS=[('hadamard','Hadamard',TEAL,TEAL,'o'),
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--draft',action='store_true');ap.add_argument('--reuse-data',action='store_true');args=ap.parse_args()
     typography=style();plt.rcParams.update({'axes.linewidth':.9,'xtick.major.width':.8,'ytick.major.width':.8});data=pd.read_csv(HERE/'fig2_revised_data.csv');source=json.loads((HERE/'fig2_fig3_source_metadata.json').read_text())
-    fig,axes=plt.subplots(1,3,figsize=(5.5,2.55));fig.subplots_adjust(left=.095,right=.985,bottom=.23,top=.69,wspace=.62)
+    fig,axes=plt.subplots(1,3,figsize=(6.6,2.25));fig.subplots_adjust(left=.08,right=.987,bottom=.255,top=.71,wspace=.52)
     titles=['Null-space energy','Activation range','INT4 error'];ylabs=['Energy fraction, f','Mean group range','Activation NMSE']
     reductions={}
     for ax,letter,title,ylabel in zip(axes,'abc',titles,ylabs):
@@ -40,7 +40,7 @@ def main():
         for method,label,color,fill,marker in [METHODS[2],METHODS[0],METHODS[1]]]
     fig.legend(handles=handles,loc='upper center',bbox_to_anchor=(.535,.995),ncol=3,frameon=False,handlelength=2,columnspacing=2.1)
     export(fig,HERE/'fig2_revised',draft=args.draft,panel_axes=dict(zip('abc',axes)),qa_directory=HERE/'qa/fig2_fig3',panel_directory=HERE/'panels/fig2_fig3')
-    meta=dict(source_commit=source['source_commit'],size_inches=[5.5,2.55],panels=list('abc'),typography=typography,
+    meta=dict(source_commit=source['source_commit'],size_inches=[6.6,2.25],panels=list('abc'),typography=typography,
         plotted_points=252,point_counts_per_panel=84,layer_indices=list(range(28)),mean_reduction_percent=reductions,
         line_width_pt={'PrismQuant':1.5,'comparators':1.05,'reference':.85,'axes':.9,'ticks':.8},
         marker_edge_width_pt=.45,palette_source='archive/fig2_fig3_before_oral_revision/fig2_metadata.json',

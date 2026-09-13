@@ -18,13 +18,13 @@ import pandas as pd
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parent
 QA=HERE/'qa/deployment'
-BASES=[HERE/'fig4_revised',HERE/'fig_deployment_efficiency',
+BASES=[HERE/'fig4_revised',HERE/'fig5',
        HERE/'appendix/fig4_metadata_8b',HERE/'appendix/fig_e17_rank_cost',
        HERE/'appendix/fig_matched_eager_graph',HERE/'appendix/fig_kernel_all_shapes']
 
 
 def audit_source():
-    for name,includes in [('make_fig4_revised.py',[]),('make_deployment_efficiency.py',[]),('make_deployment_appendix.py',['make_fig4_revised.py'])]:
+    for name,includes in [('make_fig4_revised.py',[]),('make_fig5.py',[]),('make_deployment_appendix.py',['make_fig4_revised.py'])]:
         cmd=[sys.executable,str(HERE/'qa_tools/validate_figure.py'),str(HERE/name),'--json','--font-family','Times New Roman']
         for inc in ['deployment_figure_style.py']+includes:cmd+=['--include-source',str(HERE/inc)]
         r=subprocess.run(cmd,capture_output=True,text=True,check=True)
@@ -69,6 +69,11 @@ def main():
     assert all(data.groupby(['metric','model','method','baseline','mode','phase','batch','tokens'],dropna=False).session.apply(lambda x:set(x)=={0,1,2,3}))
     graph=data[data['mode'].eq('cuda_graph_sequence')]
     assert graph.backend.str.startswith('private current-stream').all()
+    assert metadata['figure_number']==5 and metadata['canonical_export']=='fig5'
+    assert json.loads((HERE/'fig5_metadata.json').read_text())==metadata
+    include=(HERE/'include_deployment_figures.tex').read_text()
+    assert 'figures/fig5.pdf' in include and 'fig5Caption' in include
+    assert 'fig_deployment_efficiency' not in include
     typography=cairo_font()
     import cairosvg
     report=dict(status='PASS',source_commit=metadata['source_commit'],frozen_source_files=len(metadata['source_hashes']),
@@ -104,7 +109,7 @@ def main():
             height_inches=page.rect.height/72,min_font_pt=min(x['size'] for x in spans),
             embedded_font=True,vector_only=True,editable_svg=True,png_dpi=600,collision_failures=0))
     # Assert that every displayed central comparison is derived from the plotted CSV.
-    text=fitz.open(HERE/'fig_deployment_efficiency.pdf')[0].get_text()
+    text=fitz.open(HERE/'fig5.pdf')[0].get_text()
     for metric in ['prefill_speedup','decode_latency','peak_memory']:
         values=data[data.metric.eq(metric)&data.session.eq(0)]
         if metric!='prefill_speedup':values=values[values['mode'].eq('cuda_graph_sequence')]

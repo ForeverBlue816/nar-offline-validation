@@ -53,3 +53,5 @@ There are no significance stars, hidden points, enlarged error bars, smoothing,
 profiler-time substitutions, or full-checkpoint Pareto claims.
 
 2026-09-13 current revision: Figure 4 restores the original decoder-layer cost panel c with blue/teal model colors, while preserving the wider k=8 category band. The preceding E28 Graph-overhead c remains archived. Deployment d's linear zoom contains the complete 0.32566–0.80506 session range and the 1.00 reference. All measurements and statistic definitions remain unchanged. Figure 2/3 has its own separate QA bundle in ../fig2_fig3/.
+
+The deployment figure is now Figure 5. Canonical exports, component panels and their QA records use fig5; metadata records figure_number=5 and the LaTeX caption/reference points to fig5.pdf. The 5.5 × 5.35-inch rendered appearance and all data remain unchanged by renaming.

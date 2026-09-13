@@ -6,7 +6,7 @@ import pandas as pd
 from matplotlib.lines import Line2D
 from matplotlib.ticker import FormatStrFormatter
 from deployment_figure_style import *
-from make_deployment_efficiency import select
+from make_fig5 import select
 from make_fig4_revised import budget, budget_legend
 
 

@@ -18,9 +18,9 @@ def main():
     subprocess.run([sys.executable,str(HERE/'build_e28_figure_data.py')],check=True,cwd=ROOT)
     assert before=={p.name:digest(p) for p in csvs},'Data rebuild changed a plotted value or source record'
     def render():
-        for name in ['make_fig4_revised.py','make_deployment_efficiency.py','make_deployment_appendix.py']:
+        for name in ['make_fig4_revised.py','make_fig5.py','make_deployment_appendix.py']:
             subprocess.run([sys.executable,str(HERE/name),'--reuse-data'],check=True,cwd=ROOT)
-        files=[HERE/(base+ext) for base in ['fig4_revised','fig_deployment_efficiency'] for ext in ['.pdf','.svg','.png']]
+        files=[HERE/(base+ext) for base in ['fig4_revised','fig5'] for ext in ['.pdf','.svg','.png']]
         files += [p for folder in [HERE/'appendix',HERE/'panels'] for p in folder.iterdir() if p.suffix in ['.pdf','.svg','.png'] and not p.name.startswith('fig3_')]
         return {str(p.relative_to(ROOT)):digest(p) for p in sorted(files)}
     first=render();second=render();assert first==second,'Repeated render changed artifact bytes'
