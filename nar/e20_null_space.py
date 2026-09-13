@@ -79,6 +79,9 @@ ROWS = (
     Row("bf16", 0, 0),
     Row("hadamard", 64, 1), Row("hadamard", 128, 1), Row("hadamard", 256, 1),
     Row("hadamard", 256, 2), Row("hadamard", 256, 3),
+    # Added 2026-09-13: the g128 m=2 Hadamard control, so the manuscript's
+    # (group, m) grid has the Hadamard side of the g128 m=2 cell as well.
+    Row("hadamard", 128, 2),
     Row("nar", 64, 1), Row("nar", 128, 1), Row("nar", 256, 1),
     Row("nar", 256, 2), Row("nar", 256, 3), Row("nar", 128, 2),
     # Diagnostics: identical rotations and chunks, c_j stored fp32 instead of
