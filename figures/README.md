@@ -1,8 +1,8 @@
-# PrismQuant manuscript figures — revision 7
+# PrismQuant manuscript figures — September 13 oral revision
 
 Scientific plots are generated with Python/matplotlib. User-specified presentation
 choices take precedence over journal-style defaults. SVG/PDF axes and text remain
-editable; dense scientific marks are embedded rasters.
+editable. Figures 2, 3, 4 and deployment are entirely vector; Figure 1 retains its existing rasterized dense 3D marks.
 
 ## PrismQuant method framework — 2026-09-10
 
@@ -27,20 +27,23 @@ scatter/bar marks are explicitly identified as schematic illustrations.
 
 ## Current exports
 
-- Figure 1: fig1a through fig1g, each in SVG/PDF/transparent 300-dpi PNG.
-  fig1_preview.png and fig1.pdf/svg form a compact 6.6 × 4.25-inch mechanism
-  teaser with a raw-activation fork, two rotation paths, matched range outcomes,
-  and a shared strip of the original three signed traces. Vector arrows and
-  unscaled icons annotate the mechanism; no error/energy results are invented.
-- Figure 2: fig2a/b/c and assembly; Hadamard, DuQuant, and PrismQuant in all three panels.
-- Figure 3: fig3a (cloud), fig3b (energy), and fig3c (two-part range law).
-  fig3c1 and fig3c2 are also exported independently in SVG/PDF/PNG.
-  fig3_preview.png is the complete 2-by-2 review sheet; fig3c_preview.png is
-  the side-by-side range-law comparison. No in-panel titles or footer captions.
+- **Figure 2:** [PDF](fig2_revised.pdf), [SVG](fig2_revised.svg), [600-dpi PNG](fig2_revised.png). Three paired layer panels, original blue/cyan/pink colors and lighter curves; every original value retained.
+- **Figure 3:** [PDF](fig3_revised.pdf), [SVG](fig3_revised.svg), [600-dpi PNG](fig3_revised.png). Four panels: geometry, seven-layer energy coverage, pooled range law, and all-expert MoE evidence. Internal experiment IDs appear only in provenance.
+- **Figure 4:** [PDF](fig4_revised.pdf), [SVG](fig4_revised.svg), [600-dpi PNG](fig4_revised.png). Accuracy and rank recovery, plus the restored blue/teal decoder-layer cost panel.
+- **Deployment:** [PDF](fig_deployment_efficiency.pdf), [SVG](fig_deployment_efficiency.svg), [600-dpi PNG](fig_deployment_efficiency.png). Explicit prefill batch size and enlarged implementation comparisons.
+- Figure 1 and the method framework retain their existing exports.
 
-## Figures 3 and 4 typography and print strokes
+`fig2.pdf/svg/png`, `fig3.pdf/svg/png`, and their preview files are verified compatibility copies. Active standalone panels are `fig2a/b/c` and `fig3a/b/c/d`, with equivalent named copies under `panels/fig2_fig3/`. The old split law panels and scripts are archived in `archive/fig2_fig3_before_oral_revision/`. All new figures use actual Times New Roman Bold at 7.5–10.5 pt and 5.5-inch manuscript width. Captions are kept separate from the bare figures.
 
-Figures 3 and 4 now use the same verified, upright **Times New Roman Bold**
+![Figure 2](fig2_revised.png)
+
+![Figure 3](fig3_revised.png)
+
+The historical sections below record earlier figure choices; the active reproduction workflow is in “Figures 2/3: evidence, provenance and reproduction”.
+
+## Figures 3 and 4 typography and print strokes (historical baseline)
+
+The original Figures 3 and 4 use the same verified, upright **Times New Roman Bold**
 as Figures 1 and 2, including all tick numbers, axes, direct labels, insets,
 and legends. `FIGURE3_FONT_DIR` and `FIGURE4_FONT_DIR` support a custom
 font directory; rendering fails if the actual bold font is unavailable.
@@ -58,7 +61,7 @@ caption text is also exported separately in Times New Roman Bold as
 The typography and rendered checks are recorded in
 `qa/fig3.typography-review.json` and `qa/fig4.typography-review.json`.
 
-## Figure 3 SVG import correction
+## Figure 3 SVG import correction (historical baseline)
 
 The two range-law views (`fig3c1.svg` and `fig3c2.svg`) now contain native
 vector marks for all 2520 activation, 280 V-cache, and 112 multi-slot
@@ -121,9 +124,9 @@ font directory. `figure_typography.py` provides the common font lock and
 caption exporter. Font provenance is in `fig1_metadata.json`, and the
 rendered audit is in `qa/fig1.typography-review.json`.
 
-## Figure 2 DuQuant addendum
+## Figure 2 DuQuant addendum (original measurement protocol)
 
-Figure 2 now uses **Times New Roman Bold** throughout: tick numbers, axis
+The original Figure 2 used **Times New Roman Bold** throughout: tick numbers, axis
 labels, annotations, panel letters, and legend. The unchanged caption text
 is also typeset separately as `fig2_caption.svg/pdf/png` at 8 pt bold;
 the scientific panels remain bare. Tick labels remain 6 pt, axis labels
@@ -194,99 +197,84 @@ asset and frozen-code roots as the Figure 4 measurement helper, supports CPU
 or CUDA, and resumes complete per-layer checkpoints. Original E1c summaries
 are retained; the addendum lives in the per-layer CSV and done metadata.
 
-## Figure 4
+## Figure 4 and deployment efficiency — active September 13 revision
 
-`fig4a` (3B metadata budget), `fig4b` (recovery and kernel cost), and
-`fig4a_8b` (appendix) are separate 2.7-by-4.2-inch SVG/PDF/300-dpi PNG panels.
-`fig4_preview.png` and `fig4.pdf/svg` combine the two main panels. The figures
-contain no titles, footers, protocol notes, or missing-data notices. The
-requested short deployment interpretation appears inside panel b.
+The revised Figure 4 has a left-spanning activation metadata panel, rank recovery at upper right, and the restored original decoder-layer transform cost at lower right. All accuracy and cost points are retained. The widened k=8 category band remains. Panel c uses blue/teal model colors, four k=8/32 points and both dashed Hadamard references; its separately benchmarked transform/(layer+transform) statistic is explained in the caption. The deployment figure provides eager prefill throughput, private
+Graph decode latency and allocated memory, and measured implementation
+ablations. It is named `fig_deployment_efficiency` until the complete
+manuscript establishes numbering.
 
-The budget panels retain every requested existing E20 configuration, with
-mean PPL recomputed from three seeds on 64 chunks and effective bits
-`4 + 16*(m+1)/g`. The unaccounted fp32 coefficient controls are excluded.
-Each panel's CSV lists the exact summary-file row and physical CSV line for
-every point and the bf16 reference. Bracket endpoints are those same plotted
-points; their source lines and PPL differences are in `fig4_metadata.json`.
+![Revised Figure 4](fig4_revised.png)
 
-The revised presentation keeps both columns at 2.7 by 4.2 inches. Panel a
-spans the two stacked panels at right: b1 shows recovery, b2 shows kernel
-cost. Both right-hand axes have the same plot width as a, share their x
-limits, and use a 62:38 ratio of plot heights. Their combined top and bottom
-edges align with a. The two legends occupy a dedicated bottom row with
-matching rectangular frames and 6.5-pt type. Only the three model entries
-appear in the right-hand legend; b2 identifies the timing models directly.
+![Deployment efficiency](fig_deployment_efficiency.png)
 
-The separate bare exports `fig4b1` and `fig4b2` have widths of 2.7 inches
-and heights of 2.604 and 1.596 inches (62:38, summing to a's 4.2 inches).
-They preserve the marks and font sizes while giving each panel its own
-margins. `fig4b` retains the assembled right column with its shared legend.
-`fig4b1.csv` and `fig4b2.csv` partition the unchanged `fig4b.csv`, preserving
-source rows for all 15 recovery points, four kernel points and two references.
+Both main figures are drawn at **5.5 inches wide**, with real embedded Times
+New Roman Bold (all text at least 7.5 pt), editable SVG text, vector PDF, and
+600-dpi PNG. Figure 4 is 5.55 inches high; deployment is 5.35 inches high.
+`fig4.pdf`, `fig4.svg`, and `fig4_preview.png` are compatibility copies of the
+revised Figure 4, promoted only after QA. `fig4_revised_metadata.json` describes
+the current layout; `fig4_metadata.json` remains the original data/panel record.
 
-Budget tick labels are horizontal; the 4.1875 tick remains without text.
-The scale-resolution bracket spans the Hadamard (256,1)/(128,1) pair with
-its label above and no leader. The null-space bracket lies at x=4.25; its
-label sits to the right, clear of the (256,3) point label. A small stroke
-gap at the intervening measured triangle avoids crossing the marker.
-The 3B lower bound stays at 7.60, and the measured bf16 line at 7.61675.
-The 8B appendix uses the same presentation.
+Frozen sources are commit `6747960b96b0b03e626e98eaeeccf0d1abc34e79` and
+`results/e28_v2/20260912_a40_v2_full_int4`. Private Graph correctness is 6/6
+PASS and matched timing 36/36 PASS; failed original-backend Graph captures
+are not plotted. The figure builder verifies raw samples, collector summaries,
+paired denominators, independent memory bytes, and source hashes. Raw CSVs use
+full precision. `deployment_efficiency_table.md` provides readable values.
 
-The green deployed band extends through both right-hand axes. Recovery
-labels (0.39, 0.36, 0.59) sit to the left of k=8, staggered for clearance.
-The two-line interpretation sits at the upper left of b1. Only b2 carries
-x tick labels and the shared x-axis label. Its two solid red diamond lines
-connect measured k=8 and k=32 costs, with percentages beside the markers
-and model names at the ends. Dashed Hadamard references have right-aligned
-labels. All source CSV numbers remain unchanged by this layout revision.
+`fig4_revised_data.csv` retains the 3B/8B budget points, all 15 rank observations,
+original E17 cost points/references, and new Graph overhead. The deployment CSV
+contains 416 central/session rows, including all 30 kernel comparisons. Source
+file, pointer or CSV row, frozen commit/run, backend/mode, workload, units,
+statistic and formula are recorded. Ratio-of-pooled-medians and
+median-of-session-ratios are explicitly distinguished. Memory is maximum
+inference peak allocated bytes across sessions, divided by 1e9.
 
-The recovery panel evaluates `(mean PPL_Hadamard - mean PPL_k) /
-(mean PPL_Hadamard - PPL_bf16)`, directly from PPLs. It does not reuse legacy
-recovery columns with different averaging or rotation-only corrections.
-Llama uses the E11 activation-only protocol (64 chunks; seeds 20260902,
-20260903, 20260904). Qwen uses the existing E18 v2 activation-only results
-(146 chunks; seed 20260902). All five requested categories are measured for
-all three models; there are no missing k values and no interpolated points.
-The per-site maxima (qkv/down) are 24/64 for 3B, 32/112 for Llama 8B,
-and 32/96 for Qwen 8B. At each nominal k, the actual site value is capped
-by that site's maximum. The CSV records both values.
+The paper's accuracy protocols and random-weight E28 timing protocol are not
+checkpoint-level joint accuracy/speed measurements. E28 uses per-token
+symmetric INT4, different from the native paper group-128 asymmetric format.
+See `captions.txt` / `captions.tex` for the full protocol, Graph page layout,
+statistics, backend stress limitations, and interpretation boundaries.
 
-The previously absent Llama k=64 rows were measured on September 5, 2026,
-using the original E11 code at `f424b82`, original test tokens and rotation
-seeds, bf16 weights/KV, and group-128 activation quantization at both sites.
-The frozen E11 eigenvectors were recovered by inverting its b64 Householder
-factors, checked against the stored b128 k32 reflectors, then used for a
-fresh original-protocol 128-sequence permutation calibration. There is no
-new eigensolver fit. Raw losses, factor/basis audits, summary PPLs, and device
-and token-hash provenance are in `results/<model>/e11_k64_*` and
-`E11_K64_DONE.json`. Original E11 tables are preserved.
+Appendix exports in `appendix/` preserve the original RTX PRO 6000 E17 rank
+cost, 8B metadata budget, matched private eager-to-Graph comparison, and all
+T=1/2048/32768 implementation ablations, including unfavorable TC-B points.
+`panels/` holds 15 bare vector/600-dpi panel/strip exports for assembly; reuse each main
+figure's corresponding legend. The complete original Figure 4 and its old
+README are saved in `archive/fig4_before_e28/`; original CSVs and individual
+component exports remain unchanged. The preceding three-panel revision is
+preserved in `archive/fig4_before_two_panel_refinement/`.
 
-Kernel costs come from E17 v3's `*_share_of_layer` columns:
-`100 * kernel_ms / (decoder_layer_ms + kernel_ms)`. The k=8 timing row
-supplies each model's single horizontal Hadamard reference. PrismQuant has
-only the measured k=8 and k=32 timing points; no costs are estimated at other
-k values. `fig4b.csv` carries separate source files and exact CSV line numbers
-for every recovery value, each baseline, and each kernel measurement.
+The prefill labels explicitly say `batch 1` / `batch 16`: these are sequences
+processed together, each containing 2048 input tokens. The deployment d panel
+uses a labeled linear 0.25–1.05 axis, complete session ranges, larger markers,
+thicker comparison segments, and ratios with derived time-reduction labels.
+The reference 1.00 remains visible; neither measurements nor statistics change.
 
-To reproduce the exports and independently verify raw-loss and CSV linkage:
+Reproduce with a CPU plotting environment containing
+`requirements-deployment-figures.txt` and a locally licensed Times New Roman
+installation. Use `FIGURE4_FONT_DIR` if needed; font files are never committed.
 
 ```bash
-python figures/make_fig4.py
-python figures/verify_fig4.py
-python figures/audit_exports.py --figure 4
+python figures/build_e28_figure_data.py
+python figures/make_fig4_revised.py --reuse-data
+python figures/make_deployment_efficiency.py --reuse-data
+python figures/make_deployment_appendix.py --reuse-data
+python figures/write_deployment_captions.py
+python figures/verify_deployment_figures.py --promote-fig4
+# Optional stronger check: two identical full render bundles.
+python figures/check_deployment_reproducibility.py
 ```
 
-To repeat a missing-k experiment, export the `nar/` directory from commit
-`f424b82` into a separate code directory, then run on an allocated GPU:
-
-```bash
-python figures/measure_fig4_k64.py --model llama32_3b \
-  --repo "$PWD" --assets "$NAR_WORKDIR" --scratch "$FIG4_SCRATCH" \
-  --code-root "$FIG4_FROZEN_CODE"
-```
-
-Use `llama31_8b` for the other model. Existing completed measurements are
-reused. The required frozen factors and model cache reside in the asset root.
+`--draft` produces 150-dpi review PNGs; rerun without it for final delivery.
+`--reuse-data` skips data rebuilding and never launches an experiment. None of
+these commands trains, calibrates, benchmarks a GPU, or modifies a kernel.
+Use `include_deployment_figures.tex` for the LaTeX integration. The QA entry
+point checks every main/appendix/standalone vector and PNG, verifies actual
+font embedding, renders PDF and SVG independently, and records results under
+`qa/deployment/`. The source validator includes shared modules and accepts the
+explicit manuscript font contract; its generic Nature TIFF/column-width
+warnings are reviewed against this task's PNG/5.5-inch specification.
 
 ## Figure 1
 
@@ -317,73 +305,30 @@ keeps the fp16(min x) affine offset. Standalone a/b panels are 1.88 × 1.53
 and 1.82 × 1.35 inches; c/d are identically 2.16 × 1.35 inches. The annotated
 assembly, rather than the bare panels alone, carries the causal story.
 
-## Figure 3
+## Figures 2/3: evidence, provenance and reproduction
 
-make_fig3.py was restored from the scatter implementation at commit 721f253,
-then updated. Its ellipse replacement is no longer rendered.
+Figure 2 retains 252 values (28 layers × 3 methods × 3 metrics), the 1/128 reference, and the unchanged 25.30% range / 40.41% NMSE mean reductions. Main curves are 1.5 pt; comparators are 1.05 pt and the dashed reference is 0.85 pt. The original palette is restored: PrismQuant deep blue #1D3557, Hadamard pale cyan #A8DADC and DuQuant pale pink #F5CBCB. Markers and axes are lighter while the final-size font and layout are retained. The original diagnostic scope and source-row linkage remain explicit.
 
-Panel a projects 8064 non-BOS, stride-32 tokens from layer 27 onto the same
-frozen uncentered second-moment v1/v2 basis used by Figure 1. Each coordinate
-is centered and divided by its own sample standard deviation (ddof=0).
-The 0.5–99.5 percentile frame is expanded to the full observed extrema and
-padded 8%, so every point lies inside it. Metadata records both frames.
+Figure 3 has four equal plot areas. Panel a preserves all 8,064 standardized non-BOS token projections and both original unit-direction vectors. Panel b preserves all 768 original BOS-excluded rank-256 energy points at layers 1/13/27 and adds all 256 existing rank-64 points at layers 5/9/18/22. These additional spectra include BOS: dashed/solid styles, a visible note and the caption distinguish the protocols; no curve is extrapolated or spliced. A common all-token seven-layer view is in `appendix/fig3_energy_all_token_context.pdf/svg/png`, including the BOS-dominated layer-1 trace.
 
-The arrows show the unit receiving-group DC direction pulled back through the
-full-width Hadamard and frozen PrismQuant transforms, projected onto v1/v2.
-Their lengths are 0.0150056 and 0.9999949. Arrow coordinates use unit-direction
-cosines overlaid on the standardized token cloud; their lengths are not token
-standard deviations. Their common plotting multiplier is 1.0. The sign of a
-null direction is arbitrary and is oriented toward positive v1.
+Panel c combines all 2,912 existing activation/V-cache/multi-slot observations. Circle/square/diamond markers distinguish the families, without internal experiment IDs. The original reference coefficients and R² are unchanged. Panel d retains all 5,342 available experts and displays ten equal-count f-bin medians with empirical Q1–Q3 intervals. No MoE fitted line is displayed. The predefined full-row subset (4,955 experts reaching the original 256-row cap) has within-subset OLS R²=0.61; the all-expert value 0.43 remains visible. Metadata separately records transferred-reference predictive R² and every eligibility, binning and calibration rule.
 
-Panel b retains the existing rank-256 energy measurements for layers 1/13/27.
-The x axis is logarithmic from 1 to 256. Layer 27 uses deep blue; the other two
-use frosted blue with solid/dashed lines and direct endpoint labels.
+Source inspection confirms 263 experts have f>0.5; excluding them reduces x variance by 71.38% and within-subset R² to 0.19. Cold (<2048 routed tokens) reference residuals have 3.82× the hot-expert standard deviation. These are descriptive checks, not causal evidence. MoE experts are excluded from the dense reference fit; their retained evaluation rows are part of expert calibration capture and are not described as an independent calibration/test split.
 
-Panel c is split by source population: fig3c1 contains all 2520 E1c activation
-points; fig3c2 contains all 280 E7 V-cache and 112 E20 multi-slot points. Both
-use identical axes, the dashed identity line, and the same thin pooled OLS fit.
-Both explicitly label “Pooled R² = 0.86”: this is not a fit estimated within
-either subpanel. The exact pooled fit is y = 0.0598022 + 0.8665148 x,
-R² = 0.8613894973, with x = sqrt(1-f). Small upper-left insets enlarge the
-0.85–1.0 corner. Every point remains in its main plot; inset filtering only
-selects the zoom region. The measured range-law table is unchanged.
-
-Standalone Figure 3 panels are 2.65 by 2.35 inches with 600-dpi PNGs.
-Combined review PNGs are 300 dpi. The paired fig3c canvas is 5.3 by 2.35 inches.
-
-## Palette and type
-
-Height map: #F1FAEE → #A8DADC → #457B9D → #1D3557.
-Text/PrismQuant: #1D3557; raw/cloud/E7: #457B9D; Hadamard/E20: #A8DADC.
-Pane edges: #C9D6DF; grids: #DCE4EA. All labels use upright DejaVu Serif,
-6-pt ticks, 7-pt axis labels, and 6.5-pt legends.
-
-## Reproduce
-
-Use the existing environment with numpy, pandas, torch, matplotlib, Pillow,
-and PyMuPDF. From the committed derived arrays and tables:
+`fig2_revised_data.csv` and `fig3_revised_data.csv` record each plotted point's source commit, file, physical CSV line, fields, formula and units. `fig3_moe_binned_summary.csv` includes exact expert membership for every bin. `fig2_fig3_source_metadata.json` stores source hashes, unrounded statistics, fit definitions and protocol limitations. The original measurement tables are unchanged.
 
 ```bash
-python figures/make_fig1.py --reuse-data
-python figures/make_fig3.py
-python figures/verify_figures.py
-python figures/audit_exports.py
+python figures/build_fig3_moe_summary.py
+python figures/make_fig2_revised.py --reuse-data
+python figures/make_fig3_revised.py --reuse-data
+python figures/write_fig2_fig3_captions.py
+python figures/verify_fig2_fig3_revised.py --promote
+python figures/check_fig2_fig3_reproducibility.py
 ```
 
-To refresh from the frozen activation artifacts, first run:
+Use the existing `requirements-deployment-figures.txt` CPU environment and a licensed Times New Roman installation. The shared style honors `FIGURE4_FONT_DIR`; no font binaries are redistributed. The legacy `make_fig2.py` / `make_fig3.py` entry points dispatch to the active renderers. The data builder performs only file reads and NumPy/pandas summaries; it never launches calibration, eigensolvers, model inference or GPU work. Do not run historical preparation scripts to reproduce these exports.
 
-```bash
-python figures/make_fig1.py --workdir "$NAR_WORKDIR"
-python figures/prepare_fig3.py --workdir "$NAR_WORKDIR" --geometry-only
-python figures/make_fig3.py
-```
-
-The geometry-only route reuses the frozen layer-27 basis and factor. It does
-not rerun a model or eigensolver. The old fig3_eigvecs_layer1.npz is retained as
-historical provenance and is not used by the current renderer.
-
-Scientific linkage, data-integrity comparisons, and rendered export audits are
-in qa/. Figure 2's measurements and files are preserved.
+`captions_fig2_fig3.txt/.tex` contain scientific captions; `include_fig2_fig3.tex` supplies manuscript inclusion. `fig2_caption` and `fig3_caption` are separately typeset. The QA bundle is `qa/fig2_fig3/`: source preflight, actual 7.5-pt minimum embedded-font checks, 1.5-pt plot alignment, zero collisions, native SVG marker counts, independent PDF/SVG and grayscale renders, and two byte-identical full renders. The new bundle contains 12 figures/panels/captions, 36 export artifacts. Legacy assets and QA assumptions remain archived rather than masquerading as current checks.
 
 ## Dominant eigendirections micro-diagram
 

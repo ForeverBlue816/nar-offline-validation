@@ -1,0 +1,75 @@
+{
+  "source_commit": "519ddad56370051e59afbc83d18aa35db0456d55",
+  "size_inches": [
+    5.5,
+    2.55
+  ],
+  "panels": [
+    "a",
+    "b",
+    "c"
+  ],
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "plotted_points": 252,
+  "point_counts_per_panel": 84,
+  "layer_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27
+  ],
+  "mean_reduction_percent": {
+    "b": 25.300744078136486,
+    "c": 40.40835032693099
+  },
+  "line_width_pt": {
+    "PrismQuant": 1.5,
+    "comparators": 1.05,
+    "reference": 0.85,
+    "axes": 0.9,
+    "ticks": 0.8
+  },
+  "marker_edge_width_pt": 0.45,
+  "palette_source": "archive/fig2_fig3_before_oral_revision/fig2_metadata.json",
+  "minimum_font_pt": 7.5,
+  "palette": {
+    "PrismQuant": "#1D3557",
+    "Hadamard": "#A8DADC",
+    "DuQuant": "#F5CBCB"
+  },
+  "source_table": "fig2_revised_data.csv",
+  "statistics": "Unchanged arithmetic mean of the 28 paired per-layer percentage reductions; no seed interval inferred.",
+  "diagnostic_scope": "DuQuant is the existing DuQuant-style diagnostic, not the complete official implementation."
+}

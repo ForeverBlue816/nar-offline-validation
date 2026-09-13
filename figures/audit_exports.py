@@ -10,8 +10,16 @@ import tempfile
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--qa-tools',type=Path,default=Path.home()/'.codex/skills/nature-figure/scripts')
-    parser.add_argument('--figure',choices=['all','1','2','4'],default='all')
+    parser.add_argument('--figure',choices=['all','1','2','3','4'],default='all')
     args=parser.parse_args();tools=args.qa_tools
+    # Active Figures 2/3/4 use the stronger frozen-source/vector verification suites.
+    active_root=Path(__file__).resolve().parent
+    if args.figure in ['all','2','3']:
+        subprocess.run([sys.executable,str(active_root/'verify_fig2_fig3_revised.py')],check=True)
+    if args.figure in ['all','4']:
+        subprocess.run([sys.executable,str(active_root/'verify_deployment_figures.py')],check=True)
+    if args.figure in ['2','3','4']:return
+    if args.figure=='all':args.figure='1'
     root=Path(__file__).resolve().parent; qa=root/'qa';qa.mkdir(exist_ok=True)
     summary={}
     panels=[f'fig1{x}' for x in 'abcdefg']+[f'fig2{x}' for x in 'abc']+[f'fig3{x}' for x in ['a','b','c','c1','c2']]

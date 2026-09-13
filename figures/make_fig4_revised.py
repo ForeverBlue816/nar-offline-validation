@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Activation design and original decoder-layer transform cost; frozen data only."""
+import argparse
+import json
+import numpy as np
+import pandas as pd
+from matplotlib.lines import Line2D
+from matplotlib.ticker import FormatStrFormatter
+from deployment_figure_style import *
+from build_e28_figure_data import build
+
+
+def budget(ax,data,letter='a',model='llama32_3b'):
+    axis(ax,letter,'Activation metadata budget','Llama-3.2-3B' if model=='llama32_3b' else 'Llama-3.1-8B')
+    pts=data[data.kind.eq('point')&data.model.eq(model)]
+    bf=float(data[data.kind.eq('bf16_reference')&data.model.eq(model)].ppl.iloc[0])
+    for method,color,edge,marker in [('hadamard',TEAL,TEAL_EDGE,'o'),('nar',BLUE,BLUE,'s')]:
+        part=pts[pts.method.eq(method)&pts.m.eq(1)].sort_values('effective_bits')
+        ax.plot(part.effective_bits,part.ppl,color=edge if method=='hadamard' else color,lw=2.1,
+                marker=marker,ms=5.4,mfc=color,mec=edge,mew=1,zorder=4)
+        extra=pts[pts.method.eq(method)&pts.m.gt(1)]
+        if method=='nar':
+            for row in extra.itertuples():
+                origin=pts[pts.method.eq(method)&pts.g.eq(row.g)&pts.m.eq(1)].iloc[0]
+                ax.plot([origin.effective_bits,row.effective_bits],[origin.ppl,row.ppl],ls=(0,(1.5,2)),color=BLUE,lw=1.7,zorder=2)
+        ax.plot(extra.effective_bits,extra.ppl,ls='none',marker='o' if method=='hadamard' else '^',ms=5.6,
+                mfc='white' if method=='hadamard' else BLUE,mec=edge,mew=1.1,zorder=5)
+    lower=7.60 if model=='llama32_3b' else 6.19
+    upper=7.845 if model=='llama32_3b' else 6.435
+    ax.set_ylim(lower,upper);ax.set_xlim(4.087,4.57)
+    ax.set_xticks([4.125,4.25,4.375,4.5],['4.13','4.25','4.38','4.50']);ax.grid(False)
+    ax.set_yticks(np.arange(7.60,7.801,.05) if model=='llama32_3b' else [6.20,6.25,6.30,6.35,6.40]);ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+    ax.set_xlabel('Activation bits / value');ax.set_ylabel('WikiText-2 perplexity')
+    ax.axhline(bf,lw=1.7,color=GRAY_EDGE,ls=(0,(3,2)))
+    ax.annotate('bf16 reference',(4.55,bf),xytext=(0,4),textcoords='offset points',ha='right',fontsize=7.5,color=GRAY_EDGE)
+    def pick(method,g,m):return pts[pts.method.eq(method)&pts.g.eq(g)&pts.m.eq(m)].iloc[0]
+    h=pick('hadamard',128,1);n=pick('nar',128,1)
+    y=max(pts.ppl)+.028
+    ax.plot([4.125,4.125,4.25,4.25],[y-.004,y,y,y-.004],lw=1.1,color=STEEL)
+    ax.annotate('Scale resolution',((4.125+4.25)/2,y),xytext=(0,4),textcoords='offset points',ha='center',fontsize=7.5,color=STEEL)
+    x=4.295
+    ax.plot([x-.009,x,x,x-.009],[n.ppl,n.ppl,h.ppl,h.ppl],color=STEEL,lw=1.1)
+    offsets={('hadamard',256,1):(0,-12),('hadamard',256,2):(-7,9),('hadamard',256,3):(26,7),
+        ('hadamard',128,1):(-4,-11),('hadamard',64,1):(0,10),('nar',256,1):(3,-19),
+        ('nar',256,2):(-1,16),('nar',256,3):(36,2),('nar',128,1):(-6,-13),
+        ('nar',128,2):(0,-20),('nar',64,1):(-5,-13)}
+    for row in pts.itertuples():
+        dx,dy=offsets[(row.method,int(row.g),int(row.m))]
+        if model=='llama31_8b' and row.method=='nar' and int(row.g)==128 and int(row.m)==2:dy=-22
+        ax.annotate(f'({int(row.g)}, {int(row.m)})',(row.effective_bits,row.ppl),xytext=(dx,dy),
+                    textcoords='offset points',ha='center',va='center',fontsize=7.5)
+
+
+def budget_legend(fig):
+    handles=[Line2D([],[],color=TEAL_EDGE,marker='o',mfc=TEAL,lw=2.1,label='Hadamard'),
+             Line2D([],[],color=TEAL_EDGE,marker='o',mfc='white',lw=0,label='Hadamard + directions'),
+             Line2D([],[],color=BLUE,marker='s',lw=2.1,label='PrismQuant'),
+             Line2D([],[],color=BLUE,marker='^',ls=':',lw=1.7,label='PrismQuant + directions')]
+    fig.legend(handles=handles,loc='lower left',bbox_to_anchor=(.087,.035),fontsize=7.5,
+                handlelength=1.6,labelspacing=.48,handletextpad=.6)
+
+
+def recovery(ax,data):
+    axis(ax,'b','Recovery versus rank','k=8 operating point')
+    pts=data[data.kind.eq('recovery')]
+    ax.axvspan(-.45,.50,color=GREEN,alpha=.22,lw=0,zorder=0)
+    for model,(color,marker,ls,label) in MODEL_STYLE.items():
+        part=pts[pts.model.eq(model)].copy();part['order']=part.k_category.map({x:i for i,x in enumerate(['8','16','32','64','max'])});part=part.sort_values('order')
+        assert len(part)==5
+        ax.plot(part.order,part.recovery_percent,color=color,marker=marker,ls=ls,lw=2.1,ms=5.2,mew=.8,label=label,zorder=4)
+    ax.set_xlim(-.45,4.35);ax.set_ylim(0,109);ax.set_xticks(range(5),['8','16','32','64','max'])
+    ax.set_yticks([0,50,100]);ax.yaxis.set_major_formatter(FormatStrFormatter('%g'))
+    ax.set_xlabel('Alignment rank (categories)');ax.set_ylabel('Activation-only PPL\nrecovery (%)',labelpad=5)
+
+
+def decoder_cost(ax,data):
+    axis(ax,'c','Decoder-layer cost','RTX PRO 6000 Blackwell Server · T=2048')
+    for model,marker,color in [('llama32_3b','o',TEAL_EDGE),('llama31_8b','s',STEEL)]:
+        p=data[data.model.eq(model)&data.kind.eq('kernel_share')].sort_values('k')
+        assert len(p)==2
+        ax.plot([0,1],p.share_percent,color=color,marker=marker,lw=2.1,ms=5.1,mew=.8)
+        for x,y in zip([0,1],p.share_percent):
+            ax.annotate(f'{y:.2f}%',(x,y),xytext=(8,-5) if model=='llama31_8b' and x==0 else (0,7 if model=='llama32_3b' else -13),textcoords='offset points',ha='left' if model=='llama31_8b' and x==0 else 'center',fontsize=7.5,color=color)
+        h=float(data[data.model.eq(model)&data.kind.eq('hadamard_kernel_share')].share_percent.iloc[0])
+        ax.axhline(h,color=color,ls=(0,(3,2)),lw=1.5)
+    ax.text(.96,.085,'Dashed: Hadamard',ha='right',va='bottom',transform=ax.transAxes,fontsize=7.5,color=GRAY_EDGE)
+    ax.set_xlim(-.32,1.32);ax.set_ylim(0,10.2);ax.set_xticks([0,1],['8','32']);ax.set_yticks([0,5,10])
+    ax.set_xlabel('Alignment rank k');ax.set_ylabel('Transform / layer time (%)');ax.grid(False)
+
+
+def main():
+    ap=argparse.ArgumentParser();ap.add_argument('--reuse-data',action='store_true');ap.add_argument('--draft',action='store_true');args=ap.parse_args()
+    if not args.reuse_data:build()
+    typography=style();data=pd.read_csv(HERE/'fig4_revised_data.csv')
+    fig=plt.figure(figsize=(5.5,5.55))
+    gs=fig.add_gridspec(2,2,left=.105,right=.975,bottom=.225,top=.91,width_ratios=[1.14,1],wspace=.41,hspace=.75)
+    a=fig.add_subplot(gs[:,0]);b=fig.add_subplot(gs[0,1]);c=fig.add_subplot(gs[1,1])
+    budget(a,data);recovery(b,data);decoder_cost(c,data);budget_legend(fig)
+    handles=[Line2D([],[],color=color,marker=marker,ls=ls,lw=2.1,label=name) for color,marker,ls,name in MODEL_STYLE.values()]
+    fig.legend(handles=handles,loc='lower left',bbox_to_anchor=(.605,.035),fontsize=7.5,handlelength=1.6,labelspacing=.48)
+    export(fig,HERE/'fig4_revised',draft=args.draft,panel_axes={'a':a,'b':b,'c':c})
+    meta=dict(source_commit=json.loads((HERE/'deployment_efficiency_metadata.json').read_text())['source_commit'],
+        size_inches=[5.5,5.55],typography=typography,sharex=False,metadata_point_count=11,
+        rank_point_count=15,panels=['a','b','c'],layout='left spanning two rows; right accuracy and original decoder-layer cost',
+        cost_point_count=4,cost_reference_count=2,cost_source='Original E17 v3, RTX PRO 6000 Blackwell Server Edition, T=2048',
+        cost_definition='100*t_transform/(t_decoder_layer+t_transform)',cost_colors=[TEAL_EDGE,STEEL],
+        k8_highlight_rank_category_bounds=[-.45,.50],k8_highlight_alpha=.22,
+        archived_panel='E28 Graph overhead remains archived; requested original E17 decoder-layer share restored')
+    (HERE/'fig4_revised_metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
+
+if __name__=='__main__':main()

@@ -1,8 +1,112 @@
 {
-  "model": "llama32_3b",
-  "site": "down_input",
-  "layer": 27,
-  "restored_from_commit": "721f253",
+  "source_commit": "519ddad56370051e59afbc83d18aa35db0456d55",
+  "size_inches": [
+    5.5,
+    6.05
+  ],
+  "panels": [
+    "a",
+    "b",
+    "c",
+    "d"
+  ],
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "panel_point_counts": {
+    "a": 8066,
+    "b": 1024,
+    "c": 2912,
+    "d": 5342
+  },
+  "energy_layers": [
+    1,
+    5,
+    9,
+    13,
+    18,
+    22,
+    27
+  ],
+  "energy_protocols": {
+    "solid": "Original BOS-excluded rank-256, layers 1/13/27; 768 unchanged points",
+    "dashed": "Existing all-token rank-64, layers 5/9/18/22; 256 additional points; no continuation beyond measured rank"
+  },
+  "reference_fit": {
+    "intercept": 0.05980223276470587,
+    "slope": 0.8665147718600141,
+    "r_squared": 0.8613894973078933
+  },
+  "moe_diagnostics": {
+    "all": {
+      "n": 5342,
+      "within_subset_ols_r_squared": 0.43276280655992555,
+      "transferred_reference_predictive_r_squared": 0.429864481675752,
+      "median_y_over_sqrt": 0.947901307877725,
+      "x_variance_ddof0": 0.010372456176936315,
+      "reference_residual_sd_ddof0": 0.09555348811672133
+    },
+    "full_rows_256": {
+      "n": 4955,
+      "within_subset_ols_r_squared": 0.6080230824871335,
+      "transferred_reference_predictive_r_squared": 0.6061925712312145,
+      "median_y_over_sqrt": 0.9507033288121296,
+      "x_variance_ddof0": 0.010403035562654718,
+      "reference_residual_sd_ddof0": 0.0699899516866673
+    },
+    "fewer_than_256_rows": {
+      "n": 387,
+      "within_subset_ols_r_squared": 0.11618767215368046,
+      "transferred_reference_predictive_r_squared": -0.17149901464422213,
+      "median_y_over_sqrt": 0.8564126353150658,
+      "x_variance_ddof0": 0.00810010685738938,
+      "reference_residual_sd_ddof0": 0.2186221694286039
+    },
+    "hot_tokens_ge_2048": {
+      "n": 4142,
+      "within_subset_ols_r_squared": 0.825515642158987,
+      "transferred_reference_predictive_r_squared": 0.7937410812720689,
+      "median_y_over_sqrt": 0.9558967347978982,
+      "x_variance_ddof0": 0.010572789233813006,
+      "reference_residual_sd_ddof0": 0.042662879574885654
+    },
+    "cold_tokens_lt_2048": {
+      "n": 1200,
+      "within_subset_ols_r_squared": 0.17644205037109784,
+      "transferred_reference_predictive_r_squared": -0.036510256238008854,
+      "median_y_over_sqrt": 0.8817109549573217,
+      "x_variance_ddof0": 0.008535099054095765,
+      "reference_residual_sd_ddof0": 0.16289131858954423
+    },
+    "f_le_0_5": {
+      "n": 5079,
+      "within_subset_ols_r_squared": 0.18956555909174014,
+      "transferred_reference_predictive_r_squared": 0.18553915074589666,
+      "median_y_over_sqrt": 0.9477236933589573,
+      "x_variance_ddof0": 0.002968835449000716,
+      "reference_residual_sd_ddof0": 0.09274171091826311
+    },
+    "f_gt_0_5_count": 263,
+    "cold_over_hot_reference_residual_sd": 3.8181041742300352,
+    "dense_x_variance_ddof0": 0.018521431269256615
+  },
+  "moe_binning": "Ten equal-count bins ordered by f/layer/expert; every point assigned; median x/y connected as descriptive polyline; Q1-Q3 shown as intervals, not confidence intervals.",
+  "marker_area_pt2": 6,
+  "marker_encoding": "fixed area; cold teal (alpha .22), hot blue (alpha .23); every expert retained",
+  "moe_calibration_scope": "MoE experts are excluded from the dense reference fit. Kept evaluation rows are part of the expert covariance collection; no independent calibration/test split is claimed.",
+  "minimum_font_pt": 7.5,
+  "experiment_ids": "Provenance tables only; excluded from figure text, legend and scientific caption.",
+  "source_tables": [
+    "fig3_revised_data.csv",
+    "fig3_moe_binned_summary.csv"
+  ],
+  "revision": "oral-2026-09-13",
   "geometry": {
     "model": "llama32_3b",
     "site": "down_input",
@@ -66,111 +170,5 @@
       "bounds_rule": "0.5-99.5 percentiles expanded to all observations, plus 8% padding",
       "arrow_scale": 1.0
     }
-  },
-  "panels": [
-    "a",
-    "b",
-    "c"
-  ],
-  "palette": {
-    "prismquant": "#1D3557",
-    "prismquant_light": "#457B9D",
-    "hadamard": "#A8DADC",
-    "duquant": "#E63946",
-    "identity": "#457B9D",
-    "reference": "#1D3557",
-    "text": "#1D3557",
-    "zero": "#F1FAEE",
-    "pane_edge": "#C9D6DF",
-    "grid": "#DCE4EA"
-  },
-  "panel_size_inches": [
-    2.65,
-    2.35
-  ],
-  "range_law_points": 2912,
-  "point_counts": {
-    "E1c activations": 2520,
-    "E7 V cache": 280,
-    "E20 multi-slot": 112
-  },
-  "font_family_resolved": "Times New Roman",
-  "typography": {
-    "family": "Times New Roman",
-    "weight": "bold",
-    "weight_class": 700,
-    "postscript_name": "TimesNewRomanPS-BoldMT",
-    "version": "Version 2.82",
-    "file": "Timesbd.TTF",
-    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
-  },
-  "stroke_widths_pt": {
-    "axes": 0.9,
-    "ticks": 0.8,
-    "energy_curves": [
-      1.5,
-      1.5,
-      1.8
-    ],
-    "identity": 1.1,
-    "pooled_fit": 0.95
-  },
-  "fit_intercept": 0.05980223276470587,
-  "fit_slope": 0.8665147718600141,
-  "fit_r_squared": 0.8613894973078933,
-  "corner_inset": true,
-  "inset_limits": [
-    0.85,
-    1.0
-  ],
-  "fit_definition": "pooled ordinary least squares with intercept; all source rows included",
-  "main_axis_limits": [
-    [
-      0.0,
-      1.02
-    ],
-    [
-      0.0,
-      1.0474256430291942
-    ]
-  ],
-  "range_law_subpanels": {
-    "fig3c1": {
-      "families": [
-        "E1c activations"
-      ],
-      "points": 2520,
-      "inset": true
-    },
-    "fig3c2": {
-      "families": [
-        "E7 V cache",
-        "E20 multi-slot"
-      ],
-      "points": 392,
-      "inset": true
-    },
-    "fig3c3": {
-      "families": [
-        "E26 MoE experts"
-      ],
-      "model": "qwen3_30b_a3b_base",
-      "points": 5342,
-      "inset": true,
-      "in_pooled_fit": false,
-      "own_fit": {
-        "intercept": 0.09889918341897097,
-        "slope": 0.8184215028399259,
-        "r_squared": 0.4327628065599256,
-        "points": 5342
-      },
-      "source": "fig3_range_law_moe.csv"
-    }
-  },
-  "fit_display": "same pooled fit of the three reference sources in all three views; not a per-family fit. The MoE view is held out of that fit and states its own R\u00b2 beside it.",
-  "svg_export": {
-    "range_law_marks": "native vector markers in main axes and insets",
-    "composition": "single viewport with translated groups and unique IDs",
-    "x_formula": "complete vector radical and overbar; editable Times New Roman Bold radicand"
   }
 }

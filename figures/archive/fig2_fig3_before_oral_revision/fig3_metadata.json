@@ -1,0 +1,176 @@
+{
+  "model": "llama32_3b",
+  "site": "down_input",
+  "layer": 27,
+  "restored_from_commit": "721f253",
+  "geometry": {
+    "model": "llama32_3b",
+    "site": "down_input",
+    "layer": 27,
+    "arrows": {
+      "hadamard": {
+        "projection_v1": 0.014288674108684063,
+        "projection_v2": -0.0045826914720237255,
+        "in_plane_length": 0.015005574561655521,
+        "norm": 1.0
+      },
+      "nar": {
+        "projection_v1": 0.9999948740005493,
+        "projection_v2": 1.605070849564072e-07,
+        "in_plane_length": 0.9999948740005493,
+        "norm": 0.9999998807907104
+      }
+    },
+    "target_group": 0,
+    "dimensions": 8192,
+    "group_size": 128,
+    "projection_rows": 8064,
+    "projection_stride": 32,
+    "bos_exclusion_rule": "all projection token positions start at 32; BOS position 0 excluded",
+    "basis": "frozen E1c uncentered second-moment v1/v2, same basis and factor as Figure 1",
+    "hadamard_definition": "full-width random-sign Hadamard, identical to Figure 1",
+    "arrow_definition": "unit group-DC direction pulled back through each orthogonal transform; sign oriented toward positive v1",
+    "base_seed": 20260902,
+    "source": "frozen wide_cal_a; no eigensolver or model rerun",
+    "cloud": {
+      "initial_percentile_limits": [
+        [
+          -2.7937827974849965,
+          -0.8747241015570117
+        ],
+        [
+          2.527154840497252,
+          6.133074457460065
+        ]
+      ],
+      "axis_limits": [
+        [
+          -3.9695884615079087,
+          6.7671226710294885
+        ],
+        [
+          -2.578381569653816,
+          19.904577810609812
+        ]
+      ],
+      "rows": 8064,
+      "inside_frame": 8064,
+      "projection_mean": [
+        18.227300990215774,
+        -0.193240206309809
+      ],
+      "projection_sd_ddof0": [
+        5.270287337108155,
+        9.472277245981612
+      ],
+      "bounds_rule": "0.5-99.5 percentiles expanded to all observations, plus 8% padding",
+      "arrow_scale": 1.0
+    }
+  },
+  "panels": [
+    "a",
+    "b",
+    "c"
+  ],
+  "palette": {
+    "prismquant": "#1D3557",
+    "prismquant_light": "#457B9D",
+    "hadamard": "#A8DADC",
+    "duquant": "#E63946",
+    "identity": "#457B9D",
+    "reference": "#1D3557",
+    "text": "#1D3557",
+    "zero": "#F1FAEE",
+    "pane_edge": "#C9D6DF",
+    "grid": "#DCE4EA"
+  },
+  "panel_size_inches": [
+    2.65,
+    2.35
+  ],
+  "range_law_points": 2912,
+  "point_counts": {
+    "E1c activations": 2520,
+    "E7 V cache": 280,
+    "E20 multi-slot": 112
+  },
+  "font_family_resolved": "Times New Roman",
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "stroke_widths_pt": {
+    "axes": 0.9,
+    "ticks": 0.8,
+    "energy_curves": [
+      1.5,
+      1.5,
+      1.8
+    ],
+    "identity": 1.1,
+    "pooled_fit": 0.95
+  },
+  "fit_intercept": 0.05980223276470587,
+  "fit_slope": 0.8665147718600141,
+  "fit_r_squared": 0.8613894973078933,
+  "corner_inset": true,
+  "inset_limits": [
+    0.85,
+    1.0
+  ],
+  "fit_definition": "pooled ordinary least squares with intercept; all source rows included",
+  "main_axis_limits": [
+    [
+      0.0,
+      1.02
+    ],
+    [
+      0.0,
+      1.0474256430291942
+    ]
+  ],
+  "range_law_subpanels": {
+    "fig3c1": {
+      "families": [
+        "E1c activations"
+      ],
+      "points": 2520,
+      "inset": true
+    },
+    "fig3c2": {
+      "families": [
+        "E7 V cache",
+        "E20 multi-slot"
+      ],
+      "points": 392,
+      "inset": true
+    },
+    "fig3c3": {
+      "families": [
+        "E26 MoE experts"
+      ],
+      "model": "qwen3_30b_a3b_base",
+      "points": 5342,
+      "inset": true,
+      "in_pooled_fit": false,
+      "own_fit": {
+        "intercept": 0.09889918341897097,
+        "slope": 0.8184215028399259,
+        "r_squared": 0.4327628065599256,
+        "points": 5342
+      },
+      "source": "fig3_range_law_moe.csv"
+    }
+  },
+  "fit_display": "same pooled fit of the three reference sources in all three views; not a per-family fit. The MoE view is held out of that fit and states its own R\u00b2 beside it.",
+  "svg_export": {
+    "range_law_marks": "native vector markers in main axes and insets",
+    "composition": "single viewport with translated groups and unique IDs",
+    "x_formula": "complete vector radical and overbar; editable Times New Roman Bold radicand"
+  }
+}

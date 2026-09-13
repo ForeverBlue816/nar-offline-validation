@@ -1,0 +1,18 @@
+% Include in the manuscript preamble/body after loading graphicx.
+% Physical width is 5.5 in; do not shrink to an unreadable single-column panel.
+\input{figures/captions.tex}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig4_revised.pdf}
+  \caption{\csname fig4_revisedCaption\endcsname}
+  \label{fig:design-cost}
+\end{figure}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_deployment_efficiency.pdf}
+  \caption{\csname fig_deployment_efficiencyCaption\endcsname}
+  \label{fig:deployment-efficiency}
+\end{figure}
+% Numbering is supplied by the full manuscript, not forced to Figure 5.
+% Appendix: figures/appendix/fig4_metadata_8b.pdf, fig_e17_rank_cost.pdf,
+% fig_matched_eager_graph.pdf, and fig_kernel_all_shapes.pdf.

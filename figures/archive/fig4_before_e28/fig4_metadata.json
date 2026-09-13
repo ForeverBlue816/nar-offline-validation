@@ -1,0 +1,203 @@
+{
+  "panels": {
+    "fig4a": {
+      "model": "llama32_3b",
+      "missing_configurations": [],
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_limits": [
+        4.085,
+        4.545
+      ],
+      "y_limits": [
+        7.6,
+        7.826242825602765
+      ],
+      "horizontal_tick_labels": true,
+      "hidden_tick_label": 4.1875,
+      "null_label_x": 4.29,
+      "legend_location": "below plot, boxed",
+      "legend_bbox_pt": [
+        33.048,
+        13.608,
+        184.68000000000004,
+        52.92
+      ],
+      "scale_bracket_y": 7.803242825602765,
+      "null_bracket_x": 4.25,
+      "null_bracket_marker_gap": [
+        7.7211453498517555,
+        7.729432632840868
+      ],
+      "null_space_gap_at_4_25": 0.057650417489194083,
+      "scale_resolution_gap": 0.01922330101617309,
+      "annotation_sources": {
+        "null_space_term": [
+          3,
+          8
+        ],
+        "scale_resolution_term": [
+          4,
+          3
+        ]
+      }
+    },
+    "fig4a_8b": {
+      "model": "llama31_8b",
+      "missing_configurations": [],
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_limits": [
+        4.085,
+        4.545
+      ],
+      "y_limits": [
+        6.19,
+        6.412215826945062
+      ],
+      "horizontal_tick_labels": true,
+      "hidden_tick_label": 4.1875,
+      "null_label_x": 4.29,
+      "legend_location": "below plot, boxed",
+      "legend_bbox_pt": [
+        33.048,
+        13.608,
+        184.68000000000004,
+        52.92
+      ],
+      "scale_bracket_y": 6.389215826945062,
+      "null_bracket_x": 4.25,
+      "null_bracket_marker_gap": [
+        6.298430516798818,
+        6.306570290679589
+      ],
+      "null_space_gap_at_4_25": 0.05996411950033842,
+      "scale_resolution_gap": 0.0269543669459118,
+      "annotation_sources": {
+        "null_space_term": [
+          3,
+          8
+        ],
+        "scale_resolution_term": [
+          4,
+          3
+        ]
+      }
+    },
+    "fig4b": {
+      "size_inches": [
+        2.7,
+        4.2
+      ],
+      "x_categories": [
+        "8",
+        "16",
+        "32",
+        "64",
+        "max"
+      ],
+      "recovery_limits": [
+        0,
+        1.05
+      ],
+      "kernel_share_percent_limits": [
+        0,
+        10
+      ],
+      "layout": "stacked shared-x recovery and cost",
+      "plot_height_fractions": [
+        0.62,
+        0.38
+      ],
+      "legend_location": "below stack, boxed",
+      "legend_bbox_pt": [
+        33.048,
+        13.608,
+        184.68000000000004,
+        52.92
+      ],
+      "deployment_note": "Llama: little gain past 8; Qwen3: more at a cost.",
+      "k8_recovery_labels": {
+        "llama32_3b": "0.39",
+        "llama31_8b": "0.36",
+        "qwen3_8b_base": "0.59"
+      },
+      "hadamard_timing_reference": "k=8 row for each model",
+      "share_denominator": "decoder_layer_ms + online_transform_ms",
+      "missing_k_categories": {
+        "llama32_3b": [],
+        "llama31_8b": [],
+        "qwen3_8b_base": []
+      },
+      "protocols": {
+        "llama32_3b": {
+          "site_kmax": {
+            "down": 64,
+            "qkv": 24
+          },
+          "seeds": 3,
+          "chunks": 64
+        },
+        "llama31_8b": {
+          "site_kmax": {
+            "down": 112,
+            "qkv": 32
+          },
+          "seeds": 3,
+          "chunks": 64
+        },
+        "qwen3_8b_base": {
+          "site_kmax": {
+            "down": 96,
+            "qkv": 32
+          },
+          "seeds": 1,
+          "chunks": 146
+        }
+      },
+      "recovery_formula": "ratio computed from mean PPLs; not the legacy stored recovery column"
+    },
+    "fig4b1": {
+      "size_inches": [
+        2.7,
+        2.604
+      ],
+      "source_table": "fig4b.csv",
+      "rows": 15,
+      "legend": "shared in fig4b"
+    },
+    "fig4b2": {
+      "size_inches": [
+        2.7,
+        1.596
+      ],
+      "source_table": "fig4b.csv",
+      "rows": 6,
+      "legend": "shared in fig4b"
+    }
+  },
+  "backend": "plain matplotlib",
+  "typography": {
+    "family": "Times New Roman",
+    "weight": "bold",
+    "weight_class": 700,
+    "postscript_name": "TimesNewRomanPS-BoldMT",
+    "version": "Version 2.82",
+    "file": "Timesbd.TTF",
+    "sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "stroke_widths_pt": {
+    "axes": 0.9,
+    "ticks": 0.8,
+    "baseline_series": 1.6,
+    "hero_series": 2.0,
+    "kernel": 1.1,
+    "bf16_reference": 1.1,
+    "hadamard_references": 0.95,
+    "brackets": 0.9
+  }
+}
