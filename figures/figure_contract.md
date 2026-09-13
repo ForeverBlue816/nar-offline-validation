@@ -4,12 +4,12 @@ Frozen source: commit 6747960b96b0b03e626e98eaeeccf0d1abc34e79;
 run results/e28_v2/20260912_a40_v2_full_int4. Main was checked before work.
 Backend: Python/matplotlib; actual 5.5-inch final width, Times New Roman Bold.
 
-Figure 4 asks how activation metadata and rank affect PPL, and what k=8 adds
-to measured deployment latency. An asymmetric quantitative layout preserves
-all 11 budget points plus BF16 (3B main, 8B appendix), all 15 rank points, and
-uses two same-backend Graph overhead estimates. The original E17 cost evidence
-is retained in the appendix. Accuracy and runtime are different protocols and
-are not a joint checkpoint Pareto frontier.
+Figure 4 asks how activation metadata and rank affect PPL. The 2026-09-13
+user revision uses two side-by-side quantitative panels: all 11 budget points
+plus BF16 (3B main, 8B appendix), and all 15 rank points. A wider green band
+marks the k=8 category only. The former Graph overhead panel is archived;
+its complete source values remain in the CSV and the deployment evidence.
+Accuracy and runtime remain distinct protocols, not a joint Pareto frontier.
 
 The efficiency figure asks whether the compact transform preserves practical
 integer-pipeline efficiency. The small implementation strip defines the actual
@@ -33,3 +33,8 @@ ratios; nonmonotone recovery; all point and uncertainty extents retained.
 Exports: true vector PDF with embedded font, editable SVG text, PNG at 600 dpi,
 independent panels and appendix, exact source CSVs, metadata, captions, LaTeX,
 source and rendered QA. Final rendered axes alignment tolerance is 1.5 pt.
+
+Visual refinement: deployment prefill uses explicit batch-size wording. The
+kernel dot plot uses a labeled linear 0.25–1.05 axis containing every session
+and the reference 1.00, thicker comparisons, and derived percentage reductions.
+No point is shifted, omitted, transformed nonlinearly, or truncated.

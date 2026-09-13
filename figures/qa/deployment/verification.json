@@ -97,18 +97,7 @@
     {
       "file": "figures/panels/fig4_revised_b",
       "width_inches": 2.636756261189779,
-      "height_inches": 2.0659957461886935,
-      "min_font_pt": 7.5,
-      "embedded_font": true,
-      "vector_only": true,
-      "editable_svg": true,
-      "png_dpi": 600,
-      "collision_failures": 0
-    },
-    {
-      "file": "figures/panels/fig4_revised_c",
-      "width_inches": 2.338363859388563,
-      "height_inches": 1.7600541644626193,
+      "height_inches": 3.5695728725857205,
       "min_font_pt": 7.5,
       "embedded_font": true,
       "vector_only": true,
@@ -119,7 +108,7 @@
     {
       "file": "figures/panels/fig_deployment_efficiency_a",
       "width_inches": 2.4924719068739147,
-      "height_inches": 1.9250748952229817,
+      "height_inches": 2.0706303914388022,
       "min_font_pt": 7.5,
       "embedded_font": true,
       "vector_only": true,
@@ -249,6 +238,20 @@
       "collision_failures": 0
     }
   ],
+  "visual_revision_checks": {
+    "figure4_panels": [
+      "a",
+      "b"
+    ],
+    "explicit_batch_size": true,
+    "kernel_ratio_axis": [
+      0.25,
+      1.05
+    ],
+    "reference_visible": true,
+    "all_sessions_visible": true,
+    "derived_reduction_labels": true
+  },
   "source_preflight_notes": [
     "5.5 inches is the explicit manuscript width, overriding Nature 89/183 mm defaults.",
     "PNG at 600 dpi is the requested raster format; no TIFF required.",

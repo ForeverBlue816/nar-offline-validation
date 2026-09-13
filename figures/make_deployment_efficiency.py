@@ -43,7 +43,7 @@ def implementation(fig):
 
 
 def prefill(ax,d):
-    axis(ax,'a','Prefill throughput','2048 input tokens · eager')
+    axis(ax,'a','Prefill throughput','2048 tokens / sequence · eager')
     for i,(model,batch) in enumerate([('3b',1),('3b',16),('8b',1),('8b',16)]):
         for offset,method in [(-.215,'hadamard'),(.215,'nar')]:
             val,ss=select(d,'prefill_speedup',model,method,batch=batch)
@@ -52,9 +52,10 @@ def prefill(ax,d):
             span(ax,val,ss,x)
             ax.text(x,max(val,max(ss))+.065,f'{val:.2f}',ha='center',va='bottom',fontsize=7.5)
     ax.axhline(1,ls=(0,(3,2)),lw=1,color=GRAY_EDGE,zorder=1)
-    ax.set_xticks(range(4),['3B\nB1','3B\nB16','8B\nB1','8B\nB16'])
+    ax.set_xticks(range(4),['3B\nbatch 1','3B\nbatch 16','8B\nbatch 1','8B\nbatch 16'])
     ax.set_ylim(0,1.78);ax.set_yticks([0,.5,1,1.5]);ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     ax.set_ylabel('Prefill speedup over FP16 (×)')
+    ax.set_xlabel('Sequences per prefill batch',fontsize=7.5)
     ax.set_xlim(-.6,3.6)
 
 
@@ -99,19 +100,21 @@ def memory(ax,d):
 def ablation(ax,d):
     axis(ax,'d','Kernel implementation','Own baseline = 1.00 · wall time')
     # Axes y-space holds the two explicit baseline groups and model rows.
-    specs=[('3b','nar_prebound','nar_generic',1,3.1),('8b','nar_prebound','nar_generic',1,2.2),
-           ('3b','nar_generic','nar_generic_shuffle',2048,.7),('8b','nar_generic','nar_generic_shuffle',2048,-.2)]
+    specs=[('3b','nar_prebound','nar_generic',1,3.3),('8b','nar_prebound','nar_generic',1,2.25),
+           ('3b','nar_generic','nar_generic_shuffle',2048,.55),('8b','nar_generic','nar_generic_shuffle',2048,-.55)]
     for model,method,base,t,y in specs:
         val,ss=select(d,'kernel_ratio',model,method,baseline=base,tokens=t)
-        ax.plot([val,1],[y,y],color='#BDCBD6',lw=1.2,zorder=1)
-        ax.scatter([1],[y],s=21,facecolor=GRAY,edgecolor=GRAY_EDGE,linewidth=.8,zorder=2)
+        ax.plot([val,1],[y,y],color=STEEL,lw=2.2,zorder=1)
+        ax.scatter([1],[y],s=34,facecolor=GRAY,edgecolor=GRAY_EDGE,linewidth=1.0,zorder=2)
         span(ax,val,ss,y,horizontal=True,dots=True,color=STEEL)
-        ax.scatter([val],[y],s=28,marker='o' if model=='3b' else 's',color=BLUE,zorder=7)
-        ax.annotate(f'{val:.2f}',(val,y),xytext=(0,3.5),textcoords='offset points',ha='center',va='bottom',fontsize=7.5)
-    ax.text(.03,4.3,'Prebound / generic launch · T=1',fontsize=7.5,ha='left')
-    ax.text(.03,1.6,'R4: TC-B / shuffle-B · T=2048',fontsize=7.5,ha='left')
-    ax.set_yticks([3.1,2.2,.7,-.2],['3B','8B','3B','8B']);ax.tick_params(axis='y',length=0)
-    ax.set_xlim(0,1.1);ax.set_ylim(-.7,4.9);ax.set_xticks([0,.25,.5,.75,1]);ax.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+        ax.scatter([val],[y],s=39,marker='o' if model=='3b' else 's',color=BLUE,zorder=7)
+        reduction=100*(1-val)
+        ax.annotate(f'{val:.2f}×  (−{reduction:.2f}%)',((val+1)/2,y),xytext=(0,4),
+                    textcoords='offset points',ha='center',va='bottom',fontsize=7.5,color=BLUE)
+    ax.text(.265,4.3,'Prebound / generic launch · T=1',fontsize=7.5,ha='left')
+    ax.text(.265,1.45,'R4: TC-B / shuffle-B · T=2048',fontsize=7.5,ha='left')
+    ax.set_yticks([3.3,2.25,.55,-.55],['3B','8B','3B','8B']);ax.tick_params(axis='y',length=0)
+    ax.set_xlim(.25,1.05);ax.set_ylim(-1,4.9);ax.set_xticks([.25,.5,.75,1]);ax.xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
     ax.set_xlabel('Elapsed-time ratio (lower is better)');ax.grid(False)
     ax.spines[['left','top','right']].set_visible(False)
 
@@ -128,6 +131,9 @@ def main():
     export(fig,HERE/'fig_deployment_efficiency',draft=args.draft,exclude_axes=[strip],panel_axes={**dict(zip('abcd',axes)),'implementation':strip})
     meta=json.loads((HERE/'deployment_efficiency_metadata.json').read_text());meta['typography']=typography
     meta['size_inches']=[5.5,5.35]
+    meta['visual_revision']={'date':'2026-09-13','prefill_batch_definition':'number of sequences processed in one prefill batch',
+        'kernel_ratio_axis':{'scale':'linear','limits':[.25,1.05],'reference':1.0,'all_session_extrema_visible':True},
+        'kernel_reduction_label_formula':'100 * (1 - median paired-session elapsed-time ratio)'}
     (HERE/'deployment_efficiency_metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
 
 if __name__=='__main__':main()

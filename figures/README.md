@@ -199,9 +199,10 @@ are retained; the addendum lives in the per-layer CSV and done metadata.
 
 ## Figure 4 and deployment efficiency — 2026-09-12
 
-The revised Figure 4 preserves all accuracy observations and replaces its
-main cost panel with measured k=8 overhead from matched private CUDA Graph
-records. The deployment figure provides eager prefill throughput, private
+The revised Figure 4 has two side-by-side panels for activation metadata
+and rank recovery, preserving all accuracy observations. The k=8 band spans
+the full category width. The former c cost panel is archived with its data
+retained in the source CSVs. The deployment figure provides eager prefill throughput, private
 Graph decode latency and allocated memory, and measured implementation
 ablations. It is named `fig_deployment_efficiency` until the complete
 manuscript establishes numbering.
@@ -241,10 +242,17 @@ statistics, backend stress limitations, and interpretation boundaries.
 Appendix exports in `appendix/` preserve the original RTX PRO 6000 E17 rank
 cost, 8B metadata budget, matched private eager-to-Graph comparison, and all
 T=1/2048/32768 implementation ablations, including unfavorable TC-B points.
-`panels/` holds bare vector/600-dpi panel exports for assembly; reuse each main
+`panels/` holds 14 bare vector/600-dpi panel/strip exports for assembly; reuse each main
 figure's corresponding legend. The complete original Figure 4 and its old
 README are saved in `archive/fig4_before_e28/`; original CSVs and individual
-component exports remain unchanged.
+component exports remain unchanged. The preceding three-panel revision is
+preserved in `archive/fig4_before_two_panel_refinement/`.
+
+The prefill labels explicitly say `batch 1` / `batch 16`: these are sequences
+processed together, each containing 2048 input tokens. The deployment d panel
+uses a labeled linear 0.25–1.05 axis, complete session ranges, larger markers,
+thicker comparison segments, and ratios with derived time-reduction labels.
+The reference 1.00 remains visible; neither measurements nor statistics change.
 
 Reproduce with a CPU plotting environment containing
 `requirements-deployment-figures.txt` and a locally licensed Times New Roman

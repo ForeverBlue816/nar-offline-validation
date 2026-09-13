@@ -7,7 +7,7 @@
   "summary": {
     "fail": 0,
     "warn": 0,
-    "comparisons": 3,
+    "comparisons": 1,
     "exemptions": 0
   },
   "tolerances": {
@@ -32,7 +32,7 @@
         ],
         "grid_id": "matplotlib-grid-1",
         "row_start": 0,
-        "row_stop": 2,
+        "row_stop": 1,
         "col_start": 0,
         "col_stop": 1,
         "panel_label": "a",
@@ -45,7 +45,7 @@
         "id": "b",
         "bbox_pt": [
           252.49779733974484,
-          202.00156212175156,
+          93.74400000000001,
           386.1,
           297.97200000000004
         ],
@@ -57,57 +57,21 @@
         "panel_label": "b",
         "panel_label_anchor_pt": [
           223.49779733974484,
-          309.97200000000004
-        ]
-      },
-      {
-        "id": "c",
-        "bbox_pt": [
-          252.49779733974484,
-          93.74400000000001,
-          386.1,
-          151.90790174439303
-        ],
-        "grid_id": "matplotlib-grid-1",
-        "row_start": 1,
-        "row_stop": 2,
-        "col_start": 1,
-        "col_stop": 2,
-        "panel_label": "c",
-        "panel_label_anchor_pt": [
-          223.49779733974484,
-          163.90790174439303
+          309.9720000000001
         ]
       }
     ],
-    "row_groups": [],
-    "column_groups": [
+    "row_groups": [
       {
-        "id": "inferred-column-2",
-        "panels": [
-          "b",
-          "c"
-        ]
-      }
-    ],
-    "boundary_groups": [
-      {
-        "id": "inferred-shared-top-1",
-        "edge": "top",
+        "id": "inferred-row-1",
         "panels": [
           "a",
           "b"
         ]
-      },
-      {
-        "id": "inferred-shared-bottom-1",
-        "edge": "bottom",
-        "panels": [
-          "a",
-          "c"
-        ]
       }
     ],
+    "column_groups": [],
+    "boundary_groups": [],
     "exemptions": []
   },
   "findings": []

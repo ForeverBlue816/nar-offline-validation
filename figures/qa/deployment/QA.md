@@ -16,13 +16,12 @@ and each panel was visually inspected along with its complete assembly.
 | Panel | Role / summary | Spread and unit | Visual review |
 |---|---|---|---|
 | Fig.4 a | E20 3B metadata/PPL; 11 points + bf16 | Retained mean PPL; no invented interval | All labels readable; exact x preserved; two brackets explained in caption |
-| Fig.4 b | 15 categorical-rank recovery values | Recovery from recorded mean PPLs; heterogeneous original seed protocols documented | Real nonmonotone paths retained; narrow k=8 band stops within b; model markers and legend explicit |
-| Fig.4 c | 3B/8B additional Graph latency | Ratio of pooled medians; three paired-session ratios and min–max | Both models/percentages visible; axis starts at zero and includes every session |
+| Fig.4 b | 15 categorical-rank recovery values | Recovery from recorded mean PPLs; heterogeneous original seed protocols documented | Real nonmonotone paths retained; wider k=8 category band ends before rank 16; model markers and legend explicit |
 | Efficiency strip | Actual R4 interface | Diagram only; widths do not encode time | X branch, FP16 output, offline factors, shared token quantizer, and CUTLASS all visible |
-| Efficiency a | Four prefill workloads, both integer methods | Ratio of pooled throughput medians; session-ratio min–max | Equal-width bars and FP16=1 line; all eight labels; input throughput explicitly named |
+| Efficiency a | Four prefill workloads, both integer methods | Ratio of pooled throughput medians; session-ratio min–max | Equal-width bars and FP16=1 line; all eight values; batch 1/16 explicitly means sequences per prefill call |
 | Efficiency b | Six matched Graph latency values | Pooled medians and session-median min–max | Zero origin, complete FP16 bars, truthful 3B slowdown and 8B 1.22× gain |
 | Efficiency c | Six matched Graph memory values | Maximum inference allocated peak; session-peak min–max | Decimal GB, both savings, similar integer-pipeline resource levels; not weight size |
-| Efficiency d | Dispatch and complete-R4 B comparisons | Median of three paired-session wall ratios; min–max | Own reference=1 explicit, four values, two baseline groups, no B-only/full-model claim |
+| Efficiency d | Dispatch and complete-R4 B comparisons | Median of three paired-session wall ratios; min–max | Linear axis 0.25–1.05; complete session ranges and reference 1.00; larger marks plus ratios and derived time reductions; no B-only/full-model claim |
 | Appendix metadata 8B | 11 E20 points + bf16 | Original summary values | All labels and repeated x coordinates retained |
 | Appendix E17 cost | Four k=8/32 points and two references | Original local bench aggregates; no invented intervals | Original RTX PRO 6000 protocol and proxy denominator in caption |
 | Appendix matched modes a/b | Six latencies per model | Same-private-backend medians; min–max | Both modes, all three methods, distinct mode markers; no original eager denominator |
@@ -41,8 +40,8 @@ not a Nature 89/183 mm column. Rendered checks enforce the actual requested
 contract. The shared-module and explicit-font options make the source audit
 inspect the real export code without substituting a sans-serif font.
 
-See verification.json for all 21 PDF/SVG/PNG asset checks, reproducibility.json
-for the frozen-CSV rebuild and two byte-identical runs of all 63 figure assets,
+See verification.json for all 20 PDF/SVG/PNG asset checks, reproducibility.json
+for the frozen-CSV rebuild and two byte-identical runs of all 60 figure assets,
 and the individual alignment, extent, source, text, and collision reports.
 
 Protocol limits are documented in captions and metadata: random performance
@@ -51,3 +50,11 @@ quantization/KV interfaces, one preallocated page2176 during Graph timing,
 independent page64 correctness, and retained large-accumulator stress failures.
 There are no significance stars, hidden points, enlarged error bars, smoothing,
 profiler-time substitutions, or full-checkpoint Pareto claims.
+
+2026-09-13 revision: Figure 4 now contains only the two full-height accuracy
+panels. The former c is archived, including its original collision record;
+its measurements remain unchanged in the original data CSV. The enlarged
+k=8 shading denotes a category selection, not uncertainty. Deployment d's
+linear zoom is explicitly tick-labeled and contains the complete 0.32566–0.80506
+session range as well as the 1.00 reference. No hidden axis break or altered
+measurement is used to increase salience.

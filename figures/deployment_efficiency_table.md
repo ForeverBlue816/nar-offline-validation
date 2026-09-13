@@ -2,7 +2,7 @@
 
 Displayed values use two decimals; the CSV retains unrounded values.
 
-| Metric | Model | Method | Baseline | Mode / scope | B / T | Value | Unit |
+| Metric | Model | Method | Baseline | Mode / scope | Batch size / tokens | Value | Unit |
 |---|---|---|---|---|---|---:|---|
 | prefill_throughput | 3b | fp16 |  | eager_sequence / prefill1 | 1 / 2048 | 10163.48 | input tokens/s |
 | prefill_throughput | 3b | hadamard |  | eager_sequence / prefill1 | 1 / 2048 | 12819.74 | input tokens/s |

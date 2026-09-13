@@ -1,4 +1,23 @@
-# Figure 4 and deployment-efficiency revision
+# Figure 4 and deployment-efficiency revisions
+
+## 2026-09-13: visual clarity revision
+
+- Figure 4 now has only a and b, side by side. The former c and the preceding
+  assembly are archived in `archive/fig4_before_two_panel_refinement/`.
+  All measurement CSVs remain byte-for-byte unchanged.
+- Enlarged b to the full plot height and widened the k=8 highlight from
+  0.34 to 0.95 categorical axis units; it stops halfway before rank 16.
+- Replaced opaque B1/B16 prefill labels with `batch 1` / `batch 16` and an
+  explicit sequence-count axis description.
+- Tightened deployment d to a labeled linear 0.25–1.05 range. All points,
+  session extrema and the neutral reference 1.00 remain visible. Thicker
+  segments and larger markers accompany ratio and percentage-reduction labels
+  calculated from unrounded measurements.
+- Updated captions, metadata, independent panels, compatibility copies and QA.
+  Current bundle: 20 figures/panels, 60 PDF/SVG/PNG artifacts. The two original
+  main-figure point tables and the full 30-comparison appendix remain intact.
+
+## 2026-09-12: original deployment revision
 
 Sources frozen at 6747960b96b0b03e626e98eaeeccf0d1abc34e79 and
 results/e28_v2/20260912_a40_v2_full_int4. No experiments or kernels changed.

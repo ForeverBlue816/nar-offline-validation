@@ -109,6 +109,22 @@ def main():
         values=data[data.metric.eq(metric)&data.session.eq(0)]
         if metric!='prefill_speedup':values=values[values['mode'].eq('cuda_graph_sequence')]
         assert all(f'{v:.2f}' in text for v in values.value)
+    fig4_meta=json.loads((HERE/'fig4_revised_metadata.json').read_text())
+    assert fig4_meta['panels']==['a','b']
+    fig4_layout=json.loads((QA/'fig4_revised.alignment.json').read_text())
+    assert len(fig4_layout['layout']['panels'])==2
+    fig4_text=fitz.open(HERE/'fig4_revised.pdf')[0].get_text()
+    assert 'Measured cost' not in fig4_text
+    assert metadata['visual_revision']['kernel_ratio_axis']['limits']==[.25,1.05]
+    assert 'batch 1' in text and 'batch 16' in text and 'Sequences per prefill batch' in text
+    for model,method,base,t in [('3b','nar_prebound','nar_generic',1),('8b','nar_prebound','nar_generic',1),
+                               ('3b','nar_generic','nar_generic_shuffle',2048),('8b','nar_generic','nar_generic_shuffle',2048)]:
+        rows=data[data.metric.eq('kernel_ratio')&data.model.eq(model)&data.method.eq(method)&data.baseline.eq(base)&data.tokens.eq(t)]
+        r=float(rows[rows.session.eq(0)].value.iloc[0])
+        assert f'{100*(1-r):.2f}%' in text
+        assert rows.value.min()>=.25 and rows.value.max()<=1.05
+    report['visual_revision_checks']={'figure4_panels':['a','b'],'explicit_batch_size':True,
+        'kernel_ratio_axis':[.25,1.05],'reference_visible':True,'all_sessions_visible':True,'derived_reduction_labels':True}
     report['source_preflight_notes']=['5.5 inches is the explicit manuscript width, overriding Nature 89/183 mm defaults.',
         'PNG at 600 dpi is the requested raster format; no TIFF required.',
         'Shared modules are included in source preflight; the explicit Times New Roman contract supersedes the generic sans-serif default.']

@@ -180,5 +180,19 @@
   "size_inches": [
     5.5,
     5.35
-  ]
+  ],
+  "visual_revision": {
+    "date": "2026-09-13",
+    "prefill_batch_definition": "number of sequences processed in one prefill batch",
+    "kernel_ratio_axis": {
+      "scale": "linear",
+      "limits": [
+        0.25,
+        1.05
+      ],
+      "reference": 1.0,
+      "all_session_extrema_visible": true
+    },
+    "kernel_reduction_label_formula": "100 * (1 - median paired-session elapsed-time ratio)"
+  }
 }

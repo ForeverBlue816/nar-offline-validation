@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="179.457971pt" height="138.605391pt" viewBox="0 0 179.457971 138.605391" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="179.457971pt" height="149.085391pt" viewBox="0 0 179.457971 149.085391" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
@@ -20,10 +20,10 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 138.605391 
-L 179.457971 138.605391 
-L 179.457971 0 
-L 0 0 
+   <path d="M 0 149.085391 
+L 179.457971 149.085391 
+L 179.457971 -0 
+L 0 -0 
 z
 " style="fill: #ffffff"/>
   </g>
@@ -50,7 +50,7 @@ L 0 3.3
      </g>
      <g id="text_1">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(51.175843 126.723798)">3B</text>
-      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(51.175843 134.287782)">B1</text>
+      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(43.780726 134.287782)">batch 1</text>
      </g>
     </g>
     <g id="xtick_2">
@@ -61,7 +61,7 @@ L 0 3.3
      </g>
      <g id="text_2">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(84.79411 126.723798)">3B</text>
-      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(82.91911 134.287782)">B16</text>
+      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(75.523993 134.287782)">batch 16</text>
      </g>
     </g>
     <g id="xtick_3">
@@ -72,7 +72,7 @@ L 0 3.3
      </g>
      <g id="text_3">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(118.412377 126.723798)">8B</text>
-      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(118.412377 134.287782)">B1</text>
+      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(111.01726 134.287782)">batch 1</text>
      </g>
     </g>
     <g id="xtick_4">
@@ -83,8 +83,11 @@ L 0 3.3
      </g>
      <g id="text_4">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(152.030644 126.723798)">8B</text>
-      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(150.155644 134.287782)">B16</text>
+      <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; fill: #1d3557" transform="translate(142.760527 134.287782)">batch 16</text>
      </g>
+    </g>
+    <g id="text_5">
+     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="105.979611" y="144.975673" transform="rotate(-0 105.979611 144.975673)">Sequences per prefill batch</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -104,7 +107,7 @@ L -3.3 0
        <use xlink:href="#m75f432d54d" x="35.38125" y="114.957391" style="fill: #1d3557; stroke: #1d3557; stroke-width: 0.95"/>
       </g>
      </g>
-     <g id="text_5">
+     <g id="text_6">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: end; fill: #1d3557" x="28.58125" y="117.440594" transform="rotate(-0 28.58125 117.440594)">0.00</text>
      </g>
     </g>
@@ -119,7 +122,7 @@ L 176.577971 89.474978
        <use xlink:href="#m75f432d54d" x="35.38125" y="89.474978" style="fill: #1d3557; stroke: #1d3557; stroke-width: 0.95"/>
       </g>
      </g>
-     <g id="text_6">
+     <g id="text_7">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: end; fill: #1d3557" x="28.58125" y="91.958181" transform="rotate(-0 28.58125 91.958181)">0.50</text>
      </g>
     </g>
@@ -134,7 +137,7 @@ L 176.577971 63.992565
        <use xlink:href="#m75f432d54d" x="35.38125" y="63.992565" style="fill: #1d3557; stroke: #1d3557; stroke-width: 0.95"/>
       </g>
      </g>
-     <g id="text_7">
+     <g id="text_8">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: end; fill: #1d3557" x="28.58125" y="66.475768" transform="rotate(-0 28.58125 66.475768)">1.00</text>
      </g>
     </g>
@@ -149,11 +152,11 @@ L 176.577971 38.510151
        <use xlink:href="#m75f432d54d" x="35.38125" y="38.510151" style="fill: #1d3557; stroke: #1d3557; stroke-width: 0.95"/>
       </g>
      </g>
-     <g id="text_8">
+     <g id="text_9">
       <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: end; fill: #1d3557" x="28.58125" y="40.993355" transform="rotate(-0 28.58125 40.993355)">1.50</text>
      </g>
     </g>
-    <g id="text_9">
+    <g id="text_10">
      <text style="font-weight: 700; font-size: 8.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="9.638047" y="69.598696" transform="rotate(-90 9.638047 69.598696)">Prefill speedup over FP16 (×)</text>
     </g>
    </g>
@@ -172,11 +175,11 @@ L 35.38125 24.24
 L 176.577971 114.957391 
 " style="fill: none; stroke: #1d3557; stroke-width: 1.05; stroke-linejoin: miter; stroke-linecap: square"/>
    </g>
-   <g id="text_10">
+   <g id="text_11">
     <text style="font-weight: 700; font-size: 10.5px; font-family: 'Times New Roman', serif; text-anchor: start; fill: #1d3557" x="6.38125" y="9.993984" transform="rotate(-0 6.38125 9.993984)">a</text>
    </g>
-   <g id="text_11">
-    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: start; fill: #385a75" x="35.38125" y="20.621641" transform="rotate(-0 35.38125 20.621641)">2048 input tokens · eager</text>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: start; fill: #385a75" x="35.38125" y="20.621641" transform="rotate(-0 35.38125 20.621641)">2048 tokens / sequence · eager</text>
    </g>
    <g id="patch_5">
     <path d="M 42.441086 114.957391 
@@ -186,7 +189,7 @@ L 42.441086 50.672713
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #a8dadc; stroke: #56858b; stroke-linejoin: miter"/>
    </g>
-   <g id="text_12">
+   <g id="text_13">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="48.324283" y="45.667555" transform="rotate(-0 48.324283 45.667555)">1.26</text>
    </g>
    <g id="patch_6">
@@ -197,7 +200,7 @@ L 56.896941 51.401509
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #1d3557; stroke: #1d3557; stroke-linejoin: miter"/>
    </g>
-   <g id="text_13">
+   <g id="text_14">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="62.780138" y="46.438099" transform="rotate(-0 62.780138 46.438099)">1.25</text>
    </g>
    <g id="patch_7">
@@ -208,7 +211,7 @@ L 76.059353 49.745396
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #a8dadc; stroke: #56858b; stroke-linejoin: miter"/>
    </g>
-   <g id="text_14">
+   <g id="text_15">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="81.94255" y="44.50335" transform="rotate(-0 81.94255 44.50335)">1.28</text>
    </g>
    <g id="patch_8">
@@ -219,7 +222,7 @@ L 90.515208 50.708878
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #1d3557; stroke: #1d3557; stroke-linejoin: miter"/>
    </g>
-   <g id="text_15">
+   <g id="text_16">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="96.398405" y="45.457162" transform="rotate(-0 96.398405 45.457162)">1.26</text>
    </g>
    <g id="patch_9">
@@ -230,7 +233,7 @@ L 109.67762 40.990883
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #a8dadc; stroke: #56858b; stroke-linejoin: miter"/>
    </g>
-   <g id="text_16">
+   <g id="text_17">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="115.560817" y="35.847281" transform="rotate(-0 115.560817 35.847281)">1.45</text>
    </g>
    <g id="patch_10">
@@ -241,7 +244,7 @@ L 124.133475 40.314043
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #1d3557; stroke: #1d3557; stroke-linejoin: miter"/>
    </g>
-   <g id="text_17">
+   <g id="text_18">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="130.016672" y="35.179209" transform="rotate(-0 130.016672 35.179209)">1.46</text>
    </g>
    <g id="patch_11">
@@ -252,7 +255,7 @@ L 143.295887 39.079042
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #a8dadc; stroke: #56858b; stroke-linejoin: miter"/>
    </g>
-   <g id="text_18">
+   <g id="text_19">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="149.179084" y="33.915262" transform="rotate(-0 149.179084 33.915262)">1.49</text>
    </g>
    <g id="patch_12">
@@ -263,10 +266,10 @@ L 157.751742 38.239308
 z
 " clip-path="url(#p0f29aa7d9b)" style="fill: #1d3557; stroke: #1d3557; stroke-linejoin: miter"/>
    </g>
-   <g id="text_19">
+   <g id="text_20">
     <text style="font-weight: 700; font-size: 7.5px; font-family: 'Times New Roman', serif; text-anchor: middle; fill: #1d3557" x="163.634939" y="33.229894" transform="rotate(-0 163.634939 33.229894)">1.51</text>
    </g>
-   <g id="text_20">
+   <g id="text_21">
     <text style="font-weight: 700; font-size: 9px; font-family: 'Times New Roman', serif; text-anchor: start; fill: #1d3557" x="35.38125" y="12.24" transform="rotate(-0 35.38125 12.24)">Prefill throughput</text>
    </g>
    <g id="line2d_14">
