@@ -55,15 +55,19 @@
     "c": 40.40835032693099
   },
   "line_width_pt": {
-    "PrismQuant": 2.3,
-    "comparators": 1.85,
-    "reference": 1.5
+    "PrismQuant": 1.5,
+    "comparators": 1.05,
+    "reference": 0.85,
+    "axes": 0.9,
+    "ticks": 0.8
   },
+  "marker_edge_width_pt": 0.45,
+  "palette_source": "archive/fig2_fig3_before_oral_revision/fig2_metadata.json",
   "minimum_font_pt": 7.5,
   "palette": {
     "PrismQuant": "#1D3557",
-    "Hadamard": "#56858B",
-    "DuQuant": "#BC9272"
+    "Hadamard": "#A8DADC",
+    "DuQuant": "#F5CBCB"
   },
   "source_table": "fig2_revised_data.csv",
   "statistics": "Unchanged arithmetic mean of the 28 paired per-layer percentage reductions; no seed interval inferred.",

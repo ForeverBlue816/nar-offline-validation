@@ -39,7 +39,7 @@ def main():
             plotted=capture[capture.model.eq(row.model)&capture.site.eq(row.site)&capture.layer.eq(row.layer)&capture.method.eq(method)]
             assert len(plotted)==1
             np.testing.assert_allclose(getattr(row,column),plotted.iloc[0][column],rtol=1e-12,atol=1e-12)
-        assert '#bc9272' in (FIG/f'{stem}.svg').read_text().lower(), 'Active DuQuant comparator uses the shared warm accent'
+        assert '#f5cbcb' in (FIG/f'{stem}.svg').read_text().lower(), 'DuQuant uses the original pale pink palette'
     report={'main_figure_status':'PASS','source_commit':source_commit,'original_e1c_rows_byte_identical':True,
         'gate_verification':'Complete frozen table hashes plus direct numerical bracket/replay checks; DONE metadata has no duquant_addendum field','appended_rows':56,'range_bracket_violations':0,
         'plotted_rows_per_metric':84,'duquant_layers_per_panel':28,

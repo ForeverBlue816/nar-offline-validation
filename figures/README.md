@@ -27,7 +27,7 @@ scatter/bar marks are explicitly identified as schematic illustrations.
 
 ## Current exports
 
-- **Figure 2:** [PDF](fig2_revised.pdf), [SVG](fig2_revised.svg), [600-dpi PNG](fig2_revised.png). Three paired layer panels, stronger curves and labels; every original value retained.
+- **Figure 2:** [PDF](fig2_revised.pdf), [SVG](fig2_revised.svg), [600-dpi PNG](fig2_revised.png). Three paired layer panels, original blue/cyan/pink colors and lighter curves; every original value retained.
 - **Figure 3:** [PDF](fig3_revised.pdf), [SVG](fig3_revised.svg), [600-dpi PNG](fig3_revised.png). Four panels: geometry, seven-layer energy coverage, pooled range law, and all-expert MoE evidence. Internal experiment IDs appear only in provenance.
 - **Figure 4:** [PDF](fig4_revised.pdf), [SVG](fig4_revised.svg), [600-dpi PNG](fig4_revised.png). Accuracy and rank recovery, plus the restored blue/teal decoder-layer cost panel.
 - **Deployment:** [PDF](fig_deployment_efficiency.pdf), [SVG](fig_deployment_efficiency.svg), [600-dpi PNG](fig_deployment_efficiency.png). Explicit prefill batch size and enlarged implementation comparisons.
@@ -307,7 +307,7 @@ assembly, rather than the bare panels alone, carries the causal story.
 
 ## Figures 2/3: evidence, provenance and reproduction
 
-Figure 2 retains 252 values (28 layers × 3 methods × 3 metrics), the 1/128 reference, and the unchanged 25.30% range / 40.41% NMSE mean reductions. Main curves are 2.3 pt; comparators are 1.85 pt. Hadamard is teal and DuQuant uses a restrained warm accent. The original diagnostic scope and source-row linkage remain explicit.
+Figure 2 retains 252 values (28 layers × 3 methods × 3 metrics), the 1/128 reference, and the unchanged 25.30% range / 40.41% NMSE mean reductions. Main curves are 1.5 pt; comparators are 1.05 pt and the dashed reference is 0.85 pt. The original palette is restored: PrismQuant deep blue #1D3557, Hadamard pale cyan #A8DADC and DuQuant pale pink #F5CBCB. Markers and axes are lighter while the final-size font and layout are retained. The original diagnostic scope and source-row linkage remain explicit.
 
 Figure 3 has four equal plot areas. Panel a preserves all 8,064 standardized non-BOS token projections and both original unit-direction vectors. Panel b preserves all 768 original BOS-excluded rank-256 energy points at layers 1/13/27 and adds all 256 existing rank-64 points at layers 5/9/18/22. These additional spectra include BOS: dashed/solid styles, a visible note and the caption distinguish the protocols; no curve is extrapolated or spliced. A common all-token seven-layer view is in `appendix/fig3_energy_all_token_context.pdf/svg/png`, including the BOS-dominated layer-1 trace.
 

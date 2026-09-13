@@ -4,7 +4,7 @@ The active figures pass source-data, physical-layout and rendered-output checks.
 
 | Panel | Scientific evidence and retention | Visual/quantitative review |
 |---|---|---|
-| Figure 2 a–c | 252 unchanged values; all 28 layers × three methods × three metrics | Thicker main/comparison/reference strokes, visible distinct markers, shared legend, 25.30% / 40.41% unchanged paired reductions; no invented uncertainty |
+| Figure 2 a–c | 252 unchanged values; all 28 layers × three methods × three metrics | Original blue/cyan/pink palette; lighter 1.5/1.05/0.85-pt main/comparison/reference strokes and .45-pt marker boundaries, visible distinct markers, shared legend, 25.30% / 40.41% unchanged paired reductions; no invented uncertainty |
 | Figure 3a | 8064 unchanged non-BOS projections and both frozen unit-direction projections | Full extrema retained with original padding; common arrow scale 1.0, direction-length labels separated from zero reference; all points native vector |
 | Figure 3b | All 768 original rank-256 points plus 256 existing rank-64 points at four evenly spaced additional layers | Seven distinct color/marker pairs. Solid non-BOS and dashed all-token protocols visibly distinguished. Added curves stop at 64; original curves continue unchanged to 256 |
 | Figure 3c | All 2520 activation, 280 V-cache and 112 multi-slot points | Same original pooled fit and identity reference, labeled scientific families with circle/square/diamond marks; complete radical/overbar and editable radicand |

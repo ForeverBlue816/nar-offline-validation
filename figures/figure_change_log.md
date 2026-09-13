@@ -1,5 +1,12 @@
 # Manuscript figure revisions
 
+## 2026-09-13: Figure 2 original colors and lighter strokes
+
+- Restored the original deep-blue PrismQuant, pale-cyan Hadamard and pale-pink DuQuant colors, including matching legend handles.
+- Reduced main/comparison/reference widths from 2.3/1.85/1.5 pt to 1.5/1.05/0.85 pt, and softened marker edges and axes. Kept the current font sizes, layout, exact data and statistics.
+- Refreshed main/standalone PDF, editable SVG, 600-dpi PNG, manuscript aliases, palette-sensitive checks and export QA. Figures 3, 4 and deployment retain their existing rendered appearance.
+
+
 ## 2026-09-13: unified Figures 2/3 and restored decoder-layer cost
 
 - Restored Figure 4c from all six original decoder-layer cost/reference records, using restrained blue/teal colors. Kept the wider k=8 category highlight; Figure 4 is now 5.5 × 5.55 inches with a left-spanning accuracy panel. The E28 Graph-overhead experiment remains archived and is not conflated with this independently benchmarked cost statistic.
