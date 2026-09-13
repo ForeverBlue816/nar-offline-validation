@@ -20,7 +20,7 @@
     {
       "file": "figures/fig4_revised",
       "width_inches": 5.5,
-      "height_inches": 4.649999830457899,
+      "height_inches": 5.5500000847710504,
       "min_font_pt": 7.5,
       "embedded_font": true,
       "vector_only": true,
@@ -86,7 +86,7 @@
     {
       "file": "figures/panels/fig4_revised_a",
       "width_inches": 2.6403681437174478,
-      "height_inches": 3.563166724310981,
+      "height_inches": 4.528416527642144,
       "min_font_pt": 7.5,
       "embedded_font": true,
       "vector_only": true,
@@ -96,8 +96,19 @@
     },
     {
       "file": "figures/panels/fig4_revised_b",
-      "width_inches": 2.636756261189779,
-      "height_inches": 3.5695728725857205,
+      "width_inches": 2.504256354437934,
+      "height_inches": 2.1155274709065757,
+      "min_font_pt": 7.5,
+      "embedded_font": true,
+      "vector_only": true,
+      "editable_svg": true,
+      "png_dpi": 600,
+      "collision_failures": 0
+    },
+    {
+      "file": "figures/panels/fig4_revised_c",
+      "width_inches": 2.376527786254883,
+      "height_inches": 2.1139649285210504,
       "min_font_pt": 7.5,
       "embedded_font": true,
       "vector_only": true,
@@ -241,7 +252,8 @@
   "visual_revision_checks": {
     "figure4_panels": [
       "a",
-      "b"
+      "b",
+      "c"
     ],
     "explicit_batch_size": true,
     "kernel_ratio_axis": [

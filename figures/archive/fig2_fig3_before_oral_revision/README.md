@@ -1,0 +1,1 @@
+Frozen Figure 2/3 exports and renderers before the September 13 oral-figure revision. Source commit: 519ddad56370051e59afbc83d18aa35db0456d55. Original scientific source tables remain unchanged in figures/ and results/. These archived assets are not the active manuscript figures.

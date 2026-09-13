@@ -63,9 +63,10 @@ def span(ax, center, values, pos, horizontal=False, color=GRAY_EDGE, dots=False)
         for y in [lo,hi]:ax.plot([pos-.025,pos+.025],[y,y],lw=1.1,color=color,zorder=5)
 
 
-def export(fig, outbase, *, draft=False, exclude_axes=(), panel_axes=None):
+def export(fig, outbase, *, draft=False, exclude_axes=(), panel_axes=None, qa_directory=None, panel_directory=None):
     outbase=Path(outbase);outbase.parent.mkdir(parents=True,exist_ok=True)
-    q=HERE/'qa'/'deployment';q.mkdir(exist_ok=True,parents=True)
+    q=Path(qa_directory) if qa_directory else HERE/'qa'/'deployment';q.mkdir(exist_ok=True,parents=True)
+    panel_dir=Path(panel_directory) if panel_directory else HERE/'panels';panel_dir.mkdir(exist_ok=True,parents=True)
     fig.canvas.draw()
     extents=[]
     for ax in fig.axes:
@@ -109,9 +110,9 @@ def export(fig, outbase, *, draft=False, exclude_axes=(), panel_axes=None):
             for a in other:a.set_visible(False)
             for ext in ['pdf','svg','png']:
                 metadata={'CreationDate':None,'ModDate':None} if ext=='pdf' else ({'Date':None} if ext=='svg' else None)
-                fig.savefig(HERE/'panels'/f'{outbase.name}_{letter}.{ext}',bbox_inches=bbox,dpi=600,metadata=metadata)
+                fig.savefig(panel_dir/f'{outbase.name}_{letter}.{ext}',bbox_inches=bbox,dpi=600,metadata=metadata)
             for a,v in zip(other,prior):a.set_visible(v)
-            path=HERE/'panels'/f'{outbase.name}_{letter}.pdf'
+            path=panel_dir/f'{outbase.name}_{letter}.pdf'
             subprocess.run([sys.executable,str(HERE/'qa_tools/audit_figure_collisions.py'),str(path),
                 '--json-out',str(q/f'{outbase.name}_{letter}.collision.json')],capture_output=True,check=True)
     plt.close(fig)

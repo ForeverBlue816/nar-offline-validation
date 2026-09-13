@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Two-panel activation design figure retaining every accuracy observation."""
+"""Activation design and original decoder-layer transform cost; frozen data only."""
 import argparse
 import json
 import numpy as np
@@ -43,7 +43,7 @@ def budget(ax,data,letter='a',model='llama32_3b'):
     offsets={('hadamard',256,1):(0,-12),('hadamard',256,2):(-7,9),('hadamard',256,3):(26,7),
         ('hadamard',128,1):(-4,-11),('hadamard',64,1):(0,10),('nar',256,1):(3,-19),
         ('nar',256,2):(-1,16),('nar',256,3):(36,2),('nar',128,1):(-6,-13),
-        ('nar',128,2):(0,-13),('nar',64,1):(-5,-13)}
+        ('nar',128,2):(0,-20),('nar',64,1):(-5,-13)}
     for row in pts.itertuples():
         dx,dy=offsets[(row.method,int(row.g),int(row.m))]
         if model=='llama31_8b' and row.method=='nar' and int(row.g)==128 and int(row.m)==2:dy=-22
@@ -69,26 +69,43 @@ def recovery(ax,data):
         assert len(part)==5
         ax.plot(part.order,part.recovery_percent,color=color,marker=marker,ls=ls,lw=2.1,ms=5.2,mew=.8,label=label,zorder=4)
     ax.set_xlim(-.45,4.35);ax.set_ylim(0,109);ax.set_xticks(range(5),['8','16','32','64','max'])
-    ax.set_yticks([0,25,50,75,100]);ax.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+    ax.set_yticks([0,50,100]);ax.yaxis.set_major_formatter(FormatStrFormatter('%g'))
     ax.set_xlabel('Alignment rank (categories)');ax.set_ylabel('Activation-only PPL\nrecovery (%)',labelpad=5)
+
+
+def decoder_cost(ax,data):
+    axis(ax,'c','Decoder-layer cost','RTX PRO 6000 Blackwell Server · T=2048')
+    for model,marker,color in [('llama32_3b','o',TEAL_EDGE),('llama31_8b','s',STEEL)]:
+        p=data[data.model.eq(model)&data.kind.eq('kernel_share')].sort_values('k')
+        assert len(p)==2
+        ax.plot([0,1],p.share_percent,color=color,marker=marker,lw=2.1,ms=5.1,mew=.8)
+        for x,y in zip([0,1],p.share_percent):
+            ax.annotate(f'{y:.2f}%',(x,y),xytext=(8,-5) if model=='llama31_8b' and x==0 else (0,7 if model=='llama32_3b' else -13),textcoords='offset points',ha='left' if model=='llama31_8b' and x==0 else 'center',fontsize=7.5,color=color)
+        h=float(data[data.model.eq(model)&data.kind.eq('hadamard_kernel_share')].share_percent.iloc[0])
+        ax.axhline(h,color=color,ls=(0,(3,2)),lw=1.5)
+    ax.text(.96,.085,'Dashed: Hadamard',ha='right',va='bottom',transform=ax.transAxes,fontsize=7.5,color=GRAY_EDGE)
+    ax.set_xlim(-.32,1.32);ax.set_ylim(0,10.2);ax.set_xticks([0,1],['8','32']);ax.set_yticks([0,5,10])
+    ax.set_xlabel('Alignment rank k');ax.set_ylabel('Transform / layer time (%)');ax.grid(False)
 
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--reuse-data',action='store_true');ap.add_argument('--draft',action='store_true');args=ap.parse_args()
     if not args.reuse_data:build()
     typography=style();data=pd.read_csv(HERE/'fig4_revised_data.csv')
-    fig=plt.figure(figsize=(5.5,4.65))
-    gs=fig.add_gridspec(1,2,left=.105,right=.975,bottom=.28,top=.89,width_ratios=[1.14,1],wspace=.41)
-    a=fig.add_subplot(gs[0,0]);b=fig.add_subplot(gs[0,1])
-    budget(a,data);recovery(b,data);budget_legend(fig)
+    fig=plt.figure(figsize=(5.5,5.55))
+    gs=fig.add_gridspec(2,2,left=.105,right=.975,bottom=.225,top=.91,width_ratios=[1.14,1],wspace=.41,hspace=.75)
+    a=fig.add_subplot(gs[:,0]);b=fig.add_subplot(gs[0,1]);c=fig.add_subplot(gs[1,1])
+    budget(a,data);recovery(b,data);decoder_cost(c,data);budget_legend(fig)
     handles=[Line2D([],[],color=color,marker=marker,ls=ls,lw=2.1,label=name) for color,marker,ls,name in MODEL_STYLE.values()]
     fig.legend(handles=handles,loc='lower left',bbox_to_anchor=(.605,.035),fontsize=7.5,handlelength=1.6,labelspacing=.48)
-    export(fig,HERE/'fig4_revised',draft=args.draft,panel_axes={'a':a,'b':b})
+    export(fig,HERE/'fig4_revised',draft=args.draft,panel_axes={'a':a,'b':b,'c':c})
     meta=dict(source_commit=json.loads((HERE/'deployment_efficiency_metadata.json').read_text())['source_commit'],
-        size_inches=[5.5,4.65],typography=typography,sharex=False,metadata_point_count=11,
-        rank_point_count=15,panels=['a','b'],layout='side-by-side',
+        size_inches=[5.5,5.55],typography=typography,sharex=False,metadata_point_count=11,
+        rank_point_count=15,panels=['a','b','c'],layout='left spanning two rows; right accuracy and original decoder-layer cost',
+        cost_point_count=4,cost_reference_count=2,cost_source='Original E17 v3, RTX PRO 6000 Blackwell Server Edition, T=2048',
+        cost_definition='100*t_transform/(t_decoder_layer+t_transform)',cost_colors=[TEAL_EDGE,STEEL],
         k8_highlight_rank_category_bounds=[-.45,.50],k8_highlight_alpha=.22,
-        removed_panel='Graph overhead c archived; all source data retained')
+        archived_panel='E28 Graph overhead remains archived; requested original E17 decoder-layer share restored')
     (HERE/'fig4_revised_metadata.json').write_text(json.dumps(meta,indent=2)+'\n')
 
 if __name__=='__main__':main()

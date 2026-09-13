@@ -21,7 +21,7 @@ def main():
         for name in ['make_fig4_revised.py','make_deployment_efficiency.py','make_deployment_appendix.py']:
             subprocess.run([sys.executable,str(HERE/name),'--reuse-data'],check=True,cwd=ROOT)
         files=[HERE/(base+ext) for base in ['fig4_revised','fig_deployment_efficiency'] for ext in ['.pdf','.svg','.png']]
-        files += [p for folder in [HERE/'appendix',HERE/'panels'] for p in folder.iterdir() if p.suffix in ['.pdf','.svg','.png']]
+        files += [p for folder in [HERE/'appendix',HERE/'panels'] for p in folder.iterdir() if p.suffix in ['.pdf','.svg','.png'] and not p.name.startswith('fig3_')]
         return {str(p.relative_to(ROOT)):digest(p) for p in sorted(files)}
     first=render();second=render();assert first==second,'Repeated render changed artifact bytes'
     report=dict(status='PASS',data_rebuild_identical=True,full_render_repeats=2,artifact_count=len(first),sha256=second)

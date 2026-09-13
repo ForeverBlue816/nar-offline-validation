@@ -17,6 +17,7 @@ and each panel was visually inspected along with its complete assembly.
 |---|---|---|---|
 | Fig.4 a | E20 3B metadata/PPL; 11 points + bf16 | Retained mean PPL; no invented interval | All labels readable; exact x preserved; two brackets explained in caption |
 | Fig.4 b | 15 categorical-rank recovery values | Recovery from recorded mean PPLs; heterogeneous original seed protocols documented | Real nonmonotone paths retained; wider k=8 category band ends before rank 16; model markers and legend explicit |
+| Fig.4 c | Original decoder-layer transform share; four rank points + both references | Separately benchmarked transform/(layer+transform); no invented session uncertainty | Blue/teal colors; all four exact values readable; both dashed Hadamard references retained |
 | Efficiency strip | Actual R4 interface | Diagram only; widths do not encode time | X branch, FP16 output, offline factors, shared token quantizer, and CUTLASS all visible |
 | Efficiency a | Four prefill workloads, both integer methods | Ratio of pooled throughput medians; session-ratio min–max | Equal-width bars and FP16=1 line; all eight values; batch 1/16 explicitly means sequences per prefill call |
 | Efficiency b | Six matched Graph latency values | Pooled medians and session-median min–max | Zero origin, complete FP16 bars, truthful 3B slowdown and 8B 1.22× gain |
@@ -28,7 +29,7 @@ and each panel was visually inspected along with its complete assembly.
 | Appendix all kernels a–e | All 30 comparisons | Median of three paired-session ratios; min–max | All three shapes, two models, and five families; T=1 TC-B losses included |
 
 The automated collision reports have zero FAIL and zero WARN findings.
-The main figures are 5.5 inches wide (Figure 4 height 4.65; deployment 5.35).
+The main figures are 5.5 inches wide (Figure 4 height 5.55; deployment 5.35).
 The 8B standalone appendix is 3.4 inches wide, with unchanged physical text size.
 Standalone panels are bare assembly assets and use the corresponding main
 figure legend. Grayscale previews preserve markers, ordering, strokes and
@@ -40,8 +41,8 @@ not a Nature 89/183 mm column. Rendered checks enforce the actual requested
 contract. The shared-module and explicit-font options make the source audit
 inspect the real export code without substituting a sans-serif font.
 
-See verification.json for all 20 PDF/SVG/PNG asset checks, reproducibility.json
-for the frozen-CSV rebuild and two byte-identical runs of all 60 figure assets,
+See verification.json for all 21 PDF/SVG/PNG asset checks, reproducibility.json
+for the frozen-CSV rebuild and two byte-identical runs of all 63 figure assets,
 and the individual alignment, extent, source, text, and collision reports.
 
 Protocol limits are documented in captions and metadata: random performance
@@ -51,10 +52,4 @@ independent page64 correctness, and retained large-accumulator stress failures.
 There are no significance stars, hidden points, enlarged error bars, smoothing,
 profiler-time substitutions, or full-checkpoint Pareto claims.
 
-2026-09-13 revision: Figure 4 now contains only the two full-height accuracy
-panels. The former c is archived, including its original collision record;
-its measurements remain unchanged in the original data CSV. The enlarged
-k=8 shading denotes a category selection, not uncertainty. Deployment d's
-linear zoom is explicitly tick-labeled and contains the complete 0.32566–0.80506
-session range as well as the 1.00 reference. No hidden axis break or altered
-measurement is used to increase salience.
+2026-09-13 current revision: Figure 4 restores the original decoder-layer cost panel c with blue/teal model colors, while preserving the wider k=8 category band. The preceding E28 Graph-overhead c remains archived. Deployment d's linear zoom contains the complete 0.32566–0.80506 session range and the 1.00 reference. All measurements and statistic definitions remain unchanged. Figure 2/3 has its own separate QA bundle in ../fig2_fig3/.

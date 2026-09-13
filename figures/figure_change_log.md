@@ -1,6 +1,17 @@
-# Figure 4 and deployment-efficiency revisions
+# Manuscript figure revisions
 
-## 2026-09-13: visual clarity revision
+## 2026-09-13: unified Figures 2/3 and restored decoder-layer cost
+
+- Restored Figure 4c from all six original decoder-layer cost/reference records, using restrained blue/teal colors. Kept the wider k=8 category highlight; Figure 4 is now 5.5 × 5.55 inches with a left-spanning accuracy panel. The E28 Graph-overhead experiment remains archived and is not conflated with this independently benchmarked cost statistic.
+- Restyled Figure 2 at 5.5 × 2.55 inches with 2.3-pt main curves, 1.85-pt comparators and ≥7.5-pt labels, preserving every one of 252 values and both mean reductions.
+- Rebuilt Figure 3 at 5.5 × 6.05 inches as a four-panel evidence grid. Kept every original geometry, rank-256 energy and reference-law observation. Added four existing depth-spanning rank-64 spectra with their different BOS protocol explicitly visible and a same-protocol seven-layer appendix.
+- Merged activation, V-cache and multi-slot law observations; replaced internal experiment identifiers with scientific names. Kept all 5,342 experts in the main MoE panel, adding equal-count f-bin median/IQR summaries. Kept original reference coefficients; displayed full-row and all-expert R² together. Verified 263 high-f experts, 0.19 restricted-range R², 0.95 median y/x and 3.82× cold/hot residual spread.
+- Corrected the holdout wording after inspecting the original collector: MoE observations are excluded from the dense reference fit, while retained expert rows come from expert calibration capture. No independent calibration/test split or causal cold-expert noise claim is made.
+- Added traceable point/bin tables, source hashes, scientific captions and LaTeX snippets. Archived old figure files/scripts; active aliases and independent panel exports now point to the revised figures.
+- Updated the legacy DuQuant gate to check complete frozen tables and all 56 numerical brackets directly because the retained DONE metadata lacks its former addendum field; measurements are unchanged.
+- Both verification suites enforce embedded Times New Roman Bold, actual ≥7.5-pt text, editable vector SVG/PDF, 600-dpi PNG, full point counts, no clipping, zero collision findings and strict 1.5-pt rendered alignment. The deployment bundle has 21 assets / 63 exports; the Figure 2/3 bundle has 12 assets / 36 exports, each rendered twice identically.
+
+## 2026-09-13: earlier visual clarity revision (superseded layout)
 
 - Figure 4 now has only a and b, side by side. The former c and the preceding
   assembly are archived in `archive/fig4_before_two_panel_refinement/`.

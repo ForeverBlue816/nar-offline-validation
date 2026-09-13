@@ -1,0 +1,114 @@
+{
+  "source_commit": "519ddad56370051e59afbc83d18aa35db0456d55",
+  "source_hashes": {
+    "figures/fig2_capture.csv": "ca6965b86bc0c7bd7d9264934857805ff5b272168ead5c2ac86633d97421f489",
+    "figures/fig2b.csv": "5d3998b565cf17c68658136bdaa83259bdefb97b77e80b1d922e847e8cbca242",
+    "figures/fig2c.csv": "dfda207222392d977da967b2cb876e0c027bb6a402f1eb641f518dad0805ff8b",
+    "figures/fig3_token_projections.csv": "88d1afce4c985f54d3066cdbdc3932a089c5a59ce3218859a2558d7f0c4e41ef",
+    "figures/fig3_geometry_metadata.json": "506f892b0db9f90e6f06a6e667ebc4697ea6dedb582486ad355145d3eea4bc2b",
+    "figures/fig3_eigenspace_r256.csv": "4ff929d5bc7366cc8fa205fdbc16598e697d7076cb6ffa82aba076cc28b8d578",
+    "figures/fig3_range_law.csv": "f88a2b46a819b030fe445c0fee9ad8808ac938174c153cc20e2271918c2961d7",
+    "figures/fig3_range_law_moe.csv": "3c813c33434d4cf1054009b46dcf93a5d0975ac53ae1228e28d0e9ea7d185db0",
+    "results/llama32_3b/e1c_per_layer.csv": "84cb038dafa091054d301e5383c44cd1ad47a7cd642f9d51a5837263855b8916",
+    "results/llama32_3b/e1c_eigenspace.csv": "934b546f0c7839a4308917d4ce74742e635c0b2ae957449943decb8fac3047a9",
+    "results/llama32_3b/e1c_range_vs_k.csv": "573e9f929ff956b9f6fe0f097394cf6b88368f74988f6bdd47d53864cc36de37",
+    "results/llama32_3b/e7_range_vs_k.csv": "d590a7fd3fd41603a8dac4edefd324a2c644da1ad5262888c78745f88a272226",
+    "results/llama32_3b/e20_range_vs_config.csv": "a2cce8b11ebc330e39d4fce43cd693ae473e242d2956bbcb8171dd04fbbd8a2b",
+    "results/qwen3_30b_a3b_base/e26_expert_range_law.csv": "5c0cbfc1f33129d83a0beaaf583cbc471b4bf9a580138c93940ffb9f5bd0aed7",
+    "results/qwen3_30b_a3b_base/e26_expert_f.csv": "f32fcb62701f8ce9fc322e8d860a04c84324ee4baede23c6c6eb6dabf67918f5",
+    "nar/e26_moe.py": "eb173acd0f68c7c8778de41081c6936d137fa8e1695c3d3a90a5072902c3fb65",
+    "nar/extended_experiment.py": "8331f9bb5cd20c7877c836b2db1115aacf5689337fac4a7428ac59f7eb834f8b",
+    "figures/prepare_fig3.py": "ba2de0435edac33ed5a82a918ccf240d4eedd7bdc1bd7c393714f9b189bc4900"
+  },
+  "count_fig2": 252,
+  "count_fig3_by_panel": {
+    "a": 8066,
+    "b": 1024,
+    "c": 2912,
+    "d": 5342
+  },
+  "reference_fit": {
+    "intercept": 0.05980223276470587,
+    "slope": 0.8665147718600141,
+    "r_squared": 0.8613894973078933
+  },
+  "energy_layers": [
+    1,
+    5,
+    9,
+    13,
+    18,
+    22,
+    27
+  ],
+  "energy_original_layers": [
+    1,
+    13,
+    27
+  ],
+  "energy_protocols": {
+    "solid": "Original BOS-excluded rank-256, layers 1/13/27; 768 unchanged points",
+    "dashed": "Existing all-token rank-64, layers 5/9/18/22; 256 additional points; no continuation beyond measured rank"
+  },
+  "moe_diagnostics": {
+    "all": {
+      "n": 5342,
+      "within_subset_ols_r_squared": 0.43276280655992555,
+      "transferred_reference_predictive_r_squared": 0.429864481675752,
+      "median_y_over_sqrt": 0.947901307877725,
+      "x_variance_ddof0": 0.010372456176936315,
+      "reference_residual_sd_ddof0": 0.09555348811672133
+    },
+    "full_rows_256": {
+      "n": 4955,
+      "within_subset_ols_r_squared": 0.6080230824871335,
+      "transferred_reference_predictive_r_squared": 0.6061925712312145,
+      "median_y_over_sqrt": 0.9507033288121296,
+      "x_variance_ddof0": 0.010403035562654718,
+      "reference_residual_sd_ddof0": 0.0699899516866673
+    },
+    "fewer_than_256_rows": {
+      "n": 387,
+      "within_subset_ols_r_squared": 0.11618767215368046,
+      "transferred_reference_predictive_r_squared": -0.17149901464422213,
+      "median_y_over_sqrt": 0.8564126353150658,
+      "x_variance_ddof0": 0.00810010685738938,
+      "reference_residual_sd_ddof0": 0.2186221694286039
+    },
+    "hot_tokens_ge_2048": {
+      "n": 4142,
+      "within_subset_ols_r_squared": 0.825515642158987,
+      "transferred_reference_predictive_r_squared": 0.7937410812720689,
+      "median_y_over_sqrt": 0.9558967347978982,
+      "x_variance_ddof0": 0.010572789233813006,
+      "reference_residual_sd_ddof0": 0.042662879574885654
+    },
+    "cold_tokens_lt_2048": {
+      "n": 1200,
+      "within_subset_ols_r_squared": 0.17644205037109784,
+      "transferred_reference_predictive_r_squared": -0.036510256238008854,
+      "median_y_over_sqrt": 0.8817109549573217,
+      "x_variance_ddof0": 0.008535099054095765,
+      "reference_residual_sd_ddof0": 0.16289131858954423
+    },
+    "f_le_0_5": {
+      "n": 5079,
+      "within_subset_ols_r_squared": 0.18956555909174014,
+      "transferred_reference_predictive_r_squared": 0.18553915074589666,
+      "median_y_over_sqrt": 0.9477236933589573,
+      "x_variance_ddof0": 0.002968835449000716,
+      "reference_residual_sd_ddof0": 0.09274171091826311
+    },
+    "f_gt_0_5_count": 263,
+    "cold_over_hot_reference_residual_sd": 3.8181041742300352,
+    "dense_x_variance_ddof0": 0.018521431269256615
+  },
+  "full_row_definition": "rows == HELD_OUT_ROWS == 256 (original collector cap), predefined by source code, not selected by fit",
+  "cold_definition": "routed_tokens < N0 == 2048, original shrinkage threshold",
+  "shrinkage": "Sigma_e = (n_e Sigma_own + 2048 Sigma_layer_pool)/(n_e+2048) for cold experts",
+  "heldout_scope": "MoE experts are excluded from the dense reference fit. Kept evaluation rows are part of the expert covariance collection; no independent calibration/test split is claimed.",
+  "original_expert_eligibility": "Original range table includes n_e>=64: all 5342 available expert observations retained; remaining 802 of 6144 experts have no range observation, not a plotting exclusion.",
+  "r_squared_definition": "Panel d reports within-subset OLS-with-intercept R\u00b2 (equivalently squared Pearson correlation), descriptive only. Transferred-reference predictive R\u00b2 is separately recorded; no MoE fitted line is drawn.",
+  "binning": "Ten equal-count bins ordered by f/layer/expert; every point assigned; median x/y connected as descriptive polyline; Q1-Q3 shown as intervals, not confidence intervals.",
+  "display_precision": "Only labels are rounded; computations and coordinates use frozen full precision."
+}
