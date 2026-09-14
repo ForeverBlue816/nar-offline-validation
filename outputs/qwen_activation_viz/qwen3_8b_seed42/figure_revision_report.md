@@ -101,3 +101,40 @@ updated final PDF renders in the existing PDF render index. Previous visual
 reviews remain historical for these three pages. Renderer commit `3849efd`,
 Slurm job `150750`; reproduce with
 `python -m nar.activation_viz.height_axis_revision "$RAW_RUN" "$RUN"`.
+
+
+## Clean footers and full-domain reference rows (2026-09-14)
+
+This follow-up supersedes the preceding preservation statements only for the
+three priority raw detail matrices and their three full-domain matrix companions.
+The local `Sample 0 / tokens / channels / g128`, color-mapping and zero-floor
+explanatory footer lines are removed. Their scientific definitions remain in
+the README. Removing 0.60 inches of footer space preserves physical plot-area
+sizes, measured geometry, camera, blue-orange colors and shared limits.
+
+All three full-domain matrices now contain the Unrotated reference plus three
+rotated methods. The existing full-grid rasterizer processes all 2,048 tokens
+and 4,096 q_proj or 12,288 down_proj channels, with shared four-method limits.
+Current upper-surface defaults replace the earlier artificial height columns
+and closed sidewalls. Linear color mapping, linear heights and the established
+full-view camera are retained; DejaVu Sans matches the local figure typography.
+
+The Unrotated row uses the original paired_local/unrotated norm-fused FP32
+shards. The reference pairing audit checks input IDs and capture metadata.
+End-to-end rotated rows retain upstream QDQ; this is not a paired intermediate
+input claim. All numerical records and all unrelated figure files are protected.
+
+Reproduce with `python -m nar.activation_viz.clean_full_revision "$RAW_RUN" "$RUN"`.
+See the [contract](clean_full_revision_contract.md) and
+[scoped audit](qa/clean_full_revision/audit.json). The separate historical
+height-axis and palette audits describe their original renders.
+
+Final review: all six PDFs pass font and collision failure gates; all six panel
+alignment reports pass without exemptions. Minimum text at 183 mm is 7.02 pt
+for local matrices and 5.10 pt for full-domain matrices. Pane/image bounding-box
+warnings were reviewed on every panel. The audit confirms 48 unchanged local
+surface records, 48 full-domain panels, 2,664 unchanged unrelated figure files
+and nine unchanged scientific record files. All 96 panels were visually reviewed.
+Slurm 153504 completed local exports before a missing-Numba error; after an
+isolated dependency install, Slurm 153506 completed full exports and final QA
+with exit code 0. Existing supplementary numerical failures remain unchanged.

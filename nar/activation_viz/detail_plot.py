@@ -256,6 +256,8 @@ def export(fig, path, records, scales, colorbars):
         document[0].get_pixmap(dpi=600, alpha=False).save(str(path) + '.png')
     write_json(path.with_suffix('.geometry.json'), {
         'config': CONFIG, 'panels': records, 'scales': scales,
+        'explanatory_footer_visible': not getattr(fig, '_height_axis_revision', False),
+        'footer_space_removed_inches': .60 if getattr(fig, '_height_axis_revision', False) else 0,
         **({'height_axis_style': HEIGHT_AXIS_STYLE, 'palette_style': PALETTE_STYLE}
            if getattr(fig, '_height_axis_revision', False) else {}),
         'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
@@ -281,7 +283,9 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     zoom = name == 'rotated_only_zoom'
     height_axis = name == 'matrix' and (mode, site, quantity) in HEIGHT_AXIS_TARGETS
     cmap = CMAP if height_axis else colormaps['viridis']
-    footer_extra = .25 if height_axis else 0
+    # The priority matrices keep the scientific caption in the README.
+    # Subtract only footer space; physical surface-grid dimensions stay fixed.
+    footer_extra = -.35 if height_axis else 0
     font_size = 11.75 if cols == 4 else 8.5
     width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0) + footer_extra
     fig = plt.figure(figsize=(width, height), dpi=600)
@@ -294,8 +298,9 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     mapping = 'Linear heights; linear color mapping.' if linear else 'Linear heights; square-root color mapping.'
     zoom = name == 'rotated_only_zoom'
     zero_note = '\nHeight ticks: activation magnitude; pale floor: z=0.' if height_axis else ''
-    fig.text(.5, .06 / height, 'Sample 0 · tokens 0–127 · channels 0–511 · g128.\n' + mapping + zero_note,
-             ha='center', va='bottom', fontsize=font_size)
+    if not height_axis:
+        fig.text(.5, .06 / height, 'Sample 0 · tokens 0–127 · channels 0–511 · g128.\n' + mapping + zero_note,
+                 ha='center', va='bottom', fontsize=font_size)
     if zoom:
         fig.text(.5, 1 - .36 / height, 'Rotated-only zoom: shared scale differs from the four-row matrix.',
                  ha='center', va='top', fontsize=font_size)

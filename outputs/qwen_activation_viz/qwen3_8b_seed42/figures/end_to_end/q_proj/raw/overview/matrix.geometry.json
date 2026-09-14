@@ -7,7 +7,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -15,7 +18,38 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 0,
+      "source": "activations/paired_local/unrotated/s00_l00_q_proj.pt",
+      "source_sha256": "a30aaa47ef81a14b73739edea21dbd77aa1d1a836621d71eec8cd1aa942c7eba",
+      "maximum": 32.32394027709961,
+      "z_limit": 33.2936584854126
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -26,7 +60,7 @@
       "source": "activations/end_to_end/hadamard/s00_l00_q_proj.pt",
       "source_sha256": "30e2bdcf8068f52b3d52b0c46f0946a1bb63f9d889a5b041f1d0aa8a301eb5d3",
       "maximum": 4.907323837280273,
-      "z_limit": 5.605647420883179
+      "z_limit": 33.2936584854126
     },
     {
       "shape": [
@@ -35,7 +69,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -43,7 +80,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -54,7 +91,7 @@
       "source": "activations/end_to_end/nar_k8/s00_l00_q_proj.pt",
       "source_sha256": "c199749fba29b18ef937cf6f9904e28368f3119f79e982a9783f791468eaf061",
       "maximum": 5.107708930969238,
-      "z_limit": 5.605647420883179
+      "z_limit": 33.2936584854126
     },
     {
       "shape": [
@@ -63,7 +100,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -71,7 +111,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -82,7 +122,7 @@
       "source": "activations/end_to_end/nar_kmax/s00_l00_q_proj.pt",
       "source_sha256": "9cc3c1e1f9637c681dbb0d22601a110f0bb105de9dda47d78d56eb8547ffcdcb",
       "maximum": 5.442376136779785,
-      "z_limit": 5.605647420883179
+      "z_limit": 33.2936584854126
     },
     {
       "shape": [
@@ -91,7 +131,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -99,7 +142,38 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 12,
+      "source": "activations/paired_local/unrotated/s00_l12_q_proj.pt",
+      "source_sha256": "5d519fe6b10f96406ba7925d86b1566016d2d3f60689687e7570cdcd2ae1a0e8",
+      "maximum": 46.91509246826172,
+      "z_limit": 48.32254524230957
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -110,7 +184,7 @@
       "source": "activations/end_to_end/hadamard/s00_l12_q_proj.pt",
       "source_sha256": "4ee779bf6686d24424971b37c72a239e472318acfb3d8ce06370e3212bb613a5",
       "maximum": 5.0047383308410645,
-      "z_limit": 6.604581689834595
+      "z_limit": 48.32254524230957
     },
     {
       "shape": [
@@ -119,7 +193,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -127,7 +204,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -138,7 +215,7 @@
       "source": "activations/end_to_end/nar_k8/s00_l12_q_proj.pt",
       "source_sha256": "706cb951374cf41e5c4004c865b9b0191e5a81ea321036f222f706a9b4e4f95c",
       "maximum": 6.412215232849121,
-      "z_limit": 6.604581689834595
+      "z_limit": 48.32254524230957
     },
     {
       "shape": [
@@ -147,7 +224,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -155,7 +235,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -166,7 +246,7 @@
       "source": "activations/end_to_end/nar_kmax/s00_l12_q_proj.pt",
       "source_sha256": "a802e970b89496297e79717c0314e9a952a63cb4da5a6d864b6a5c92d7d2a87f",
       "maximum": 5.87501335144043,
-      "z_limit": 6.604581689834595
+      "z_limit": 48.32254524230957
     },
     {
       "shape": [
@@ -175,7 +255,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -183,7 +266,38 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 23,
+      "source": "activations/paired_local/unrotated/s00_l23_q_proj.pt",
+      "source_sha256": "2a6dacfc65213499f2342b96e8940886080d396dde1168d84c75d5154743f0d7",
+      "maximum": 63.74514389038086,
+      "z_limit": 65.65749820709229
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -194,7 +308,7 @@
       "source": "activations/end_to_end/hadamard/s00_l23_q_proj.pt",
       "source_sha256": "4eda0cad7af2fe7679988e110c5a2faab632e341886147b85f62cf886860ebf4",
       "maximum": 4.964585781097412,
-      "z_limit": 6.409994068145752
+      "z_limit": 65.65749820709229
     },
     {
       "shape": [
@@ -203,7 +317,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -211,7 +328,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -222,7 +339,7 @@
       "source": "activations/end_to_end/nar_k8/s00_l23_q_proj.pt",
       "source_sha256": "df10a3fe7a0cded6360d624cf3b346c92c1a9c06d748932d0cc5f983da1c3da6",
       "maximum": 6.223295211791992,
-      "z_limit": 6.409994068145752
+      "z_limit": 65.65749820709229
     },
     {
       "shape": [
@@ -231,7 +348,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -239,7 +359,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -250,7 +370,7 @@
       "source": "activations/end_to_end/nar_kmax/s00_l23_q_proj.pt",
       "source_sha256": "f454d47d19fbfbb343cba35965da90da246718de5dec8870fe0d79d4af7ddb88",
       "maximum": 6.132126808166504,
-      "z_limit": 6.409994068145752
+      "z_limit": 65.65749820709229
     },
     {
       "shape": [
@@ -259,7 +379,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -267,7 +390,38 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
+      "pixel_size": [
+        1356,
+        1356
+      ],
+      "rasterizer": "depth-tested full grid",
+      "method": "unrotated",
+      "layer": 35,
+      "source": "activations/paired_local/unrotated/s00_l35_q_proj.pt",
+      "source_sha256": "5f8b6ab1f2791160d222b032dd3b99404d7da93fb29812c9e527b557280ad073",
+      "maximum": 60.95192337036133,
+      "z_limit": 62.78048107147217
+    },
+    {
+      "shape": [
+        2048,
+        4096
+      ],
+      "vertices_processed": 8388608,
+      "surface_triangles": 16764930,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
+      "data_stride": [
+        1,
+        1
+      ],
+      "pooling": false,
+      "cropping": false,
+      "base_z": 0,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -278,7 +432,7 @@
       "source": "activations/end_to_end/hadamard/s00_l35_q_proj.pt",
       "source_sha256": "24433a8f0211d25e6e4a31a78af6305a7bfbf4e90515ff4ad973d575155bcf59",
       "maximum": 4.428213596343994,
-      "z_limit": 6.250932240486145
+      "z_limit": 62.78048107147217
     },
     {
       "shape": [
@@ -287,7 +441,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -295,7 +452,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -306,7 +463,7 @@
       "source": "activations/end_to_end/nar_k8/s00_l35_q_proj.pt",
       "source_sha256": "baa272ae42fd0c7f3b4f584dcc021f6a9807780539ab9b5cbfc73c38d882126d",
       "maximum": 5.624730110168457,
-      "z_limit": 6.250932240486145
+      "z_limit": 62.78048107147217
     },
     {
       "shape": [
@@ -315,7 +472,10 @@
       ],
       "vertices_processed": 8388608,
       "surface_triangles": 16764930,
-      "sidewall_triangles": 24568,
+      "sidewall_triangles": 0,
+      "draw_surface": true,
+      "draw_height_columns": false,
+      "draw_sidewalls": false,
       "data_stride": [
         1,
         1
@@ -323,7 +483,7 @@
       "pooling": false,
       "cropping": false,
       "base_z": 0,
-      "vertical_height_segments": 8388608,
+      "vertical_height_segments": 0,
       "pixel_size": [
         1356,
         1356
@@ -334,10 +494,38 @@
       "source": "activations/end_to_end/nar_kmax/s00_l35_q_proj.pt",
       "source_sha256": "865c510b1871e28819e39b25c9cfdfb52c97f303eb60fb3342b201d9387eb939",
       "maximum": 6.06886625289917,
-      "z_limit": 6.250932240486145
+      "z_limit": 62.78048107147217
     }
   ],
   "sample": 0,
-  "sidewalls": "geometric closure to z=0; not additional measurements",
-  "seconds": 62.80790459900163
+  "draw_surface": true,
+  "draw_height_columns": false,
+  "draw_sidewalls": false,
+  "seconds": 30.578667733992916,
+  "revision": "clean-footer-full-reference-v1",
+  "reference_source_mode": "paired_local",
+  "reference_precision": "unquantized norm-fused FP32",
+  "plot_source_sha256": "d2645d8a45b95a52823b0ff29ba4a6d460b16fbc940f9e34ecabeae95b24d2ac",
+  "rasterizer_source_sha256": "a2861a4ac5cad5da2a5b8e7aad469656fc101ae3e0f5c414a97e4cdc2ab8296b",
+  "git_commit": "82ea9c947f6ae242c555ddd797c9a0240b72bcf4",
+  "camera": {
+    "projection": "persp",
+    "elev": 25,
+    "azim": -60,
+    "box_aspect": [
+      1.28,
+      1,
+      0.72
+    ],
+    "zoom": 0.88
+  },
+  "color": {
+    "cmap": "blue_warm_orange",
+    "norm": "Normalize",
+    "vmin": 0
+  },
+  "intended_insertion_width_inches": 7.2,
+  "font_family": "DejaVu Sans",
+  "explanatory_footer_visible": false,
+  "git_commit_role": "base commit; plot_source_sha256 identifies the working-tree renderer used for this export"
 }

@@ -2353,6 +2353,8 @@
     "view": "four_method_scale",
     "scale_differs_from_matrix": false
   },
+  "explanatory_footer_visible": false,
+  "footer_space_removed_inches": 0.6,
   "height_axis_style": {
     "revision": "priority-height-axis-v1",
     "height_ticks": "0, half shared maximum, shared maximum; measured units",
@@ -2380,8 +2382,8 @@
     "gamma": 0.5,
     "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
   },
-  "git_commit": "3849efd4fde3de5c1a3524cbd81d9c80446d5afb",
-  "plot_source_sha256": "08f2bfec96291bf88512f2b50feddf235b2176c8c8b664ed489a307879e90066",
+  "git_commit": "82ea9c947f6ae242c555ddd797c9a0240b72bcf4",
+  "plot_source_sha256": "2abcf846ad1841e482a8d077ef0bde9dc8622e6f87b8fece12c2a55d051abd12",
   "output_paths": [
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/matrix.pdf",
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/matrix.png",
@@ -2389,8 +2391,9 @@
   ],
   "figure_inches": [
     12.05,
-    12.0
+    11.4
   ],
   "intended_insertion_width_inches": 7.2,
-  "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged"
+  "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged",
+  "git_commit_role": "base commit; plot_source_sha256 identifies the working-tree renderer used for this export"
 }

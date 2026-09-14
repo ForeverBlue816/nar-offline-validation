@@ -1,0 +1,157 @@
+{
+  "revision": "clean-footer-full-reference-v1",
+  "records": [
+    {
+      "pdf": "figures/end_to_end/q_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "23e957142f793cfc07364b0ce728b9c9fd88cf5c5268098100836a68ed93284c",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/end_to_end__q_proj__raw__detail__matrix.png",
+      "full_grid_vertices": 1048576,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 80,
+        "text-image-edge": 16
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    },
+    {
+      "pdf": "figures/end_to_end/q_proj/raw/overview/matrix.pdf",
+      "pdf_sha256": "3c075bc6445164171b7e84a09726b6d1f342fde22e4b8fb19fb22334a72315e0",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 5.1000000000000005,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/end_to_end__q_proj__raw__overview__matrix.png",
+      "full_grid_vertices": 134217728,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 64,
+        "text-image-edge": 64
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    },
+    {
+      "pdf": "figures/end_to_end/down_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "5a593371190f52868cd61bf1e28dd9e18c48b4594cbb6c71a5b748759ccc261f",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/end_to_end__down_proj__raw__detail__matrix.png",
+      "full_grid_vertices": 1048576,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 80,
+        "text-image-edge": 16
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    },
+    {
+      "pdf": "figures/end_to_end/down_proj/raw/overview/matrix.pdf",
+      "pdf_sha256": "a04941f200d5ca53e7051499990636708366e76828076b577ef3ca53e15a62eb",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 5.1000000000000005,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/end_to_end__down_proj__raw__overview__matrix.png",
+      "full_grid_vertices": 402653184,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 96,
+        "text-image-edge": 80
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    },
+    {
+      "pdf": "figures/paired_local/q_proj/raw/detail/matrix.pdf",
+      "pdf_sha256": "09c64fe958cf9270548595eb5cde89cc75bc4d83ea14d34f2415ae396acc1037",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 7.020747085528998,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/paired_local__q_proj__raw__detail__matrix.png",
+      "full_grid_vertices": 1048576,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 80,
+        "text-image-edge": 16
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    },
+    {
+      "pdf": "figures/paired_local/q_proj/raw/overview/matrix.pdf",
+      "pdf_sha256": "11af387a08d9484e3402198f6d2497d487e74776a84c2a41f542921f4304bf38",
+      "panels": 16,
+      "minimum_text_pt_at_183mm": 5.1000000000000005,
+      "font_exit": 0,
+      "collision_exit": 0,
+      "review_png": "qa/clean_full_revision/paired_local__q_proj__raw__overview__matrix.png",
+      "full_grid_vertices": 134217728,
+      "alignment": {
+        "fail": 0,
+        "warn": 0,
+        "comparisons": 12,
+        "exemptions": 0
+      },
+      "collision_warnings": {
+        "text-fill-edge": 64,
+        "text-image-edge": 64
+      },
+      "warning_review": "Reviewed on final PDF page render: tick-label boxes intersect rectangular 3D pane/image bounding boxes, including transparent image margins. Actual glyphs remain legible outside measured surface marks; no text/stroke collisions or clipping.",
+      "visual_review": "passed"
+    }
+  ],
+  "local_panels_data_unchanged": 48,
+  "full_domain_panels": 48,
+  "other_figure_files_unchanged": 2664,
+  "experimental_records_unchanged": true,
+  "reference_pairing_passed": true,
+  "visual_review": {
+    "status": "passed",
+    "figure_count": 6,
+    "panel_count": 96,
+    "backend": "Python / PyMuPDF final PDF page renders",
+    "checks": [
+      "Each panel and full page inspected",
+      "Footer absent in all three local matrices",
+      "Original local blue-orange color mapping, height ticks and zero plane retained",
+      "Full-domain matrices contain Unrotated and all channels/tokens",
+      "No data or artificial visual advantage introduced"
+    ],
+    "full_domain_note": "Global unrotated peaks dominate shared column limits in several full-domain panels, so rotated rows look flatter. This is expected; no per-method normalization is introduced."
+  },
+  "passed": true
+}

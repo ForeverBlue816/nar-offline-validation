@@ -244,5 +244,54 @@
     "changes": "original blue-orange palette restored; gamma=0.5, measured heights, camera, axes, dimensions and shared limits unchanged",
     "audit": "qa/blue_orange_revision/audit.json",
     "plot_source_sha256": "08f2bfec96291bf88512f2b50feddf235b2176c8c8b664ed489a307879e90066"
+  },
+  "clean_full_followup": {
+    "revision": "clean-footer-full-reference-v1",
+    "targets": [
+      "figures/end_to_end/q_proj/raw/detail/matrix",
+      "figures/end_to_end/q_proj/raw/overview/matrix",
+      "figures/end_to_end/down_proj/raw/detail/matrix",
+      "figures/end_to_end/down_proj/raw/overview/matrix",
+      "figures/paired_local/q_proj/raw/detail/matrix",
+      "figures/paired_local/q_proj/raw/overview/matrix"
+    ],
+    "contract": "clean_full_revision_contract.md",
+    "audit": "qa/clean_full_revision/audit.json",
+    "local_change": "Remove three explanatory footer lines and 0.60 inches of page space; physical plot-area sizes, data, projection, z/color scales, labels and zero plane unchanged",
+    "overview_change": "All four methods; full token/channel domain; current upper-surface-only renderer; original camera and linear blue-orange colors; DejaVu Sans",
+    "source_hashes": {
+      "detail_plot.py": "2abcf846ad1841e482a8d077ef0bde9dc8622e6f87b8fece12c2a55d051abd12",
+      "full_plot.py": "d2645d8a45b95a52823b0ff29ba4a6d460b16fbc940f9e34ecabeae95b24d2ac",
+      "full_surface.py": "a2861a4ac5cad5da2a5b8e7aad469656fc101ae3e0f5c414a97e4cdc2ab8296b",
+      "plot.py": "4ad35fb869bdc819e560c98186d322f42e66524889ef194338b31f4216899efd",
+      "clean_full_revision.py": "865392584fb503e4bfecd4fd260157b752986794a6f70989d8a00ae51818f0bd"
+    },
+    "base_commit": "82ea9c947f6ae242c555ddd797c9a0240b72bcf4",
+    "source_revision_note": "Rendered from the edited working tree on base_commit; source_hashes specify the exact renderer. The final artifact commit contains these same sources.",
+    "jobs": [
+      {
+        "job_id": "153504",
+        "scope": "three local matrices completed; overview phase stopped because Numba was absent",
+        "state": "FAILED"
+      },
+      {
+        "job_id": "153506",
+        "scope": "three full-domain matrices and complete six-PDF audit",
+        "state": "COMPLETED",
+        "exit_code": "0:0"
+      }
+    ],
+    "runtime": {
+      "python": "3.11.16",
+      "numpy": "2.4.6",
+      "matplotlib": "3.10.5",
+      "torch": "2.11.0+cu128",
+      "pymupdf": "1.28.2",
+      "numba": "0.67.0",
+      "llvmlite": "0.49.0",
+      "font": "DejaVu Sans",
+      "surface_dpi": 600
+    },
+    "reproduction": "python -m nar.activation_viz.clean_full_revision \"$RAW_RUN\" \"$RUN\""
   }
 }

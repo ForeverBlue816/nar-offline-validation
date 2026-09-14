@@ -38,11 +38,21 @@ frozen factors, quantizers, measured statistics and supplementary failures are
 immutable. Integrity snapshots and the publication manifest record this.
 
 
+## Current priority full-domain and footer follow-up
+
+For the three priority raw matrices, the [current scoped contract](clean_full_revision_contract.md)
+supersedes the archived overview geometry and local explanatory-footer layout.
+Both views retain four rows including the same unquantized Unrotated reference.
+Full-domain renders use all tokens and channels, upper surfaces only, linear
+blue-orange colors and DejaVu Sans. Other archived overviews retain their
+previous assets. Caption metadata remains in the README rather than below
+these three local plots.
+
 ---
 
 ## Archived preceding full-resolution revision (superseded for detail)
 
-The record below describes the previous publication. Its identical-view, zero-column and wall rules do not govern current detail outputs. Existing overview images are preserved as global context.
+The record below describes the previous publication. Its identical-view, zero-column and wall rules do not govern current detail outputs. Unrevised overview images are preserved as global context; the three priority raw matrices follow the current scoped contract above.
 
 # Full-resolution rendering revision
 

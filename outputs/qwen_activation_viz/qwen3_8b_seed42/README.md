@@ -4,6 +4,29 @@ Real Qwen/Qwen3-8B-Base activations, fixed sample 0 from eight WikiText-2 test w
 
 [Revision report](figure_revision_report.md) · [Rendering contract](full_resolution_contract.md) · [Render settings](detail_render_config.json) · [Measured findings](measured_summary.md) · [Publication inventory](publication_manifest.json)
 
+## Updated priority matrices
+
+The three local matrices below omit the explanatory footer and its extra page
+space. Axis labels, blue-orange colorbars, linear height ticks and the pale z=0
+floor remain. The corresponding full-domain matrices each have four rows:
+Unrotated, Hadamard, PrismQuant (k=8), PrismQuant (k=max).
+
+| Forward / site | Local PDF | Local SVG | Full-domain PDF | Full-domain SVG |
+|---|---|---|---|---|
+| end_to_end / q_proj | [PDF](figures/end_to_end/q_proj/raw/detail/matrix.pdf) | [SVG](figures/end_to_end/q_proj/raw/detail/matrix.svg) | [PDF](figures/end_to_end/q_proj/raw/overview/matrix.pdf) | [SVG](figures/end_to_end/q_proj/raw/overview/matrix.svg) |
+| end_to_end / down_proj | [PDF](figures/end_to_end/down_proj/raw/detail/matrix.pdf) | [SVG](figures/end_to_end/down_proj/raw/detail/matrix.svg) | [PDF](figures/end_to_end/down_proj/raw/overview/matrix.pdf) | [SVG](figures/end_to_end/down_proj/raw/overview/matrix.svg) |
+| paired_local / q_proj | [PDF](figures/paired_local/q_proj/raw/detail/matrix.pdf) | [SVG](figures/paired_local/q_proj/raw/detail/matrix.svg) | [PDF](figures/paired_local/q_proj/raw/overview/matrix.pdf) | [SVG](figures/paired_local/q_proj/raw/overview/matrix.svg) |
+
+Local range: sample 0, tokens 0–127, channels 0–511, g128. Heights are linear;
+local colors use square-root mapping. Full range: tokens 0–2047 and channels
+0–4095 (q_proj) or 0–12287 (down_proj), with linear colors and heights. Each
+column shares its limit across all four rows. Local and full-domain limits
+are determined from their respective data domains and may differ. Large global
+unrotated peaks can make other rows appear flatter on the shared full-domain
+scale; no row receives a separate normalization.
+
+[Current revision contract](clean_full_revision_contract.md) · [Current audit](qa/clean_full_revision/audit.json)
+
 ## Local surfaces
 
 ![Local group-centered down-projection activations](figures/paired_local/down_proj/residual/detail/rotated_only_zoom.png)
@@ -21,7 +44,7 @@ Detail uses exactly tokens [0,128), channels [0,512), sample 0 and four g128 gro
 
 The unrotated row is an unquantized norm-fused FP32 reference. In end-to-end matrices it comes from the matching paired_local/unrotated cache. Its input IDs, sample, layer, site and norm-fusion metadata are checked; the three quantized forwards include upstream QDQ and are not claimed to share identical intermediate inputs.
 
-Full-domain overviews remain available, unchanged from the preceding publication. Their historical solid geometry is documented in the archived full-resolution contract; it is not used for current local detail. Overview and detail are independent assets. Metrics and exact ECDF values/counts retain all eight full samples. The local window is not an exhaustive model-outlier survey.
+The three priority raw full-domain matrices are regenerated from every measured vertex and adjacent cell, with an Unrotated reference row and upper surfaces only. They use DejaVu Sans to match the local matrices. Other overview assets retain the preceding publication and its archived geometry. Overview and detail are independent assets. Metrics and exact ECDF values/counts retain all eight full samples. The local window is not an exhaustive model-outlier survey.
 
 Four-column matrices use 11.75 pt text at 12.05-inch export width, retaining 7.02 pt text when inserted at 7.2 inches (183 mm). Individual panels use 8.5 pt native text and remain readable at 3.5-inch insertion width. Channel ticks 0, 256 and 511 and token ticks 0, 64 and 127 avoid crowding. All vertices are still drawn. Floor guides and short front-edge ticks mark the three g128 boundaries; per-column colorbars give the shared height/color limits. PDF/SVG axes and text are vector; only surface marks are rasterized.
 
@@ -41,9 +64,17 @@ Group means are not actual quantizer offsets. Local raw peaks, group-centered re
 
 ## Reproduction
 
+The renderer requires NumPy, Matplotlib, PyTorch, PyMuPDF, Numba and llvmlite.
+Exact versions for this follow-up are recorded in [runtime.json](qa/clean_full_revision/runtime.json).
+For the Slurm wrapper, `QWEN_FIGURE_DEPS` optionally points to an isolated extra-package directory.
+
 The raw signed FP32 shards remain at `raw_activation_root` in [run_manifest.json](run_manifest.json). [activation_inventory.json](activation_inventory.json) records all 448 shard hashes. No model rerun is needed.
 
 ```bash
+# Reproduce only the six priority matrices from this revision:
+python -m nar.activation_viz.clean_full_revision "$RAW_RUN" "$RUN"
+
+# Broader original local suite:
 python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 4
 python -m nar.activation_viz.detail_checks "$RAW_RUN" "$RUN"
 python -m nar.activation_viz.report "$RUN"

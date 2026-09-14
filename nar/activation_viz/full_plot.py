@@ -49,6 +49,9 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
            name='matrix', scale_methods=None):
     from .full_surface import add_height_surface
     torch.set_num_threads(1)
+    style()
+    plt.rcParams.update({'font.family': 'sans-serif', 'font.sans-serif': ['DejaVu Sans'],
+                         'svg.fonttype': 'none', 'pdf.fonttype': 42})
     nrow, ncol = len(methods), len(layers)
     width = 12 if ncol == 4 else 3.25
     height = 2.65*nrow+.85 if ncol == 4 else 3.5
@@ -100,6 +103,7 @@ def matrix(root, out, mode, site, quantity, methods, layers=LAYERS,
                       maximum=float(z.max()), z_limit=limit)
         records.append(record)
         del z
+        print('FULL PANEL', mode, site, method, f'Block {layer+1}', flush=True)
     path = out/mode/site/quantity/'overview'/name
     save(fig, path)
     path.with_suffix('.scales.json').write_text(json.dumps({'z_limits_by_layer': limits,
