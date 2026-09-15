@@ -38,6 +38,15 @@ frozen factors, quantizers, measured statistics and supplementary failures are
 immutable. Integrity snapshots and the publication manifest record this.
 
 
+## Latest local typography and palette follow-up
+
+For the three priority raw local matrices, [local_typography_contract.md](local_typography_contract.md)
+supersedes the earlier local font and blue-orange palette settings. Use Times
+New Roman Bold at 14 pt for body/tick text (15/16 pt block/figure titles), restore
+Viridis with the same gamma 0.5, and remove the reference separator. Keep all
+measured geometry and shared limits. Full-domain assets retain their prior
+blue-orange palette and typography.
+
 ## Current priority full-domain and footer follow-up
 
 For the three priority raw matrices, the [current scoped contract](clean_full_revision_contract.md)

@@ -138,3 +138,39 @@ and nine unchanged scientific record files. All 96 panels were visually reviewed
 Slurm 153504 completed local exports before a missing-Numba error; after an
 isolated dependency install, Slurm 153506 completed full exports and final QA
 with exit code 0. Existing supplementary numerical failures remain unchanged.
+
+
+## Local Times New Roman Bold and Viridis follow-up (2026-09-15)
+
+At the user's request, only the three priority raw local matrices use actual
+Times New Roman Bold, with body/tick/row text increased from 11.75 to 14 pt,
+block titles from 12.75 to 15 pt and figure title from 13.75 to 16 pt. Body text
+is 8.37 pt at the intended 183-mm insertion width. The short figure-level rule
+beneath the Unrotated reference is removed. No other reference text is removed.
+
+A subsequent user preference restores the original Viridis blue-green palette
+for the same three local matrices. PowerNorm(gamma=0.5), linear measured heights,
+shared limits, source arrays, full local meshes and native camera coordinates
+are preserved. This supersedes the preceding blue-orange choice for these
+three local assets only. The three full-domain matrices retain their preceding
+blue-orange exports and typography.
+
+Enlarged colorbar labels require 4-pt padding from their short tick marks.
+The initial spacing report is archived separately; the final PDF, SVG and PNG
+are generated from the corrected Matplotlib source. Scientific records and
+all unrelated figure exports are protected by the scoped baseline hashes.
+
+Reproduce with `python -m nar.activation_viz.local_typography_revision "$RAW_RUN" "$RUN"`.
+The [contract](local_typography_contract.md) and
+[scoped audit](qa/local_typography_revision/audit.json) identify the current
+font, palette, measured-data checks and final rendered results. Earlier
+revision audits describe the exports current at their own recorded revisions.
+
+Final validation: all 48 source arrays, measured surfaces, native projected
+coordinates and shared limits match the preceding local figures. All three
+PDFs embed Times New Roman Bold, retain at least 8.37 pt text at 183 mm, and
+contain no reference separator. Final font and collision failure gates pass;
+all panel alignment reports pass without exemptions. Pane-bound warnings were
+reviewed across all 48 panels. All 2,688 unrelated figure files, including the
+full-domain matrices, and nine scientific record files remain unchanged.
+Slurm 154769 produced the final exports after the colorbar-spacing repair.

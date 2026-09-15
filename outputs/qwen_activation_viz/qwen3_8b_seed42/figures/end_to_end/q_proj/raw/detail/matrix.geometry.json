@@ -139,7 +139,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -279,7 +279,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -419,7 +419,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -559,7 +559,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 14.996990995407105,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -699,7 +699,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -839,7 +839,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -979,7 +979,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1119,7 +1119,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 10.562105932235719,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1259,7 +1259,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1399,7 +1399,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1539,7 +1539,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1679,7 +1679,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 8.263445167541503,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1819,7 +1819,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -1959,7 +1959,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -2099,7 +2099,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -2239,7 +2239,7 @@
         "gamma": 0.5,
         "vmin": 0,
         "vmax": 6.238163032531738,
-        "cmap": "blue_warm_orange"
+        "cmap": "viridis"
       },
       "debug_points": [
         {
@@ -2348,13 +2348,26 @@
     "linear_heights": true,
     "norm": "PowerNorm",
     "gamma": 0.5,
-    "cmap": "blue_warm_orange",
+    "cmap": "viridis",
     "vmin": 0,
     "view": "four_method_scale",
     "scale_differs_from_matrix": false
   },
   "explanatory_footer_visible": false,
   "footer_space_removed_inches": 0.6,
+  "typography_style": {
+    "revision": "priority-times-bold-v1",
+    "font_family": "Times New Roman",
+    "font_weight": "bold",
+    "matrix_font_size_pt": 14,
+    "block_title_font_size_pt": 15,
+    "figure_title_font_size_pt": 16,
+    "reference_separator": false,
+    "colorbar_tick_pad_pt": 4,
+    "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw",
+    "font_file_sha256": "4357b63cef20c01661a53c5dae70ffd20cb4765503aaed6d38b17a57c5a90bff"
+  },
+  "reference_separator_count": 0,
   "height_axis_style": {
     "revision": "priority-height-axis-v1",
     "height_ticks": "0, half shared maximum, shared maximum; measured units",
@@ -2367,23 +2380,15 @@
     "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
   },
   "palette_style": {
-    "revision": "priority-blue-orange-v1",
-    "cmap": "blue_warm_orange",
-    "colors": [
-      "#225b8d",
-      "#4f8eb6",
-      "#96b8c6",
-      "#dac9a8",
-      "#eaa15d",
-      "#c46731"
-    ],
-    "source": "existing plot.CMAP, reused unchanged",
+    "revision": "priority-viridis-restored-v1",
+    "cmap": "viridis",
+    "source": "original Matplotlib Viridis, matching the user reference image",
     "norm": "PowerNorm",
     "gamma": 0.5,
     "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
   },
-  "git_commit": "82ea9c947f6ae242c555ddd797c9a0240b72bcf4",
-  "plot_source_sha256": "2abcf846ad1841e482a8d077ef0bde9dc8622e6f87b8fece12c2a55d051abd12",
+  "git_commit": "65666d7c9f2f29b257bcbc22eb50df71c5d86044",
+  "plot_source_sha256": "8cedda54b3f4b1b79c0333efab6d1955eaa5b1c7bbda11487cffdd5a0f9b9e5f",
   "output_paths": [
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/matrix.pdf",
     "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/q_proj/raw/detail/matrix.png",
@@ -2395,5 +2400,5 @@
   ],
   "intended_insertion_width_inches": 7.2,
   "color_semantics": "Matplotlib surface face mean height mapped through the declared norm; vertex heights unchanged",
-  "git_commit_role": "base commit; plot_source_sha256 identifies the working-tree renderer used for this export"
+  "git_commit_role": "base commit; plot_source_sha256 identifies the edited renderer used for this export"
 }

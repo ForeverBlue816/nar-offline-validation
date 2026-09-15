@@ -1,7 +1,7 @@
 {
   "pdf": "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/matrix.pdf",
   "auditable": true,
-  "verdict": "REVIEW REQUIRED",
+  "verdict": "FIX BEFORE DELIVERY",
   "page_count": 1,
   "visible_text_box_count": 174,
   "text_trace_count": 174,
@@ -9,7 +9,7 @@
   "filled_region_count": 77,
   "image_region_count": 20,
   "summary": {
-    "fail": 0,
+    "fail": 8,
     "warn": 96,
     "contained_fill_overlays": 16,
     "contained_image_overlays": 0
@@ -20,6 +20,198 @@
     "clipping_tolerance_pt": 0.5
   },
   "findings": [
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        92.37310791015625,
+        789.4049682617188,
+        116.87310791015625,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        104.62310791015625,
+        788.3999633789062,
+        104.62310791015625,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        126
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "15.00",
+      "text_bbox": [
+        209.15545654296875,
+        789.4049682617188,
+        240.65545654296875,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        224.90545654296875,
+        788.3999633789062,
+        224.90545654296875,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        127
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        282.5302429199219,
+        789.4049682617188,
+        307.0302429199219,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        294.7802429199219,
+        788.3999633789062,
+        294.7802429199219,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        254
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "10.56",
+      "text_bbox": [
+        399.3125915527344,
+        789.4049682617188,
+        430.8125915527344,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        415.0625915527344,
+        788.3999633789062,
+        415.0625915527344,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        255
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        472.6874084472656,
+        789.4049682617188,
+        497.1874084472656,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        484.9374084472656,
+        788.3999633789062,
+        484.9374084472656,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        382
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "8.26",
+      "text_bbox": [
+        592.9697265625,
+        789.4049682617188,
+        617.4697265625,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        605.2197265625,
+        788.3999633789062,
+        605.2197265625,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        383
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        662.8445434570312,
+        789.4049682617188,
+        687.3445434570312,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        675.0945434570312,
+        788.3999633789062,
+        675.0945434570312,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        510
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "6.24",
+      "text_bbox": [
+        783.1268920898438,
+        789.4049682617188,
+        807.6268920898438,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        795.3768920898438,
+        788.3999633789062,
+        795.3768920898438,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        511
+      ]
+    },
     {
       "severity": "WARN",
       "kind": "text-fill-edge",

@@ -12,7 +12,8 @@ from pathlib import Path
 import numpy as np
 import torch
 import pymupdf
-from matplotlib import colormaps, colors, ticker
+from matplotlib import colormaps, colors, ticker, font_manager
+from matplotlib.text import Text
 from matplotlib.cm import ScalarMappable
 from matplotlib.lines import Line2D
 from mpl_toolkits.mplot3d import proj3d
@@ -67,11 +68,20 @@ HEIGHT_AXIS_STYLE = {
 
 
 PALETTE_STYLE = {
-    'revision': 'priority-blue-orange-v1',
-    'cmap': CMAP.name,
-    'colors': ['#225b8d', '#4f8eb6', '#96b8c6', '#dac9a8', '#eaa15d', '#c46731'],
-    'source': 'existing plot.CMAP, reused unchanged',
+    'revision': 'priority-viridis-restored-v1',
+    'cmap': 'viridis',
+    'source': 'original Matplotlib Viridis, matching the user reference image',
     'norm': 'PowerNorm', 'gamma': 0.5,
+    'scope': HEIGHT_AXIS_STYLE['scope'],
+}
+
+
+TYPOGRAPHY_STYLE = {
+    'revision': 'priority-times-bold-v1',
+    'font_family': 'Times New Roman', 'font_weight': 'bold',
+    'matrix_font_size_pt': 14, 'block_title_font_size_pt': 15,
+    'figure_title_font_size_pt': 16, 'reference_separator': False,
+    'colorbar_tick_pad_pt': 4,
     'scope': HEIGHT_AXIS_STYLE['scope'],
 }
 
@@ -258,6 +268,8 @@ def export(fig, path, records, scales, colorbars):
         'config': CONFIG, 'panels': records, 'scales': scales,
         'explanatory_footer_visible': not getattr(fig, '_height_axis_revision', False),
         'footer_space_removed_inches': .60 if getattr(fig, '_height_axis_revision', False) else 0,
+        **({'typography_style': fig._typography_style, 'reference_separator_count': 0}
+           if hasattr(fig, '_typography_style') else {}),
         **({'height_axis_style': HEIGHT_AXIS_STYLE, 'palette_style': PALETTE_STYLE}
            if getattr(fig, '_height_axis_revision', False) else {}),
         'git_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
@@ -282,11 +294,11 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
     rows, cols = len(methods), len(layers)
     zoom = name == 'rotated_only_zoom'
     height_axis = name == 'matrix' and (mode, site, quantity) in HEIGHT_AXIS_TARGETS
-    cmap = CMAP if height_axis else colormaps['viridis']
+    cmap = colormaps['viridis']
     # The priority matrices keep the scientific caption in the README.
     # Subtract only footer space; physical surface-grid dimensions stay fixed.
     footer_extra = -.35 if height_axis else 0
-    font_size = 11.75 if cols == 4 else 8.5
+    font_size = TYPOGRAPHY_STYLE['matrix_font_size_pt'] if height_axis else (11.75 if cols == 4 else 8.5)
     width, height = 1.65 + 2.6 * cols + (1.6 if debug else 0), 1.95 + 2.45 * rows + (.25 if zoom else 0) + footer_extra
     fig = plt.figure(figsize=(width, height), dpi=600)
     fig._height_axis_revision = height_axis
@@ -354,11 +366,22 @@ def matrix(source, destination, mode, site, quantity, methods=METHODS, layers=LA
         cb = fig.colorbar(ScalarMappable(norm=norm, cmap=cmap), cax=cax,
                           orientation='horizontal', ticks=[0, limit])
         cb.ax.xaxis.set_major_formatter(ticker.FuncFormatter(number))
-        cb.ax.tick_params(labelsize=font_size, pad=1, length=2)
+        cb.ax.tick_params(labelsize=font_size,
+                          pad=TYPOGRAPHY_STYLE['colorbar_tick_pad_pt'] if height_axis else 1, length=2)
         cb.outline.set_linewidth(.3)
         colorbars.append(cax)
+    if height_axis:
+        font_path = font_manager.findfont(
+            font_manager.FontProperties(family='Times New Roman', weight='bold'),
+            fallback_to_default=False)
+        face = font_manager.get_font(font_path)
+        assert face.family_name == 'Times New Roman' and face.style_name == 'Bold'
+        for text in fig.findobj(match=Text):
+            text.set_fontfamily('Times New Roman')
+            text.set_fontweight('bold')
+        fig._typography_style = {**TYPOGRAPHY_STYLE, 'font_file_sha256': digest(font_path)}
     fig.canvas.draw()
-    if mode == 'end_to_end' and 'unrotated' in methods and len(methods) > 1:
+    if not height_axis and mode == 'end_to_end' and 'unrotated' in methods and len(methods) > 1:
         y = (axes[0, 0].get_position().y0 + axes[1, 0].get_position().y1) / 2
         fig.add_artist(Line2D([.05 / width, .95 / width], [y, y],
                               transform=fig.transFigure, color='.7', linewidth=.5))

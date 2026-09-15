@@ -7,8 +7,10 @@ Real Qwen/Qwen3-8B-Base activations, fixed sample 0 from eight WikiText-2 test w
 ## Updated priority matrices
 
 The three local matrices below omit the explanatory footer and its extra page
-space. Axis labels, blue-orange colorbars, linear height ticks and the pale z=0
-floor remain. The corresponding full-domain matrices each have four rows:
+space. Axis labels, Viridis blue-green colorbars, linear height ticks and the pale z=0
+floor remain. The three local matrices now use larger Times New Roman Bold
+text (14 pt body/ticks, 15 pt block titles, 16 pt figure title), and the
+separator below the Unrotated reference is removed. The corresponding full-domain matrices each have four rows:
 Unrotated, Hadamard, PrismQuant (k=8), PrismQuant (k=max).
 
 | Forward / site | Local PDF | Local SVG | Full-domain PDF | Full-domain SVG |
@@ -25,7 +27,7 @@ are determined from their respective data domains and may differ. Large global
 unrotated peaks can make other rows appear flatter on the shared full-domain
 scale; no row receives a separate normalization.
 
-[Current revision contract](clean_full_revision_contract.md) · [Current audit](qa/clean_full_revision/audit.json)
+[Local typography/color contract](local_typography_contract.md) · [Local audit](qa/local_typography_revision/audit.json) · [Full-domain revision](clean_full_revision_contract.md)
 
 ## Local surfaces
 
@@ -46,9 +48,9 @@ The unrotated row is an unquantized norm-fused FP32 reference. In end-to-end mat
 
 The three priority raw full-domain matrices are regenerated from every measured vertex and adjacent cell, with an Unrotated reference row and upper surfaces only. They use DejaVu Sans to match the local matrices. Other overview assets retain the preceding publication and its archived geometry. Overview and detail are independent assets. Metrics and exact ECDF values/counts retain all eight full samples. The local window is not an exhaustive model-outlier survey.
 
-Four-column matrices use 11.75 pt text at 12.05-inch export width, retaining 7.02 pt text when inserted at 7.2 inches (183 mm). Individual panels use 8.5 pt native text and remain readable at 3.5-inch insertion width. Channel ticks 0, 256 and 511 and token ticks 0, 64 and 127 avoid crowding. All vertices are still drawn. Floor guides and short front-edge ticks mark the three g128 boundaries; per-column colorbars give the shared height/color limits. PDF/SVG axes and text are vector; only surface marks are rasterized.
+The three priority local matrices use 14 pt Times New Roman Bold at 12.05-inch export width, retaining 8.37 pt at 7.2 inches (183 mm). Other four-column local matrices retain 11.75 pt text and 7.02 pt at the same insertion width. Individual panels use 8.5 pt native text and remain readable at 3.5-inch insertion width. Channel ticks 0, 256 and 511 and token ticks 0, 64 and 127 avoid crowding. All vertices are still drawn. Floor guides and short front-edge ticks mark the three g128 boundaries; per-column colorbars give the shared height/color limits. PDF/SVG axes and text are vector; only surface marks are rasterized.
 
-The three priority raw matrices (end_to_end q_proj/down_proj and paired_local q_proj) restore the original blue-to-orange colormap with gamma 0.5, label linear height ticks and identify the pale floor as z=0. These axis annotations clarify real nonzero surface heights; their linear-color controls and zoom companions retain their previous Viridis palette and layout. These retained companions are not matched-colormap controls for the newly restored blue-orange matrices.
+The three priority raw local matrices (end_to_end q_proj/down_proj and paired_local q_proj) now restore the original Viridis blue-green colormap with gamma 0.5 at the user's request. They retain measured linear height ticks and the pale z=0 floor, and use enlarged Times New Roman Bold throughout. Their linear-color controls and zoom companions retain their existing exports. Full-domain matrices retain their blue-orange palette and previous typography.
 
 ## Numerical results and limitations
 
@@ -71,15 +73,11 @@ For the Slurm wrapper, `QWEN_FIGURE_DEPS` optionally points to an isolated extra
 The raw signed FP32 shards remain at `raw_activation_root` in [run_manifest.json](run_manifest.json). [activation_inventory.json](activation_inventory.json) records all 448 shard hashes. No model rerun is needed.
 
 ```bash
-# Reproduce only the six priority matrices from this revision:
-python -m nar.activation_viz.clean_full_revision "$RAW_RUN" "$RUN"
-
-# Broader original local suite:
-python -m nar.activation_viz.full_batch "$RAW_RUN" "$RUN" --workers 4
-python -m nar.activation_viz.detail_checks "$RAW_RUN" "$RUN"
-python -m nar.activation_viz.report "$RUN"
-python -m nar.activation_viz.render_batch "$RUN" --audit-only
+# Latest three-local-figure typography/color follow-up:
+python -m nar.activation_viz.local_typography_revision "$RAW_RUN" "$RUN"
 python -m nar.activation_viz.publish "$RUN" "$PUBLICATION_DIR"
 ```
+
+Earlier full-domain and broad local-suite commands are retained in their revision reports and use the source revisions recorded there.
 
 This is a user-requested visualization revision. Earlier predeclared experiment rules and superseded display records are retained; the new window and color mapping are not presented as the original preregistration.

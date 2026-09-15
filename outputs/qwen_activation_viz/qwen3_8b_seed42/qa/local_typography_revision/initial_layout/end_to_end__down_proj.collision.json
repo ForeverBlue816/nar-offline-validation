@@ -1,7 +1,7 @@
 {
-  "pdf": "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/paired_local/q_proj/raw/detail/matrix.pdf",
+  "pdf": "outputs/qwen_activation_viz/qwen3_8b_seed42/figures/end_to_end/down_proj/raw/detail/matrix.pdf",
   "auditable": true,
-  "verdict": "REVIEW REQUIRED",
+  "verdict": "FIX BEFORE DELIVERY",
   "page_count": 1,
   "visible_text_box_count": 174,
   "text_trace_count": 174,
@@ -9,7 +9,7 @@
   "filled_region_count": 77,
   "image_region_count": 20,
   "summary": {
-    "fail": 0,
+    "fail": 8,
     "warn": 96,
     "contained_fill_overlays": 16,
     "contained_image_overlays": 0
@@ -20,6 +20,198 @@
     "clipping_tolerance_pt": 0.5
   },
   "findings": [
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        92.37310791015625,
+        789.4049682617188,
+        116.87310791015625,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        104.62310791015625,
+        788.3999633789062,
+        104.62310791015625,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        126
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "2.25",
+      "text_bbox": [
+        212.65545654296875,
+        789.4049682617188,
+        237.15545654296875,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        224.90545654296875,
+        788.3999633789062,
+        224.90545654296875,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        127
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        282.5302429199219,
+        789.4049682617188,
+        307.0302429199219,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        294.7802429199219,
+        788.3999633789062,
+        294.7802429199219,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        254
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "3.50",
+      "text_bbox": [
+        402.8125915527344,
+        789.4049682617188,
+        427.3125915527344,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        415.0625915527344,
+        788.3999633789062,
+        415.0625915527344,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        255
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        472.6874084472656,
+        789.4049682617188,
+        497.1874084472656,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        484.9374084472656,
+        788.3999633789062,
+        484.9374084472656,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        382
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "10.44",
+      "text_bbox": [
+        589.4697265625,
+        789.4049682617188,
+        620.9697265625,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        605.2197265625,
+        788.3999633789062,
+        605.2197265625,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        383
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "0.00",
+      "text_bbox": [
+        662.8445434570312,
+        789.4049682617188,
+        687.3445434570312,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        675.0945434570312,
+        788.3999633789062,
+        675.0945434570312,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        510
+      ]
+    },
+    {
+      "severity": "FAIL",
+      "kind": "text-stroke",
+      "page": 1,
+      "message": "Text is crossed by 1 stroked path(s)",
+      "text": "331.48",
+      "text_bbox": [
+        776.1268920898438,
+        789.4049682617188,
+        814.6268920898438,
+        803.4049682617188
+      ],
+      "other_text": null,
+      "other_bbox": [
+        795.3768920898438,
+        788.3999633789062,
+        795.3768920898438,
+        790.3999633789062
+      ],
+      "object_count": 1,
+      "object_indexes": [
+        511
+      ]
+    },
     {
       "severity": "WARN",
       "kind": "text-fill-edge",
@@ -1955,7 +2147,7 @@
       "other_text": null,
       "other_bbox": [
         95.76000213623047,
-        79.67996978759766,
+        108.59996795654297,
         237.83999633789062,
         182.27996826171875
       ],
@@ -1979,7 +2171,7 @@
       "other_text": null,
       "other_bbox": [
         95.76000213623047,
-        281.27996826171875,
+        292.0799560546875,
         237.83999633789062,
         353.15997314453125
       ],
@@ -2003,9 +2195,9 @@
       "other_text": null,
       "other_bbox": [
         95.76000213623047,
-        453.96002197265625,
+        459.239990234375,
         237.83999633789062,
-        524.52001953125
+        525.1199951171875
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2027,9 +2219,9 @@
       "other_text": null,
       "other_bbox": [
         95.76000213623047,
-        624.8399658203125,
+        633.1199951171875,
         237.83999633789062,
-        696.5999755859375
+        696.3599853515625
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2051,9 +2243,9 @@
       "other_text": null,
       "other_bbox": [
         285.8399963378906,
-        89.51998138427734,
+        87.8399658203125,
         428.03997802734375,
-        181.91998291015625
+        182.27996826171875
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2074,10 +2266,10 @@
       ],
       "other_text": null,
       "other_bbox": [
-        285.8399963378906,
-        279.239990234375,
+        285.9599914550781,
+        288.8399658203125,
         428.03997802734375,
-        353.3999938964844
+        353.75994873046875
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2099,9 +2291,9 @@
       "other_text": null,
       "other_bbox": [
         285.8399963378906,
-        441.1200256347656,
+        457.32000732421875,
         428.03997802734375,
-        524.52001953125
+        524.8800048828125
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2123,9 +2315,9 @@
       "other_text": null,
       "other_bbox": [
         285.8399963378906,
-        613.0799560546875,
+        626.52001953125,
         428.03997802734375,
-        696.3599853515625
+        696.239990234375
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2147,9 +2339,9 @@
       "other_text": null,
       "other_bbox": [
         476.0400085449219,
-        87.1199722290039,
+        98.51995849609375,
         618.1199951171875,
-        182.15997314453125
+        182.51995849609375
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2171,9 +2363,9 @@
       "other_text": null,
       "other_bbox": [
         476.0400085449219,
-        271.91998291015625,
+        289.1999816894531,
         618.1199951171875,
-        352.79998779296875
+        353.8799743652344
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2195,9 +2387,9 @@
       "other_text": null,
       "other_bbox": [
         476.0400085449219,
-        431.52001953125,
+        456.8399963378906,
         618.1199951171875,
-        524.6400146484375
+        525.239990234375
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2219,7 +2411,7 @@
       "other_text": null,
       "other_bbox": [
         476.0400085449219,
-        608.1599731445312,
+        629.3999633789062,
         618.1199951171875,
         696.5999755859375
       ],
@@ -2243,9 +2435,9 @@
       "other_text": null,
       "other_bbox": [
         666.239990234375,
-        83.39998626708984,
+        93.59996032714844,
         808.3200073242188,
-        181.91998291015625
+        182.51995849609375
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2267,9 +2459,9 @@
       "other_text": null,
       "other_bbox": [
         666.239990234375,
-        268.0799865722656,
+        284.7599792480469,
         808.3200073242188,
-        352.91998291015625
+        353.8799743652344
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2291,9 +2483,9 @@
       "other_text": null,
       "other_bbox": [
         666.239990234375,
-        425.760009765625,
+        417.4800109863281,
         808.3200073242188,
-        524.4000244140625
+        524.6400146484375
       ],
       "object_count": 1,
       "object_indexes": [
@@ -2315,9 +2507,9 @@
       "other_text": null,
       "other_bbox": [
         666.239990234375,
-        594.3599853515625,
+        587.760009765625,
         808.3200073242188,
-        696.5999755859375
+        696.3599853515625
       ],
       "object_count": 1,
       "object_indexes": [

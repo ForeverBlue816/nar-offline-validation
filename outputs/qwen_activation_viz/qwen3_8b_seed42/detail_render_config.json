@@ -236,5 +236,55 @@
       "surface_dpi": 600
     },
     "reproduction": "python -m nar.activation_viz.clean_full_revision \"$RAW_RUN\" \"$RUN\""
+  },
+  "local_typography_followup": {
+    "revision": "priority-times-bold-viridis-v1",
+    "targets": [
+      "figures/end_to_end/q_proj/raw/detail/matrix",
+      "figures/end_to_end/down_proj/raw/detail/matrix",
+      "figures/paired_local/q_proj/raw/detail/matrix"
+    ],
+    "typography": {
+      "revision": "priority-times-bold-v1",
+      "font_family": "Times New Roman",
+      "font_weight": "bold",
+      "matrix_font_size_pt": 14,
+      "block_title_font_size_pt": 15,
+      "figure_title_font_size_pt": 16,
+      "reference_separator": false,
+      "colorbar_tick_pad_pt": 4,
+      "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+    },
+    "palette": {
+      "revision": "priority-viridis-restored-v1",
+      "cmap": "viridis",
+      "source": "original Matplotlib Viridis, matching the user reference image",
+      "norm": "PowerNorm",
+      "gamma": 0.5,
+      "scope": "only matrix in end_to_end/q_proj/raw, end_to_end/down_proj/raw, paired_local/q_proj/raw"
+    },
+    "contract": "local_typography_contract.md",
+    "audit": "qa/local_typography_revision/audit.json",
+    "source_hashes": {
+      "detail_plot.py": "8cedda54b3f4b1b79c0333efab6d1955eaa5b1c7bbda11487cffdd5a0f9b9e5f",
+      "plot.py": "4ad35fb869bdc819e560c98186d322f42e66524889ef194338b31f4216899efd",
+      "local_typography_revision.py": "19354df3bd9c4d08f1b3550911e525ed70d0ed9e14d15c14b1c5870f71083610"
+    },
+    "base_commit": "65666d7c9f2f29b257bcbc22eb50df71c5d86044",
+    "source_revision_note": "Source hashes identify the edited working-tree renderer; the final artifact commit contains the same sources.",
+    "jobs": [
+      {
+        "job_id": "154760",
+        "status": "initial render; font/data/reference-rule checks passed, colorbar tick spacing required repair"
+      },
+      {
+        "job_id": "154769",
+        "status": "final render and PDF/SVG audit completed"
+      }
+    ],
+    "minimum_text_pt_at_183mm": 8.365145463609018,
+    "scientific_data_unchanged": true,
+    "full_domain_exports_unchanged": true,
+    "reproduction": "python -m nar.activation_viz.local_typography_revision \"$RAW_RUN\" \"$RUN\""
   }
 }
