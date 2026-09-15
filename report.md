@@ -1685,7 +1685,7 @@ The m-direction quantizer adds `m - 1` dot products of length g per group to the
 
 ## Results — Llama-3.2-3B
 
-Three paired rotation seeds, 64 WikiText-2 chunks, exact-transpose fold with the round-trip residual at most 3.209e-07 across all 66 (row, seed, site) checks against a 1e-6 bound, fp32 per-chunk NLL. The 8B rows are running and will be added; nothing below is copied from E11.
+Three paired rotation seeds, 64 WikiText-2 chunks, exact-transpose fold with the round-trip residual at most 3.209e-07 across all 72 (row, seed, site) checks against a 1e-6 bound, fp32 per-chunk NLL. The 8B rows are running and will be added; nothing below is copied from E11.
 
 | row | eff. bits | slots (down) | mean PPL | delta vs bf16 | paired delta vs NAR g128 m=1 [90% CI] |
 |---|---:|---:|---:|---:|---|
@@ -1695,6 +1695,7 @@ Three paired rotation seeds, 64 WikiText-2 chunks, exact-transpose fold with the
 | Hadamard g256 m=1 | 4.125 | 0 | 7.79003 | +0.17328 | +0.07687 [+0.05138, +0.10237] |
 | Hadamard g256 m=2 | 4.1875 | 0 | 7.79124 | +0.17449 | +0.07809 [+0.05880, +0.09737] |
 | Hadamard g256 m=3 | 4.25 | 0 | 7.78898 | +0.17223 | +0.07582 [+0.05967, +0.09197] |
+| Hadamard g128 m=2 | 4.375 | 0 | 7.77032 | +0.15357 | +0.05716 [+0.03496, +0.07936] |
 | NAR g64 m=1 | 4.5 | 128 | 7.68492 | +0.06817 | -0.02823 [-0.03815, -0.01831] |
 | **NAR g128 m=1** | **4.25** | **64** | **7.71316** | **+0.09641** | baseline |
 | NAR g128 m=2 | 4.375 | 128 | 7.70424 | +0.08748 | -0.00892 [-0.01685, -0.00099] |
@@ -1710,6 +1711,8 @@ Three paired rotation seeds, 64 WikiText-2 chunks, exact-transpose fold with the
 
 **H3 is supported.** Against Hadamard g256 m=1, the extra directions give **+0.00121 [-0.01959, +0.02201]** at m=2 and **-0.00105 [-0.02564, +0.02354]** at m=3. Both intervals contain zero: an unaligned rotation gains nothing from extra null-space directions, so any NAR gain from m is not an artifact of the quantizer.
 
+**H3′ is supported** (row run 2026-09-13 by job 152466, hypothesis fixed 2026-09-15 before the numbers were read). Hadamard g128 m=2 scores **7.770320** (seed std 0.009588; seeds 7.762328, 7.780952, 7.767681) at 4.375 bits. Against Hadamard g128 m=1 the paired delta is **-0.00049 [-0.02084, +0.01986]**: the second fixed Walsh direction buys nothing at g=128, as it bought nothing at g=256. Against the E20 baseline NAR g128 m=1 it costs +0.05716 [+0.03496, +0.07936], and against NAR g128 m=2, the paired cell it completes, +0.06608 [+0.04037, +0.09180]. The (128, 2) cell therefore reads 7.77 (Hadamard) against 7.70 (NAR): the whole of the m=2 gain at g=128 is alignment.
+
 **Scale resolution, measured directly.** Hadamard g128 minus Hadamard g256 is **-0.01922 [-0.03598, -0.00246]**. Halving the group buys about 0.019 PPL from scale resolution alone, with no slots involved.
 
 ### What the extra directions do buy
@@ -1722,6 +1725,7 @@ H1 and H2 failing does not mean the extra directions are inert. Within a fixed g
 | NAR g256 m=3 vs g256 m=1 | **-0.01423 [-0.02322, -0.00524]** |
 | NAR g128 m=2 vs g128 m=1 | **-0.00892 [-0.01685, -0.00099]** |
 | Hadamard g256 m=3 vs g256 m=1 (control) | -0.00105 [-0.02564, +0.02354] |
+| Hadamard g128 m=2 vs g128 m=1 (H3′ control, added 2026-09-15) | -0.00049 [-0.02084, +0.01986] |
 
 NAR gains from the third direction and Hadamard does not, which points at an alignment-driven gain — the mechanism the DC-alignment story predicts, in which the zero-point's direction is not privileged but simply the one that was already free. **This does not replicate on the 8B** (see below), so it is reported as a 3B observation and not as a general property.
 
@@ -1809,7 +1813,7 @@ On Llama-3.2-3B, **H1 and H2 do not hold and H3 does**. Extra null-space directi
 
 ## Results — Llama-3.1-8B
 
-Same protocol, three seeds, 64 chunks, exact-transpose fold with the round-trip residual at most 4.102e-07 across all 66 checks.
+Same protocol, three seeds, 64 chunks, exact-transpose fold with the round-trip residual at most 4.102e-07 across all 72 checks.
 
 | row | eff. bits | slots (down) | mean PPL | delta vs bf16 | paired delta vs NAR g128 m=1 [90% CI] |
 |---|---:|---:|---:|---:|---|
@@ -1819,6 +1823,7 @@ Same protocol, three seeds, 64 chunks, exact-transpose fold with the round-trip 
 | Hadamard g256 m=1 | 4.125 | 0 | 6.37356 | +0.16914 | +0.08692 [+0.06841, +0.10543] |
 | Hadamard g256 m=2 | 4.1875 | 0 | 6.37722 | +0.17279 | +0.09057 [+0.07763, +0.10352] |
 | Hadamard g256 m=3 | 4.25 | 0 | 6.36874 | +0.16432 | +0.08210 [+0.06961, +0.09459] |
+| Hadamard g128 m=2 | 4.375 | 0 | 6.34899 | +0.14456 | +0.06234 [+0.05701, +0.06767] |
 | NAR g64 m=1 | 4.5 | 224 | 6.26450 | +0.06008 | -0.02214 [-0.02657, -0.01771] |
 | **NAR g128 m=1** | **4.25** | **112** | **6.28664** | **+0.08222** | baseline |
 | NAR g128 m=2 | 4.375 | 224 | 6.28531 | +0.08088 | -0.00133 [-0.00697, +0.00431] |
@@ -1828,12 +1833,16 @@ Same protocol, three seeds, 64 chunks, exact-transpose fold with the round-trip 
 
 **The three hypotheses land the same way as on the 3B.** H1 is not supported: NAR g256 m=2 costs +0.01807 [+0.00921, +0.02693]. H2 is not supported: NAR g256 m=3 costs +0.01586 [+0.01038, +0.02133] at identical 4.25 bits. H3 is supported: Hadamard's extra directions give +0.00365 [-0.00707, +0.01437] at m=2 and -0.00482 [-0.01196, +0.00231] at m=3, both containing zero. Scale resolution alone, Hadamard g128 minus g256, is -0.02695 [-0.04811, -0.00580], larger than the 3B's -0.01922.
 
+**H3′ is supported on the 8B as well.** Hadamard g128 m=2 scores **6.348986** (seed std 0.002615; seeds 6.351620, 6.346391, 6.348947). Against Hadamard g128 m=1 the paired delta is **+0.00238 [-0.00275, +0.00750]**, against NAR g128 m=1 +0.06234 [+0.05701, +0.06767], and against NAR g128 m=2 +0.06368 [+0.05294, +0.07441]. The (128, 2) cell reads 6.35 (Hadamard) against 6.29 (NAR).
+
 **What does not replicate is the gain from the extra directions.** On the 8B they are statistically indistinguishable from doing nothing:
 
 | comparison | 3B | 8B |
 |---|---|---|
 | NAR g256 m=3 vs g256 m=1 | **-0.01423 [-0.02322, -0.00524]** | -0.00253 [-0.00911, +0.00405] |
 | NAR g128 m=2 vs g128 m=1 | **-0.00892 [-0.01685, -0.00099]** | -0.00133 [-0.00697, +0.00431] |
+| Hadamard g128 m=2 vs g128 m=1 (H3′ control) | -0.00049 [-0.02084, +0.01986] | +0.00238 [-0.00275, +0.00750] |
+| Hadamard g128 m=2 vs NAR g128 m=2 | +0.06608 [+0.04037, +0.09180] | +0.06368 [+0.05294, +0.07441] |
 
 Both 8B intervals contain zero. The 3B result that extra null-space directions buy a real, alignment-driven improvement therefore **does not generalize**, and the honest summary across the two models is the weaker one: extra directions are at best model-dependent, while the cost of the coarser group needed to pay for them is consistent and significant on both.
 
