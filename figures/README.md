@@ -31,6 +31,7 @@ scatter/bar marks are explicitly identified as schematic illustrations.
 - **Figure 3:** [PDF](fig3_revised.pdf), [SVG](fig3_revised.svg), [600-dpi PNG](fig3_revised.png). Four panels: geometry, seven-layer energy coverage, pooled range law, and all-expert MoE evidence. Internal experiment IDs appear only in provenance.
 - **Figure 4:** [PDF](fig4_revised.pdf), [SVG](fig4_revised.svg), [600-dpi PNG](fig4_revised.png). Accuracy and rank recovery, plus the restored blue/teal decoder-layer cost panel.
 - **Figure 5 — deployment:** [PDF](fig5.pdf), [SVG](fig5.svg), [600-dpi PNG](fig5.png). Explicit prefill batch size and enlarged implementation comparisons.
+- **Figure 5 standalone SVGs:** [Panel a](fig5_a.svg), [Panel b](fig5_b.svg), [Panel c](fig5_c.svg), [Panel d](fig5_d.svg), or [download all four (ZIP)](fig5_panels_svg.zip). These convenience copies are byte-identical to the corresponding files under `panels/`.
 - Figure 1 and the method framework retain their existing exports.
 
 `fig2.pdf/svg/png`, `fig3.pdf/svg/png`, and their preview files are verified compatibility copies. Active standalone panels are `fig2a/b/c` and `fig3a/b/c/d`, with equivalent named copies under `panels/fig2_fig3/`. The old split law panels and scripts are archived in `archive/fig2_fig3_before_oral_revision/`. All new figures use actual Times New Roman Bold at 7.5–10.5 pt. Figures 2/3 use a wider 6.6-inch canvas; Figures 4/5 retain their 5.5-inch width. Captions are kept separate from the bare figures.

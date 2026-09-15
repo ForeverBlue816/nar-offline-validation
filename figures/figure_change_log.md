@@ -1,5 +1,11 @@
 # Manuscript figure revisions
 
+## 2026-09-15: direct Figure 5 panel SVG downloads
+
+- Added `fig5_a.svg`, `fig5_b.svg`, `fig5_c.svg` and `fig5_d.svg` beside the full `fig5.svg`, with a four-file ZIP and direct README links.
+- Verified that every convenience SVG and ZIP entry is byte-identical to its existing `panels/` export. No figure appearance, labels, data or previous QA results change.
+
+
 ## 2026-09-13: wider Figures 2/3, central legend and Figure 5 naming
 
 - Increased Figure 2 from 5.5 × 2.55 to 6.6 × 2.25 inches and Figure 3 from 5.5 × 6.05 to 6.6 × 4.95 inches. Kept native font sizes, original Fig2 pastel colors/thin strokes, all points, fit coefficients and axis limits.
