@@ -1,0 +1,88 @@
+{
+  "model": "llama32_3b",
+  "row": "nar_kmax_asym_g128",
+  "protocol": "g128_asym (4.15625 weight bits), asymmetric group-128 activations, KIVI KV",
+  "status": "author-reported; measured by the author on a separate cluster; not reproduced in this pipeline; raw harness output not in this repository",
+  "reported_on": "2026-09-17",
+  "reported_by": "the author, in conversation",
+  "author_statement": "three runs on another cluster following this repository's three rotation seeds; the counts below were given as the k=max result; perplexity 8.58 reported earlier with a different seed",
+  "ambiguity": "whether the counts are one seed or a per-task aggregate of the three runs was not stated; a mean of three integer counts need not be an integer",
+  "counts": {
+    "arc_challenge": {
+      "correct": 512,
+      "total": 1172,
+      "metric": "acc_norm",
+      "accuracy": 0.43686006825938567
+    },
+    "arc_easy": {
+      "correct": 1669,
+      "total": 2376,
+      "metric": "acc_norm",
+      "accuracy": 0.7024410774410774
+    },
+    "boolq": {
+      "correct": 2425,
+      "total": 3270,
+      "metric": "acc",
+      "accuracy": 0.7415902140672783
+    },
+    "hellaswag": {
+      "correct": 7190,
+      "total": 10042,
+      "metric": "acc_norm",
+      "accuracy": 0.7159928301135232
+    },
+    "openbookqa": {
+      "correct": 205,
+      "total": 500,
+      "metric": "acc_norm",
+      "accuracy": 0.41
+    },
+    "piqa": {
+      "correct": 1380,
+      "total": 1838,
+      "metric": "acc_norm",
+      "accuracy": 0.750816104461371
+    },
+    "social_iqa": {
+      "correct": 897,
+      "total": 1954,
+      "metric": "acc",
+      "accuracy": 0.45905834186284544
+    },
+    "winogrande": {
+      "correct": 864,
+      "total": 1267,
+      "metric": "acc",
+      "accuracy": 0.6819258089976322
+    }
+  },
+  "eight_task_mean": 0.6123355556503892,
+  "perplexity_reported": 8.58,
+  "this_pipeline_seed0": {
+    "counts": {
+      "arc_challenge": 509,
+      "arc_easy": 1661,
+      "boolq": 2422,
+      "hellaswag": 7189,
+      "openbookqa": 201,
+      "piqa": 1378,
+      "social_iqa": 889,
+      "winogrande": 846
+    },
+    "eight_task_mean": 0.6080439511426721,
+    "perplexity": 8.59702,
+    "source": "results/llama32_3b/e14_nar_kmax_asym_g128_g128_asym_seed0_zero_shot*.json"
+  },
+  "difference_vs_seed0_items": {
+    "arc_challenge": 3,
+    "arc_easy": 8,
+    "boolq": 3,
+    "hellaswag": 1,
+    "openbookqa": 4,
+    "piqa": 2,
+    "social_iqa": 8,
+    "winogrande": 18
+  },
+  "note": "every one of the eight reported counts is above the seed-0 count of this pipeline, by 1 to 18 items; the seed-0 row is retained as this pipeline's measurement"
+}

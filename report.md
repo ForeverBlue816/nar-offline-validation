@@ -580,8 +580,12 @@ The same rows on the nine tasks, same harness revision and task versions as the 
 | Hadamard, g128_asym | 4.156 | 9.04241 | 43.00 | 67.63 | 66.97 | 71.18 | 40.00 | 74.27 | 45.60 | 65.67 | 64.76 | 59.29 |
 | NAR k=8, g128_asym | 4.156 | 8.63633 | 42.83 | 68.27 | 72.08 | 70.86 | 38.80 | 75.68 | 45.45 | 67.72 | 65.32 | 60.21 |
 | NAR k=max, g128_asym | 4.156 | 8.59702 | 43.43 | 69.91 | 74.07 | 71.59 | 40.20 | 74.97 | 45.50 | 66.77 | 65.58 | 60.80 |
+| NAR k=max, g128_asym ‡ | 4.156 | 8.58 ‡ | 43.69 | 70.24 | 74.16 | 71.60 | 41.00 | 75.08 | 45.91 | 68.19 | — | 61.23 |
+
+‡ Reported by the author on 2026-09-17 from a separate cluster (three runs following this repository's three rotation seeds; counts as given: 512/1172, 1669/2376, 2425/3270, 7190/10042, 205/500, 1380/1838, 897/1954, 864/1267; perplexity 8.58 reported with a different seed). Not reproduced in this pipeline; raw harness output not in this repository; whether the counts are one seed or an aggregate of the three was not stated. LAMBADA was not reported, so there is no six-task mean. The seed-0 row above remains this pipeline's own measurement; every reported count is above it, by 1 to 18 items. Provenance: `results/llama32_3b/e14_nar_kmax_asym_g128_author_reported.json`.
 
 Paired within each protocol against its own Hadamard row:
+
 
 | protocol | NAR k=8 − H, PPL | eight-task | NAR k=max − H, PPL | eight-task |
 |---|---:|---:|---:|---:|
