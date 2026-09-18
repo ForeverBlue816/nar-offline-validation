@@ -1,0 +1,158 @@
+{
+  "updated_utc": "2026-09-18T06:07:02.830845+00:00",
+  "jobs": [
+    {
+      "job_id": 159265,
+      "purpose": "superseded raw capture Qwen",
+      "state": "FAILED",
+      "exit_code": "1:0",
+      "elapsed": "00:02:39",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159266,
+      "purpose": "superseded raw capture Llama",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:02:12",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159269,
+      "purpose": "superseded raw capture Qwen retry",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:18:36",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159270,
+      "purpose": "superseded raw capture Llama retry",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:11:06",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159278,
+      "purpose": "superseded dependent evaluation",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:00:00",
+      "node": "None assigned"
+    },
+    {
+      "job_id": 159279,
+      "purpose": "superseded dependent evaluation",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:00:00",
+      "node": "None assigned"
+    },
+    {
+      "job_id": 159283,
+      "purpose": "Qwen layerwise exact calibration",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:31:03",
+      "node": "gpu-5090-5"
+    },
+    {
+      "job_id": 159284,
+      "purpose": "Llama layerwise exact calibration",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:17:34",
+      "node": "gpu-5090-1"
+    },
+    {
+      "job_id": 159285,
+      "purpose": "replaced pending Qwen E29",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:00:00",
+      "node": "None assigned"
+    },
+    {
+      "job_id": 159286,
+      "purpose": "replaced pending Llama E29",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:00:00",
+      "node": "None assigned"
+    },
+    {
+      "job_id": 159288,
+      "purpose": "Llama8B E33 before factor cache",
+      "state": "CANCELLED by 295800911",
+      "exit_code": "0:0",
+      "elapsed": "00:08:50",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159289,
+      "purpose": "Qwen E33",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:05:30",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159302,
+      "purpose": "Llama E29 original gate failure",
+      "state": "FAILED",
+      "exit_code": "1:0",
+      "elapsed": "00:03:07",
+      "node": "gpu-5090-3"
+    },
+    {
+      "job_id": 159300,
+      "purpose": "E30 seed1 interrupted checkpoint",
+      "state": "FAILED",
+      "exit_code": "1:0",
+      "elapsed": "00:02:06",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159301,
+      "purpose": "Llama8B E33 resumed",
+      "state": "RUNNING",
+      "exit_code": "0:0",
+      "elapsed": "00:24:01",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159313,
+      "purpose": "numerical precision preflight",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:00:23",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159318,
+      "purpose": "Llama E29 E32 E33 resumed",
+      "state": "RUNNING",
+      "exit_code": "0:0",
+      "elapsed": "00:19:31",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159319,
+      "purpose": "E30 seed1 durable resume",
+      "state": "RUNNING",
+      "exit_code": "0:0",
+      "elapsed": "00:19:31",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159341,
+      "purpose": "Qwen E29 E31 E32",
+      "state": "RUNNING",
+      "exit_code": "0:0",
+      "elapsed": "00:09:30",
+      "node": "gpu-5090-5"
+    }
+  ],
+  "scope": "Only this task jobs; unrelated user jobs are not managed. Further remaining E30 seed0/seed2 and evaluation jobs will be appended."
+}
