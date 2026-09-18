@@ -1,0 +1,60 @@
+[
+  {
+    "file": "results/llama31_8b/e20_range_vs_config.csv",
+    "rows": 208,
+    "models": [
+      "llama31_8b"
+    ],
+    "seed_column": false,
+    "status": "retain every row; seed-CI unavailable in source"
+  },
+  {
+    "file": "results/llama32_3b/e20_range_vs_config.csv",
+    "rows": 182,
+    "models": [
+      "llama32_3b"
+    ],
+    "seed_column": false,
+    "status": "retain every row; seed-CI unavailable in source"
+  },
+  {
+    "model": "llama32_3b",
+    "new_measurement": "64 frozen chunks, all layers, three paired rotation seeds; no quantization",
+    "rows": [
+      "E11:g64_kmax",
+      "E11:g128_k8",
+      "E11:g128_k16",
+      "E11:g128_k32",
+      "E11:g128_kmax",
+      "E11:g256_kmax",
+      "E20:all published rotation configurations"
+    ],
+    "f_definition": "calibration energy weighted selected eigendirections for legacy sources, plus measured test-set DC/Walsh capture as separately named diagnostic",
+    "step_definition": "mean unrounded group range / 15, matching saved E20 range diagnostic; no fitted multiplier"
+  },
+  {
+    "model": "llama31_8b",
+    "new_measurement": "64 frozen chunks, all layers, three paired rotation seeds; no quantization",
+    "rows": [
+      "E11:g64_kmax",
+      "E11:g128_k8",
+      "E11:g128_k16",
+      "E11:g128_k32",
+      "E11:g128_kmax",
+      "E11:g256_kmax",
+      "E20:all published rotation configurations"
+    ],
+    "f_definition": "calibration energy weighted selected eigendirections for legacy sources, plus measured test-set DC/Walsh capture as separately named diagnostic",
+    "step_definition": "mean unrounded group range / 15, matching saved E20 range diagnostic; no fitted multiplier"
+  },
+  {
+    "model": "qwen3_4b_base",
+    "new_measurement": "64 frozen chunks, all layers, three paired rotation seeds; no quantization",
+    "rows": [
+      "E22:saved_g128_k8",
+      "E22:saved_g128_kmax"
+    ],
+    "f_definition": "calibration energy weighted selected eigendirections for legacy sources, plus measured test-set DC/Walsh capture as separately named diagnostic",
+    "step_definition": "mean unrounded group range / 15, matching saved E20 range diagnostic; no fitted multiplier"
+  }
+]

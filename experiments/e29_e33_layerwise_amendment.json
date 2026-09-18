@@ -1,0 +1,17 @@
+{
+  "recorded_utc": "2026-09-18T05:20:35.353061+00:00",
+  "reason": "Avoid HDD bottleneck and repeated whole-model activation storage; no experiment rows/data/statistics changed.",
+  "verification": "Qwen 36 layers x two sites x two sequences and final hidden states are bit-identical; Llama same gate before calibration.",
+  "cancelled_preparation_jobs": [
+    159269,
+    159270
+  ],
+  "replaced_pending_jobs": [
+    159278,
+    159279
+  ],
+  "observed_ppl_rows": 0,
+  "observed_spectral_rows": 0,
+  "new_peak_activation_storage": "one layer in host memory; hidden-state checkpoint every four layers",
+  "all_samples_retained": true
+}

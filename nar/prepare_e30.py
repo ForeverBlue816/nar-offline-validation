@@ -62,18 +62,12 @@ def evict_capture(m,label):
 
 def main():
     a.setup();m='qwen3_4b_base';a.prepare_tokens(m)
+    from nar.reviewer_layerwise import run as layerwise
     for seed in a.SEEDS:
-        labels=[f'wt2_n{n}_s{seed}' for n in [64,128,256]]
-        if not all(prepared(m,z) for z in labels):
-            big=labels[-1];a.capture(m,big)
-            for n,label in zip([64,128,256],labels):
-                if n!=256:prefix_view(m,big,label)
-                streamed_spectral(m,label);a.build_factors(m,label)
-        for label in labels:
-            if label!='wt2_n128_s0' and (a.ASSETS/m/'capture'/label/'DONE.json').exists():evict_capture(m,label)
-        label=f'c4_n128_s{seed}'
-        if not prepared(m,label):
-            a.capture(m,label);streamed_spectral(m,label);a.build_factors(m,label)
-        if (a.ASSETS/m/'capture'/label/'DONE.json').exists():evict_capture(m,label)
+        for label in [f'wt2_n{n}_s{seed}' for n in [64,128,256]]+[f'c4_n128_s{seed}']:
+            if not prepared(m,label):layerwise(m,label,False)
+            checkpoint=a.ASSETS/m/'layerwise'/label/'hidden_checkpoint.pt'
+            if label!='wt2_n128_s0' and checkpoint.exists() and prepared(m,label):
+                checkpoint.unlink()
     a.savej(a.REPO/'results'/m/'e30_preparation.json',{'status':'COMPLETE','created_utc':a.utc(),'corpora':['wt2','c4'],'optional_nonweb':'unavailable at preregistration','seed0_default_source':'shared exact-moment S3 calibration prepared before E29'})
 if __name__=='__main__':main()

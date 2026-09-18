@@ -103,11 +103,11 @@ def row_diagnostics(exp,m,spec,seed,rot):
     out=[]
     for s,l,n in a.keys(m):
         d=rot.data[s,l];per=torch.empty(n,dtype=torch.float64,device='cuda');per[d['target']]=d['energy_after_g'][d['source']]
-        grouped=per.reshape(-1,128)[:,1:].sum(1);spread=float(grouped.max()/grouped.median().clamp_min(1e-30))
+        grouped=per.reshape(-1,128)[:,1:].sum(1);spread=float(grouped.max()/grouped.quantile(.5).clamp_min(1e-30))
         item=dict(model=m,row=spec['row'],seed=seed,site=s,layer=l,rank=d['k'],residual_group_energy_max_median=spread,captured_fraction=d['calibration_fraction'])
         if exp==32:
             p=a.loadt(a.ASSETS/m/'spectral'/spec['label']/f'{s}_{l:02d}.pt')['solvers'][spec['solver']]
-            item.update(ritz_residual_median=float(p['ritz_residuals'].median()),ritz_residual_max=float(p['ritz_residuals'].max()),principal_angle_max_deg=float(p['principal_angles_deg'].max()))
+            item.update(ritz_residual_median=float(p['ritz_residuals'].quantile(.5)),ritz_residual_max=float(p['ritz_residuals'].max()),principal_angle_max_deg=float(p['principal_angles_deg'].max()))
         out.append(item)
     a.append(a.REPO/'results'/m/f'e{exp}_diagnostics.csv',out,['row','seed','site','layer'])
 
