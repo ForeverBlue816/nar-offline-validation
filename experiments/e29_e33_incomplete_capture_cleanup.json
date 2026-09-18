@@ -1,0 +1,517 @@
+{
+  "reason": "superseded incomplete capture only; new lossless layerwise method validated before switch",
+  "files": [
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_15.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_16.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_04.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_20.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_25.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_18.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_18.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_05.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_12.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_02.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_08.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_17.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_17.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_06.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_07.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_11.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_24.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_26.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_27.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_20.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_09.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_16.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_23.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_13.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_10.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_10.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_15.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_22.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_01.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_07.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_27.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_23.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_03.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_04.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_01.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_26.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_08.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_05.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_19.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_24.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_06.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_25.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_03.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_00.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_21.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_00.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_14.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_09.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_02.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_12.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_11.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_22.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_13.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_14.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/down_19.bf16",
+      "logical_bytes": 4294967296
+    },
+    {
+      "file": "llama32_3b/capture/wt2_n128_s0/qkv_21.bf16",
+      "logical_bytes": 1610612736
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_15.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_16.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_31.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_04.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_29.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_20.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_25.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_18.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_18.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_05.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_28.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_12.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_02.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_33.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_08.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_17.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_17.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_06.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_07.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_11.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_24.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_26.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_27.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_20.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_30.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_09.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_16.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_23.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_13.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_10.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_33.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_32.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_35.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_34.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_10.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_15.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_30.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_22.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_28.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_01.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_07.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_27.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_23.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_32.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_03.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_04.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_01.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_26.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_08.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_05.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_19.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_34.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_24.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_06.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_25.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_03.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_00.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_35.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_21.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_00.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_14.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_09.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_02.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_12.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_11.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_29.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_22.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_13.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_14.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/down_19.bf16",
+      "logical_bytes": 5100273664
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_31.bf16",
+      "logical_bytes": 1342177280
+    },
+    {
+      "file": "qwen3_4b_base/capture/wt2_n128_s0/qkv_21.bf16",
+      "logical_bytes": 1342177280
+    }
+  ]
+}

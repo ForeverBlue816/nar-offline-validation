@@ -17,6 +17,8 @@ python_bin=/projects/nar/nar-validation/venv/bin/python
 model="${1:?model}"
 shift
 for exp in "$@"; do
+  if [[ "$exp" == 33 ]]; then "$python_bin" nar/e33_rangelaw.py --model "$model"; continue; fi
   if [[ "$exp" == 30 ]]; then "$python_bin" nar/prepare_e30.py; fi
   "$python_bin" nar/run_reviewer_experiments.py --experiment "$exp" --model "$model"
+  if [[ "$exp" != 29 ]]; then "$python_bin" nar/reviewer_diagnostics.py --experiment "$exp" --model "$model"; fi
 done

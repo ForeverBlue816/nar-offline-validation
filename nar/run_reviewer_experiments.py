@@ -94,6 +94,7 @@ def record_metadata(exp,m):
         'tokens':a.js(a.ASSETS/m/'tokens/DONE.json'),'row_bits':{},'source_sha256':{str(p.relative_to(a.REPO)):a.sha(p) for p in [Path(__file__),a.REPO/'nar/reviewer_ablations.py']}}
     for r in content['rows']:
         overhead=16 if r['symmetric'] else 32
+        r['rank_cap_by_site']={s:(1 if r['group']=='token' else n//128) for s,n in ds.items()}
         content['row_bits'][r['row']]={s:4+overhead/(n if r['group']=='token' else r['group']) for s,n in ds.items()}
     a.savej(a.REPO/'results'/m/f'e{exp}_metadata.json',content)
 

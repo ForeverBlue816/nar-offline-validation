@@ -1,0 +1,12 @@
+{
+  "fixed_before_new_PPL": true,
+  "one_seed_std": {
+    "E31_P5_vs_P1": "reference P1 standard deviation across three seed corpus PPLs, separately for each rank",
+    "E32_S3_vs_S4": "reference S4 standard deviation across three seed corpus PPLs"
+  },
+  "H30a": "abs(delta_N64 - delta_N256) < 0.20 * abs(delta_N128), with deltas relative to matched Hadamard; also report all pairwise deviations from N128",
+  "H30c": "report both mean per-site f changes and worst layer-seed change; strict per-site/layer check requires every absolute f difference < 0.03",
+  "H32c": "check every layer/site with a 1e-12 floating-point tolerance and report all violations; also report site means",
+  "H29b_reference_availability": "Frozen E11 summary contains k=8,16,32,max but no k=1 PPL row. Report the per-token k=1 effect and attenuation relative to Q1; the historical k=1 numerical reproduction subclaim is not assessable from available records.",
+  "replication_gate": "Llama Q1 vs E27 both-sites A_full/Hadamard: report absolute PPL difference and difference divided by historical seed std; abs difference <= historical seed std is the within-one-seed-noise criterion. Include E20 differences with sign mapping/calibration differences explicitly identified."
+}

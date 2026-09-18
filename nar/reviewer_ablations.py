@@ -248,6 +248,24 @@ def build_factors(m,label,solver='S3',rank='max',variant='P1',seed=0):
         savet(dest,saved)
     LOG.info('factors complete %s %s %s k%s %s seed%d',m,label,solver,rank,variant,seed)
 
+_DC_SIGNS = {}
+
+def dc_hadamard_rows(x,transpose=False):
+    """Normalize the Paley product's first column to DC for the rank-one PQ row.
+
+    Paley-II order 76 is orthogonal but its first column is signed. A fixed
+    output sign normalization gives H_DC e0 = ones/sqrt(n); the actual
+    transpose reverses this normalization. The frozen Hadamard baseline
+    retains its original matrix. No learned quantity enters this correction.
+    """
+    n=x.shape[-1];key=(n,str(x.device),x.dtype)
+    if key not in _DC_SIGNS:
+        unit=torch.zeros((1,n),device=x.device,dtype=x.dtype);unit[0,0]=1
+        _DC_SIGNS[key]=act.full_hadamard_rows(unit,torch.ones(n,device=x.device,dtype=x.dtype)).sign()[0]
+    ones=torch.ones(n,device=x.device,dtype=x.dtype);normalization=_DC_SIGNS[key]
+    if transpose:return full_hadamard_rows_transpose(x*normalization,ones)
+    return act.full_hadamard_rows(x,ones)*normalization
+
 class Rotation:
     def __init__(self,m,seed,method='pq',label='wt2_n128_s0',solver='S3',rank='max',variant='P1'):
         self.m=m;self.method=method;self.data={};self.signs={};self.variant=variant
@@ -264,13 +282,13 @@ class Rotation:
             return f(x,sign).reshape(shape)
         d=self.data[s,l];n=d['n'];b=d['block']
         if transpose:
-            x=full_hadamard_rows_transpose(x,torch.ones_like(sign)) if b==n else act.ext._fast_walsh_hadamard(x.reshape(-1,n//b,b)).reshape(-1,n)
+            x=dc_hadamard_rows(x,True) if b==n else act.ext._fast_walsh_hadamard(x.reshape(-1,n//b,b)).reshape(-1,n)
             x=x*sign;z=torch.empty_like(x);z[:,d['source']]=x[:,d['target']]
             out=z-(z@d['y'])@d['w'].T
         else:
             x=x-(x@d['w'])@d['y'].T;z=torch.empty_like(x);z[:,d['target']]=x[:,d['source']]
             z=z*sign
-            out=act.full_hadamard_rows(z,torch.ones_like(sign)) if b==n else act.ext._fast_walsh_hadamard(z.reshape(-1,n//b,b)).reshape(-1,n)
+            out=dc_hadamard_rows(z) if b==n else act.ext._fast_walsh_hadamard(z.reshape(-1,n//b,b)).reshape(-1,n)
         return out.reshape(shape)
     def gate(self):
         out=[]

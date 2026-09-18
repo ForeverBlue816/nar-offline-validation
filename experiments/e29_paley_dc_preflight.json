@@ -1,0 +1,9 @@
+{
+  "stage": "before any E29 PPL measurement",
+  "gate": "full-width rank-one selected direction must map to the DC vector",
+  "discovered": "The frozen Paley-II order-76 matrix is orthogonal, but its first column contains signs; the unnormalized 9728-dimensional DC residual is 0.22941569983959198.",
+  "correction": "Only the full-width rank-one PQ transform uses a fixed output sign normalization derived from H e0. Its inverse uses the exact reverse transpose. Q3 and Q4 share this same normalized matrix and the same saved G. Grouped PQ and the frozen Hadamard baseline are unchanged.",
+  "data_dependence": "none; determined solely by the Hadamard matrix before PPL",
+  "factor_recalibration_needed": false,
+  "historical_files_modified": false
+}

@@ -26,6 +26,15 @@ class NumericalContract(unittest.TestCase):
                 for i in range(k):self.assertEqual(mapping[i*128],i*128)
         for pair in zip(a.orders(e,512,4,'P1',0),a.orders(e,512,4,'P4',0)):
             self.assertTrue(torch.equal(*pair))
+    def test_full_width_paley_dc_and_actual_transpose(self):
+        for n in [2560,9728,3072,8192]:
+            unit=torch.zeros((1,n));unit[0,0]=1
+            mapped=a.dc_hadamard_rows(unit)
+            self.assertLess(float((mapped-torch.ones_like(mapped)/n**.5).norm()),1e-6)
+            x=torch.randn((3,n),generator=torch.Generator().manual_seed(113))
+            back=a.dc_hadamard_rows(a.dc_hadamard_rows(x),True)
+            self.assertLess(float((back-x).norm()/x.norm()),1e-6)
+
     def test_quantizer_offsets_and_degenerate_groups(self):
         x=torch.tensor([[2.,3.,4.,5.],[0.,0.,0.,0.]])
         sym=a.quantize(x,4,True);asym=a.quantize(x,4,False)

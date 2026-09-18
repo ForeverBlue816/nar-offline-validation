@@ -61,13 +61,15 @@ def evict_capture(m,label):
 
 
 def main():
+    p=argparse.ArgumentParser();p.add_argument('--seed',type=int,choices=[0,1,2]);args=p.parse_args()
     a.setup();m='qwen3_4b_base';a.prepare_tokens(m)
     from nar.reviewer_layerwise import run as layerwise
-    for seed in a.SEEDS:
+    for seed in (a.SEEDS if args.seed is None else [args.seed]):
         for label in [f'wt2_n{n}_s{seed}' for n in [64,128,256]]+[f'c4_n128_s{seed}']:
             if not prepared(m,label):layerwise(m,label,False)
             checkpoint=a.ASSETS/m/'layerwise'/label/'hidden_checkpoint.pt'
             if label!='wt2_n128_s0' and checkpoint.exists() and prepared(m,label):
                 checkpoint.unlink()
-    a.savej(a.REPO/'results'/m/'e30_preparation.json',{'status':'COMPLETE','created_utc':a.utc(),'corpora':['wt2','c4'],'optional_nonweb':'unavailable at preregistration','seed0_default_source':'shared exact-moment S3 calibration prepared before E29'})
+    name='e30_preparation.json' if args.seed is None else f'e30_preparation_seed{args.seed}.json'
+    a.savej(a.REPO/'results'/m/name,{'status':'COMPLETE','created_utc':a.utc(),'corpora':['wt2','c4'],'optional_nonweb':'unavailable at preregistration','seed0_default_source':'shared exact-moment S3 calibration prepared before E29'})
 if __name__=='__main__':main()
