@@ -1,0 +1,13 @@
+{
+  "stopped_jobs": [
+    159265,
+    159266
+  ],
+  "replacement_jobs": [
+    159269,
+    159270
+  ],
+  "reason": "Incomplete activation capture reached personal storage quota; new task assets moved to project storage. Incomplete bf16 captures discarded before any DONE marker; original tokens retained. No PPL or eigensolver results had been produced.",
+  "asset_storage": "project artifacts/e29_e33",
+  "measurements_changed": false
+}
