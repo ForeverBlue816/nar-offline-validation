@@ -1,0 +1,115 @@
+{
+  "KV": "bf16 unchanged",
+  "created_utc": "2026-09-18T05:57:58.583262+00:00",
+  "dimensions": {
+    "down": 8192,
+    "qkv": 3072
+  },
+  "experiment": 32,
+  "fold": "R^T Q(R x), rounded to original bf16 only after transpose",
+  "layers": 28,
+  "model": "llama32_3b",
+  "preregistration_sha256": "690965b28584c5f19e81403975d31b474665f569f133f2a661cc60e9e032ee0c",
+  "rotation_arithmetic": "stored fp32 WY factors, fp64 WY multiply-accumulate, fp32 Hadamard and quantizer",
+  "row_bits": {
+    "S3": {
+      "down": 4.25,
+      "qkv": 4.25
+    },
+    "S4": {
+      "down": 4.25,
+      "qkv": 4.25
+    },
+    "hadamard": {
+      "down": 4.25,
+      "qkv": 4.25
+    }
+  },
+  "rows": [
+    {
+      "evalsets": [
+        "wt2"
+      ],
+      "group": 128,
+      "label": "wt2_n128_s0",
+      "method": "hadamard",
+      "rank": "max",
+      "rank_cap_by_site": {
+        "down": 64,
+        "qkv": 24
+      },
+      "row": "hadamard",
+      "solver": "S3",
+      "symmetric": false,
+      "variant": "P1"
+    },
+    {
+      "evalsets": [
+        "wt2"
+      ],
+      "group": 128,
+      "label": "wt2_n128_s0",
+      "method": "pq",
+      "rank": "max",
+      "rank_cap_by_site": {
+        "down": 64,
+        "qkv": 24
+      },
+      "row": "S3",
+      "solver": "S3",
+      "symmetric": false,
+      "variant": "P1"
+    },
+    {
+      "evalsets": [
+        "wt2"
+      ],
+      "group": 128,
+      "label": "wt2_n128_s0",
+      "method": "pq",
+      "rank": "max",
+      "rank_cap_by_site": {
+        "down": 64,
+        "qkv": 24
+      },
+      "row": "S4",
+      "solver": "S4",
+      "symmetric": false,
+      "variant": "P1"
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "sites": [
+    "post-RMSNorm qkv input",
+    "down_proj input"
+  ],
+  "source_sha256": {
+    "nar/reviewer_ablations.py": "77fd8fb86343b22bd1a58309f99907d3566a601918aab1f16d314d04108d8880",
+    "nar/run_reviewer_experiments.py": "6b4e632605602560150b5de008a83f0c3863e9faec50d1e24d89ef19a7a5beb5"
+  },
+  "tokens": {
+    "created_utc": "2026-09-18T04:56:12.568112+00:00",
+    "model": "llama32_3b",
+    "sources": {
+      "wt2_eval": {
+        "file": "cache/tokenized/llama32_3b-test-o0-n64-l2048.pt",
+        "sha256": "13245c7d485c2b711dac6258ab21e3d62683fdb2863da47138d1dad59ee80b05",
+        "tensor_sha256": "f2ede7fbb9bc50eabec8e59efc4b344bd21bd7f11aad6be51ab5fe25c34039a4"
+      },
+      "wt2_n128_s0": {
+        "file": "cache/tokenized/llama32_3b-train-o0-n128-l2048.pt",
+        "sha256": "de43576731a5ebf52ede54a1400af335ca6eef21f2c7289f0e2b4c22bdc7e308",
+        "tensor_sha256": "fae1de0b5f0f0cdabd8efabd41b59bfe12c6fec96444574e948d615803107cd1"
+      }
+    },
+    "token_files": {
+      "wt2_eval.pt": "7a7b7dc6f6f242742c30f5194894a13f9225c540c5568a1c1839849368debd08",
+      "wt2_n128_s0.pt": "829421c40f5a67db61ecc1f005c934b5f112f860b73275de25c8eb760fac53e1"
+    }
+  },
+  "weights": "bf16 unchanged"
+}

@@ -1,0 +1,7 @@
+model,row,seed,eval_set,source,source_row,source_sha256,reason
+qwen3_4b_base,hadamard,0,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_hadamard,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+qwen3_4b_base,hadamard,1,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_hadamard,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+qwen3_4b_base,hadamard,2,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_hadamard,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+qwen3_4b_base,S3,0,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_pq,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+qwen3_4b_base,S3,1,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_pq,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+qwen3_4b_base,S3,2,wt2,results/qwen3_4b_base/e29_per_sequence.csv,Q1_pq,5156f203c3fab4a8c976d0a272620e5bec145ccf2e1efde3311d3767999dc069,"identical new-experiment rotation, quantizer and frozen evaluation chunks"

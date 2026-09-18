@@ -1,0 +1,31 @@
+[
+  {
+    "S3_minus_S4": 0.004330718849518671,
+    "S4_seed_std": 0.0059900659509417075,
+    "hypothesis": "H32a",
+    "model": "qwen3_4b_base",
+    "supported": true
+  },
+  {
+    "CIs_excluding_zero": [
+      "S1",
+      "S2"
+    ],
+    "hypothesis": "H32b",
+    "largest_angle_is_S1": true,
+    "supported": false
+  },
+  {
+    "hypothesis": "H32c",
+    "layer_sites_checked": 72,
+    "supported": true,
+    "violations": []
+  },
+  {
+    "S3_minus_S4": 0.004740187354903114,
+    "S4_seed_std": 0.0006339988511470209,
+    "hypothesis": "H32a",
+    "model": "llama32_3b",
+    "supported": false
+  }
+]

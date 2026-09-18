@@ -2369,7 +2369,44 @@ angle to S4, f at the down site, PPL, delta vs S4 [CI]}.
 ```
 
 
-Status: PRE-REGISTERED; no new measurements have run. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+Status: measurements complete; all original hypotheses retained. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+
+<!-- E32 RESULTS START -->
+
+**Qwen3-4B-Base**
+
+| Row | Ritz residual | Max angle (°) | Down f | PPL | Seed SD | Δ vs S4 [90% CI] |
+| --- | --- | --- | --- | --- | --- | --- |
+| hadamard | — | — | — | 7.876938 | 0.009933 | 0.183816 [0.171556, 0.196077] |
+| S1 | 2.840e+00 | 89.998543 | 0.008518 | 7.751955 | 0.012896 | 0.058833 [0.051084, 0.066583] |
+| S2 | 4.256e-01 | 89.990628 | 0.290359 | 7.699832 | 0.010982 | 0.006710 [0.000137, 0.013284] |
+| S3 | 1.164e-01 | 89.971391 | 0.324627 | 7.697452 | 0.006476 | 0.004331 [-0.002184, 0.010846] |
+| S4 | 4.873e-15 | 0.000010 | 0.333925 | 7.693121 | 0.005990 | 0.000000 [0.000000, 0.000000] |
+
+**Llama-3.2-3B**
+
+| Row | Ritz residual | Max angle (°) | Down f | PPL | Seed SD | Δ vs S4 [90% CI] |
+| --- | --- | --- | --- | --- | --- | --- |
+| hadamard | — | — | — | 7.766634 | 0.005198 | 0.066146 [0.059403, 0.072888] |
+| S3 | 1.407e-01 | 89.895300 | 0.313824 | 7.705229 | 0.008399 | 0.004740 [-0.000465, 0.009946] |
+| S4 | 3.522e-15 | 0.000012 | 0.321691 | 7.700489 | 0.000634 | 0.000000 [0.000000, 0.000000] |
+
+Ritz residual is the median of each site/layer’s top-k median residual; maximum residuals and every top-k residual/angle are also exported. The exact solver uses the same explicit fp64 uncentered second moment as the randomized solvers. S3 shares the newly measured E29 default; Llama adds only S4 beyond this shared comparison. Pass counts include the final Rayleigh–Ritz product, and all rows use oversampling 16 and the same starting sketch.
+
+**Pre-registered hypothesis checks**
+
+| Hypothesis | Model / rank | Outcome |
+| --- | --- | --- |
+| H32a | qwen3_4b_base | supported |
+| H32b | all | not supported |
+| H32c | all | supported |
+| H32a | llama32_3b | not supported |
+
+<!-- E32 RESULTS END -->
+
+**Reading.** The exact rows meet the stated numerical gate, with maximum Ritz residuals of 3.03e-11 on Qwen and 3.96e-11 on Llama. Captured fraction increases monotonically from S1 through S4 at all 72 Qwen layer/sites, supporting H32c. Qwen S3−S4 is 0.004331 PPL, below S4's seed SD of 0.005990, whereas Llama's 0.004740 difference exceeds S4's unusually small SD of 0.000634 (though it remains below S3's SD of 0.008399 and its paired interval includes zero); H32a therefore passes only on Qwen under the pre-registered reference-SD rule. Both S1 and S2 have positive paired intervals versus S4 on Qwen, so H32b's “only S1” clause fails despite S1 having the largest maximum angle. The three-product default is close to exact on perplexity, while near-right-angle worst-case subspace directions show that maximum principal angle alone is not a reliable proxy for the observed end-to-end loss.
+
+
 
 ## E33 — Quantitative check of the range law (no GPU needed if steps were logged)
 

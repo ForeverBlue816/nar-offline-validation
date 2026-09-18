@@ -1,0 +1,7 @@
+model,row,seed,eval_set,source,source_row,source_sha256,reason
+llama32_3b,hadamard,0,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_hadamard,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+llama32_3b,hadamard,1,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_hadamard,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+llama32_3b,hadamard,2,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_hadamard,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+llama32_3b,S3,0,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_pq,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+llama32_3b,S3,1,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_pq,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
+llama32_3b,S3,2,wt2,results/llama32_3b/e29_per_sequence.csv,Q1_pq,2bf76a1b7dcedfa7ed2518943d077349ea6297e27ad9a4e4f122c1841987cd59,"identical new-experiment rotation, quantizer and frozen evaluation chunks"
