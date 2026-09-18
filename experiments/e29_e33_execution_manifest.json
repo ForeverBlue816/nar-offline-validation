@@ -1,0 +1,10 @@
+{
+  "status": "PREPARED",
+  "sources": {
+    "nar/reviewer_ablations.py": "7a576376905c8a794a0591082e0cbde1257373a95b0ca529b33f43a199a87ac8",
+    "tests/test_reviewer_ablations.py": "7d357435251e872e72638240b8ca043779ec71ed96204775c7b4ce24683720fd",
+    "slurm_reviewer_prepare.sh": "a5b0cf1e531b3974b79a0425e75d96b18ea0b8f0429d8b97fc201056016445bb",
+    "experiments/e29_e33_preregistration.md": "690965b28584c5f19e81403975d31b474665f569f133f2a661cc60e9e032ee0c"
+  },
+  "note": "Qwen64 evaluation is first64 of frozen146 BOS-prefixed windows; seeds use E27 sign mapping (+128). No calibration/PPL measurements yet."
+}
