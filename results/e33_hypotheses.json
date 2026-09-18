@@ -1,0 +1,35 @@
+[
+  {
+    "hypothesis": "H33",
+    "layers": 36,
+    "median_absolute_error": 0.1805102218745616,
+    "median_signed_error": 0.15427049085819167,
+    "model": "qwen3_4b_base",
+    "p90_absolute_error": 0.5218948795501392,
+    "row": "E22_kmax",
+    "site": "down",
+    "supported": false
+  },
+  {
+    "hypothesis": "H33",
+    "layers": 28,
+    "median_absolute_error": 0.08873313890608184,
+    "median_signed_error": 0.08443891516463536,
+    "model": "llama32_3b",
+    "p90_absolute_error": 0.11708599601700008,
+    "row": "E11_g128_kmax",
+    "site": "down",
+    "supported": false
+  },
+  {
+    "hypothesis": "H33",
+    "layers": 32,
+    "median_absolute_error": 0.08767702416994275,
+    "median_signed_error": 0.08631933140183085,
+    "model": "llama31_8b",
+    "p90_absolute_error": 0.100101664700761,
+    "row": "E11_g128_kmax",
+    "site": "down",
+    "supported": false
+  }
+]

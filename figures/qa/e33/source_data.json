@@ -1,0 +1,35 @@
+{
+  "source": "results/e33_rangelaw_persite.csv",
+  "aggregate_counts": {
+    "llama32_3b": 1120,
+    "llama31_8b": 1280,
+    "qwen3_4b_base": 144
+  },
+  "input_rows": 2544,
+  "plotted_rows": 2544,
+  "excluded_rows": 0,
+  "historical_records_retained_separately": 390,
+  "historical_scatter_omission_reason": "different diagnostic sampling and no three-seed CI; matched saved-rotation configurations are measured again on all 64 chunks",
+  "axis_bounds": {
+    "llama32_3b": [
+      0.0004253377335001857,
+      0.2655504951832711
+    ],
+    "llama31_8b": [
+      0.0001872523089207451,
+      0.2765290052915133
+    ],
+    "qwen3_4b_base": [
+      0.003020058254865467,
+      1.3490135652613664
+    ]
+  },
+  "uncertainty": "90% Student-t over 3 rotation seeds, df=2",
+  "rank_color_transform": "log2(k+1)",
+  "primary_down_median_absolute_error": {
+    "llama32_3b": 0.08873313890608184,
+    "llama31_8b": 0.08767702416994275,
+    "qwen3_4b_base": 0.1805102218745616
+  },
+  "fitted_coefficient": null
+}

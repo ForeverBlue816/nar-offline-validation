@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-18T06:58:35.679879+00:00",
+  "pdf_points": [
+    0.0,
+    0.0,
+    475.20001220703125,
+    226.8000030517578
+  ],
+  "png_pixels": [
+    3960,
+    1890
+  ],
+  "png_dpi": [
+    599.9988,
+    599.9988
+  ],
+  "fonts": [
+    {
+      "name": "DFKAVT+TimesNewRomanPS-BoldMT",
+      "type": "Type0",
+      "embedded_bytes": 33696
+    }
+  ],
+  "svg_editable_text_elements": 44,
+  "source_hashes": {
+    "figures/deployment_figure_style.py": "f40b9bac35f381f1276616fc564bbdccc401f2694d33b8c297c54e3ae94f8e7e",
+    "figures/plot_e33_rangelaw.py": "59bc7ed3c09abd08904a1190606c5017e14a0066de004002fd1451bc35893fa9"
+  },
+  "artifact_hashes": {
+    "figures/fig_rangelaw_persite.png": "15e80ac74549a590c30d4c25fea1b0ba5680f8163f76ff05df0c98f848e4daa7",
+    "figures/fig_rangelaw_persite.pdf": "bb06e8086e2d179f291864fa77984cce2e32f60774153422d8632c5df78121b7",
+    "figures/fig_rangelaw_persite.svg": "750071c79e240087a4fec124722e878a82ddc0c58357035a0bc8e1fef915c8c2"
+  },
+  "visual_review": {
+    "panels": [
+      "a: Llama-3.2-3B; both site clusters and low-range outliers retained; 8.87% error subtitle clear",
+      "b: Llama-3.1-8B; shared geometry and identity line clear; 8.77% error subtitle clear",
+      "c: Qwen3-4B-Base; deviations and low-step outliers visible; 18.05% error subtitle clear"
+    ],
+    "complete_figure": "Inspected the final-size composition and a detailed preview. Equal square panels and gutters, no clipped text or crossing annotations; model titles, site/rank scales, CI definition, and quantitative error subtitles are legible. All 2544 aggregates and seed whiskers retained. The plot uses fixed log axes rather than exaggerating error, and the caption explains the default-row error subtitles and overlapping controls.",
+    "limitation": "Many seed intervals are smaller than markers; exact intervals and errors remain in the CSV."
+  }
+}

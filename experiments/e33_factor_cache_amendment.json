@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-18T05:38:21.176813+00:00",
+  "old_source_sha256": "0e8b8ae666776d3bfa211cc98cbb709d9236d13e8602c20a6dfe77b7d0dd8a0c",
+  "new_source_sha256": "37e594326bd6c9b111119c188b7744bff33a317fef24b4806240ca2547596482",
+  "completed_llama8b_rows_preserved": 162,
+  "data_sha256_before_resume": "f89d48b7d6fb7aab49eebd78eb085b18a6fa2be052ee5d1f9ecc0cd16e95cdbf",
+  "change": "Cache the identical per-site seed-independent saved factors, recovered eigendirections and compact-WY matrices. Clear GPU caches at each completed site. No sample, row, formula, arithmetic or random seed changes. Resume only missing measurements.",
+  "reason": "Avoid repeatedly reconstructing the same Householder factors for three sign seeds and duplicate coefficient-storage rows."
+}

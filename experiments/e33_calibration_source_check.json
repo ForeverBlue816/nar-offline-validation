@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "note": "Raw checksums differ because of CSV newline serialization; all parsed cells and keys match. No source table changed.",
+  "records": [
+    {
+      "file": "results/llama32_3b/e11_calibration_eigenspace.csv",
+      "repository_sha256": "fbdb6531da47899c9441a4a89bc57a870880db5b7bfbab11f7c75374e635bf4a",
+      "frozen_asset_sha256": "108f2bd7aca59a37f6220c71d727239db6ccd8378ef906566223d5dffd1324c2",
+      "rows": 4928,
+      "all_parsed_cells_identical": true,
+      "equal_after_newline_normalization": true
+    },
+    {
+      "file": "results/llama31_8b/e11_calibration_eigenspace.csv",
+      "repository_sha256": "29fac68ab85f5ced436373f6f0bed1ea26d8485c31d95cfb687431252271c261",
+      "frozen_asset_sha256": "af26c242d9b46d46249ed71506e6da404db78d0acd4a60711748b474ae5b679e",
+      "rows": 9216,
+      "all_parsed_cells_identical": true,
+      "equal_after_newline_normalization": true
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# E33 figure contract
+
+Question: How accurately does the unfitted range law predict the quantization step at each layer and site?
+
+Claim to assess, not presume: the predicted step agrees with the measured step closely enough to support the pre-registered 5% median absolute relative error bound at the down site. The paired errors and any failed bound remain visible and are reported independently of the overall scatter correlation.
+
+Archetype: quantitative grid. Three matched model panels are explicitly requested: Llama-3.2-3B establishes the comparison with existing activation experiments; Llama-3.1-8B tests scale; Qwen3-4B-Base tests a different family and non-power-of-two dimensions. Equal panel areas reflect the same test in all three settings. No fitted line or coefficient is permitted.
+
+Data contract: plot every new layer/configuration aggregate with all three completed rotation seeds; do not select favorable layers or ranks. Each aggregate retains the exact mean step, prediction and 90% Student-t seed confidence interval. The saved historical single-seed range table is preserved separately and does not receive invented uncertainty. Every matched new observation uses all 64 frozen 2048-token chunks. Source CSVs preserve group size and multiple-Walsh configurations even when they overlap visually.
+
+Encoding: measured mean quantization step on x, predicted step on y, identical logarithmic limits within each panel and an identity line. Logarithmic axes are needed to show both site scales without suppressing the smaller activation ranges. Qkv is blue, down is the existing Figure 1 burgundy (#601D49); increasing selected rank uses increasing color intensity. Site shapes supplement hue. The common rank color scales are explicit. Each panel subtitle annotates the pre-registered default g=128, k=max down-site median absolute error so a broad log-scale correlation is not mistaken for 5% predictive accuracy. All error bars are plotted without changing their values; a nonpositive lower confidence bound would block logarithmic export rather than be silently clipped.
+
+Export: Python/matplotlib, existing editable Times New Roman typography, 6.6 × 3.15 inches, matching the existing paper figure width; PDF, SVG and 600-dpi PNG. Minimum rendered glyph size 7.5 pt. Final plot widths, heights and gutters must pass 1.5-pt alignment; PDF text and collision audits plus visual inspection are required. The caption states n, uncertainty, log axes, aggregation, the range/15 definition and no fitted coefficient. The complete per-site error table is the quantitative source for conclusions.

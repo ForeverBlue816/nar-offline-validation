@@ -2438,4 +2438,57 @@ and the table to results/e33_rangelaw_persite.csv; add an "## E33" section to
 report.md.
 ```
 
-Status: PRE-REGISTERED; no new measurements have run. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+Status: measurements complete; all original hypotheses retained. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+
+<!-- E33 RESULTS START -->
+
+| Model | Site | k | Layer/config points | Median \|e\| | P90 \|e\| | Median signed e |
+| --- | --- | --- | --- | --- | --- | --- |
+| Llama-3.1-8B | down | 0 | 192 | 0.14% | 0.26% | -0.03% |
+| Llama-3.1-8B | down | 8 | 32 | 12.15% | 17.48% | +11.96% |
+| Llama-3.1-8B | down | 16 | 32 | 11.53% | 17.25% | +11.48% |
+| Llama-3.1-8B | down | 32 | 32 | 10.81% | 16.69% | +10.71% |
+| Llama-3.1-8B | down | 56 | 64 | 8.14% | 15.56% | +8.00% |
+| Llama-3.1-8B | down | 112 | 96 | 8.81% | 15.79% | +8.75% |
+| Llama-3.1-8B | down | 168 | 64 | 7.48% | 14.95% | +7.37% |
+| Llama-3.1-8B | down | 224 | 128 | 9.01% | 16.41% | +8.78% |
+| Llama-3.1-8B | qkv | 0 | 192 | 0.13% | 0.32% | -0.06% |
+| Llama-3.1-8B | qkv | 8 | 32 | 2.02% | 3.54% | +2.02% |
+| Llama-3.1-8B | qkv | 16 | 96 | 1.08% | 6.55% | +1.08% |
+| Llama-3.1-8B | qkv | 32 | 128 | 1.26% | 6.43% | +1.26% |
+| Llama-3.1-8B | qkv | 48 | 64 | 1.44% | 7.39% | +1.44% |
+| Llama-3.1-8B | qkv | 64 | 128 | 0.97% | 6.27% | +0.51% |
+| Llama-3.2-3B | down | 0 | 168 | 0.13% | 0.29% | -0.04% |
+| Llama-3.2-3B | down | 8 | 28 | 11.05% | 14.73% | +10.33% |
+| Llama-3.2-3B | down | 16 | 28 | 10.74% | 14.03% | +10.05% |
+| Llama-3.2-3B | down | 32 | 84 | 8.77% | 15.06% | +8.52% |
+| Llama-3.2-3B | down | 64 | 84 | 9.14% | 15.00% | +8.69% |
+| Llama-3.2-3B | down | 96 | 56 | 7.87% | 12.88% | +7.79% |
+| Llama-3.2-3B | down | 128 | 112 | 9.44% | 15.17% | +9.21% |
+| Llama-3.2-3B | qkv | 0 | 168 | 0.11% | 0.20% | -0.02% |
+| Llama-3.2-3B | qkv | 8 | 28 | 1.67% | 3.79% | +1.67% |
+| Llama-3.2-3B | qkv | 12 | 56 | 2.90% | 8.25% | +2.90% |
+| Llama-3.2-3B | qkv | 16 | 28 | 0.69% | 3.25% | +0.69% |
+| Llama-3.2-3B | qkv | 24 | 112 | 1.70% | 8.89% | +1.70% |
+| Llama-3.2-3B | qkv | 36 | 56 | 2.69% | 11.77% | +2.69% |
+| Llama-3.2-3B | qkv | 48 | 112 | 1.53% | 7.64% | +1.50% |
+| Qwen3-4B-Base | down | 8 | 36 | 21.23% | 62.84% | +19.03% |
+| Qwen3-4B-Base | down | 76 | 36 | 18.05% | 52.19% | +15.43% |
+| Qwen3-4B-Base | qkv | 8 | 36 | 2.46% | 4.56% | -1.80% |
+| Qwen3-4B-Base | qkv | 20 | 36 | 3.54% | 6.17% | -3.18% |
+
+The rank-only table pools all retained configurations with the same absolute k; `e33_error_summary.csv` additionally separates group size, multiple-Walsh configuration and source row. H33 uses each model’s default g=128, k=max configuration, and evaluates the median of absolute layer errors after paired seed averaging. The figure includes all new three-seed points and their 90% Student-t intervals; historical one-seed points remain separately archived without invented confidence intervals. The quantization step is the unrounded group range/15, consistent with the saved range diagnostics; no coefficient is fitted.
+
+**Pre-registered hypothesis checks**
+
+| Hypothesis | Model / rank | Outcome |
+| --- | --- | --- |
+| H33 | qwen3_4b_base | not supported |
+| H33 | llama32_3b | not supported |
+| H33 | llama31_8b | not supported |
+
+<!-- E33 RESULTS END -->
+
+**Reading.** At the default g=128, k=max down site, median absolute relative errors are 8.87% on Llama-3.2-3B, 8.77% on Llama-3.1-8B and 18.05% on Qwen3-4B-Base, so H33 is not supported on any model. The corresponding median signed errors are +8.44%, +8.63% and +15.43%, indicating systematic overprediction of the remaining step, although individual layer/configuration errors can have either sign. There are no unused anchor slots in these full-capacity rows, so unused fillers cannot explain the primary discrepancy. Incidental reference capture alone would shift the prediction downward, whereas changes in residual correlations and tails are consistent with the observed failure of a common energy-to-range scaling factor. No coefficient is fitted, calibration and held-out captured fractions are retained separately, and these diagnostics do not uniquely identify which distributional assumption causes each layer's error.
+
+Figure: [PDF](figures/fig_rangelaw_persite.pdf), [editable SVG](figures/fig_rangelaw_persite.svg), [PNG](figures/fig_rangelaw_persite.png), and [standalone caption](figures/fig_rangelaw_persite_caption.md).

@@ -1,0 +1,27 @@
+{
+  "source_inputs": [
+    "figures/plot_e33_rangelaw.py",
+    "figures/deployment_figure_style.py"
+  ],
+  "source_validator_passes": 18,
+  "adjudications": [
+    {
+      "finding": "FONT-FAMILY",
+      "decision": "manuscript-specific exception",
+      "reason": "The static heuristic only accepts sans-serif families. This manuscript uses editable Times New Roman, consistent with the existing paper figures. The final PDF embeds TrueType fonts and passes the 7.5-pt minimum audit."
+    },
+    {
+      "finding": "EXPORT-RASTER",
+      "decision": "accepted export contract",
+      "reason": "The requested submission artifact is PDF with editable SVG; 600-dpi PNG is the review preview. TIFF is not required for this vector scatter figure."
+    },
+    {
+      "finding": "FINAL-WIDTH",
+      "decision": "existing manuscript figure width",
+      "reason": "The 6.6-inch width matches the repository paper figures and the explicit E33 figure contract. The generic Nature 89/183-mm heuristic is not the format target for this ICLR manuscript."
+    }
+  ],
+  "rendered_QA_status": "PASS; final export inspected",
+  "source_validator_warnings": 2,
+  "source_validator_failures": 1
+}
