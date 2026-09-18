@@ -1,0 +1,42 @@
+[
+  {
+    "gain_Q1": 0.17948551987748385,
+    "gain_Q2": 0.19448813188799896,
+    "hypothesis": "H29a",
+    "model": "qwen3_4b_base",
+    "ratio": 1.083586754077743,
+    "supported": false
+  },
+  {
+    "Q3_gain_smaller_than_Q1": false,
+    "gain_Q3": 0.2178116256615009,
+    "hypothesis": "H29b",
+    "model": "qwen3_4b_base",
+    "status": "historical k=1 reference unavailable; attenuation reported"
+  },
+  {
+    "hypothesis": "H29c",
+    "model": "qwen3_4b_base",
+    "supported": false
+  },
+  {
+    "gain_Q1": 0.0614053343653825,
+    "gain_Q2": 0.060053546546890914,
+    "hypothesis": "H29a",
+    "model": "llama32_3b",
+    "ratio": 0.9779858243186497,
+    "supported": false
+  },
+  {
+    "Q3_gain_smaller_than_Q1": true,
+    "gain_Q3": 0.04052297461678241,
+    "hypothesis": "H29b",
+    "model": "llama32_3b",
+    "status": "historical k=1 reference unavailable; attenuation reported"
+  },
+  {
+    "hypothesis": "H29c",
+    "model": "llama32_3b",
+    "supported": false
+  }
+]

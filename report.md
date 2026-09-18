@@ -2185,7 +2185,55 @@ Deliverable table: rows Q1–Q4 x {Hadamard, PQ, delta [CI]} x {Qwen3-4B, Llama-
 ```
 
 
-Status: PRE-REGISTERED; no new measurements have run. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+Status: measurements complete; all original hypotheses retained. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+
+<!-- E29 RESULTS START -->
+
+**Qwen3-4B-Base**
+
+| Quantizer | Hadamard PPL ± seed SD | PQ PPL ± seed SD | PQ − Hadamard [90% CI] |
+| --- | --- | --- | --- |
+| Q1 | 7.876938 ± 0.009933 | 7.697452 ± 0.006476 | -0.179486 [-0.190826, -0.168145] |
+| Q2 | 7.958077 ± 0.010886 | 7.763589 ± 0.010976 | -0.194488 [-0.207329, -0.181647] |
+| Q3 | 8.074933 ± 0.018068 | 7.857122 ± 0.008970 | -0.217812 [-0.235329, -0.200295] |
+| Q4 | 8.177815 ± 0.011334 | 8.041056 ± 0.013581 | -0.136760 [-0.150622, -0.122898] |
+
+**Llama-3.2-3B**
+
+| Quantizer | Hadamard PPL ± seed SD | PQ PPL ± seed SD | PQ − Hadamard [90% CI] |
+| --- | --- | --- | --- |
+| Q1 | 7.766634 ± 0.005198 | 7.705229 ± 0.008399 | -0.061405 [-0.068099, -0.054712] |
+| Q2 | 7.819370 ± 0.002481 | 7.759316 ± 0.011427 | -0.060054 [-0.067795, -0.052312] |
+| Q3 | 7.926146 ± 0.010885 | 7.885623 ± 0.014441 | -0.040523 [-0.049908, -0.031137] |
+| Q4 | 8.007514 ± 0.006789 | 7.994875 ± 0.006146 | -0.012640 [-0.023169, -0.002110] |
+
+**Frozen baseline comparison (Llama-3.2-3B)**
+
+| Reference | New − old PPL | Old seed SD | Within one old SD |
+| --- | --- | --- | --- |
+| E27 both hadamard | -0.004495 | 0.006144 | True |
+| E20 hadamard_g128_m1 | -0.004174 | 0.003395 | False |
+| E27 both A_full | -0.000053 | 0.010096 | True |
+| E20 nar_g128_m1 | -0.007929 | 0.004232 | False |
+
+Q1/Q2 use precisely the same saved rotations; Q3/Q4 use the same full-width rank-one rotations. Effective bits and the rank cap are recorded by site in `e29_metadata.json`. The Paley-II full-width PQ matrix requires a fixed DC sign normalization, recorded before PPL in `experiments/e29_paley_dc_preflight.json`. E27 shares the sign mapping, but uses saved calibration/fold arithmetic; E20 additionally uses a different sign offset and factor construction, so these differences are exposed rather than attributed solely to hardware.
+
+**Pre-registered hypothesis checks**
+
+| Hypothesis | Model / rank | Outcome |
+| --- | --- | --- |
+| H29a | qwen3_4b_base | not supported |
+| H29b | qwen3_4b_base | historical k=1 reference unavailable; attenuation reported |
+| H29c | qwen3_4b_base | not supported |
+| H29a | llama32_3b | not supported |
+| H29b | llama32_3b | historical k=1 reference unavailable; attenuation reported |
+| H29c | llama32_3b | not supported |
+
+<!-- E29 RESULTS END -->
+
+**Reading.** Removing the affine offset does not remove the measured advantage: the symmetric g=128 gain is 108.36% of the asymmetric gain on Qwen and 97.80% on Llama, so H29a is not supported on either model. For the per-token rank-one row, the gain attenuates on Llama (0.040523 versus 0.061405 PPL) but increases on Qwen (0.217812 versus 0.179486); the frozen E11 table has no k=1 PPL row, so the proposed historical k=1 comparison cannot be completed from those records. The prescribed paired-chunk Q4 intervals exclude zero on both models, contrary to H29c. Llama Q1 differs from the compatible E27 baseline by −0.000053 PPL for PQ and −0.004495 for Hadamard, both within one historical seed SD. These controls support a benefit from the structured rotation in this activation-only setting, but do not support the stronger claim that an affine offset is necessary for that benefit.
+
+
 
 ## E30 — Calibration robustness (size and corpus)
 
