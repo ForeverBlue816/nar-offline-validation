@@ -10,6 +10,8 @@ The default quantizer stores fp16 scale and real-valued offset at g=128. The sym
 
 Householder construction and eigensolver accumulation use fp64. For actual PQ evaluations, the two compact-WY products accumulate in fp64 using the unchanged stored fp32 factors; Hadamard and quantization use fp32. This adjustment followed an anchor-gate failure of 1.0326e-6 before the first PQ PPL chunk. The preflight shows that fp64 multiplication reduces the maximum anchor error to 1.0857e-7 without changing factors or subspaces. All formal rows still undergo the requested numerical gates.
 
+Round-trip checks apply the actual forward and transpose to eight fixed Gaussian probe vectors at every layer/site, reporting relative Frobenius error. Anchor checks evaluate every selected unit direction and report the largest Euclidean distance to its signed constant-slot target. The final audit checks every recorded row/seed/layer/site against the 1e-6 threshold.
+
 ## Execution
 
 Use the repository's existing CUDA/PyTorch environment and cached model/dataset assets. `reviewer_ablations.py` contains the project cache defaults; `ABLATION_ASSETS` may override the new artifact destination. Old result files and model assets are read only.
@@ -50,3 +52,15 @@ python figures/plot_e33_rangelaw.py
 ```
 
 The E33 figure uses every complete new layer/configuration aggregate, identity lines and genuine seed-CI whiskers. Both axes are logarithmic with equal limits and physical scale within each model; hues distinguish sites and shade intensity encodes absolute rank. Single-seed historical range diagnostics are archived separately without invented replication. The rank-pooled error table and the more specific configuration-separated table are both provided; no coefficient is fitted. PDF, editable SVG and 600-dpi PNG accompany rendered alignment, font and collision audits. Source-code QA reads both the plotting script and its shared exporter; its sans-serif-only heuristic is adjudicated against the manuscript's existing Times New Roman contract.
+
+## Final verification and figure dependencies
+
+The recorded Python/package versions are in `e29_e33_software_environment.json`. Figure rendering uses matplotlib, Pillow, the existing repository fonts and PyMuPDF for PDF geometry audits. On the recorded cluster, the added PyMuPDF installation is isolated in `/home/yanlongc/figure-qa-deps`, so the figure command uses `PYTHONPATH=/home/yanlongc/figure-qa-deps`; in another environment, install PyMuPDF in that environment instead.
+
+```bash
+python -m unittest discover -s tests -p 'test_reviewer_*.py'
+python nar/verify_reviewer_results.py
+PYTHONPATH=/home/yanlongc/figure-qa-deps python figures/plot_e33_rangelaw.py
+```
+
+The final audit requires every planned chunk and every row/seed/layer/site numerical gate, checks each evaluation tensor hash, verifies the exact-solver residuals and E33 prediction formula, and confirms that the original result files and report prefix are preserved. Its output is `e29_e33_final_verification.json`; `e30_token_audit.json` additionally checks nested calibration subsets, the exact seed-0 baseline, and disjoint C4 documents/windows. Large model, calibration and rotation tensors remain in the project artifact store rather than Git; the source scripts, frozen-input hashes, measured tables, figures and execution provenance are versioned.

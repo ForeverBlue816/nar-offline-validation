@@ -1,0 +1,29 @@
+{
+  "c4_calibration_pool_documents": 1704,
+  "c4_drawn_indices_match_all_seeds": true,
+  "c4_evaluation_documents": 294,
+  "c4_shared_documents": 0,
+  "c4_shared_eval_calibration_token_windows": 0,
+  "status": "PASS",
+  "token_file_hashes_verified": [
+    "c4_eval.pt",
+    "c4_n128_s0.pt",
+    "c4_n128_s1.pt",
+    "c4_n128_s2.pt",
+    "c4_pool.pt",
+    "wt2_eval.pt",
+    "wt2_n128_s0.pt",
+    "wt2_n128_s1.pt",
+    "wt2_n128_s2.pt",
+    "wt2_n256_s0.pt",
+    "wt2_n256_s1.pt",
+    "wt2_n256_s2.pt",
+    "wt2_n64_s0.pt",
+    "wt2_n64_s1.pt",
+    "wt2_n64_s2.pt"
+  ],
+  "utc": "2026-09-18T07:06:32.531373+00:00",
+  "wt2_eval_bit_identical_to_frozen_first64": true,
+  "wt2_seed0_N128_bit_identical_to_frozen_calibration": true,
+  "wt2_subsets_nested_all_seeds": true
+}

@@ -1,0 +1,3 @@
+model,site,layer_seed_pairs,f_wt2_mean,f_c4_mean,f_absolute_difference_mean,f_absolute_difference_max,f_difference_over_003,all_jaccard_mean,all_changed_fraction_mean,anchor_jaccard_mean,anchor_changed_fraction_mean,filler_jaccard_mean,filler_changed_fraction_mean,residual_jaccard_mean,residual_changed_fraction_mean
+qwen3_4b_base,qkv,108,0.5522835079987825,0.5539882226450301,0.020972889922549993,0.051514631058061255,22,0.00786971524091392,0.9843858506944443,1.0,0.0,,,0.0039482732497139105,0.9921369203849518
+qwen3_4b_base,down,108,0.31507211094272525,0.2733963716318096,0.04225169233219708,0.10895889674989259,82,0.00418738024072954,0.9916601943226121,1.0,0.0,,,0.0002658160432609517,0.9994685423094042

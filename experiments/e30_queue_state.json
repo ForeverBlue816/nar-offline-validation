@@ -1,0 +1,36 @@
+{
+  "started_utc": "2026-09-18T06:10:56.215972+00:00",
+  "jobs": {
+    "seed2": {
+      "job_id": 159361,
+      "status": "COMPLETE",
+      "submitted_utc": "2026-09-18T06:12:56.266772+00:00",
+      "command": [
+        "slurm_reviewer_e30_prepare.sh",
+        "2"
+      ]
+    },
+    "seed0": {
+      "job_id": 159383,
+      "status": "COMPLETE",
+      "submitted_utc": "2026-09-18T06:29:26.653277+00:00",
+      "command": [
+        "slurm_reviewer_e30_prepare.sh",
+        "0"
+      ]
+    },
+    "evaluation": {
+      "job_id": 159397,
+      "status": "COMPLETE",
+      "submitted_utc": "2026-09-18T06:50:57.070930+00:00",
+      "command": [
+        "slurm_reviewer_eval.sh",
+        "qwen3_4b_base",
+        "30"
+      ]
+    }
+  },
+  "updated_utc": "2026-09-18T07:18:27.634527+00:00",
+  "queue_job_count": 2,
+  "status": "COMPLETE"
+}

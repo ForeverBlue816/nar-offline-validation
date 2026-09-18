@@ -1,0 +1,92 @@
+{
+  "frozen_eval_token_hashes": {
+    "llama32_3b/wt2": "7a7b7dc6f6f242742c30f5194894a13f9225c540c5568a1c1839849368debd08",
+    "qwen3_4b_base/c4": "5215a4c13fa4df46197e5b09887eb429abd913e5519c68928a9793441e5b1775",
+    "qwen3_4b_base/wt2": "2b8c8fd24c772e7965e98ea13f78d4e9308abd536437bfa8c7b4fee91014bb5e"
+  },
+  "original_report_prefix_preserved": true,
+  "original_result_files_checked": 962,
+  "original_result_files_modified": [],
+  "rows": [
+    {
+      "chunks": 1536,
+      "experiment": 29,
+      "max_anchor_residual": 1.0567183750254117e-07,
+      "max_round_trip": 2.594421459889418e-07,
+      "model": "qwen3_4b_base",
+      "numerical_gates": 1728,
+      "status": "PASS"
+    },
+    {
+      "chunks": 1920,
+      "experiment": 30,
+      "max_anchor_residual": 1.1575350100656578e-07,
+      "max_round_trip": 2.5861848484964867e-07,
+      "model": "qwen3_4b_base",
+      "numerical_gates": 1080,
+      "status": "PASS"
+    },
+    {
+      "chunks": 2112,
+      "experiment": 31,
+      "max_anchor_residual": 1.0610560963186799e-07,
+      "max_round_trip": 2.5861848484964867e-07,
+      "model": "qwen3_4b_base",
+      "numerical_gates": 2376,
+      "status": "PASS"
+    },
+    {
+      "chunks": 960,
+      "experiment": 32,
+      "max_anchor_residual": 1.1564456059431905e-07,
+      "max_round_trip": 2.5861848484964867e-07,
+      "model": "qwen3_4b_base",
+      "numerical_gates": 1080,
+      "status": "PASS"
+    },
+    {
+      "chunks": 1536,
+      "experiment": 29,
+      "max_anchor_residual": 1.085748024820532e-07,
+      "max_round_trip": 1.4921556612534914e-07,
+      "model": "llama32_3b",
+      "numerical_gates": 1344,
+      "status": "PASS"
+    },
+    {
+      "chunks": 576,
+      "experiment": 32,
+      "max_anchor_residual": 1.085748024820532e-07,
+      "max_round_trip": 1.4866151332171285e-07,
+      "model": "llama32_3b",
+      "numerical_gates": 504,
+      "status": "PASS"
+    },
+    {
+      "experiment": 33,
+      "max_round_trip": 7.992709925019881e-07,
+      "model": "qwen3_4b_base",
+      "numerical_gates": 432,
+      "rows": 432,
+      "status": "PASS"
+    },
+    {
+      "experiment": 33,
+      "max_round_trip": 1.6799856439320138e-07,
+      "model": "llama32_3b",
+      "numerical_gates": 3360,
+      "rows": 3360,
+      "status": "PASS"
+    },
+    {
+      "experiment": 33,
+      "max_round_trip": 1.9547699992017442e-07,
+      "model": "llama31_8b",
+      "numerical_gates": 3840,
+      "rows": 3840,
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "utc": "2026-09-18T07:19:03.595353+00:00"
+}

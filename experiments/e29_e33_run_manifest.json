@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-09-18T06:07:02.830845+00:00",
+  "updated_utc": "2026-09-18T07:21:00.396733+00:00",
   "jobs": [
     {
       "job_id": 159265,
@@ -116,9 +116,9 @@
     {
       "job_id": 159301,
       "purpose": "Llama8B E33 resumed",
-      "state": "RUNNING",
+      "state": "COMPLETED",
       "exit_code": "0:0",
-      "elapsed": "00:24:01",
+      "elapsed": "01:02:51",
       "node": "gpu-5090-2"
     },
     {
@@ -132,27 +132,52 @@
     {
       "job_id": 159318,
       "purpose": "Llama E29 E32 E33 resumed",
-      "state": "RUNNING",
+      "state": "COMPLETED",
       "exit_code": "0:0",
-      "elapsed": "00:19:31",
+      "elapsed": "00:41:53",
       "node": "gpu-5090-2"
     },
     {
       "job_id": 159319,
       "purpose": "E30 seed1 durable resume",
-      "state": "RUNNING",
+      "state": "COMPLETED",
       "exit_code": "0:0",
-      "elapsed": "00:19:31",
+      "elapsed": "00:24:57",
       "node": "gpu-5090-2"
     },
     {
       "job_id": 159341,
       "purpose": "Qwen E29 E31 E32",
-      "state": "RUNNING",
+      "state": "COMPLETED",
       "exit_code": "0:0",
-      "elapsed": "00:09:30",
+      "elapsed": "00:44:49",
+      "node": "gpu-5090-5"
+    },
+    {
+      "job_id": 159361,
+      "purpose": "E30 seed2 calibration",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:27:17",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159383,
+      "purpose": "E30 seed0 calibration",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:21:14",
+      "node": "gpu-5090-2"
+    },
+    {
+      "job_id": 159397,
+      "purpose": "E30 final paired evaluation and slot diagnostics",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed": "00:28:38",
       "node": "gpu-5090-5"
     }
   ],
-  "scope": "Only this task jobs; unrelated user jobs are not managed. Further remaining E30 seed0/seed2 and evaluation jobs will be appended."
+  "scope": "Only this task jobs, including superseded and failed preflights. Unrelated user jobs were not managed.",
+  "status": "ALL_PLANNED_MEASUREMENTS_COMPLETE"
 }

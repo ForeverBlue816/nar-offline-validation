@@ -2272,7 +2272,48 @@ set x {PQ PPL, delta [CI]}; (C) per site: f_WT2, f_C4, slot Jaccard.
 ```
 
 
-Status: PRE-REGISTERED; no new measurements have run. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+Status: measurements complete; all original hypotheses retained. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+
+<!-- E30 RESULTS START -->
+
+**A–B. Calibration size and corpus (both evaluation sets)**
+
+| Calibration | Eval set | PQ/Hadamard PPL | Seed SD | Δ vs Hadamard [90% CI] |
+| --- | --- | --- | --- | --- |
+| hadamard | wt2 | 7.876938 | 0.009933 | 0.000000 [0.000000, 0.000000] |
+| hadamard | c4 | 13.160260 | 0.025505 | 0.000000 [0.000000, 0.000000] |
+| wt2_n64 | wt2 | 7.690386 | 0.003206 | -0.186552 [-0.198645, -0.174459] |
+| wt2_n64 | c4 | 12.851011 | 0.003612 | -0.309249 [-0.329589, -0.288908] |
+| wt2_n128 | wt2 | 7.694292 | 0.008723 | -0.182646 [-0.194074, -0.171217] |
+| wt2_n128 | c4 | 12.844368 | 0.003297 | -0.315891 [-0.337229, -0.294554] |
+| wt2_n256 | wt2 | 7.702549 | 0.008777 | -0.174389 [-0.185371, -0.163407] |
+| wt2_n256 | c4 | 12.851577 | 0.000090 | -0.308683 [-0.330208, -0.287158] |
+| c4_n128 | wt2 | 7.703242 | 0.005041 | -0.173696 [-0.185298, -0.162093] |
+| c4_n128 | c4 | 12.851504 | 0.003269 | -0.308756 [-0.330209, -0.287304] |
+
+**C. Captured fraction and slot reassignment**
+
+| Site | Mean f, WT2 | Mean f, C4 | All-slot Jaccard | Anchor Jaccard | Changed fraction | Max \|Δf\| |
+| --- | --- | --- | --- | --- | --- | --- |
+| qkv | 0.552284 | 0.553988 | 0.007870 | 1.000000 | 0.984386 | 0.051515 |
+| down | 0.315072 | 0.273396 | 0.004187 | 1.000000 | 0.991660 | 0.108959 |
+
+The three-seed N=128 WT2 mean differs from the new E29 default by -0.003160 PPL (E29 seed SD 0.006476; within one SD: True).
+
+At k=max there are no unused filler slots: selected anchors remain fixed, and the residual-coordinate assignments provide the permutation comparison. The N=128 seed-0 WT2 tokens and PPL chunks match the new E29 activation-only reference exactly; seeds 1/2 use the pre-registered independently drawn nested calibration subsets. Historical E22 W4A4KV4 PPL is not an activation-only replication target. Calibration/evaluation C4 documents are disjoint; the optional local non-web corpus was unavailable at pre-registration.
+
+**Pre-registered hypothesis checks**
+
+| Hypothesis | Model / rank | Outcome |
+| --- | --- | --- |
+| H30a | all | supported |
+| H30b | all | not supported |
+| H30c | all | not supported |
+
+<!-- E30 RESULTS END -->
+
+**Reading.** H30a is supported: the WikiText-2 gains at N=64, 128 and 256 are 0.186552, 0.182646 and 0.174389 PPL, so the N=64–256 change is only 6.66% of the N=128 gain. C4 calibration retains 95.10% of the WikiText-2 gain, but its C4-evaluation gain is 0.308756 versus 0.315891 for WikiText-2 calibration, so H30b's corpus-matched improvement clause is not supported. Residual-coordinate assignments change by 99.21% at qkv and 99.95% at down, while selected anchor assignments remain identical and there are no unused filler slots at k=max. H30c is not supported: the mean down captured fraction changes from 0.315072 to 0.273396, and the largest layer/seed absolute changes are 0.051515 at qkv and 0.108959 at down, with 22/108 and 82/108 pairs respectively exceeding 0.03. The N=128 reproduction differs from the new default by −0.003160 PPL, within its 0.006476 seed SD, with seed-0 chunks identical; these conclusions cover the two available corpora, as the optional non-web corpus was unavailable before measurement.
+
 
 ## E31 — Anchor placement and residual balancing
 

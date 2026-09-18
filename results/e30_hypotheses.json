@@ -1,0 +1,59 @@
+[
+  {
+    "change_over_N128": 0.06659285353085985,
+    "gain_N128": 0.18264576733773344,
+    "gain_N256": 0.17438904573907887,
+    "gain_N64": 0.18655194857143206,
+    "hypothesis": "H30a",
+    "supported": true
+  },
+  {
+    "C4_eval_gain_C4cal": 0.30875633105922873,
+    "C4_eval_gain_WT2cal": 0.3158914288920158,
+    "hypothesis": "H30b",
+    "retained_gain_fraction": 0.9509982771175528,
+    "supported": false
+  },
+  {
+    "hypothesis": "H30c",
+    "sites": [
+      {
+        "all_changed_fraction_mean": "0.9843858506944443",
+        "all_jaccard_mean": "0.00786971524091392",
+        "anchor_changed_fraction_mean": "0.0",
+        "anchor_jaccard_mean": "1.0",
+        "f_absolute_difference_max": "0.051514631058061255",
+        "f_absolute_difference_mean": "0.020972889922549993",
+        "f_c4_mean": "0.5539882226450301",
+        "f_difference_over_003": "22",
+        "f_wt2_mean": "0.5522835079987825",
+        "filler_changed_fraction_mean": "",
+        "filler_jaccard_mean": "",
+        "layer_seed_pairs": "108",
+        "model": "qwen3_4b_base",
+        "residual_changed_fraction_mean": "0.9921369203849518",
+        "residual_jaccard_mean": "0.0039482732497139105",
+        "site": "qkv"
+      },
+      {
+        "all_changed_fraction_mean": "0.9916601943226121",
+        "all_jaccard_mean": "0.00418738024072954",
+        "anchor_changed_fraction_mean": "0.0",
+        "anchor_jaccard_mean": "1.0",
+        "f_absolute_difference_max": "0.10895889674989259",
+        "f_absolute_difference_mean": "0.04225169233219708",
+        "f_c4_mean": "0.2733963716318096",
+        "f_difference_over_003": "82",
+        "f_wt2_mean": "0.31507211094272525",
+        "filler_changed_fraction_mean": "",
+        "filler_jaccard_mean": "",
+        "layer_seed_pairs": "108",
+        "model": "qwen3_4b_base",
+        "residual_changed_fraction_mean": "0.9994685423094042",
+        "residual_jaccard_mean": "0.0002658160432609517",
+        "site": "down"
+      }
+    ],
+    "supported": false
+  }
+]

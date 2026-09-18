@@ -49,14 +49,15 @@ def e29():
 
 
 def e30():
-    m='qwen3_4b_base';t=complete(30,m);lines=[];hyp=[]
+    m='qwen3_4b_base';t=complete(30,m);lines=['**A–B. Calibration size and corpus (both evaluation sets)**'];hyp=[]
     lines.append(mdtable(['Calibration','Eval set','PQ/Hadamard PPL','Seed SD','Δ vs Hadamard [90% CI]'],[[row,ev,num(r['mean_ppl']),num(r['seed_std']),interval(r)] for (row,ev),r in t.items()]))
     g={key:-float(r['delta']) for key,r in t.items()};base=g['wt2_n128','wt2']
     change=abs(g['wt2_n64','wt2']-g['wt2_n256','wt2'])
     hyp.append(dict(hypothesis='H30a',supported=base>0 and change<.2*base,gain_N64=g['wt2_n64','wt2'],gain_N128=base,gain_N256=g['wt2_n256','wt2'],change_over_N128=change/abs(base) if base else None))
     hyp.append(dict(hypothesis='H30b',supported=base>0 and g['c4_n128','wt2']>=.75*base and g['c4_n128','c4']>g['wt2_n128','c4'],retained_gain_fraction=g['c4_n128','wt2']/base if base else None,C4_eval_gain_C4cal=g['c4_n128','c4'],C4_eval_gain_WT2cal=g['wt2_n128','c4']))
     shift=a.rows(a.REPO/'results'/m/'e30_slot_summary.csv');assert len(shift)==2
-    lines.append(mdtable(['Site','Mean f, WT2','Mean f, C4','All-slot Jaccard','Changed fraction','Max |Δf|'],[[r['site'],num(r['f_wt2_mean']),num(r['f_c4_mean']),num(r['all_jaccard_mean']),num(r['all_changed_fraction_mean']),num(r['f_absolute_difference_max'])] for r in shift]))
+    lines.append('**C. Captured fraction and slot reassignment**')
+    lines.append(mdtable(['Site','Mean f, WT2','Mean f, C4','All-slot Jaccard','Anchor Jaccard','Changed fraction','Max |Δf|'],[[r['site'],num(r['f_wt2_mean']),num(r['f_c4_mean']),num(r['all_jaccard_mean']),num(r['anchor_jaccard_mean']),num(r['all_changed_fraction_mean']),num(r['f_absolute_difference_max'])] for r in shift]))
     hyp.append(dict(hypothesis='H30c',supported=all(float(r['all_changed_fraction_mean'])>0 and float(r['f_absolute_difference_max'])<.03 for r in shift),sites=shift))
     # Calibration seed zero must reuse the exact new E29 baseline measurement.
     x={(r['seed'],r['chunk']):r['nll'] for r in a.rows(a.REPO/'results'/m/'e29_per_sequence.csv') if r['row']=='Q1_pq' and r['seed']=='0'}
