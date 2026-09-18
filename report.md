@@ -2304,7 +2304,42 @@ row the per-group residual-energy spread (max/median over groups at the down sit
 ```
 
 
-Status: PRE-REGISTERED; no new measurements have run. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+Status: measurements complete; all original hypotheses retained. Shared operational definitions: [preregistration](experiments/e29_e33_preregistration.md).
+
+<!-- E31 RESULTS START -->
+
+| Row | PPL | Seed SD | Δ vs same-rank P1 [90% CI] | Down spread, median across layers/seeds |
+| --- | --- | --- | --- | --- |
+| hadamard | 7.876938 | 0.009933 | — | — |
+| P1_k8 | 7.707258 | 0.005486 | 0.000000 [0.000000, 0.000000] | 1.006639 |
+| P2_k8 | 7.709697 | 0.009077 | 0.002438 [-0.004339, 0.009216] | 5.458572 |
+| P3_k8 | 7.707925 | 0.006770 | 0.000666 [-0.005377, 0.006710] | 1.379955 |
+| P4_k8 | 7.698247 | 0.005469 | -0.009012 [-0.014695, -0.003328] | 1.004851 |
+| P5_k8 | 7.724128 | 0.000000 | 0.016869 [0.010863, 0.022875] | 1.006639 |
+| P1_kmax | 7.697452 | 0.006476 | 0.000000 [0.000000, 0.000000] | 1.000766 |
+| P2_kmax | 7.696769 | 0.008438 | -0.000683 [-0.007343, 0.005978] | 3.396205 |
+| P3_kmax | 7.694030 | 0.012191 | -0.003422 [-0.010506, 0.003661] | 1.227958 |
+| P4_kmax | 7.697452 | 0.006476 | 0.000000 [0.000000, 0.000000] | 1.000766 |
+| P5_kmax | 7.696781 | 0.000000 | -0.000671 [-0.006728, 0.005385] | 1.000766 |
+
+The explicitly requested balancing contrast is P1 − P2 at k=max = 0.000683 [-0.005978, 0.007343] PPL (90% paired CI).
+
+Residual spread is max/median over residual-coordinate group energies after G, excluding each DC anchor; the displayed value is the median across down layers and seeds, and every underlying value is retained in the diagnostics CSV. The energy estimates use the frozen stride-32 calibration sample for the greedy step, while eigenspaces and perplexity use their complete specified samples. P4 at k=max is algebraically identical to P1, and its exact new measurement is reused with a hash audit. All variants share bit-identical G at each rank.
+
+**Pre-registered hypothesis checks**
+
+| Hypothesis | Model / rank | Outcome |
+| --- | --- | --- |
+| H31a | all | not supported |
+| H31b | all | not supported |
+| H31c | 8 | not supported |
+| H31c | max | supported |
+
+<!-- E31 RESULTS END -->
+
+**Reading.** Greedy balancing strongly equalizes down-site residual energy at k=max (median group max/median spread 1.000766 for P1 versus 3.396205 for P2), but P1 has a slightly higher mean PPL than both identity and random placement, and both paired intervals include zero; H31a is not supported. At k=8, removing low-energy fillers improves PPL by 0.009012 (P4−P1 CI [−0.014695, −0.003328]), contrary to H31b, while P4 and P1 are exactly identical at k=max as their constructions require. Fixing all signs to +1 worsens k=8 by 0.016869 PPL, exceeding P1's seed SD of 0.005486, whereas the k=max difference is only −0.000671 against a seed SD of 0.006476. H31c is therefore supported at k=max but not at k=8 under the pre-registered criterion. Energy balancing is demonstrably achieved, but these measurements do not establish that the default balancing/filler choice is necessary for the end-to-end perplexity benefit in this setting.
+
+
 
 ## E32 — Eigenspace estimation error
 

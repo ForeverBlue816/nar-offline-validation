@@ -62,6 +62,11 @@ def e30():
     x={(r['seed'],r['chunk']):r['nll'] for r in a.rows(a.REPO/'results'/m/'e29_per_sequence.csv') if r['row']=='Q1_pq' and r['seed']=='0'}
     y={(r['seed'],r['chunk']):r['nll'] for r in a.rows(a.REPO/'results'/m/'e30_per_sequence.csv') if r['row']=='wt2_n128' and r['seed']=='0' and r['eval_set']=='wt2'}
     assert x==y and len(x)==64
+    reference=complete(29,m)['Q1_pq','wt2'];current=t['wt2_n128','wt2']
+    difference=float(current['mean_ppl'])-float(reference['mean_ppl']);reference_std=float(reference['seed_std'])
+    comparison=dict(reference='new E29 Q1 activation-only default; E22 W4A4KV4 is not comparable',E29_mean_ppl=reference['mean_ppl'],E30_mean_ppl=current['mean_ppl'],delta=difference,E29_seed_std=reference_std,within_one_reference_seed_std=abs(difference)<=reference_std,seed0_per_chunk_bit_identical=True,other_seeds='calibration subsets vary as pre-registered')
+    a.savej(a.REPO/'results'/m/'e30_default_comparison.json',comparison)
+    lines.append(f"The three-seed N=128 WT2 mean differs from the new E29 default by {num(difference)} PPL (E29 seed SD {num(reference_std)}; within one SD: {abs(difference)<=reference_std}).")
     lines.append('At k=max there are no unused filler slots: selected anchors remain fixed, and the residual-coordinate assignments provide the permutation comparison. The N=128 seed-0 WT2 tokens and PPL chunks match the new E29 activation-only reference exactly; seeds 1/2 use the pre-registered independently drawn nested calibration subsets. Historical E22 W4A4KV4 PPL is not an activation-only replication target. Calibration/evaluation C4 documents are disjoint; the optional local non-web corpus was unavailable at pre-registration.')
     return lines,hyp
 
@@ -71,13 +76,15 @@ def e31():
     rows=[]
     for (row,ev),r in t.items():
         spread=[float(x['residual_group_energy_max_median']) for x in diag if x['row']==row and x['site']=='down']
-        rows.append([row,num(r['mean_ppl']),num(r['seed_std']),interval(r),num(np.median(spread)) if spread else '—'])
+        rows.append([row,num(r['mean_ppl']),num(r['seed_std']),interval(r) if row!='hadamard' else '—',num(np.median(spread)) if spread else '—'])
     lines.append(mdtable(['Row','PPL','Seed SD','Δ vs same-rank P1 [90% CI]','Down spread, median across layers/seeds'],rows))
     hyp.append(dict(hypothesis='H31a',supported=all(float(t[p+'_kmax','wt2']['delta'])>=0 for p in ['P2','P3']),P1_minus_P2=-float(t['P2_kmax','wt2']['delta']),P1_minus_P3=-float(t['P3_kmax','wt2']['delta'])))
     hyp.append(dict(hypothesis='H31b',supported=float(t['P4_k8','wt2']['delta'])>0 and float(t['P4_kmax','wt2']['delta'])==0,P4_minus_P1_k8=float(t['P4_k8','wt2']['delta']),P4_minus_P1_kmax=float(t['P4_kmax','wt2']['delta'])))
     for rank in ['8','max']:
         delta=float(t['P5_k'+rank,'wt2']['delta']);std=float(t['P1_k'+rank,'wt2']['seed_std'])
         hyp.append(dict(hypothesis='H31c',rank=rank,supported=abs(delta)<std,P5_minus_P1=delta,P1_seed_std=std))
+    balancing=t['P2_kmax','wt2']
+    lines.append(f"The explicitly requested balancing contrast is P1 − P2 at k=max = {num(-float(balancing['delta']))} [{num(-float(balancing['ci90_high']))}, {num(-float(balancing['ci90_low']))}] PPL (90% paired CI).")
     lines.append('Residual spread is max/median over residual-coordinate group energies after G, excluding each DC anchor; the displayed value is the median across down layers and seeds, and every underlying value is retained in the diagnostics CSV. The energy estimates use the frozen stride-32 calibration sample for the greedy step, while eigenspaces and perplexity use their complete specified samples. P4 at k=max is algebraically identical to P1, and its exact new measurement is reused with a hash audit. All variants share bit-identical G at each rank.')
     return lines,hyp
 
