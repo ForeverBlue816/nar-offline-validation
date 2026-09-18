@@ -1,0 +1,92 @@
+{
+  "utc": "2026-09-18T05:47:07.071574+00:00",
+  "job": 159300,
+  "reason": "Slurm requeue interrupted network-filesystem write; zero-byte checkpoint and any malformed new caches quarantined, no completed measurement removed",
+  "quarantined": [
+    {
+      "path": "layerwise/wt2_n128_s1/hidden_checkpoint.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/down_04.pt",
+      "bytes": 11831424
+    },
+    {
+      "path": "spectral/wt2_n128_s1/down_05.pt",
+      "bytes": 11831424
+    },
+    {
+      "path": "spectral/wt2_n128_s1/qkv_02.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/down_03.pt",
+      "bytes": 11831424
+    },
+    {
+      "path": "spectral/wt2_n128_s1/down_01.pt",
+      "bytes": 11831424
+    },
+    {
+      "path": "spectral/wt2_n128_s1/qkv_06.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/qkv_04.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/qkv_03.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/qkv_05.pt",
+      "bytes": 0
+    },
+    {
+      "path": "spectral/wt2_n128_s1/down_02.pt",
+      "bytes": 11831424
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/down_04.pt",
+      "bytes": 5916032
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/down_05.pt",
+      "bytes": 5916032
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/qkv_02.pt",
+      "bytes": 0
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/down_03.pt",
+      "bytes": 5916032
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/down_01.pt",
+      "bytes": 5916032
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/qkv_06.pt",
+      "bytes": 0
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/qkv_04.pt",
+      "bytes": 0
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/qkv_03.pt",
+      "bytes": 0
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/qkv_05.pt",
+      "bytes": 0
+    },
+    {
+      "path": "factors/wt2_n128_s1/S3/kmax/P1_s0/down_02.pt",
+      "bytes": 5916032
+    }
+  ],
+  "prevention": "fsync all new torch assets before rename; logs append on requeue"
+}

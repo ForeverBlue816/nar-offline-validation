@@ -20,7 +20,11 @@ def utc(): return datetime.now(timezone.utc).isoformat()
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def js(p): return json.loads(Path(p).read_text())
 def savej(p,d): base.atomic_json(Path(p),d)
-def savet(p,d): base.atomic_torch_save(Path(p),d)
+def savet(p,d):
+    p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);temp=p.with_suffix(p.suffix+'.tmp')
+    with temp.open('wb') as f:
+        torch.save(d,f);f.flush();os.fsync(f.fileno())
+    os.replace(temp,p)
 def loadt(p): return torch.load(p,map_location='cpu',weights_only=True)
 def rows(p): return base.read_csv(p) if Path(p).exists() else []
 def write(p,rs):
@@ -29,7 +33,7 @@ def write(p,rs):
     fields=list(dict.fromkeys(k for r in rs for k in r))
     temp=p.with_suffix('.tmp')
     with temp.open('w',newline='') as f:
-        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rs)
+        w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(rs);f.flush();os.fsync(f.fileno())
     os.replace(temp,p)
 def append(p,new,key):
     old=rows(p); known={tuple(str(r[k]) for k in key):r for r in old}
@@ -275,6 +279,8 @@ class Rotation:
             if method=='pq':
                 d=loadt(factor_path(m,label,solver,rank,variant,seed,s,l))
                 self.data[s,l]={k:v.cuda() if isinstance(v,torch.Tensor) else v for k,v in d.items()}
+                # Identical stored factors; fp64 accumulation satisfies the strict anchor gate.
+                self.data[s,l]['w']=self.data[s,l]['w'].double();self.data[s,l]['y']=self.data[s,l]['y'].double()
     def apply(self,s,l,x,transpose=False):
         shape=x.shape;x=x.float().reshape(-1,shape[-1]);sign=self.signs[s,l]
         if self.method=='hadamard':
@@ -284,9 +290,9 @@ class Rotation:
         if transpose:
             x=dc_hadamard_rows(x,True) if b==n else act.ext._fast_walsh_hadamard(x.reshape(-1,n//b,b)).reshape(-1,n)
             x=x*sign;z=torch.empty_like(x);z[:,d['source']]=x[:,d['target']]
-            out=z-(z@d['y'])@d['w'].T
+            zz=z.double();out=(zz-(zz@d['y'])@d['w'].T).float()
         else:
-            x=x-(x@d['w'])@d['y'].T;z=torch.empty_like(x);z[:,d['target']]=x[:,d['source']]
+            xx=x.double();x=(xx-(xx@d['w'])@d['y'].T).float();z=torch.empty_like(x);z[:,d['target']]=x[:,d['source']]
             z=z*sign
             out=dc_hadamard_rows(z) if b==n else act.ext._fast_walsh_hadamard(z.reshape(-1,n//b,b)).reshape(-1,n)
         return out.reshape(shape)
@@ -304,7 +310,6 @@ class Rotation:
                     for i in range(d['k']):target[i,i*GROUP:(i+1)*GROUP]=1/math.sqrt(GROUP)
                 anchor=float(torch.minimum((r-target).norm(dim=1),(r+target).norm(dim=1)).max())
             out.append({'site':s,'layer':l,'round_trip':rt,'anchor_residual':anchor})
-            assert rt<=1e-6 and anchor<=1e-6, out[-1]
         return out
 
 def quantize(x,group,symmetric):
@@ -331,6 +336,10 @@ def evaluate_row(model,m,exp,row,seed,rotation,group=128,symmetric=False,evalset
     known={int(r['chunk']) for r in rows(dest) if r['row']==row and int(r['seed'])==seed and r['eval_set']==evalset}
     if known==set(range(64)):return
     audit=rotation.gate()
+    failures=[r for r in audit if r['round_trip']>1e-6 or r['anchor_residual']>1e-6]
+    if failures:
+        savej(REPO/'results'/m/f'e{exp}_{row}_s{seed}_GATE_FAILURE.json',{'utc':utc(),'row':row,'seed':seed,'failures':failures,'full_audit':audit})
+        raise AssertionError(failures)
     append(REPO/'results'/m/f'e{exp}_gates.csv',[dict(experiment=exp,model=m,row=row,seed=seed,**r) for r in audit],['model','row','seed','site','layer'])
     tok=loadt(tokenpath(m,f'{evalset}_eval'));assert tuple(tok.shape)==(64,LENGTH)
     hooks=Hooks(model,rotation,group,symmetric);hooks.install()

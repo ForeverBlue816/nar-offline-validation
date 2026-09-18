@@ -1,0 +1,14 @@
+{
+  "failed_job": 159302,
+  "row": "Q1_pq",
+  "seed": 0,
+  "site": "down",
+  "layer": 7,
+  "failed_anchor_residual": 1.0326162964702235e-06,
+  "round_trip": 1.3593765402220015e-07,
+  "tolerance": 1e-06,
+  "PQ_PPL_measurements_before_correction": 0,
+  "correction": "Accumulate the two compact-WY matrix products in fp64 for every new PQ evaluation, retaining exactly the same stored factors, signs, permutation and fp32 Hadamard/quantizer. Return to fp32 before Hadamard or after inverse WY. No factor refit or sample change.",
+  "diagnostic_maximum_after_correction": 1.085748024820532e-07,
+  "all_failed_gates_persisted_on_future_failures": true
+}

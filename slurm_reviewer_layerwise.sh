@@ -6,6 +6,7 @@
 #SBATCH --time=2-00:00:00
 #SBATCH --qos=override-limits-but-killable
 #SBATCH --output=runs/reviewer-layerwise-%j.out
+#SBATCH --open-mode=append
 #SBATCH --error=runs/reviewer-layerwise-%j.err
 set -euo pipefail
 cd "${SLURM_SUBMIT_DIR:?}"

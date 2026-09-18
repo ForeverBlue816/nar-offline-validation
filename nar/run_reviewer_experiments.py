@@ -90,7 +90,7 @@ def record_metadata(exp,m):
     c,ds=a.config(m)
     content={'experiment':exp,'model':m,'created_utc':a.utc(),'preregistration_sha256':a.sha(a.REPO/'experiments/e29_e33_preregistration.md'),
         'rows':plan(exp,m),'seeds':list(a.SEEDS),'dimensions':ds,'layers':c.num_hidden_layers,
-        'weights':'bf16 unchanged','KV':'bf16 unchanged','sites':['post-RMSNorm qkv input','down_proj input'],'fold':'R^T Q(R x), rounded to original bf16 only after transpose',
+        'weights':'bf16 unchanged','KV':'bf16 unchanged','rotation_arithmetic':'stored fp32 WY factors, fp64 WY multiply-accumulate, fp32 Hadamard and quantizer','sites':['post-RMSNorm qkv input','down_proj input'],'fold':'R^T Q(R x), rounded to original bf16 only after transpose',
         'tokens':a.js(a.ASSETS/m/'tokens/DONE.json'),'row_bits':{},'source_sha256':{str(p.relative_to(a.REPO)):a.sha(p) for p in [Path(__file__),a.REPO/'nar/reviewer_ablations.py']}}
     for r in content['rows']:
         overhead=16 if r['symmetric'] else 32
