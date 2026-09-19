@@ -1,0 +1,73 @@
+model,scope,row,seed,group_class,layer_group_count,group_token_observations,mean_range,status
+llama32_3b,common_input,Q1,0,anchor,1792,234881024,0.28922314005051114,MEASURED
+llama32_3b,common_input,Q1,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q1,1,anchor,1792,234881024,0.2892250076699101,MEASURED
+llama32_3b,common_input,Q1,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q1,2,anchor,1792,234881024,0.28922702890660806,MEASURED
+llama32_3b,common_input,Q1,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5a,0,anchor,1792,234881024,0.3254192884371256,MEASURED
+llama32_3b,common_input,Q5a,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5a,1,anchor,1792,234881024,0.3254219503764017,MEASURED
+llama32_3b,common_input,Q5a,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5a,2,anchor,1792,234881024,0.32541475125596053,MEASURED
+llama32_3b,common_input,Q5a,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5b,0,anchor,1792,234881024,0.3201166319146868,MEASURED
+llama32_3b,common_input,Q5b,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5b,1,anchor,1792,234881024,0.3201125599077551,MEASURED
+llama32_3b,common_input,Q5b,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Q5b,2,anchor,1792,234881024,0.3201051499495357,MEASURED
+llama32_3b,common_input,Q5b,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Had,0,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Had,0,other,1792,234881024,0.3985096443215526,MEASURED
+llama32_3b,common_input,Had,1,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Had,1,other,1792,234881024,0.39898873035273585,MEASURED
+llama32_3b,common_input,Had,2,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,common_input,Had,2,other,1792,234881024,0.3986321372297515,MEASURED
+llama32_3b,runtime,Q1_asym,0,anchor,1792,234881024,0.2891984045202146,MEASURED
+llama32_3b,runtime,Q1_asym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q1_asym,1,anchor,1792,234881024,0.28923512277772406,MEASURED
+llama32_3b,runtime,Q1_asym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q1_asym,2,anchor,1792,234881024,0.28925383131110044,MEASURED
+llama32_3b,runtime,Q1_asym,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_asym,0,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_asym,0,other,1792,234881024,0.3968089649922443,MEASURED
+llama32_3b,runtime,Had_asym,1,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_asym,1,other,1792,234881024,0.3975626142345939,MEASURED
+llama32_3b,runtime,Had_asym,2,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_asym,2,other,1792,234881024,0.3971055626293304,MEASURED
+llama32_3b,runtime,Q1_sym,0,anchor,1792,234881024,0.28910750579089634,MEASURED
+llama32_3b,runtime,Q1_sym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q1_sym,1,anchor,1792,234881024,0.28898943731044585,MEASURED
+llama32_3b,runtime,Q1_sym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q1_sym,2,anchor,1792,234881024,0.28892596081331134,MEASURED
+llama32_3b,runtime,Q1_sym,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_sym,0,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_sym,0,other,1792,234881024,0.3974371346673719,MEASURED
+llama32_3b,runtime,Had_sym,1,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_sym,1,other,1792,234881024,0.39675398217040964,MEASURED
+llama32_3b,runtime,Had_sym,2,anchor,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Had_sym,2,other,1792,234881024,0.39700618544884875,MEASURED
+llama32_3b,runtime,Q5a_asym,0,anchor,1792,234881024,0.32519936021858153,MEASURED
+llama32_3b,runtime,Q5a_asym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5a_asym,1,anchor,1792,234881024,0.32524065629319343,MEASURED
+llama32_3b,runtime,Q5a_asym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5a_asym,2,anchor,1792,234881024,0.32519706808420057,MEASURED
+llama32_3b,runtime,Q5a_asym,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_asym,0,anchor,1792,234881024,0.3196350322348161,MEASURED
+llama32_3b,runtime,Q5b_asym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_asym,1,anchor,1792,234881024,0.3198464475529767,MEASURED
+llama32_3b,runtime,Q5b_asym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_asym,2,anchor,1792,234881024,0.3197096354955722,MEASURED
+llama32_3b,runtime,Q5b_asym,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5a_sym,0,anchor,1792,234881024,0.32471430393440665,MEASURED
+llama32_3b,runtime,Q5a_sym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5a_sym,1,anchor,1792,234881024,0.3249964080643422,MEASURED
+llama32_3b,runtime,Q5a_sym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5a_sym,2,anchor,1792,234881024,0.3249988347928819,MEASURED
+llama32_3b,runtime,Q5a_sym,2,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_sym,0,anchor,1792,234881024,0.31950006500811085,MEASURED
+llama32_3b,runtime,Q5b_sym,0,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_sym,1,anchor,1792,234881024,0.31950962429474206,MEASURED
+llama32_3b,runtime,Q5b_sym,1,other,0,0,,N/A: no groups in this stratum at k=max
+llama32_3b,runtime,Q5b_sym,2,anchor,1792,234881024,0.31935752881646984,MEASURED
+llama32_3b,runtime,Q5b_sym,2,other,0,0,,N/A: no groups in this stratum at k=max

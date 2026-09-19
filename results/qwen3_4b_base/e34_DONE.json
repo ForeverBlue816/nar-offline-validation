@@ -1,0 +1,25 @@
+{
+  "baseline_token_records": 393024,
+  "chunk_records": 3072,
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-5.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-c456f1a1-92c3-b503-cbb8-e75a86e2654e, 32607 MiB, 31486 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "2",
+    "slurm_job_id": "160525",
+    "torch": "2.11.0+cu128"
+  },
+  "preregistration_sha256": "4029be113cc883daf42056dbf03321283ae6ab8e758ae366091ae1471fe25337",
+  "rows": 16,
+  "status": "COMPLETE",
+  "utc": "2026-09-19T04:48:09.347176+00:00"
+}

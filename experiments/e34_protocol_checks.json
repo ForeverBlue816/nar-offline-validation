@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "test_command": "python -m unittest discover -s tests -p 'test_e34*.py'",
+  "token_indexing": [
+    {
+      "all_chunks_start_with_bos": true,
+      "bos_id": 151643,
+      "bos_id_occurrences_after_position0": 0,
+      "model": "qwen3_4b_base",
+      "scored_target_positions_per_chunk": 2047,
+      "shape": [
+        64,
+        2048
+      ]
+    },
+    {
+      "all_chunks_start_with_bos": true,
+      "bos_id": 128000,
+      "bos_id_occurrences_after_position0": 0,
+      "model": "llama32_3b",
+      "scored_target_positions_per_chunk": 2047,
+      "shape": [
+        64,
+        2048
+      ]
+    }
+  ],
+  "unit_tests_passed": 9,
+  "utc": "2026-09-19T04:13:32.028192+00:00"
+}

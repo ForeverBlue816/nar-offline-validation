@@ -1,0 +1,66 @@
+{
+  "H34a": [
+    {
+      "Q1_seed_std": 0.010976028961610557,
+      "difference": 0.008586323171641652,
+      "row": "Q5a",
+      "supported": true
+    },
+    {
+      "Q1_seed_std": 0.010976028961610557,
+      "difference": 0.000692045976338207,
+      "row": "Q5b",
+      "supported": true
+    }
+  ],
+  "H34b": {
+    "Q5_minus_Q1": 0.029381788158826083,
+    "decision": "minor",
+    "denominator_hadamard_minus_Q1": 0.17948551987748296,
+    "share": 0.1637000476633554,
+    "worse_variant": "Q5a"
+  },
+  "H34c": {
+    "full_hypothesis": "not supported on anchor clause",
+    "other_clause": "not identifiable; all groups anchored at k=max",
+    "variants": [
+      {
+        "Q1_anchor_mean_range": 1.1196776304912828,
+        "anchor_exceeds_50_percent": false,
+        "anchor_mean_range": 1.3278707397098974,
+        "anchor_range_ratio": 1.1859402238189447,
+        "model": "qwen3_4b_base",
+        "other_clause": "not identifiable at k=max",
+        "other_group_count": 0,
+        "other_group_ratio": null,
+        "row": "Q5a"
+      },
+      {
+        "Q1_anchor_mean_range": 1.1196776304912828,
+        "anchor_exceeds_50_percent": false,
+        "anchor_mean_range": 1.2945760905813395,
+        "anchor_range_ratio": 1.1562042996369555,
+        "model": "qwen3_4b_base",
+        "other_clause": "not identifiable at k=max",
+        "other_group_count": 0,
+        "other_group_ratio": null,
+        "row": "Q5b"
+      }
+    ]
+  },
+  "H34d": {
+    "M1_minus_M2_per_quantized_token": 0.47878802296232276,
+    "M1_per_quantized_token_larger": true,
+    "ci90_high": 1.0285509272837705,
+    "ci90_low": -0.07097488135912494,
+    "ci_unit": "64 paired chunk clusters, ratio delta method, seeds averaged",
+    "class_fraction_below_one_percent": true,
+    "flagged_signed_share": -0.11564359603877711,
+    "model": "qwen3_4b_base",
+    "positive_total_offset_specific": false,
+    "share_exceeds_half": false,
+    "supported": false,
+    "total_offset_spec": -221.8220374869383
+  },
+  "model": "qwen3_4b_base"
+}

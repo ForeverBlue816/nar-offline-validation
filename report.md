@@ -2533,3 +2533,173 @@ The rank-only table pools all retained configurations with the same absolute k; 
 **Reading.** At the default g=128, k=max down site, median absolute relative errors are 8.87% on Llama-3.2-3B, 8.77% on Llama-3.1-8B and 18.05% on Qwen3-4B-Base, so H33 is not supported on any model. The corresponding median signed errors are +8.44%, +8.63% and +15.43%, indicating systematic overprediction of the remaining step, although individual layer/configuration errors can have either sign. There are no unused anchor slots in these full-capacity rows, so unused fillers cannot explain the primary discrepancy. Incidental reference capture alone would shift the prediction downward, whereas changes in residual correlations and tails are consistent with the observed failure of a common energy-to-range scaling factor. No coefficient is fitted, calibration and held-out captured fractions are retained separately, and these diagnostics do not uniquely identify which distributional assumption causes each layer's error.
 
 Figure: [PDF](figures/fig_rangelaw_persite.pdf), [editable SVG](figures/fig_rangelaw_persite.svg), [PNG](figures/fig_rangelaw_persite.png), and [standalone caption](figures/fig_rangelaw_persite_caption.md).
+
+## E34 — Does the offset contribute at g=128?
+
+Status: measurements complete; fixed hypotheses and operational limitations retained.
+
+H34a  Under SYMMETRIC quantization, Q5a and Q5b are within one seed SD of Q1
+      (the target column is irrelevant once the level is flat and localized).
+H34b  Under ASYMMETRIC quantization, define the offset-specific share
+      s = (PPL_Q5 − PPL_Q1) / (PPL_Had − PPL_Q1) using the worse of Q5a/Q5b.
+      Decision rule fixed now: s < 0.25 -> the offset is a minor contributor
+      at g=128 and the mechanism section is rewritten around flatness and
+      localization; s > 0.50 -> the offset is a major contributor and E29's
+      Q2 parity has another cause to be investigated; 0.25–0.50 -> report both
+      and word the mechanism as two-part.
+H34c  In the anchor groups, the measured range under Q5 exceeds Q1 by more than
+      50%, while in the other groups the two are within 5% — i.e. Q5 raises the
+      range exactly where predicted, and the PPL consequence of that is what
+      H34b measures.
+H34d  The offset-specific gain concentrates on massive tokens: the {BOS, massive}
+      classes, under 1% of positions, carry more than half of the summed
+      offset_spec, and M1 shows a larger offset-specific delta per token than M2.
+
+
+The fixed row matrix, numerical gates, causal-loss indexing, minimal within-group anchor swap, empty other-group stratum at k=max, symmetric masked controls and decision rules are recorded before measurement in [the E34 preregistration](experiments/e34_preregistration.md).
+
+<!-- E34 RESULTS START -->
+
+All planned rows are complete. The original E29 chunk records are reused with source hashes; their independent E34 token-loss replays pass the bit-for-bit fp32 scalar gate. All old result files remain read only. The H34b decision bins apply to unrounded point estimates; the reported paired PPL intervals describe uncertainty and do not establish a sharp statistical separation at the 0.25 or 0.50 boundary.
+
+Both models use three paired seeds and the same frozen 64 chunks, with 16 fixed rows per model (6,144 chunk evaluations including exact baseline replays). PPL contrasts retain E29’s paired 3×64 delta-method intervals (t191); the same texts recur across seeds, and additional three-seed intervals are exported in the CSVs. Token attribution instead clusters over the 64 unique chunks after averaging seeds. Numerical gates, result hashes and preservation of all previous results are recorded in the [final audit](experiments/e34_final_verification.json); scheduler completion and pre-run hashes are in the [run manifest](experiments/e34_run_manifest.json) and [log excerpt](experiments/e34_job_log_excerpt.txt).
+
+### Qwen3-4B-Base
+
+**A. Constant versus nonconstant target column**
+
+| Format | Row | PPL | Seed SD | Δ vs Q1 [90% paired CI] |
+| --- | --- | --- | --- | --- |
+| asym | Q1 | 7.697452 | 0.006476 | 0.000000 [0.000000, 0.000000] |
+| asym | Q5a | 7.726834 | 0.005760 | 0.029382 [0.022291, 0.036473] |
+| asym | Q5b | 7.720112 | 0.005913 | 0.022660 [0.015732, 0.029588] |
+| asym | Had | 7.876938 | 0.009933 | 0.179486 [0.168145, 0.190826] |
+| sym | Q1 | 7.763589 | 0.010976 | 0.000000 [0.000000, 0.000000] |
+| sym | Q5a | 7.772175 | 0.007367 | 0.008586 [0.000695, 0.016478] |
+| sym | Q5b | 7.764281 | 0.006621 | 0.000692 [-0.006950, 0.008334] |
+| sym | Had | 7.958077 | 0.010886 | 0.194488 [0.181647, 0.207329] |
+
+| Column | Common-input down range | Q1 range | Anchor range / Q1 | Other groups |
+| --- | --- | --- | --- | --- |
+| Q5a | 1.327871 | 1.119678 | 1.185940 | N/A (0 groups at k=max) |
+| Q5b | 1.294576 | 1.119678 | 1.156204 | N/A (0 groups at k=max) |
+
+Q5a has one sign transition within a group; Q5b alternates signs. Each moves the anchor by swapping exactly one residual coordinate in the same group; all other residual assignments, G and D are unchanged. The table uses matched unquantized inputs to avoid upstream-quantization confounding. An isolated nonconstant aligned level has range 2|c|, but extrema of its sum with residual activations do not add linearly, so a 50% increase of the total group range is an empirical hypothesis. Both the per-group common-input values and the actual-runtime values for every Part A row/seed/layer are exported, with empty strata explicitly marked N/A.
+
+**B. Where the next-token loss changes**
+
+The fixed massive-token layer is **21 (zero based)**, chosen by the largest qkv DC share (0.656646) on the unquantized frozen inputs. There are 132 massive and 64 BOS input positions, totaling 0.15%; the massive fraction alone is 0.10%. Of flagged positions, 0 occur at the unscored final predictor position.
+
+| Predictor class | Token count | Share of summed gain | Mean gain [90% CI] | Share of summed offset_spec | Mean offset_spec [90% CI] |
+| --- | --- | --- | --- | --- | --- |
+| BOS | 64 | -0.51% | -0.241548 [-0.317285, -0.165811] | -17.91% | 0.620836 [0.477073, 0.764598] |
+| massive | 132 | 4.71% | 1.077718 [0.723452, 1.431985] | 6.35% | -0.106676 [-0.427644, 0.214293] |
+| other | 130812 | 95.80% | 0.022115 [0.021007, 0.023223] | 111.56% | -0.001892 [-0.003460, -0.000324] |
+| BOS+massive | 196 | 4.20% | 0.646938 [0.407441, 0.886434] | -11.56% | 0.130879 [-0.093305, 0.355063] |
+
+Summed seed-averaged gain = 3019.672407 NLL; summed offset_spec = -221.822037 NLL. Shares are signed ratios and are not percentages of an assumed positive benefit. BOS here means the loss of the first text token predicted from BOS; the frozen protocol has no BOS-target loss. The supplemental target-position table reports that missing BOS-target stratum explicitly. Counts are unique positions, and intervals cluster by 64 chunks after averaging paired seeds, rather than treating tokens/seeds as independent observations. The BOS+massive row is the union of the first two rows, not an additional disjoint class.
+
+**C. Whose input activation is quantized**
+
+| Mask/contrast | PQ − Had PPL [90% paired CI] |
+| --- | --- |
+| M1 | -0.035384 [-0.041065, -0.029703] |
+| M2 | -0.132216 [-0.141670, -0.122763] |
+| M1+M2 | -0.167600 [-0.178867, -0.156334] |
+| all-token Q1 | -0.179486 [-0.190826, -0.168145] |
+| M1+M2 minus all-token Q1 | 0.011885 [0.002138, 0.021633] |
+
+| Mask | Quantized input positions | Offset-specific NLL / quantized input [90% chunk CI] |
+| --- | --- | --- |
+| M1 | 196 | 0.475051 [-0.074495, 1.024597] |
+| M2 | 130876 | -0.003737 [-0.004990, -0.002484] |
+
+M1 quantizes BOS+massive inputs; M2 quantizes their complement, with exactly the same fixed mask in every layer, at both sites, and across methods/seeds. Unmasked outputs retain the original bf16 values bit for bit. Matched symmetric controls make the offset-specific contrast identifiable. M1+M2 and its difference from all-token Q1 use joint paired influence values, preserving covariance; PPL effects need not be additive.
+
+**Pre-registered decisions**
+
+| Hypothesis | Outcome |
+| --- | --- |
+| H34a | supported; Q5a/Q5b checks: Q5a Δ=0.008586, Q1 SD=0.010976, Q5b Δ=0.000692, Q1 SD=0.010976 |
+| H34b | minor contributor under the fixed rule; s=0.163700, worse variant=Q5a |
+| H34c | not supported on anchor clause |
+| H34d | not supported |
+
+Source tables: [all-row PPL](results/qwen3_4b_base/e34_summary.csv), [group ranges](results/qwen3_4b_base/e34_range_common_input.csv), [runtime ranges](results/qwen3_4b_base/e34_range_runtime.csv), [range splits](results/qwen3_4b_base/e34_range_split.csv), [token attribution](results/qwen3_4b_base/e34_attribution.csv), [target-position attribution](results/qwen3_4b_base/e34_attribution_target_position.csv), [masked contrasts](results/qwen3_4b_base/e34_masked_summary.csv), [hypothesis details](results/qwen3_4b_base/e34_hypotheses.json). Per-token losses are in `e34_per_token_seed0/1/2.csv`; each row gives both predictor and target positions.
+
+**Reading.** The worse nonconstant target (Q5a) changes asymmetric PPL by 0.029382, corresponding to s=0.164 and the pre-registered **minor** decision. The symmetric target-column check is supported, while the paired common-input anchor ranges are Q5a=1.186×, Q5b=1.156×; the requested other-group comparison is unavailable because every group is anchored at k=max. The flagged classes account for -11.56% of the signed offset-specific sum (-221.822037 NLL), and the total is nonpositive. Matched masked controls give an M1−M2 offset-specific rate of 0.478788 [-0.070975, 1.028551] NLL per quantized input, so H34d is not supported under its full fixed rule. NLL at predictor position t reflects quantization at all positions up to t, so Part B locates changed losses, whereas Part C intervenes on quantized input positions and does not assume additive downstream effects.
+
+### Llama-3.2-3B
+
+**A. Constant versus nonconstant target column**
+
+| Format | Row | PPL | Seed SD | Δ vs Q1 [90% paired CI] |
+| --- | --- | --- | --- | --- |
+| asym | Q1 | 7.705229 | 0.008399 | 0.000000 [0.000000, 0.000000] |
+| asym | Q5a | 7.720706 | 0.001095 | 0.015477 [0.009813, 0.021141] |
+| asym | Q5b | 7.718516 | 0.005566 | 0.013287 [0.007529, 0.019044] |
+| asym | Had | 7.766634 | 0.005198 | 0.061405 [0.054712, 0.068099] |
+| sym | Q1 | 7.759316 | 0.011427 | 0.000000 [0.000000, 0.000000] |
+| sym | Q5a | 7.764011 | 0.015363 | 0.004695 [-0.001311, 0.010700] |
+| sym | Q5b | 7.762935 | 0.006262 | 0.003619 [-0.003223, 0.010460] |
+| sym | Had | 7.819370 | 0.002481 | 0.060054 [0.052312, 0.067795] |
+
+| Column | Common-input down range | Q1 range | Anchor range / Q1 | Other groups |
+| --- | --- | --- | --- | --- |
+| Q5a | 0.325419 | 0.289225 | 1.125140 | N/A (0 groups at k=max) |
+| Q5b | 0.320111 | 0.289225 | 1.106790 | N/A (0 groups at k=max) |
+
+Q5a has one sign transition within a group; Q5b alternates signs. Each moves the anchor by swapping exactly one residual coordinate in the same group; all other residual assignments, G and D are unchanged. The table uses matched unquantized inputs to avoid upstream-quantization confounding. An isolated nonconstant aligned level has range 2|c|, but extrema of its sum with residual activations do not add linearly, so a 50% increase of the total group range is an empirical hypothesis. Both the per-group common-input values and the actual-runtime values for every Part A row/seed/layer are exported, with empty strata explicitly marked N/A.
+
+**B. Where the next-token loss changes**
+
+The fixed massive-token layer is **1 (zero based)**, chosen by the largest qkv DC share (0.593388) on the unquantized frozen inputs. There are 132 massive and 64 BOS input positions, totaling 0.15%; the massive fraction alone is 0.10%. Of flagged positions, 0 occur at the unscored final predictor position.
+
+| Predictor class | Token count | Share of summed gain | Mean gain [90% CI] | Share of summed offset_spec | Mean offset_spec [90% CI] |
+| --- | --- | --- | --- | --- | --- |
+| BOS | 64 | -1.95% | -0.317566 [-0.380144, -0.254988] | -0.54% | -0.002513 [-0.028514, 0.023489] |
+| massive | 132 | -0.02% | -0.001707 [-0.042183, 0.038768] | -18.59% | -0.041991 [-0.100677, 0.016696] |
+| other | 130812 | 101.98% | 0.008107 [0.007176, 0.009038] | 119.13% | 0.000271 [-0.000732, 0.001275] |
+| BOS+massive | 196 | -1.98% | -0.104845 [-0.141939, -0.067751] | -19.13% | -0.029100 [-0.068406, 0.010206] |
+
+Summed seed-averaged gain = 1039.937308 NLL; summed offset_spec = 29.808020 NLL. Shares are signed ratios and are not percentages of an assumed positive benefit. BOS here means the loss of the first text token predicted from BOS; the frozen protocol has no BOS-target loss. The supplemental target-position table reports that missing BOS-target stratum explicitly. Counts are unique positions, and intervals cluster by 64 chunks after averaging paired seeds, rather than treating tokens/seeds as independent observations. The BOS+massive row is the union of the first two rows, not an additional disjoint class.
+
+**C. Whose input activation is quantized**
+
+| Mask/contrast | PQ − Had PPL [90% paired CI] |
+| --- | --- |
+| M1 | -0.015720 [-0.018233, -0.013208] |
+| M2 | -0.044329 [-0.050122, -0.038535] |
+| M1+M2 | -0.060049 [-0.066487, -0.053611] |
+| all-token Q1 | -0.061405 [-0.068099, -0.054712] |
+| M1+M2 minus all-token Q1 | 0.001356 [-0.005858, 0.008570] |
+
+| Mask | Quantized input positions | Offset-specific NLL / quantized input [90% chunk CI] |
+| --- | --- | --- |
+| M1 | 196 | -0.273514 [-0.550520, 0.003491] |
+| M2 | 130876 | 0.000349 [-0.000878, 0.001576] |
+
+M1 quantizes BOS+massive inputs; M2 quantizes their complement, with exactly the same fixed mask in every layer, at both sites, and across methods/seeds. Unmasked outputs retain the original bf16 values bit for bit. Matched symmetric controls make the offset-specific contrast identifiable. M1+M2 and its difference from all-token Q1 use joint paired influence values, preserving covariance; PPL effects need not be additive.
+
+**Pre-registered decisions**
+
+| Hypothesis | Outcome |
+| --- | --- |
+| H34a | supported; Q5a/Q5b checks: Q5a Δ=0.004695, Q1 SD=0.011427, Q5b Δ=0.003619, Q1 SD=0.011427 |
+| H34b | two-part contributor under the fixed rule; s=0.252046, worse variant=Q5a |
+| H34c | not supported on anchor clause |
+| H34d | not supported |
+
+Source tables: [all-row PPL](results/llama32_3b/e34_summary.csv), [group ranges](results/llama32_3b/e34_range_common_input.csv), [runtime ranges](results/llama32_3b/e34_range_runtime.csv), [range splits](results/llama32_3b/e34_range_split.csv), [token attribution](results/llama32_3b/e34_attribution.csv), [target-position attribution](results/llama32_3b/e34_attribution_target_position.csv), [masked contrasts](results/llama32_3b/e34_masked_summary.csv), [hypothesis details](results/llama32_3b/e34_hypotheses.json). Per-token losses are in `e34_per_token_seed0/1/2.csv`; each row gives both predictor and target positions.
+
+**Reading.** The worse nonconstant target (Q5a) changes asymmetric PPL by 0.015477, corresponding to s=0.252 and the pre-registered **two-part** decision. The symmetric target-column check is supported, while the paired common-input anchor ranges are Q5a=1.125×, Q5b=1.107×; the requested other-group comparison is unavailable because every group is anchored at k=max. The flagged classes account for -19.13% of the signed offset-specific sum (29.808020 NLL), and the total is positive. Matched masked controls give an M1−M2 offset-specific rate of -0.273863 [-0.550871, 0.003144] NLL per quantized input, so H34d is not supported under its full fixed rule. NLL at predictor position t reflects quantization at all positions up to t, so Part B locates changed losses, whereas Part C intervenes on quantized input positions and does not assume additive downstream effects.
+
+### Mechanism wording after the pre-registered decision
+
+**Qwen3-4B-Base.** At g=128, the observed advantage is primarily described in terms of within-group flatness and localization; the column intervention assigns only a minor share to constant-column offset absorption. The measured intervention ratio is 0.163700. The minimal residual-coordinate swap, distributional changes and nonlinear propagation mean this ratio is not a pure additive causal fraction; the token and masking diagnostics above test additional, distinct parts of the mechanism.
+
+**Llama-3.2-3B.** At g=128, the mechanism is described in two parts: localization/low crest factor and an additional constant-column benefit under the affine format. The measured intervention ratio is 0.252046. The minimal residual-coordinate swap, distributional changes and nonlinear propagation mean this ratio is not a pure additive causal fraction; the token and masking diagnostics above test additional, distinct parts of the mechanism.
+
+No manuscript main text is present in this repository; this section supplies the decision-conditioned replacement mechanism wording. Pre-registration, execution hashes and preservation checks accompany the results. No row was tuned or dropped after observing PPL.
+
+<!-- E34 RESULTS END -->

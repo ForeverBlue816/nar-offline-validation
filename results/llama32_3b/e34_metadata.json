@@ -1,0 +1,156 @@
+{
+  "DC_layer_selection": "largest qkv DC share under frozen seed-0 Q1 on all unquantized evaluation tokens",
+  "created_utc": "2026-09-19T03:57:30.814712+00:00",
+  "execution_manifest_sha256": "f2c4a827373b1a2352e9d2475f3b5a64d47157238385c9197b651ae8eaf2dd27",
+  "hardware": {
+    "cuda_available": true,
+    "cuda_runtime": "12.8",
+    "gpu_capability": [
+      12,
+      0
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 5090",
+    "hostname": "gpu-5090-5.cluster02.eee.ntu.edu.sg",
+    "nvidia_smi": [
+      "0, NVIDIA GeForce RTX 5090, GPU-85d9b71d-cb7c-daa1-f50a-5b28e9a1bdbf, 32607 MiB, 32106 MiB, 580.173.02"
+    ],
+    "python": "3.11.16 | packaged by conda-forge | (main, Aug 21 2026, 22:44:51) [GCC 14.4.0]",
+    "slurm_job_gpus": "3",
+    "slurm_job_id": "160526",
+    "torch": "2.11.0+cu128"
+  },
+  "indexing": "predictor p=0..2046 -> target p+1=1..2047; BOS-associated first-text prediction, no BOS-target NLL",
+  "model": "llama32_3b",
+  "preregistration_sha256": "4029be113cc883daf42056dbf03321283ae6ab8e758ae366091ae1471fe25337",
+  "rows": [
+    {
+      "baseline": "Q1_pq",
+      "column": 0,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q1_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": "Q1_hadamard",
+      "column": 0,
+      "mask": "all",
+      "method": "hadamard",
+      "row": "Had_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": "Q2_pq",
+      "column": 0,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q1_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": "Q2_hadamard",
+      "column": 0,
+      "mask": "all",
+      "method": "hadamard",
+      "row": "Had_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 64,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q5a_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 1,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q5b_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 64,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q5a_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 1,
+      "mask": "all",
+      "method": "pq",
+      "row": "Q5b_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M1",
+      "method": "pq",
+      "row": "M1_pq_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M1",
+      "method": "hadamard",
+      "row": "M1_had_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M1",
+      "method": "pq",
+      "row": "M1_pq_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M1",
+      "method": "hadamard",
+      "row": "M1_had_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M2",
+      "method": "pq",
+      "row": "M2_pq_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M2",
+      "method": "hadamard",
+      "row": "M2_had_asym",
+      "symmetric": false
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M2",
+      "method": "pq",
+      "row": "M2_pq_sym",
+      "symmetric": true
+    },
+    {
+      "baseline": null,
+      "column": 0,
+      "mask": "M2",
+      "method": "hadamard",
+      "row": "M2_had_sym",
+      "symmetric": true
+    }
+  ],
+  "source_sha256": "9f06b33e77e07809faa2e161df27adae5c1ab18e820a1bde530092d6364aa28f"
+}

@@ -1,0 +1,66 @@
+{
+  "H34a": [
+    {
+      "Q1_seed_std": 0.011426864372063717,
+      "difference": 0.004694616222887582,
+      "row": "Q5a",
+      "supported": true
+    },
+    {
+      "Q1_seed_std": 0.011426864372063717,
+      "difference": 0.0036185732214306654,
+      "row": "Q5b",
+      "supported": true
+    }
+  ],
+  "H34b": {
+    "Q5_minus_Q1": 0.015476956259238506,
+    "decision": "two-part",
+    "denominator_hadamard_minus_Q1": 0.0614053343653822,
+    "share": 0.2520457940534198,
+    "worse_variant": "Q5a"
+  },
+  "H34c": {
+    "full_hypothesis": "not supported on anchor clause",
+    "other_clause": "not identifiable; all groups anchored at k=max",
+    "variants": [
+      {
+        "Q1_anchor_mean_range": 0.28922505887567646,
+        "anchor_exceeds_50_percent": false,
+        "anchor_mean_range": 0.32541866335649594,
+        "anchor_range_ratio": 1.125139932969561,
+        "model": "llama32_3b",
+        "other_clause": "not identifiable at k=max",
+        "other_group_count": 0,
+        "other_group_ratio": null,
+        "row": "Q5a"
+      },
+      {
+        "Q1_anchor_mean_range": 0.28922505887567646,
+        "anchor_exceeds_50_percent": false,
+        "anchor_mean_range": 0.3201114472573258,
+        "anchor_range_ratio": 1.1067901533211404,
+        "model": "llama32_3b",
+        "other_clause": "not identifiable at k=max",
+        "other_group_count": 0,
+        "other_group_ratio": null,
+        "row": "Q5b"
+      }
+    ]
+  },
+  "H34d": {
+    "M1_minus_M2_per_quantized_token": -0.273863189525047,
+    "M1_per_quantized_token_larger": false,
+    "ci90_high": 0.0031443678826986177,
+    "ci90_low": -0.5508707469327927,
+    "ci_unit": "64 paired chunk clusters, ratio delta method, seeds averaged",
+    "class_fraction_below_one_percent": true,
+    "flagged_signed_share": -0.19134344704851955,
+    "model": "llama32_3b",
+    "positive_total_offset_specific": true,
+    "share_exceeds_half": false,
+    "supported": false,
+    "total_offset_spec": 29.808020257200994
+  },
+  "model": "llama32_3b"
+}

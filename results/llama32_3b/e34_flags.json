@@ -1,0 +1,20 @@
+{
+  "bos_count": 64,
+  "flag_file_sha256": "766730aa8204f886a53e140fe378fcb4285f89b7b5cbe132d5b0b3f4d6ab5e0a",
+  "flag_tensor_sha256": "7ef67f7e0b971cbd8954208fff020e72083db5de3ad01cef4bd69aeb83898399",
+  "flagged_count": 196,
+  "flagged_fraction": 0.001495361328125,
+  "input_positions": 131072,
+  "massive_count": 132,
+  "massive_fraction": 0.001007080078125,
+  "model": "llama32_3b",
+  "scored_massive_count": 132,
+  "scored_positions": 131008,
+  "selected_dc_share": 0.5933876647499622,
+  "selected_layer": 1,
+  "selection_site": "post-RMSNorm qkv DC share; pre-layer residual norm",
+  "status": "COMPLETE",
+  "token_sha256": "7a7b7dc6f6f242742c30f5194894a13f9225c540c5568a1c1839849368debd08",
+  "unscored_flagged_final_positions": 0,
+  "utc": "2026-09-19T04:00:05.499937+00:00"
+}

@@ -1,0 +1,50 @@
+{
+  "jobs": [
+    {
+      "model": "qwen3_4b_base",
+      "job_id": 160525,
+      "submitted_utc": "2026-09-19T03:57:05.077287+00:00",
+      "status": "COMPLETED",
+      "scheduler": {
+        "JobIDRaw": "160525",
+        "State": "COMPLETED",
+        "ExitCode": "0:0",
+        "Elapsed": "00:50:55",
+        "Start": "2026-09-19T03:57:15",
+        "End": "2026-09-19T04:48:10",
+        "NodeList": "gpu-5090-5",
+        "AllocTRES": "billing=6,cpu=4,gres/gpu:rtx5090=1,gres/gpu=1,mem=48G,node=1"
+      },
+      "measurements_completed_utc": "2026-09-19T04:48:09.347176+00:00",
+      "completion_record_sha256": "8f1a9c5fdd5976cc47297dd3ede8ee96c79fae580331efc9a4ed7f6f598af47f",
+      "log_sha256": {
+        "runs/e34-160525.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "runs/e34-160525.err": "853d1435d388f6ca1485978819e7aa81e12b82f7e160674ed80d17e419465ab0"
+      }
+    },
+    {
+      "model": "llama32_3b",
+      "job_id": 160526,
+      "submitted_utc": "2026-09-19T03:57:05.082695+00:00",
+      "status": "COMPLETED",
+      "scheduler": {
+        "JobIDRaw": "160526",
+        "State": "COMPLETED",
+        "ExitCode": "0:0",
+        "Elapsed": "00:37:24",
+        "Start": "2026-09-19T03:57:15",
+        "End": "2026-09-19T04:34:39",
+        "NodeList": "gpu-5090-5",
+        "AllocTRES": "billing=6,cpu=4,gres/gpu:rtx5090=1,gres/gpu=1,mem=48G,node=1"
+      },
+      "measurements_completed_utc": "2026-09-19T04:34:38.453353+00:00",
+      "completion_record_sha256": "7a87ccdc8bb8f125d093253fc80d0fccc142fb82c4ffaac4768490b02fa1c2d8",
+      "log_sha256": {
+        "runs/e34-160526.out": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "runs/e34-160526.err": "b15522375e84f7105edb3abe58e3516de7395a10325bda289e6086d47b1e4f0e"
+      }
+    }
+  ],
+  "scope": "E34 only; no unrelated jobs managed",
+  "finalized_utc": "2026-09-19T04:48:40.663330+00:00"
+}

@@ -1,0 +1,20 @@
+{
+  "bos_count": 64,
+  "flag_file_sha256": "561e7bd93a3f0a3e3ab2aac1448e1911b34515fbbfd6417639db86cb0ffbd7d2",
+  "flag_tensor_sha256": "6ac08d3e26cc1ba35923d431937554e2d74b545c23cbbbb3f52a3552604db2c1",
+  "flagged_count": 196,
+  "flagged_fraction": 0.001495361328125,
+  "input_positions": 131072,
+  "massive_count": 132,
+  "massive_fraction": 0.001007080078125,
+  "model": "qwen3_4b_base",
+  "scored_massive_count": 132,
+  "scored_positions": 131008,
+  "selected_dc_share": 0.6566455936583954,
+  "selected_layer": 21,
+  "selection_site": "post-RMSNorm qkv DC share; pre-layer residual norm",
+  "status": "COMPLETE",
+  "token_sha256": "2b8c8fd24c772e7965e98ea13f78d4e9308abd536437bfa8c7b4fee91014bb5e",
+  "unscored_flagged_final_positions": 0,
+  "utc": "2026-09-19T04:01:17.757867+00:00"
+}
